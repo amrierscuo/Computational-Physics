@@ -12,13 +12,25 @@
     canvas {
       display: block;
     }
+    #metric {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 5px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <canvas id="mandelbrot"></canvas>
+  <div id="metric">Resolution: 1 / 300</div>
   <script>
     const canvas = document.getElementById("mandelbrot");
     const ctx = canvas.getContext("2d");
+    const metric = document.getElementById("metric");
 
     // Set canvas size
     canvas.width = window.innerWidth;
@@ -92,6 +104,10 @@
         centerX = interestingX;
         centerY = interestingY;
       }
+
+      // Update resolution metric
+      const resolution = (1 / scale).toExponential(3);
+      metric.textContent = `Resolution: 1 / ${resolution}`;
     };
 
     // Get smooth color gradient
