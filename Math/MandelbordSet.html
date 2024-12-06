@@ -100,13 +100,15 @@
             pixels[pixelIndex + 1] = color[1]; // Green
             pixels[pixelIndex + 2] = color[2]; // Blue
             pixels[pixelIndex + 3] = 255; // Alpha
-
-            // Track interesting region (boundary)
-            if (!interestingFound && iteration > maxIterations / 4) {
-              interestingX = x0;
-              interestingY = y0;
-              interestingFound = true;
-            }
+//x0=(px-width/2)/scale + centerX
+//x0=(pt-heigth/2)/scale + centerY
+          // Track interesting region (boundary), the code choose the first point that surpass limit iteration>maxIterations/4
+          // If an interesting point is found (iteration > threshold), save its coordinates.
+          if (!interestingFound && iteration > maxIterations / 4) {
+            interestingX = x0; // x-coordinate in the complex plane
+            interestingY = y0; // y-coordinate in the complex plane
+            interestingFound = true; // Flag to prevent overwriting with other points
+          }
           }
         }
       }
@@ -114,8 +116,9 @@
       ctx.putImageData(imageData, 0, 0);
 
       // Update center to focus on the boundary
+      // After processing all pixels, update the center to zoom in on the interesting region.
       if (interestingFound) {
-        centerX = interestingX;
+        centerX = interestingX; // Move center to focus on the boundary
         centerY = interestingY;
       }
 
