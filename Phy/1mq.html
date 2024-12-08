@@ -384,6 +384,7 @@
 					<li><strong style="color: #e67e22;">Percentuale:</strong> Riordina in base alla frequenza stimata dell'argomento, calcolata considerando peso, occorrenze e livello di dettaglio.</li>
 					<li><strong style="color: #27ae60;">Dettaglio:</strong> Riordina in base alla lunghezza descrittiva degli argomenti (livello di dettaglio).</li>
 					<li><strong style="color: #9b59b6;">Alfabetico:</strong> Riordina in ordine alfabetico.</li>
+					<li><strong style="color: #e74c3c;">Casuale:</strong> Riordina in modo casuale.</li>
 				</ul>
 				<p>
 					Seleziona un criterio di riordinamento:
@@ -400,6 +401,9 @@
 					</label><br>
 					<label>
 						<input type="radio" name="sort" value="alphabetical"> Riordina Alfabeticamente
+					</label><br>
+					<label>
+						<input type="radio" name="sort" value="random"> Riordina Casualmente
 					</label><br><br>
 					<button type="button" onclick="applySort()">Applica Riordinamento</button>
 				</form>
@@ -407,6 +411,7 @@
 				<div id="sorted-results">
 					<!-- La lista riordinata verrà visualizzata qui -->
 				</div>
+
 
 				</ul>
             </div>
@@ -480,6 +485,9 @@ function applySort() {
         sortedTopics = [...topics].sort((a, b) => b.detailLength - a.detailLength);
     } else if (sortOption === "alphabetical") {
         sortedTopics = [...topics].sort((a, b) => a.topic.localeCompare(b.topic));
+    } else if (sortOption === "random") {
+        // Ordina in modo casuale
+        sortedTopics = [...topics].sort(() => Math.random() - 0.5);
     } else {
         sortedTopics = [...topics]; // Mantieni ordine standard
     }
@@ -490,30 +498,16 @@ function applySort() {
         <h3>Lista Riordinata</h3>
         <ul>
             ${sortedTopics
-              .map((topic, index) => {
-                  // Aggiungi colori e medaglie solo se l'ordinamento è per percentuale
-                  let color = "#000";
-                  let medal = "";
-                  if (sortOption === "percentage") {
-                      if (index < 3) {
-                          color = "#FFD700"; // Oro
-                          medal = `<img src="${medalImages.Gold}" style="width:20px;height:20px;">`;
-                      } else if (index < 8) {
-                          color = "#C0C0C0"; // Argento
-                          medal = `<img src="${medalImages.Silver}" style="width:20px;height:20px;">`;
-                      } else if (index < 18) {
-                          color = "#CD7F32"; // Bronzo
-                          medal = `<img src="${medalImages.Bronze}" style="width:20px;height:20px;">`;
-                      }
-                  }
-                  return `<li style="color: ${color};">${topic.topic} - Percentuale: ${topic.percentage.toFixed(
+              .map((topic) => {
+                  return `<li>${topic.topic} - Percentuale: ${topic.percentage.toFixed(
                       2
-                  )}%, Dettaglio: ${topic.detailLength} ${medal}</li>`;
+                  )}%, Dettaglio: ${topic.detailLength}</li>`;
               })
               .join("")}
         </ul>
     `;
 }
+
 
 
 
