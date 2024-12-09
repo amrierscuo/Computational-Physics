@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	    
     <script id="MathJax-script" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <title>Indice MQ</title>
@@ -389,24 +389,25 @@
 				<p>
 					Seleziona un criterio di riordinamento:
 				</p>
-				<form id="sort-options">
-					<label>
-						<input type="radio" name="sort" value="standard" checked> Mantieni l'ordine standard
-					</label><br>
-					<label>
-						<input type="radio" name="sort" value="percentage"> Riordina per Percentuale (frequenza stimata)
-					</label><br>
-					<label>
-						<input type="radio" name="sort" value="detail"> Riordina per Lunghezza Descrittiva
-					</label><br>
-					<label>
-						<input type="radio" name="sort" value="alphabetical"> Riordina Alfabeticamente
-					</label><br>
-					<label>
-						<input type="radio" name="sort" value="random"> Riordina Casualmente
-					</label><br><br>
-					<button type="button" onclick="applySort()">Applica Riordinamento</button>
-				</form>
+<form id="sort-options">
+    <label>
+        <input type="radio" name="sort" value="standard" checked> Mantieni l'ordine standard
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="percentage"> Riordina per Percentuale (frequenza stimata)
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="detail"> Riordina per Lunghezza Descrittiva
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="alphabetical"> Riordina Alfabeticamente
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="random"> Ordina Casualmente
+    </label><br><br>
+    <button type="button" onclick="applySort()">Applica Riordinamento</button>
+</form>
+
 
 				<div id="sorted-results">
 					<!-- La lista riordinata verrà visualizzata qui -->
@@ -486,11 +487,12 @@ function applySort() {
     } else if (sortOption === "alphabetical") {
         sortedTopics = [...topics].sort((a, b) => a.topic.localeCompare(b.topic));
     } else if (sortOption === "random") {
-        // Ordina in modo casuale
+        // Ordinamento casuale
         sortedTopics = [...topics].sort(() => Math.random() - 0.5);
     } else {
         sortedTopics = [...topics]; // Mantieni ordine standard
     }
+
 
     // Aggiorna il contenitore con la lista ordinata
     const resultsDiv = document.getElementById("sorted-results");
@@ -498,10 +500,25 @@ function applySort() {
         <h3>Lista Riordinata</h3>
         <ul>
             ${sortedTopics
-              .map((topic) => {
-                  return `<li>${topic.topic} - Percentuale: ${topic.percentage.toFixed(
+              .map((topic, index) => {
+                  // Aggiungi colori e medaglie solo se l'ordinamento è per percentuale
+                  let color = "#000";
+                  let medal = "";
+                  if (sortOption === "percentage") {
+                      if (index < 3) {
+                          color = "#FFD700"; // Oro
+                          medal = `<img src="${medalImages.Gold}" style="width:20px;height:20px;">`;
+                      } else if (index < 8) {
+                          color = "#C0C0C0"; // Argento
+                          medal = `<img src="${medalImages.Silver}" style="width:20px;height:20px;">`;
+                      } else if (index < 18) {
+                          color = "#CD7F32"; // Bronzo
+                          medal = `<img src="${medalImages.Bronze}" style="width:20px;height:20px;">`;
+                      }
+                  }
+                  return `<li style="color: ${color};">${topic.topic} - Percentuale: ${topic.percentage.toFixed(
                       2
-                  )}%, Dettaglio: ${topic.detailLength}</li>`;
+                  )}%, Dettaglio: ${topic.detailLength} ${medal}</li>`;
               })
               .join("")}
         </ul>
