@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>Indice MQ</title>
+    <style>
+        /* Palette colori generali */
+        :root {
+            --background-color: #f9f9f9;
+            --sidebar-color: #2c3e50;
+            --sidebar-text-color: #ecf0f1;
+            --sidebar-hover-color: #34495e;
+            --content-background: #ffffff;
+            --header-color: #3498db;
+            --link-color: #2980b9;
+            --link-hover-color: #1abc9c;
+            --text-color: #2c3e50;
+        }
+
+        /* Colori per i 14 argomenti principali */
+        .argomento-1 {background-color: #f9c0c0;}   /* Limiti fisica classica */
+        .argomento-2 {background-color: #fce3c0;}   /* Onde e particelle */
+        .argomento-3 {background-color: #f9f9c0;}   /* Eq. Schr. indip. tempo */
+        .argomento-4 {background-color: #c0f9c4;}   /* Problemi 1D */
+        .argomento-5 {background-color: #c0f9f4;}   /* Operatori e spazi vett. */
+        .argomento-6 {background-color: #c0d0f9;}   /* Postulati MQ */
+        .argomento-7 {background-color: #e0c0f9;}   /* Momento angolare */
+        .argomento-8 {background-color: #f9c0e3;}   /* Eq. 3D */
+        .argomento-9 {background-color: #f9d8c0;}   /* Spin */
+        .argomento-10{background-color: #f9ecc0;}   /* Particelle identiche */
+        .argomento-11{background-color: #d0f9c0;}   /* Composiz. momenti ang. */
+        .argomento-12{background-color: #c0f9f9;}   /* Perturbazioni staz. */
+        .argomento-13{background-color: #c0e0f9;}   /* Struttura fine idrogeno */
+        .argomento-14{background-color: #f9c0f9;}   /* Pert. dip. dal tempo */
+
+        /* Colori per Esercizi (Set) - 10 set */
+        .esercizio-1 {background-color: #ffe5e0;} 
+        .esercizio-2 {background-color: #fff0e0;}
+        .esercizio-3 {background-color: #fffce0;}
+        .esercizio-4 {background-color: #e0ffe5;}
+        .esercizio-5 {background-color: #e0fffa;}
+        .esercizio-6 {background-color: #e0f0ff;}
+        .esercizio-7 {background-color: #f0e0ff;}
+        .esercizio-8 {background-color: #ffe0f5;}
+        .esercizio-9 {background-color: #f7ffe0;}
+        .esercizio-10{background-color: #e0ffe0;}
+
+        /* Colori per Esami Scritti (9 esami) */
+        .esame-1 {background-color: #ffe6f0;}
+        .esame-2 {background-color: #ffe6f9;}
+        .esame-3 {background-color: #fce6ff;}
+        .esame-4 {background-color: #e6e6ff;}
+        .esame-5 {background-color: #e6f9ff;}
+        .esame-6 {background-color: #e6fffa;}
+        .esame-7 {background-color: #e6ffed;}
+        .esame-8 {background-color: #f6ffe6;}
+        .esame-9 {background-color: #fffae6;}
+
+        /* Colori per Domande Orali - assegnamo classi ai principali gruppi */
+        /* Individuiamo i blocchi principali (strong) e diamo classi .orale-1, .orale-2, ecc. */
+        .orale-1 {background-color: #faf0f0;} /* Equazione di Schrödinger */
+        .orale-2 {background-color: #faf8f0;} /* Problemi 1D */
+        .orale-3 {background-color: #f0faf0;} /* Rel. indeterminazione */
+        .orale-4 {background-color: #f0f0fa;} /* Momento angolare */
+        .orale-5 {background-color: #f5f0fa;} /* Struttura fine idrogeno */
+        .orale-6 {background-color: #f0f5fa;} /* Perturbazioni non dip. tempo */
+        .orale-7 {background-color: #f0faf5;} /* Perturbazioni dip. tempo */
+
+        /* Stile generale pagina */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-color);
+            color: var(--sidebar-text-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin: 15px 0;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--sidebar-text-color);
+            font-size: 14px;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--sidebar-hover-color);
+            color: var(--link-hover-color);
+        }
+
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            flex: 1;
+            background-color: var(--content-background);
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .content.collapsed {
+            margin-left: 0;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: var(--header-color);
+            color: white;
+            border: none;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--link-hover-color);
+        }
+
+        .content h2 {
+            color: var(--header-color);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .content ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        .content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .content a:hover {
+            color: var(--link-hover-color);
+            text-decoration: underline;
+        }
+
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .links {
+            margin-top: 20px;
+        }
+
+        #apply-sort-button {
+            background-color: #3498db;
+            color: white; 
+            border: none;
+            padding: 10px 20px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #apply-sort-button:hover {
+            background-color: #2980b9; 
+            transform: scale(1.05); 
+        }
+
+        #apply-sort-button:active {
+            background-color: #1c5986; 
+            transform: scale(0.95); 
+        }
+
+        /* Tabella Argomenti */
+        table.argomenti-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border: 3px solid var(--header-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        table.argomenti-table td {
+            vertical-align: top;
+            padding: 15px;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table.argomenti-table tr td:last-child {
+            border-right: none;
+        }
+
+        table.argomenti-table td strong {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--header-color);
+            font-size: 1.2em;
+        }
+
+        table.argomenti-table ul {
+            list-style-type: disc;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        table.argomenti-table td:hover {
+            background-color: #eaf2f8;
+        }
+
+        table.argomenti-table a {
+            color: var(--text-color);
+        }
+        table.argomenti-table a:hover {
+            color: var(--link-hover-color);
+            text-decoration: underline;
+        }
+
+        /* Stile per le liste di esercizi, esami, domande orali */
+        /* Ogni li principale avrà una classe assegnata per il colore di sfondo */
+        ul > li.esercizio-1, ul > li.esercizio-2, ul > li.esercizio-3, 
+        ul > li.esercizio-4, ul > li.esercizio-5, ul > li.esercizio-6,
+        ul > li.esercizio-7, ul > li.esercizio-8, ul > li.esercizio-9,
+        ul > li.esercizio-10 {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        ul > li.esame-1, ul > li.esame-2, ul > li.esame-3, ul > li.esame-4,
+        ul > li.esame-5, ul > li.esame-6, ul > li.esame-7, ul > li.esame-8,
+        ul > li.esame-9 {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Domande orali: i blocchi con strong avranno classi .orale-x */
+        .orale-1, .orale-2, .orale-3, .orale-4, .orale-5, .orale-6, .orale-7 {
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        /* Anche i sub-lists interni avranno un po' di padding */
+        ul ul {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="toggle-btn" onclick="toggleSidebar()" aria-label="Toggle Menu">Menu</button>
+
+    <div class="sidebar" id="sidebar">
+        <h1>Indice MQ</h1>
+        <ul>
+            <li><a href="#argomenti-mq">1. Argomenti MQ</a></li>
+            <li><a href="#esercizi-set">2. Esercizi/Set di MQ</a></li>
+            <li><a href="#esami-scritti">3. Esami Scritti MQ</a></li>
+            <li><a href="#domande-orali">4. Domande Orali MQ</a></li>
+        </ul>
+    </div>
+
+    <div class="content" id="content">
+        <div id="indice-mq">
+            <h2>Indice Completo (Formato Immagine)</h2>
+            <div class="image-container">
+                <img src="indiceMQ++.jpg" alt="Indice Completo MQ">
+            </div>
+            <div class="links">
+<h2>1.Argomenti di Meccanica Quantistica</h2>
+<table class="argomenti-table">
+    <tr>
+        <!-- 1 e 8 -->
+        <td class="argomento-1">
+            <strong>1. Limiti della fisica classica:</strong>
+            <ul>
+                <li><a href="radiazione-corpo-nero.html">Radiazione di corpo nero</a></li>
+                <li><a href="effetto-fotoelettrico.html">Effetto fotoelettrico</a></li>
+                <li><a href="effetto-compton.html">Effetto Compton</a></li>
+                <li><a href="atomo-bohr.html">Atomo di Bohr</a></li>
+                <li><a href="spettri-atomici.html">Spettri atomici</a></li>
+            </ul>
+        </td>
+        <td class="argomento-8">
+            <strong>8. Eq. di Schrödinger in 3 dimensioni:</strong>
+            <ul>
+                <li><a href="separazione-variabili.html">Separazione delle variabili</a></li>
+                <li><a href="oscillatore-armonico-3d.html">Oscillatore armonico tridimensionale</a></li>
+                <li><a href="potenziali-centrali.html">Potenziali centrali</a></li>
+                <li><a href="atomo-idrogeno.html">Atomo di idrogeno</a></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <!-- 2 e 9 -->
+        <td class="argomento-2">
+            <strong>2. Onde e particelle:</strong>
+            <ul>
+                <li><a href="relazione-de-broglie.html">Relazione di de Broglie</a></li>
+                <li><a href="analogia-ottica-meccanica.html">Analogia ottica-meccanica</a></li>
+                <li><a href="esperimenti-doppia-fenditura.html">Esperimento della doppia fenditura</a></li>
+                <li><a href="onde-piane-pacchetti.html">Onde piane e pacchetti d’onde</a></li>
+                <li><a href="principio-sovrapposizione.html">Principio di sovrapposizione</a></li>
+                <li><a href="pacchetto-gaussiano.html">Pacchetto d’onda gaussiano</a></li>
+                <li><a href="relazione-indeterminazione.html">Relazione di indeterminazione</a></li>
+                <li><a href="equazione-schrodinger-ottica.html">L’equazione di Schrödinger dall’ottica</a></li>
+                <li><a href="conservazione-probabilita.html">Conservazione della probabilità</a></li>
+                <li><a href="densita-corrente.html">Densità e corrente di probabilità</a></li>
+                <li><a href="equazione-continuita.html">Equazione di continuità</a></li>
+                <li><a href="calcolo-operatoriale.html">Calcolo operatoriale</a></li>
+                <li><a href="teorema-ehrenfest.html">Teorema di Ehrenfest</a></li>
+            </ul>
+        </td>
+        <td class="argomento-9">
+            <strong>9. Spin:</strong>
+            <ul>
+                <li><a href="effetto-zeeman-normale.html">Effetto Zeeman normale</a></li>
+                <li><a href="campo-b-uniforme.html">Interazione con campo EM: campo B uniforme</a></li>
+                <li><a href="esperimento-stern-gerlach.html">Esperimento di Stern-Gerlach</a></li>
+                <li><a href="spinori-pauli.html">Spin ½: spinori di Pauli</a></li>
+                <li><a href="spazi-prodotto.html">Spazi prodotto diretto</a></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <!-- 3 e 10 -->
+        <td class="argomento-3">
+            <strong>3. Eq. di Schrödinger indipendente dal tempo:</strong>
+            <ul>
+                <li><a href="autofunzioni-autovalori.html">Autofunzioni ed autovalori</a></li>
+                <li><a href="sviluppo-serie-autofunzioni.html">Sviluppo in serie di autofunzioni</a></li>
+                <li><a href="stati-stazionari.html">Stati stazionari</a></li>
+                <li><a href="misure-energia.html">Misure di energia</a></li>
+            </ul>
+        </td>
+        <td class="argomento-10">
+            <strong>10. Particelle identiche:</strong>
+            <ul>
+                <li><a href="indistinguibilita.html">Indistinguibilità</a></li>
+                <li><a href="postulato-simmetrizzazione.html">Postulato di simmetrizzazione</a></li>
+                <li><a href="determinante-slater.html">Determinante di Slater</a></li>
+                <li><a href="principio-esclusione-pauli.html">Principio di esclusione di Pauli</a></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <!-- 4 e 11 -->
+        <td class="argomento-4">
+            <strong>4. Problemi unidimensionali:</strong>
+            <ul>
+                <li><a href="particella-libera.html">Particella libera</a></li>
+                <li><a href="gradino-potenziale.html">Gradino di potenziale</a></li>
+                <li><a href="barriera-potenziale.html">Barriera di potenziale</a></li>
+                <li><a href="buca-potenziale.html">Buca di potenziale a pareti infinite/finite</a></li>
+                <li><a href="stati-legati-diffusione.html">Stati legati e di diffusione</a></li>
+                <li><a href="parita.html">Parità</a></li>
+                <li><a href="oscillatore-armonico.html">Oscillatore armonico</a></li>
+            </ul>
+        </td>
+        <td class="argomento-11">
+            <strong>11. Composizione di momenti angolari:</strong>
+            <ul>
+                <li><a href="coefficenti-clebsch-gordan.html">Coefficenti di Clebsch-Gordan</a></li>
+                <li><a href="somma-spin-due-particelle.html">Somma di due spin ½</a></li>
+                <li><a href="momento-angolare-orbitale-spin.html">Somma di un momento angolare orbitale e di uno spin ½</a></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <!-- 5 e 12 -->
+        <td class="argomento-5">
+            <strong>5. Operatori e spazi vettoriali:</strong>
+            <ul>
+                <li><a href="notazione-dirac.html">Notazione di Dirac</a></li>
+                <li><a href="coordinate-impulsi.html">Rappresentazione delle coordinate e degli impulsi</a></li>
+                <li><a href="trasformazioni-unitarie.html">Trasformazioni unitarie</a></li>
+                <li><a href="evoluzione-operatori.html">Evoluzione temporale degli operatori</a></li>
+                <li><a href="simmetrie-leggi-conservazione.html">Simmetrie e leggi di conservazione</a></li>
+                <li><a href="generatori-traslazioni.html">Generatori di traslazioni e rotazioni</a></li>
+                <li><a href="oscillatore-operatoriale.html">Oscillatore armonico con metodi operatoriali</a></li>
+            </ul>
+        </td>
+        <td class="argomento-12">
+            <strong>12. Perturbazioni stazionarie:</strong>
+            <ul>
+                <li><a href="perturbazioni-non-degenere.html">Caso non degenere</a></li>
+                <li><a href="correzioni-autovalori.html">Correzioni al I e II ordine per gli autovalori dell’energia</a></li>
+                <li><a href="correzioni-stati.html">Correzioni al I ordine per gli stati</a></li>
+                <li><a href="perturbazioni-degenere.html">Caso degenere</a></li>
+                <li><a href="rimozione-degenerazione.html">Rimozione della degenerazione</a></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <!-- 6 e 13 -->
+        <td class="argomento-6">
+            <strong>6. Postulati della meccanica quantistica:</strong>
+            <ul>
+                <li><a href="degenerazione-osservabili.html">Degenerazione e osservabili compatibili</a></li>
+                <li><a href="relazioni-indeterminazione.html">Relazioni di indeterminazione</a></li>
+            </ul>
+        </td>
+        <td class="argomento-13">
+            <strong>13. Struttura fine dell’atomo di idrogeno:</strong>
+            <ul>
+                <li><a href="effetti-relativistici.html">Effetti relativistici</a></li>
+                <li><a href="correzioni-primo-ordine.html">Correzioni al I ordine</a></li>
+                <li><a href="teorema-feynman-hellmann.html">Teorema di Feynman-Hellmann</a></li>
+                <li><a href="notazione-spettroscopica.html">Notazione spettroscopica</a></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <!-- 7 e 14 -->
+        <td class="argomento-7">
+            <strong>7. Momento angolare:</strong>
+            <ul>
+                <li><a href="relazioni-commutazione.html">Relazioni di commutazione</a></li>
+                <li><a href="trattazione-operatoriale.html">Trattazione operatoriale</a></li>
+                <li><a href="coordinate-sferiche.html">Momento angolare in coordinate sferiche</a></li>
+                <li><a href="armoniche-sferiche.html">Armoniche sferiche</a></li>
+                <li><a href="rappresentazioni-matriciali.html">Rappresentazioni matriciali</a></li>
+            </ul>
+        </td>
+        <td class="argomento-14">
+            <strong>14. Perturbazioni dipendenti dal tempo:</strong>
+            <ul>
+                <li><a href="probabilita-transizione.html">Probabilità di transizione</a></li>
+                <li><a href="perturbazione-costante-periodica.html">Perturbazione costante e periodica</a></li>
+                <li><a href="emissione-assorbimento-risonante.html">Emissione e assorbimento risonante</a></li>
+                <li><a href="transizioni-al-continuo.html">Transizioni al continuo</a></li>
+                <li><a href="regola-oro-fermi.html">Regola d’oro di Fermi</a></li>
+                <li><a href="vita-media-larghezza.html">Vita media e larghezza di uno stato</a></li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<h2 id="esercizi-set">2. Esercizi/Set di MQ</h2>
+<ul>
+    <li class="esercizio-1"><a href="set-4-radiazione-fotoelettrico.html">Set 4: Radiazione, effetto fotoelettrico, Compton, ...</a></li>
+    <li class="esercizio-2"><a href="set-5-indeterminazione-normalizzazione.html">Set 5: Principio di indeterminazione, ...</a></li>
+    <li class="esercizio-3"><a href="set-6-operatori-autofunzioni.html">Set 6: Valori medi operatori, autofunzioni, ...</a></li>
+    <li class="esercizio-4"><a href="set-7-parita-oscillatore.html">Set 7: Parità, valori medi oscillatore armonico, ...</a></li>
+    <li class="esercizio-5"><a href="set-7-new-multivista.html">Set 7-New: Parità, evoluzione temporale, ...</a></li>
+    <li class="esercizio-6"><a href="set-8-operatori-angolari.html">Set 8: Operatori angolari in coordinate sferiche, ...</a></li>
+    <li class="esercizio-7"><a href="set-9-funzioni-radiali.html">Set 9: Funzioni radiali idrogeno, probabilità ...</a></li>
+    <li class="esercizio-8"><a href="set-10-momento-totale.html">Set 10: Momento angolare totale, spin combinati, ...</a></li>
+    <li class="esercizio-9"><a href="set-11-perturbazioni-stazionarie.html">Set 11: Perturbazioni stazionarie: effetto Stark, ...</a></li>
+    <li class="esercizio-10"><a href="set-12-probabilita-transizione.html">Set 12: Probabilità di transizione: oscillatore armonico ...</a></li>
+</ul>
+
+<h2 id="esami-scritti">3. Esami Scritti MQ</h2>
+<ul>
+    <li class="esame-1"><a href="esame-1-oscillatore-armonico.html">Esame 1 (05-02-2019): Oscillatore armonico, spin combinati, ...</a></li>
+    <li class="esame-2"><a href="esame-2-oscillatore-combinato.html">Esame 2 (20-02-2019): Oscillatore armonico combinato, ...</a></li>
+    <li class="esame-3"><a href="esame-3-particelle-degenerazione.html">Esame 3 (17-07-2019): Particelle (L^2, L_z), degenerazione e perturbazione ...</a></li>
+    <li class="esame-4"><a href="esame-4-buca-perturbazione-lineare.html">Esame 4 (16-09-2019): Oscillatore armonico, tre particelle di spin, ...</a></li>
+    <li class="esame-5"><a href="esame-5-perturbazione-gaussiana.html">Esame 5 (27-01-2021): Oscillatore armonico, spin (S=5/2), perturbazione gaussiana ...</a></li>
+    <li class="esame-6"><a href="esame-6-sistema-tre-livelli.html">Esame 6 (10-02-2021): Oscillatore armonico, spin (S_x, S_y), sistema a tre livelli ...</a></li>
+    <li class="esame-7"><a href="esame-7-perturbazioni-complesse.html">Esame 7 (24-02-2021): Oscillatore armonico combinato, momento angolare totale, ...</a></li>
+    <li class="esame-8"><a href="esame-8-particella-perturbazione.html">Esame 8 (19-01-2022): Particella (L^2, S_z), oscillatore armonico con perturbazione ...</a></li>
+    <li class="esame-9"><a href="esame-9-spin-degenerazione.html">Esame 9 (04-02-2022): Spin (S_z), oscillatore armonico (E, <x^2>), particelle degenerazione ...</a></li>
+</ul>
+
+<h2 id="domande-orali">4. Domande Orali MQ</h2>
+<ul>
+    <li><a href="effetto-compton2.html">Effetto Compton</a></li>
+    <hr>
+    <!-- Equazione di Schrödinger -->
+    <li><a href="equazione-di-schrodinger.html">Equazione di Schrödinger:</a></li>
+    <li><a href="equazione-schrodinger-generale.html">Forma generale [e operatoriale]</a></li>
+    <li><a href="conservazione-probabilita.html">Conservazione della probabilità (locale e globale)</a></li>
+    <li><a href="equazione-continuita-nuova.html">Equazione di continuità (nuova)</a></li>
+    <li><a href="hermiticita-conservazione.html">Hermiticità di \( H \) e conservazione della probabilità</a></li>
+    <li><a href="valore-aspettazione.html">Valore di aspettazione</a></li>
+    <li><a href="simmetrizzazione-prodotti.html">Simmetrizzazione dei prodotti</a></li>
+    <li><a href="teorema-ehrenfest2.html">Teorema di Ehrenfest</a></li>
+    <hr>
+    <!-- Soluzione equazione di Schrödinger -->
+    <li><a href="soluzione-equazione-schrodinger.html">Soluzione dell’equazione di Schrödinger:</a></li>
+    <li><a href="stati-stazionari2.html">Stati stazionari</a></li>
+    <li><a href="proprieta-autofunzioni.html">Proprietà autofunzioni dell’energia</a></li>
+    <hr>
+    <!-- Problemi unidimensionali -->
+    <li><a href="problemi-unidimensionali.html">Problemi unidimensionali:</a></li>
+    <li><a href="particella-libera2.html">Particella libera o \( V \) costante</a></li>
+    <li><a href="gradino-potenziale2.html">Gradino di potenziale</a></li>
+    <li><a href="barriera-potenziale2.html">Barriera di potenziale</a></li>
+    <li><a href="buca-infinita.html">Buca di potenziale a pareti infinite</a></li>
+    <li><a href="buca-finita.html">Buca di potenziale a pareti finite</a></li>
+    <li><a href="buca-arcoseno.html">Buca di potenziale con soluzione tramite arcoseno (nuova)</a></li>
+    <li><a href="oscillatore-operatoriale2.html">Oscillatore armonico operatoriale</a></li>
+    <li><a href="postulati-meccanica-quantistica.html">Postulati della meccanica quantistica</a></li>
+    <li><a href="osservabili-compatibili.html">Osservabili compatibili (caso degenere e non degenere)</a></li>
+    <hr>
+    <!-- Relazione di indeterminazione -->
+    <li><a href="relazione-indeterminazione2.html">Relazione di indeterminazione:</a></li>
+    <li><a href="indeterminazione-operatoriale.html">Espressione generale operatoriale</a></li>
+    <li><a href="indeterminazione-minima.html">Stato con indeterminazione minima</a></li>
+    <li><a href="indeterminazione-operatori-generici.html">Dimostrazione del principio di indeterminazione per operatori generici (nuova)</a></li>
+    <hr>
+    <!-- Momento angolare -->
+    <li><a href="momento-angolare.html">Momento angolare:</a></li>
+    <li><a href="momento-lx-ly-lplus-lminus.html">Momento angolare \( L_x, L_y, L_+, L_- \)</a></li>
+    <li><a href="modello-vettoriale.html">Modello vettoriale</a></li>
+    <li><a href="evoluzione-operatori2.html">Evoluzione temporale degli operatori</a></li>
+    <li><a href="composizione-J-L-S.html">Composizione di \( J \), definizione di \( L \) e \( S \) (nuova)</a></li>
+    <hr>
+    <!-- 3D e potenziali centrali -->
+    <li><a href="equazione-schrodinger-3d.html">Equazione di Schrödinger in 3 dimensioni</a></li>
+    <li><a href="oscillatore-armonico-3d2.html">Oscillatore armonico in 3 dimensioni</a></li>
+    <li><a href="potenziale-centrale.html">Potenziale centrale, soluzione con \( u = R r \)</a></li>
+    <hr>
+    <!-- Struttura fine dell'atomo di idrogeno -->
+    <li><a href="struttura-fine-idrogeno.html">Struttura fine dell’atomo di idrogeno:</a></li>
+    <li><a href="hamiltoniana-relativistica.html">Hamiltoniana relativistica \( H_{\text{rel}} \)</a></li>
+    <li><a href="correzioni-hamiltoniane.html">Correzioni Hamiltoniane</a></li>
+    <li><a href="interazione-spin-orbita.html">Interazione spin-orbita \( H_{\text{spin-orbita}} \)</a></li>
+    <li><a href="correzione-darwin.html">Correzione di Darwin \( H_{\text{Darwin}} \)</a></li>
+    <hr>
+    <!-- Particelle identiche -->
+    <li><a href="composizione-momenti-angolari.html">Composizione dei momenti angolari</a></li>
+    <li><a href="particelle-identiche.html">Particelle identiche e postulato di simmetrizzazione</a></li>
+    <li><a href="composizione-spin.html">Composizione degli spin (nuova)</a></li>
+    <li><a href="slater-pauli.html">N particelle non interagenti, determinante di Slater, principio di Pauli</a></li>
+    <hr>
+    <!-- Perturbazioni stazionarie -->
+    <li><a href="perturbazioni-non-dipendenti-tempo.html">Perturbazioni non dipendenti dal tempo:</a></li>
+    <li><a href="perturbazioni-non-degenere2.html">Caso non degenere</a></li>
+    <li><a href="effetto-stark.html">Effetto Stark</a></li>
+    <hr>
+    <!-- Perturbazioni dipendenti dal tempo -->
+    <li><a href="perturbazioni-dipendenti-tempo.html">Perturbazioni dipendenti dal tempo:</a></li>
+    <li><a href="variazione-costanti.html">Metodo della variazione delle costanti</a></li>
+    <li><a href="perturbazione-periodica.html">Perturbazione periodica</a></li>
+    <li><a href="transizioni-continuo.html">Transizioni a uno stato del continuo (Regola d'oro di Fermi)</a></li>
+    <li><a href="vita-invariata.html">Probabilità che lo stato rimanga invariato, vita media, larghezza di riga</a></li>
+    <hr>
+    <!-- Effetti particelle in campi -->
+    <li><a href="effetto-zeeman-normale2.html">Effetto Zeeman normale</a></li>
+    <hr>
+    <!-- Teorema di Feynman-Hellmann -->
+    <li><a href="teorema-feynman-hellmann2.html">Teorema di Feynman-Hellmann</a></li>
+</ul>
+
+
+
+
+<h2 style="color: #3498db;">Riordina Domande Orali MQ</h2>
+<p>
+    Gli argomenti sono stati ordinati inizialmente in base alla loro struttura tematica. È possibile riordinarli 
+    utilizzando una delle seguenti metriche:
+</p>
+<ul>
+    <li><strong style="color: #e67e22;">Percentuale:</strong> Riordina in base alla frequenza stimata dell'argomento</li>
+    <li><strong style="color: #27ae60;">Dettaglio:</strong> Riordina in base alla lunghezza descrittiva</li>
+    <li><strong style="color: #9b59b6;">Alfabetico:</strong> Riordina in ordine alfabetico</li>
+    <li><strong style="color: #e74c3c;">Casuale:</strong> Riordina in modo casuale</li>
+</ul>
+<p>
+    Seleziona un criterio di riordinamento:
+</p>
+<form id="sort-options">
+    <label>
+        <input type="radio" name="sort" value="standard" checked> Mantieni l'ordine standard
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="percentage"> Riordina per Percentuale (frequenza stimata)
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="detail"> Riordina per Lunghezza Descrittiva
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="alphabetical"> Riordina Alfabeticamente
+    </label><br>
+    <label>
+        <input type="radio" name="sort" value="random"> Ordina Casualmente
+    </label><br><br>
+    <button type="button" onclick="applySort()" id="apply-sort-button" aria-label="Applica il criterio di riordinamento selezionato" title="Clicca per applicare il criterio di riordinamento selezionato">Applica Riordinamento</button>
+</form>
+
+<div id="sorted-results">
+    <!-- La lista riordinata verrà visualizzata qui -->
+</div>
+            </div>
+        </div>
+    </div>
+
+<script>
+const topics = [
+    { topic: "Effetto Compton", weight: 5, percentage: 4.17, detailLength: 15 },
+    { topic: "Equazione di Schrödinger: Forma generale [e operatoriale]", weight: 8, percentage: 6.67, detailLength: 60 },
+    { topic: "Conservazione della probabilità (locale e globale)", weight: 6, percentage: 5.00, detailLength: 45 },
+    { topic: "Hermiticità di H e conservazione della probabilità", weight: 6, percentage: 5.00, detailLength: 53 },
+    { topic: "Valore di aspettazione", weight: 5, percentage: 4.17, detailLength: 23 },
+    { topic: "Simmetrizzazione dei prodotti", weight: 5, percentage: 4.17, detailLength: 26 },
+    { topic: "Teorema di Ehrenfest", weight: 5, percentage: 4.17, detailLength: 22 },
+    { topic: "Soluzione dell’equazione di Schrödinger: Stati stazionari", weight: 7, percentage: 5.83, detailLength: 58 },
+    { topic: "Proprietà autofunzioni dell’energia", weight: 6, percentage: 5.00, detailLength: 38 },
+    { topic: "Problemi unidimensionali: Particella libera o V costante", weight: 7, percentage: 5.83, detailLength: 58 },
+    { topic: "Gradino di potenziale", weight: 6, percentage: 5.00, detailLength: 21 },
+    { topic: "Barriera di potenziale", weight: 6, percentage: 5.00, detailLength: 23 },
+    { topic: "Buca di potenziale a pareti infinite", weight: 6, percentage: 5.00, detailLength: 34 },
+    { topic: "Buca di potenziale a pareti finite", weight: 5, percentage: 4.17, detailLength: 29 },
+    { topic: "Momento Lx, Ly, L+, L-", weight: 6, percentage: 5.00, detailLength: 20 },
+    { topic: "Oscillatore armonico: Approccio operatoriale", weight: 10, percentage: 8.33, detailLength: 42 },
+    { topic: "Oscillatore armonico: Soluzione in 3 dimensioni", weight: 8, percentage: 6.67, detailLength: 51 },
+    { topic: "Postulati della meccanica quantistica", weight: 7, percentage: 5.83, detailLength: 38 },
+    { topic: "Osservabili compatibili (caso degenere e non degenere)", weight: 6, percentage: 5.00, detailLength: 56 },
+    { topic: "Relazione di indeterminazione: Espressione generale operatoriale", weight: 8, percentage: 6.67, detailLength: 64 },
+    { topic: "Relazione di indeterminazione: Stato con indeterminazione minima", weight: 7, percentage: 5.83, detailLength: 64 },
+    { topic: "Momento angolare: Definizione e proprietà", weight: 6, percentage: 5.00, detailLength: 41 },
+    { topic: "Momento angolare: Evoluzione temporale degli operatori", weight: 6, percentage: 5.00, detailLength: 44 },
+    { topic: "Momento angolare: Modello vettoriale", weight: 5, percentage: 4.17, detailLength: 20 },
+    { topic: "Momento angolare: Composizione di L e S", weight: 7, percentage: 5.83, detailLength: 56 },
+    { topic: "Struttura fine dell’atomo di idrogeno: Hamiltoniana relativistica (H_rel)", weight: 4, percentage: 3.33, detailLength: 55 },
+    { topic: "Struttura fine dell’atomo di idrogeno: Correzioni Hamiltoniane", weight: 4, percentage: 3.33, detailLength: 38 },
+    { topic: "Struttura fine dell’atomo di idrogeno: Interazione spin-orbita (H_spin-orbita)", weight: 4, percentage: 3.33, detailLength: 78 },
+    { topic: "Struttura fine dell’atomo di idrogeno: Correzione di Darwin (H_Darwin)", weight: 4, percentage: 3.33, detailLength: 58 },
+    { topic: "Particelle in campo elettromagnetico: Effetto Zeeman normale", weight: 4, percentage: 3.33, detailLength: 44 },
+    { topic: "Particelle identiche: N particelle non interagenti", weight: 4, percentage: 3.33, detailLength: 51 },
+    { topic: "Determinante di Slater", weight: 4, percentage: 3.33, detailLength: 26 },
+    { topic: "Principio di Pauli", weight: 4, percentage: 3.33, detailLength: 20 },
+    { topic: "Composizione degli spin", weight: 5, percentage: 4.17, detailLength: 35 },
+    { topic: "Perturbazioni non dipendenti dal tempo: Caso non degenere", weight: 6, percentage: 5.00, detailLength: 45 },
+    { topic: "Effetto Stark", weight: 6, percentage: 5.00, detailLength: 34 },
+    { topic: "Perturbazioni dipendenti dal tempo: Metodo della variazione delle costanti", weight: 6, percentage: 5.00, detailLength: 74 },
+    { topic: "Perturbazioni dipendenti dal tempo: Perturbazione periodica", weight: 6, percentage: 5.00, detailLength: 60 },
+    { topic: "Perturbazioni dipendenti dal tempo: Transizioni a uno stato del continuo", weight: 6, percentage: 5.00, detailLength: 72 },
+    { topic: "Perturbazioni dipendenti dal tempo: Probabilità dello stato invariato", weight: 5, percentage: 4.17, detailLength: 44 },
+    { topic: "Teorema di Feynman-Hellmann", weight: 4, percentage: 3.33, detailLength: 33 },
+];
+
+const medalImages = {
+    Gold: "Gold.png",
+    Silver: "Silver.png",
+    Bronze: "Bronze.png",
+};
+
+function applySort() {
+    const sortOption = document.querySelector('input[name="sort"]:checked').value;
+    let sortedTopics;
+
+    // Ordinamento in base all'opzione selezionata
+    if (sortOption === "percentage") {
+        sortedTopics = [...topics].sort((a, b) => b.percentage - a.percentage);
+    } else if (sortOption === "detail") {
+        sortedTopics = [...topics].sort((a, b) => b.detailLength - a.detailLength);
+    } else if (sortOption === "alphabetical") {
+        sortedTopics = [...topics].sort((a, b) => a.topic.localeCompare(b.topic));
+    } else if (sortOption === "random") {
+        // Ordinamento casuale
+        sortedTopics = [...topics].sort(() => Math.random() - 0.5);
+    } else {
+        sortedTopics = [...topics]; // Mantieni ordine standard
+    }
+
+    const resultsDiv = document.getElementById("sorted-results");
+    resultsDiv.innerHTML = `
+        <h3>Lista Riordinata</h3>
+        <ul>
+            ${sortedTopics
+              .map((topic, index) => {
+                  let color = "#000";
+                  let medal = "";
+                  if (sortOption === "percentage") {
+                      if (index < 3) {
+                          color = "#FFD700"; // Oro
+                          medal = `<img src="${medalImages.Gold}" style="width:20px;height:20px;">`;
+                      } else if (index < 8) {
+                          color = "#C0C0C0"; // Argento
+                          medal = `<img src="${medalImages.Silver}" style="width:20px;height:20px;">`;
+                      } else if (index < 18) {
+                          color = "#CD7F32"; // Bronzo
+                          medal = `<img src="${medalImages.Bronze}" style="width:20px;height:20px;">`;
+                      }
+                  }
+                  return `<li style="color: ${color};">${topic.topic} - Percentuale: ${topic.percentage.toFixed(
+                      2
+                  )}%, Dettaglio: ${topic.detailLength} ${medal}</li>`;
+              })
+              .join("")}
+        </ul>
+    `;
+}
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    sidebar.classList.toggle('closed');
+    content.classList.toggle('collapsed');
+}
+</script>
+
+</body>
+</html>
