@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fisica I (FI)</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,38 +12,48 @@
             color: #333;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
         }
         h1 {
             font-size: 3em;
             color: #654321;
             text-shadow: 2px 2px 5px #fff;
-            margin-top: 20px;
+            text-align: center;
+            margin: 20px 0;
         }
-        .pdf-container {
-            width: 80%;
-            height: 80vh;
-            margin: 20px auto;
+        .download-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #654321;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+        }
+        .download-button:hover {
+            background: #000;
+        }
+        .image-gallery {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        .image-gallery img {
+            max-width: 80%;
+            height: auto;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             border: 2px solid #654321;
-            overflow: hidden;
             border-radius: 10px;
-            background: #fff;
-        }
-        #pdf-viewer {
-            width: 100%;
-            height: 100%;
-            overflow-y: scroll;
-        }
-        canvas {
-            display: block;
-            margin: 0 auto;
         }
         footer {
+            text-align: center;
             margin-top: 20px;
             color: #654321;
             font-size: 0.9em;
@@ -62,35 +71,20 @@
     </style>
 </head>
 <body>
+    <a href="BibbiaEsercitazioniV3_8.pdf" class="download-button" download>Scarica il PDF</a>
     <h1>Fisica I (FI)</h1>
-    <div class="pdf-container" id="pdf-viewer">
-        <!-- PDF.js renders the pages here -->
+    <div class="image-gallery">
+        <!-- Inizio galleria immagini -->
+        <img src="images/BibbiaEsercitazioniV3_8_Page_001.jpg" alt="Pagina 1">
+        <img src="images/BibbiaEsercitazioniV3_8_Page_002.jpg" alt="Pagina 2">
+        <img src="images/BibbiaEsercitazioniV3_8_Page_003.jpg" alt="Pagina 3">
+        <img src="images/BibbiaEsercitazioniV3_8_Page_004.jpg" alt="Pagina 4">
+        <img src="images/BibbiaEsercitazioniV3_8_Page_005.jpg" alt="Pagina 5">
+        <img src="images/BibbiaEsercitazioniV3_8_Page_006.jpg" alt="Pagina 6">
+        <!-- Continuo -->
     </div>
     <footer>
         Torna all'<a href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/index.html">Indice Principale</a>
     </footer>
-
-    <script>
-        const url = 'BibbiaEsercitazioniV3_8.pdf'; // Path al PDF
-        const pdfContainer = document.getElementById('pdf-viewer');
-
-        pdfjsLib.getDocument(url).promise.then(pdf => {
-            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                pdf.getPage(pageNum).then(page => {
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    pdfContainer.appendChild(canvas);
-
-                    const viewport = page.getViewport({ scale: 1.5 });
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    page.render({ canvasContext: context, viewport: viewport });
-                });
-            }
-        }).catch(error => {
-            pdfContainer.innerHTML = `<p style="color: red;">Errore nel caricamento del PDF: ${error.message}</p>`;
-        });
-    </script>
 </body>
 </html>
