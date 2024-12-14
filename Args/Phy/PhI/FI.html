@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fisica I (FI)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,11 +33,16 @@
             border: 2px solid #654321;
             overflow: hidden;
             border-radius: 10px;
+            background: #fff;
         }
-        iframe {
+        #pdf-viewer {
             width: 100%;
             height: 100%;
-            border: none;
+            overflow-y: scroll;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
         }
         footer {
             margin-top: 20px;
@@ -57,11 +63,34 @@
 </head>
 <body>
     <h1>Fisica I (FI)</h1>
-    <div class="pdf-container">
-        <iframe src="BibbiaEsercitazioniV3_8.pdf" title="Bibbia Esercitazioni"></iframe>
+    <div class="pdf-container" id="pdf-viewer">
+        <!-- PDF.js renders the pages here -->
     </div>
     <footer>
-        Torna all'<a href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/Phy.html">Indice Principale</a>
+        Torna all'<a href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/index.html">Indice Principale</a>
     </footer>
+
+    <script>
+        const url = 'BibbiaEsercitazioniV3_8.pdf'; // Path al PDF
+        const pdfContainer = document.getElementById('pdf-viewer');
+
+        pdfjsLib.getDocument(url).promise.then(pdf => {
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(page => {
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    pdfContainer.appendChild(canvas);
+
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    page.render({ canvasContext: context, viewport: viewport });
+                });
+            }
+        }).catch(error => {
+            pdfContainer.innerHTML = `<p style="color: red;">Errore nel caricamento del PDF: ${error.message}</p>`;
+        });
+    </script>
 </body>
 </html>
