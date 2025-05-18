@@ -297,6 +297,113 @@
             border-radius: 5px;
             margin-top: 5px;
         }
+				@keyframes fadeIn {
+		  from { opacity: 0; transform: translateY(20px); }
+		  to { opacity: 1; transform: translateY(0); }
+		}
+    @keyframes backgroundSpin {
+        0% {
+            transform: rotateZ(0deg) scale(1.5);
+        }
+        100% {
+            transform: rotateZ(360deg) scale(1.5);
+        }
+    }
+		@keyframes wheelSpin {
+		  0% { transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); }
+		}
+		    @keyframes backgroundSpin {
+        0% {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.2);
+        }
+        25% {
+            transform: perspective(1000px) rotateX(90deg) rotateY(90deg) scale(1.3);
+        }
+        50% {
+            transform: perspective(1000px) rotateX(180deg) rotateY(180deg) scale(1.4);
+        }
+        75% {
+            transform: perspective(1000px) rotateX(270deg) rotateY(270deg) scale(1.3);
+        }
+        100% {
+            transform: perspective(1000px) rotateX(360deg) rotateY(360deg) scale(1.2);
+        }
+    }
+
+     #wheel-container {
+        position: relative;
+        margin: 3em auto;
+        padding: 4em;
+        border-radius: 15px;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+
+    #wheel-container::before {
+        content: '';
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        right: -50%;
+        bottom: -50%;
+        background: url('img/eso0932a.jpg') center/cover;
+        animation: backgroundSpin 240s linear infinite;
+        filter: brightness(0.6) blur(2px);
+        z-index: -1;
+        transform: scale(1.2) rotateZ(360deg);
+    }
+
+    #wheel-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('img/rotabackground.jpg') center/cover;
+        opacity: 0.8;
+        z-index: 0;
+        mix-blend-mode: soft-light;
+    }
+
+    @keyframes floating {
+        0% {
+            transform: translateY(0) rotateX(-3deg) rotateY(-3deg);
+        }
+        50% {
+            transform: translateY(-20px) rotateX(3deg) rotateY(3deg);
+        }
+        100% {
+            transform: translateY(0) rotateX(-3deg) rotateY(-3deg);
+        }
+    }
+ @keyframes backgroundSpin {
+        from { transform: rotate(0deg) scale(1.4); }
+        to { transform: rotate(360deg) scale(1.4); }
+    }
+
+    .wheel-content {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2em;
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .background-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, 
+            rgba(179, 0, 0, 0.1) 0%, 
+            rgba(0, 0, 0, 0.6) 70%);
+        z-index: 1;
+    }
     </style>
 </head>
 <body>
@@ -677,7 +784,33 @@
   </ol>
 </div>
 
-
+<!-- Ruota della fortuna per le Domande Orali MQ 2025 -->
+<div id="wheel-container">
+    <div class="background-overlay"></div>
+    <div class="wheel-content">
+    <h3 style="color: #b30000; font-family: 'Georgia', serif; margin-bottom: 1.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+      Ruota della Fortuna: Domanda Orale Casual 2025
+    </h3>
+    
+    <canvas id="wheel" width="400" height="400" style="border: 6px solid #b30000; border-radius: 50%; background: #fff; box-shadow: 0 0 15px rgba(179, 0, 0, 0.4);"></canvas>
+    
+    <br>
+    <button onclick="spinWheel()" style="margin-top: 2em; background: linear-gradient(145deg, #b30000, #8a0000); color: white; 
+              font-weight: bold; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; 
+              font-size: 1.1em; transition: transform 0.3s, box-shadow 0.3s;"
+            onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 5px 15px rgba(179,0,0,0.4)';" 
+            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+      🎡 Gira la Ruota
+    </button>
+    
+    <div id="result-box" style="margin-top: 2em; padding: 1.5em; background: #fff3f3; border-radius: 10px; 
+              border-left: 5px solid #b30000; display: none; animation: fadeIn 0.5s ease-in;">
+      <p id="selected-question" style="margin: 0; font-size: 1.3em; font-weight: bold; color: #b30000;
+                 line-height: 1.4; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">
+      </p>
+    </div>
+  </div>
+</div>
 
 
 <h2 style="color: #3498db;">Riordina Domande Orali MQ</h2>
@@ -724,6 +857,104 @@
     </div>
 
 <script>
+
+// Array di colori arcobaleno per 18 spicchi
+const colors = [
+  '#FF6B6B', '#FF8E53', '#FFD93D', '#6BFF7A', '#53D1FF', '#6B8AFF',
+  '#B56BFF', '#FF6BCD', '#FF3333', '#FF9053', '#FFE652', '#52FF9C',
+  '#52D8FF', '#5273FF', '#A652FF', '#FF52C2', '#FF5252', '#FFA652'
+];
+
+const questions = [
+  "Barriera di potenziale (confronto MA-CL)",
+  "Discussione termine spin-orbita nella struttura fine dell’atomo di idrogeno",
+  "Momento angolare di due fermioni legati",
+  "Teoria delle perturbazioni stazionarie degenere",
+  "Transizioni tra livelli atomici con pulsazione di Bohr",
+  "Conservazione della probabilità globale e locale",
+  "Sistemi di particelle identiche",
+  "Perturbazioni stazionarie",
+  "Profilo generico di potenziale",
+  "Osservabili compatibili",
+  "Osservabili commutano se e solo se sono compatibili",
+  "Step di potenziale",
+  "Perturbazioni dipendenti dal tempo",
+  "Principio di Heisenberg",
+  "Pacchetto d’onda a indeterminazione minima",
+  "Coefficienti di Clebsch–Gordan",
+  "Gradino di potenziale",
+  "Composizione di momenti angolari totali"
+];
+
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const radius = canvas.width / 2;
+const center = radius;
+const step = (2 * Math.PI) / questions.length;
+
+function drawWheel(highlightIndex = -1) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Disegna gli spicchi colorati
+  for (let i = 0; i < questions.length; i++) {
+    ctx.beginPath();
+    ctx.moveTo(center, center);
+    ctx.arc(center, center, radius, i * step, (i + 1) * step);
+    ctx.fillStyle = highlightIndex === i ? '#b30000' : colors[i];
+    ctx.fill();
+    
+    // Aggiungi testo
+    ctx.save();
+    ctx.translate(center, center);
+    ctx.rotate(i * step + step / 2);
+    ctx.textAlign = "right";
+    ctx.fillStyle = '#fff';
+    ctx.font = "bold 12px Arial";
+    ctx.fillText(questions[i].substring(0, 20), radius - 15, 5);
+    ctx.restore();
+  }
+
+  // Cerchio centrale
+  ctx.beginPath();
+  ctx.arc(center, center, 20, 0, 2 * Math.PI);
+  ctx.fillStyle = '#b30000';
+  ctx.fill();
+}
+
+let rotation = 0;
+let isSpinning = false;
+
+function spinWheel() {
+  if (isSpinning) return;
+  isSpinning = true;
+  document.getElementById('result-box').style.display = 'none';
+
+  const spins = 5 + Math.random() * 3;
+  const finalRotation = rotation + spins * 360;
+  const selectedIndex = Math.floor((questions.length - (finalRotation % 360) / (360 / questions.length)) % questions.length);
+
+  const animate = () => {
+    rotation += 10;
+    if (rotation >= finalRotation) {
+      drawWheel(selectedIndex);
+      document.getElementById("selected-question").textContent = 
+        `Domanda selezionata: ${questions[selectedIndex]}`;
+      document.getElementById('result-box').style.display = 'block';
+      isSpinning = false;
+      return;
+    }
+    
+    drawWheel();
+    canvas.style.transform = `rotate(${rotation}deg)`;
+    requestAnimationFrame(animate);
+  };
+  
+  requestAnimationFrame(animate);
+}
+
+// Inizializza la ruota
+drawWheel();
+
 const topics = [
     { topic: "Effetto Compton", weight: 5, percentage: 4.17, detailLength: 15 },
     { topic: "Equazione di Schrödinger: Forma generale [e operatoriale]", weight: 8, percentage: 6.67, detailLength: 60 },
