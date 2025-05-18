@@ -7,331 +7,280 @@
     <script id="MathJax-script" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <title>Indice MQ</title>
-    <style>
-        /* Palette colori generali */
-        :root {
-            --background-color: #f9f9f9;
-            --sidebar-color: #2c3e50;
-            --sidebar-text-color: #ecf0f1;
-            --sidebar-hover-color: #34495e;
-            --content-background: #ffffff;
-            --header-color: #3498db;
-            --link-color: #2980b9;
-            --link-hover-color: #1abc9c;
-            --text-color: #2c3e50;
-        }
-
-        /* Colori per i 14 argomenti principali */
-        .argomento-1 {background-color: #f9c0c0;}   /* Limiti fisica classica */
-        .argomento-2 {background-color: #fce3c0;}   /* Onde e particelle */
-        .argomento-3 {background-color: #f9f9c0;}   /* Eq. Schr. indip. tempo */
-        .argomento-4 {background-color: #c0f9c4;}   /* Problemi 1D */
-        .argomento-5 {background-color: #c0f9f4;}   /* Operatori e spazi vett. */
-        .argomento-6 {background-color: #c0d0f9;}   /* Postulati MQ */
-        .argomento-7 {background-color: #e0c0f9;}   /* Momento angolare */
-        .argomento-8 {background-color: #f9c0e3;}   /* Eq. 3D */
-        .argomento-9 {background-color: #f9d8c0;}   /* Spin */
-        .argomento-10{background-color: #f9ecc0;}   /* Particelle identiche */
-        .argomento-11{background-color: #d0f9c0;}   /* Composiz. momenti ang. */
-        .argomento-12{background-color: #c0f9f9;}   /* Perturbazioni staz. */
-        .argomento-13{background-color: #c0e0f9;}   /* Struttura fine idrogeno */
-        .argomento-14{background-color: #f9c0f9;}   /* Pert. dip. dal tempo */
-
-        /* Colori per Esercizi (Set) - 10 set */
-        .esercizio-1 {background-color: #ffe5e0;} 
-        .esercizio-2 {background-color: #fff0e0;}
-        .esercizio-3 {background-color: #fffce0;}
-        .esercizio-4 {background-color: #e0ffe5;}
-        .esercizio-5 {background-color: #e0fffa;}
-        .esercizio-6 {background-color: #e0f0ff;}
-        .esercizio-7 {background-color: #f0e0ff;}
-        .esercizio-8 {background-color: #ffe0f5;}
-        .esercizio-9 {background-color: #f7ffe0;}
-        .esercizio-10{background-color: #e0ffe0;}
-
-        /* Colori per Esami Scritti (9 esami) */
-        .esame-1 {background-color: #ffe6f0;}
-        .esame-2 {background-color: #ffe6f9;}
-        .esame-3 {background-color: #fce6ff;}
-        .esame-4 {background-color: #e6e6ff;}
-        .esame-5 {background-color: #e6f9ff;}
-        .esame-6 {background-color: #e6fffa;}
-        .esame-7 {background-color: #e6ffed;}
-        .esame-8 {background-color: #f6ffe6;}
-        .esame-9 {background-color: #fffae6;}
-
-        /* Colori per Domande Orali - assegnamo classi ai principali gruppi */
-        /* Individuiamo i blocchi principali (strong) e diamo classi .orale-1, .orale-2, ecc. */
-        .orale-1 {background-color: #faf0f0;} /* Equazione di Schrödinger */
-        .orale-2 {background-color: #faf8f0;} /* Problemi 1D */
-        .orale-3 {background-color: #f0faf0;} /* Rel. indeterminazione */
-        .orale-4 {background-color: #f0f0fa;} /* Momento angolare */
-        .orale-5 {background-color: #f5f0fa;} /* Struttura fine idrogeno */
-        .orale-6 {background-color: #f0f5fa;} /* Perturbazioni non dip. tempo */
-        .orale-7 {background-color: #f0faf5;} /* Perturbazioni dip. tempo */
-
-		/* Stile generale pagina */
-		body {
-			font-family: 'Arial', sans-serif;
-			margin: 0;
-			display: flex;
-			background: url('img/texture_ghiaccio.png') repeat center center fixed;
-			background-size: cover;
-			color: var(--text-color);
-		}
-		
-        .sidebar {
-            width: 250px;
-            background-color: rgba(44, 62, 80, 0.95);
-            color: var(--sidebar-text-color);
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            position: fixed;
-            height: 100%;
-            transform: translateX(0);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .sidebar.closed {
-            transform: translateX(-100%);
-        }
-
-        .sidebar h1 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar li {
-            margin: 15px 0;
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            color: var(--sidebar-text-color);
-            font-size: 14px;
-            padding: 8px 12px;
-            display: block;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .sidebar a:hover {
-            background-color: var(--sidebar-hover-color);
-            color: var(--link-hover-color);
-        }
-
-        .content {
-            margin-left: 270px;
-            padding: 20px;
-            flex: 1;
-            background-color: rgba(255, 255, 255, 0.85);
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        .content.collapsed {
-            margin-left: 0;
-        }
-
-        .toggle-btn {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background-color: var(--header-color);
-            color: white;
-            border: none;
-            font-size: 12px;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-
-        .toggle-btn:hover {
-            background-color: var(--link-hover-color);
-        }
-
-        .content h2 {
-            color: var(--header-color);
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .content ul {
-            list-style-type: square;
-            padding-left: 20px;
-        }
-
-        .content a {
-            color: var(--link-color);
-            text-decoration: none;
-        }
-
-        .content a:hover {
-            color: var(--link-hover-color);
-            text-decoration: underline;
-        }
-
-        .image-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 2px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .links {
-            margin-top: 20px;
-        }
-
-        #apply-sort-button {
-            background-color: #3498db;
-            color: white; 
-            border: none;
-            padding: 10px 20px; 
-            font-size: 16px; 
-            font-weight: bold; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        #apply-sort-button:hover {
-            background-color: #2980b9; 
-            transform: scale(1.05); 
-        }
-
-        #apply-sort-button:active {
-            background-color: #1c5986; 
-            transform: scale(0.95); 
-        }
-
-        /* Tabella Argomenti */
-        table.argomenti-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #ffffff;
-            border: 3px solid var(--header-color);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        table.argomenti-table td {
-            vertical-align: top;
-            padding: 15px;
-            border-right: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-        }
-
-        table.argomenti-table tr td:last-child {
-            border-right: none;
-        }
-
-        table.argomenti-table td strong {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--header-color);
-            font-size: 1.2em;
-        }
-
-        table.argomenti-table ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-
-        table.argomenti-table td:hover {
-            background-color: #eaf2f8;
-        }
-
-        table.argomenti-table a {
-            color: var(--text-color);
-        }
-        table.argomenti-table a:hover {
-            color: var(--link-hover-color);
-            text-decoration: underline;
-        }
-
-        /* Stile per le liste di esercizi, esami, domande orali */
-        /* Ogni li principale avrà una classe assegnata per il colore di sfondo */
-        ul > li.esercizio-1, ul > li.esercizio-2, ul > li.esercizio-3, 
-        ul > li.esercizio-4, ul > li.esercizio-5, ul > li.esercizio-6,
-        ul > li.esercizio-7, ul > li.esercizio-8, ul > li.esercizio-9,
-        ul > li.esercizio-10 {
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-
-        ul > li.esame-1, ul > li.esame-2, ul > li.esame-3, ul > li.esame-4,
-        ul > li.esame-5, ul > li.esame-6, ul > li.esame-7, ul > li.esame-8,
-        ul > li.esame-9 {
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-
-        /* Domande orali: i blocchi con strong avranno classi .orale-x */
-        .orale-1, .orale-2, .orale-3, .orale-4, .orale-5, .orale-6, .orale-7 {
-            padding: 10px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-bottom: 5px;
-        }
-        /* Anche i sub-lists interni avranno un po' di padding */
-        ul ul {
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-				@keyframes fadeIn {
-		  from { opacity: 0; transform: translateY(20px); }
-		  to { opacity: 1; transform: translateY(0); }
-		}
-    @keyframes backgroundSpin {
-        0% {
-            transform: rotateZ(0deg) scale(1.5);
-        }
-        100% {
-            transform: rotateZ(360deg) scale(1.5);
-        }
-    }
-		@keyframes wheelSpin {
-		  0% { transform: rotate(0deg); }
-		  100% { transform: rotate(360deg); }
-		}
-		    @keyframes backgroundSpin {
-        0% {
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.2);
-        }
-        25% {
-            transform: perspective(1000px) rotateX(90deg) rotateY(90deg) scale(1.3);
-        }
-        50% {
-            transform: perspective(1000px) rotateX(180deg) rotateY(180deg) scale(1.4);
-        }
-        75% {
-            transform: perspective(1000px) rotateX(270deg) rotateY(270deg) scale(1.3);
-        }
-        100% {
-            transform: perspective(1000px) rotateX(360deg) rotateY(360deg) scale(1.2);
-        }
+<style>
+    :root {
+        --background-color: #f9f9f9;
+        --sidebar-color: #2c3e50;
+        --sidebar-text-color: #ecf0f1;
+        --sidebar-hover-color: #34495e;
+        --content-background: #ffffff;
+        --header-color: #3498db;
+        --link-color: #2980b9;
+        --link-hover-color: #1abc9c;
+        --text-color: #2c3e50;
     }
 
-     #wheel-container {
+    /* Colori per i 14 argomenti principali */
+    .argomento-1 {background-color: #f9c0c0;}
+    .argomento-2 {background-color: #fce3c0;}
+    .argomento-3 {background-color: #f9f9c0;}
+    .argomento-4 {background-color: #c0f9c4;}
+    .argomento-5 {background-color: #c0f9f4;}
+    .argomento-6 {background-color: #c0d0f9;}
+    .argomento-7 {background-color: #e0c0f9;}
+    .argomento-8 {background-color: #f9c0e3;}
+    .argomento-9 {background-color: #f9d8c0;}
+    .argomento-10{background-color: #f9ecc0;}
+    .argomento-11{background-color: #d0f9c0;}
+    .argomento-12{background-color: #c0f9f9;}
+    .argomento-13{background-color: #c0e0f9;}
+    .argomento-14{background-color: #f9c0f9;}
+
+    /* Colori per Esercizi (Set) - 10 set */
+    .esercizio-1 {background-color: #ffe5e0;}
+    .esercizio-2 {background-color: #fff0e0;}
+    .esercizio-3 {background-color: #fffce0;}
+    .esercizio-4 {background-color: #e0ffe5;}
+    .esercizio-5 {background-color: #e0fffa;}
+    .esercizio-6 {background-color: #e0f0ff;}
+    .esercizio-7 {background-color: #f0e0ff;}
+    .esercizio-8 {background-color: #ffe0f5;}
+    .esercizio-9 {background-color: #f7ffe0;}
+    .esercizio-10{background-color: #e0ffe0;}
+
+    /* Colori per Esami Scritti (9 esami) */
+    .esame-1 {background-color: #ffe6f0;}
+    .esame-2 {background-color: #ffe6f9;}
+    .esame-3 {background-color: #fce6ff;}
+    .esame-4 {background-color: #e6e6ff;}
+    .esame-5 {background-color: #e6f9ff;}
+    .esame-6 {background-color: #e6fffa;}
+    .esame-7 {background-color: #e6ffed;}
+    .esame-8 {background-color: #f6ffe6;}
+    .esame-9 {background-color: #fffae6;}
+
+    /* Colori per Domande Orali */
+    .orale-1 {background-color: #faf0f0;}
+    .orale-2 {background-color: #faf8f0;}
+    .orale-3 {background-color: #f0faf0;}
+    .orale-4 {background-color: #f0f0fa;}
+    .orale-5 {background-color: #f5f0fa;}
+    .orale-6 {background-color: #f0f5fa;}
+    .orale-7 {background-color: #f0faf5;}
+
+    /* --- Stile generale pagina --- */
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        display: flex;
+        background: url('img/texture_ghiaccio.png') repeat center center fixed;
+        background-size: cover;
+        color: var(--text-color);
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: rgba(44, 62, 80, 0.95);
+        color: var(--sidebar-text-color);
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        position: fixed;
+        height: 100%;
+        transform: translateX(0);
+        transition: transform 0.3s ease-in-out;
+    }
+    .sidebar.closed {
+        transform: translateX(-100%);
+    }
+    .sidebar h1 {
+        font-size: 18px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+    .sidebar li {
+        margin: 15px 0;
+    }
+    .sidebar a {
+        text-decoration: none;
+        color: var(--sidebar-text-color);
+        font-size: 14px;
+        padding: 8px 12px;
+        display: block;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .sidebar a:hover {
+        background-color: var(--sidebar-hover-color);
+        color: var(--link-hover-color);
+    }
+
+    .content {
+        margin-left: 270px;
+        padding: 20px;
+        flex: 1;
+        background-color: rgba(255, 255, 255, 0.85);
+        transition: margin-left 0.3s ease-in-out;
+    }
+    .content.collapsed {
+        margin-left: 0;
+    }
+
+    .toggle-btn {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: var(--header-color);
+        color: white;
+        border: none;
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        z-index: 1000;
+    }
+    .toggle-btn:hover {
+        background-color: var(--link-hover-color);
+    }
+
+    .content h2 {
+        color: var(--header-color);
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .content ul {
+        list-style-type: square;
+        padding-left: 20px;
+    }
+    .content a {
+        color: var(--link-color);
+        text-decoration: none;
+    }
+    .content a:hover {
+        color: var(--link-hover-color);
+        text-decoration: underline;
+    }
+    .image-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid #ddd;
+        border-radius: 5px;
+    }
+    .links {
+        margin-top: 20px;
+    }
+
+    #apply-sort-button {
+        background-color: #3498db;
+        color: white; 
+        border: none;
+        padding: 10px 20px; 
+        font-size: 16px; 
+        font-weight: bold; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    #apply-sort-button:hover {
+        background-color: #2980b9; 
+        transform: scale(1.05); 
+    }
+    #apply-sort-button:active {
+        background-color: #1c5986; 
+        transform: scale(0.95); 
+    }
+
+    /* --- Tabelle Argomenti --- */
+    table.argomenti-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #ffffff;
+        border: 3px solid var(--header-color);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    table.argomenti-table td {
+        vertical-align: top;
+        padding: 15px;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+    table.argomenti-table tr td:last-child {
+        border-right: none;
+    }
+    table.argomenti-table td strong {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--header-color);
+        font-size: 1.2em;
+    }
+    table.argomenti-table ul {
+        list-style-type: disc;
+        margin: 0;
+        padding-left: 20px;
+    }
+    table.argomenti-table td:hover {
+        background-color: #eaf2f8;
+    }
+    table.argomenti-table a {
+        color: var(--text-color);
+    }
+    table.argomenti-table a:hover {
+        color: var(--link-hover-color);
+        text-decoration: underline;
+    }
+
+    /* --- Liste colorate esercizi/esami/orali --- */
+    ul > li[class^="esercizio-"],
+    ul > li[class^="esame-"] {
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    /* Blocchi domande orali */
+    .orale-1, .orale-2, .orale-3, .orale-4, .orale-5, .orale-6, .orale-7 {
+        padding: 10px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+    ul ul {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    /* --- Animazioni --- */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+@keyframes backgroundSpin {
+    0%   { transform: perspective(1000px) rotateX(7deg) rotateY(-15deg) scale(1.2);}
+    50%  { transform: perspective(1000px) rotateX(-7deg) rotateY(15deg) scale(1.22);}
+    100% { transform: perspective(1000px) rotateX(7deg) rotateY(-15deg) scale(1.2);}
+}
+
+    @keyframes floating {
+        0%   { transform: translateY(0) rotateX(-3deg) rotateY(-3deg);}
+        50%  { transform: translateY(-20px) rotateX(3deg) rotateY(3deg);}
+        100% { transform: translateY(0) rotateX(-3deg) rotateY(-3deg);}
+    }
+
+    /* --- Ruota della Fortuna --- */
+    #wheel-container {
         position: relative;
         margin: 3em auto;
         padding: 4em;
@@ -340,49 +289,37 @@
         transform-style: preserve-3d;
         perspective: 1000px;
     }
-
     #wheel-container::before {
         content: '';
         position: fixed;
         top: -50%;
-        left: -50%;
-        right: -50%;
+        left: -80%;
+        right: -80%;
         bottom: -50%;
-        background: url('img/eso0932a.jpg') center/cover;
-        animation: backgroundSpin 240s linear infinite;
+        background: url('img/rotabackground.jpg') center/cover;
+           animation: backgroundSpin 20s cubic-bezier(0.85,0.03,0.16,0.98) infinite alternate;
+    /*       ^^^^
+      - '40s' è la durata completa (regolata a piacere)
+      - 'cubic-bezier(0.7,0,0.3,1)' dà una “ease-in-out” personalizzata, accelera al centro e rallenta ai bordi
+      - 'infinite alternate' fa oscillare avanti e indietro */
         filter: brightness(0.6) blur(2px);
         z-index: -1;
         transform: scale(1.2) rotateZ(360deg);
     }
+#wheel-container::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: url('img/eso0932a.jpg') center center / cover no-repeat;
+	opacity: 0.32;
+	z-index: 0;
+	mix-blend-mode: screen;
+}
 
-    #wheel-container::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('img/rotabackground.jpg') center/cover;
-        opacity: 0.8;
-        z-index: 0;
-        mix-blend-mode: soft-light;
-    }
 
-    @keyframes floating {
-        0% {
-            transform: translateY(0) rotateX(-3deg) rotateY(-3deg);
-        }
-        50% {
-            transform: translateY(-20px) rotateX(3deg) rotateY(3deg);
-        }
-        100% {
-            transform: translateY(0) rotateX(-3deg) rotateY(-3deg);
-        }
-    }
- @keyframes backgroundSpin {
-        from { transform: rotate(0deg) scale(1.4); }
-        to { transform: rotate(360deg) scale(1.4); }
-    }
 
     .wheel-content {
         position: relative;
@@ -392,19 +329,19 @@
         border-radius: 10px;
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
     }
-
     .background-overlay {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: radial-gradient(circle at center, 
-            rgba(179, 0, 0, 0.1) 0%, 
+        background: radial-gradient(circle at center,
+            rgba(179, 0, 0, 0.1) 0%,
             rgba(0, 0, 0, 0.6) 70%);
         z-index: 1;
     }
-    </style>
+</style>
+
 </head>
 <body>
 
@@ -937,8 +874,22 @@ function spinWheel() {
     rotation += 10;
     if (rotation >= finalRotation) {
       drawWheel(selectedIndex);
-      document.getElementById("selected-question").textContent = 
-        `Domanda selezionata: ${questions[selectedIndex]}`;
+// Array dei link (in ordine, come le domande)
+const links = [
+  "Domanda2025_1.html", "Domanda2025_2.html", "Domanda2025_3.html", "Domanda2025_4.html",
+  "Domanda2025_5.html", "Domanda2025_6.html", "Domanda2025_7.html", "Domanda2025_8.html",
+  "Domanda2025_9.html", "Domanda2025_10.html", "Domanda2025_11.html", "Domanda2025_12.html",
+  "Domanda2025_13.html", "Domanda2025_14.html", "Domanda2025_15.html", "Domanda2025_16.html",
+  "Domanda2025_17.html", "Domanda2025_18.html"
+];
+
+// Quando la ruota si ferma:
+const selectedQuestion = questions[selectedIndex];
+const selectedLink = links[selectedIndex];
+
+document.getElementById("selected-question").innerHTML = 
+  `Domanda selezionata: <b>${selectedQuestion}</b> - soluzione: <a href="${selectedLink}" target="_blank" style="color:#b30000;">link</a>`;
+
       document.getElementById('result-box').style.display = 'block';
       isSpinning = false;
       return;
