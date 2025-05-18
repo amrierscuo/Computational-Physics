@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>Barriera di potenziale (confronto MA-CL)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- MathJax per formule LaTeX -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -39,19 +44,114 @@
             border-radius: 6px;
             box-shadow: 0 2px 16px rgba(140,0,0,0.13);
         }
+        .qa-flash {
+            background: #f6f6ff;
+            border-left: 4px solid #2980b9;
+            margin-top: 2em;
+            padding: 1em 1.3em;
+            border-radius: 8px;
+            font-size: 1.04em;
+        }
+        .qa-flash strong {
+            color: #b30000;
+            font-size: 1.05em;
+        }
     </style>
 </head>
 <body>
     <h1>Barriera di potenziale (confronto MA-CL)</h1>
     <div>Qui trovi la soluzione alla domanda:<br>
-    <b>Barriera di potenziale (confronto MA-CL)</b>
+        <b>Barriera di potenziale (confronto MA-CL)</b>
     </div>
     <div class="imgwrap">
-        <img src="img/Domanda2025_1.jpeg" alt="Soluzione Barriera di potenziale (confronto MA-CL)">
+        <img src="img/Domanda2025_1.jpg" alt="Soluzione Barriera di potenziale (confronto MA-CL)">
     </div>
     <div class="soluzione">
-        <!-- Inserisci qui la soluzione testuale, formule, commenti, ecc... -->
-        <p><i>Soluzione in fase di caricamento...</i></p>
+        <ol style="line-height:1.7">
+            <li><b>Il problema:</b> Studiamo una particella di energia \(E > 0\) che incide su una barriera di potenziale rettangolare:
+                <br>
+                <span style="display:inline-block; margin-top:0.5em; margin-bottom:0.5em">
+                    \( V(x) = \begin{cases}
+                    0 & x < 0 \\
+                    V_0 & 0 < x < a \\
+                    0 & x > a
+                    \end{cases} \)
+                </span>
+            </li>
+            <li><b>Classica:</b> 
+                <ul>
+                    <li>\(E \in (0, V_0)\): la particella viene <b>sempre riflessa</b> (\(T=0\)), nessuna trasmissione.</li>
+                    <li>\(E > V_0\): la particella viene <b>sempre trasmessa</b> (\(T=1\)), nessuna riflessione.</li>
+                </ul>
+            </li>
+            <li><b>Analisi quantistica:</b>
+                <ul>
+                    <li>Si risolve l'equazione di Schrödinger in tre regioni:</li>
+                    <li style="margin-bottom:0.5em;">
+                        <b>Regione I (<i>x &lt; 0</i>):</b> \( \psi_1(x) = A e^{ikx} + B e^{-ikx} \)
+                        <br>
+                        <b>Regione II (<i>0 &lt; x &lt; a</i>):</b>
+                        <ul style="margin:0.2em 0 0.2em 1em;">
+                            <li>Se \(E \in (0, V_0)\): \( \psi_2(x) = F e^{\kappa x} + G e^{-\kappa x} \), con \( \kappa = \sqrt{\frac{2m(V_0-E)}{\hbar^2}} \)</li>
+                            <li>Se \(E > V_0\): \( \psi_2(x) = F e^{ik' x} + G e^{-ik' x} \), con \( k' = \sqrt{\frac{2m(E-V_0)}{\hbar^2}} \)</li>
+                        </ul>
+                        <b>Regione III (<i>x &gt; a</i>):</b> \( \psi_3(x) = C e^{ikx} \)
+                    </li>
+                    <li>Imponi la continuità di \( \psi(x) \) e \( \psi'(x) \) ai bordi (<i>x=0</i>, <i>x=a</i>), trova i rapporti tra costanti.</li>
+                    <li>Calcola densità di corrente:
+                        <br>
+                        <span style="font-size:0.97em;">Per \( x&lt;0 \): \( j = v(|A|^2 - |B|^2) \). <br> Per \( x&gt;a \): \( j = v|C|^2 \), dove \( v = \frac{\hbar k}{m} \).</span>
+                    </li>
+                    <li>Definisci coefficienti: \( R = \frac{|B|^2}{|A|^2} \), \( T = \frac{|C|^2}{|A|^2} \) con \( R+T=1 \).</li>
+                </ul>
+            </li>
+            <li><b>Risultati e confronto:</b>
+                <ul>
+                    <li><b>Risultato quantistico:</b> <u>Entrambi i coefficienti di trasmissione e riflessione sono non banali</u> sia per \(E \in (0, V_0)\) che per \(E > V_0\).</li>
+                    <li>
+                        <b>Per \(E \in (0, V_0)\):</b> trasmissione “tunnel”:
+                        <br>
+                        \( T = \left[1 + \frac{V_0^2 \sinh^2(\kappa a)}{4E(V_0 - E)}\right]^{-1} \)
+                        <br>
+                        <b>Riflessione:</b>
+                        <br>
+                        \( R = 1 - T \)
+                        <br>
+                        (<i>La probabilità di attraversamento è esponenzialmente piccola se la barriera è “spessa”</i>)
+                    </li>
+                    <li>
+                        <b>Per \(E > V_0\):</b> anche sopra la barriera si ha <u>interferenza quantistica</u>:
+                        <br>
+                        \( T = \left[1 + \frac{V_0^2 \sin^2(k'a)}{4E(E - V_0)}\right]^{-1} \)
+                        <br>
+                        \( R = 1 - T \)
+                    </li>
+                </ul>
+            </li>
+            <li><b>Limiti notevoli:</b>
+                <ul>
+                    <li>\(E \to 0:\) \( T \to 0 \) (<i>nessuna trasmissione, come in classica</i>)</li>
+                    <li>\(E \to V_0^-:\) \( T \to \left[1 + \frac{m V_0 a^2}{2\hbar^2}\right]^{-1} \) (<i>resta minore di 1</i>)</li>
+                    <li>\(E \to V_0^+:\) stesso limite di sopra, <i>trasmissione non totale</i></li>
+                </ul>
+            </li>
+            <li>
+                <b>Fisica dietro il fenomeno:</b>
+                <ul>
+                    <li><b>Effetto tunnel:</b> la particella può attraversare la barriera anche se “classicamente proibito”.</li>
+                    <li><b>Applicazioni:</b> radioattività alfa, microscopia a effetto tunnel (STM).</li>
+                    <li><b>Differenza chiave:</b> nella meccanica classica \(T\) o \(R\) sono sempre 0 o 1; nella quantistica sono intermedi e dipendono da \(E, V_0, a\).</li>
+                </ul>
+            </li>
+        </ol>
+
+        <div class="qa-flash">
+            <strong>Domanda secca:</strong><br>
+            Cos’è l’effetto tunnel?
+            <br><br>
+            <strong>Risposta:</strong><br>
+            L’effetto tunnel è il fenomeno quantistico per cui una particella può attraversare una barriera di potenziale anche se la sua energia è inferiore all’altezza della barriera, cosa impossibile secondo la fisica classica.
+        </div>
     </div>
 </body>
 </html>
