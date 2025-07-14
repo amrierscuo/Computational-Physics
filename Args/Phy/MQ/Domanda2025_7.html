@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Sistemi di particelle identiche</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- MathJax per formule LaTeX -->
+   <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -33,12 +36,129 @@
             text-align: center;
             margin-top: 1.5em;
         }
-        img {
+        img { 
             max-width: 97%;
             margin: 0 auto;
             border-radius: 6px;
             box-shadow: 0 2px 16px rgba(140,0,0,0.13);
         }
+        .slater-box {
+            background: #f0e6f7;
+            border-left: 4px solid #7d26cd;
+            padding: 1.1em 1.3em;
+            margin-top: 1.3em;
+            border-radius: 9px;
+            font-size: 1.06em;
+        }
+        .bosone {
+            background: #f0fff8;
+            border-left: 4px solid #27ae60;
+            margin-bottom: 1em;
+            padding: 0.7em 1.2em;
+            border-radius: 8px;
+        }
+        .fermione {
+            background: #fef6f6;
+            border-left: 4px solid #c0392b;
+            margin-bottom: 1em;
+            padding: 0.7em 1.2em;
+            border-radius: 8px;
+        }
+        .formula-box {
+            background: #fff;
+            border-radius: 6px;
+            padding: 0.14em 0.7em 0.14em 0.7em;
+            font-size: 1.05em;
+            display: inline-block;
+            margin: 0.4em 0;
+        }
+		.background-anim {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bubble {
+    position: absolute;
+    bottom: -80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #b9e6ff88 70%, #a9c6f933 100%);
+    opacity: 0.45;
+    animation: bubbleUp 13s linear infinite;
+}
+
+@keyframes bubbleUp {
+    0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0.2;
+    }
+    60% {
+        opacity: 0.45;
+    }
+    100% {
+        transform: translateY(-120vh) scale(1.2);
+        opacity: 0;
+    }
+}
+.particle-box {
+    position: relative;
+    background: #e8f7ff;
+    border: 2px solid #77bbff;
+    border-radius: 14px;
+    padding: 2em 1em 1em 1em;
+    min-height: 120px;
+    margin: 1.5em 0 2.2em 0;
+    overflow: hidden;
+    box-shadow: 0 2px 12px #bbe6ff44;
+}
+.particles-container {
+    position: absolute;
+    top: 15px; left: 10px; right: 10px; bottom: 40px;
+    pointer-events: none;
+}
+.particle {
+    position: absolute;
+    width: 23px; height: 23px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 65% 35%, #69b3ff 60%, #3498db 100%);
+    opacity: 0.65;
+    animation: particleMove 6.5s linear infinite;
+    animation-delay: calc(-0.7s * var(--i));
+}
+.particle:nth-child(1) { left: 8%; top: 15%;}
+.particle:nth-child(2) { left: 21%; top: 40%;}
+.particle:nth-child(3) { left: 33%; top: 18%;}
+.particle:nth-child(4) { left: 42%; top: 55%;}
+.particle:nth-child(5) { left: 59%; top: 25%;}
+.particle:nth-child(6) { left: 70%; top: 46%;}
+.particle:nth-child(7) { left: 80%; top: 33%;}
+.particle:nth-child(8) { left: 14%; top: 68%;}
+.particle:nth-child(9) { left: 56%; top: 68%;}
+.particle:nth-child(10){ left: 80%; top: 72%;}
+
+@keyframes particleMove {
+  0%   { transform: translateY(0)   scale(1);}
+  10%  { transform: translateY(-7px) scale(1.1);}
+  25%  { transform: translateY(6px) scale(0.98);}
+  40%  { transform: translateY(-6px) scale(1.06);}
+  55%  { transform: translateY(7px) scale(0.92);}
+  75%  { transform: translateY(-8px) scale(1.14);}
+  100% { transform: translateY(0)   scale(1);}
+}
+
+.particle-label {
+    position: relative;
+    text-align: center;
+    color: #1a506a;
+    margin-top: 98px;
+    font-size: 1.07em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
     </style>
 </head>
 <body>
@@ -46,12 +166,115 @@
     <div>Qui trovi la soluzione alla domanda:<br>
     <b>Sistemi di particelle identiche</b>
     </div>
-    <div class="imgwrap">
+    <!-- <div class="imgwrap">
         <img src="img/Domanda2025_7.jpeg" alt="Soluzione Sistemi di particelle identiche">
-    </div>
+    </div> -->
     <div class="soluzione">
-        <!-- Inserisci qui la soluzione testuale, formule, commenti, ecc... -->
-        <p><i>Soluzione in fase di caricamento...</i></p>
+        <div class="bosone">
+            <b>Bosoni:</b> Funzioni d’onda <b>simmetriche</b> rispetto allo scambio di particelle.<br>
+            Nessun limite al numero di bosoni nello stesso stato quantico.
+        </div>
+        <div class="fermione">
+            <b>Fermioni:</b> Funzioni d’onda <b>antisimmetriche</b> rispetto allo scambio di particelle.<br>
+            Due fermioni <b>non possono mai</b> occupare lo stesso stato quantico (principio di Pauli).
+        </div>
+        <b>Simmetrizzazione degli stati:</b>
+        <br>
+        Se due o più particelle sono identiche e indistinguibili, la funzione d’onda totale deve essere simmetrica (bosoni) o antisimmetrica (fermioni) rispetto allo scambio di qualsiasi coppia.<br><br>
+        Formalmente, per due particelle:
+        <div class="formula-box">
+            \( \Psi(x_1, x_2) = \pm \Psi(x_2, x_1) \)
+        </div>
+        <br>
+        (\(+\) bosoni, \(-\) fermioni)
+        <br>
+        <ul>
+            <li><b>Bosoni:</b> funzione d’onda simmetrica per ogni permutazione</li>
+            <li><b>Fermioni:</b> funzione d’onda antisimmetrica per ogni permutazione</li>
+        </ul>
+        <b>Perché serve?</b> La simmetrizzazione rispetta il principio di esclusione di Pauli per i fermioni, e riflette la vera indistinguibilità delle particelle.
+        <div class="slater-box">
+            <b>Determinante di Slater</b><br>
+            Per \(N\) fermioni, la funzione d’onda antisimmetrica è costruita come un <b>determinante di Slater</b>:
+            <div class="formula-box">
+                \( \Psi_A(x_1, ..., x_N) = \frac{1}{\sqrt{N!}}
+                \begin{vmatrix}
+                    \varphi_1(x_1) & \varphi_1(x_2) & \cdots & \varphi_1(x_N) \\
+                    \varphi_2(x_1) & \varphi_2(x_2) & \cdots & \varphi_2(x_N) \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    \varphi_N(x_1) & \varphi_N(x_2) & \cdots & \varphi_N(x_N)
+                \end{vmatrix}
+                \)
+            </div>
+            Questo determinante si annulla se due colonne o righe sono uguali &rarr; nessun fermione può stare nello stesso stato.
+            <div style="text-align:center; margin-top:1em;">
+                <img src="Slater.jpg" alt="Schema determinante di Slater, sistemi di particelle identiche" style="max-width: 480px;">
+            </div>
+        </div>
+        <br>
+        <b>Esempio (N=2):</b><br>
+        - <b>Bosoni:</b> stato simmetrizzato
+        <div class="formula-box">
+            \( \Psi_S(x_1, x_2) = \frac{1}{\sqrt{2}} [\varphi_a(x_1)\varphi_b(x_2) + \varphi_a(x_2)\varphi_b(x_1)] \)
+        </div>
+        - <b>Fermioni:</b> stato antisimmetrizzato
+        <div class="formula-box">
+            \( \Psi_A(x_1, x_2) = \frac{1}{\sqrt{2}} [\varphi_a(x_1)\varphi_b(x_2) - \varphi_a(x_2)\varphi_b(x_1)] \)
+        </div>
+        <br>
+       <div class="slater-box" style="margin-top:1.7em; margin-bottom:1.7em;">
+    <span style="font-size:1.06em;">
+    Per un sistema generico di \(N\) fermioni, la funzione d’onda antisimmetrica è data dal determinante di Slater:
+    </span>
+    <br><br>
+    \[
+    \Psi_A(q_1, \ldots, q_N) = \frac{1}{\sqrt{N!}}
+    \begin{vmatrix}
+    u_1(q_1) & u_2(q_1) & \cdots & u_N(q_1) \\
+    u_1(q_2) & u_2(q_2) & \cdots & u_N(q_2) \\
+    \vdots   & \vdots   & \ddots & \vdots   \\
+    u_1(q_N) & u_2(q_N) & \cdots & u_N(q_N) \\
+    \end{vmatrix}
+    \]
+    <span style="font-size:1.06em;">
+    Se due colonne del determinante coincidono (ovvero, due particelle nello stesso stato \(u_k\)), allora per le proprietà del determinante si ha
+    </span>
+    <br><br>
+    \[
+    \Psi_A = 0
+    \]
+    <span style="font-size:1.07em; color:#b30000;">
+    \(\textbf{Principio di Pauli:}\) Due (o +) fermioni identici non possono occupare lo stesso stato quantico.
+<div class="particle-box">
+  <div class="particles-container">
+    <!-- Le particelle sono div -->
+    <div class="particle" style="--i:0;"></div>
+    <div class="particle" style="--i:1;"></div>
+    <div class="particle" style="--i:2;"></div>
+    <div class="particle" style="--i:3;"></div>
+    <div class="particle" style="--i:4;"></div>
+    <div class="particle" style="--i:5;"></div>
+    <div class="particle" style="--i:6;"></div>
+    <div class="particle" style="--i:7;"></div>
+    <div class="particle" style="--i:8;"></div>
+    <div class="particle" style="--i:9;"></div>
+  </div>
+  <div class="particle-label">blu le mille bolle</div>
+</div>
+
+
+    </span>
+</div>
+
     </div>
+		<div class="background-anim">
+  <div class="bubble" style="left:8%;  width:65px; height:65px; animation-delay:0s;"></div>
+  <div class="bubble" style="left:18%; width:40px; height:40px; animation-delay:2.2s;"></div>
+  <div class="bubble" style="left:34%; width:54px; height:54px; animation-delay:4.1s;"></div>
+  <div class="bubble" style="left:53%; width:38px; height:38px; animation-delay:1.7s;"></div>
+  <div class="bubble" style="left:68%; width:72px; height:72px; animation-delay:3.5s;"></div>
+  <div class="bubble" style="left:81%; width:30px; height:30px; animation-delay:6s;"></div>
+  <div class="bubble" style="left:90%; width:50px; height:50px; animation-delay:9.1s;"></div>
+</div>
 </body>
 </html>
