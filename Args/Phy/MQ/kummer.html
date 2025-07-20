@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atomo Idrogenoide e Equazione di Kummer-Laplace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1a237e;
+      --primary-light: #534bae;
+      --primary-dark: #000051;
+      --secondary: #0097a7;
+      --secondary-light: #56c8d8;
+      --secondary-dark: #006978;
+      --accent: #ff4081;
+      --text: #212121;
+      --text-light: #757575;
+      --background: #f5f7ff;
+      --surface: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --success: #4caf50;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f5f7ff);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(120deg, var(--primary-dark), var(--primary));
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 8px 20px var(--shadow);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 1.4rem;
+      font-weight: 300;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      opacity: 0.9;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+    }
+
+    .content-section {
+      display: none;
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px var(--shadow);
+      padding: 40px;
+      margin-bottom: 40px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    h2 {
+      color: var(--primary);
+      font-size: 2.2rem;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid var(--secondary-light);
+    }
+
+    h3 {
+      color: var(--primary-light);
+      font-size: 1.6rem;
+      margin: 30px 0 15px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    .formula-container {
+      background: linear-gradient(to right, #e3f2fd, #f0f7ff);
+      border-left: 5px solid var(--secondary);
+      padding: 20px;
+      border-radius: 0 10px 10px 0;
+      margin: 25px 0;
+      font-size: 1.1rem;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .formula {
+      font-family: 'Times New Roman', serif;
+      font-size: 1.4rem;
+      text-align: center;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .interactive-box {
+      background: var(--surface);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 30px 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--secondary-light), var(--secondary));
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .value-display {
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--secondary-dark);
+      margin-top: 5px;
+    }
+
+    .visualization {
+      background: #f8fbff;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 30px 0;
+      min-height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .orbital-container {
+      width: 100%;
+      height: 400px;
+      position: relative;
+    }
+
+    .orbital {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      opacity: 0.7;
+      transition: all 0.8s ease;
+    }
+
+    .orbital-electron {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 15px var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 64, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0); }
+    }
+
+    .chart-container {
+      height: 350px;
+      margin: 30px 0;
+    }
+
+    .reference-box {
+      background: linear-gradient(135deg, #e0f2f1, #f1f8e9);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 30px 0;
+      border-left: 5px solid var(--success);
+    }
+
+    .reference-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .reference-item {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .reference-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .reference-item h4 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .reference-item p {
+      font-size: 0.95rem;
+      color: var(--text-light);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      margin-top: 40px;
+      background: linear-gradient(120deg, var(--primary-dark), var(--primary));
+      color: white;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .quantum-numbers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .quantum-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border-top: 5px solid var(--secondary);
+    }
+
+    .quantum-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .quantum-card h4 {
+      color: var(--primary);
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .quantum-card p {
+      font-size: 1rem;
+      color: var(--text-light);
+    }
+
+    .equation-derivation {
+      background: linear-gradient(to right, #f9fbe7, #fffde7);
+      padding: 25px;
+      border-radius: 15px;
+      margin: 30px 0;
+      border-left: 5px solid #f57f17;
+    }
+
+    .step {
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px dashed #e0e0e0;
+    }
+
+    .step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .step-number {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      margin: 40px 0;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 20px;
+      width: 4px;
+      background: var(--secondary);
+    }
+
+    .timeline-item {
+      display: flex;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .timeline-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      z-index: 1;
+      flex-shrink: 0;
+      margin-right: 25px;
+    }
+
+    .timeline-content {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      flex: 1;
+    }
+
+    .timeline-content h4 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .download-section {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 5px 15px rgba(26, 35, 126, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(26, 35, 126, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .subtitle { font-size: 1.1rem; }
+      .controls { grid-template-columns: 1fr; }
+      .content-section { padding: 25px; }
+      .download-section { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Atomo Idrogenoide e Equazione di Kummer-Laplace</h1>
+      <p class="subtitle">Esplorazione quantistica degli atomi monoelettronici e soluzione dell'equazione radiale</p>
+      <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="intro">Introduzione</button>
+        <button class="tab-btn" data-tab="equation">Equazione di Schrödinger</button>
+        <button class="tab-btn" data-tab="kummer">Kummer-Laplace</button>
+        <button class="tab-btn" data-tab="solution">Soluzioni</button>
+        <button class="tab-btn" data-tab="applications">Applicazioni</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Introduzione -->
+    <section id="intro" class="content-section active">
+      <h2>Atomi Idrogenoidi in Meccanica Quantistica</h2>
+      <p>Gli <strong>atomi idrogenoidi</strong> sono sistemi atomici costituiti da un nucleo con carica +Ze e un singolo elettrone. Questi includono:</p>
+      
+      <div class="interactive-box">
+        <div class="quantum-numbers">
+          <div class="quantum-card">
+            <h4>Idrogeno (H)</h4>
+            <p>Z = 1</p>
+          </div>
+          <div class="quantum-card">
+            <h4>Elio ionizzato (He⁺)</h4>
+            <p>Z = 2</p>
+          </div>
+          <div class="quantum-card">
+            <h4>Litio doppiamente ionizzato (Li²⁺)</h4>
+            <p>Z = 3</p>
+          </div>
+          <div class="quantum-card">
+            <h4>Berillio tripliamente ionizzato (Be³⁺)</h4>
+            <p>Z = 4</p>
+          </div>
+        </div>
+      </div>
+
+      <p>Questi sistemi rappresentano i casi più semplici per lo studio della meccanica quantistica in tre dimensioni, poiché il potenziale coulombiano permette una soluzione analitica completa dell'equazione di Schrödinger.</p>
+
+      <h3>Separazione delle Variabili</h3>
+      <p>Per risolvere l'equazione di Schrödinger per l'atomo idrogenoide, sfruttiamo la simmetria sferica del sistema. La funzione d'onda totale può essere separata in:</p>
+      
+      <div class="formula-container">
+        <div class="formula">\[ \Psi(r, \theta, \phi) = R(r) \cdot Y_{\ell m}(\theta, \phi) \]</div>
+        <p>Dove:</p>
+        <ul>
+          <li>\( R(r) \) è la parte radiale della funzione d'onda</li>
+          <li>\( Y_{\ell m}(\theta, \phi) \) sono le armoniche sferiche (parte angolare)</li>
+        </ul>
+      </div>
+
+      <div class="visualization">
+        <div class="orbital-container">
+          <div class="orbital" style="width: 300px; height: 300px; border: 2px dashed var(--secondary);"></div>
+          <div class="orbital" style="width: 200px; height: 200px; border: 2px dashed var(--primary);"></div>
+          <div class="orbital-electron"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Equazione di Schrödinger -->
+    <section id="equation" class="content-section">
+      <h2>Equazione di Schrödinger per Potenziali Centrali</h2>
+      
+      <div class="equation-derivation">
+        <div class="step">
+          <span class="step-number">1</span>
+          <h3>Equazione Completa</h3>
+          <p>L'equazione di Schrödinger indipendente dal tempo per un potenziale centrale:</p>
+          <div class="formula">\[ -\frac{\hbar^2}{2\mu} \nabla^2 \psi + V(r) \psi = E \psi \]</div>
+          <p>dove \( \mu \) è la massa ridotta del sistema.</p>
+        </div>
+        
+        <div class="step">
+          <span class="step-number">2</span>
+          <h3>Separazione in Coordinate Sferiche</h3>
+          <p>Sostituendo l'operatore Laplaciano in coordinate sferiche:</p>
+          <div class="formula">\[ \nabla^2 = \frac{1}{r^2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial}{\partial r} \right) + \frac{1}{r^2 \sin \theta} \frac{\partial}{\partial \theta} \left( \sin \theta \frac{\partial}{\partial \theta} \right) + \frac{1}{r^2 \sin^2 \theta} \frac{\partial^2}{\partial \phi^2} \]</div>
+        </div>
+        
+        <div class="step">
+          <span class="step-number">3</span>
+          <h3>Equazione Radiale</h3>
+          <p>Dopo la separazione delle variabili, otteniamo l'equazione radiale:</p>
+          <div class="formula">\[ -\frac{\hbar^2}{2\mu} \frac{d^2 u}{dr^2} + \left[ V(r) + \frac{\hbar^2 \ell(\ell+1)}{2\mu r^2} \right] u = E u \]</div>
+          <p>dove \( u(r) = r R(r) \) e \( \ell \) è il numero quantico angolare.</p>
+        </div>
+      </div>
+
+      <h3>Potenziale Coulombiano</h3>
+      <p>Per l'atomo idrogenoide, il potenziale è di tipo coulombiano:</p>
+      <div class="formula">\[ V(r) = -\frac{Z e^2}{4\pi \varepsilon_0 r} \]</div>
+      
+      <div class="interactive-box">
+        <div class="controls">
+          <div class="control-group">
+            <label for="z-slider">Numero Atomico (Z):</label>
+            <input type="range" id="z-slider" min="1" max="5" value="1" step="1">
+            <div class="value-display" id="z-value">1</div>
+          </div>
+          <div class="control-group">
+            <label for="n-slider">Numero Quantico Principale (n):</label>
+            <input type="range" id="n-slider" min="1" max="4" value="1" step="1">
+            <div class="value-display" id="n-value">1</div>
+          </div>
+          <div class="control-group">
+            <label for="l-slider">Numero Quantico Angolare (ℓ):</label>
+            <input type="range" id="l-slider" min="0" max="3" value="0" step="1">
+            <div class="value-display" id="l-value">0</div>
+          </div>
+        </div>
+        
+        <div class="chart-container">
+          <canvas id="wavefunction-chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Equazione di Kummer-Laplace -->
+    <section id="kummer" class="content-section">
+      <h2>L'Equazione di Kummer-Laplace</h2>
+      
+      <div class="equation-derivation">
+        <div class="step">
+          <span class="step-number">1</span>
+          <h3>Sostituzione di Variabili</h3>
+          <p>Per semplificare l'equazione radiale, introduciamo nuove variabili:</p>
+          <div class="formula">\[ \rho = \frac{2Z r}{a_0 n}, \quad a_0 = \frac{4\pi\varepsilon_0 \hbar^2}{\mu e^2} \]</div>
+          <p>dove \( a_0 \) è il raggio di Bohr e \( n \) è il numero quantico principale.</p>
+        </div>
+        
+        <div class="step">
+          <span class="step-number">2</span>
+          <h3>Forma dell'Equazione</h3>
+          <p>Con la sostituzione \( u(\rho) = \rho^{\ell+1} e^{-\rho/2} g(\rho) \), otteniamo:</p>
+          <div class="formula">\[ \rho \frac{d^2 g}{d\rho^2} + (2\ell + 2 - \rho) \frac{dg}{d\rho} + (n - \ell - 1) g = 0 \]</div>
+        </div>
+        
+        <div class="step">
+          <span class="step-number">3</span>
+          <h3>Equazione di Kummer</h3>
+          <p>Questa è l'equazione di Kummer o equazione ipergeometrica confluente:</p>
+          <div class="formula">\[ z \frac{d^2 w}{dz^2} + (b - z) \frac{dw}{dz} - a w = 0 \]</div>
+          <p>Le cui soluzioni sono le funzioni ipergeometriche confluenti \( _1F_1(a; b; z) \).</p>
+        </div>
+      </div>
+
+      <div class="formula-container">
+        <h3>Soluzione Generale</h3>
+        <div class="formula">\[ g(\rho) = A \cdot _1F_1(\ell + 1 - n; 2\ell + 2; \rho) \]</div>
+        <p>dove A è una costante di normalizzazione.</p>
+      </div>
+
+      <h3>Contesto Storico</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-icon"><i class="fas fa-user"></i></div>
+          <div class="timeline-content">
+            <h4>Ernst Kummer (1810-1893)</h4>
+            <p>Matematico tedesco che studiò le equazioni differenziali ipergeometriche e sviluppò la teoria delle funzioni ipergeometriche confluenti.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-icon"><i class="fas fa-atom"></i></div>
+          <div class="timeline-content">
+            <h4>Pierre-Simon Laplace (1749-1827)</h4>
+            <p>Matematico e astronomo francese, contribuì alla teoria del potenziale e alla meccanica celeste, con applicazioni alla fisica matematica.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-icon"><i class="fas fa-flask"></i></div>
+          <div class="timeline-content">
+            <h4>Erwin Schrödinger (1887-1961)</h4>
+            <p>Formulò l'equazione d'onda della meccanica quantistica nel 1926, aprendo la strada alla soluzione per l'atomo di idrogeno.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Soluzioni -->
+    <section id="solution" class="content-section">
+      <h2>Soluzioni e Polinomi di Laguerre</h2>
+      
+      <h3>Condizione di Quantizzazione</h3>
+      <p>Affinché la soluzione sia accettabile fisicamente (finita e normalizzabile), il parametro \( a \) della funzione ipergeometrica confluente deve essere un intero non positivo:</p>
+      <div class="formula">\[ \ell + 1 - n = -n_r, \quad n_r = 0, 1, 2, \ldots \]</div>
+      <p>dove \( n_r \) è il numero quantico radiale.</p>
+      
+      <div class="formula-container">
+        <h3>Relazione tra Numeri Quantici</h3>
+        <div class="formula">\[ n = n_r + \ell + 1 \]</div>
+        <p>dove \( n \) è il numero quantico principale (\( n = 1, 2, 3, \ldots \)).</p>
+      </div>
+
+      <h3>Polinomi di Laguerre Associati</h3>
+      <p>Quando la funzione ipergeometrica confluente termina (diventa un polinomio), la soluzione si esprime in termini di polinomi di Laguerre associati:</p>
+      <div class="formula">\[ R_{n\ell}(r) = \sqrt{{\left( \frac{2Z}{na_0} \right)}^3 \frac{(n-\ell-1)!}{2n[(n+\ell)!]^3}} e^{-\rho/2} \rho^{\ell} L_{n-\ell-1}^{2\ell+1}(\rho) \]</div>
+      
+      <div class="interactive-box">
+        <div class="controls">
+          <div class="control-group">
+            <label for="n2-slider">Numero Quantico Principale (n):</label>
+            <input type="range" id="n2-slider" min="1" max="4" value="1" step="1">
+            <div class="value-display" id="n2-value">1</div>
+          </div>
+          <div class="control-group">
+            <label for="l2-slider">Numero Quantico Angolare (ℓ):</label>
+            <input type="range" id="l2-slider" min="0" max="3" value="0" step="1">
+            <div class="value-display" id="l2-value">0</div>
+          </div>
+        </div>
+        
+        <div class="chart-container">
+          <canvas id="laguerre-chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Applicazioni -->
+    <section id="applications" class="content-section">
+      <h2>Applicazioni e Approfondimenti</h2>
+      
+      <h3>Struttura Fina e Spin</h3>
+      <p>Per una descrizione più accurata, dobbiamo considerare effetti relativistici e lo spin dell'elettrone:</p>
+      <div class="formula">\[ H = H_0 + H_{rel} + H_{SO} + H_D \]</div>
+      <p>dove:</p>
+      <ul>
+        <li>\( H_{rel} \): correzione di massa relativistica</li>
+        <li>\( H_{SO} \): accoppiamento spin-orbita</li>
+        <li>\( H_D \): termine di Darwin</li>
+      </ul>
+      
+      <div class="reference-box">
+        <h3>Effetto Zeeman</h3>
+        <p>In presenza di un campo magnetico esterno, i livelli energetici si separano ulteriormente (effetto Zeeman):</p>
+        <div class="formula">\[ \Delta E = \mu_B g_J m_J B \]</div>
+        <p>dove \( \mu_B \) è il magnetone di Bohr, \( g_J \) è il fattore di Landé, e \( m_J \) è il numero quantico magnetico totale.</p>
+      </div>
+
+      <h3>Risorse per Approfondire</h3>
+      <div class="reference-list">
+        <div class="reference-item">
+          <h4>Polinomi Ortogonali</h4>
+          <p>Polinomi di Laguerre, Legendre e Hermite con applicazioni in meccanica quantistica.</p>
+        </div>
+        <div class="reference-item">
+          <h4>Equazioni Differenziali II Ordine</h4>
+          <p>Punti regolari e singolari, metodo di Frobenius, soluzioni in serie di potenze.</p>
+        </div>
+        <div class="reference-item">
+          <h4>Spin e Particelle Identiche</h4>
+          <p>Principio di esclusione di Pauli, determinante di Slater, funzioni d'onda simmetriche e antisimmetriche.</p>
+        </div>
+        <div class="reference-item">
+          <h4>Perturbazioni Stazionarie</h4>
+          <p>Teoria delle perturbazioni per livelli degeneri e non degeneri, struttura fine dell'atomo di idrogeno.</p>
+        </div>
+      </div>
+
+      <div class="download-section">
+<a href="https://sr.wikipedia.org/wiki/Кумерова_функција" target="_blank" class="download-btn">
+  <i class="fas fa-download"></i> Appunti Completi (PDF)
+</a>
+<a href="https://en.wikipedia.org/wiki/Confluent_hypergeometric_function" target="_blank" class="download-btn">
+  <i class="fas fa-download"></i> Schede Riassuntive
+</a>
+<a href="https://sr.wikipedia.org/wiki/%D0%9A%D1%83%D0%BC%D0%B5%D1%80%D0%BE%D0%B2%D0%B0_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D1%98%D0%B0" target="_blank" class="download-btn">
+  <i class="fas fa-download"></i> Esercizi Risolti
+</a>
+
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>© 2023 Fisica Quantistica Avanzata - Atomi Idrogenoidi</p>
+      <p>Materiale didattico per corsi di Meccanica Quantistica</p>
+    </div>
+  </footer>
+
+  <script>
+    // Tab navigation
+    document.querySelectorAll('.tab-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons and sections
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+        
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        // Show corresponding section
+        const tabId = button.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Sliders for wavefunction visualization
+    const zSlider = document.getElementById('z-slider');
+    const nSlider = document.getElementById('n-slider');
+    const lSlider = document.getElementById('l-slider');
+    const zValue = document.getElementById('z-value');
+    const nValue = document.getElementById('n-value');
+    const lValue = document.getElementById('l-value');
+
+    zSlider.addEventListener('input', updateWavefunctionChart);
+    nSlider.addEventListener('input', updateWavefunctionChart);
+    lSlider.addEventListener('input', updateWavefunctionChart);
+
+    function updateSliders() {
+      zValue.textContent = zSlider.value;
+      nValue.textContent = nSlider.value;
+      lValue.textContent = lSlider.value;
+    }
+
+    zSlider.addEventListener('input', updateSliders);
+    nSlider.addEventListener('input', updateSliders);
+    lSlider.addEventListener('input', updateSliders);
+
+    // Initialize values
+    updateSliders();
+
+    // Wavefunction chart
+    const wavefunctionCtx = document.getElementById('wavefunction-chart').getContext('2d');
+    let wavefunctionChart = new Chart(wavefunctionCtx, {
+      type: 'line',
+      data: {
+        labels: Array.from({length: 100}, (_, i) => i/10),
+        datasets: [{
+          label: 'Funzione d\'Onda Radiale',
+          data: [],
+          borderColor: '#0097a7',
+          backgroundColor: 'rgba(0, 151, 167, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Distanza (r/a₀)'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'u(r)'
+            }
+          }
+        }
+      }
+    });
+
+    // Laguerre chart
+    const laguerreCtx = document.getElementById('laguerre-chart').getContext('2d');
+    let laguerreChart = new Chart(laguerreCtx, {
+      type: 'line',
+      data: {
+        labels: Array.from({length: 100}, (_, i) => i),
+        datasets: [{
+          label: 'Polinomio di Laguerre',
+          data: [],
+          borderColor: '#ff4081',
+          backgroundColor: 'rgba(255, 64, 129, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'ρ'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'L(ρ)'
+            }
+          }
+        }
+      }
+    });
+
+    // Update charts with initial data
+    updateWavefunctionChart();
+    updateLaguerreChart();
+
+    function hydrogenWavefunction(r, n, l, Z) {
+      // Simplified model for visualization
+      const a0 = 1; // Bohr radius
+      const rho = 2 * Z * r / (n * a0);
+      
+      // Radial wavefunction approximation
+      return Math.pow(r, l) * Math.exp(-Z * r / (n * a0)) * laguerrePolynomial(n - l - 1, 2 * l + 1, rho);
+    }
+
+    function laguerrePolynomial(k, alpha, x) {
+      // Approximation of Laguerre polynomials for visualization
+      if (k === 0) return 1;
+      if (k === 1) return 1 + alpha - x;
+      if (k === 2) return 0.5 * (x*x - 2*(alpha+2)*x + (alpha+1)*(alpha+2));
+      if (k === 3) {
+        return (1/6) * (-x*x*x + 3*(alpha+3)*x*x - 3*(alpha+2)*(alpha+3)*x + (alpha+1)*(alpha+2)*(alpha+3));
+      }
+      return Math.sin(x); // Fallback for higher k
+    }
+
+    function updateWavefunctionChart() {
+      const Z = parseInt(zSlider.value);
+      const n = parseInt(nSlider.value);
+      const l = parseInt(lSlider.value);
+      
+      const data = [];
+      for (let i = 0; i < 100; i++) {
+        const r = i / 10;
+        data.push(hydrogenWavefunction(r, n, l, Z));
+      }
+      
+      wavefunctionChart.data.datasets[0].data = data;
+      wavefunctionChart.data.datasets[0].label = `R(r) per n=${n}, ℓ=${l}, Z=${Z}`;
+      wavefunctionChart.update();
+    }
+
+    // Laguerre sliders
+    const n2Slider = document.getElementById('n2-slider');
+    const l2Slider = document.getElementById('l2-slider');
+    const n2Value = document.getElementById('n2-value');
+    const l2Value = document.getElementById('l2-value');
+
+    n2Slider.addEventListener('input', updateLaguerreChart);
+    l2Slider.addEventListener('input', updateLaguerreChart);
+
+    function updateLaguerreSliders() {
+      n2Value.textContent = n2Slider.value;
+      l2Value.textContent = l2Slider.value;
+    }
+
+    n2Slider.addEventListener('input', updateLaguerreSliders);
+    l2Slider.addEventListener('input', updateLaguerreSliders);
+
+    updateLaguerreSliders();
+
+    function updateLaguerreChart() {
+      const n = parseInt(n2Slider.value);
+      const l = parseInt(l2Slider.value);
+      const k = n - l - 1;
+      const alpha = 2 * l + 1;
+      
+      if (k < 0) {
+        laguerreChart.data.datasets[0].data = Array(100).fill(0);
+        laguerreChart.data.datasets[0].label = `Polinomio non definito per n=${n}, ℓ=${l}`;
+      } else {
+        const data = [];
+        for (let i = 0; i < 100; i++) {
+          const x = i;
+          data.push(laguerrePolynomial(k, alpha, x));
+        }
+        laguerreChart.data.datasets[0].data = data;
+        laguerreChart.data.datasets[0].label = `L_{${k}}^{${alpha}}(ρ) per n=${n}, ℓ=${l}`;
+      }
+      
+      laguerreChart.update();
+    }
+
+    // Initialize MathJax
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      startup: {
+        ready: function() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(() => {
+            console.log('MathJax initialized');
+          });
+        }
+      }
+    };
+  </script>
+</body>
+</html>
