@@ -762,214 +762,218 @@
   </footer>
 
   <script>
-    // Tab navigation
-    document.querySelectorAll('.tab-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        // Remove active class from all buttons and sections
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-        
-        // Add active class to clicked button
-        button.classList.add('active');
-        
-        // Show corresponding section
-        const tabId = button.getAttribute('data-tab');
-        document.getElementById(tabId).classList.add('active');
-      });
+  // Tab navigation
+  document.querySelectorAll('.tab-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all buttons and sections
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+      
+      // Add active class to clicked button
+      button.classList.add('active');
+      
+      // Show corresponding section
+      const tabId = button.getAttribute('data-tab');
+      document.getElementById(tabId).classList.add('active');
     });
+  });
 
-    // Sliders for wavefunction visualization
-    const zSlider = document.getElementById('z-slider');
-    const nSlider = document.getElementById('n-slider');
-    const lSlider = document.getElementById('l-slider');
-    const zValue = document.getElementById('z-value');
-    const nValue = document.getElementById('n-value');
-    const lValue = document.getElementById('l-value');
+  // Sliders for wavefunction visualization
+  const zSlider = document.getElementById('z-slider');
+  const nSlider = document.getElementById('n-slider');
+  const lSlider = document.getElementById('l-slider');
+  const zValue = document.getElementById('z-value');
+  const nValue = document.getElementById('n-value');
+  const lValue = document.getElementById('l-value');
 
-    zSlider.addEventListener('input', updateWavefunctionChart);
-    nSlider.addEventListener('input', updateWavefunctionChart);
-    lSlider.addEventListener('input', updateWavefunctionChart);
+  zSlider.addEventListener('input', updateWavefunctionChart);
+  nSlider.addEventListener('input', updateWavefunctionChart);
+  lSlider.addEventListener('input', updateWavefunctionChart);
 
-    function updateSliders() {
-      zValue.textContent = zSlider.value;
-      nValue.textContent = nSlider.value;
-      lValue.textContent = lSlider.value;
-    }
+  function updateSliders() {
+    zValue.textContent = zSlider.value;
+    nValue.textContent = nSlider.value;
+    lValue.textContent = lSlider.value;
+  }
 
-    zSlider.addEventListener('input', updateSliders);
-    nSlider.addEventListener('input', updateSliders);
-    lSlider.addEventListener('input', updateSliders);
+  zSlider.addEventListener('input', updateSliders);
+  nSlider.addEventListener('input', updateSliders);
+  lSlider.addEventListener('input', updateSliders);
 
-    // Initialize values
-    updateSliders();
+  // Initialize values
+  updateSliders();
 
-    // Wavefunction chart
-    const wavefunctionCtx = document.getElementById('wavefunction-chart').getContext('2d');
-    let wavefunctionChart = new Chart(wavefunctionCtx, {
-      type: 'line',
-      data: {
-        labels: Array.from({length: 100}, (_, i) => i/10),
-        datasets: [{
-          label: 'Funzione d\'Onda Radiale',
-          data: [],
-          borderColor: '#0097a7',
-          backgroundColor: 'rgba(0, 151, 167, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Distanza (r/a₀)'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'u(r)'
-            }
+  // Wavefunction chart
+  const wavefunctionCtx = document.getElementById('wavefunction-chart').getContext('2d');
+  let wavefunctionChart = new Chart(wavefunctionCtx, {
+    type: 'line',
+    data: {
+      labels: Array.from({length: 100}, (_, i) => i/10),
+      datasets: [{
+        label: 'Funzione d\'Onda Radiale',
+        data: [],
+        borderColor: '#0097a7',
+        backgroundColor: 'rgba(0, 151, 167, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Distanza (r/a₀)'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'u(r)'
           }
         }
       }
-    });
+    }
+  });
 
-    // Laguerre chart
-    const laguerreCtx = document.getElementById('laguerre-chart').getContext('2d');
-    let laguerreChart = new Chart(laguerreCtx, {
-      type: 'line',
-      data: {
-        labels: Array.from({length: 100}, (_, i) => i),
-        datasets: [{
-          label: 'Polinomio di Laguerre',
-          data: [],
-          borderColor: '#ff4081',
-          backgroundColor: 'rgba(255, 64, 129, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.3
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'ρ'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'L(ρ)'
-            }
+  // Laguerre chart
+  const laguerreCtx = document.getElementById('laguerre-chart').getContext('2d');
+  let laguerreChart = new Chart(laguerreCtx, {
+    type: 'line',
+    data: {
+      labels: Array.from({length: 100}, (_, i) => i),
+      datasets: [{
+        label: 'Polinomio di Laguerre',
+        data: [],
+        borderColor: '#ff4081',
+        backgroundColor: 'rgba(255, 64, 129, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'ρ'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'L(ρ)'
           }
         }
       }
-    });
-
-    // Update charts with initial data
-    updateWavefunctionChart();
-    updateLaguerreChart();
-
-    function hydrogenWavefunction(r, n, l, Z) {
-      // Simplified model for visualization
-      const a0 = 1; // Bohr radius
-      const rho = 2 * Z * r / (n * a0);
-      
-      // Radial wavefunction approximation
-      return Math.pow(r, l) * Math.exp(-Z * r / (n * a0)) * laguerrePolynomial(n - l - 1, 2 * l + 1, rho);
     }
+  });
 
-    function laguerrePolynomial(k, alpha, x) {
-      // Approximation of Laguerre polynomials for visualization
-      if (k === 0) return 1;
-      if (k === 1) return 1 + alpha - x;
-      if (k === 2) return 0.5 * (x*x - 2*(alpha+2)*x + (alpha+1)*(alpha+2));
-      if (k === 3) {
-        return (1/6) * (-x*x*x + 3*(alpha+3)*x*x - 3*(alpha+2)*(alpha+3)*x + (alpha+1)*(alpha+2)*(alpha+3));
-      }
-      return Math.sin(x); // Fallback for higher k
+  // Update charts with initial data
+  updateWavefunctionChart();
+  // (NON chiamare qui updateLaguerreChart: gli slider n2/l2 non sono ancora definiti)
+
+  function hydrogenWavefunction(r, n, l, Z) {
+    // Simplified model for visualization
+    const a0 = 1; // Bohr radius
+    const rho = 2 * Z * r / (n * a0);
+    
+    // Radial wavefunction approximation
+    return Math.pow(r, l) * Math.exp(-Z * r / (n * a0)) * laguerrePolynomial(n - l - 1, 2 * l + 1, rho);
+  }
+
+  function laguerrePolynomial(k, alpha, x) {
+    // Approximation of Laguerre polynomials for visualization
+    if (k === 0) return 1;
+    if (k === 1) return 1 + alpha - x;
+    if (k === 2) return 0.5 * (x*x - 2*(alpha+2)*x + (alpha+1)*(alpha+2));
+    if (k === 3) {
+      return (1/6) * (-x*x*x + 3*(alpha+3)*x*x - 3*(alpha+2)*(alpha+3)*x + (alpha+1)*(alpha+2)*(alpha+3));
     }
+    return Math.sin(x); // Fallback for higher k
+  }
 
-    function updateWavefunctionChart() {
-      const Z = parseInt(zSlider.value);
-      const n = parseInt(nSlider.value);
-      const l = parseInt(lSlider.value);
-      
+  function updateWavefunctionChart() {
+    const Z = parseInt(zSlider.value);
+    const n = parseInt(nSlider.value);
+    const l = parseInt(lSlider.value);
+    
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+      const r = i / 10;
+      data.push(hydrogenWavefunction(r, n, l, Z));
+    }
+    
+    wavefunctionChart.data.datasets[0].data = data;
+    wavefunctionChart.data.datasets[0].label = `R(r) per n=${n}, ℓ=${l}, Z=${Z}`;
+    wavefunctionChart.update();
+  }
+
+  // Laguerre sliders
+  const n2Slider = document.getElementById('n2-slider');
+  const l2Slider = document.getElementById('l2-slider');
+  const n2Value = document.getElementById('n2-value');
+  const l2Value = document.getElementById('l2-value');
+
+  n2Slider.addEventListener('input', updateLaguerreChart);
+  l2Slider.addEventListener('input', updateLaguerreChart);
+
+  function updateLaguerreSliders() {
+    n2Value.textContent = n2Slider.value;
+    l2Value.textContent = l2Slider.value;
+  }
+
+  n2Slider.addEventListener('input', updateLaguerreSliders);
+  l2Slider.addEventListener('input', updateLaguerreSliders);
+
+  updateLaguerreSliders();
+
+  function updateLaguerreChart() {
+    const n = parseInt(n2Slider.value);
+    const l = parseInt(l2Slider.value);
+    const k = n - l - 1;
+    const alpha = 2 * l + 1;
+    
+    if (k < 0) {
+      laguerreChart.data.datasets[0].data = Array(100).fill(0);
+      laguerreChart.data.datasets[0].label = `Polinomio non definito per n=${n}, ℓ=${l}`;
+    } else {
       const data = [];
       for (let i = 0; i < 100; i++) {
-        const r = i / 10;
-        data.push(hydrogenWavefunction(r, n, l, Z));
+        const x = i;
+        data.push(laguerrePolynomial(k, alpha, x));
       }
-      
-      wavefunctionChart.data.datasets[0].data = data;
-      wavefunctionChart.data.datasets[0].label = `R(r) per n=${n}, ℓ=${l}, Z=${Z}`;
-      wavefunctionChart.update();
+      laguerreChart.data.datasets[0].data = data;
+      laguerreChart.data.datasets[0].label = `L_{${k}}^{${alpha}}(ρ) per n=${n}, ℓ=${l}`;
     }
+    
+    laguerreChart.update();
+  }
 
-    // Laguerre sliders
-    const n2Slider = document.getElementById('n2-slider');
-    const l2Slider = document.getElementById('l2-slider');
-    const n2Value = document.getElementById('n2-value');
-    const l2Value = document.getElementById('l2-value');
+  // Ora che gli slider e la funzione esistono, possiamo inizializzare il grafico di Laguerre
+  updateLaguerreChart();
 
-    n2Slider.addEventListener('input', updateLaguerreChart);
-    l2Slider.addEventListener('input', updateLaguerreChart);
-
-    function updateLaguerreSliders() {
-      n2Value.textContent = n2Slider.value;
-      l2Value.textContent = l2Slider.value;
-    }
-
-    n2Slider.addEventListener('input', updateLaguerreSliders);
-    l2Slider.addEventListener('input', updateLaguerreSliders);
-
-    updateLaguerreSliders();
-
-    function updateLaguerreChart() {
-      const n = parseInt(n2Slider.value);
-      const l = parseInt(l2Slider.value);
-      const k = n - l - 1;
-      const alpha = 2 * l + 1;
-      
-      if (k < 0) {
-        laguerreChart.data.datasets[0].data = Array(100).fill(0);
-        laguerreChart.data.datasets[0].label = `Polinomio non definito per n=${n}, ℓ=${l}`;
-      } else {
-        const data = [];
-        for (let i = 0; i < 100; i++) {
-          const x = i;
-          data.push(laguerrePolynomial(k, alpha, x));
-        }
-        laguerreChart.data.datasets[0].data = data;
-        laguerreChart.data.datasets[0].label = `L_{${k}}^{${alpha}}(ρ) per n=${n}, ℓ=${l}`;
+  // Initialize MathJax
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    startup: {
+      ready: function() {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(() => {
+          console.log('MathJax initialized');
+        });
       }
-      
-      laguerreChart.update();
     }
+  };
+</script>
 
-    // Initialize MathJax
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      },
-      startup: {
-        ready: function() {
-          MathJax.startup.defaultReady();
-          MathJax.startup.promise.then(() => {
-            console.log('MathJax initialized');
-          });
-        }
-      }
-    };
-  </script>
 </body>
 </html>
