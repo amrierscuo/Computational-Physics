@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
+<title>Globe Cells — L17 vs L14 (Three.js)</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; background: #0b1020; color: #dbe1ff; overflow: hidden;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  }
+  .frame {
+    position: absolute; inset: 16px; border: 1px solid #334; border-radius: 12px;
+    background: radial-gradient(1200px 600px at 30% 20%, rgba(70,90,160,0.08), rgba(0,0,0,0)) no-repeat;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4) inset;
+    display: grid; grid-template-rows: auto 1fr auto;
+  }
+  .frame header {
+    padding: 10px 14px; font-weight: 600; letter-spacing: 0.2px; color: #c7d2fe; border-bottom: 1px solid #334;
+  }
+  #viewport { position: relative; }
+  #canvas { width: 100%; height: 100%; display: block; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+  .toolbar {
+    position: absolute; z-index: 5; left: 12px; top: 12px; display: flex; gap: 8px; flex-wrap: wrap;
+    background: rgba(12, 18, 40, 0.6); border: 1px solid #334; border-radius: 10px; padding: 8px; backdrop-filter: blur(6px);
+  }
+  .toolbar button {
+    appearance: none; background: #1b2450; border: 1px solid #48578a; color: #e6ebff; padding: 6px 10px;
+    font-size: 12px; border-radius: 8px; cursor: pointer;
+  }
+  .toolbar button:hover { background: #243070; }
+  .legend {
+    padding: 10px 14px; font-size: 12px; line-height: 1.4; color: #c8d1ff; border-top: 1px solid #334;
+  }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border: 1px solid #334; border-radius: 999px; background: rgba(12,18,40,0.5); margin-right: 8px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .swatch.l14 { background: #ffb703; }
+  .swatch.l17 { background: #00e5ff; }
+  .swatch.grid { background: #aab4ff; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <header>Globe subdivided in cells — Show L17 (fine) vs L14 (coarse), highlight & subdivide</header>
+    <div id="viewport">
+      <div class="toolbar">
+        <button id="showL17">Show L17 (fine)</button>
+        <button id="showL14">Show L14 (coarse)</button>
+        <button id="subdivide">Subdivide highlighted L14 → L17</button>
+        <button id="focusEq">Focus Equator</button>
+        <button id="focusGr">Focus Greenland</button>
+        <button id="focusAn">Focus Antarctica</button>
+        <button id="resetView">Reset view</button>
+		
+		<button id="hdrOn">HDR ON</button>
+		<button id="hdrOff">HDR OFF</button>
+		<button id="modeOrbit">Orbit mode</button>
+		<button id="modePan">Pan/Zoom libero</button>
+
+      </div>
+      <canvas id="canvas"></canvas>
+    </div>
+    <div class="legend">
+      <span class="pill"><span class="swatch grid"></span>Global grid: meridians/parallels</span>
+      <span class="pill"><span class="swatch l17"></span>Level L17 (fine): ~5°×5° (concettuale)</span>
+      <span class="pill"><span class="swatch l14"></span>Level L14 (coarse): ~20°×20° (concettuale)</span>
+      &nbsp;•&nbsp; Controls: drag = orbit, wheel = zoom, right-drag = pan.
+    </div>
+  </div>
+
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+  
+}
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { Line2 } from "three/addons/lines/Line2.js";
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+
+const canvas = document.getElementById("canvas");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+
+const scene = new THREE.Scene();
+
+// Camera
+const fov = 45, near = 0.1, far = 100;
+const camera = new THREE.PerspectiveCamera(fov, 16/9, near, far);
+const EARTH_R = 1.0, START_DIST = 4.0;
+camera.position.set(0, 0, START_DIST);
+
+// Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.minDistance = 1.2;
+controls.maxDistance = 20;
+controls.screenSpacePanning = true;
+controls.zoomSpeed = 1.0;
+controls.panSpeed  = 0.6;
+controls.target.set(0, 0, 0);
+
+// Lights
+scene.add(new THREE.AmbientLight(0x93a3ff, 0.7));
+const dir = new THREE.DirectionalLight(0xffffff, 0.65);
+dir.position.set(5, 3, 2);
+scene.add(dir);
+
+// Earth
+const earthGeo = new THREE.SphereGeometry(EARTH_R, 96, 72);
+const earthMat = new THREE.MeshStandardMaterial({
+  color: 0x3355aa,
+  roughness: 0.9,
+  metalness: 0.0,
+  map: new THREE.TextureLoader().load(
+    "https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg",
+    t => { t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace; }
+  )
+});
+const earth = new THREE.Mesh(earthGeo, earthMat);
+scene.add(earth);
+
+// Atmosphere
+const atm = new THREE.Mesh(
+  new THREE.SphereGeometry(EARTH_R * 1.008, 48, 36),
+  new THREE.MeshBasicMaterial({ color: 0x88aaff, transparent: true, opacity: 0.06, depthWrite: false })
+);
+atm.renderOrder = 0;
+scene.add(atm);
+
+// ===== HDR ENV/BG =====
+const NEBULA_HDR = "HDR_blue_nebulae-1.hdr";
+const FALLBACK_HDR = "https://threejs.org/examples/textures/equirectangular/royal_esplanade_1k.hdr";
+
+let currentEnv = null;
+async function setHDRBackground(url) {
+  try {
+    const loader = new RGBELoader();
+    const hdr = await loader.loadAsync(url);
+    hdr.mapping = THREE.EquirectangularReflectionMapping;
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    pmrem.compileEquirectangularShader();
+    const envRT = pmrem.fromEquirectangular(hdr);
+
+    if (currentEnv) { currentEnv.dispose(); currentEnv = null; }
+    scene.background = hdr;
+    scene.environment = envRT.texture;
+    currentEnv = envRT;
+  } catch (e) {
+    console.warn("HDR load failed for", url, e);
+    if (url !== FALLBACK_HDR) return setHDRBackground(FALLBACK_HDR);
+  }
+}
+function clearHDRBackground() {
+  scene.background = null;
+  scene.environment = null;
+  if (currentEnv) { currentEnv.dispose(); currentEnv = null; }
+}
+
+// Utils
+const DEG2RAD = Math.PI / 180;
+function latLonToVec3(latDeg, lonDeg, r = EARTH_R) {
+  const phi = (90 - latDeg) * DEG2RAD;
+  const theta = (lonDeg + 180) * DEG2RAD;
+  const x = -r * Math.sin(phi) * Math.cos(theta);
+  const z =  r * Math.sin(phi) * Math.sin(theta);
+  const y =  r * Math.cos(phi);
+  return new THREE.Vector3(x, y, z);
+}
+
+// Fat grid
+function makeLatLonGridFat({ stepDeg=15, lineColor=0xe8edff, lineOpacity=0.95, lineWidth=2.4, radiusScale=1.02 }={}) {
+  const group = new THREE.Group();
+  const materials = [];
+  const r = EARTH_R * radiusScale;
+
+  function addPolyline(points) {
+    const flat = [];
+    for (const p of points) flat.push(p.x, p.y, p.z);
+    const geom = new LineGeometry();
+    geom.setPositions(flat);
+    const mat = new LineMaterial({
+      color: lineColor, transparent: true, opacity: lineOpacity,
+      linewidth: lineWidth, depthTest: false
+    });
+    mat.resolution.set(renderer.domElement.clientWidth || 1, renderer.domElement.clientHeight || 1);
+    const line = new Line2(geom, mat);
+    line.computeLineDistances();
+    group.add(line);
+    materials.push(mat);
+  }
+
+  for (let lon = -180; lon <= 180; lon += stepDeg) {
+    const pts = [], segs = 180;
+    for (let i = 0; i <= segs; i++) pts.push(latLonToVec3(-90 + (i*180/segs), lon, r));
+    addPolyline(pts);
+  }
+  for (let lat = -90 + stepDeg; lat <= 90 - stepDeg; lat += stepDeg) {
+    const pts = [], segs = 360;
+    for (let j = 0; j <= segs; j++) pts.push(latLonToVec3(lat, -180 + (j*360/segs), r));
+    addPolyline(pts);
+  }
+  group.userData.gridMaterials = materials;
+  return group;
+}
+
+// Cell patch + outline
+function makeSphericalPatch({ latMin, latMax, lonMin, lonMax }, opt = {}) {
+  const { color=0x00e5ff, opacity=0.55, extrude=1.012, latSeg=12, lonSeg=12, handleAntiMeridian=true } = opt;
+  const EPS=1e-6, clampLat=lat=>Math.max(-90+EPS, Math.min(90-EPS,lat)), wrapLon=lon=>((lon+180)%360+360)%360-180;
+  latMin = clampLat(latMin); latMax = clampLat(latMax);
+  lonMin = wrapLon(lonMin);  lonMax = wrapLon(lonMax);
+
+  if (handleAntiMeridian && lonMin > lonMax) {
+    const g = new THREE.Group();
+    g.add(
+      makeSphericalPatch({ latMin, latMax, lonMin,     lonMax: 180 }, { ...opt, handleAntiMeridian:false }),
+      makeSphericalPatch({ latMin, latMax, lonMin:-180, lonMax      }, { ...opt, handleAntiMeridian:false }),
+    );
+    return g;
+  }
+
+  const positions=[], indices=[];
+  for (let i=0;i<=latSeg;i++){
+    const t=i/latSeg, lat=latMin+(latMax-latMin)*t;
+    for(let j=0;j<=lonSeg;j++){
+      const s=j/lonSeg, lon=lonMin+(lonMax-lonMin)*s;
+      const v=latLonToVec3(lat,lon,EARTH_R*extrude);
+      positions.push(v.x,v.y,v.z);
+    }
+  }
+  const row=lonSeg+1;
+  for(let i=0;i<latSeg;i++){
+    for(let j=0;j<lonSeg;j++){
+      const a=i*row+j,b=a+1,c=a+row,d=c+1;
+      indices.push(a,c,b,b,c,d);
+    }
+  }
+  const geom=new THREE.BufferGeometry();
+  geom.setAttribute("position", new THREE.Float32BufferAttribute(positions,3));
+  geom.setIndex(indices); geom.computeVertexNormals();
+  return new THREE.Mesh(geom,new THREE.MeshStandardMaterial({color,transparent:true,opacity,roughness:0.4,metalness:0.0,side:THREE.DoubleSide}));
+}
+function makeFatOutlineRect({ latMin, latMax, lonMin, lonMax }, { color=0xffffff, opacity=1.0, width=3.0, seg=96, radiusScale=1.014 } = {}) {
+  const r = EARTH_R * radiusScale;
+  const pts=[];
+  for (let j=0;j<=seg;j++){ const lon=lonMin+(lonMax-lonMin)*(j/seg); pts.push(latLonToVec3(latMax,lon,r)); }
+  for (let i=0;i<=seg;i++){ const lat=latMax+(latMin-latMax)*(i/seg); pts.push(latLonToVec3(lat,lonMax,r)); }
+  for (let j=0;j<=seg;j++){ const lon=lonMax+(lonMin-lonMax)*(j/seg); pts.push(latLonToVec3(latMin,lon,r)); }
+  for (let i=0;i<=seg;i++){ const lat=latMin+(latMax-latMin)*(i/seg); pts.push(latLonToVec3(lat,lonMin,r)); }
+  const flat=[]; for(const p of pts) flat.push(p.x,p.y,p.z);
+  const geom=new LineGeometry(); geom.setPositions(flat);
+  const mat=new LineMaterial({ color,transparent:true,opacity,linewidth:width,depthTest:false });
+  const w=renderer.domElement.clientWidth||1,h=renderer.domElement.clientHeight||1; mat.resolution.set(w,h);
+  const line=new Line2(geom,mat); line.computeLineDistances(); line.renderOrder=2; return line;
+}
+
+// Grids
+const gridL17 = makeLatLonGridFat({ stepDeg: 5,  lineWidth: 2.4, lineColor: 0xe8edff, lineOpacity: 0.95, radiusScale: 1.02 });
+const gridL14 = makeLatLonGridFat({ stepDeg: 20, lineWidth: 2.4, lineColor: 0xe8edff, lineOpacity: 0.95, radiusScale: 1.02 });
+scene.add(gridL17); scene.add(gridL14); gridL14.visible=false;
+
+// Cells
+const coarseCells = [
+  { name: "Equator",    box: { latMin: -10, latMax:  10, lonMin: -10, lonMax:  10 }, center: { lat: 0,   lon:   0 } },
+  { name: "Greenland",  box: { latMin:  65, latMax:  85, lonMin: -50, lonMax: -30 }, center: { lat: 75,  lon: -40 } },
+  { name: "Antarctica", box: { latMin: -85, latMax: -65, lonMin:  20, lonMax:  40 }, center: { lat: -75, lon:  30 } },
+];
+const coarseGroup = new THREE.Group();
+for (const c of coarseCells) {
+  const g=new THREE.Group();
+  g.add(
+    makeSphericalPatch(c.box,{ color:0xffb703, opacity:0.42, extrude:1.012 }),
+    makeFatOutlineRect(c.box,{ color:0xffd166, opacity:1.0, width:3.0, radiusScale:1.014 })
+  );
+  coarseGroup.add(g);
+}
+scene.add(coarseGroup); coarseGroup.visible=false;
+
+const fineGroup = new THREE.Group();
+const L17Highlights = [
+  { name: "Equator L17",    box: { latMin: -2.5,  latMax:  2.5, lonMin:  -2.5, lonMax:   2.5 } },
+  { name: "Greenland L17",  box: { latMin: 72.5,  latMax: 77.5, lonMin: -42.5, lonMax: -37.5 } },
+  { name: "Antarctica L17", box: { latMin: -77.5, latMax: -72.5, lonMin: 27.5, lonMax:  32.5 } },
+];
+for (const h of L17Highlights) {
+  const g=new THREE.Group();
+  g.add(
+    makeSphericalPatch(h.box,{ color:0x00e5ff, opacity:0.58, extrude:1.012 }),
+    makeFatOutlineRect(h.box,{ color:0x9df3ff, opacity:1.0, width:3.0, radiusScale:1.014 })
+  );
+  fineGroup.add(g);
+}
+scene.add(fineGroup);
+
+const subdivGroup = new THREE.Group();
+function subdivideBoxToL17(box, step=5) {
+  const out=[];
+  for (let lat=box.latMin; lat<box.latMax-1e-6; lat+=step) {
+    for (let lon=box.lonMin; lon<box.lonMax-1e-6; lon+=step) {
+      out.push({ latMin:lat, latMax:Math.min(lat+step,box.latMax), lonMin:lon, lonMax:Math.min(lon+step,box.lonMax) });
+    }
+  }
+  return out;
+}
+for (const c of coarseCells) {
+  const g=new THREE.Group();
+  for (const tile of subdivideBoxToL17(c.box,5)) g.add(makeSphericalPatch(tile,{ color:0x00e5ff, opacity:0.25, extrude:1.011 }));
+  subdivGroup.add(g);
+}
+scene.add(subdivGroup); subdivGroup.visible=false;
+
+// ===== Autocentering toggle =====
+let targetCamPos = camera.position.clone();
+let targetLookAt = new THREE.Vector3(0, 0, 0);
+let autoFollow = true; // ON: to target; OFF: move free
+
+
+function focusOn(lat, lon, distance = 2.3) {
+  autoFollow = true;
+  const dir = latLonToVec3(lat, lon, 1).normalize();
+  targetCamPos.copy(dir).multiplyScalar(distance);
+  targetLookAt.set(0, 0, 0);
+}
+
+
+function resetView() {
+  autoFollow = false;
+  const p = latLonToVec3(0, 0, -1); // (-1,0,0) 
+  camera.position.copy(p).multiplyScalar(START_DIST);
+  controls.target.set(0, 0, 0);
+
+  targetCamPos.copy(camera.position);
+  targetLookAt.copy(controls.target);
+  controls.update();
+}
+
+
+controls.addEventListener('start', () => { autoFollow = false; });
+
+// ===== Toolbar actions =====
+document.getElementById("showL17")?.addEventListener("click", () => {
+  gridL17.visible = true;  gridL14.visible = false;
+  fineGroup.visible = true; coarseGroup.visible = false; subdivGroup.visible = false;
+});
+document.getElementById("showL14")?.addEventListener("click", () => {
+  gridL17.visible = false; gridL14.visible = true;
+  fineGroup.visible = false; coarseGroup.visible = true; subdivGroup.visible = false;
+});
+document.getElementById("subdivide")?.addEventListener("click", () => {
+  gridL17.visible = false; gridL14.visible = true;
+  fineGroup.visible = false; coarseGroup.visible = true; subdivGroup.visible = true;
+});
+document.getElementById("focusEq")?.addEventListener("click", () => focusOn(0, 0, 2.0));
+document.getElementById("focusGr")?.addEventListener("click", () => focusOn(75, -40, 2.2));
+document.getElementById("focusAn")?.addEventListener("click", () => focusOn(-75, 30, 2.2));
+document.getElementById("resetView")?.addEventListener("click", resetView);
+
+// HDR on/off
+document.getElementById("hdrOn")?.addEventListener("click", () => setHDRBackground(NEBULA_HDR));
+document.getElementById("hdrOff")?.addEventListener("click", () => clearHDRBackground());
+
+// Mod control
+function setOrbitMode() {
+  controls.enableRotate = true;
+  controls.enablePan = true;
+  controls.mouseButtons = {
+    LEFT: THREE.MOUSE.ROTATE,
+    MIDDLE: THREE.MOUSE.DOLLY,
+    RIGHT: THREE.MOUSE.PAN
+  };
+  controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
+}
+function setPanMode() {
+  controls.enableRotate = false;
+  controls.enablePan = true;
+  controls.mouseButtons = {
+    LEFT: THREE.MOUSE.PAN,
+    MIDDLE: THREE.MOUSE.DOLLY,
+    RIGHT: THREE.MOUSE.PAN
+  };
+  controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_PAN };
+}
+document.getElementById("modeOrbit")?.addEventListener("click", setOrbitMode);
+document.getElementById("modePan")?.addEventListener("click", setPanMode);
+
+// Autocentering UI (optional) + hotkey
+document.getElementById("autoOn")?.addEventListener("click", () => {
+  autoFollow = true;
+  
+  targetCamPos.copy(camera.position);
+  targetLookAt.copy(controls.target);
+});
+document.getElementById("autoOff")?.addEventListener("click", () => { autoFollow = false; });
+window.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() === 'a') autoFollow = !autoFollow;
+});
+
+// Resize 
+function updateFatLineResolutions(root, w, h) {
+  root.traverse(obj => {
+    const m = obj.material;
+    if (m && m.isLineMaterial && m.resolution) m.resolution.set(w, h);
+  });
+}
+function resizeRendererToDisplaySize() {
+  const frame = document.querySelector(".frame");
+  const w = frame.clientWidth - 2;
+  const h = frame.clientHeight - 82;
+  const needResize = (renderer.domElement.width !== w || renderer.domElement.height !== h);
+  if (needResize) {
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    for (const g of [gridL17, gridL14]) {
+      if (g?.userData?.gridMaterials) for (const m of g.userData.gridMaterials) m.resolution.set(w, h);
+    }
+    updateFatLineResolutions(scene, w, h);
+  }
+}
+window.addEventListener("resize", resizeRendererToDisplaySize);
+
+//start
+setHDRBackground(NEBULA_HDR);
+
+// Loop
+function animate() {
+  requestAnimationFrame(animate);
+  resizeRendererToDisplaySize();
+
+  earth.rotation.y += 0.00045;
+  atm.rotation.y   += 0.00045;
+
+  if (autoFollow) {
+    camera.position.lerp(targetCamPos, 0.08);
+    controls.target.lerp(targetLookAt, 0.08);
+  }
+  controls.update();
+  renderer.render(scene, camera);
+}
+resetView();
+setOrbitMode();
+animate();
+</script>
+
+
+
+</body>
+</html>
