@@ -6,7 +6,7 @@
   <title>Atomo Idrogenoide e Equazione di Kummer-Laplace</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
+  
   <style>
     * {
       margin: 0;
@@ -488,7 +488,212 @@
         <button class="tab-btn" data-tab="applications">Applicazioni</button>
       </div>
     </div>
+	
+	
   </header>
+
+
+
+<!-- Blocco Kummer/Laplace inserito tra header e il container principale -->
+<div class="container">
+  <div id="kummer-notes-v2" class="content-section active">
+
+    <h2>Derivazione rigorosa: dal potenziale coulombiano a Kummer e ai Laguerre associati</h2>
+
+    <!-- NOTAZIONE E PUNTO DI PARTENZA -->
+    <div class="formula-container">
+      <h3>Notazione e punto di partenza</h3>
+      <p>
+        Coordinate sferiche su \( \mathbb{R}^3 \): \( \vec{r}=(r,\theta,\phi) \).
+        Operatore Laplaciano: 
+      </p>
+      <div class="formula">
+        \[
+        \nabla^2=\frac{1}{r^2}\frac{\partial}{\partial r}\!\left(r^2\frac{\partial}{\partial r}\right)
+        +\frac{1}{r^2\sin\theta}\frac{\partial}{\partial \theta}\!\left(\sin\theta\,\frac{\partial}{\partial \theta}\right)
+        +\frac{1}{r^2\sin^2\theta}\frac{\partial^2}{\partial \phi^2}.
+        \]
+      </div>
+      <p>
+        Potenziale coulombiano centrale: 
+        \(V(r)=-\dfrac{Z e^2}{4\pi\varepsilon_0\,r}\).
+        Equazione di Schr&ouml;dinger stazionaria con massa ridotta \( \mu \):
+      </p>
+      <div class="formula">
+        \[
+        -\frac{\hbar^2}{2\mu}\,\nabla^2\Psi(\vec{r})+V(r)\,\Psi(\vec{r})=E\,\Psi(\vec{r}).
+        \]
+      </div>
+    </div>
+
+    <!-- SEPARAZIONE E POTENZIALE EFFICACE -->
+    <div class="equation-derivation">
+      <div class="step">
+        <span class="step-number">1</span>
+        <h3>Separazione delle variabili e potenziale efficace</h3>
+        <p>
+          Con simmetria sferica si pone 
+          \( \Psi_{E\ell m}(\vec{r})=R_{E\ell}(r)\,Y_{\ell m}(\theta,\phi) \)
+          con \(Y_{\ell m}\) armoniche sferiche. Definendo 
+          \(u_{E\ell}(r)=r\,R_{E\ell}(r)\),
+          l’equazione radiale diventa:
+        </p>
+        <div class="formula">
+          \[
+          -\frac{\hbar^2}{2\mu}\frac{d^2u}{dr^2}+
+          \underbrace{\left[
+            V(r)+\frac{\hbar^2\,\ell(\ell+1)}{2\mu\,r^2}
+          \right]}_{V_{\mathrm{eff}}(r)}
+          u(r)=E\,u(r).
+          \]
+        </div>
+        <p>
+          <strong>Regolarit&agrave; all’origine</strong> \(r\to 0\): il termine centrifugo domina. Cercando 
+          \(u\sim r^{s}\) si ottiene l’equazione indiciale 
+          \(s(s-1)-\ell(\ell+1)=0\) con soluzioni
+          \(s=\ell+1\) e \(s=-\ell\).
+          Si seleziona il ramo fisico \(u(r)\propto r^{\ell+1}\) per avere \(R(r)=u/r\) finita.
+        </p>
+      </div>
+
+
+      <div class="step">
+        <span class="step-number">2</span>
+        <h3>Variabili adimensionali e parametro energetico</h3>
+        <p>Stati legati \(E<0\). Introduciamo</p>
+        <div class="formula">
+          \[
+          \kappa=\frac{\sqrt{-2\mu E}}{\hbar},\qquad 
+          \rho=2\kappa r,\qquad
+          \lambda=\frac{\mu}{\hbar^2\kappa}\,\frac{Z e^2}{4\pi\varepsilon_0}
+          =\frac{Z e^2}{4\pi\varepsilon_0\hbar}\sqrt{\frac{-\mu}{2E}}.
+          \]
+        </div>
+        <p>Con queste definizioni l’equazione radiale &egrave;</p>
+        <div class="formula">
+          \[
+          \frac{d^2u}{d\rho^2}
+          +\left(-\frac{1}{4}+\frac{\lambda}{\rho}-\frac{\ell(\ell+1)}{\rho^2}\right)u=0.
+          \]
+        </div>
+        <p>
+          Asintotica per \( \rho\to\infty \): \(u''-\dfrac{1}{4}u\simeq 0\) 
+          quindi \(u\sim A\,e^{+\rho/2}+B\,e^{-\rho/2}\). 
+          La normalizzabilit&agrave; impone \(A=0\).
+        </p>
+      </div>
+
+      <div class="step">
+        <span class="step-number">3</span>
+        <h3>Estrazione del comportamento dominante e riduzione a Kummer</h3>
+        <p>Si estrae il decadimento esponenziale e la potenza regolare:</p>
+        <div class="formula">
+          \[
+          u(\rho)=e^{-\rho/2}\,\rho^{\ell+1}\,g(\rho).
+          \]
+        </div>
+        <p>Sostituendo e semplificando i termini derivativi si ottiene</p>
+        <div class="formula">
+          \[
+          \boxed{\rho\,g''(\rho)+(2\ell+2-\rho)\,g'(\rho)+(\lambda-\ell-1)\,g(\rho)=0}.
+          \]
+        </div>
+        <p>
+          Questa &egrave; l’equazione ipergeometrica confluente di Kummer nella forma
+          \( z w''+(b-z)w'-a\,w=0 \) con
+          \( a=\ell+1-\lambda \) e \( b=2\ell+2 \).
+        </p>
+      </div>
+
+      <div class="step">
+        <span class="step-number">4</span>
+        <h3>Soluzione in serie, ricorrenza e terminazione</h3>
+        <p>
+          Cercando \( g(\rho)=\sum_{k=0}^{\infty}c_k\,\rho^{k} \) e allineando le potenze,
+          la ricorrenza tra coefficienti &egrave;:
+        </p>
+        <div class="formula">
+          \[
+          \boxed{c_{k+1}=\frac{k+\ell+1-\lambda}{(k+1)(k+2\ell+2)}\,c_k},\qquad k\ge 0.
+          \]
+        </div>
+        <p>
+          Per \(k\to\infty\) si ha \(c_{k+1}/c_k\sim 1/k\) che genera \(g(\rho)\sim e^{\rho}\).
+          Per garantire \(u(\rho)=e^{-\rho/2}\rho^{\ell+1}g(\rho)\) normalizzabile,
+          la serie deve <em>terminare</em>: esiste \(n_r\in\mathbb{N}_0\) tale che
+          \(k+\ell+1-\lambda=0\) per \(k=n_r\).
+        </p>
+        <div class="formula">
+          \[
+          \boxed{\lambda=\ell+1+n_r\equiv n} \quad\Rightarrow\quad
+          g(\rho)\ \text{polinomio}\ L^{(2\ell+1)}_{\,n-\ell-1}(\rho).
+          \]
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">5</span>
+        <h3>Autofunzioni radiali e spettro energetico</h3>
+        <p>
+          Scrivendo il raggio di Bohr effettivo \(a_\mu=\dfrac{4\pi\varepsilon_0\hbar^2}{\mu e^2}\) e 
+          \( \rho=\dfrac{2Zr}{n a_\mu} \), le autofunzioni radiali normalizzate sono
+        </p>
+        <div class="formula">
+          \[
+          R_{n\ell}(r)=\frac{2}{n a_\mu}
+          \sqrt{\frac{(n-\ell-1)!}{(n+\ell)!}}\;
+          e^{-r/(n a_\mu)}\,
+          \left(\tfrac{2r}{n a_\mu}\right)^{\ell}\,
+          L^{(2\ell+1)}_{\,n-\ell-1}\!\left(\tfrac{2r}{n a_\mu}\right).
+          \]
+        </div>
+        <p>Livelli energetici quantizzati:</p>
+        <div class="formula">
+          \[
+          \boxed{E_n=-\frac{\mu Z^2 e^4}{2(4\pi\varepsilon_0)^2\hbar^2}\,\frac{1}{n^2}
+          =-\frac{\mu}{m_e}\,\frac{Z^2\,\mathrm{Ry}}{n^2}},\qquad n=\ell+1+n_r.
+          \]
+        </div>
+        <p>
+          Numero di nodi radiali \(=\ n-\ell-1\). A parit&agrave; di \(n\) l’energia non dipende da \(\ell\) e \(m\). 
+          Degenerazione del livello \(n\): 
+          \(g_n=\sum_{\ell=0}^{n-1}(2\ell+1)=\boxed{n^2}\).
+        </p>
+      </div>
+    </div>
+
+    <!-- RICHIAMI DAGLI APPUNTI -->
+    <h3>Richiami dagli appunti allegati</h3>
+    <div class="reference-list">
+      <div class="reference-item">
+        <h4>Regolarit&agrave; e metodo di Frobenius</h4>
+        <img src="img/kummer1.jpg" alt="Appunti: regolarità e Frobenius" style="width:100%; border-radius:10px;">
+        <p>
+          Equazione indiciale \(s(s-1)-\ell(\ell+1)=0\).
+          Selezione del ramo \(s=\ell+1\) per evitare divergenze all’origine.
+        </p>
+      </div>
+      <div class="reference-item">
+        <h4>Variabili \(\rho,\lambda\), ansatz e condizione \(\lambda=n\)</h4>
+        <img src="img/kummer2.jpg" alt="Appunti: variabili adimensionali e Kummer" style="width:100%; border-radius:10px;">
+        <p>
+          Riduzione a \( \rho g''+(2\ell+2-\rho)g'+(\lambda-\ell-1)g=0 \).
+          Terminazione della serie e Laguerre associati \(L^{(2\ell+1)}_{\,n-\ell-1}\).
+        </p>
+      </div>
+    </div>
+
+    <div class="formula-container">
+      <h3>Messaggio chiave</h3>
+      <p>
+        Normalizzabilit&agrave; \(\Rightarrow\) fattore \(e^{-\rho/2}\). 
+        Regolarit&agrave; all’origine \(\Rightarrow\) fattore \(\rho^{\ell+1}\). 
+        Terminazione della serie di Kummer \(\Rightarrow\) polinomi di Laguerre associati e quantizzazione 
+        \(n=\ell+1+n_r\) con \(E_n\propto -1/n^2\).
+      </p>
+    </div>
+  </div>
+</div>
 
   <div class="container">
     <!-- Introduzione -->
@@ -531,6 +736,8 @@
         </ul>
       </div>
 
+
+
       <div class="visualization">
         <div class="orbital-container">
           <div class="orbital" style="width: 300px; height: 300px; border: 2px dashed var(--secondary);"></div>
@@ -538,6 +745,9 @@
           <div class="orbital-electron"></div>
         </div>
       </div>
+	  
+	  
+	  
     </section>
 
     <!-- Equazione di Schrödinger -->
@@ -761,7 +971,7 @@
     </div>
   </footer>
 
-  <script>
+<script>
   // Tab navigation
   document.querySelectorAll('.tab-btn').forEach(button => {
     button.addEventListener('click', () => {
@@ -877,7 +1087,6 @@
 
   // Update charts with initial data
   updateWavefunctionChart();
-  // (NON chiamare qui updateLaguerreChart: gli slider n2/l2 non sono ancora definiti)
 
   function hydrogenWavefunction(r, n, l, Z) {
     // Simplified model for visualization
@@ -958,22 +1167,25 @@
 
   // Ora che gli slider e la funzione esistono, possiamo inizializzare il grafico di Laguerre
   updateLaguerreChart();
+</script>
 
-  // Initialize MathJax
-  MathJax = {
+<!-- Configurazione MathJax (unica e corretta) -->
+<script>
+  window.MathJax = {
     tex: {
+      packages: {'[+]': ['boldsymbol']},
       inlineMath: [['$', '$'], ['\\(', '\\)']]
     },
     startup: {
-      ready: function() {
+      ready: () => {
         MathJax.startup.defaultReady();
-        MathJax.startup.promise.then(() => {
-          console.log('MathJax initialized');
-        });
+        console.log("MathJax inizializzato con boldsymbol");
       }
     }
   };
 </script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 </body>
 </html>
+
