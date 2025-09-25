@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esercizi di Relatività Speciale</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a16;
+            color: #e0e0ff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 15px rgba(106, 17, 203, 0.5); }
+            100% { text-shadow: 0 0 25px rgba(37, 117, 252, 0.7); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #a0a0ff;
+        }
+
+        .esercitazione {
+            background: rgba(20, 20, 40, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(100, 100, 255, 0.1);
+        }
+
+        .esercitazione:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .esercitazione-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .esercitazione h2 {
+            font-size: 2rem;
+            color: #6a8cff;
+            border-bottom: 2px solid rgba(106, 140, 255, 0.3);
+            padding-bottom: 10px;
+            margin-right: 20px;
+        }
+
+        .download-btn {
+            background: linear-gradient(90deg, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(37, 117, 252, 0.5);
+        }
+
+        .download-btn i {
+            margin-right: 8px;
+        }
+
+        .esercitazione-img {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .esercitazione-img img {
+            width: 100%;
+            display: block;
+        }
+
+        .esercizio {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        .esercizio:hover {
+            background: rgba(40, 40, 80, 0.6);
+        }
+
+        .esercizio h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #8cb4ff;
+            display: flex;
+            align-items: center;
+        }
+
+        .esercizio h3:before {
+            content: "●";
+            margin-right: 10px;
+            color: #6a8cff;
+        }
+
+        .testo-esercizio {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .soluzione-toggle {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .soluzione-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(37, 117, 252, 0.5);
+        }
+
+        .soluzione {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: rgba(40, 40, 80, 0.3);
+            border-radius: 5px;
+            margin-top: 15px;
+            padding: 0 15px;
+        }
+
+        .soluzione.open {
+            max-height: 500px;
+            padding: 15px;
+        }
+
+        .soluzione-content {
+            opacity: 0;
+            transition: opacity 0.3s ease 0.2s;
+        }
+
+        .soluzione.open .soluzione-content {
+            opacity: 1;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Cambria', 'Times New Roman', serif;
+            font-size: 1.2rem;
+            text-align: center;
+            border-left: 4px solid #6a8cff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            color: #a0a0ff;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .esercitazione {
+                padding: 20px;
+            }
+            
+            .esercitazione h2 {
+                font-size: 1.7rem;
+            }
+            
+            .esercitazione-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .download-btn {
+                margin-top: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="three-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Fondamenti di Fisica Teorica: Relatività Speciale</h1>
+            <p class="subtitle">Esplora e risolvi esercizi di relatività speciale con soluzioni interattive e visualizzazioni dinamiche.</p>
+        </header>
+        
+        <!-- ESERCITAZIONE 1 -->
+        <section class="esercitazione">
+            <div class="esercitazione-header">
+                <h2>Esercitazione 1</h2>
+                <a href="esercitazioni/esercitazione 1.pdf" download class="download-btn">
+                    <i class="fas fa-download"></i> Scarica PDF Esercitazione 1
+                </a>
+            </div>
+            
+            <div class="esercitazione-img">
+                <img src="img/es1.jpg" alt="Esercitazione 1">
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 1</h3>
+                <div class="testo-esercizio">
+                    Mostrare, attraverso un calcolo esplicito, che l'equazione delle onde
+                    <div class="formula">∇²ψ - (1/c²) ∂²ψ/∂t² = 0</div>
+                    non è invariante in forma rispetto alle trasformazioni di Galilei (si supponga ψ invariante, ψ'(x, t') = ψ(x, t)).
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 2</h3>
+                <div class="testo-esercizio">
+                    Esperimento di Michelson-Morley
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 3</h3>
+                <div class="testo-esercizio">
+                    Quanto misura il raggio della terra per un osservatore sul sole tenendo conto che il raggio di riposo della terra vale circa 6400 km?
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 4</h3>
+                <div class="testo-esercizio">
+                    Un sistema di riferimento inerziale S' ha una velocità v = 0.6 c rispetto ad un sistema S. Gli orologi sono tali da segnare t = t' = 0 nel punto x = x' = 0.
+                    <br><br>
+                    (a) Un evento accade in S a t = 2 × 10⁻⁷ s nel punto x = 50 m. A che istante questo evento accade in S'?
+                    <br>
+                    (b) Se un secondo evento accade a t = 3 × 10⁻⁷ s nel punto x = 10 m in S, qual è l'intervallo di tempo tra i due eventi nel sistema S'?
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 5</h3>
+                <div class="testo-esercizio">
+                    Due eventi accadono allo stesso istante in un sistema di riferimento inerziale S e sono separati da una distanza di 1 km lungo l'asse x. Qual è la loro separazione temporale misurata in un sistema di riferimento inerziale S' che si muove a velocità costante rispetto ad S lungo x e dove la distanza spaziale misurata vale 2 km?
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ESERCITAZIONE 2 -->
+        <section class="esercitazione">
+            <div class="esercitazione-header">
+                <h2>Esercitazione 2</h2>
+                <a href="esercitazioni/esercitazione 2.pdf" download class="download-btn">
+                    <i class="fas fa-download"></i> Scarica PDF Esercitazione 2
+                </a>
+            </div>
+            
+            <div class="esercitazione-img">
+                <img src="img/es2.jpg" alt="Esercitazione 2">
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 1</h3>
+                <div class="testo-esercizio">
+                    Dilatazione della vita media dei muoni cosmici.
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 2</h3>
+                <div class="testo-esercizio">
+                    Un iperone A ha una vita media di circa 2.5 × 10⁻¹⁰ s nel suo sistema di riferimento. Se copre una distanza di 0.05 m prima di decadere, quanto vale la sua velocità?
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 3</h3>
+                <div class="testo-esercizio">
+                    Una particella di velocità 0.8c si muove verso la terra lungo la direzione nord-sud; un'altra particella si muove nelle direzione opposta con velocità 0.6c. Calcolare la velocità relativa di avvicinamento di una particella rispetto all'altra.
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 4</h3>
+                <div class="testo-esercizio">
+                    Si considerino due sistemi di riferimento inerziali S e S' in moto relativo con velocità v < c lungo l'asse x.
+                    <br><br>
+                    (a) Se un corpo si muove con velocità u in S e velocità u' in S' dimostrare che se u < c anche u' < c, mentre se u = c, u' = c.
+                    <br>
+                    (b) Se v = 3c/4, uₓ = 3c/4, uᵧ = c/2 e u_z = 0, in quale direzione e con quale velocità si muove il corpo in S'.
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 5</h3>
+                <div class="testo-esercizio">
+                    Con quale velocità e in quale direzione si muove una galassia A se una linea di assorbimento a 550 nm misurata per una galassia stazionaria risulta a 450 nm per la galassia A? E per una galassia B che presenta la stessa linea spostata a 700 nm?
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ESERCITAZIONE 3 -->
+        <section class="esercitazione">
+            <div class="esercitazione-header">
+                <h2>Esercitazione 3</h2>
+                <a href="esercitazioni/esercitazione 3.pdf" download class="download-btn">
+                    <i class="fas fa-download"></i> Scarica PDF Esercitazione 3
+                </a>
+            </div>
+            
+            <div class="esercitazione-img">
+                <img src="img/es3.jpg" alt="Esercitazione 3">
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 1</h3>
+                <div class="testo-esercizio">
+                    Moto di una carica elettrica in campo elettrico costante e uniforme
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 2</h3>
+                <div class="testo-esercizio">
+                    Moto di una carica elettrica in campo magnetico costante e uniforme
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 3</h3>
+                <div class="testo-esercizio">
+                    Una particella ha un'energia totale di 5 GeV e un momento di 3 GeV/c.
+                    <br><br>
+                    (a) Quanto vale la sua massa a riposo?
+                    <br>
+                    (b) Qual è la sua energia in un sistema di riferimento in cui il suo momento vale 4 GeV/c?
+                    <br>
+                    (c) Qual è la velocità relativa dei due sistemi di riferimento?
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 4</h3>
+                <div class="testo-esercizio">
+                    Quale differenza di potenziale accelererebbe un elettrone alla velocità della luce secondo la fisica classica?
+                    <br><br>
+                    (a) Con questa differenza di potenziale, quale velocità acquisterebbe relativisticamente l'elettrone?
+                    <br>
+                    (b) Quali sarebbero la sua energia totale e la sua energia cinetica?
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 5</h3>
+                <div class="testo-esercizio">
+                    Determinare l'espressione del tensore metrico dello spazio di Minkowski in coordinate cilindriche.
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="esercizio">
+                <h3>Esercizio 6</h3>
+                <div class="testo-esercizio">
+                    Siano Aᵘ e Bᵘ due quadrivettori di Lorentz ortogonali. Dimostrare che se sono di tipo luce sono, necessariamente, multipli l'uno dell'altro.
+                </div>
+                <button class="soluzione-toggle">Mostra Soluzione</button>
+                <div class="soluzione">
+                    <div class="soluzione-content">
+                        <!-- La soluzione verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Fondamenti di Fisica Teorica: Relatività Speciale - Esercitazioni</p>
+        </footer>
+    </div>
+
+    <script>
+        // Inizializzazione Three.js per lo sfondo animato
+        let scene, camera, renderer, particles;
+        
+        function initThree() {
+            // Creazione della scena
+            scene = new THREE.Scene();
+            
+            // Creazione della camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            // Creazione del renderer
+            renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('three-container').appendChild(renderer.domElement);
+            
+            // Creazione delle particelle per lo sfondo
+            const particleCount = 500;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                // Posizioni casuali
+                positions[i] = (Math.random() - 0.5) * 100;
+                positions[i + 1] = (Math.random() - 0.5) * 100;
+                positions[i + 2] = (Math.random() - 0.5) * 100;
+                
+                // Colori casuali con tonalità blu/viola
+                colors[i] = Math.random() * 0.2 + 0.4;     // R
+                colors[i + 1] = Math.random() * 0.2 + 0.3; // G
+                colors[i + 2] = Math.random() * 0.3 + 0.7; // B
+            }
+            
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.1,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+            
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            scene.add(particleSystem);
+            
+            // Animazione
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotazione lenta delle particelle
+                particleSystem.rotation.x += 0.0001;
+                particleSystem.rotation.y += 0.0002;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Gestione del ridimensionamento della finestra
+            window.addEventListener('resize', function() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // Inizializzazione degli eventi per i toggle delle soluzioni
+        function initToggleButtons() {
+            const toggleButtons = document.querySelectorAll('.soluzione-toggle');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const soluzione = this.nextElementSibling;
+                    soluzione.classList.toggle('open');
+                    
+                    if (soluzione.classList.contains('open')) {
+                        this.textContent = 'Nascondi Soluzione';
+                    } else {
+                        this.textContent = 'Mostra Soluzione';
+                    }
+                });
+            });
+        }
+        
+        // Inizializzazione quando il DOM è caricato
+        document.addEventListener('DOMContentLoaded', function() {
+            initThree();
+            initToggleButtons();
+        });
+    </script>
+</body>
+</html>
