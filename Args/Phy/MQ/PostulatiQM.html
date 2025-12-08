@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postulati della Meccanica Quantistica</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #0a0f2e 0%, #000000 100%);
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .main-content {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(0, 150, 255, 0.8);
+            background: linear-gradient(to right, #4facfe, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            animation: titleGlow 3s infinite alternate;
+            position: relative;
+            padding: 0 20px;
+        }
+        
+        h1::before, h1::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #00f2fe, transparent);
+        }
+        
+        h1::before {
+            left: -120px;
+        }
+        
+        h1::after {
+            right: -120px;
+        }
+        
+        @keyframes titleGlow {
+            0% { 
+                text-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+                transform: translateY(0);
+            }
+            100% { 
+                text-shadow: 0 0 20px rgba(0, 200, 255, 1), 0 0 30px rgba(0, 100, 255, 0.5);
+                transform: translateY(-5px);
+            }
+        }
+        
+        .frame {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(10, 15, 30, 0.7);
+            box-shadow: 
+                0 0 50px rgba(0, 150, 255, 0.5),
+                inset 0 0 50px rgba(0, 150, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        
+        .frame::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff, #33ff99, #ff00cc);
+            z-index: -1;
+            border-radius: 25px;
+            animation: borderAnimation 8s linear infinite;
+            filter: blur(8px);
+            background-size: 400% 400%;
+        }
+        
+        .frame::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 15, 30, 0.9);
+            z-index: -1;
+            border-radius: 20px;
+        }
+        
+        @keyframes borderAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .image-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container:hover {
+            transform: scale(1.01);
+        }
+        
+        .image-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 150, 255, 0.1) 0%, rgba(0, 200, 255, 0.05) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .ornaments {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .ornament {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.7);
+            animation: float 6s infinite ease-in-out;
+            background: radial-gradient(circle, rgba(0, 200, 255, 0.8) 0%, rgba(0, 100, 255, 0.3) 70%);
+        }
+        
+        .ornament:nth-child(1) { 
+            top: 10%; 
+            left: 5%; 
+            width: 25px;
+            height: 25px;
+            animation-delay: 0s; 
+        }
+        
+        .ornament:nth-child(2) { 
+            top: 15%; 
+            right: 10%; 
+            width: 20px;
+            height: 20px;
+            animation-delay: 1s; 
+        }
+        
+        .ornament:nth-child(3) { 
+            bottom: 20%; 
+            left: 8%; 
+            width: 30px;
+            height: 30px;
+            animation-delay: 2s; 
+        }
+        
+        .ornament:nth-child(4) { 
+            bottom: 10%; 
+            right: 5%; 
+            width: 22px;
+            height: 22px;
+            animation-delay: 3s; 
+        }
+        
+        .ornament:nth-child(5) { 
+            top: 50%; 
+            left: 3%; 
+            width: 18px;
+            height: 18px;
+            animation-delay: 4s; 
+        }
+        
+        .ornament:nth-child(6) { 
+            top: 50%; 
+            right: 3%; 
+            width: 28px;
+            height: 28px;
+            animation-delay: 5s; 
+        }
+        
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg) scale(1);
+                box-shadow: 0 0 15px rgba(0, 200, 255, 0.7);
+            }
+            50% { 
+                transform: translateY(-20px) rotate(180deg) scale(1.1);
+                box-shadow: 0 0 25px rgba(0, 200, 255, 1);
+            }
+        }
+        
+        .quantum-symbols {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 4;
+        }
+        
+        .symbol {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(0, 200, 255, 0.7);
+            opacity: 0.6;
+            animation: symbolFloat 10s infinite linear;
+        }
+        
+        .symbol:nth-child(1) { top: 15%; left: 12%; animation-delay: 0s; }
+        .symbol:nth-child(2) { top: 25%; right: 15%; animation-delay: 2s; }
+        .symbol:nth-child(3) { bottom: 30%; left: 10%; animation-delay: 4s; }
+        .symbol:nth-child(4) { bottom: 15%; right: 12%; animation-delay: 6s; }
+        .symbol:nth-child(5) { top: 40%; left: 5%; animation-delay: 1s; }
+        .symbol:nth-child(6) { top: 40%; right: 5%; animation-delay: 3s; }
+        .symbol:nth-child(7) { bottom: 40%; left: 7%; animation-delay: 5s; }
+        .symbol:nth-child(8) { bottom: 40%; right: 7%; animation-delay: 7s; }
+        
+        @keyframes symbolFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-15px) rotate(180deg); opacity: 0.7; }
+            100% { transform: translateY(0) rotate(360deg); opacity: 0.3; }
+        }
+        
+        .energy-waves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        
+        .wave {
+            position: absolute;
+            border: 2px solid rgba(0, 150, 255, 0.3);
+            border-radius: 50%;
+            animation: waveExpand 8s infinite linear;
+        }
+        
+        .wave:nth-child(1) {
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            margin-top: -5px;
+            margin-left: -5px;
+            animation-delay: 0s;
+        }
+        
+        .wave:nth-child(2) {
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            margin-top: -5px;
+            margin-left: -5px;
+            animation-delay: 2s;
+        }
+        
+        .wave:nth-child(3) {
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            margin-top: -5px;
+            margin-left: -5px;
+            animation-delay: 4s;
+        }
+        
+        .wave:nth-child(4) {
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            margin-top: -5px;
+            margin-left: -5px;
+            animation-delay: 6s;
+        }
+        
+        @keyframes waveExpand {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+                border-width: 2px;
+            }
+            100% {
+                transform: scale(20);
+                opacity: 0;
+                border-width: 0;
+            }
+        }
+        
+        .corner-decoration {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            z-index: 6;
+        }
+        
+        .corner-tl {
+            top: 15px;
+            left: 15px;
+            border-top: 3px solid rgba(0, 200, 255, 0.7);
+            border-left: 3px solid rgba(0, 200, 255, 0.7);
+            border-top-left-radius: 15px;
+        }
+        
+        .corner-tr {
+            top: 15px;
+            right: 15px;
+            border-top: 3px solid rgba(0, 200, 255, 0.7);
+            border-right: 3px solid rgba(0, 200, 255, 0.7);
+            border-top-right-radius: 15px;
+        }
+        
+        .corner-bl {
+            bottom: 15px;
+            left: 15px;
+            border-bottom: 3px solid rgba(0, 200, 255, 0.7);
+            border-left: 3px solid rgba(0, 200, 255, 0.7);
+            border-bottom-left-radius: 15px;
+        }
+        
+        .corner-br {
+            bottom: 15px;
+            right: 15px;
+            border-bottom: 3px solid rgba(0, 200, 255, 0.7);
+            border-right: 3px solid rgba(0, 200, 255, 0.7);
+            border-bottom-right-radius: 15px;
+        }
+        
+        .light-beams {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        
+        .beam {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.7), transparent);
+            transform-origin: left center;
+            animation: beamRotate 20s infinite linear;
+        }
+        
+        .beam:nth-child(1) { top: 20%; left: 50%; width: 50%; animation-delay: 0s; }
+        .beam:nth-child(2) { top: 40%; left: 50%; width: 40%; animation-delay: 5s; }
+        .beam:nth-child(3) { top: 60%; left: 50%; width: 60%; animation-delay: 10s; }
+        .beam:nth-child(4) { top: 80%; left: 50%; width: 45%; animation-delay: 15s; }
+        
+        @keyframes beamRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 7;
+        }
+        
+        .floater {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(0, 200, 255, 0.5);
+            border-radius: 50%;
+            animation: floaterMove 15s infinite linear;
+            box-shadow: 0 0 10px rgba(0, 200, 255, 0.7);
+        }
+        
+        .floater:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .floater:nth-child(2) { top: 70%; left: 80%; animation-delay: 3s; }
+        .floater:nth-child(3) { top: 40%; left: 10%; animation-delay: 6s; }
+        .floater:nth-child(4) { top: 10%; left: 60%; animation-delay: 9s; }
+        .floater:nth-child(5) { top: 80%; left: 30%; animation-delay: 12s; }
+        
+        @keyframes floaterMove {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -15px) scale(1.2); }
+            50% { transform: translate(10px, 20px) scale(0.8); }
+            75% { transform: translate(-15px, 10px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        
+        .quantum-formulas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        .formula {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            animation: formulaFade 25s infinite linear;
+        }
+        
+        .formula:nth-child(1) { top: 15%; left: 5%; animation-delay: 0s; }
+        .formula:nth-child(2) { top: 25%; right: 10%; animation-delay: 5s; }
+        .formula:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 10s; }
+        .formula:nth-child(4) { bottom: 20%; right: 5%; animation-delay: 15s; }
+        .formula:nth-child(5) { top: 60%; left: 8%; animation-delay: 20s; }
+        
+        @keyframes formulaFade {
+            0% { opacity: 0; transform: translateY(0); }
+            10% { opacity: 0.5; }
+            20% { opacity: 0.2; transform: translateY(-10px); }
+            30% { opacity: 0.7; }
+            40% { opacity: 0.3; transform: translateY(5px); }
+            50% { opacity: 0.8; }
+            60% { opacity: 0.4; transform: translateY(-5px); }
+            70% { opacity: 0.6; }
+            80% { opacity: 0.2; transform: translateY(10px); }
+            90% { opacity: 0.4; }
+            100% { opacity: 0; transform: translateY(0); }
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-align: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .particle-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .control-btn {
+            background: rgba(0, 100, 255, 0.7);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: rgba(0, 150, 255, 0.9);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .frame {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .corner-decoration {
+                width: 50px;
+                height: 50px;
+            }
+        }
+        
+        .decoration-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+            background-image: 
+                linear-gradient(rgba(0, 150, 255, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 150, 255, 0.3) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s infinite linear;
+        }
+        
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            animation: sparkleTwinkle 3s infinite;
+            z-index: 8;
+        }
+        
+        .sparkle:nth-child(1) { top: 10%; left: 15%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 20%; right: 20%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { bottom: 30%; left: 25%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { bottom: 15%; right: 15%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { top: 40%; left: 40%; animation-delay: 2s; }
+        .sparkle:nth-child(6) { top: 60%; right: 30%; animation-delay: 2.5s; }
+        
+        @keyframes sparkleTwinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .quantum-connections {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.5), transparent);
+            animation: connectionPulse 4s infinite;
+        }
+        
+        .connection:nth-child(1) { top: 30%; left: 10%; width: 30%; animation-delay: 0s; }
+        .connection:nth-child(2) { top: 60%; right: 15%; width: 25%; animation-delay: 1s; }
+        .connection:nth-child(3) { bottom: 40%; left: 20%; width: 35%; animation-delay: 2s; }
+        .connection:nth-child(4) { top: 20%; right: 10%; width: 20%; animation-delay: 3s; }
+        
+        @keyframes connectionPulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div class="particle-controls">
+        <button class="control-btn" id="moreParticles">+ Particelle</button>
+        <button class="control-btn" id="lessParticles">- Particelle</button>
+    </div>
+    
+    <div class="main-content">
+        <h1>POSTULATI DELLA MECCANICA QUANTISTICA</h1>
+        
+        <div class="frame">
+            <div class="decoration-grid"></div>
+            <div class="energy-waves">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+            <div class="light-beams">
+                <div class="beam"></div>
+                <div class="beam"></div>
+                <div class="beam"></div>
+                <div class="beam"></div>
+            </div>
+            <div class="quantum-formulas">
+                <div class="formula">ψ(x,t) = ∫Ψ(k)e^{i(kx-ωt)}dk</div>
+                <div class="formula">[x̂, p̂] = iℏ</div>
+                <div class="formula">Ĥψ = Eψ</div>
+                <div class="formula">ΔxΔp ≥ ℏ/2</div>
+                <div class="formula">|ψ⟩ = ∑c_n|φ_n⟩</div>
+            </div>
+            <div class="quantum-connections">
+                <div class="connection"></div>
+                <div class="connection"></div>
+                <div class="connection"></div>
+                <div class="connection"></div>
+            </div>
+            
+            <div class="ornaments">
+                <div class="ornament"></div>
+                <div class="ornament"></div>
+                <div class="ornament"></div>
+                <div class="ornament"></div>
+                <div class="ornament"></div>
+                <div class="ornament"></div>
+            </div>
+            
+            <div class="quantum-symbols">
+                <div class="symbol">Ψ</div>
+                <div class="symbol">ℏ</div>
+                <div class="symbol">Δ</div>
+                <div class="symbol">∫</div>
+                <div class="symbol">∂</div>
+                <div class="symbol">∑</div>
+                <div class="symbol">∞</div>
+                <div class="symbol">π</div>
+            </div>
+            
+            <div class="floating-elements">
+                <div class="floater"></div>
+                <div class="floater"></div>
+                <div class="floater"></div>
+                <div class="floater"></div>
+                <div class="floater"></div>
+            </div>
+            
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            
+            <div class="corner-decoration corner-tl"></div>
+            <div class="corner-decoration corner-tr"></div>
+            <div class="corner-decoration corner-bl"></div>
+            <div class="corner-decoration corner-br"></div>
+            
+            <div class="image-container">
+                <img src="img/PQ6.jpg" alt="I 6 Postulati della Meccanica Quantistica">
+            </div>
+        </div>
+        
+        <!-- Spazio aggiuntivo per permettere lo scrolling -->
+        <div style="height: 100vh;"></div>
+    </div>
+    
+    <div class="scroll-indicator">
+        <div>Scrolla per vedere l'intera immagine</div>
+        <div style="font-size: 20px;">↓</div>
+    </div>
+
+    <script>
+        // Inizializzazione Three.js
+        let scene, camera, renderer, particles;
+        let particleCount = 32;
+        const particleSystems = [];
+        const particleVelocities = [];
+        
+        function init() {
+            // Creazione della scena
+            scene = new THREE.Scene();
+            
+            // Configurazione della camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+            
+            // Configurazione del renderer
+            renderer = new THREE.WebGLRenderer({ 
+                alpha: true, 
+                antialias: true,
+                powerPreference: "high-performance"
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            
+            // Creazione delle particelle
+            createParticles();
+            
+            // Gestione del ridimensionamento della finestra
+            window.addEventListener('resize', onWindowResize);
+            
+            // Controlli per le particelle
+            document.getElementById('moreParticles').addEventListener('click', () => {
+                particleCount = Math.min(particleCount + 10, 200);
+                recreateParticles();
+            });
+            
+            document.getElementById('lessParticles').addEventListener('click', () => {
+                particleCount = Math.max(particleCount - 10, 10);
+                recreateParticles();
+            });
+            
+            // Avvio dell'animazione
+            animate();
+        }
+        
+        function createParticles() {
+            // Rimuovi i sistemi di particelle esistenti
+            particleSystems.forEach(system => {
+                scene.remove(system);
+            });
+            particleSystems.length = 0;
+            particleVelocities.length = 0;
+            
+            // Crea diversi tipi di particelle
+            const types = [
+                { color: 0x4facfe, size: 1.5 }, // Blu
+                { color: 0x00f2fe, size: 1.2 }, // Ciano
+                { color: 0x43e97b, size: 1.0 }, // Verde
+                { color: 0xfa709a, size: 1.8 }  // Rosa
+            ];
+            
+            const particlesPerType = Math.ceil(particleCount / types.length);
+            
+            types.forEach((type, typeIndex) => {
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particlesPerType * 3);
+                const colors = new Float32Array(particlesPerType * 3);
+                
+                // Materiale delle particelle
+                const material = new THREE.PointsMaterial({
+                    size: type.size,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.7,
+                    blending: THREE.AdditiveBlending,
+                    sizeAttenuation: true
+                });
+                
+                // Inizializzazione delle posizioni e velocità delle particelle
+                for (let i = 0; i < particlesPerType; i++) {
+                    const i3 = i * 3;
+                    
+                    // Posizione iniziale casuale
+                    positions[i3] = (Math.random() - 0.5) * 100;
+                    positions[i3 + 1] = (Math.random() - 0.5) * 100;
+                    positions[i3 + 2] = (Math.random() - 0.5) * 100;
+                    
+                    // Velocità iniziale casuale
+                    particleVelocities.push({
+                        x: (Math.random() - 0.5) * 0.2,
+                        y: (Math.random() - 0.5) * 0.2,
+                        z: (Math.random() - 0.5) * 0.2,
+                        type: typeIndex
+                    });
+                    
+                    // Colori delle particelle basati sul tipo
+                    const color = new THREE.Color(type.color);
+                    colors[i3] = color.r;
+                    colors[i3 + 1] = color.g;
+                    colors[i3 + 2] = color.b;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                
+                const particleSystem = new THREE.Points(geometry, material);
+                scene.add(particleSystem);
+                particleSystems.push(particleSystem);
+            });
+        }
+        
+        function recreateParticles() {
+            createParticles();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Aggiornamento delle posizioni delle particelle
+            let velocityIndex = 0;
+            
+            particleSystems.forEach((particles, systemIndex) => {
+                const positions = particles.geometry.attributes.position.array;
+                const count = positions.length / 3;
+                
+                for (let i = 0; i < count; i++) {
+                    const i3 = i * 3;
+                    const vIndex = velocityIndex + i;
+                    
+                    if (vIndex >= particleVelocities.length) continue;
+                    
+                    const velocity = particleVelocities[vIndex];
+                    
+                    // Aggiornamento posizione
+                    positions[i3] += velocity.x;
+                    positions[i3 + 1] += velocity.y;
+                    positions[i3 + 2] += velocity.z;
+                    
+                    // Controllo dei bordi e rimbalzo
+                    if (positions[i3] > 50 || positions[i3] < -50) {
+                        velocity.x *= -1;
+                    }
+                    if (positions[i3 + 1] > 50 || positions[i3 + 1] < -50) {
+                        velocity.y *= -1;
+                    }
+                    if (positions[i3 + 2] > 50 || positions[i3 + 2] < -50) {
+                        velocity.z *= -1;
+                    }
+                    
+                    // Attrazione verso il centro (dove si trova l'immagine)
+                    const centerX = 0, centerY = 0, centerZ = 0;
+                    const dx = centerX - positions[i3];
+                    const dy = centerY - positions[i3 + 1];
+                    const dz = centerZ - positions[i3 + 2];
+                    
+                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                    
+                    // Forza di attrazione verso il centro
+                    if (distance > 0) {
+                        const force = 0.0005;
+                        velocity.x += dx * force;
+                        velocity.y += dy * force;
+                        velocity.z += dz * force;
+                    }
+                    
+                    // Limitazione della velocità
+                    const speed = Math.sqrt(
+                        velocity.x * velocity.x +
+                        velocity.y * velocity.y +
+                        velocity.z * velocity.z
+                    );
+                    
+                    const maxSpeed = 0.5;
+                    if (speed > maxSpeed) {
+                        velocity.x = (velocity.x / speed) * maxSpeed;
+                        velocity.y = (velocity.y / speed) * maxSpeed;
+                        velocity.z = (velocity.z / speed) * maxSpeed;
+                    }
+                    
+                    // Effetto di respingimento tra particelle dello stesso tipo
+                    for (let j = 0; j < count; j++) {
+                        if (i === j) continue;
+                        
+                        const j3 = j * 3;
+                        const dx2 = positions[i3] - positions[j3];
+                        const dy2 = positions[i3 + 1] - positions[j3 + 1];
+                        const dz2 = positions[i3 + 2] - positions[j3 + 2];
+                        
+                        const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
+                        
+                        if (dist2 < 5 && dist2 > 0) {
+                            const repulseForce = 0.001;
+                            velocity.x += (dx2 / dist2) * repulseForce;
+                            velocity.y += (dy2 / dist2) * repulseForce;
+                            velocity.z += (dz2 / dist2) * repulseForce;
+                        }
+                    }
+                }
+                
+                particles.geometry.attributes.position.needsUpdate = true;
+                velocityIndex += count;
+            });
+            
+            // Rotazione leggera della scena
+            scene.rotation.x += 0.0005;
+            scene.rotation.y += 0.001;
+            
+            renderer.render(scene, camera);
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Avvio dell'applicazione
+        init();
+        
+        // Nascondi l'indicatore di scroll dopo un po' o quando l'utente scrolla
+        window.addEventListener('scroll', function() {
+            document.querySelector('.scroll-indicator').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.scroll-indicator').style.display = 'none';
+            }, 500);
+        });
+        
+        // Ripristina l'indicatore se si torna in cima
+        window.addEventListener('scroll', function() {
+            if (window.scrollY < 100) {
+                document.querySelector('.scroll-indicator').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('.scroll-indicator').style.opacity = '1';
+                }, 10);
+            }
+        });
+    </script>
+</body>
+</html>
