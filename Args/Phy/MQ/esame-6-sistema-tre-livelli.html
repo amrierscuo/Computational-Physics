@@ -1,41 +1,1017 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esame 6 sistema tre livelli</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esame 6 (10-02-2021) — Soluzioni (MQ)</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --ink2:rgba(11,16,32,.82);
+      --paper:rgba(255,255,255,.92);
+      --paper2:rgba(255,255,255,.78);
+      --shadow:rgba(0,0,0,.14);
+      --shadow2:rgba(0,0,0,.22);
+      --a1:#00e5ff;
+      --a2:#ff4ecd;
+      --a3:#52ff9c;
+      --a4:#ffe34d;
+      --radius:18px;
+      --radius-sm:12px;
+      --max:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      padding:22px 16px 46px;
+      color:var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1100px 760px at 12% 10%, rgba(0,229,255,0.18), transparent 58%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,78,205,0.14), transparent 60%),
+        radial-gradient(1200px 900px at 60% 92%, rgba(82,255,156,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(240,246,255,0.92));
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; }
+
+    header.hero{
+      position:relative;
+      padding:22px 18px;
+      border-radius:var(--radius);
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(0,229,255,0.22), transparent 60%),
+        radial-gradient(900px 420px at 90% 10%, rgba(255,78,205,0.16), transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+      border:2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+    }
+    header.hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.22;
+      mix-blend-mode:multiply;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(11,16,32,.72);
+      margin-bottom:8px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      background: linear-gradient(135deg, rgba(0,229,255,0.88), rgba(255,227,77,0.78));
+      color:#0b1020;
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: 0 12px 22px rgba(0,229,255,.14);
+    }
+    h1{
+      margin:6px 0 6px;
+      line-height:1.15;
+      letter-spacing:.2px;
+      font-size: 26px;
+    }
+    .sub{
+      margin:0;
+      color:var(--ink2);
+      font-size: 15px;
+      max-width: 92ch;
+    }
+    .top-actions{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.80);
+      color: rgba(11,16,32,.92);
+      font-weight: 900;
+      text-decoration:none;
+      box-shadow: 0 12px 26px rgba(0,0,0,.12);
+      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(1px); filter: brightness(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,42,109,0.92), rgba(255,227,77,0.78));
+      border-color: rgba(255,255,255,0.30);
+      color:#0b1020;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 320px 1fr; align-items:start; }
+    }
+
+    nav.toc{
+      position:sticky;
+      top: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.80);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 34px var(--shadow);
+      padding: 14px;
+      overflow:hidden;
+    }
+    nav.toc h2{
+      margin:0 0 10px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    nav.toc ul{ margin:0; padding-left: 18px; }
+    nav.toc li{ margin: 8px 0; }
+    nav.toc a{
+      color: rgba(11,16,32,.92);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    nav.toc a:hover{ text-decoration: underline; text-decoration-color: rgba(0,229,255,0.85); }
+
+    section.card{
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+      position:relative;
+    }
+    section.card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.18;
+      mix-blend-mode:multiply;
+    }
+    .card-head{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      background:
+        radial-gradient(900px 280px at 12% 0%, rgba(0,229,255,0.12), transparent 60%),
+        radial-gradient(900px 280px at 90% 10%, rgba(255,78,205,0.10), transparent 60%),
+        rgba(255,255,255,0.72);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-head h2{ margin:10px 0 0; font-size: 18px; line-height:1.2; }
+    .card-body{ position:relative; z-index:1; padding: 16px; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.76);
+      color: rgba(11,16,32,.80);
+    }
+    .badge .dot{
+      width:10px; height:10px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--a1), var(--a2));
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.65);
+    }
+
+    .block{
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .block h3{ margin:0 0 10px; font-size: 14px; letter-spacing:.2px; }
+
+    .steps{ margin:0; padding-left: 18px; }
+    .steps li{ margin: 10px 0; }
+
+    .note{ border-left: 4px solid rgba(0,229,255,0.85); }
+    .warn{ border-left: 4px solid rgba(255,42,109,0.75); background: rgba(255,240,245,0.78); }
+    .result{ border-left: 4px solid rgba(82,255,156,0.85); background: rgba(240,255,248,0.82); }
+
+    .tiny{ color: rgba(11,16,32,.72); font-size: 12.5px; margin-top: 8px; }
+    .hr{ height:1px; background: rgba(0,0,0,0.06); margin: 14px 0; border-radius: 999px; }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+      color: rgba(11,16,32,.75);
+      font-size: 12.5px;
+      text-align:center;
+    }
+
+    mjx-container[display="true"]{ margin: 10px 0 !important; }
+
+    code.k{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .u{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  </style>
 </head>
+
 <body>
-    <h1>Esame 6 sistema tre livelli</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Esame 6 sistema tre livelli. Grazie per la pazienza!</p>
-    <footer>
-        Generato automaticamente - Esame 6 sistema tre livelli
-    </footer>
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="kicker">
+        <span class="pill">MQ • Soluzioni</span>
+        <span>Esame 6 — 10/02/2021</span>
+      </div>
+
+      <h1>Esame 6 (10-02-2021) — Oscillatore armonico (⟨x⟩, Δx), spin 1 (misure di \(S_x\), ⟨\(S_y\)⟩), perturbazione con degenerazione</h1>
+
+      <p class="sub">
+        Pagina “full‑detail”: <b>testo</b> + <b>soluzioni</b> con passaggi super espliciti (anche aritmetica),
+        risultati finali evidenziati.
+      </p>
+
+      <div class="top-actions">
+        <a class="btn" href="1mq.html">← Torna all’indice</a>
+        <a class="btn primary" href="#ex1">Vai al primo esercizio</a>
+        <a class="btn" href="#fine">↓ Fine pagina</a>
+      </div>
+
+      <p class="tiny">
+        <b>Promemoria (oscillatore armonico):</b>
+        \[
+          E_n=\hbar\omega\left(n+\frac12\right),\qquad
+          x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),\qquad
+          p=i\sqrt{\frac{\hbar m\omega}{2}}(a^\dagger-a).
+        \]
+        <b>Promemoria (spin 1 in base \(S_z\)):</b>
+        \[
+          S_x=\frac{\hbar}{\sqrt2}\!\begin{pmatrix}0&1&0\\[2pt]1&0&1\\[2pt]0&1&0\end{pmatrix},\qquad
+          S_y=\frac{\hbar}{\sqrt2}\!\begin{pmatrix}0&-i&0\\[2pt]i&0&-i\\[2pt]0&i&0\end{pmatrix}.
+        \]
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <nav class="toc">
+        <h2>Contenuti</h2>
+        <ul>
+          <li><a href="#ex1">Esercizio 1 — \(\langle x\rangle(t)\) e \(\Delta x(t)\) (e valore a \(t=\pi/(2\omega)\))</a></li>
+          <li><a href="#ex2">Esercizio 2 — Spin 1: \(P(S_x=\pm\hbar,0)\), \(\langle S_y\rangle\)</a></li>
+          <li><a href="#ex3">Esercizio 3 — Degenerazione: autovalori/autovettori al I ordine</a></li>
+        </ul>
+
+        <div class="block note" style="margin-top:12px;">
+          <h3>Mini‑mappa (rapidissima)</h3>
+          <ul class="steps">
+            <li><b>Ex 1:</b> con \(P_0=0.75, P_1=0.25\) ⇒ stato \(|\psi\rangle = \sqrt{3}/2\,|0\rangle + e^{i\phi}\,1/2\,|1\rangle\). Le condizioni su ⟨x⟩ e ⟨p⟩ fissano \(\phi\).</li>
+            <li><b>Ex 2:</b> proietti lo stato sugli autostati di \(S_x\) (li scrivo esplicitamente) ⇒ probabilità.</li>
+            <li><b>Ex 3:</b> degenerazione \(E_1=E_2\): diagonalizza la matrice \(2\times2\) di \(h_1\) nel sottospazio \(|1\rangle,|2\rangle\).</li>
+          </ul>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex1">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 1</span>
+            <h2>Oscillatore armonico: \(\langle x\rangle(t)\) e scarto quadratico medio \(\Delta x(t)\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Un oscillatore armonico quantistico all’istante \(t=0\) si trova in uno stato tale che:
+              </p>
+              <ul class="steps">
+                <li>la probabilità di trovare lo stato fondamentale è \(0.75\), mentre la probabilità di trovare il primo stato eccitato è \(0.25\);</li>
+                <li>il valore medio di \(x\) è zero;</li>
+                <li>il valore medio di \(p\) è minore di zero.</li>
+              </ul>
+              <p>
+                Calcolare il valor medio e lo scarto quadratico medio di \(x\) all’istante \(t\) arbitrario e, in particolare,
+                all’istante \(t=\pi/(2\omega)\).
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione passo‑passo</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Poiché l’energia misura solo \(n=0\) e \(n=1\) con probabilità date, <b>lo stato deve essere una sovrapposizione di \(|0\rangle\) e \(|1\rangle\)</b>:
+                  \[
+                    |\psi(0)\rangle = c_0|0\rangle + c_1|1\rangle,
+                    \quad |c_0|^2=0.75,\quad |c_1|^2=0.25.
+                  \]
+                  Quindi:
+                  \[
+                    |c_0|=\sqrt{0.75}=\sqrt{\frac{3}{4}}=\frac{\sqrt3}{2},
+                    \qquad
+                    |c_1|=\sqrt{0.25}=\sqrt{\frac{1}{4}}=\frac12.
+                  \]
+                  Metto la fase relativa:
+                  \[
+                    c_0=\frac{\sqrt3}{2}\quad(\text{posso sceglierlo reale positivo}),\qquad
+                    c_1=\frac12 e^{i\phi}.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Uso la condizione \(\langle x\rangle(0)=0\).
+                  <br/><br/>
+                  Siccome \(x\propto (a+a^\dagger)\), tra \(|0\rangle\) e \(|1\rangle\) vale:
+                  \[
+                    \langle x\rangle(0)\propto \Re(c_0^*c_1).
+                  \]
+                  Calcolo \(c_0^*c_1\) (banale ma essenziale):
+                  \[
+                    c_0^*c_1=\left(\frac{\sqrt3}{2}\right)\left(\frac12 e^{i\phi}\right)=\frac{\sqrt3}{4}e^{i\phi}.
+                  \]
+                  La parte reale è:
+                  \[
+                    \Re\left(\frac{\sqrt3}{4}e^{i\phi}\right)=\frac{\sqrt3}{4}\cos\phi.
+                  \]
+                  Condizione \(\langle x\rangle(0)=0\Rightarrow \cos\phi=0\Rightarrow \phi=\pm\frac{\pi}{2}\ (\text{mod } \pi).\)
+                </li>
+
+                <li class="warn">
+                  Ora uso la condizione \(\langle p\rangle(0)<0\) per scegliere il segno.
+                  <br/><br/>
+                  Analogamente, \(p\propto i(a^\dagger-a)\) ⇒
+                  \[
+                    \langle p\rangle(0)\propto \Im(c_0^*c_1)=\frac{\sqrt3}{4}\sin\phi.
+                  \]
+                  Se \(\phi=+\pi/2\), \(\sin\phi=+1\Rightarrow \langle p\rangle(0)>0\) (NO).
+                  <br/>
+                  Se \(\phi=-\pi/2\), \(\sin\phi=-1\Rightarrow \langle p\rangle(0)<0\) (OK).
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Stato iniziale determinato</h3>
+                    \[
+                      e^{i\phi}=e^{-i\pi/2}=-i
+                      \quad\Rightarrow\quad
+                      \boxed{|\psi(0)\rangle=\frac{\sqrt3}{2}|0\rangle-\frac{i}{2}|1\rangle.}
+                    \]
+                  </div>
+                </li>
+
+                <li class="note">
+                  Evoluzione temporale:
+                  \[
+                    |0\rangle\to e^{-i\omega t/2}|0\rangle,\qquad
+                    |1\rangle\to e^{-i3\omega t/2}|1\rangle.
+                  \]
+                  Quindi:
+                  \[
+                    |\psi(t)\rangle=\frac{\sqrt3}{2}e^{-i\omega t/2}|0\rangle-\frac{i}{2}e^{-i3\omega t/2}|1\rangle.
+                  \]
+                </li>
+
+                <li>
+                  Calcolo \(\langle x\rangle(t)\).
+                  <br/><br/>
+                  Uso:
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),
+                    \qquad
+                    \langle x\rangle=\sqrt{\frac{\hbar}{2m\omega}}\left(\langle a\rangle+\langle a^\dagger\rangle\right)
+                    =2\sqrt{\frac{\hbar}{2m\omega}}\Re(\langle a\rangle).
+                  \]
+                  Con soli \(|0\rangle,|1\rangle\):
+                  \[
+                    \langle a\rangle(t)=c_0^*(t)c_1(t)\sqrt1.
+                  \]
+                  Qui:
+                  \[
+                    c_0(t)=\frac{\sqrt3}{2}e^{-i\omega t/2},\qquad
+                    c_1(t)=-\frac{i}{2}e^{-i3\omega t/2}.
+                  \]
+                  Quindi:
+                  \[
+                    c_0^*(t)c_1(t)=\left(\frac{\sqrt3}{2}e^{+i\omega t/2}\right)\left(-\frac{i}{2}e^{-i3\omega t/2}\right)
+                    =-\frac{i\sqrt3}{4}e^{-i\omega t}.
+                  \]
+                </li>
+
+                <li class="result">
+                  Scrivo \(e^{-i\omega t}=\cos(\omega t)-i\sin(\omega t)\), allora:
+                  \[
+                    -i e^{-i\omega t}=-i\cos(\omega t)-\sin(\omega t),
+                  \]
+                  e quindi:
+                  \[
+                    \Re\!\left(-\frac{i\sqrt3}{4}e^{-i\omega t}\right)= -\frac{\sqrt3}{4}\sin(\omega t).
+                  \]
+                  Concludo:
+                  \[
+                    \boxed{
+                      \langle x\rangle(t)=2\sqrt{\frac{\hbar}{2m\omega}}\left(-\frac{\sqrt3}{4}\sin(\omega t)\right)
+                      =-\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}\,\sin(\omega t).
+                    }
+                  \]
+                </li>
+
+                <li>
+                  Ora \(\langle x^2\rangle(t)\).
+                  <br/><br/>
+                  Uso:
+                  \[
+                    x^2=\frac{\hbar}{2m\omega}(a+a^\dagger)^2
+                    =\frac{\hbar}{2m\omega}\left(a^2+a^{\dagger2}+aa^\dagger+a^\dagger a\right)
+                    =\frac{\hbar}{2m\omega}\left(a^2+a^{\dagger2}+2a^\dagger a+1\right).
+                  \]
+                  Nel nostro stato (solo \(|0\rangle\) e \(|1\rangle\)):
+                  \[
+                    \langle a^2\rangle=0,\qquad \langle a^{\dagger2}\rangle=0
+                  \]
+                  (perché servirebbero componenti \(|2\rangle\), che non ci sono).
+                  Quindi:
+                  \[
+                    \langle x^2\rangle(t)=\frac{\hbar}{2m\omega}\left(2\langle a^\dagger a\rangle+1\right)
+                    =\frac{\hbar}{2m\omega}\left(2\langle n\rangle+1\right).
+                  \]
+                  Ma \(\langle n\rangle=0\cdot P_0+1\cdot P_1=0.25=\frac14\). Quindi:
+                  \[
+                    2\langle n\rangle+1=2\cdot\frac14+1=\frac12+1=\frac32,
+                  \]
+                  e dunque:
+                  \[
+                    \boxed{\langle x^2\rangle(t)=\frac{\hbar}{2m\omega}\cdot\frac32=\frac{3\hbar}{4m\omega}.}
+                  \]
+                </li>
+
+                <li class="result">
+                  Varianza e scarto quadratico medio:
+                  \[
+                    (\Delta x)^2=\langle x^2\rangle-\langle x\rangle^2.
+                  \]
+                  Calcolo \(\langle x\rangle^2\) (banale):
+                  \[
+                    \langle x\rangle^2(t)=\left(\frac{\sqrt3}{2}\right)^2\left(\frac{\hbar}{2m\omega}\right)\sin^2(\omega t)
+                    =\frac{3}{4}\cdot\frac{\hbar}{2m\omega}\sin^2(\omega t)
+                    =\frac{3\hbar}{8m\omega}\sin^2(\omega t).
+                  \]
+                  Quindi:
+                  \[
+                    (\Delta x)^2(t)=\frac{3\hbar}{4m\omega}-\frac{3\hbar}{8m\omega}\sin^2(\omega t)
+                    =\frac{3\hbar}{8m\omega}\Bigl(2-\sin^2(\omega t)\Bigr)
+                    =\frac{3\hbar}{8m\omega}\Bigl(1+\cos^2(\omega t)\Bigr).
+                  \]
+                  Pertanto:
+                  \[
+                    \boxed{
+                      \Delta x(t)=\sqrt{\frac{3\hbar}{8m\omega}\Bigl(1+\cos^2(\omega t)\Bigr)}.
+                    }
+                  \]
+                </li>
+
+                <li class="result">
+                  Valori speciali a \(t=\pi/(2\omega)\): qui \(\sin(\omega t)=\sin(\pi/2)=1\), \(\cos(\omega t)=0\).
+                  \[
+                    \boxed{\langle x\rangle\!\left(\frac{\pi}{2\omega}\right)=
+                      -\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}.}
+                  \]
+                  \[
+                    \boxed{(\Delta x)^2\!\left(\frac{\pi}{2\omega}\right)=\frac{3\hbar}{8m\omega}\quad\Rightarrow\quad
+                    \Delta x\!\left(\frac{\pi}{2\omega}\right)=\sqrt{\frac{3\hbar}{8m\omega}}.}
+                  \]
+                </li>
+
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex2" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 2</span>
+            <h2>Spin 1: probabilità dei risultati di \(S_x\) e valore medio di \(S_y\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Una particella con spin \(1\) è nello stato
+              </p>
+              \[
+                |\Psi\rangle=\frac{1}{\sqrt{14}}
+                \begin{pmatrix}
+                  2\\
+                  1\\
+                  3i
+                \end{pmatrix}.
+              \]
+              <p>
+                Qual è la probabilità che una misura di \(S_x\) abbia come risultato: \(+\hbar\), \(0\), \(-\hbar\)?
+                Qual è il valore medio di \(S_y\)?
+              </p>
+              <p class="tiny">
+                Assumo la base \(\{|+1\rangle_z, |0\rangle_z, |-1\rangle_z\}\), quindi il vettore colonna sono le componenti in base \(S_z\).
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione — Parte A: probabilità di \(S_x\)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Scrivo gli autostati normalizzati di \(S_x\) (in base \(S_z\)), che soddisfano:
+                  \[
+                    S_x|m_x\rangle = \hbar m_x |m_x\rangle,\qquad m_x\in\{+1,0,-1\}.
+                  \]
+                  Con
+                  \[
+                    S_x=\frac{\hbar}{\sqrt2}\begin{pmatrix}0&1&0\\[2pt]1&0&1\\[2pt]0&1&0\end{pmatrix},
+                  \]
+                  si ottiene (standard):
+                  \[
+                    |+1\rangle_x=\frac12\begin{pmatrix}1\\ \sqrt2\\ 1\end{pmatrix},\quad
+                    |0\rangle_x=\frac{1}{\sqrt2}\begin{pmatrix}1\\ 0\\ -1\end{pmatrix},\quad
+                    |-1\rangle_x=\frac12\begin{pmatrix}1\\ -\sqrt2\\ 1\end{pmatrix}.
+                  \]
+                </li>
+
+                <li>
+                  Le probabilità sono:
+                  \[
+                    P(m_x)=|\langle m_x|\Psi\rangle|^2.
+                  \]
+                </li>
+
+                <li>
+                  Calcolo l’ampiezza per \(m_x=+1\):
+                  \[
+                    \langle +1|_x\Psi\rangle
+                    =\left(\frac12(1,\sqrt2,1)\right)\cdot \frac{1}{\sqrt{14}}\begin{pmatrix}2\\1\\3i\end{pmatrix}
+                    =\frac{1}{2\sqrt{14}}\Bigl(2+\sqrt2\cdot 1+3i\Bigr).
+                  \]
+                  Quindi:
+                  \[
+                    \langle +1|_x\Psi\rangle=\frac{2+\sqrt2+3i}{2\sqrt{14}}.
+                  \]
+                  Modulo quadro (conti “banali” separando reale/immaginario):
+                  \[
+                    |2+\sqrt2+3i|^2=(2+\sqrt2)^2+3^2.
+                  \]
+                  Calcolo \((2+\sqrt2)^2\):
+                  \[
+                    (2+\sqrt2)^2=2^2+2\cdot 2\cdot\sqrt2+(\sqrt2)^2=4+4\sqrt2+2=6+4\sqrt2.
+                  \]
+                  Quindi:
+                  \[
+                    |2+\sqrt2+3i|^2=(6+4\sqrt2)+9=15+4\sqrt2.
+                  \]
+                  E dunque:
+                  \[
+                    \boxed{P(S_x=+\hbar)=\left|\frac{2+\sqrt2+3i}{2\sqrt{14}}\right|^2=\frac{15+4\sqrt2}{56}.}
+                  \]
+                </li>
+
+                <li>
+                  Calcolo l’ampiezza per \(m_x=0\):
+                  \[
+                    \langle 0|_x\Psi\rangle
+                    =\left(\frac{1}{\sqrt2}(1,0,-1)\right)\cdot \frac{1}{\sqrt{14}}\begin{pmatrix}2\\1\\3i\end{pmatrix}
+                    =\frac{1}{\sqrt{28}}(2-3i).
+                  \]
+                  Modulo quadro:
+                  \[
+                    |2-3i|^2=2^2+3^2=4+9=13.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{P(S_x=0)=\left|\frac{2-3i}{\sqrt{28}}\right|^2=\frac{13}{28}.}
+                  \]
+                </li>
+
+                <li>
+                  Calcolo l’ampiezza per \(m_x=-1\):
+                  \[
+                    \langle -1|_x\Psi\rangle
+                    =\left(\frac12(1,-\sqrt2,1)\right)\cdot \frac{1}{\sqrt{14}}\begin{pmatrix}2\\1\\3i\end{pmatrix}
+                    =\frac{1}{2\sqrt{14}}\Bigl(2-\sqrt2+3i\Bigr).
+                  \]
+                  Modulo quadro:
+                  \[
+                    |2-\sqrt2+3i|^2=(2-\sqrt2)^2+3^2.
+                  \]
+                  Calcolo \((2-\sqrt2)^2\):
+                  \[
+                    (2-\sqrt2)^2=2^2-2\cdot 2\cdot\sqrt2+(\sqrt2)^2=4-4\sqrt2+2=6-4\sqrt2.
+                  \]
+                  Quindi:
+                  \[
+                    |2-\sqrt2+3i|^2=(6-4\sqrt2)+9=15-4\sqrt2.
+                  \]
+                  E dunque:
+                  \[
+                    \boxed{P(S_x=-\hbar)=\frac{15-4\sqrt2}{56}.}
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Check (sempre consigliato)</h3>
+                  \[
+                    P(+\hbar)+P(0)+P(-\hbar)
+                    =\frac{15+4\sqrt2}{56}+\frac{13}{28}+\frac{15-4\sqrt2}{56}
+                    =\frac{30}{56}+\frac{26}{56}=\frac{56}{56}=1.
+                  \]
+                  <p style="margin:0;">
+                    Quindi le probabilità sono coerenti.
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione — Parte B: valore medio di \(S_y\)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Uso la matrice (in base \(S_z\)):
+                  \[
+                    S_y=\frac{\hbar}{\sqrt2}\begin{pmatrix}0&-i&0\\[2pt]i&0&-i\\[2pt]0&i&0\end{pmatrix}.
+                  \]
+                  e la formula:
+                  \[
+                    \langle S_y\rangle=\langle\Psi|S_y|\Psi\rangle.
+                  \]
+                </li>
+
+                <li>
+                  Scrivo \(|\Psi\rangle\) e \(\langle\Psi|\):
+                  \[
+                    |\Psi\rangle=\frac{1}{\sqrt{14}}\begin{pmatrix}2\\1\\3i\end{pmatrix},\qquad
+                    \langle\Psi|=\frac{1}{\sqrt{14}}\begin{pmatrix}2&1&-3i\end{pmatrix}.
+                  \]
+                </li>
+
+                <li>
+                  Calcolo prima \(S_y|\Psi\rangle\). Per comodità uso \(S_y=\hbar\,M\) con
+                  \[
+                    M=\frac{1}{\sqrt2}\begin{pmatrix}0&-i&0\\[2pt]i&0&-i\\[2pt]0&i&0\end{pmatrix}.
+                  \]
+                  Quindi:
+                  \[
+                    M\begin{pmatrix}2\\1\\3i\end{pmatrix}
+                    =\frac{1}{\sqrt2}\begin{pmatrix}
+                      0\cdot2+(-i)\cdot1+0\cdot3i\\[4pt]
+                      i\cdot2+0\cdot1+(-i)\cdot3i\\[4pt]
+                      0\cdot2+i\cdot1+0\cdot3i
+                    \end{pmatrix}
+                    =\frac{1}{\sqrt2}\begin{pmatrix}
+                      -i\\
+                      2i + (-i)\cdot 3i\\
+                      i
+                    \end{pmatrix}.
+                  \]
+                  Ora \((-i)\cdot 3i=-3i^2=+3\). Quindi:
+                  \[
+                    M\begin{pmatrix}2\\1\\3i\end{pmatrix}
+                    =\frac{1}{\sqrt2}\begin{pmatrix}
+                      -i\\
+                      3+2i\\
+                      i
+                    \end{pmatrix}.
+                  \]
+                </li>
+
+                <li class="result">
+                  Ora:
+                  \[
+                    \langle S_y\rangle
+                    =\frac{1}{\sqrt{14}}\begin{pmatrix}2&1&-3i\end{pmatrix}
+                    \left(\hbar\,M\right)
+                    \frac{1}{\sqrt{14}}\begin{pmatrix}2\\1\\3i\end{pmatrix}
+                    =\frac{\hbar}{14}\begin{pmatrix}2&1&-3i\end{pmatrix}
+                    \left(\frac{1}{\sqrt2}\begin{pmatrix}-i\\3+2i\\i\end{pmatrix}\right).
+                  \]
+                  Faccio il prodotto scalare (tengo il fattore \(1/\sqrt2\) fuori):
+                  \[
+                    \begin{pmatrix}2&1&-3i\end{pmatrix}\begin{pmatrix}-i\\3+2i\\i\end{pmatrix}
+                    =2(-i)+1(3+2i)+(-3i)(i).
+                  \]
+                  Calcolo i tre pezzi:
+                  \[
+                    2(-i)=-2i,\qquad 1(3+2i)=3+2i,\qquad (-3i)(i)=-3i^2=+3.
+                  \]
+                  Sommo:
+                  \[
+                    (-2i)+(3+2i)+3=6.
+                  \]
+                  Quindi:
+                  \[
+                    \langle S_y\rangle=\frac{\hbar}{14}\cdot\frac{1}{\sqrt2}\cdot 6
+                    =\frac{6\hbar}{14\sqrt2}=\frac{3\hbar}{7\sqrt2}=\frac{3\sqrt2}{14}\hbar.
+                  \]
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Risultato finale</h3>
+                    \[
+                      \boxed{\langle S_y\rangle=\frac{3\sqrt2}{14}\,\hbar.}
+                    \]
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex3" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 3</span>
+            <h2>Degenerazione: autovalori e autovettori al primo ordine perturbativo</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Sia \(H_0\) un operatore con autovalori \(E_1\), \(E_2\), \(E_3\) con \(E_1=E_2\neq E_3\).
+                Trovare al primo ordine perturbativo gli autovalori e gli autovettori dell’operatore
+              </p>
+              \[
+                H=H_0+\varepsilon\,h_1,
+              \]
+              <p>
+                dove \(h_1\) è rappresentato, nella base di \(H_0\), dalla matrice
+              </p>
+              \[
+                h_1=
+                \begin{pmatrix}
+                  1&2&1\\
+                  2&-1&2\\
+                  1&2&0
+                \end{pmatrix}.
+              \]
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (degenerate perturbation theory, super esplicita)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Denoto con \(\{|1\rangle,|2\rangle,|3\rangle\}\) gli autostati di \(H_0\) tali che:
+                  \[
+                    H_0|1\rangle=E_1|1\rangle,\quad H_0|2\rangle=E_1|2\rangle,\quad H_0|3\rangle=E_3|3\rangle.
+                  \]
+                  Il sottospazio degenere è \( \mathcal{D}=\mathrm{span}\{|1\rangle,|2\rangle\}\).
+                </li>
+
+                <li class="warn">
+                  <b>Passo chiave:</b> al primo ordine, dentro \(\mathcal{D}\) devo diagonalizzare la restrizione di \(h_1\):
+                  \[
+                    W=\begin{pmatrix}1&2\\2&-1\end{pmatrix}.
+                  \]
+                  Trovo gli autovalori \(\lambda\) di \(W\):
+                  \[
+                    \det(W-\lambda I)=
+                    \det\begin{pmatrix}1-\lambda&2\\2&-1-\lambda\end{pmatrix}
+                    =(1-\lambda)(-1-\lambda)-4.
+                  \]
+                  Ora:
+                  \[
+                    (1-\lambda)(-1-\lambda)=-(1-\lambda)(1+\lambda)=-(1-\lambda^2)=\lambda^2-1.
+                  \]
+                  Quindi:
+                  \[
+                    \det(W-\lambda I)=\lambda^2-1-4=\lambda^2-5.
+                  \]
+                  \[
+                    \lambda^2-5=0\Rightarrow \lambda=\pm\sqrt5.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Autovalori dell’energia al I ordine</h3>
+                  Per i due stati degeneri:
+                  \[
+                    \boxed{E_{\pm}=E_1+\varepsilon(\pm\sqrt5).}
+                  \]
+                  Per lo stato \(|3\rangle\) (non degenere), la correzione al I ordine è \( \varepsilon\,h_{33}=\varepsilon\cdot 0=0\):
+                  \[
+                    \boxed{E_3^{(1)}=E_3.}
+                  \]
+                  <p class="tiny" style="margin:8px 0 0;">
+                    Nota: l’accoppiamento con \(|3\rangle\) sposta l’energia dei due livelli degeneri solo al <b>secondo ordine</b>.
+                  </p>
+                </li>
+
+                <li class="note">
+                  Ora gli autovettori (dentro \(\mathcal{D}\)) sono gli autovettori di \(W\).
+                  <br/><br/>
+                  Per \(\lambda=+\sqrt5\) risolvo:
+                  \[
+                    \begin{pmatrix}1-\sqrt5&2\\2&-1-\sqrt5\end{pmatrix}
+                    \begin{pmatrix}v_1\\v_2\end{pmatrix}=0.
+                  \]
+                  Dalla prima riga:
+                  \[
+                    (1-\sqrt5)v_1+2v_2=0\Rightarrow v_2=\frac{\sqrt5-1}{2}v_1.
+                  \]
+                  Quindi un autovettore (non normalizzato) è:
+                  \[
+                    (v_1,v_2)\propto \left(1,\frac{\sqrt5-1}{2}\right).
+                  \]
+                  Definisco:
+                  \[
+                    \alpha=\frac{\sqrt5-1}{2}.
+                  \]
+                </li>
+
+                <li class="note">
+                  Per \(\lambda=-\sqrt5\) risolvo:
+                  \[
+                    (1+\sqrt5)v_1+2v_2=0\Rightarrow v_2=-\frac{1+\sqrt5}{2}v_1.
+                  \]
+                  Definisco:
+                  \[
+                    \beta=-\frac{1+\sqrt5}{2}.
+                  \]
+                  Autovettore (non normalizzato):
+                  \[
+                    (v_1,v_2)\propto (1,\beta).
+                  \]
+                </li>
+
+                <li class="warn">
+                  Normalizzo (passaggio “banale” ma lo faccio tutto).
+                  <br/><br/>
+                  Per lo stato “+”:
+                  \[
+                    |\psi_+^{(0)}\rangle=N_+\left(|1\rangle+\alpha|2\rangle\right),
+                    \qquad
+                    N_+=\frac{1}{\sqrt{1+\alpha^2}}.
+                  \]
+                  Calcolo \(\alpha^2\):
+                  \[
+                    \alpha^2=\left(\frac{\sqrt5-1}{2}\right)^2=\frac{(\sqrt5-1)^2}{4}
+                    =\frac{5-2\sqrt5+1}{4}=\frac{6-2\sqrt5}{4}=\frac{3-\sqrt5}{2}.
+                  \]
+                  Quindi:
+                  \[
+                    1+\alpha^2=1+\frac{3-\sqrt5}{2}=\frac{2+3-\sqrt5}{2}=\frac{5-\sqrt5}{2}.
+                  \]
+                  Dunque:
+                  \[
+                    \boxed{N_+=\sqrt{\frac{2}{5-\sqrt5}}.}
+                  \]
+                </li>
+
+                <li class="warn">
+                  Per lo stato “−”:
+                  \[
+                    |\psi_-^{(0)}\rangle=N_-\left(|1\rangle+\beta|2\rangle\right),
+                    \qquad N_-=\frac{1}{\sqrt{1+\beta^2}}.
+                  \]
+                  Calcolo \(\beta^2\):
+                  \[
+                    \beta^2=\left(\frac{1+\sqrt5}{2}\right)^2=\frac{(1+\sqrt5)^2}{4}
+                    =\frac{1+2\sqrt5+5}{4}=\frac{6+2\sqrt5}{4}=\frac{3+\sqrt5}{2}.
+                  \]
+                  Quindi:
+                  \[
+                    1+\beta^2=1+\frac{3+\sqrt5}{2}=\frac{5+\sqrt5}{2},
+                    \quad\Rightarrow\quad
+                    \boxed{N_-=\sqrt{\frac{2}{5+\sqrt5}}.}
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Autovettori (zeroth order “giusti”)</h3>
+                  \[
+                    \boxed{
+                      |\psi_+^{(0)}\rangle=\sqrt{\frac{2}{5-\sqrt5}}\left(|1\rangle+\frac{\sqrt5-1}{2}|2\rangle\right),
+                      \qquad
+                      |\psi_-^{(0)}\rangle=\sqrt{\frac{2}{5+\sqrt5}}\left(|1\rangle-\frac{1+\sqrt5}{2}|2\rangle\right).
+                    }
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Correzione al primo ordine degli autovettori</b> (mixing con \(|3\rangle\)).
+                  <br/><br/>
+                  Per uno stato con energia \(E_1\) che sta nel sottospazio degenere, la correzione verso lo stato non degenere \(|3\rangle\) è:
+                  \[
+                    |\psi_{\pm}\rangle = |\psi_{\pm}^{(0)}\rangle
+                    +\varepsilon\,\frac{\langle 3|h_1|\psi_{\pm}^{(0)}\rangle}{E_1-E_3}\,|3\rangle
+                    \quad (\text{a meno di rinormalizzazione }O(\varepsilon^2)).
+                  \]
+                  Calcolo \(\langle 3|h_1|\psi_{\pm}^{(0)}\rangle\).
+                  Dalla matrice \(h_1\): \(h_{31}=1\), \(h_{32}=2\), \(h_{33}=0\). Quindi:
+                  \[
+                    \langle 3|h_1|\psi_{\pm}^{(0)}\rangle = 1\cdot(\text{coeff di }|1\rangle)+2\cdot(\text{coeff di }|2\rangle).
+                  \]
+                </li>
+
+                <li class="warn">
+                  Per \(+\): coefficienti \(N_+\) e \(N_+\alpha\). Quindi:
+                  \[
+                    \langle 3|h_1|\psi_+^{(0)}\rangle = N_+(1+2\alpha).
+                  \]
+                  Ora \(2\alpha=\sqrt5-1\Rightarrow 1+2\alpha=\sqrt5\). Quindi:
+                  \[
+                    \boxed{\langle 3|h_1|\psi_+^{(0)}\rangle = N_+\sqrt5.}
+                  \]
+                  Per \(−\): coefficienti \(N_-\) e \(N_-\beta\). Quindi:
+                  \[
+                    \langle 3|h_1|\psi_-^{(0)}\rangle = N_-(1+2\beta).
+                  \]
+                  Ora \(2\beta=-(1+\sqrt5)\Rightarrow 1+2\beta=1-(1+\sqrt5)=-\sqrt5\). Quindi:
+                  \[
+                    \boxed{\langle 3|h_1|\psi_-^{(0)}\rangle = -N_-\sqrt5.}
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Autovettori al I ordine (con mixing su \(|3\rangle\))</h3>
+                  \[
+                    \boxed{
+                    |\psi_+\rangle = |\psi_+^{(0)}\rangle + \varepsilon\,\frac{N_+\sqrt5}{E_1-E_3}\,|3\rangle,
+                    \qquad
+                    |\psi_-\rangle = |\psi_-^{(0)}\rangle - \varepsilon\,\frac{N_-\sqrt5}{E_1-E_3}\,|3\rangle.
+                    }
+                  \]
+                  Per lo stato \(|3\rangle\) (non degenere):
+                  \[
+                    |\psi_3\rangle = |3\rangle + \varepsilon\sum_{k=1,2}\frac{\langle k|h_1|3\rangle}{E_3-E_1}|k\rangle.
+                  \]
+                  Dalla matrice: \(\langle 1|h_1|3\rangle=h_{13}=1\), \(\langle 2|h_1|3\rangle=h_{23}=2\). Quindi:
+                  \[
+                    \boxed{
+                      |\psi_3\rangle = |3\rangle + \varepsilon\,\frac{1}{E_3-E_1}\left(|1\rangle+2|2\rangle\right).
+                    }
+                  \]
+                </li>
+
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+        <div id="fine"></div>
+        <footer>
+          Soluzioni complete — Esame 6 (10-02-2021).<br/>
+        </footer>
+
+      </main>
+    </div>
+  </div>
 </body>
 </html>

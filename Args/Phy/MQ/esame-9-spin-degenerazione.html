@@ -1,41 +1,1295 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esame 9 spin degenerazione</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esame 9 (04-02-2022) — Soluzioni (MQ)</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --ink2:rgba(11,16,32,.82);
+      --paper:rgba(255,255,255,.92);
+      --paper2:rgba(255,255,255,.78);
+      --shadow:rgba(0,0,0,.14);
+      --shadow2:rgba(0,0,0,.22);
+      --a1:#00e5ff;
+      --a2:#ff4ecd;
+      --a3:#52ff9c;
+      --a4:#ffe34d;
+      --aR:#ff2a6d;
+      --radius:18px;
+      --radius-sm:12px;
+      --max:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      padding:22px 16px 46px;
+      color:var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1100px 760px at 12% 10%, rgba(0,229,255,0.18), transparent 58%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,78,205,0.14), transparent 60%),
+        radial-gradient(1200px 900px at 60% 92%, rgba(82,255,156,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(240,246,255,0.92));
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; }
+
+    header.hero{
+      position:relative;
+      padding:22px 18px;
+      border-radius:var(--radius);
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(141,125,255,0.18), transparent 60%),
+        radial-gradient(900px 420px at 90% 10%, rgba(255,78,205,0.14), transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+      border:2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+    }
+    header.hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.22;
+      mix-blend-mode:multiply;
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(11,16,32,.72);
+      margin-bottom:8px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      background: linear-gradient(135deg, rgba(141,125,255,0.86), rgba(255,227,77,0.78));
+      color:#0b1020;
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: 0 12px 22px rgba(141,125,255,.14);
+    }
+
+    h1{
+      margin:6px 0 6px;
+      line-height:1.15;
+      letter-spacing:.2px;
+      font-size: 26px;
+    }
+    .sub{
+      margin:0;
+      color:var(--ink2);
+      font-size: 15px;
+      max-width: 92ch;
+    }
+
+    .top-actions{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.80);
+      color: rgba(11,16,32,.92);
+      font-weight: 900;
+      text-decoration:none;
+      box-shadow: 0 12px 26px rgba(0,0,0,.12);
+      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(1px); filter: brightness(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,42,109,0.92), rgba(255,227,77,0.78));
+      border-color: rgba(255,255,255,0.30);
+      color:#0b1020;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 320px 1fr; align-items:start; }
+    }
+
+    nav.toc{
+      position:sticky;
+      top: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.80);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 34px var(--shadow);
+      padding: 14px;
+      overflow:hidden;
+    }
+    nav.toc h2{
+      margin:0 0 10px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    nav.toc ul{ margin:0; padding-left: 18px; }
+    nav.toc li{ margin: 8px 0; }
+    nav.toc a{
+      color: rgba(11,16,32,.92);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    nav.toc a:hover{ text-decoration: underline; text-decoration-color: rgba(141,125,255,0.85); }
+
+    section.card{
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+      position:relative;
+    }
+    section.card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.18;
+      mix-blend-mode:multiply;
+    }
+    .card-head{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      background:
+        radial-gradient(900px 280px at 12% 0%, rgba(141,125,255,0.14), transparent 60%),
+        radial-gradient(900px 280px at 90% 10%, rgba(255,78,205,0.10), transparent 60%),
+        rgba(255,255,255,0.72);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-head h2{ margin:10px 0 0; font-size: 18px; line-height:1.2; }
+    .card-body{ position:relative; z-index:1; padding: 16px; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.76);
+      color: rgba(11,16,32,.80);
+    }
+    .badge .dot{
+      width:10px; height:10px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--a1), var(--a2));
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.65);
+    }
+
+    .block{
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .block h3{ margin:0 0 10px; font-size: 14px; letter-spacing:.2px; }
+
+    .steps{ margin:0; padding-left: 18px; }
+    .steps li{ margin: 10px 0; }
+
+    .note{ border-left: 4px solid rgba(141,125,255,0.85); }
+    .warn{ border-left: 4px solid rgba(255,42,109,0.75); background: rgba(255,240,245,0.78); }
+    .result{ border-left: 4px solid rgba(82,255,156,0.85); background: rgba(240,255,248,0.82); }
+
+    .tiny{ color: rgba(11,16,32,.72); font-size: 12.5px; margin-top: 8px; }
+    .hr{ height:1px; background: rgba(0,0,0,0.06); margin: 14px 0; border-radius: 999px; }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+      color: rgba(11,16,32,.75);
+      font-size: 12.5px;
+      text-align:center;
+    }
+
+    mjx-container[display="true"]{ margin: 10px 0 !important; }
+
+    .u{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+    details{
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.70);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      padding: 10px 12px;
+      margin: 12px 0;
+    }
+    summary{
+      cursor:pointer;
+      font-weight: 900;
+      color: rgba(11,16,32,.88);
+      list-style:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    summary::before{
+      content:"▸";
+      display:inline-block;
+      margin-right: 8px;
+      transform: translateY(-1px);
+      opacity:.85;
+    }
+    details[open] summary::before{ content:"▾"; }
+  </style>
 </head>
+
 <body>
-    <h1>Esame 9 spin degenerazione</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Esame 9 spin degenerazione. Grazie per la pazienza!</p>
-    <footer>
-        Generato automaticamente - Esame 9 spin degenerazione
-    </footer>
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="kicker">
+        <span class="pill">MQ • Soluzioni</span>
+        <span>Esame 9 — 04/02/2022</span>
+      </div>
+
+      <h1>Esame 9 (04-02-2022) — Spin \(1\) in base \(S_x\), ricostruzione stato dell’oscillatore, due particelle \(l=1\)</h1>
+
+      <p class="sub">
+        Pagina “full‑detail”: <b>testo</b> + <b>soluzioni</b> con passaggi <span class="u">espliciti</span>
+        (anche conti banali). Stesso design delle altre pagine.
+      </p>
+
+      <div class="top-actions">
+        <a class="btn" href="1mq.html">← Torna all’indice</a>
+        <a class="btn primary" href="#ex1">Vai al primo esercizio</a>
+        <a class="btn" href="#fine">↓ Fine pagina</a>
+      </div>
+
+      <p class="tiny">
+        <b>Formula‑kit minimo usato sotto:</b>
+        \[
+          S_x=\frac{\hbar}{\sqrt2}\begin{pmatrix}0&1&0\\[2pt]1&0&1\\[2pt]0&1&0\end{pmatrix},\quad
+          S_y=\frac{\hbar}{\sqrt2}\begin{pmatrix}0&-i&0\\[2pt]i&0&-i\\[2pt]0&i&0\end{pmatrix},\quad
+          S_z=\hbar\begin{pmatrix}1&0&0\\[2pt]0&0&0\\[2pt]0&0&-1\end{pmatrix}.
+        \]
+        \[
+          x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),\quad
+          (a+a^\dagger)^2=a^2+(a^\dagger)^2+aa^\dagger+a^\dagger a.
+        \]
+        \[
+          \mathbf{L}_1\cdot\mathbf{L}_2=\frac12\left(\mathbf{L}^2-\mathbf{L}_1^2-\mathbf{L}_2^2\right),
+          \quad \mathbf{L}=\mathbf{L}_1+\mathbf{L}_2.
+        \]
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <nav class="toc">
+        <h2>Contenuti</h2>
+        <ul>
+          <li><a href="#ex1">Esercizio 1 — Spin \(1\): \(\langle S_x\rangle\), probabilità su \(S_z\), \(\langle S_z\rangle\)</a></li>
+          <li><a href="#ex2">Esercizio 2 — Oscillatore: dati su energie + \(\langle m\omega x^2\rangle\) → stato</a></li>
+          <li><a href="#ex3">Esercizio 3 — Due particelle \(l=1\): decomposizione in \(|L,M\rangle\), evoluzione con \(H\), probabilità a tempo \(t\)</a></li>
+          <li><a href="#formulario">Formulario (riassunto)</a></li>
+        </ul>
+
+        <div class="block note" style="margin-top:12px;">
+          <h3>Mini‑mappa (30 secondi)</h3>
+          <ul class="steps">
+            <li><b>Ex 1:</b> prima <span class="u">normalizza</span> (qui la norma viene 25 → fattore \(1/5\)). Poi \(\langle S_x\rangle\) è immediato (sei già in base \(S_x\)). Per \(S_z\): esprimi \(|m\rangle_x\) in base \(|m\rangle_z\) usando gli autovettori di \(S_x\).</li>
+            <li><b>Ex 2:</b> lo stato vive solo su \(|1\rangle,|2\rangle,|3\rangle\). \(\langle E\rangle\) dà un’equazione sui quadrati, \(\langle m\omega x^2\rangle\) dà la stessa parte + un <span class="u">termine incrociato</span> tra \(|1\rangle\) e \(|3\rangle\). Risolvi → coefficienti (con un segno libero per \(|2\rangle\)).</li>
+            <li><b>Ex 3:</b> scrivi \(|1,1\rangle|1,-1\rangle\) come somma di \(|L,0\rangle\) con \(L=0,1,2\). Poi usa \( \mathbf{L}_1\!\cdot\!\mathbf{L}_2=\frac12(L^2-L_1^2-L_2^2)\) per diagonalizzare \(H\). Le probabilità di \(L^2\) non cambiano nel tempo.</li>
+          </ul>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex1">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 1</span>
+            <h2>Spin \(1\) dato in base di \(S_x\): \(\langle S_x\rangle\), probabilità di \(S_z\), \(\langle S_z\rangle\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Una particella con spin \(1\) si trova nello stato:
+              </p>
+              \[
+                |\Psi\rangle = 2\sqrt{3}\,|+1\rangle_x + 3i\,|0\rangle_x + 2\,|-1\rangle_x,
+              \]
+              <p class="tiny">
+                Nota (coerente col PDF): gli stati \(|m\rangle_x\) sono autostati di \(S_x\) con autovalori \(m\hbar\), con \(m=+1,0,-1\).
+              </p>
+              <ul class="steps">
+                <li>(a) Qual è il valore medio di \(S_x\)?</li>
+                <li>(b) Quali sono i valori possibili e le rispettive probabilità di una misura di \(S_z\)?</li>
+                <li>(c) Qual è il valore medio di \(S_z\)?</li>
+              </ul>
+            </div>
+
+            <div class="block warn">
+              <h3>Step 0 (obbligatorio): normalizzazione</h3>
+              <p>
+                Il testo non mostra un prefattore di normalizzazione: quindi lo calcoliamo.
+              </p>
+              <ul class="steps">
+                <li>
+                  Moduli quadri dei coefficienti:
+                  \[
+                    |2\sqrt3|^2 = (2^2)\cdot(\sqrt3)^2 = 4\cdot 3 = 12,
+                  \]
+                  \[
+                    |3i|^2 = 3^2\cdot|i|^2 = 9\cdot 1 = 9,
+                  \]
+                  \[
+                    |2|^2=4.
+                  \]
+                </li>
+                <li>
+                  Norma totale:
+                  \[
+                    \|\,|\Psi\rangle\|^2 = 12+9+4 = 25
+                    \quad\Rightarrow\quad
+                    \|\,|\Psi\rangle\| = 5.
+                  \]
+                </li>
+              </ul>
+              <div class="block result" style="margin-top:10px;">
+                <h3>Stato normalizzato</h3>
+                \[
+                  \boxed{
+                    |\Psi\rangle_{\text{norm}}=\frac{1}{5}\Big(2\sqrt3\,|+1\rangle_x + 3i\,|0\rangle_x + 2\,|-1\rangle_x\Big)
+                  }
+                \]
+                <p class="tiny" style="margin:10px 0 0;">
+                  Da ora in poi userò sempre lo stato normalizzato (sennò probabilità e medie vengono sbagliate).
+                </p>
+              </div>
+            </div>
+
+            <div class="block">
+              <h3>(a) Calcolo di \(\langle S_x\rangle\)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  In base \(|m\rangle_x\), l’operatore \(S_x\) è diagonale:
+                  \[
+                    S_x|m\rangle_x = m\hbar |m\rangle_x.
+                  \]
+                  Quindi:
+                  \[
+                    \langle S_x\rangle = \hbar\left( (+1)P_{+} + 0\cdot P_0 + (-1)P_{-}\right)
+                    =\hbar(P_{+}-P_{-}).
+                  \]
+                </li>
+
+                <li class="note">
+                  Probabilità (coeff. normalizzati):
+                  \[
+                    c_{+}=\frac{2\sqrt3}{5},\quad c_{0}=\frac{3i}{5},\quad c_{-}=\frac{2}{5}.
+                  \]
+                  Quindi
+                  \[
+                    P_{+}=|c_+|^2=\frac{12}{25},\quad
+                    P_{0}=|c_0|^2=\frac{9}{25},\quad
+                    P_{-}=|c_-|^2=\frac{4}{25}.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Risultato (a)</h3>
+                  \[
+                    \langle S_x\rangle=\hbar\left(\frac{12}{25}-\frac{4}{25}\right)
+                    =\hbar\cdot\frac{8}{25}.
+                  \]
+                  \[
+                    \boxed{\langle S_x\rangle=\frac{8}{25}\hbar.}
+                  \]
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>(b) Probabilità di una misura di \(S_z\)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Per misurare \(S_z\) devo esprimere lo stato in base \(|m\rangle_z\).
+                  <br/><br/>
+                  Uso un metodo “pulito”: trovo gli autovettori di \(S_x\) (già noti) in base \(S_z\).
+                  In base \(\{|+1\rangle_z,|0\rangle_z,|-1\rangle_z\}\), valgono:
+                  \[
+                    |+1\rangle_x=\frac12|+1\rangle_z+\frac{1}{\sqrt2}|0\rangle_z+\frac12|-1\rangle_z,
+                  \]
+                  \[
+                    |0\rangle_x=\frac{1}{\sqrt2}|+1\rangle_z-\frac{1}{\sqrt2}|-1\rangle_z,
+                  \]
+                  \[
+                    |-1\rangle_x=\frac12|+1\rangle_z-\frac{1}{\sqrt2}|0\rangle_z+\frac12|-1\rangle_z.
+                  \]
+                  <p class="tiny">
+                    (Queste relazioni si ottengono risolvendo \(S_x v=\lambda v\) usando la matrice di \(S_x\) nel formulario.)
+                  </p>
+                </li>
+
+                <li class="warn">
+                  Sostituisco nello stato normalizzato:
+                  \[
+                    |\Psi\rangle_{\text{norm}}=c_+|+1\rangle_x+c_0|0\rangle_x+c_-|-1\rangle_x,
+                  \]
+                  con
+                  \[
+                    c_+=\frac{2\sqrt3}{5},\quad c_0=\frac{3i}{5},\quad c_-=\frac{2}{5}.
+                  \]
+                  Calcolo i coefficienti davanti a \(|+1\rangle_z, |0\rangle_z, |-1\rangle_z\).
+                </li>
+
+                <li class="note">
+                  <b>Coefficiente di \(|+1\rangle_z\).</b>
+                  <br/>
+                  Contributi:
+                  \[
+                    |+1\rangle_x \to \frac12|+1\rangle_z,\quad
+                    |0\rangle_x \to \frac{1}{\sqrt2}|+1\rangle_z,\quad
+                    |-1\rangle_x \to \frac12|+1\rangle_z.
+                  \]
+                  Quindi:
+                  \[
+                    a \equiv \langle +1|_z \Psi\rangle
+                    =\frac12 c_+ +\frac{1}{\sqrt2}c_0+\frac12 c_-.
+                  \]
+                  Ora calcolo i pezzi “banali”:
+                  \[
+                    \frac12(c_+ + c_-)=\frac12\left(\frac{2\sqrt3}{5}+\frac{2}{5}\right)
+                    =\frac{2(\sqrt3+1)}{10}=\frac{\sqrt3+1}{5}.
+                  \]
+                  \[
+                    \frac{1}{\sqrt2}c_0=\frac{1}{\sqrt2}\cdot\frac{3i}{5}=\frac{3i}{5\sqrt2}.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{a=\frac{\sqrt3+1}{5}+\frac{3i}{5\sqrt2}}.
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Coefficiente di \(|0\rangle_z\).</b>
+                  <br/>
+                  Contributi:
+                  \[
+                    |+1\rangle_x \to \frac{1}{\sqrt2}|0\rangle_z,\quad
+                    |0\rangle_x \to 0,\quad
+                    |-1\rangle_x \to -\frac{1}{\sqrt2}|0\rangle_z.
+                  \]
+                  Quindi:
+                  \[
+                    b \equiv \langle 0|_z \Psi\rangle
+                    =\frac{1}{\sqrt2}(c_+-c_-)
+                    =\frac{1}{\sqrt2}\left(\frac{2\sqrt3}{5}-\frac{2}{5}\right)
+                    =\frac{2(\sqrt3-1)}{5\sqrt2}.
+                  \]
+                  \[
+                    \boxed{b=\frac{2(\sqrt3-1)}{5\sqrt2}}\quad \text{(reale)}.
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Coefficiente di \(|-1\rangle_z\).</b>
+                  <br/>
+                  Per simmetria viene:
+                  \[
+                    c \equiv \langle -1|_z \Psi\rangle
+                    =\frac12 c_+ -\frac{1}{\sqrt2}c_0+\frac12 c_-
+                    =\frac{\sqrt3+1}{5}-\frac{3i}{5\sqrt2}.
+                  \]
+                  \[
+                    \boxed{c=\frac{\sqrt3+1}{5}-\frac{3i}{5\sqrt2}}.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Probabilità di \(S_z\)</h3>
+                  I valori possibili sono \(+\hbar,0,-\hbar\) con probabilità
+                  \[
+                    P_{+}^z=|a|^2,\qquad P_0^z=|b|^2,\qquad P_-^z=|c|^2.
+                  \]
+                  Notare che \(c=a^*\) (sono complessi coniugati), quindi \(P_+^z=P_-^z\).
+                  <div class="hr"></div>
+
+                  <p><b>Calcolo esplicito di \(P_{+}^z=|a|^2\).</b></p>
+                  \[
+                    a=\frac{1}{5}\Big((\sqrt3+1)+\frac{3i}{\sqrt2}\Big)
+                    \Rightarrow
+                    |a|^2=\frac{1}{25}\left((\sqrt3+1)^2+\left(\frac{3}{\sqrt2}\right)^2\right).
+                  \]
+                  Ora:
+                  \[
+                    (\sqrt3+1)^2=3+1+2\sqrt3=4+2\sqrt3,
+                    \qquad
+                    \left(\frac{3}{\sqrt2}\right)^2=\frac{9}{2}.
+                  \]
+                  Somma:
+                  \[
+                    4+2\sqrt3+\frac{9}{2}=\frac{8}{2}+\frac{9}{2}+2\sqrt3=\frac{17}{2}+2\sqrt3.
+                  \]
+                  Quindi:
+                  \[
+                    |a|^2=\frac{1}{25}\left(\frac{17}{2}+2\sqrt3\right)=\frac{1}{50}(17+4\sqrt3).
+                  \]
+                  <div class="hr"></div>
+
+                  <p><b>Calcolo esplicito di \(P_0^z=|b|^2\).</b></p>
+                  \[
+                    b=\frac{2(\sqrt3-1)}{5\sqrt2}
+                    \Rightarrow
+                    |b|^2=\frac{4(\sqrt3-1)^2}{25\cdot 2}.
+                  \]
+                  \[
+                    (\sqrt3-1)^2=3+1-2\sqrt3=4-2\sqrt3.
+                  \]
+                  Quindi:
+                  \[
+                    |b|^2=\frac{4(4-2\sqrt3)}{50}=\frac{16-8\sqrt3}{50}=\frac{8-4\sqrt3}{25}.
+                  \]
+
+                  <div class="block result" style="margin-top:10px;">
+                    <h3>Risposta (b)</h3>
+                    \[
+                      \boxed{
+                      P(S_z=+\hbar)=\frac{17+4\sqrt3}{50},\quad
+                      P(S_z=0)=\frac{8-4\sqrt3}{25},\quad
+                      P(S_z=-\hbar)=\frac{17+4\sqrt3}{50}.
+                      }
+                    \]
+                    <p class="tiny" style="margin:10px 0 0;">
+                      Check “banale” che sommano a 1:
+                      \(2\cdot\frac{17+4\sqrt3}{50}+\frac{8-4\sqrt3}{25}
+                      =\frac{34+8\sqrt3}{50}+\frac{16-8\sqrt3}{50}=\frac{50}{50}=1\).
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>(c) Calcolo di \(\langle S_z\rangle\)</h3>
+              <ol class="steps">
+                <li class="note">
+                  In una misura di \(S_z\), i valori sono \(+\hbar,0,-\hbar\). Quindi:
+                  \[
+                    \langle S_z\rangle = \hbar(P_+^z - P_-^z) + 0\cdot P_0^z.
+                  \]
+                </li>
+                <li class="result">
+                  Siccome \(P_+^z=P_-^z\), si annullano:
+                  \[
+                    \boxed{\langle S_z\rangle=0.}
+                  \]
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex2" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 2</span>
+            <h2>Oscillatore armonico: ricostruire lo stato da energie misurate + \(\langle m\omega x^2\rangle\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Misurando l’energia di un oscillatore armonico unidimensionale si ottengono i seguenti valori:
+              </p>
+              \[
+                \frac{3}{2}\hbar\omega,\qquad \frac{5}{2}\hbar\omega,\qquad \frac{7}{2}\hbar\omega,
+              \]
+              <p>
+                con valore medio dell’energia pari a \(\frac{8}{3}\hbar\omega\).
+                Sappiamo inoltre che
+                \(\langle m\omega x^2\rangle=\frac{5}{3}\hbar\).
+              </p>
+              <p>
+                Determinare lo stato dell’oscillatore armonico sapendo che i coefficienti dello sviluppo sono <b>reali</b>,
+                con quello relativo allo stato di energia \(\frac{7}{2}\hbar\omega\) <b>positivo</b>.
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Step 1: forma dello stato e notazione</h3>
+              <ol class="steps">
+                <li class="note">
+                  Per l’oscillatore:
+                  \[
+                    E_n=\hbar\omega\left(n+\frac12\right).
+                  \]
+                  Quindi:
+                  \[
+                    \frac{3}{2}\hbar\omega \Rightarrow n=1,\quad
+                    \frac{5}{2}\hbar\omega \Rightarrow n=2,\quad
+                    \frac{7}{2}\hbar\omega \Rightarrow n=3.
+                  \]
+                </li>
+                <li class="note">
+                  Se una misura può dare solo quei tre valori, lo stato ha supporto solo su \(|1\rangle,|2\rangle,|3\rangle\):
+                  \[
+                    |\psi\rangle=a|1\rangle+b|2\rangle+c|3\rangle,
+                    \qquad a,b,c\in\mathbb{R},\qquad c>0.
+                  \]
+                </li>
+                <li class="note">
+                  Normalizzazione:
+                  \[
+                    a^2+b^2+c^2=1.
+                  \]
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>Step 2: equazione da \(\langle E\rangle\)</h3>
+              <ol class="steps">
+                <li class="note">
+                  \[
+                    \langle E\rangle
+                    =a^2\frac{3}{2}\hbar\omega+b^2\frac{5}{2}\hbar\omega+c^2\frac{7}{2}\hbar\omega
+                    =\frac{8}{3}\hbar\omega.
+                  \]
+                  Divido tutto per \(\hbar\omega\) (banale):
+                  \[
+                    \frac{3}{2}a^2+\frac{5}{2}b^2+\frac{7}{2}c^2=\frac{8}{3}.
+                  \]
+                </li>
+                <li class="warn">
+                  Moltiplico per 2 per togliere i denominatori “/2”:
+                  \[
+                    3a^2+5b^2+7c^2=\frac{16}{3}.
+                  \]
+                  <div class="tiny">
+                    (Ho moltiplicato entrambi i membri per 2: \(\frac{8}{3}\cdot 2=\frac{16}{3}\).)
+                  </div>
+                </li>
+                <li class="result">
+                  \[
+                    \boxed{3a^2+5b^2+7c^2=\frac{16}{3}.}
+                  \]
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>Step 3: equazione da \(\langle m\omega x^2\rangle\)</h3>
+              <ol class="steps">
+                <li class="note">
+                  Uso
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger)
+                    \Rightarrow
+                    x^2=\frac{\hbar}{2m\omega}(a+a^\dagger)^2.
+                  \]
+                  Quindi:
+                  \[
+                    m\omega x^2=\frac{\hbar}{2}(a+a^\dagger)^2.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Espando:
+                  \[
+                    (a+a^\dagger)^2=a^2+(a^\dagger)^2+aa^\dagger+a^\dagger a.
+                  \]
+                  In una sovrapposizione di \(|1\rangle,|2\rangle,|3\rangle\),
+                  gli unici termini “incrociati” possibili sono tra stati che differiscono di \(\Delta n=\pm 2\),
+                  perché \(a^2\) abbassa di 2 e \((a^\dagger)^2\) alza di 2.
+                  <br/><br/>
+                  Qui \(|1\rangle\) e \(|3\rangle\) differiscono di 2 → <span class="u">comparirà un termine \(a\,c\)</span>.
+                </li>
+
+                <li class="note">
+                  Valori standard:
+                  \[
+                    \langle n|x^2|n\rangle=\frac{\hbar}{2m\omega}(2n+1).
+                  \]
+                  Quindi:
+                  \[
+                    \langle n|m\omega x^2|n\rangle=\frac{\hbar}{2}(2n+1)=\hbar\left(n+\frac12\right).
+                  \]
+                  (Sembra “uguale a \(E_n/\omega\)” — ed è normale.)
+                </li>
+
+                <li class="note">
+                  Elemento fuori diagonale utile:
+                  \[
+                    \langle 1|x^2|3\rangle=\frac{\hbar}{2m\omega}\langle 1|a^2|3\rangle.
+                  \]
+                  Ma:
+                  \[
+                    a^2|3\rangle = a(\sqrt3|2\rangle)=\sqrt3\,a|2\rangle=\sqrt3\sqrt2\,|1\rangle=\sqrt6\,|1\rangle,
+                  \]
+                  quindi:
+                  \[
+                    \langle 1|a^2|3\rangle=\sqrt6,
+                    \qquad
+                    \Rightarrow
+                    \langle 1|x^2|3\rangle=\frac{\hbar}{2m\omega}\sqrt6.
+                  \]
+                  Moltiplicando per \(m\omega\):
+                  \[
+                    \langle 1|m\omega x^2|3\rangle=\frac{\hbar}{2}\sqrt6.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Metto insieme tutto:
+                  \[
+                    \langle m\omega x^2\rangle
+                    =
+                    a^2\hbar\left(1+\frac12\right)
+                    +b^2\hbar\left(2+\frac12\right)
+                    +c^2\hbar\left(3+\frac12\right)
+                    +2ac\left(\frac{\hbar}{2}\sqrt6\right),
+                  \]
+                  cioè:
+                  \[
+                    \langle m\omega x^2\rangle
+                    =\hbar\left(\frac32a^2+\frac52b^2+\frac72c^2\right)+\hbar\,ac\sqrt6.
+                  \]
+                  Ma il testo dà:
+                  \[
+                    \langle m\omega x^2\rangle=\frac{5}{3}\hbar.
+                  \]
+                  Divido per \(\hbar\):
+                  \[
+                    \frac32a^2+\frac52b^2+\frac72c^2 + ac\sqrt6=\frac53.
+                  \]
+                </li>
+
+                <li class="note">
+                  Moltiplico per 2:
+                  \[
+                    3a^2+5b^2+7c^2 + 2ac\sqrt6=\frac{10}{3}.
+                  \]
+                </li>
+
+                <li class="result">
+                  \[
+                    \boxed{3a^2+5b^2+7c^2 + 2ac\sqrt6=\frac{10}{3}.}
+                  \]
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>Step 4: risoluzione (conti “banali” espliciti)</h3>
+              <ol class="steps">
+                <li class="note">
+                  Sottraggo l’equazione dell’energia (Step 2) da quella di \(x^2\) (Step 3):
+                  \[
+                    \Big(3a^2+5b^2+7c^2 + 2ac\sqrt6\Big) - \Big(3a^2+5b^2+7c^2\Big)
+                    =
+                    \frac{10}{3}-\frac{16}{3}.
+                  \]
+                  A sinistra “cancella tutto” tranne il termine incrociato:
+                  \[
+                    2ac\sqrt6=\frac{-6}{3}=-2.
+                  \]
+                  Quindi:
+                  \[
+                    ac\sqrt6=-1
+                    \quad\Rightarrow\quad
+                    \boxed{ac=-\frac{1}{\sqrt6}}.
+                  \]
+                </li>
+
+                <li class="note">
+                  Ora uso anche normalizzazione per eliminare \(b^2\):
+                  \[
+                    b^2=1-a^2-c^2.
+                  \]
+                  Inserisco nell’equazione dell’energia:
+                  \[
+                    3a^2+5(1-a^2-c^2)+7c^2=\frac{16}{3}.
+                  \]
+                  Sviluppo:
+                  \[
+                    3a^2+5-5a^2-5c^2+7c^2=\frac{16}{3}
+                    \Rightarrow
+                    5-2a^2+2c^2=\frac{16}{3}.
+                  \]
+                  Porto il 5 a destra:
+                  \[
+                    -2a^2+2c^2=\frac{16}{3}-5=\frac{16}{3}-\frac{15}{3}=\frac{1}{3}.
+                  \]
+                  Divido per 2:
+                  \[
+                    -a^2+c^2=\frac{1}{6}
+                    \Rightarrow
+                    \boxed{c^2-a^2=\frac16.}
+                  \]
+                </li>
+
+                <li class="warn">
+                  Metto \(u=a^2\ge 0\), \(v=c^2\ge 0\). Allora:
+                  \[
+                    v-u=\frac16,\qquad uv=\frac16
+                    \quad (\text{perché }(ac)^2=\frac{1}{6}).
+                  \]
+                  Sostituisco \(v=u+\frac16\) dentro \(uv=\frac16\):
+                  \[
+                    u\left(u+\frac16\right)=\frac16
+                    \Rightarrow
+                    u^2+\frac16u-\frac16=0.
+                  \]
+                  Moltiplico per 6:
+                  \[
+                    6u^2+u-1=0.
+                  \]
+                  Discriminante:
+                  \[
+                    \Delta=1^2-4\cdot 6\cdot(-1)=1+24=25,
+                    \quad \sqrt{\Delta}=5.
+                  \]
+                  Quindi:
+                  \[
+                    u=\frac{-1\pm 5}{12}.
+                  \]
+                  Due possibilità:
+                  \[
+                    u_1=\frac{4}{12}=\frac13,\qquad
+                    u_2=\frac{-6}{12}=-\frac12\ (\text{scarto perché }u\ge 0).
+                  \]
+                  Dunque:
+                  \[
+                    \boxed{a^2=\frac13.}
+                  \]
+                  Poi:
+                  \[
+                    c^2=v=u+\frac16=\frac13+\frac16=\frac{2}{6}+\frac{1}{6}=\frac{3}{6}=\frac12
+                    \Rightarrow
+                    \boxed{c^2=\frac12.}
+                  \]
+                  Infine:
+                  \[
+                    b^2=1-a^2-c^2=1-\frac13-\frac12=1-\frac{2}{6}-\frac{3}{6}=1-\frac{5}{6}=\frac16
+                    \Rightarrow
+                    \boxed{b^2=\frac16.}
+                  \]
+                </li>
+
+                <li class="note">
+                  Ora i segni:
+                  \[
+                    c>0 \Rightarrow c=\sqrt{\frac12}=\frac{1}{\sqrt2}.
+                  \]
+                  Inoltre \(ac=-\frac{1}{\sqrt6}\) implica che \(a\) è negativo:
+                  \[
+                    a=\frac{ac}{c}=\left(-\frac{1}{\sqrt6}\right)\bigg/\left(\frac{1}{\sqrt2}\right)
+                    =-\frac{\sqrt2}{\sqrt6}=-\frac{1}{\sqrt3}.
+                  \]
+                  Per \(b\) il testo non dà un vincolo di segno: quindi
+                  \[
+                    b=\pm\frac{1}{\sqrt6}.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Risposta finale (Ex 2)</h3>
+                  \[
+                    \boxed{
+                      |\psi\rangle
+                      =
+                      -\frac{1}{\sqrt3}|1\rangle
+                      \ \pm\ \frac{1}{\sqrt6}|2\rangle
+                      +\frac{1}{\sqrt2}|3\rangle
+                    }
+                  \]
+                  <p class="tiny" style="margin:10px 0 0;">
+                    Il segno di \(b\) non influenza né \(\langle E\rangle\) né \(\langle m\omega x^2\rangle\) perché \(x^2\) collega (in questa sottobase) solo \(|1\rangle\leftrightarrow|3\rangle\).
+                    Se vuoi una scelta convenzionale “univoca”, spesso si prende \(b>0\).
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex3" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 3</span>
+            <h2>Due particelle con \(l_1=l_2=1\): possibili \(L^2,L_z\), evoluzione con \(H\), probabilità a tempo \(t\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Al tempo \(t=0\), lo stato di un sistema di due particelle è rappresentato nella base
+                \(|l_1,m_1\rangle|l_2,m_2\rangle\) con \(l_1=l_2=1\) dal vettore
+              </p>
+              \[
+                |\Psi(0)\rangle = |1,1\rangle|1,-1\rangle.
+              \]
+              <ul class="steps">
+                <li>(a) Quali sono i possibili valori di una misura di \(L^2\) e \(L_z\) con \(\mathbf{L}=\mathbf{L}_1+\mathbf{L}_2\)?</li>
+                <li>
+                  (b) Sia
+                  \[
+                    H=\frac{L^2}{2I}+\lambda\,\mathbf{L}_1\cdot\mathbf{L}_2.
+                  \]
+                  Determinare \(|\Psi(t)\rangle\) e \(\langle H\rangle\).
+                </li>
+                <li>(c) Ripetere (a) a tempo \(t\) generico.</li>
+              </ul>
+            </div>
+
+            <div class="block">
+              <h3>(a) Possibili risultati e probabilità per \(L^2\) e \(L_z\)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  <b>Misura di \(L_z\).</b>
+                  Poiché \(L_z=L_{1z}+L_{2z}\), sullo stato prodotto:
+                  \[
+                    L_z|1,1\rangle|1,-1\rangle=(1-1)\hbar|1,1\rangle|1,-1\rangle=0\cdot\hbar\,|\Psi(0)\rangle.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{L_z=0\ \text{con probabilità }1.}
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Misura di \(L^2\).</b>
+                  Per somma di due momenti angolari con \(l_1=l_2=1\), i valori possibili sono:
+                  \[
+                    L=0,1,2.
+                  \]
+                  Qui \(M=m_1+m_2=1+(-1)=0\), quindi sono permessi tutti e tre:
+                  \[
+                    |L=0,M=0\rangle,\quad |L=1,M=0\rangle,\quad |L=2,M=0\rangle.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Ora serve decomporre
+                  \(|1,1\rangle|1,-1\rangle\) nella base accoppiata \(|L,M\rangle\).
+                  Uso i coefficienti di Clebsch‑Gordan per \(1\otimes 1\) (standard):
+                  \[
+                    |1,1\rangle|1,-1\rangle
+                    =
+                    \frac{1}{\sqrt6}|2,0\rangle
+                    +\frac{1}{\sqrt2}|1,0\rangle
+                    +\frac{1}{\sqrt3}|0,0\rangle.
+                  \]
+                  <p class="tiny">
+                    Check “banale” di normalizzazione: \(1/6+1/2+1/3=1\).
+                  </p>
+                </li>
+
+                <li class="result">
+                  <h3>Risposta (a)</h3>
+                  <p>
+                    I valori possibili di \(L^2\) sono \(L(L+1)\hbar^2\) con \(L=0,1,2\), e le probabilità sono i moduli quadri dei coefficienti:
+                  </p>
+                  \[
+                    \boxed{
+                      P(L=2)=\frac16,\quad P(L=1)=\frac12,\quad P(L=0)=\frac13.
+                    }
+                  \]
+                  <p>
+                    Inoltre:
+                    \[
+                      \boxed{P(L_z=0)=1.}
+                    \]
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>(b) Evoluzione \(|\Psi(t)\rangle\) e \(\langle H\rangle\)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Riscrivo \(\mathbf{L}_1\cdot\mathbf{L}_2\) usando:
+                  \[
+                    \mathbf{L}^2=\mathbf{L}_1^2+\mathbf{L}_2^2+2\,\mathbf{L}_1\cdot\mathbf{L}_2
+                    \Rightarrow
+                    \mathbf{L}_1\cdot\mathbf{L}_2=\frac12\left(\mathbf{L}^2-\mathbf{L}_1^2-\mathbf{L}_2^2\right).
+                  \]
+                </li>
+
+                <li class="note">
+                  Per \(l_1=l_2=1\):
+                  \[
+                    \mathbf{L}_1^2=\mathbf{L}_2^2=l(l+1)\hbar^2=1\cdot 2\,\hbar^2=2\hbar^2.
+                  \]
+                  Quindi:
+                  \[
+                    \mathbf{L}_1^2+\mathbf{L}_2^2=4\hbar^2.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Inserisco in \(H\):
+                  \[
+                    H=\frac{L^2}{2I}+\lambda\cdot\frac12\left(L^2-4\hbar^2\right)
+                    =
+                    \left(\frac{1}{2I}+\frac{\lambda}{2}\right)L^2-2\lambda\hbar^2.
+                  \]
+                  Conclusione importantissima:
+                  <div class="block result" style="margin-top:10px;">
+                    <h3>Diagonalizzazione “gratis”</h3>
+                    <p>
+                      \(H\) dipende solo da \(L^2\) (più una costante), quindi gli autostati di energia sono \(|L,M\rangle\).
+                      In particolare i \(|L,0\rangle\) che compaiono sono <span class="u">autostati di \(H\)</span>.
+                    </p>
+                  </div>
+                </li>
+
+                <li class="note">
+                  Autovalori di \(L^2\): \(L^2|L,M\rangle=L(L+1)\hbar^2|L,M\rangle\).
+                  Quindi l’energia:
+                  \[
+                    E_L=\left(\frac{1}{2I}+\frac{\lambda}{2}\right)L(L+1)\hbar^2-2\lambda\hbar^2.
+                  \]
+                  Calcolo caso per caso (conti espliciti):
+                  <ul class="steps">
+                    <li>
+                      \(L=0\Rightarrow L(L+1)=0\):
+                      \[
+                        E_0=0-2\lambda\hbar^2=-2\lambda\hbar^2.
+                      \]
+                    </li>
+                    <li>
+                      \(L=1\Rightarrow L(L+1)=2\):
+                      \[
+                        E_1=\left(\frac{1}{2I}+\frac{\lambda}{2}\right)2\hbar^2-2\lambda\hbar^2
+                        =\left(\frac{1}{I}+\lambda-2\lambda\right)\hbar^2
+                        =\left(\frac{1}{I}-\lambda\right)\hbar^2.
+                      \]
+                    </li>
+                    <li>
+                      \(L=2\Rightarrow L(L+1)=6\):
+                      \[
+                        E_2=\left(\frac{1}{2I}+\frac{\lambda}{2}\right)6\hbar^2-2\lambda\hbar^2
+                        =\left(\frac{3}{I}+3\lambda-2\lambda\right)\hbar^2
+                        =\left(\frac{3}{I}+\lambda\right)\hbar^2.
+                      \]
+                    </li>
+                  </ul>
+                </li>
+
+                <li class="warn">
+                  Evoluzione temporale:
+                  \[
+                    |\Psi(t)\rangle=\sum_{L=0}^2 c_L\,e^{-iE_L t/\hbar}\,|L,0\rangle,
+                  \]
+                  con coefficienti iniziali
+                  \[
+                    c_2=\frac{1}{\sqrt6},\quad c_1=\frac{1}{\sqrt2},\quad c_0=\frac{1}{\sqrt3}.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Risposta (b): stato a tempo \(t\)</h3>
+                  \[
+                    \boxed{
+                    |\Psi(t)\rangle
+                    =
+                    \frac{1}{\sqrt6}e^{-iE_2 t/\hbar}|2,0\rangle
+                    +
+                    \frac{1}{\sqrt2}e^{-iE_1 t/\hbar}|1,0\rangle
+                    +
+                    \frac{1}{\sqrt3}e^{-iE_0 t/\hbar}|0,0\rangle
+                    }
+                  \]
+                  con
+                  \[
+                    E_0=-2\lambda\hbar^2,\quad
+                    E_1=\left(\frac{1}{I}-\lambda\right)\hbar^2,\quad
+                    E_2=\left(\frac{3}{I}+\lambda\right)\hbar^2.
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Media dell’energia \(\langle H\rangle\).</b>
+                  Poiché \(H\) è indipendente dal tempo, \(\langle H\rangle\) è costante e vale
+                  \[
+                    \langle H\rangle=\sum_L |c_L|^2 E_L
+                    =\frac16E_2+\frac12E_1+\frac13E_0.
+                  \]
+                  Calcolo (conti espliciti):
+                  \[
+                    \frac16E_2=\frac16\left(\frac{3}{I}+\lambda\right)\hbar^2=\left(\frac{1}{2I}+\frac{\lambda}{6}\right)\hbar^2,
+                  \]
+                  \[
+                    \frac12E_1=\frac12\left(\frac{1}{I}-\lambda\right)\hbar^2=\left(\frac{1}{2I}-\frac{\lambda}{2}\right)\hbar^2,
+                  \]
+                  \[
+                    \frac13E_0=\frac13(-2\lambda\hbar^2)=\left(-\frac{2\lambda}{3}\right)\hbar^2.
+                  \]
+                  Sommo i pezzi \(1/I\):
+                  \[
+                    \frac{1}{2I}+\frac{1}{2I}=\frac{1}{I}.
+                  \]
+                  Sommo i pezzi in \(\lambda\) con denominatore 6:
+                  \[
+                    \frac{\lambda}{6}-\frac{\lambda}{2}-\frac{2\lambda}{3}
+                    =
+                    \frac{\lambda}{6}-\frac{3\lambda}{6}-\frac{4\lambda}{6}
+                    =
+                    -\frac{6\lambda}{6}=-\lambda.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{\langle H\rangle=\left(\frac{1}{I}-\lambda\right)\hbar^2.}
+                  \]
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>(c) Ripetere (a) a tempo \(t\) generico</h3>
+              <ol class="steps">
+                <li class="note">
+                  Lo stato \(|\Psi(t)\rangle\) resta combinazione di \(|L,0\rangle\) con le <span class="u">stesse</span> ampiezze in modulo:
+                  cambiano solo le fasi \(e^{-iE_L t/\hbar}\).
+                </li>
+                <li class="result">
+                  Quindi le probabilità di misurare \(L^2\) e \(L_z\) sono <b>identiche</b> a quelle di \(t=0\):
+                  \[
+                    \boxed{
+                      P(L=2)=\frac16,\quad P(L=1)=\frac12,\quad P(L=0)=\frac13
+                    }
+                    \qquad \text{e}\qquad
+                    \boxed{P(L_z=0)=1.}
+                  \]
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="formulario" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Formulario</span>
+            <h2>Formulario (riassunto utile per questa pagina)</h2>
+          </div>
+
+          <div class="card-body">
+            <details open>
+              <summary>Armoniche sferiche (estratto)</summary>
+              <div class="block" style="margin-top:10px;">
+                \[
+                  Y_{\ell,-m}=(-1)^m Y_{\ell,m}^*,\qquad
+                  Y_{0,0}=\frac{1}{\sqrt{4\pi}}
+                \]
+                \[
+                  Y_{1,1}=-\sqrt{\frac{3}{8\pi}}\,e^{i\phi}\sin\theta,\quad
+                  Y_{1,0}=\sqrt{\frac{3}{4\pi}}\cos\theta
+                \]
+                \[
+                  Y_{2,2}=\sqrt{\frac{15}{32\pi}}\,e^{2i\phi}\sin^2\theta,\quad
+                  Y_{2,1}=-\sqrt{\frac{15}{8\pi}}\,e^{i\phi}\sin\theta\cos\theta,\quad
+                  Y_{2,0}=\sqrt{\frac{5}{16\pi}}(3\cos^2\theta-1)
+                \]
+              </div>
+            </details>
+
+            <details>
+              <summary>Oscillatore armonico: operatori</summary>
+              <div class="block" style="margin-top:10px;">
+                \[
+                  a=\sqrt{\frac{m\omega}{2\hbar}}\left(x+i\frac{p}{m\omega}\right),\qquad
+                  a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\left(x-i\frac{p}{m\omega}\right).
+                \]
+                \[
+                  x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),\qquad
+                  p=i\sqrt{\frac{\hbar m\omega}{2}}(a^\dagger-a).
+                \]
+              </div>
+            </details>
+
+            <details>
+              <summary>Matrici di spin \(j=1/2\) e \(j=1\)</summary>
+              <div class="block" style="margin-top:10px;">
+                <p class="tiny"><b>\(j=1/2\):</b></p>
+                \[
+                  J_x=\frac{\hbar}{2}\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
+                  J_y=\frac{\hbar}{2}\begin{pmatrix}0&-i\\ i&0\end{pmatrix},\quad
+                  J_z=\frac{\hbar}{2}\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+                \]
+                <p class="tiny"><b>\(j=1\):</b></p>
+                \[
+                  J_x=\frac{\hbar}{\sqrt{2}}\begin{pmatrix}0&1&0\\1&0&1\\0&1&0\end{pmatrix},\quad
+                  J_y=\frac{\hbar}{\sqrt{2}}\begin{pmatrix}0&-i&0\\ i&0&-i\\0&i&0\end{pmatrix},\quad
+                  J_z=\hbar\begin{pmatrix}1&0&0\\0&0&0\\0&0&-1\end{pmatrix}.
+                \]
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <div id="fine"></div>
+        <footer>
+          Soluzioni complete — Esame 9 (04-02-2022).<br/>
+        </footer>
+
+      </main>
+    </div>
+  </div>
 </body>
 </html>

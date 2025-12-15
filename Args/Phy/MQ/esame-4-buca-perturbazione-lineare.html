@@ -1,41 +1,791 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esame 4 buca perturbazione lineare</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esame 4 (16-09-2019) — Soluzioni (MQ)</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --ink2:rgba(11,16,32,.82);
+      --paper:rgba(255,255,255,.92);
+      --paper2:rgba(255,255,255,.78);
+      --shadow:rgba(0,0,0,.14);
+      --shadow2:rgba(0,0,0,.22);
+      --a1:#00e5ff;
+      --a2:#ff4ecd;
+      --a3:#52ff9c;
+      --a4:#ffe34d;
+      --radius:18px;
+      --radius-sm:12px;
+      --max:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      padding:22px 16px 46px;
+      color:var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1100px 760px at 12% 10%, rgba(0,229,255,0.18), transparent 58%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,78,205,0.14), transparent 60%),
+        radial-gradient(1200px 900px at 60% 92%, rgba(82,255,156,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(240,246,255,0.92));
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; }
+
+    header.hero{
+      position:relative;
+      padding:22px 18px;
+      border-radius:var(--radius);
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(0,229,255,0.22), transparent 60%),
+        radial-gradient(900px 420px at 90% 10%, rgba(255,78,205,0.16), transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+      border:2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+    }
+    header.hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.22;
+      mix-blend-mode:multiply;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(11,16,32,.72);
+      margin-bottom:8px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      background: linear-gradient(135deg, rgba(0,229,255,0.88), rgba(255,227,77,0.78));
+      color:#0b1020;
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: 0 12px 22px rgba(0,229,255,.14);
+    }
+    h1{
+      margin:6px 0 6px;
+      line-height:1.15;
+      letter-spacing:.2px;
+      font-size: 26px;
+    }
+    .sub{
+      margin:0;
+      color:var(--ink2);
+      font-size: 15px;
+      max-width: 86ch;
+    }
+    .top-actions{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.80);
+      color: rgba(11,16,32,.92);
+      font-weight: 900;
+      text-decoration:none;
+      box-shadow: 0 12px 26px rgba(0,0,0,.12);
+      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(1px); filter: brightness(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,42,109,0.92), rgba(255,227,77,0.78));
+      border-color: rgba(255,255,255,0.30);
+      color:#0b1020;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 320px 1fr; align-items:start; }
+    }
+
+    nav.toc{
+      position:sticky;
+      top: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.80);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 34px var(--shadow);
+      padding: 14px;
+      overflow:hidden;
+    }
+    nav.toc h2{
+      margin:0 0 10px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    nav.toc ul{ margin:0; padding-left: 18px; }
+    nav.toc li{ margin: 8px 0; }
+    nav.toc a{
+      color: rgba(11,16,32,.92);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    nav.toc a:hover{ text-decoration: underline; text-decoration-color: rgba(0,229,255,0.85); }
+
+    section.card{
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+      position:relative;
+    }
+    section.card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.18;
+      mix-blend-mode:multiply;
+    }
+    .card-head{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      background:
+        radial-gradient(900px 280px at 12% 0%, rgba(0,229,255,0.12), transparent 60%),
+        radial-gradient(900px 280px at 90% 10%, rgba(255,78,205,0.10), transparent 60%),
+        rgba(255,255,255,0.72);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-head h2{ margin:10px 0 0; font-size: 18px; line-height:1.2; }
+    .card-body{ position:relative; z-index:1; padding: 16px; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.76);
+      color: rgba(11,16,32,.80);
+    }
+    .badge .dot{
+      width:10px; height:10px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--a1), var(--a2));
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.65);
+    }
+
+    .block{
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .block h3{ margin:0 0 10px; font-size: 14px; letter-spacing:.2px; }
+
+    .steps{ margin:0; padding-left: 18px; }
+    .steps li{ margin: 10px 0; }
+
+    .note{ border-left: 4px solid rgba(0,229,255,0.85); }
+    .warn{ border-left: 4px solid rgba(255,42,109,0.75); background: rgba(255,240,245,0.78); }
+    .result{ border-left: 4px solid rgba(82,255,156,0.85); background: rgba(240,255,248,0.82); }
+
+    .tiny{ color: rgba(11,16,32,.72); font-size: 12.5px; margin-top: 8px; }
+    .hr{ height:1px; background: rgba(0,0,0,0.06); margin: 14px 0; border-radius: 999px; }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+      color: rgba(11,16,32,.75);
+      font-size: 12.5px;
+      text-align:center;
+    }
+
+    mjx-container[display="true"]{ margin: 10px 0 !important; }
+    code.k{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Esame 4 buca perturbazione lineare</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Esame 4 buca perturbazione lineare. Grazie per la pazienza!</p>
-    <footer>
-        Generato automaticamente - Esame 4 buca perturbazione lineare
-    </footer>
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="kicker">
+        <span class="pill">MQ • Soluzioni</span>
+        <span>Esame 4 — 16/09/2019</span>
+      </div>
+
+      <h1>Esame 4 (16-09-2019) — Oscillatore armonico (⟨x⟩ nel tempo), tre spin 1/2 → quartetto, buca infinita + perturbazione lineare</h1>
+      <p class="sub">
+        Contiene: <b>testo</b> + <b>soluzione completa</b> (anche passaggi “banali”),
+        con risultati finali evidenziati e commentati.
+      </p>
+
+      <div class="top-actions">
+        <a class="btn" href="1mq.html">← Torna all’indice</a>
+        <a class="btn primary" href="#ex3">Vai al primo esercizio</a>
+        <a class="btn" href="#fine">↓ Fine pagina</a>
+      </div>
+
+      <p class="tiny">
+        <b>Promemoria rapido:</b>
+        \[
+          x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),\qquad
+          p=i\sqrt{\frac{\hbar m\omega}{2}}(a^\dagger-a).
+        \]
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <nav class="toc">
+        <h2>Contenuti</h2>
+        <ul>
+          <li><a href="#ex3">Esercizio 3 — Stato con \(P_0,P_1\): trovare \(\langle x\rangle(t)\) e a \(t=\pi/(2\omega)\)</a></li>
+          <li><a href="#ex4">Esercizio 4 — 3 particelle di spin \(1/2\): i 4 stati con spin totale \(3/2\)</a></li>
+          <li><a href="#ex5">Esercizio 5 — Buca infinita \((0,L)\) + \(H_p=\varepsilon E_0 x/L\): \(\Delta E_1^{(1)}\), \(\Delta E_2^{(1)}\)</a></li>
+        </ul>
+
+        <div class="block note" style="margin-top:12px;">
+          <h3>Mini‑mappa (super utile)</h3>
+          <ul class="steps">
+            <li><b>Oscillatore:</b> se lo stato ha solo \(|0\rangle\) e \(|1\rangle\), allora \(\langle x\rangle(t)\) oscilla con \(\sin(\omega t)\) o \(\cos(\omega t)\) (dipende dalla fase).</li>
+            <li><b>3 spin 1/2:</b> il quartetto \(j=3/2\) è <u>completamente simmetrico</u>.</li>
+            <li><b>Buca \((0,L)\):</b> per ogni \(n\), \(\langle x\rangle=L/2\) → la perturbazione lineare dà lo stesso shift al I ordine.</li>
+          </ul>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex3">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 3</span>
+            <h2>Oscillatore armonico: ricostruzione fase + calcolo \(\langle x\rangle(t)\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Un oscillatore armonico quantistico all’istante \(t=0\) si trova in uno stato tale che:
+                <br/>
+                (a) la probabilità di trovare lo stato fondamentale è \(0.75\), mentre la probabilità di trovare il primo stato eccitato è \(0.25\);
+                <br/>
+                (b) il valore medio di \(x\) è zero;
+                <br/>
+                (c) il valore medio di \(p\) è <u>minore di zero</u>.
+              </p>
+              <p>
+                Calcolare il valore medio di \(x\) all’istante \(t\) arbitrario e, in particolare, all’istante
+                \(t=\pi/(2\omega)\) ove \(\omega\) è la frequenza angolare.
+              </p>
+
+              <p class="tiny">Si ricordi che</p>
+              \[
+                x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),\qquad
+                p=i\sqrt{\frac{\hbar m\omega}{2}}(a^\dagger-a).
+              \]
+            </div>
+
+            <div class="block">
+              <h3>Soluzione passo‑passo (con conti “banali”)</h3>
+
+              <ol class="steps">
+                <li>
+                  Dato che le probabilità sono
+                  \[
+                    P_0=0.75=\frac{3}{4},\qquad P_1=0.25=\frac{1}{4},
+                  \]
+                  lo stato a \(t=0\) deve essere (a meno di una fase relativa):
+                  \[
+                    |\psi(0)\rangle = c_0|0\rangle+c_1|1\rangle,
+                    \qquad |c_0|^2=\frac{3}{4},\quad |c_1|^2=\frac{1}{4}.
+                  \]
+                  Quindi:
+                  \[
+                    |c_0|=\sqrt{\frac{3}{4}}=\frac{\sqrt3}{2},\qquad
+                    |c_1|=\sqrt{\frac{1}{4}}=\frac{1}{2}.
+                  \]
+                  <div class="tiny">
+                    Conto “banale”: \(\sqrt{3/4}=\sqrt3/\sqrt4=\sqrt3/2\) e \(\sqrt{1/4}=1/2\).
+                  </div>
+                </li>
+
+                <li class="note">
+                  Impongo ora \(\langle x\rangle(0)=0\). Siccome
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),
+                  \]
+                  è utile calcolare \(\langle a\rangle\). Per \( |\psi\rangle=c_0|0\rangle+c_1|1\rangle \) vale:
+                  \[
+                    a|0\rangle=0,\qquad a|1\rangle=\sqrt1\,|0\rangle=|0\rangle.
+                  \]
+                  Quindi:
+                  \[
+                    \langle a\rangle
+                    =\langle\psi|a|\psi\rangle
+                    =(c_0^*\langle0|+c_1^*\langle1|)\,a\,(c_0|0\rangle+c_1|1\rangle)
+                    =c_0^*c_1.
+                  \]
+                  Allora:
+                  \[
+                    \langle x\rangle(0)=\sqrt{\frac{\hbar}{2m\omega}}\Bigl(\langle a\rangle+\langle a\rangle^*\Bigr)
+                    =2\sqrt{\frac{\hbar}{2m\omega}}\Re(c_0^*c_1).
+                  \]
+                  La condizione \(\langle x\rangle(0)=0\) implica:
+                  \[
+                    \Re(c_0^*c_1)=0 \quad\Rightarrow\quad c_0^*c_1 \text{ è puramente immaginario.}
+                  \]
+                </li>
+
+                <li>
+                  Scelgo senza perdita di generalità \(c_0\) reale e positivo:
+                  \[
+                    c_0=\frac{\sqrt3}{2}.
+                  \]
+                  Allora \(c_1\) deve essere “a fase \(\pm\pi/2\)”, cioè:
+                  \[
+                    c_1=\pm i\,\frac12.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Impongo ora \(\langle p\rangle(0)<0\).
+                  Calcolo \(\langle p\rangle\):
+                  \[
+                    \langle p\rangle=i\sqrt{\frac{\hbar m\omega}{2}}\Bigl(\langle a^\dagger\rangle-\langle a\rangle\Bigr)
+                    =i\sqrt{\frac{\hbar m\omega}{2}}\Bigl(\langle a\rangle^*-\langle a\rangle\Bigr)
+                    =2\sqrt{\frac{\hbar m\omega}{2}}\,\Im(\langle a\rangle).
+                  \]
+                  Ma \(\langle a\rangle=c_0^*c_1\).
+                  <br/><br/>
+                  Se \(c_1=+i/2\), allora \(c_0^*c_1=(\sqrt3/2)(i/2)=+i\sqrt3/4\) → \(\Im>0\) → \(\langle p\rangle>0\).
+                  <br/>
+                  Quindi devo prendere l’altro segno:
+                  \[
+                    \boxed{c_1=-\frac{i}{2}.}
+                  \]
+                </li>
+
+                <li>
+                  Quindi lo stato iniziale è:
+                  \[
+                    \boxed{|\psi(0)\rangle=\frac{\sqrt3}{2}|0\rangle-\frac{i}{2}|1\rangle.}
+                  \]
+                </li>
+
+                <li>
+                  Evoluzione temporale:
+                  \[
+                    |\psi(t)\rangle=\frac{\sqrt3}{2}e^{-iE_0t/\hbar}|0\rangle-\frac{i}{2}e^{-iE_1t/\hbar}|1\rangle,
+                  \]
+                  con
+                  \[
+                    E_0=\hbar\omega\left(0+\frac12\right)=\frac{\hbar\omega}{2},\qquad
+                    E_1=\hbar\omega\left(1+\frac12\right)=\frac{3\hbar\omega}{2}.
+                  \]
+                  Quindi:
+                  \[
+                    |\psi(t)\rangle=\frac{\sqrt3}{2}e^{-i\omega t/2}|0\rangle-\frac{i}{2}e^{-i3\omega t/2}|1\rangle.
+                  \]
+                </li>
+
+                <li class="note">
+                  Uso il trucco “pulito”: \(\langle x\rangle(t)\) dipende da \(\langle a\rangle(t)=\langle\psi(t)|a|\psi(t)\rangle\).
+                  Come prima, vale \(\langle a\rangle(t)=c_0(t)^*c_1(t)\).
+                  <br/><br/>
+                  Qui
+                  \[
+                    c_0(t)=\frac{\sqrt3}{2}e^{-i\omega t/2},\qquad
+                    c_1(t)=-\frac{i}{2}e^{-i3\omega t/2}.
+                  \]
+                  Quindi:
+                  \[
+                    \langle a\rangle(t)=c_0(t)^*c_1(t)=\left(\frac{\sqrt3}{2}e^{+i\omega t/2}\right)\left(-\frac{i}{2}e^{-i3\omega t/2}\right)
+                    =-\frac{i\sqrt3}{4}e^{-i\omega t}.
+                  \]
+                  Ora:
+                  \[
+                    \langle x\rangle(t)=2\sqrt{\frac{\hbar}{2m\omega}}\Re(\langle a\rangle(t)).
+                  \]
+                </li>
+
+                <li>
+                  Espando (passi elementari):
+                  \[
+                    e^{-i\omega t}=\cos(\omega t)-i\sin(\omega t).
+                  \]
+                  Moltiplico per \(-i\):
+                  \[
+                    -i(\cos-i\sin)=-i\cos+(-i)(-i)\sin=-i\cos-\sin.
+                  \]
+                  Quindi:
+                  \[
+                    \langle a\rangle(t)=-\frac{i\sqrt3}{4}(\cos-i\sin)
+                    =\frac{\sqrt3}{4}\bigl(-\sin(\omega t)-i\cos(\omega t)\bigr).
+                  \]
+                  Dunque:
+                  \[
+                    \Re(\langle a\rangle(t))=-\frac{\sqrt3}{4}\sin(\omega t).
+                  \]
+                  Allora:
+                  \[
+                    \langle x\rangle(t)
+                    =2\sqrt{\frac{\hbar}{2m\omega}}\left(-\frac{\sqrt3}{4}\sin(\omega t)\right)
+                    =-\underbrace{\left(\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}\right)}_{\text{ampiezza}}\sin(\omega t).
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Risultato compatto</h3>
+                  \[
+                    \boxed{\langle x\rangle(t)=-\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}\;\sin(\omega t)
+                    =-\sqrt{\frac{3\hbar}{8m\omega}}\;\sin(\omega t).}
+                  \]
+                  <p class="tiny" style="margin:8px 0 0;">
+                    Conto “banale” di equivalenza: \(\frac{\sqrt3}{2}\sqrt{\frac{1}{2}}=\frac{\sqrt3}{2\sqrt2}=\frac{\sqrt3}{\sqrt8}=\sqrt{\frac{3}{8}}\).
+                  </p>
+                </li>
+
+                <li>
+                  Ora valuto a \(t=\pi/(2\omega)\):
+                  \[
+                    \sin(\omega t)=\sin\!\left(\omega\cdot\frac{\pi}{2\omega}\right)=\sin\!\left(\frac{\pi}{2}\right)=1.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{\langle x\rangle\!\left(\frac{\pi}{2\omega}\right)=-\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}
+                    =-\sqrt{\frac{3\hbar}{8m\omega}}.}
+                  \]
+                </li>
+              </ol>
+
+              <div class="block warn">
+                <h3>Commento (per capire “il segno”)</h3>
+                <p style="margin:0;">
+                  Il testo impone \(\langle p\rangle(0)<0\): questa condizione <u>fissa il segno</u> (fase \(-i\)) e quindi
+                  fa venire \(\langle x\rangle(t)\) con un “meno”.
+                  Se il testo avesse detto \(\langle p\rangle(0)>0\), avresti ottenuto lo stesso modulo ma con segno opposto.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex4" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 4</span>
+            <h2>Tre particelle di spin \(1/2\): i 4 stati con spin totale \(3/2\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Determinare i 4 stati con spin totale \(3/2\) che possono essere formati da 3 particelle con spin \(1/2\).
+              </p>
+              <p class="tiny">Si ricordi che</p>
+              \[
+                J_\pm|j,m\rangle=\hbar\sqrt{j(j+1)-m(m\pm1)}\,|j,m\pm1\rangle.
+              \]
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (chiara e “pulita”)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Con tre spin \(1/2\), lo spazio totale ha dimensione \(2^3=8\).
+                  La decomposizione in rappresentazioni di SU(2) è:
+                  \[
+                    \frac12\otimes\frac12\otimes\frac12
+                    =\frac32\ \oplus\ \frac12\ \oplus\ \frac12.
+                  \]
+                  Il blocco con \(j=\frac32\) ha dimensione \(2j+1=4\) → <b>sono proprio i 4 stati richiesti</b>.
+                </li>
+
+                <li>
+                  Chiamo \(|\uparrow\rangle\) lo stato con \(m=\frac12\) e \(|\downarrow\rangle\) quello con \(m=-\frac12\).
+                  <br/>
+                  Lo stato di massima proiezione è unico e totalmente simmetrico:
+                  \[
+                    \boxed{\left|\frac32,\frac32\right\rangle=|\uparrow\uparrow\uparrow\rangle.}
+                  \]
+                </li>
+
+                <li>
+                  Applico l’operatore di discesa \(J_-=S_{1-}+S_{2-}+S_{3-}\) per generare gli altri stati del quartetto
+                  (equivalentemente: scrivo direttamente la combinazione simmetrica).
+                  <br/><br/>
+                  Lo stato con \(m=\frac12\) deve avere due “su” e un “giù”, e deve essere <u>simmetrico</u> per scambio di particelle:
+                  \[
+                    \boxed{\left|\frac32,\frac12\right\rangle
+                    =\frac{1}{\sqrt3}\bigl(|\uparrow\uparrow\downarrow\rangle+|\uparrow\downarrow\uparrow\rangle+|\downarrow\uparrow\uparrow\rangle\bigr).}
+                  \]
+                </li>
+
+                <li>
+                  Analogamente, per \(m=-\frac12\) (due “giù” e un “su”, sempre simmetrico):
+                  \[
+                    \boxed{\left|\frac32,-\frac12\right\rangle
+                    =\frac{1}{\sqrt3}\bigl(|\downarrow\downarrow\uparrow\rangle+|\downarrow\uparrow\downarrow\rangle+|\uparrow\downarrow\downarrow\rangle\bigr).}
+                  \]
+                </li>
+
+                <li>
+                  Infine lo stato di minima proiezione è unico:
+                  \[
+                    \boxed{\left|\frac32,-\frac32\right\rangle=|\downarrow\downarrow\downarrow\rangle.}
+                  \]
+                </li>
+              </ol>
+
+              <div class="block result">
+                <h3>Risposta finale (Esercizio 4)</h3>
+                \[
+                  \boxed{
+                  \begin{aligned}
+                    \left|\frac32,\frac32\right\rangle &=|\uparrow\uparrow\uparrow\rangle,\\[4pt]
+                    \left|\frac32,\frac12\right\rangle &=\frac{1}{\sqrt3}\Bigl(|\uparrow\uparrow\downarrow\rangle+|\uparrow\downarrow\uparrow\rangle+|\downarrow\uparrow\uparrow\rangle\Bigr),\\[4pt]
+                    \left|\frac32,-\frac12\right\rangle &=\frac{1}{\sqrt3}\Bigl(|\downarrow\downarrow\uparrow\rangle+|\downarrow\uparrow\downarrow\rangle+|\uparrow\downarrow\downarrow\rangle\Bigr),\\[4pt]
+                    \left|\frac32,-\frac32\right\rangle &=|\downarrow\downarrow\downarrow\rangle.
+                  \end{aligned}}
+                \]
+              </div>
+
+              <div class="block warn">
+                <h3>Commento (non richiesto, ma utilissimo)</h3>
+                <p style="margin:0;">
+                  Gli altri 4 stati (per completare gli 8 totali) sono due doppietti con \(j=1/2\) e hanno simmetria “mista” (non completamente simmetrica).
+                  Qui però ti chiedevano <b>solo</b> il quartetto \(j=3/2\).
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex5" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 5</span>
+            <h2>Buca infinita \((0,L)\) + perturbazione lineare \(H_p=\varepsilon E_0 x/L\): correzioni al I ordine</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Una particella di massa \(m\) si trova in una buca di potenziale unidimensionale infinita con pareti in \(x=0\) e \(x=L\).
+                Calcolare, al primo ordine perturbativo, le correzioni all’energia del livello fondamentale e del primo livello eccitato prodotte dalla perturbazione:
+              </p>
+              \[
+                H_p=\varepsilon E_0\,\frac{x}{L},
+              \]
+              <p>dove \(E_0\) è l’energia dello stato fondamentale non perturbato.</p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (con integrali svolti)</h3>
+
+              <ol class="steps">
+                <li>
+                  In una buca infinita su \((0,L)\), gli autostati non perturbati sono:
+                  \[
+                    \psi_n(x)=\sqrt{\frac{2}{L}}\sin\!\left(\frac{n\pi x}{L}\right),\qquad n=1,2,3,\dots
+                  \]
+                  e le energie:
+                  \[
+                    E_n^{(0)}=\frac{n^2\pi^2\hbar^2}{2mL^2}.
+                  \]
+                  In particolare:
+                  \[
+                    E_1^{(0)}=E_0,\qquad E_2^{(0)}=4E_0.
+                  \]
+                </li>
+
+                <li class="note">
+                  Al primo ordine perturbativo:
+                  \[
+                    \Delta E_n^{(1)}=\langle n|H_p|n\rangle
+                    =\varepsilon E_0\,\frac{1}{L}\,\langle n|x|n\rangle
+                    =\varepsilon E_0\,\frac{1}{L}\int_0^L x|\psi_n(x)|^2\,dx.
+                  \]
+                </li>
+
+                <li>
+                  Calcolo \(\langle x\rangle_n\) “a mano”:
+                  \[
+                    \langle x\rangle_n=\int_0^L x\left(\frac{2}{L}\sin^2\!\left(\frac{n\pi x}{L}\right)\right)dx
+                    =\frac{2}{L}\int_0^L x\sin^2\!\left(\frac{n\pi x}{L}\right)\,dx.
+                  \]
+                  Uso l’identità:
+                  \[
+                    \sin^2(\theta)=\frac{1-\cos(2\theta)}{2}.
+                  \]
+                  Quindi:
+                  \[
+                    \langle x\rangle_n=\frac{2}{L}\int_0^L x\cdot\frac{1-\cos\!\left(\frac{2n\pi x}{L}\right)}{2}\,dx
+                    =\frac{1}{L}\int_0^L x\Bigl(1-\cos(kx)\Bigr)\,dx,
+                  \]
+                  dove ho posto \(k=\frac{2n\pi}{L}\).
+                </li>
+
+                <li>
+                  Separando:
+                  \[
+                    \langle x\rangle_n=\frac{1}{L}\left[\int_0^L x\,dx-\int_0^L x\cos(kx)\,dx\right].
+                  \]
+                  Primo integrale (banalissimo):
+                  \[
+                    \int_0^L x\,dx=\left[\frac{x^2}{2}\right]_0^L=\frac{L^2}{2}.
+                  \]
+                  Quindi contribuisce:
+                  \[
+                    \frac{1}{L}\cdot\frac{L^2}{2}=\frac{L}{2}.
+                  \]
+                </li>
+
+                <li>
+                  Secondo integrale: \(\int_0^L x\cos(kx)\,dx\). Faccio per parti:
+                  <br/>
+                  scelgo \(u=x\Rightarrow du=dx\), \(dv=\cos(kx)dx\Rightarrow v=\frac{\sin(kx)}{k}\).
+                  Quindi:
+                  \[
+                    \int x\cos(kx)\,dx=x\frac{\sin(kx)}{k}-\int 1\cdot\frac{\sin(kx)}{k}\,dx
+                    =\frac{x\sin(kx)}{k}+\frac{\cos(kx)}{k^2}.
+                  \]
+                  Valuto tra 0 e \(L\):
+                  \[
+                    \int_0^L x\cos(kx)\,dx=
+                    \left[\frac{x\sin(kx)}{k}+\frac{\cos(kx)}{k^2}\right]_0^L.
+                  \]
+                  Ora:
+                  \[
+                    \sin(kL)=\sin\!\left(\frac{2n\pi}{L}L\right)=\sin(2n\pi)=0,
+                    \qquad
+                    \cos(kL)=\cos(2n\pi)=1,
+                    \qquad
+                    \cos(0)=1.
+                  \]
+                  Quindi:
+                  \[
+                    \left[\frac{x\sin(kx)}{k}\right]_0^L=\frac{L\cdot 0}{k}-\frac{0\cdot 0}{k}=0,
+                  \]
+                  e
+                  \[
+                    \left[\frac{\cos(kx)}{k^2}\right]_0^L=\frac{1}{k^2}-\frac{1}{k^2}=0.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{\int_0^L x\cos(kx)\,dx=0.}
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Conclusione su \(\langle x\rangle_n\)</h3>
+                  \[
+                    \boxed{\langle x\rangle_n=\frac{L}{2}\quad\text{per ogni }n.}
+                  \]
+                </li>
+
+                <li>
+                  Quindi:
+                  \[
+                    \Delta E_n^{(1)}=\varepsilon E_0\frac{1}{L}\cdot\frac{L}{2}=\frac{\varepsilon E_0}{2}.
+                  \]
+                  Quindi, in particolare:
+                  \[
+                    \boxed{\Delta E_1^{(1)}=\frac{\varepsilon E_0}{2},\qquad \Delta E_2^{(1)}=\frac{\varepsilon E_0}{2}.}
+                  \]
+                </li>
+
+                <li class="note">
+                  (Commento) È interessante che <u>entrambi</u> i livelli si spostino della stessa quantità al primo ordine:
+                  la perturbazione è proporzionale a \(\langle x\rangle\), e nella buca \((0,L)\) ogni \(|\psi_n|^2\) è simmetrico rispetto a \(L/2\).
+                </li>
+              </ol>
+
+              <div class="block result">
+                <h3>Risposta finale (Esercizio 5)</h3>
+                \[
+                  \boxed{\Delta E_{1}^{(1)}=\frac{\varepsilon E_0}{2},\qquad \Delta E_{2}^{(1)}=\frac{\varepsilon E_0}{2}.}
+                \]
+                <p class="tiny" style="margin:8px 0 0;">
+                  Quindi:
+                  \[
+                    E_1\simeq E_0+\frac{\varepsilon E_0}{2},\qquad
+                    E_2\simeq 4E_0+\frac{\varepsilon E_0}{2}.
+                  \]
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <div id="fine"></div>
+        <footer>
+          Soluzioni complete — Esame 4 (16-09-2019).<br/>
+        </footer>
+
+      </main>
+    </div>
+  </div>
 </body>
 </html>
