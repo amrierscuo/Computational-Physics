@@ -1,41 +1,1135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set 8 operatori angolari</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Set 8 — Operatori angolari in coordinate sferiche</title>
+
+  <!-- MathJax (per formule LaTeX) -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,0.06);
+      --panel-2: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --accent: #64b5ff;
+      --accent-2: #a78bfa;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --shadow: 0 12px 35px rgba(0,0,0,0.35);
+      --border: 1px solid rgba(255,255,255,0.12);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 20%, rgba(100,181,255,0.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 15%, rgba(167,139,250,0.20), transparent 55%),
+        radial-gradient(900px 700px at 70% 90%, rgba(52,211,153,0.12), transparent 60%),
+        var(--bg);
+      line-height: 1.65;
+    }
+
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 26px 18px 60px;
+    }
+
+    /* Header */
+    .hero{
+      border: var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(100,181,255,0.16), rgba(167,139,250,0.12));
+      box-shadow: var(--shadow);
+      padding: 22px 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      right:-120px; top:-120px;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle at 30% 30%, rgba(100,181,255,0.35), transparent 60%);
+      filter: blur(2px);
+      transform: rotate(15deg);
+      pointer-events:none;
+    }
+    .hero h1{
+      margin: 0 0 6px;
+      font-size: 1.9rem;
+      letter-spacing: 0.2px;
+    }
+    .hero p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 78ch;
+    }
+
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .pillrow{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .pill strong{ color: var(--text); font-weight: 700; }
+
+    /* Cards */
+    .card{
+      margin-top: 18px;
+      border: var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.05);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card header{
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .card header h2{
+      margin:0;
+      font-size: 1.15rem;
+    }
+    .badge{
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.18);
+      color: rgba(255,255,255,0.85);
+      white-space: nowrap;
+    }
+    .card .content{
+      padding: 16px;
+    }
+
+    /* Details */
+    details{
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      background: rgba(0,0,0,0.18);
+      overflow:hidden;
+      margin: 12px 0;
+    }
+    details > summary{
+      cursor:pointer;
+      padding: 12px 14px;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      color: rgba(255,255,255,0.92);
+      user-select:none;
+      background: rgba(255,255,255,0.06);
+    }
+    details > summary::-webkit-details-marker{ display:none; }
+    details > summary .tag{
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.72);
+    }
+    details .inner{
+      padding: 14px;
+      color: rgba(255,255,255,0.88);
+    }
+
+    /* Typography helpers */
+    .u{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    .b{ font-weight: 800; color: #ffffff; }
+    .hl{
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(100,181,255,0.14);
+      border: 1px solid rgba(100,181,255,0.25);
+      display:inline-block;
+    }
+    .note{
+      border-left: 4px solid rgba(251,191,36,0.9);
+      background: rgba(251,191,36,0.10);
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.88);
+      margin: 10px 0;
+    }
+    .ok{
+      border-left: 4px solid rgba(52,211,153,0.9);
+      background: rgba(52,211,153,0.10);
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.90);
+      margin: 10px 0;
+    }
+    .danger{
+      border-left: 4px solid rgba(251,113,133,0.9);
+      background: rgba(251,113,133,0.10);
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.90);
+      margin: 10px 0;
+    }
+    .mono{
+      font-family: var(--mono);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      overflow-x:auto;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 880px){
+      .grid.two{ grid-template-columns: 1fr 1fr; }
+    }
+
+    ol li{ margin: 6px 0; }
+    ul li{ margin: 6px 0; }
+
+    footer{
+      margin-top: 26px;
+      color: rgba(255,255,255,0.55);
+      text-align:center;
+      font-size: 0.92rem;
+    }
+
+    .toc{
+      margin-top: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .toc a{
+      display:inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: var(--border);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.86);
+      font-size: 0.93rem;
+      text-decoration:none;
+    }
+    .toc a:hover{
+      background: rgba(255,255,255,0.10);
+      text-decoration:none;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Set 8 operatori angolari</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 8 operatori angolari. Grazie per la pazienza!</p>
+  <div class="wrap">
+
+    <div class="topbar">
+      <div class="pillrow">
+        <span class="pill">📌 <strong>Set 8</strong> — Operatori angolari</span>
+        <span class="pill">🧭 Coordinate sferiche: \((r,\theta,\varphi)\)</span>
+        <span class="pill">🧠 Focus: \(L_z, L_\pm, L^2\), matrici \(l=2\), misure</span>
+      </div>
+      <div class="pillrow">
+        <a class="pill" href="1mq.html#esercizi-set">← Torna ai Set</a>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Set 8 — Operatori angolari in coordinate sferiche</h1>
+      <p>
+        In questa pagina trovi <span class="b">testo + soluzioni complete</span> (con passaggi elementari inclusi) su:
+        <span class="hl">forme differenziali di \(L_z, L_\pm, L^2\)</span>,
+        <span class="hl">matrici per \(l=2\)</span>,
+        <span class="hl">probabilità e valori medi</span>,
+        <span class="hl">decomposizione su armoniche sferiche</span>.
+      </p>
+
+      <div class="toc">
+        <a href="#es1">Esercizio 1</a>
+        <a href="#es2">Esercizio 2</a>
+        <a href="#es3">Esercizio 3</a>
+        <a href="#es4">Esercizio 4</a>
+      </div>
+    </div>
+
+    <!-- ===================== ES 1 ===================== -->
+    <section id="es1" class="card">
+      <header>
+        <h2>1) Operatori \(L_z\), \(L_\pm\), \(L^2\) in coordinate sferiche</h2>
+        <span class="badge">Set 8 — Esercizio 1</span>
+      </header>
+      <div class="content">
+
+        <details open>
+          <summary>
+            <span class="b">Testo</span>
+            <span class="tag">Determinare \(L_z, L_\pm, L^2\) in coordinate polari sferiche</span>
+          </summary>
+          <div class="inner">
+            <p>
+              <span class="b">Si determinino le espressioni</span> degli operatori
+              \(L_z\), \(L_\pm\) e \(L^2\) in coordinate polari sferiche.
+            </p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span class="b">Soluzione (passo‑passo)</span>
+            <span class="tag">Forme differenziali standard</span>
+          </summary>
+          <div class="inner">
+
+            <div class="note">
+              Convenzione: uso \(\varphi\) come angolo azimutale (spesso scritto \(\phi\)).
+            </div>
+
+            <ol>
+              <li>
+                <span class="b">Punto di partenza:</span> in rappresentazione delle coordinate,
+                \[
+                  \mathbf{L} = \mathbf{r}\times\mathbf{p}, \qquad \mathbf{p}=-i\hbar\nabla.
+                \]
+                Quindi
+                \[
+                  \mathbf{L} = -i\hbar\,(\mathbf{r}\times\nabla).
+                \]
+              </li>
+
+              <li>
+                <span class="b u">Operatore \(L_z\).</span><br/>
+                In coordinate sferiche, l’operatore associato alla rotazione attorno a \(z\) è la derivata rispetto a \(\varphi\):
+                \[
+                  \boxed{\,L_z = -i\hbar\,\frac{\partial}{\partial\varphi}\,}.
+                \]
+                (È coerente con \(L_z\,Y_{\ell m}=\hbar m\,Y_{\ell m}\), perché \(Y_{\ell m}\propto e^{im\varphi}\).)
+              </li>
+
+              <li>
+                <span class="b u">Operatori di salita/discesa \(L_\pm\).</span><br/>
+                Definizione:
+                \[
+                  L_\pm = L_x \pm i L_y.
+                \]
+                La forma differenziale (standard) in coordinate sferiche è:
+                \[
+                  \boxed{
+                  \,L_\pm
+                  = \hbar\,e^{\pm i\varphi}
+                  \left(
+                    \pm\frac{\partial}{\partial\theta}
+                    + i\cot\theta\,\frac{\partial}{\partial\varphi}
+                  \right)\, }.
+                \]
+                Controllo di consistenza: agiscono come “alza/abbassa” su \(m\):
+                \[
+                  L_\pm\,|\ell,m\rangle
+                  = \hbar\sqrt{\ell(\ell+1)-m(m\pm 1)}\,|\ell,m\pm 1\rangle.
+                \]
+              </li>
+
+              <li>
+                <span class="b u">Operatore \(L^2\).</span><br/>
+                L’operatore \(L^2\) coincide con \(-\hbar^2\) volte il “pezzo angolare” del Laplaciano.
+                La forma differenziale è:
+                \[
+                  \boxed{
+                  \,L^2
+                  = -\hbar^2\left[
+                    \frac{1}{\sin\theta}\frac{\partial}{\partial\theta}
+                    \left(\sin\theta\,\frac{\partial}{\partial\theta}\right)
+                    +\frac{1}{\sin^2\theta}\frac{\partial^2}{\partial\varphi^2}
+                  \right]\, }.
+                \]
+              </li>
+            </ol>
+
+            <div class="ok">
+              <span class="b">Risultato finale:</span><br/>
+              \[
+                L_z=-i\hbar\,\partial_\varphi,\qquad
+                L_\pm=\hbar e^{\pm i\varphi}\left(\pm\partial_\theta+i\cot\theta\,\partial_\varphi\right),\qquad
+                L^2=-\hbar^2\left[\frac{1}{\sin\theta}\partial_\theta(\sin\theta\,\partial_\theta)+\frac{1}{\sin^2\theta}\partial_\varphi^2\right].
+              \]
+            </div>
+
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- ===================== ES 2 ===================== -->
+    <section id="es2" class="card">
+      <header>
+        <h2>2) Matrici di \(L^2, L_z, L_x, L_y\) per \(l=2\)</h2>
+        <span class="badge">Set 8 — Esercizio 2</span>
+      </header>
+      <div class="content">
+
+        <details open>
+          <summary>
+            <span class="b">Testo</span>
+            <span class="tag">Costruire le matrici usando \(L_\pm|\ell m\rangle\)</span>
+          </summary>
+          <div class="inner">
+            <p>
+              Usando la relazione
+              \[
+                L_\pm|\ell m\rangle = c_\pm(\ell,m)\,|\ell,m\pm1\rangle,\qquad
+                c_\pm(\ell,m)=\hbar\sqrt{\ell(\ell+1)-m(m\pm1)},
+              \]
+              dove \(|\ell m\rangle\) sono autostati comuni di \(L^2\) ed \(L_z\),
+              determinare le rappresentazioni matriciali per \(L^2\), \(L_z\), \(L_x\), \(L_y\)
+              relative agli stati con \(\ell=2\).
+            </p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span class="b">Soluzione (super dettagliata)</span>
+            <span class="tag">Base ordinata: \(m=2,1,0,-1,-2\)</span>
+          </summary>
+          <div class="inner">
+
+            <div class="note">
+              <span class="b">Scelta della base (importantissima):</span><br/>
+              userò l’ordine
+              \[
+                \bigl\{|2,2\rangle,\ |2,1\rangle,\ |2,0\rangle,\ |2,-1\rangle,\ |2,-2\rangle\bigr\}.
+              \]
+              Quindi le matrici saranno \(5\times5\).
+            </div>
+
+            <ol>
+              <li>
+                <span class="b u">Matrice di \(L^2\).</span><br/>
+                Poiché \(L^2|\ell m\rangle=\hbar^2\ell(\ell+1)|\ell m\rangle\), con \(\ell=2\):
+                \[
+                  \ell(\ell+1)=2\cdot 3=6 \quad \Rightarrow\quad
+                  L^2 = 6\hbar^2\,\mathbb{I}_5.
+                \]
+                Quindi:
+                \[
+                \boxed{
+                L^2=6\hbar^2
+                \begin{pmatrix}
+                1&0&0&0&0\\
+                0&1&0&0&0\\
+                0&0&1&0&0\\
+                0&0&0&1&0\\
+                0&0&0&0&1
+                \end{pmatrix}}
+                \]
+              </li>
+
+              <li>
+                <span class="b u">Matrice di \(L_z\).</span><br/>
+                \(L_z|2,m\rangle=\hbar m|2,m\rangle\). In base ordinata \((2,1,0,-1,-2)\):
+                \[
+                \boxed{
+                L_z=\hbar
+                \begin{pmatrix}
+                2&0&0&0&0\\
+                0&1&0&0&0\\
+                0&0&0&0&0\\
+                0&0&0&-1&0\\
+                0&0&0&0&-2
+                \end{pmatrix}}
+                \]
+              </li>
+
+              <li>
+                <span class="b u">Costruiamo \(L_+\).</span><br/>
+                Formula:
+                \[
+                  L_+|2,m\rangle=\hbar\sqrt{6-m(m+1)}\,|2,m+1\rangle.
+                \]
+                Calcolo “banale” dei coefficienti (uno per uno):
+                <ul>
+                  <li>
+                    Per \(m=-2\): \(6-m(m+1)=6-(-2)(-1)=6-2=4\), \(\sqrt{4}=2\). Quindi coefficiente \(2\hbar\).
+                  </li>
+                  <li>
+                    Per \(m=-1\): \(6-(-1)\cdot0=6-0=6\), \(\sqrt{6}\). Quindi coefficiente \(\sqrt{6}\hbar\).
+                  </li>
+                  <li>
+                    Per \(m=0\): \(6-0\cdot1=6\), \(\sqrt{6}\hbar\).
+                  </li>
+                  <li>
+                    Per \(m=1\): \(6-1\cdot2=6-2=4\), \(\sqrt{4}=2\), coefficiente \(2\hbar\).
+                  </li>
+                </ul>
+
+                In matrice (colonna = stato iniziale, riga = stato finale):
+                \[
+                \boxed{
+                L_+ =
+                \begin{pmatrix}
+                0 & 2\hbar & 0 & 0 & 0\\
+                0 & 0 & \sqrt{6}\hbar & 0 & 0\\
+                0 & 0 & 0 & \sqrt{6}\hbar & 0\\
+                0 & 0 & 0 & 0 & 2\hbar\\
+                0 & 0 & 0 & 0 & 0
+                \end{pmatrix}}
+                \]
+              </li>
+
+              <li>
+                <span class="b u">\(L_-\) è l’aggiunto hermitiano di \(L_+\).</span><br/>
+                Quindi:
+                \[
+                \boxed{
+                L_- =
+                \begin{pmatrix}
+                0 & 0 & 0 & 0 & 0\\
+                2\hbar & 0 & 0 & 0 & 0\\
+                0 & \sqrt{6}\hbar & 0 & 0 & 0\\
+                0 & 0 & \sqrt{6}\hbar & 0 & 0\\
+                0 & 0 & 0 & 2\hbar & 0
+                \end{pmatrix}}
+                \]
+              </li>
+
+              <li>
+                <span class="b u">Infine \(L_x\) e \(L_y\).</span><br/>
+                \[
+                  L_x=\frac{L_+ + L_-}{2},\qquad
+                  L_y=\frac{L_+ - L_-}{2i}.
+                \]
+
+                <p class="note">
+                  Esempio di conto “banale”: se in \(L_+\) compare \(2\hbar\) fuori diagonale, allora in \(L_x\)
+                  comparirà \((2\hbar)/2 = \hbar\).<br/>
+                  Se compare \(\sqrt{6}\hbar\), allora in \(L_x\) compare \((\sqrt{6}\hbar)/2 = (\sqrt{6}/2)\hbar\).
+                </p>
+
+                \[
+                \boxed{
+                L_x=
+                \begin{pmatrix}
+                0 & \hbar & 0 & 0 & 0\\
+                \hbar & 0 & \frac{\sqrt6}{2}\hbar & 0 & 0\\
+                0 & \frac{\sqrt6}{2}\hbar & 0 & \frac{\sqrt6}{2}\hbar & 0\\
+                0 & 0 & \frac{\sqrt6}{2}\hbar & 0 & \hbar\\
+                0 & 0 & 0 & \hbar & 0
+                \end{pmatrix}}
+                \]
+
+                \[
+                \boxed{
+                L_y=
+                \begin{pmatrix}
+                0 & -i\hbar & 0 & 0 & 0\\
+                i\hbar & 0 & -i\frac{\sqrt6}{2}\hbar & 0 & 0\\
+                0 & i\frac{\sqrt6}{2}\hbar & 0 & -i\frac{\sqrt6}{2}\hbar & 0\\
+                0 & 0 & i\frac{\sqrt6}{2}\hbar & 0 & -i\hbar\\
+                0 & 0 & 0 & i\hbar & 0
+                \end{pmatrix}}
+                \]
+              </li>
+            </ol>
+
+            <div class="ok">
+              <span class="b">Check veloce:</span> \(L_x\) e \(L_y\) sono hermitiani (come devono essere), e \(L^2\) è proporzionale all’identità.
+            </div>
+
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- ===================== ES 3 ===================== -->
+    <section id="es3" class="card">
+      <header>
+        <h2>3) Stato \(l=1\): normalizzazione, misure di \(L_z\), \(\langle L_y\rangle\), probabilità per \(L_x=\hbar\)</h2>
+        <span class="badge">Set 8 — Esercizio 3</span>
+      </header>
+      <div class="content">
+
+        <details open>
+          <summary>
+            <span class="b">Testo</span>
+            <span class="tag">Stato \(|\Psi\rangle=\frac{1}{a}(2|1,1\rangle+|1,0\rangle+2i|1,-1\rangle)\)</span>
+          </summary>
+          <div class="inner">
+            <p>
+              Una particella è nello stato
+              \[
+                |\Psi\rangle=\frac{1}{a}\Bigl(2|1,1\rangle+|1,0\rangle+2i|1,-1\rangle\Bigr),
+              \]
+              dove \(|\ell m\rangle\) sono autostati comuni (normalizzati) di \(L^2\) ed \(L_z\).
+              Dopo aver determinato la costante \(a\), usando le rappresentazioni matriciali per gli operatori del momento angolare, si trovi:
+            </p>
+            <ol>
+              <li>(a) Probabilità che una misura di \(L_z\) dia \(\hbar\), \(0\), \(-\hbar\).</li>
+              <li>(b) \(\langle L_z\rangle\).</li>
+              <li>(c) \(\langle L_y\rangle\).</li>
+              <li>(d) Probabilità che una misura di \(L_x\) dia \(\hbar\).</li>
+            </ol>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span class="b">Soluzione (con conti elementari)</span>
+            <span class="tag">Base: \(|1,1\rangle,|1,0\rangle,|1,-1\rangle\)</span>
+          </summary>
+          <div class="inner">
+
+            <div class="note">
+              Userò la base ordinata \(\{|1,1\rangle,\ |1,0\rangle,\ |1,-1\rangle\}\).
+              In questa base lo stato ha componenti:
+              \[
+                |\Psi\rangle=\begin{pmatrix}
+                2/a\\
+                1/a\\
+                2i/a
+                \end{pmatrix}.
+              \]
+            </div>
+
+            <h3 style="margin-top:6px;">(0) Normalizzazione: calcolo di \(a\)</h3>
+            <ol>
+              <li>
+                Norma al quadrato:
+                \[
+                  \langle\Psi|\Psi\rangle
+                  =\frac{1}{|a|^2}\Bigl(|2|^2 + |1|^2 + |2i|^2\Bigr).
+                \]
+              </li>
+              <li>
+                Conti “banali”:
+                <ul>
+                  <li>\(|2|^2 = 2\cdot 2 = 4\)</li>
+                  <li>\(|1|^2 = 1\)</li>
+                  <li>\(|2i|^2 = 2^2|i|^2 = 4\cdot 1 = 4\)</li>
+                </ul>
+                Quindi:
+                \[
+                  |2|^2+|1|^2+|2i|^2 = 4+1+4 = 9.
+                \]
+              </li>
+              <li>
+                Impongo normalizzazione a 1:
+                \[
+                  \frac{9}{|a|^2}=1 \quad \Rightarrow\quad |a|^2=9 \quad \Rightarrow\quad |a|=3.
+                \]
+                Scelgo \(a\) reale positivo:
+                \[
+                  \boxed{a=3.}
+                \]
+              </li>
+            </ol>
+
+            <h3>(a) Probabilità di \(L_z=\hbar,0,-\hbar\)</h3>
+            <p>
+              Siccome \(L_z|1,m\rangle=\hbar m|1,m\rangle\), la misura di \(L_z\) restituisce:
+              \(\hbar\) (se \(m=+1\)),
+              \(0\) (se \(m=0\)),
+              \(-\hbar\) (se \(m=-1\)).
+            </p>
+            <p>
+              I coefficienti (con \(a=3\)) sono:
+              \[
+                c_{+1}=\frac{2}{3},\qquad c_0=\frac{1}{3},\qquad c_{-1}=\frac{2i}{3}.
+              \]
+              Quindi:
+              \[
+                P(\hbar)=|c_{+1}|^2=\left|\frac{2}{3}\right|^2=\frac{4}{9},\quad
+                P(0)=|c_0|^2=\left|\frac{1}{3}\right|^2=\frac{1}{9},\quad
+                P(-\hbar)=|c_{-1}|^2=\left|\frac{2i}{3}\right|^2=\frac{4}{9}.
+              \]
+              <span class="ok"><span class="b">Check:</span> \(\frac{4}{9}+\frac{1}{9}+\frac{4}{9}=1\).</span>
+            </p>
+
+            <h3>(b) Valore medio \(\langle L_z\rangle\)</h3>
+            <p>
+              \[
+                \langle L_z\rangle
+                =(\hbar)\,P(\hbar) + 0\cdot P(0) + (-\hbar)\,P(-\hbar)
+                =\hbar\frac{4}{9}-\hbar\frac{4}{9}=0.
+              \]
+              Quindi:
+              \[
+                \boxed{\langle L_z\rangle=0.}
+              \]
+            </p>
+
+            <h3>(c) Valore medio \(\langle L_y\rangle\)</h3>
+            <p>
+              Per \(l=1\) in base \((m=1,0,-1)\):
+              \[
+                L_y=\frac{\hbar}{\sqrt2}
+                \begin{pmatrix}
+                0 & -i & 0\\
+                i & 0 & -i\\
+                0 & i & 0
+                \end{pmatrix}.
+              \]
+              Lo stato (con \(a=3\)) è:
+              \[
+                |\Psi\rangle=
+                \begin{pmatrix}
+                2/3\\
+                1/3\\
+                2i/3
+                \end{pmatrix}.
+              \]
+            </p>
+
+            <p class="note">
+              Farò il calcolo in modo “meccanico”:
+              1) calcolo \(L_y|\Psi\rangle\); 2) faccio il prodotto scalare con \(\langle\Psi|\).
+            </p>
+
+            <ol>
+              <li>
+                Calcolo \(L_y|\Psi\rangle\).<br/>
+                Prima la matrice senza \(\hbar/\sqrt2\):
+                \[
+                M=
+                \begin{pmatrix}
+                0 & -i & 0\\
+                i & 0 & -i\\
+                0 & i & 0
+                \end{pmatrix}.
+                \]
+                Quindi \(L_y|\Psi\rangle = \frac{\hbar}{\sqrt2} M|\Psi\rangle\).
+                Ora:
+                <ul>
+                  <li>
+                    Prima componente:
+                    \[
+                      (M|\Psi\rangle)_1 = 0\cdot\frac{2}{3} + (-i)\cdot\frac{1}{3} + 0\cdot\frac{2i}{3} = -\frac{i}{3}.
+                    \]
+                  </li>
+                  <li>
+                    Seconda componente:
+                    \[
+                      (M|\Psi\rangle)_2 = i\cdot\frac{2}{3} + 0\cdot\frac{1}{3} + (-i)\cdot\frac{2i}{3}.
+                    \]
+                    Ora \((-i)\cdot(2i/3)=-(2i^2/3)=+(2/3)\) perché \(i^2=-1\).<br/>
+                    Quindi:
+                    \[
+                      (M|\Psi\rangle)_2 = \frac{2i}{3}+\frac{2}{3} = \frac{2}{3}(1+i).
+                    \]
+                  </li>
+                  <li>
+                    Terza componente:
+                    \[
+                      (M|\Psi\rangle)_3 = 0\cdot\frac{2}{3} + i\cdot\frac{1}{3} + 0\cdot\frac{2i}{3}=\frac{i}{3}.
+                    \]
+                  </li>
+                </ul>
+                Dunque:
+                \[
+                  L_y|\Psi\rangle=
+                  \frac{\hbar}{\sqrt2}
+                  \begin{pmatrix}
+                  -i/3\\
+                  \frac{2}{3}(1+i)\\
+                  i/3
+                  \end{pmatrix}.
+                \]
+              </li>
+
+              <li>
+                Ora \(\langle\Psi| = (2/3,\ 1/3,\ -2i/3)\) (perché coniugo \(2i/3\to -2i/3\)).<br/>
+                Quindi:
+                \[
+                  \langle L_y\rangle
+                  =\langle\Psi|L_y|\Psi\rangle
+                  =\frac{\hbar}{\sqrt2}\left[
+                    \frac{2}{3}\left(-\frac{i}{3}\right)
+                    +\frac{1}{3}\left(\frac{2}{3}(1+i)\right)
+                    +\left(-\frac{2i}{3}\right)\left(\frac{i}{3}\right)
+                  \right].
+                \]
+                Calcolo i tre pezzi (banalmente):
+                <ul>
+                  <li>\(\frac{2}{3}\left(-\frac{i}{3}\right)=-\frac{2i}{9}\)</li>
+                  <li>\(\frac{1}{3}\cdot\frac{2}{3}(1+i)=\frac{2}{9}(1+i)=\frac{2}{9}+\frac{2i}{9}\)</li>
+                  <li>\(\left(-\frac{2i}{3}\right)\left(\frac{i}{3}\right)= -\frac{2i^2}{9}=+\frac{2}{9}\)</li>
+                </ul>
+                Sommo:
+                \[
+                  \left(-\frac{2i}{9}\right)+\left(\frac{2}{9}+\frac{2i}{9}\right)+\left(\frac{2}{9}\right)
+                  =\frac{4}{9}.
+                \]
+                Quindi:
+                \[
+                  \boxed{\langle L_y\rangle=\frac{\hbar}{\sqrt2}\cdot\frac{4}{9}=\frac{4\hbar}{9\sqrt2}.}
+                \]
+              </li>
+            </ol>
+
+            <h3>(d) Probabilità che \(L_x=\hbar\)</h3>
+            <p>
+              Per \(l=1\), gli autovalori di \(L_x\) sono \(\{+\hbar,0,-\hbar\}\).<br/>
+              Serve la componente di \(|\Psi\rangle\) lungo l’autostato \(|m_x=+1\rangle\).
+            </p>
+
+            <p class="note">
+              In base \((|1,1\rangle,|1,0\rangle,|1,-1\rangle)\),
+              la matrice di \(L_x\) è:
+              \[
+                L_x=\frac{\hbar}{\sqrt2}
+                \begin{pmatrix}
+                0&1&0\\
+                1&0&1\\
+                0&1&0
+                \end{pmatrix}.
+              \]
+              L’autovettore (normalizzato) per autovalore \(+\hbar\) è proporzionale a \((1,\sqrt2,1)\),
+              quindi:
+              \[
+                |m_x=+1\rangle=
+                \begin{pmatrix}
+                1/2\\
+                1/\sqrt2\\
+                1/2
+                \end{pmatrix}.
+              \]
+            </p>
+
+            <p>
+              Ampiezza:
+              \[
+                A=\langle m_x=+1|\Psi\rangle
+                =\frac{1}{2}\frac{2}{3}+\frac{1}{\sqrt2}\frac{1}{3}+\frac{1}{2}\frac{2i}{3}
+                =\frac{1}{3}+\frac{1}{3\sqrt2}+\frac{i}{3}.
+              \]
+              Quindi:
+              \[
+                A=\frac{1+1/\sqrt2+i}{3}.
+              \]
+              Probabilità:
+              \[
+                P(L_x=\hbar)=|A|^2=\frac{1}{9}\left[\left(1+\frac{1}{\sqrt2}\right)^2+1^2\right].
+              \]
+              Calcolo:
+              \[
+                \left(1+\frac{1}{\sqrt2}\right)^2
+                =1+2\cdot\frac{1}{\sqrt2}+\frac{1}{2}
+                =1+\sqrt2+\frac{1}{2}
+                =\frac{3}{2}+\sqrt2.
+              \]
+              Aggiungo \(+1\):
+              \[
+                \frac{3}{2}+\sqrt2+1=\frac{5}{2}+\sqrt2.
+              \]
+              Dunque:
+              \[
+                P(L_x=\hbar)=\frac{1}{9}\left(\frac{5}{2}+\sqrt2\right)=\frac{5+2\sqrt2}{18}.
+              \]
+              <span class="ok"><span class="b">Risposta:</span> \(\boxed{P(L_x=\hbar)=\frac{5+2\sqrt2}{18}}\).</span>
+            </p>
+
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- ===================== ES 4 ===================== -->
+    <section id="es4" class="card">
+      <header>
+        <h2>4) Decomposizione su \(Y_{2m}\) e valori medi di \(L^2, L_z, L_x, L_y\)</h2>
+        <span class="badge">Set 8 — Esercizio 4</span>
+      </header>
+      <div class="content">
+
+        <details open>
+          <summary>
+            <span class="b">Testo</span>
+            <span class="tag">\(\Psi(r,\theta,\varphi)\) con sin/cos → armoniche sferiche</span>
+          </summary>
+          <div class="inner">
+            <p>
+              Una particella è descritta dalla funzione d’onda
+              \[
+                \Psi(r,\theta,\varphi)=\sqrt{\frac{5}{8\pi}}
+                \left(\sin 2\theta \cos\varphi-\frac{i}{\sqrt2}\sin^2\theta \sin 2\varphi\right) f(r),
+              \]
+              dove \(f(r)\) è una generica funzione.
+              Usando le armoniche sferiche \(Y_{\ell,m}\) (in particolare \(Y_{2,\pm2}\) e \(Y_{2,\pm1}\))
+              determinare:
+            </p>
+            <ol>
+              <li>(a) la probabilità che una misura di \(L_z\) dia \(+2\hbar\), \(0\), \(-\hbar\);</li>
+              <li>(b) i valori medi di \(L^2\), \(L_z\), \(L_x\), \(L_y\).</li>
+            </ol>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span class="b">Soluzione (con decomposizione esplicita)</span>
+            <span class="tag">Scrivo tutto come combinazione di \(Y_{2m}\)</span>
+          </summary>
+          <div class="inner">
+
+            <div class="note">
+              Userò le identità “da trigonometria complessa”:
+              \[
+                \cos\varphi=\frac{e^{i\varphi}+e^{-i\varphi}}{2},\qquad
+                \sin 2\varphi=\frac{e^{2i\varphi}-e^{-2i\varphi}}{2i},\qquad
+                \sin 2\theta=2\sin\theta\cos\theta.
+              \]
+              E le forme standard:
+              \[
+                Y_{2,2}=\sqrt{\frac{15}{32\pi}}\,e^{2i\varphi}\sin^2\theta,\qquad
+                Y_{2,1}=-\sqrt{\frac{15}{8\pi}}\,e^{i\varphi}\sin\theta\cos\theta,
+              \]
+              e \(Y_{2,-m}=(-1)^m Y_{2,m}^*\).
+            </div>
+
+            <h3>(1) Riscrivo i pezzi angolari</h3>
+
+            <ol>
+              <li>
+                <span class="b u">Primo termine:</span> \(\sin 2\theta\cos\varphi\).<br/>
+                \[
+                  \sin 2\theta\cos\varphi
+                  =2\sin\theta\cos\theta\cdot\frac{e^{i\varphi}+e^{-i\varphi}}{2}
+                  =\sin\theta\cos\theta\,(e^{i\varphi}+e^{-i\varphi}).
+                \]
+                Ora:
+                \[
+                  \sin\theta\cos\theta\,e^{i\varphi}= -\frac{1}{\sqrt{15/(8\pi)}}\,Y_{2,1},
+                  \qquad
+                  \sin\theta\cos\theta\,e^{-i\varphi}= \frac{1}{\sqrt{15/(8\pi)}}\,Y_{2,-1}.
+                \]
+                Quindi:
+                \[
+                  \sin 2\theta\cos\varphi
+                  =\sqrt{\frac{8\pi}{15}}\,(Y_{2,-1}-Y_{2,1}).
+                \]
+              </li>
+
+              <li>
+                <span class="b u">Secondo termine:</span> \(\sin^2\theta\sin 2\varphi\).<br/>
+                \[
+                  \sin^2\theta\sin 2\varphi
+                  =\sin^2\theta\cdot\frac{e^{2i\varphi}-e^{-2i\varphi}}{2i}.
+                \]
+                E dato che:
+                \[
+                  Y_{2,2}=\sqrt{\frac{15}{32\pi}}\,\sin^2\theta\,e^{2i\varphi}
+                  \quad\Rightarrow\quad
+                  \sin^2\theta\,e^{2i\varphi}=\sqrt{\frac{32\pi}{15}}\,Y_{2,2},
+                \]
+                analogamente
+                \(\sin^2\theta\,e^{-2i\varphi}=\sqrt{\frac{32\pi}{15}}\,Y_{2,-2}\).
+                Quindi:
+                \[
+                  \sin^2\theta\sin 2\varphi
+                  =\sqrt{\frac{32\pi}{15}}\cdot\frac{1}{2i}\,(Y_{2,2}-Y_{2,-2}).
+                \]
+              </li>
+            </ol>
+
+            <h3>(2) Metto tutto insieme e semplifico i coefficienti</h3>
+
+            <p>
+              La funzione angolare complessiva è
+              \[
+              \sqrt{\frac{5}{8\pi}}
+              \left(\sin 2\theta \cos\varphi-\frac{i}{\sqrt2}\sin^2\theta \sin 2\varphi\right).
+              \]
+            </p>
+
+            <p>
+              Sostituisco le due decomposizioni:
+              \[
+                \sqrt{\frac{5}{8\pi}}
+                \left[
+                \sqrt{\frac{8\pi}{15}}(Y_{2,-1}-Y_{2,1})
+                -\frac{i}{\sqrt2}\left(\sqrt{\frac{32\pi}{15}}\cdot\frac{1}{2i}\right)(Y_{2,2}-Y_{2,-2})
+                \right].
+              \]
+            </p>
+
+            <p class="note">
+              Semplificazione “banale” dei coefficienti:
+              <br/>
+              \(\sqrt{\frac{5}{8\pi}}\sqrt{\frac{8\pi}{15}}=\sqrt{\frac{5}{15}}=\sqrt{\frac{1}{3}}=\frac{1}{\sqrt3}\).<br/>
+              Inoltre \(-\frac{i}{\sqrt2}\cdot\frac{1}{2i}=-\frac{1}{2\sqrt2}\).<br/>
+              E \(\sqrt{\frac{32\pi}{15}} = 2\sqrt{\frac{8\pi}{15}}\), quindi con \(\frac{1}{2\sqrt2}\) rimane \(\frac{1}{\sqrt2}\sqrt{\frac{8\pi}{15}}\),
+              e poi ancora \(\sqrt{\frac{5}{8\pi}}\sqrt{\frac{8\pi}{15}}=\frac{1}{\sqrt3}\), quindi totale \(\frac{1}{\sqrt6}\).
+            </p>
+
+            <p>
+              Risultato compatto:
+              \[
+                \boxed{
+                \Psi(r,\theta,\varphi)= f(r)\left[
+                \frac{1}{\sqrt3}(Y_{2,-1}-Y_{2,1})
+                -\frac{1}{\sqrt6}(Y_{2,2}-Y_{2,-2})
+                \right].}
+              \]
+            </p>
+
+            <div class="ok">
+              <span class="b">Check di normalizzazione (solo parte angolare):</span><br/>
+              i coefficienti hanno moduli:
+              \(1/\sqrt3\) per \(m=\pm1\) (quindi \(1/3+1/3=2/3\)) e
+              \(1/\sqrt6\) per \(m=\pm2\) (quindi \(1/6+1/6=1/3\)).<br/>
+              Somma: \(2/3+1/3=1\). ✅
+            </div>
+
+            <h3>(a) Probabilità richieste per \(L_z\)</h3>
+            <p>
+              Poiché \(L_z Y_{\ell m}=\hbar m Y_{\ell m}\), la probabilità di ottenere \(m\hbar\) è il modulo quadro del coefficiente di \(Y_{\ell m}\).
+            </p>
+
+            <ul>
+              <li>
+                \(L_z=+2\hbar\) ↔ \(m=+2\). Coefficiente di \(Y_{2,2}\) è \(-1/\sqrt6\).<br/>
+                \[
+                  P(+2\hbar)=\left|\frac{-1}{\sqrt6}\right|^2=\frac{1}{6}.
+                \]
+              </li>
+              <li>
+                \(L_z=0\) ↔ \(m=0\). Qui \(Y_{2,0}\) <span class="b">non compare</span>. Quindi:
+                \[
+                  P(0)=0.
+                \]
+              </li>
+              <li>
+                \(L_z=-\hbar\) ↔ \(m=-1\). Coefficiente \(+1/\sqrt3\).<br/>
+                \[
+                  P(-\hbar)=\left|\frac{1}{\sqrt3}\right|^2=\frac{1}{3}.
+                \]
+              </li>
+            </ul>
+
+            <div class="note">
+              (Extra — per completezza):<br/>
+              \(P(+\hbar)=1/3\), \(P(-2\hbar)=1/6\). La somma totale fa \(1\).
+            </div>
+
+            <h3>(b) Valori medi \(\langle L^2\rangle, \langle L_z\rangle, \langle L_x\rangle, \langle L_y\rangle\)</h3>
+
+            <ol>
+              <li>
+                <span class="b u">\(\langle L^2\rangle\).</span><br/>
+                Tutti i termini sono con \(\ell=2\), quindi \(L^2\) vale sempre \(\hbar^2\ell(\ell+1)=6\hbar^2\).<br/>
+                \[
+                  \boxed{\langle L^2\rangle = 6\hbar^2.}
+                \]
+              </li>
+
+              <li>
+                <span class="b u">\(\langle L_z\rangle\).</span><br/>
+                Valore medio di \(m\hbar\):
+                \[
+                  \langle L_z\rangle=\hbar\sum_m m\,|c_m|^2.
+                \]
+                Con \(P(2)=1/6\), \(P(1)=1/3\), \(P(-1)=1/3\), \(P(-2)=1/6\):
+                \[
+                  \sum mP(m)=2\cdot\frac{1}{6}+1\cdot\frac{1}{3}+(-1)\cdot\frac{1}{3}+(-2)\cdot\frac{1}{6}=0.
+                \]
+                Quindi:
+                \[
+                  \boxed{\langle L_z\rangle=0.}
+                \]
+              </li>
+
+              <li>
+                <span class="b u">\(\langle L_x\rangle\) e \(\langle L_y\rangle\).</span><br/>
+                Uso:
+                \[
+                  L_x=\frac{L_+ + L_-}{2},\qquad
+                  L_y=\frac{L_+ - L_-}{2i}.
+                \]
+                Qui i coefficienti sono reali ⇒ \(\langle L_-\rangle=\langle L_+\rangle\) (quindi \(\langle L_y\rangle=0\)).<br/><br/>
+
+                Calcolo \(\langle L_+\rangle=\sum_{m=-2}^{1} c_{m+1}^*c_m\,\hbar\sqrt{6-m(m+1)}\).<br/>
+                Solo i prodotti “non nulli” (perché \(c_0=0\)):
+                <ul>
+                  <li>
+                    da \(m=-2\) a \(-1\): coefficiente \(2\hbar\), e \(c_{-1}c_{-2}=\frac{1}{\sqrt3}\frac{1}{\sqrt6}=\frac{1}{\sqrt{18}}=\frac{1}{3\sqrt2}\).
+                    Quindi contributo \(2\hbar\cdot\frac{1}{3\sqrt2}=\frac{2\hbar}{3\sqrt2}\).
+                  </li>
+                  <li>
+                    da \(m=1\) a \(2\): coefficiente \(2\hbar\), e \(c_2c_1=\left(-\frac{1}{\sqrt6}\right)\left(-\frac{1}{\sqrt3}\right)=\frac{1}{\sqrt{18}}=\frac{1}{3\sqrt2}\).
+                    Quindi ancora \(\frac{2\hbar}{3\sqrt2}\).
+                  </li>
+                </ul>
+                Somma:
+                \[
+                  \langle L_+\rangle=\frac{2\hbar}{3\sqrt2}+\frac{2\hbar}{3\sqrt2}=\frac{4\hbar}{3\sqrt2}.
+                \]
+                Allora:
+                \[
+                  \langle L_x\rangle=\frac{\langle L_+\rangle+\langle L_-\rangle}{2}=\frac{\frac{4\hbar}{3\sqrt2}+\frac{4\hbar}{3\sqrt2}}{2}
+                  =\frac{4\hbar}{3\sqrt2}.
+                \]
+                E:
+                \[
+                  \boxed{\langle L_x\rangle=\frac{4\hbar}{3\sqrt2}},\qquad
+                  \boxed{\langle L_y\rangle=0}.
+                \]
+              </li>
+            </ol>
+
+          </div>
+        </details>
+
+      </div>
+    </section>
+
     <footer>
-        Generato automaticamente - Set 8 operatori angolari
+       Set 8 (Operatori angolari) • Versione “f p”
     </footer>
+
+  </div>
 </body>
 </html>

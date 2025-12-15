@@ -1,41 +1,921 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set 11 perturbazioni stazionarie</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set 11 — Perturbazioni stazionarie (Stark, oscillatore carico, buca infinita)</title>
+
+  <!-- MathJax (render LaTeX) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)']],
+        displayMath: [['\\[','\\]']]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,0.08);
+      --panel2: rgba(255,255,255,0.06);
+      --text: #e9eef7;
+      --muted: rgba(233,238,247,0.75);
+      --accent: #4aa3ff;
+      --accent2:#7cf2c3;
+      --danger:#ff6b6b;
+      --warn:#ffd166;
+      --shadow: 0 12px 35px rgba(0,0,0,0.35);
+      --border: 1px solid rgba(255,255,255,0.14);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ margin:0; padding:0; background: radial-gradient(1200px 700px at 10% 10%, rgba(74,163,255,0.22), transparent 60%),
+                                     radial-gradient(900px 600px at 90% 30%, rgba(124,242,195,0.16), transparent 55%),
+                                     radial-gradient(900px 600px at 30% 90%, rgba(255,209,102,0.12), transparent 60%),
+                                     var(--bg);
+               color: var(--text);
+               font-family: Arial, sans-serif;
+               line-height: 1.65;
+    }
+
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    header{
+      max-width: 1100px;
+      margin: 28px auto 18px;
+      padding: 18px 18px 8px;
+    }
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 8px 12px;
+      border: var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .pill strong{ color: var(--text); }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: var(--border);
+      background: rgba(255,255,255,0.06);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    h1{
+      font-size: 1.75rem;
+      margin: 10px 0 6px;
+      letter-spacing: 0.2px;
+    }
+    .subtitle{
+      color: var(--muted);
+      margin: 0 0 10px;
+      max-width: 85ch;
+    }
+
+    main{
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 0 18px;
+    }
+
+    .toc{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin: 14px 0 22px;
+    }
+    .toc a{
+      display:block;
+      padding: 12px 12px;
+      border: var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      font-weight: 700;
+    }
+    .toc a span{
+      display:block;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.92rem;
+      margin-top: 4px;
+    }
+
+    .card{
+      border: var(--border);
+      border-radius: 16px;
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      box-shadow: var(--shadow);
+      padding: 16px 16px 12px;
+      margin: 16px 0;
+    }
+
+    .card h2{
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 1.22rem;
+    }
+
+    details{
+      border: var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      padding: 10px 12px;
+      margin: 10px 0 12px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight: 800;
+      color: var(--text);
+      user-select:none;
+    }
+    .block{
+      margin-top: 10px;
+      padding: 12px;
+      border-left: 4px solid var(--accent);
+      background: rgba(74,163,255,0.10);
+      border-radius: 10px;
+    }
+
+    .note{
+      border-left-color: var(--warn);
+      background: rgba(255,209,102,0.10);
+    }
+    .warn{
+      border-left-color: var(--danger);
+      background: rgba(255,107,107,0.10);
+    }
+
+    .kpi{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin: 10px 0 6px;
+    }
+    .kpi .chip{
+      border: var(--border);
+      border-radius: 999px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.05);
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+
+    .step{
+      margin: 12px 0;
+      padding: 12px 12px 10px;
+      border: var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+    }
+    .step .title{
+      font-weight: 900;
+      margin-bottom: 8px;
+      color: var(--accent2);
+    }
+
+    .result{
+      margin: 12px 0 6px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(124,242,195,0.35);
+      background: rgba(124,242,195,0.10);
+    }
+    .result .title{
+      font-weight: 900;
+      color: var(--accent2);
+      margin-bottom: 6px;
+    }
+
+    code, pre{
+      font-family: var(--mono);
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 2px 7px;
+      color: #d6f0ff;
+    }
+
+    footer{
+      max-width: 1100px;
+      margin: 26px auto 40px;
+      padding: 0 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align:center;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Set 11 perturbazioni stazionarie</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 11 perturbazioni stazionarie. Grazie per la pazienza!</p>
-    <footer>
-        Generato automaticamente - Set 11 perturbazioni stazionarie
-    </footer>
+  <header>
+    <div class="topbar">
+      <div class="pill">
+        <strong>MQ</strong> · Set 11 · Perturbazioni stazionarie
+      </div>
+      <a class="btn" href="1mq.html#esercizi-set">← Torna a “Esercizi/Set di MQ”</a>
+    </div>
+
+    <h1>Set 11 — Perturbazioni stazionarie: \(x^3\), effetto Stark, campo elettrico costante, buca infinita</h1>
+    <p class="subtitle">
+      In questa pagina trovi <b>testo + soluzione</b> (con passaggi “banali” inclusi) per i 4 esercizi del Set 11.
+      Dove serve, evidenzio anche <u>argomenti di simmetria (parità)</u> e <u>degenerazione</u>.
+    </p>
+
+    <div class="toc">
+      <a href="#ex1">Esercizio 1 <span>Oscillatore armonico + perturbazione \(\alpha x^3\)</span></a>
+      <a href="#ex2">Esercizio 2 <span>Effetto Stark (idrogenoide): \(E_1\), \(E_2\)</span></a>
+      <a href="#ex3">Esercizio 3 <span>Oscillatore carico in \(E\) costante: 1°/2° ordine + esatto</span></a>
+      <a href="#ex4">Esercizio 4 <span>Buca infinita \(0\le x\le L\) con \(H_p\propto x\)</span></a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===================================================== -->
+    <section id="ex1" class="card">
+      <h2>Esercizio 1 — Oscillatore armonico con perturbazione \( \alpha x^3 \)</h2>
+
+      <details open>
+        <summary>Testo (dal foglio)</summary>
+        <div class="block">
+          <p>
+            Si consideri un sistema fisico descritto dalla seguente Hamiltoniana:
+          </p>
+          \[
+            H=\frac{p^2}{2m}+\frac{1}{2}m\omega^2x^2+\alpha x^3.
+          \]
+          <p>
+            Si determini lo spettro di energia al primo ordine perturbativo in \(\alpha\).<br/>
+            Si ricordi:
+          </p>
+          \[
+            x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+          \]
+        </div>
+      </details>
+
+      <div class="kpi">
+        <div class="chip">Idea chiave: parità</div>
+        <div class="chip">1° ordine: \(\Delta E_n^{(1)}=\langle n|V|n\rangle\)</div>
+        <div class="chip">Qui \(V=\alpha x^3\) (operatore dispari)</div>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 1 — Separare \(H=H_0+V\)</div>
+        <p>
+          Scriviamo:
+          \[
+            H_0=\frac{p^2}{2m}+\frac{1}{2}m\omega^2x^2,
+            \qquad
+            V=\alpha x^3.
+          \]
+          Gli autostati di \(H_0\) sono \(|n\rangle\) con energie non perturbate:
+          \[
+            E_n^{(0)}=\hbar\omega\left(n+\frac12\right),
+            \qquad n=0,1,2,\dots
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 2 — Formula di correzione al primo ordine</div>
+        <p>
+          La correzione al primo ordine è:
+          \[
+            \Delta E_n^{(1)}=\langle n|V|n\rangle=\alpha\,\langle n|x^3|n\rangle.
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 3 — Argomento di simmetria (parità) ⇒ \(\langle x^3\rangle=0\)</div>
+        <p>
+          Gli autostati \(|n\rangle\) dell’oscillatore armonico hanno parità definita:
+          \[
+            \hat{\mathcal P}|n\rangle = (-1)^n |n\rangle.
+          \]
+          L’operatore \(x\) è <b>dispari</b> sotto parità (\(x\to -x\)), quindi anche \(x^3\) è dispari:
+          \[
+            \hat{\mathcal P}\,x^3\,\hat{\mathcal P}^{-1} = (-x)^3 = -x^3.
+          \]
+          Ora, il valore di aspettazione in uno stato a parità definita di un operatore dispari è zero:
+          \[
+            \langle n|x^3|n\rangle = 0.
+          \]
+          (Intuizione “super banale”: l’integrando \(\psi_n^*(x)\,x^3\,\psi_n(x)\) è una funzione <u>dispari</u>,
+          e l’integrale su \((-\infty,+\infty)\) vale 0.)
+        </p>
+      </div>
+
+      <div class="result">
+        <div class="title">Risultato finale (1° ordine)</div>
+        <p>
+          \[
+            \Delta E_n^{(1)}=0
+            \quad\Rightarrow\quad
+            E_n \;=\; \hbar\omega\left(n+\frac12\right) + \mathcal{O}(\alpha^2).
+          \]
+        </p>
+      </div>
+
+      <div class="block note">
+        <p>
+          <b>Commento:</b> il primo contributo “non banale” allo spettro arriverà al <b>secondo ordine</b> in \(\alpha\)
+          (non richiesto qui).
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ===================================================== -->
+    <section id="ex2" class="card">
+      <h2>Esercizio 2 — Effetto Stark per atomo idrogenoide: correzioni al I ordine di \(E_1\) e \(E_2\)</h2>
+
+      <details open>
+        <summary>Testo (dal foglio)</summary>
+        <div class="block">
+          \[
+            \text{Effetto Stark per atomo idrogenoide: correzioni al I ordine perturbativo delle energie } E_1 \text{ e } E_2.
+          \]
+        </div>
+      </details>
+
+      <div class="block note">
+        <p>
+          Qui assumo l’assetto standard: <b>campo elettrico uniforme</b> lungo \(z\),
+          \(\mathbf{E}=E\,\hat z\). Per l’elettrone (\(q=-e\)) la perturbazione si può scrivere come:
+          \[
+            H' = eEz \quad (\text{convenzionale in molti corsi}).
+          \]
+          Se nel tuo corso si usa \(H'=-eEz\), cambiano solo alcuni <u>segni</u> nelle combinazioni,
+          ma gli <b>splitting in modulo</b> restano uguali.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 1 — Livello \(n=1\) (energia \(E_1\)) ⇒ nessuna correzione lineare</div>
+        <p>
+          Per \(n=1\) esiste solo lo stato \(1s\) (non degenere), con parità ben definita (pari).
+          L’operatore \(z=r\cos\theta\) è <b>dispari</b> sotto parità.
+          Quindi:
+          \[
+            \Delta E_{1}^{(1)}=\langle 100|\,eEz\,|100\rangle = eE\,\langle 100|z|100\rangle = 0.
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 2 — Livello \(n=2\) (energia \(E_2\)) ⇒ serve perturbazione degenere</div>
+        <p>
+          Per \(n=2\) ci sono più stati degeneri: \(2s\) e \(2p\) (con \(m=-1,0,+1\)).
+          La perturbazione \(H'=eEz\) seleziona (regole di selezione):
+          \[
+            \Delta \ell = \pm 1,\qquad \Delta m = 0.
+          \]
+          Quindi:
+          <ul>
+            <li>\(|200\rangle\) (2s) <b>si accoppia</b> con \(|210\rangle\) (2p, \(m=0\));</li>
+            <li>\(|21\pm 1\rangle\) <b>non</b> si accoppiano con \(|200\rangle\) (perché \(\Delta m\neq 0\)).</li>
+          </ul>
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 3 — Matrice perturbativa nel sottospazio \(\{|200\rangle,|210\rangle\}\)</div>
+        <p>
+          Nel sottospazio \(\{|200\rangle,|210\rangle\}\) la matrice di \(H'\) è:
+          \[
+            H' \;\to\;
+            \begin{pmatrix}
+              \langle200|H'|200\rangle & \langle200|H'|210\rangle\\
+              \langle210|H'|200\rangle & \langle210|H'|210\rangle
+            \end{pmatrix}.
+          \]
+          Per parità, i termini diagonali sono zero:
+          \[
+            \langle200|z|200\rangle=0,\qquad \langle210|z|210\rangle=0.
+          \]
+          Rimane il termine fuori diagonale:
+          \[
+            \langle200|H'|210\rangle=eE\,\langle200|z|210\rangle.
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 4 — Calcolo “banale ma completo” di \(\langle200|z|210\rangle\) (idrogeno)</div>
+        <p>
+          Scriviamo \(z=r\cos\theta\). L’integrale separa in parte radiale + parte angolare.
+        </p>
+
+        <div class="block">
+          <p><b>Parte angolare.</b></p>
+          <p>
+            \[
+              \langle Y_{00}|\cos\theta|Y_{10}\rangle
+              =\int Y_{00}^*(\theta,\phi)\,\cos\theta\,Y_{10}(\theta,\phi)\,d\Omega
+              =\sqrt{\frac{1}{3}}.
+            \]
+            (Se vuoi “fare i conti”: \(Y_{00}=1/\sqrt{4\pi}\), \(Y_{10}=\sqrt{3/(4\pi)}\cos\theta\),
+            quindi l’integrando \(\propto \cos^2\theta\) e \(\int \cos^2\theta\,d\Omega = 4\pi/3\).)
+          </p>
+        </div>
+
+        <div class="block">
+          <p><b>Parte radiale.</b> Uso le funzioni radiali standard (idrogeno):</p>
+          \[
+            R_{20}(r)=\frac{1}{2\sqrt{2}\,a_0^{3/2}}\left(2-\frac{r}{a_0}\right)e^{-r/(2a_0)},
+            \qquad
+            R_{21}(r)=\frac{1}{2\sqrt{6}\,a_0^{3/2}}\left(\frac{r}{a_0}\right)e^{-r/(2a_0)}.
+          \]
+          <p>
+            Il pezzo radiale per \(z=r\cos\theta\) contiene un fattore \(r\) e la misura \(r^2dr\),
+            quindi compare:
+            \[
+              I_r=\int_0^\infty r^3\,R_{20}(r)\,R_{21}(r)\,dr.
+            \]
+          </p>
+
+          <p>
+            Sostituzione “banale”: \(\rho=r/a_0\Rightarrow r=a_0\rho\), \(dr=a_0\,d\rho\).
+            Allora:
+            <br/>
+            - \(r^3dr = (a_0^3\rho^3)(a_0\,d\rho)=a_0^4\rho^3\,d\rho\).  
+            <br/>
+            - \(e^{-r/(2a_0)}e^{-r/(2a_0)}=e^{-\rho}\).
+          </p>
+
+          <p>
+            Moltiplico \(R_{20}R_{21}\): prefattore
+            \[
+              \frac{1}{2\sqrt2\,a_0^{3/2}}\cdot \frac{1}{2\sqrt6\,a_0^{3/2}}
+              =\frac{1}{4\sqrt{12}\,a_0^3}
+              =\frac{1}{8\sqrt3\,a_0^3}.
+            \]
+            Parte polinomiale: \(\rho(2-\rho)\).
+            Quindi:
+            \[
+              R_{20}R_{21}=\frac{1}{8\sqrt3\,a_0^3}\,\rho(2-\rho)\,e^{-\rho}.
+            \]
+            Pertanto:
+            \[
+              I_r=\int_0^\infty a_0^4\rho^3\cdot \frac{1}{8\sqrt3\,a_0^3}\rho(2-\rho)e^{-\rho}d\rho
+              =\frac{a_0}{8\sqrt3}\int_0^\infty \rho^4(2-\rho)e^{-\rho}d\rho.
+            \]
+          </p>
+
+          <p>
+            Ora espando:
+            \[
+              \rho^4(2-\rho)=2\rho^4-\rho^5.
+            \]
+            Uso la formula “banale”:
+            \[
+              \int_0^\infty \rho^n e^{-\rho}d\rho = n!.
+            \]
+            Quindi:
+            \[
+              \int_0^\infty 2\rho^4 e^{-\rho}d\rho = 2\cdot 4! =2\cdot 24=48,
+            \]
+            \[
+              \int_0^\infty \rho^5 e^{-\rho}d\rho = 5! = 120.
+            \]
+            Sottraggo:
+            \[
+              \int_0^\infty (2\rho^4-\rho^5)e^{-\rho}d\rho = 48-120=-72.
+            \]
+            Quindi:
+            \[
+              I_r=\frac{a_0}{8\sqrt3}\cdot(-72)=a_0\cdot\frac{-72}{8\sqrt3}
+              =a_0\cdot\frac{-9}{\sqrt3}=-3\sqrt3\,a_0.
+            \]
+          </p>
+        </div>
+
+        <div class="block">
+          <p><b>Metto insieme angolare + radiale.</b></p>
+          \[
+            \langle200|z|210\rangle = \left(\sqrt{\frac13}\right)\cdot(-3\sqrt3\,a_0) = -3a_0.
+          \]
+          <p>
+            Quindi:
+            \[
+              \langle200|H'|210\rangle = eE\,(-3a_0)= -3ea_0E.
+            \]
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 5 — Diagonalizzazione e correzioni di \(E_2\) (idrogeno)</div>
+        <p>
+          Nel sottospazio \(\{|200\rangle,|210\rangle\}\) la matrice è:
+          \[
+            \begin{pmatrix}
+              0 & -3ea_0E\\
+              -3ea_0E & 0
+            \end{pmatrix}.
+          \]
+          Gli autovalori (conti “banali”):
+          <br/>
+          Risolvo \(\det(H'-\lambda I)=0\):
+          \[
+            \det\begin{pmatrix}
+              -\lambda & -3ea_0E\\
+              -3ea_0E & -\lambda
+            \end{pmatrix}
+            =\lambda^2-(3ea_0E)^2=0
+            \;\Rightarrow\;
+            \lambda=\pm 3ea_0E.
+          \]
+          Quindi le correzioni al primo ordine per due combinazioni lineari sono:
+          \[
+            \Delta E_{2,\pm}^{(1)}=\pm 3ea_0E.
+          \]
+          Gli stati \(2p\) con \(m=\pm 1\) restano con:
+          \[
+            \Delta E_{2,m=\pm 1}^{(1)}=0.
+          \]
+        </p>
+      </div>
+
+      <div class="result">
+        <div class="title">Risultato finale (riassunto Stark, 1° ordine)</div>
+        <p>
+          \[
+            \Delta E_1^{(1)}=0.
+          \]
+          Per \(n=2\) (idrogeno):
+          \[
+            E_2 \Rightarrow
+            \begin{cases}
+              E_2^{(0)} + 3ea_0E,\\
+              E_2^{(0)} - 3ea_0E,\\
+              E_2^{(0)} \quad (\text{doppia degenerazione: } m=\pm 1).
+            \end{cases}
+          \]
+        </p>
+      </div>
+
+      <div class="block note">
+        <p>
+          <b>Idrogenoide (nucleo con carica \(+Ze\)):</b> tipicamente si sostituisce
+          \(a_0 \to a_0/Z\). Quindi lo splitting lineare diventa:
+          \[
+            \Delta E_{2,\pm}^{(1)}=\pm 3e\left(\frac{a_0}{Z}\right)E.
+          \]
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ===================================================== -->
+    <section id="ex3" class="card">
+      <h2>Esercizio 3 — Oscillatore armonico 1D carico in campo elettrico costante</h2>
+
+      <details open>
+        <summary>Testo (dal foglio)</summary>
+        <div class="block">
+          <p>
+            Si consideri un oscillatore armonico unidimensionale carico immerso in un campo elettrico costante.
+          </p>
+          <p>
+            (a) Calcolare le correzioni alle energie al primo e al secondo ordine perturbativo.<br/>
+            (b) In questo caso con un semplice cambiamento di variabile il problema si può risolvere esattamente.
+            Trovare le energie esatte e verificare che sono consistenti con il calcolo perturbativo.
+          </p>
+        </div>
+      </details>
+
+      <div class="block note">
+        <p>
+          Prendo il campo lungo \(x\). Potenziale in campo uniforme: \(V(x)=-qEx\) (scelta standard).
+          Quindi:
+          \[
+            H = \underbrace{\left(\frac{p^2}{2m}+\frac12 m\omega^2x^2\right)}_{H_0} \;+\; \underbrace{(-qEx)}_{V}.
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 1 — 1° ordine: \(\Delta E_n^{(1)}=\langle n|V|n\rangle\)</div>
+        <p>
+          \[
+            \Delta E_n^{(1)}=\langle n|(-qEx)|n\rangle = -qE\,\langle n|x|n\rangle.
+          \]
+          Ma per l’oscillatore armonico:
+          \[
+            \langle n|x|n\rangle=0
+          \]
+          (per parità: \(x\) è dispari e \(|n\rangle\) ha parità definita).
+          Quindi:
+          \[
+            \boxed{\Delta E_n^{(1)}=0.}
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 2 — 2° ordine: formula e matrice elementi</div>
+        <p>
+          La correzione al secondo ordine è:
+          \[
+            \Delta E_n^{(2)}=\sum_{k\neq n}\frac{|\langle k|V|n\rangle|^2}{E_n^{(0)}-E_k^{(0)}}.
+          \]
+          Ora uso
+          \[
+            x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),
+            \qquad
+            V=-qE\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+          \]
+          Gli unici accoppiamenti sono \(n\to n\pm 1\) perché:
+          \[
+            a|n\rangle=\sqrt{n}\,|n-1\rangle,\qquad
+            a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle.
+          \]
+          Quindi:
+          \[
+            \langle n+1|x|n\rangle=\sqrt{\frac{\hbar}{2m\omega}}\sqrt{n+1},
+            \qquad
+            \langle n-1|x|n\rangle=\sqrt{\frac{\hbar}{2m\omega}}\sqrt{n}.
+          \]
+          Moltiplico per \(-qE\) per ottenere i matrice elementi di \(V\):
+          \[
+            \langle n+1|V|n\rangle=-qE\sqrt{\frac{\hbar}{2m\omega}}\sqrt{n+1},
+          \]
+          \[
+            \langle n-1|V|n\rangle=-qE\sqrt{\frac{\hbar}{2m\omega}}\sqrt{n}.
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 3 — 2° ordine: somma “banale” su \(n\pm1\)</div>
+        <p>
+          Rimangono solo due termini:
+          \[
+            \Delta E_n^{(2)}=
+            \frac{|\langle n-1|V|n\rangle|^2}{E_n^{(0)}-E_{n-1}^{(0)}}
+            +
+            \frac{|\langle n+1|V|n\rangle|^2}{E_n^{(0)}-E_{n+1}^{(0)}}.
+          \]
+          Calcolo i denominatori:
+          \[
+            E_n^{(0)}=\hbar\omega\left(n+\frac12\right).
+          \]
+          Quindi:
+          \[
+            E_n^{(0)}-E_{n-1}^{(0)}=\hbar\omega\left(n+\frac12-(n-\frac12)\right)=\hbar\omega,
+          \]
+          \[
+            E_n^{(0)}-E_{n+1}^{(0)}=\hbar\omega\left(n+\frac12-(n+\frac32)\right)=-\hbar\omega.
+          \]
+          Ora i moduli quadri:
+          \[
+            |\langle n-1|V|n\rangle|^2 = (qE)^2\frac{\hbar}{2m\omega}\,n,
+          \]
+          \[
+            |\langle n+1|V|n\rangle|^2 = (qE)^2\frac{\hbar}{2m\omega}\,(n+1).
+          \]
+          Sostituisco:
+          \[
+            \Delta E_n^{(2)}
+            =\frac{(qE)^2\frac{\hbar}{2m\omega}n}{\hbar\omega}
+             +
+             \frac{(qE)^2\frac{\hbar}{2m\omega}(n+1)}{-\hbar\omega}.
+          \]
+          Semplifico (passo per passo):
+          <br/>
+          - \(\hbar\) si semplifica sopra/sotto in entrambi i termini.  
+          - Resta un fattore comune \((qE)^2/(2m\omega^2)\).
+          <br/><br/>
+          Quindi:
+          \[
+            \Delta E_n^{(2)}=\frac{(qE)^2}{2m\omega^2}\Bigl(n-(n+1)\Bigr)
+            =\frac{(qE)^2}{2m\omega^2}(-1)
+            =-\frac{q^2E^2}{2m\omega^2}.
+          \]
+        </p>
+      </div>
+
+      <div class="result">
+        <div class="title">Risultato perturbativo</div>
+        <p>
+          \[
+            \Delta E_n^{(1)}=0,
+            \qquad
+            \Delta E_n^{(2)}=-\frac{q^2E^2}{2m\omega^2}\quad(\text{indipendente da }n).
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 4 — Soluzione esatta (completamento del quadrato)</div>
+        <p>
+          Parto da:
+          \[
+            H=\frac{p^2}{2m}+\frac12 m\omega^2x^2-qEx.
+          \]
+          Completo il quadrato nel termine in \(x\):
+          <br/>
+          Cerco \(x_0\) tale che:
+          \[
+            \frac12 m\omega^2x^2-qEx
+            =\frac12 m\omega^2(x-x_0)^2 - \frac12 m\omega^2x_0^2.
+          \]
+          Espando \((x-x_0)^2=x^2-2xx_0+x_0^2\):
+          \[
+            \frac12 m\omega^2(x^2-2xx_0+x_0^2)
+            =\frac12 m\omega^2x^2 - m\omega^2 x x_0 + \frac12 m\omega^2x_0^2.
+          \]
+          Voglio che il termine lineare \(-m\omega^2 x x_0\) coincida con \(-qEx\).
+          Quindi:
+          \[
+            -m\omega^2 x x_0 = -qEx \quad\Rightarrow\quad x_0=\frac{qE}{m\omega^2}.
+          \]
+          Allora:
+          \[
+            H=\frac{p^2}{2m}+\frac12 m\omega^2(x-x_0)^2 - \frac12 m\omega^2x_0^2.
+          \]
+          Sostituisco \(x_0\):
+          \[
+            \frac12 m\omega^2x_0^2=\frac12 m\omega^2\left(\frac{qE}{m\omega^2}\right)^2
+            =\frac12 \frac{q^2E^2}{m\omega^2}.
+          \]
+          Quindi il termine costante è:
+          \[
+            -\frac12 \frac{q^2E^2}{m\omega^2}=-\frac{q^2E^2}{2m\omega^2}.
+          \]
+        </p>
+      </div>
+
+      <div class="result">
+        <div class="title">Energie esatte</div>
+        <p>
+          Il termine \(\frac12 m\omega^2(x-x_0)^2\) è ancora un oscillatore armonico (solo traslato),
+          quindi:
+          \[
+            E_n^{\text{(esatto)}}=\hbar\omega\left(n+\frac12\right)-\frac{q^2E^2}{2m\omega^2}.
+          \]
+          <b>Check:</b> coincide con \(1^\circ\) ordine nullo e \(2^\circ\) ordine costante trovato sopra.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ===================================================== -->
+    <section id="ex4" class="card">
+      <h2>Esercizio 4 — Buca infinita \(0\le x\le L\) con perturbazione \(H_p=\varepsilon E_1\,\frac{x}{L}\)</h2>
+
+      <details open>
+        <summary>Testo (dal foglio)</summary>
+        <div class="block">
+          <p>
+            Una particella di massa \(m\) si trova in una buca di potenziale unidimensionale infinita con pareti in
+            \(x=0\) e \(x=L\).
+            Calcolare, al primo ordine perturbativo, le correzioni all’energia del livello fondamentale e del primo livello eccitato prodotte dalla perturbazione:
+          </p>
+          \[
+            H_p=\varepsilon E_1\,\frac{x}{L},
+          \]
+          <p>
+            ove \(E_1\) è l’energia dello stato fondamentale non perturbato.
+          </p>
+        </div>
+      </details>
+
+      <div class="step">
+        <div class="title">Step 1 — Stato ed energia non perturbati nella buca infinita</div>
+        <p>
+          Per la buca infinita \(0\le x\le L\), gli autostati sono:
+          \[
+            \psi_n(x)=\sqrt{\frac{2}{L}}\sin\left(\frac{n\pi x}{L}\right),\qquad n=1,2,3,\dots
+          \]
+          e le energie:
+          \[
+            E_n^{(0)}=\frac{n^2\pi^2\hbar^2}{2mL^2}.
+          \]
+          In particolare:
+          \[
+            E_1^{(0)}=\frac{\pi^2\hbar^2}{2mL^2}\equiv E_1.
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 2 — 1° ordine: \(\Delta E_n^{(1)}=\langle n|H_p|n\rangle\)</div>
+        <p>
+          \[
+            \Delta E_n^{(1)}=\left\langle n\left|\varepsilon E_1\frac{x}{L}\right|n\right\rangle
+            =\varepsilon E_1\frac{1}{L}\,\langle x\rangle_n.
+          \]
+          Quindi dobbiamo calcolare \(\langle x\rangle_n\).
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 3 — Calcolo “banale” di \(\langle x\rangle_n\)</div>
+        <p>
+          Per definizione:
+          \[
+            \langle x\rangle_n=\int_0^L x\,|\psi_n(x)|^2\,dx
+            =\int_0^L x\left(\frac{2}{L}\sin^2\left(\frac{n\pi x}{L}\right)\right)\,dx.
+          \]
+          Porto fuori la costante \(\frac{2}{L}\):
+          \[
+            \langle x\rangle_n=\frac{2}{L}\int_0^L x\sin^2\left(\frac{n\pi x}{L}\right)\,dx.
+          \]
+          Uso identità:
+          \[
+            \sin^2(\theta)=\frac{1-\cos(2\theta)}{2}.
+          \]
+          Quindi:
+          \[
+            \sin^2\left(\frac{n\pi x}{L}\right)=\frac{1-\cos\left(\frac{2n\pi x}{L}\right)}{2}.
+          \]
+          Sostituisco:
+          \[
+            \langle x\rangle_n=\frac{2}{L}\int_0^L x\cdot \frac{1-\cos\left(\frac{2n\pi x}{L}\right)}{2}\,dx
+            =\frac{1}{L}\int_0^L x\left(1-\cos\left(\frac{2n\pi x}{L}\right)\right)\,dx.
+          \]
+          Separo gli integrali:
+          \[
+            \langle x\rangle_n=\frac{1}{L}\left(\int_0^L x\,dx - \int_0^L x\cos\left(\frac{2n\pi x}{L}\right)\,dx\right).
+          \]
+          Il primo è immediato:
+          \[
+            \int_0^L x\,dx=\left[\frac{x^2}{2}\right]_0^L=\frac{L^2}{2}.
+          \]
+          Il secondo integrale (per completezza) vale 0 perché la primitiva porta a termini
+          con \(\sin(2n\pi)=0\) e differenze di \(\cos\) che si cancellano tra 0 e \(L\).
+          Quindi:
+          \[
+            \langle x\rangle_n=\frac{1}{L}\cdot \frac{L^2}{2}=\frac{L}{2}.
+          \]
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="title">Step 4 — Correzioni per \(n=1\) e \(n=2\)</div>
+        <p>
+          Siccome \(\langle x\rangle_n=L/2\) per ogni \(n\), allora:
+          \[
+            \Delta E_n^{(1)}=\varepsilon E_1\frac{1}{L}\cdot \frac{L}{2}
+            =\varepsilon E_1\cdot \frac12
+            =\frac{\varepsilon E_1}{2}.
+          \]
+          Quindi in particolare:
+          \[
+            \Delta E_{1}^{(1)}=\frac{\varepsilon E_1}{2},
+            \qquad
+            \Delta E_{2}^{(1)}=\frac{\varepsilon E_1}{2}.
+          \]
+        </p>
+      </div>
+
+      <div class="result">
+        <div class="title">Risultato finale</div>
+        <p>
+          Correzioni al primo ordine:
+          \[
+            \boxed{\Delta E_{1}^{(1)}=\Delta E_{2}^{(1)}=\frac{\varepsilon E_1}{2}.}
+          \]
+          Se vuoi anche le energie corrette:
+          \[
+            E_1 \approx E_1^{(0)}+\frac{\varepsilon E_1}{2}=E_1\left(1+\frac{\varepsilon}{2}\right),
+          \]
+          \[
+            E_2 \approx 4E_1 + \frac{\varepsilon E_1}{2}.
+          \]
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Set 11 (soluzioni commentate).<br/>
+  </footer>
 </body>
 </html>

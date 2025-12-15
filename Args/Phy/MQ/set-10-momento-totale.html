@@ -1,41 +1,1080 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set 10 momento totale</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set 10: Momento angolare totale, spin combinati</title>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.085);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+      --muted2: rgba(255,255,255,0.60);
+      --line: rgba(255,255,255,0.14);
+      --accent: #7dd3fc;   /* azzurro */
+      --accent2:#a78bfa;   /* viola */
+      --ok: #34d399;       /* verde */
+      --warn: #fbbf24;     /* giallo */
+      --danger: #fb7185;   /* rosso */
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background:
+        radial-gradient(1000px 500px at 10% 5%, rgba(125,211,252,0.18), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, rgba(167,139,250,0.18), transparent 55%),
+        radial-gradient(900px 600px at 50% 100%, rgba(52,211,153,0.10), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 22px;
+    }
+
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .container{
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+
+    .hero{
+      background: linear-gradient(135deg, rgba(125,211,252,0.14), rgba(167,139,250,0.10));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 18px 18px 14px;
+      margin-bottom: 16px;
+    }
+    .hero h1{
+      margin: 0 0 6px;
+      font-size: 1.55rem;
+      letter-spacing: 0.2px;
+    }
+    .hero .meta{
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .pillrow{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(125,211,252,0.14);
+    }
+
+    .toc{
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin: 14px 0 18px;
+    }
+    .toc h2{
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+    .toc ul{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 14px 0;
+    }
+    .card h2{
+      margin: 0 0 8px;
+      font-size: 1.22rem;
+      color: var(--accent);
+    }
+    .sub{
+      color: var(--muted);
+      margin-top: -2px;
+      font-size: 0.98rem;
+    }
+
+    details.statement{
+      margin-top: 12px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 12px;
+      background: rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+    details.statement > summary{
+      cursor: pointer;
+      padding: 10px 12px;
+      color: var(--text);
+      font-weight: 700;
+      list-style: none;
+    }
+    details.statement > summary::-webkit-details-marker{ display:none; }
+    details.statement .inside{
+      padding: 10px 12px 12px;
+      border-top: 1px dashed rgba(255,255,255,0.18);
+      color: var(--muted);
+    }
+
+    .step{
+      margin: 10px 0 0;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .step h3{
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .result{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(52,211,153,0.35);
+      background: rgba(52,211,153,0.10);
+    }
+    .result b{ color: rgba(255,255,255,0.95); }
+    .warnbox{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(251,191,36,0.38);
+      background: rgba(251,191,36,0.10);
+      color: var(--muted);
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 0.92em;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.88);
+    }
+
+    .hr{
+      height: 1px;
+      background: var(--line);
+      margin: 14px 0;
+    }
+
+    footer{
+      margin-top: 22px;
+      text-align: center;
+      color: var(--muted2);
+      font-size: 0.92rem;
+    }
+
+    /* MathJax spacing inside cards */
+    mjx-container{ overflow-x: auto; overflow-y: hidden; padding-bottom: 2px; }
+  </style>
+
+  <!-- MathJax (LaTeX) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]'], ['$$','$$']]
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
+
 <body>
-    <h1>Set 10 momento totale</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 10 momento totale. Grazie per la pazienza!</p>
+  <div class="container">
+
+    <header class="hero">
+      <h1>Set 10 — Momento angolare totale, commutatori, spin combinati</h1>
+      <p class="meta">
+        Soluzioni <b>super-dettagliate</b> (con passaggi “banali” esplicitati) per gli esercizi del Set 10.
+        Notazione standard: \( \mathbf{J}=\mathbf{L}+\mathbf{S}\), \(S=\frac{\hbar}{2}\boldsymbol{\sigma}\).
+      </p>
+      <div class="pillrow">
+        <span class="pill"><span class="dot"></span> Teoria dei momenti angolari</span>
+        <span class="pill"><span class="dot" style="background:var(--accent2)"></span> Clebsch–Gordan (derivati con ladder)</span>
+        <span class="pill"><span class="dot" style="background:var(--ok)"></span> Probabilità di misura</span>
+      </div>
+    </header>
+
+    <nav class="toc">
+      <h2>Indice rapido</h2>
+      <ul>
+        <li><a href="#ex1">Esercizio 1 — Spin \(1/2\) in campo magnetico: evoluzione e flip \(|+\rangle\to|-\rangle\)</a></li>
+        <li><a href="#ex2">Esercizio 2 — Commutatori di \(\mathbf{J}=\mathbf{L}+\mathbf{S}\)</a></li>
+        <li><a href="#ex3">Esercizio 3 — Accoppiamento \(l=1\) con \(s=1/2\): stati \(|j,m_j\rangle\)</a></li>
+        <li><a href="#ex4">Esercizio 4 — Stato dato: misure di \(J^2\), \(J_z\), e misura simultanea \(S_z,L_z\)</a></li>
+      </ul>
+    </nav>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex1">
+      <h2>Esercizio 1 — Spin \(1/2\) in campo magnetico \(\mathbf{B}\)</h2>
+      <p class="sub">Hamiltoniana, evoluzione temporale, probabilità di transizione \(|+\rangle\to|-\rangle\).</p>
+
+      <details class="statement" open>
+        <summary>Testo (trascritto)</summary>
+        <div class="inside">
+          <p>
+            <b>1.</b> Si consideri una particella di spin \(1/2\) a riposo con potenziale \(V(r)=0\) in presenza di un campo magnetico \(\mathbf{B}\).
+          </p>
+          <p>
+            (a) si scriva l’Hamiltoniana del sistema.
+          </p>
+          <p>
+            (b) All’istante iniziale \(t=0\), il sistema si trova nello stato \(|+\rangle\), autostato di \(S_z\) con autovalore \(+\hbar/2\):
+            <br>
+            i. si dia l’espressione dello stato al tempo \(t\) generico;
+            <br>
+            ii. Quale sarà la probabilità che dopo un tempo \(\tau\) il sistema si trovi nello stato \(|-\rangle\)?
+            <br>
+            iii. Per quali valori di \(\tau\) tale probabilità sarà massima?
+            <br>
+            iv. Per quale direzione del campo magnetico avremo la certezza che la particella si trovi nello stato \(|-\rangle\)?
+          </p>
+        </div>
+      </details>
+
+      <div class="step">
+        <h3>(a) Hamiltoniana (solo interazione di Zeeman)</h3>
+        <p>
+          La particella è <b>a riposo</b> e \(V(r)=0\), quindi l’unico contributo rilevante è l’interazione
+          tra il momento magnetico \(\boldsymbol{\mu}\) e il campo \(\mathbf{B}\):
+        </p>
+        \[
+          H = - \boldsymbol{\mu}\cdot \mathbf{B}.
+        \]
+        <p>
+          Per uno spin \(1/2\) si usa \(\boldsymbol{\mu}=\gamma \mathbf{S}\) (dove \(\gamma\) è il rapporto giromagnetico; il segno dipende dalla particella).
+          Allora:
+        </p>
+        \[
+          H = -\gamma\, \mathbf{S}\cdot\mathbf{B}.
+        \]
+        <p>
+          Siccome \(\mathbf{S}=\frac{\hbar}{2}\boldsymbol{\sigma}\) (Pauli), otteniamo anche la forma matriciale:
+        </p>
+        \[
+          H = -\gamma\,\frac{\hbar}{2}\,(\boldsymbol{\sigma}\cdot\mathbf{B}).
+        \]
+        <div class="warnbox">
+          <b>Nota (importante ma “non drammatica”):</b> il <u>segno</u> di \(\gamma\) cambia solo la fase/verso della precessione,
+          mentre le <b>probabilità</b> dipendono da \(|\gamma|\). Per le probabilità useremo la frequenza
+          \(\omega \equiv |\gamma|B\) con \(B=|\mathbf{B}|\).
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>(b-i) Evoluzione temporale: scegliamo un asse comodo</h3>
+        <p>
+          Per calcolare facilmente, scegliamo il campo magnetico nel piano \(xz\) (possiamo sempre ruotare l’asse \(x\) attorno a \(z\)):
+        </p>
+        \[
+          \mathbf{B}=B(\sin\theta,\,0,\,\cos\theta),
+          \qquad \theta=\text{angolo tra }\mathbf{B}\text{ e l’asse }z.
+        \]
+        <p>
+          Allora:
+        </p>
+        \[
+          H = -\gamma \frac{\hbar}{2}\,B(\sigma_x\sin\theta+\sigma_z\cos\theta)
+          = -\frac{\hbar}{2}\,\omega_\gamma (\sigma_x\sin\theta+\sigma_z\cos\theta),
+        \]
+        dove \(\omega_\gamma \equiv \gamma B\) (può essere anche negativa; le probabilità useranno \(\omega = |\omega_\gamma|\)).
+        <p>
+          L’operatore di evoluzione è:
+        </p>
+        \[
+          U(t)=e^{-\frac{i}{\hbar}Ht}.
+        \]
+        <p>
+          Per spin \(1/2\) usiamo l’identità (rotazione su Pauli):
+        </p>
+        \[
+          e^{i\alpha\,(\hat{\mathbf{n}}\cdot\boldsymbol{\sigma})}
+          =\cos\alpha\,I+i\sin\alpha\,(\hat{\mathbf{n}}\cdot\boldsymbol{\sigma}).
+        \]
+        <p>
+          Qui \(\hat{\mathbf{n}}=(\sin\theta,0,\cos\theta)\) e \(\alpha=\frac{\omega_\gamma t}{2}\).
+          Quindi:
+        </p>
+        \[
+          U(t)=\cos\left(\frac{\omega_\gamma t}{2}\right)I
+          + i\sin\left(\frac{\omega_\gamma t}{2}\right)\,(\sigma_x\sin\theta+\sigma_z\cos\theta).
+        \]
+        <p>
+          Stato iniziale: \(|\psi(0)\rangle = |+\rangle\) (autostato di \(S_z\) con autovalore \(+\hbar/2\)).
+          In base \(\{|+\rangle,|-\rangle\}\) vale:
+          \(|+\rangle=\begin{pmatrix}1\\0\end{pmatrix}\), \(|-\rangle=\begin{pmatrix}0\\1\end{pmatrix}\).
+        </p>
+        <p>
+          Calcoliamo \(|\psi(t)\rangle=U(t)|+\rangle\). Poniamo
+          \(\alpha=\frac{\omega_\gamma t}{2}\) per scrivere meno.
+        </p>
+        <p>
+          Servono le azioni:
+          \(\sigma_x|+\rangle=|-\rangle\), \(\sigma_z|+\rangle=|+\rangle\).
+        </p>
+        \[
+          |\psi(t)\rangle
+          =\cos\alpha\,|+\rangle
+          + i\sin\alpha\,(\sin\theta\,\sigma_x|+\rangle+\cos\theta\,\sigma_z|+\rangle)
+          =\cos\alpha\,|+\rangle + i\sin\alpha(\sin\theta\,|-\rangle+\cos\theta\,|+\rangle).
+        \]
+        <div class="result">
+          <b>Risultato (stato a tempo generico):</b>
+          \[
+            |\psi(t)\rangle
+            =\underbrace{\Bigl(\cos\alpha+i\cos\theta\,\sin\alpha\Bigr)}_{\text{ampiezza su }|+\rangle}\,|+\rangle
+            \;+\;
+            \underbrace{\Bigl(i\sin\theta\,\sin\alpha\Bigr)}_{\text{ampiezza su }|-\rangle}\,|-\rangle,
+            \qquad \alpha=\frac{\omega_\gamma t}{2}.
+          \]
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>(b-ii) Probabilità di trovare \(|-\rangle\) dopo tempo \(\tau\)</h3>
+        <p>
+          L’ampiezza su \(|-\rangle\) è:
+        </p>
+        \[
+          c_-(t)=i\sin\theta\,\sin\left(\frac{\omega_\gamma t}{2}\right).
+        \]
+        <p>
+          Quindi la probabilità è il modulo quadro:
+        </p>
+        \[
+          P_{+\to -}(t)=|c_-(t)|^2
+          =|i|^2\;\sin^2\theta\;\sin^2\left(\frac{\omega_\gamma t}{2}\right).
+        \]
+        <p>
+          Passaggio “banale” ma esplicito:
+          \(|i|^2 = i\cdot(-i)=1\).
+          Quindi:
+        </p>
+        <div class="result">
+          <b>Probabilità di flip:</b>
+          \[
+            P_{+\to -}(\tau)=\sin^2\theta\;\sin^2\left(\frac{\omega_\gamma \tau}{2}\right)
+            =\sin^2\theta\;\sin^2\left(\frac{\omega \tau}{2}\right),
+            \quad \omega=|\omega_\gamma|=|\gamma|B.
+          \]
+        </div>
+        <div class="warnbox">
+          Se \(\theta=0\) (campo lungo \(z\)), allora \(\sin\theta=0\) e \(P_{+\to-}(t)=0\) per ogni \(t\):
+          <u>nessun flip</u>, solo fase.
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>(b-iii) Quando la probabilità è massima?</h3>
+        <p>
+          Il fattore \(\sin^2\theta\) è fissato dal campo. L’altro fattore \(\sin^2(\omega\tau/2)\) è massimo quando vale 1:
+        </p>
+        \[
+          \sin^2\left(\frac{\omega\tau}{2}\right)=1
+          \quad\Longleftrightarrow\quad
+          \frac{\omega\tau}{2}=\frac{\pi}{2}+k\pi,\; k\in\mathbb{Z}.
+        \]
+        <p>
+          Moltiplico entrambi i membri per 2 (passaggio banale):
+        </p>
+        \[
+          \omega\tau = \pi + 2k\pi = (2k+1)\pi.
+        \]
+        <div class="result">
+          <b>Tempi di massimo:</b>
+          \[
+            \tau_k = \frac{(2k+1)\pi}{\omega},\qquad k=0,1,2,\dots
+          \]
+          <b>Valore massimo:</b> \(P_{\max}=\sin^2\theta\).
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>(b-iv) Quando abbiamo certezza di ottenere \(|-\rangle\)?</h3>
+        <p>
+          “Certezza” significa \(P_{+\to-}(\tau)=1\) per qualche \(\tau\).
+          Dalla formula:
+        </p>
+        \[
+          P_{+\to-}(\tau)=\sin^2\theta\;\sin^2\left(\frac{\omega\tau}{2}\right)\le \sin^2\theta.
+        \]
+        <p>
+          Quindi per arrivare a 1 serve necessariamente \(\sin^2\theta=1\), cioè:
+        </p>
+        \[
+          \sin\theta=1 \quad\Longleftrightarrow\quad \theta=\frac{\pi}{2}.
+        \]
+        <div class="result">
+          <b>Direzione richiesta:</b> \(\mathbf{B}\perp \hat{\mathbf{z}}\) (campo perpendicolare a \(z\), ad es. lungo \(x\)).<br>
+          In tal caso, scegliendo \(\tau=\frac{(2k+1)\pi}{\omega}\) si ha \(P_{+\to-}(\tau)=1\).
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex2">
+      <h2>Esercizio 2 — Commutatori per \(\mathbf{J}=\mathbf{L}+\mathbf{S}\)</h2>
+      <p class="sub">Dimostrare le relazioni di commutazione e le commutazioni con \(L^2\), \(S^2\).</p>
+
+      <details class="statement" open>
+        <summary>Testo (trascritto)</summary>
+        <div class="inside">
+          <p>
+            <b>2.</b> Sia \(\mathbf{J}=\mathbf{L}+\mathbf{S}\) il momento angolare totale, con \(\mathbf{L}\) momento angolare orbitale e \(\mathbf{S}\) momento angolare di spin.
+            Si dimostri che
+          </p>
+          <p>
+            (a) \([J_i,J_j]=i\hbar\varepsilon_{ijk}J_k\)
+          </p>
+          <p>
+            (b) \([J_i,L^2]=0=[J_i,S^2]=[J^2,L^2]=[J^2,S^2]\).
+          </p>
+        </div>
+      </details>
+
+      <div class="step">
+        <h3>Ipotesi di partenza (standard)</h3>
+        <p>
+          Usiamo le relazioni note:
+        </p>
+        \[
+          [L_i,L_j]=i\hbar\varepsilon_{ijk}L_k,\qquad
+          [S_i,S_j]=i\hbar\varepsilon_{ijk}S_k,\qquad
+          [L_i,S_j]=0.
+        \]
+        <p class="warnbox">
+          L’ultima è cruciale: \(\mathbf{L}\) agisce sulle coordinate, \(\mathbf{S}\) sullo spazio di spin ⇒ operatori “indipendenti”.
+        </p>
+      </div>
+
+      <div class="step">
+        <h3>(a) Dimostrare \([J_i,J_j]=i\hbar\varepsilon_{ijk}J_k\)</h3>
+        <p>
+          Parto dalla definizione \(J_i=L_i+S_i\). Allora:
+        </p>
+        \[
+          [J_i,J_j]=[L_i+S_i,\;L_j+S_j].
+        \]
+        <p>
+          Ora espando usando bilinearità (passaggio “banale” scritto tutto):
+        </p>
+        \[
+          [L_i+S_i,\;L_j+S_j]=[L_i,L_j]+[L_i,S_j]+[S_i,L_j]+[S_i,S_j].
+        \]
+        <p>
+          Uso \([L_i,S_j]=0\) e \([S_i,L_j]=0\). Rimane:
+        </p>
+        \[
+          [J_i,J_j]=[L_i,L_j]+[S_i,S_j]
+          =i\hbar\varepsilon_{ijk}L_k + i\hbar\varepsilon_{ijk}S_k
+          = i\hbar\varepsilon_{ijk}(L_k+S_k).
+        \]
+        <div class="result">
+          <b>Conclusione:</b>
+          \[
+            [J_i,J_j]=i\hbar\varepsilon_{ijk}J_k.
+          \]
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>(b) Commutazioni con \(L^2\), \(S^2\) e tra \(J^2\) e \(L^2,S^2\)</h3>
+        <p>
+          Ricordiamo che per un momento angolare vale:
+        </p>
+        \[
+          [L_i,L^2]=0,\qquad [S_i,S^2]=0.
+        \]
+        <p>
+          (1) Calcoliamo \([J_i,L^2]\):
+        </p>
+        \[
+          [J_i,L^2]=[L_i+S_i,L^2]=[L_i,L^2]+[S_i,L^2].
+        \]
+        <p>
+          Il primo pezzo è 0. Il secondo è 0 perché \(S_i\) commuta con tutti i \(L_j\), dunque commuta anche con \(L^2=L_x^2+L_y^2+L_z^2\).
+          Quindi:
+        </p>
+        <div class="result">
+          \[
+            [J_i,L^2]=0.
+          \]
+        </div>
+
+        <div class="hr"></div>
+
+        <p>
+          (2) Analogamente:
+        </p>
+        \[
+          [J_i,S^2]=[L_i+S_i,S^2]=[L_i,S^2]+[S_i,S^2]=0+0=0.
+        \]
+        <div class="result">
+          \[
+            [J_i,S^2]=0.
+          \]
+        </div>
+
+        <div class="hr"></div>
+
+        <p>
+          (3) Ora \([J^2,L^2]\). Espando:
+        </p>
+        \[
+          J^2=(\mathbf{L}+\mathbf{S})^2=L^2+S^2+2\,\mathbf{L}\cdot\mathbf{S}.
+        \]
+        <p>
+          Quindi:
+        </p>
+        \[
+          [J^2,L^2]=[L^2+S^2+2\mathbf{L}\cdot\mathbf{S},\;L^2]
+          =[L^2,L^2]+[S^2,L^2]+2[\mathbf{L}\cdot\mathbf{S},L^2].
+        \]
+        <p>
+          I primi due sono 0. Resta \(2[\mathbf{L}\cdot\mathbf{S},L^2]\).
+          Ora:
+        </p>
+        \[
+          \mathbf{L}\cdot\mathbf{S}=\sum_{k=x,y,z} L_k S_k.
+        \]
+        <p>
+          Uso \([AB,C]=A[B,C]+[A,C]B\) su \(L_kS_k\):
+        </p>
+        \[
+          [L_kS_k,L^2]=L_k[S_k,L^2]+[L_k,L^2]S_k.
+        \]
+        <p>
+          Ma \([S_k,L^2]=0\) e \([L_k,L^2]=0\). Quindi ogni termine è 0 ⇒ la somma è 0.
+        </p>
+        <div class="result">
+          \[
+            [J^2,L^2]=0.
+          \]
+        </div>
+
+        <div class="hr"></div>
+
+        <p>
+          (4) Stesso identico ragionamento per \([J^2,S^2]\) (scambiando \(L\leftrightarrow S\)):
+        </p>
+        <div class="result">
+          \[
+            [J^2,S^2]=0.
+          \]
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex3">
+      <h2>Esercizio 3 — Accoppiamento \(l=1\) con \(s=1/2\)</h2>
+      <p class="sub">Trovare autovalori e autostati \(|j,m_j\rangle\) in funzione della base non accoppiata \(|m_l, m_s\rangle\).</p>
+
+      <details class="statement" open>
+        <summary>Testo (trascritto)</summary>
+        <div class="inside">
+          <p>
+            <b>3.</b> Una particella di spin \(1/2\) si trova in uno stato con momento angolare orbitale \(l=1\).
+            Determinare autovalori e autostati \(|j,m_j\rangle\), di \(J^2\) e \(J_z\) (\(\mathbf{J}=\mathbf{L}+\mathbf{S}\)),
+            in funzione degli autostati \(|m_l,\pm 1/2\rangle\), di \(L^2\), \(L_z\), \(S^2\) e \(S_z\).
+          </p>
+        </div>
+      </details>
+
+      <div class="step">
+        <h3>Step 1 — Quali \(j\) sono possibili? (regola “triangolare”)</h3>
+        <p>
+          Con \(l=1\) e \(s=1/2\) i valori possibili di \(j\) sono:
+        </p>
+        \[
+          j = l+s = \frac{3}{2}\quad \text{oppure}\quad j = l-s = \frac{1}{2}.
+        \]
+        <p>
+          Autovalori di \(J^2\):
+        </p>
+        \[
+          J^2|j,m\rangle=\hbar^2 j(j+1)|j,m\rangle.
+        \]
+        <div class="result">
+          <b>Quindi:</b>
+          \[
+            j=\frac{3}{2}\Rightarrow \hbar^2\frac{3}{2}\frac{5}{2}=\hbar^2\frac{15}{4},
+            \qquad
+            j=\frac{1}{2}\Rightarrow \hbar^2\frac{1}{2}\frac{3}{2}=\hbar^2\frac{3}{4}.
+          \]
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>Step 2 — Costruiamo gli stati \(j=3/2\) con il ladder \(J_-\)</h3>
+        <p>
+          La base non accoppiata è \(|l=1,m_l\rangle\otimes|s=1/2,m_s\rangle\), con:
+          \(m_l\in\{1,0,-1\}\), \(m_s\in\{+1/2,-1/2\}\).
+          Inoltre \(m_j=m_l+m_s\).
+        </p>
+        <p>
+          Lo stato con \(j=3/2\) e \(m=3/2\) è unico:
+        </p>
+        \[
+          \left|\frac{3}{2},\frac{3}{2}\right\rangle = |1,1\rangle\,\left|\frac{1}{2},\frac{1}{2}\right\rangle \equiv |1,1\rangle|\uparrow\rangle.
+        \]
+        <p>
+          Applichiamo \(J_- = L_- + S_-\). Usiamo le formule:
+        </p>
+        \[
+          L_-|l,m\rangle=\hbar\sqrt{l(l+1)-m(m-1)}\,|l,m-1\rangle,
+        \]
+        \[
+          S_-|s,m\rangle=\hbar\sqrt{s(s+1)-m(m-1)}\,|s,m-1\rangle.
+        \]
+        <p>
+          Calcolo “banale” dei coefficienti:
+        </p>
+        <ul>
+          <li>
+            \(L_-|1,1\rangle\):
+            \(l(l+1)=1\cdot2=2\);
+            \(m(m-1)=1\cdot 0=0\);
+            quindi \(\sqrt{2-0}=\sqrt2\).
+            Dunque \(L_-|1,1\rangle=\hbar\sqrt2\,|1,0\rangle\).
+          </li>
+          <li>
+            \(S_-|\uparrow\rangle = \hbar|\downarrow\rangle\) (perché \(s=1/2\) e il coefficiente viene \(\sqrt{1}=1\)).
+          </li>
+        </ul>
+        <p>
+          Ora:
+        </p>
+        \[
+          J_-\left|\frac{3}{2},\frac{3}{2}\right\rangle
+          =(L_-+S_-)\,|1,1\rangle|\uparrow\rangle
+          =\hbar\sqrt2\,|1,0\rangle|\uparrow\rangle + \hbar\,|1,1\rangle|\downarrow\rangle.
+        \]
+        <p>
+          Ma anche, per definizione di ladder su \(|j,m\rangle\):
+        </p>
+        \[
+          J_-|j,m\rangle=\hbar\sqrt{j(j+1)-m(m-1)}|j,m-1\rangle.
+        \]
+        <p>
+          Per \(j=3/2\), \(m=3/2\):
+          \(j(j+1)=\frac{15}{4}\), \(m(m-1)=\frac{3}{2}\cdot\frac{1}{2}=\frac{3}{4}\).
+          Quindi \(\frac{15}{4}-\frac{3}{4}=\frac{12}{4}=3\), e \(\sqrt3\).
+        </p>
+        \[
+          J_-\left|\frac{3}{2},\frac{3}{2}\right\rangle=\hbar\sqrt3\left|\frac{3}{2},\frac{1}{2}\right\rangle.
+        \]
+        <p>
+          Uguagliando e dividendo per \(\hbar\sqrt3\):
+        </p>
+        <div class="result">
+          \[
+            \left|\frac{3}{2},\frac{1}{2}\right\rangle
+            =\sqrt{\frac{2}{3}}\,|1,0\rangle|\uparrow\rangle
+            +\sqrt{\frac{1}{3}}\,|1,1\rangle|\downarrow\rangle.
+          \]
+        </div>
+
+        <p>
+          Ripetiamo (una volta ancora) per ottenere \(m=-1/2\).
+          Si sa che:
+        </p>
+        <p>
+          Per \(j=3/2\), \(m=1/2\):
+          \(j(j+1)=\frac{15}{4}\),
+          \(m(m-1)=\frac{1}{2}\cdot\left(-\frac{1}{2}\right)=-\frac{1}{4}\),
+          differenza \(= \frac{15}{4}-\left(-\frac{1}{4}\right)=\frac{16}{4}=4\),
+          radice \(=2\).
+        </p>
+        \[
+          J_-\left|\frac{3}{2},\frac{1}{2}\right\rangle=\hbar\cdot 2\left|\frac{3}{2},-\frac{1}{2}\right\rangle.
+        \]
+        <p>
+          Calcolando (come combinazione) si ottiene:
+        </p>
+        <div class="result">
+          \[
+            \left|\frac{3}{2},-\frac{1}{2}\right\rangle
+            =\sqrt{\frac{2}{3}}\,|1,0\rangle|\downarrow\rangle
+            +\sqrt{\frac{1}{3}}\,|1,-1\rangle|\uparrow\rangle.
+          \]
+        </div>
+
+        <p>
+          Infine lo stato \(m=-3/2\) è unico:
+        </p>
+        <div class="result">
+          \[
+            \left|\frac{3}{2},-\frac{3}{2}\right\rangle
+            =|1,-1\rangle|\downarrow\rangle.
+          \]
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>Step 3 — Stati \(j=1/2\): combinazioni ortogonali (stesso \(m\))</h3>
+        <p>
+          Per \(m=1/2\) la base non accoppiata ha due stati:
+          \(|1,0\rangle|\uparrow\rangle\) e \(|1,1\rangle|\downarrow\rangle\).
+          Uno è già usato per \(j=3/2\).
+          L’altro (\(j=1/2\)) deve essere <b>ortogonale</b> e normalizzato.
+        </p>
+        <p>
+          Abbiamo:
+        </p>
+        \[
+          \left|\frac{3}{2},\frac{1}{2}\right\rangle
+          =\sqrt{\frac{2}{3}}\,|1,0\rangle|\uparrow\rangle
+          +\sqrt{\frac{1}{3}}\,|1,1\rangle|\downarrow\rangle.
+        \]
+        <p>
+          La combinazione ortogonale (con i conti “banali” dei coefficienti che sommano a 1):
+        </p>
+        <div class="result">
+          \[
+            \left|\frac{1}{2},\frac{1}{2}\right\rangle
+            =\sqrt{\frac{1}{3}}\,|1,0\rangle|\uparrow\rangle
+            -\sqrt{\frac{2}{3}}\,|1,1\rangle|\downarrow\rangle.
+          \]
+        </div>
+
+        <p>
+          Per \(m=-1/2\) la base è \(|1,0\rangle|\downarrow\rangle\) e \(|1,-1\rangle|\uparrow\rangle\).
+          Analogamente:
+        </p>
+        <div class="result">
+          \[
+            \left|\frac{1}{2},-\frac{1}{2}\right\rangle
+            =\sqrt{\frac{2}{3}}\,|1,-1\rangle|\uparrow\rangle
+            -\sqrt{\frac{1}{3}}\,|1,0\rangle|\downarrow\rangle.
+          \]
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex4">
+      <h2>Esercizio 4 — Stato dato: misure di \(J^2\), \(J_z\), \(S_z\) e \(L_z\)</h2>
+      <p class="sub">Decomposizione in base accoppiata e calcolo probabilità.</p>
+
+      <details class="statement" open>
+        <summary>Testo (trascritto)</summary>
+        <div class="inside">
+          <p>
+            <b>4.</b> Consideriamo il seguente stato costituito dal prodotto diretto di autostati del momento angolare con autovalori
+            \(s=3/2\) e \(l=1\):
+          </p>
+          \[
+            |\psi\rangle=\sqrt{\frac{3}{5}}\left|\frac{3}{2},-\frac{3}{2};\,1,-1\right\rangle
+            +\sqrt{\frac{2}{5}}\left|\frac{3}{2},-\frac{3}{2};\,1,0\right\rangle.
+          \]
+          <p>
+            (a) Se misuriamo \(J^2\) (\(\mathbf{J}=\mathbf{L}+\mathbf{S}\)), quali valori possiamo ottenere e con quale probabilità? e se misuriamo \(J_z\)?
+          </p>
+          <p>
+            (b) Quali sono i valori possibili di una misura simultanea di \(S_z\) e \(L_z\) su questo stato e le relative probabilità?
+          </p>
+          <p>
+            Si ricordi: \(J_\pm|j,m\rangle=\hbar\sqrt{j(j+1)-m(m\pm1)}\,|j,m\pm 1\rangle\).
+          </p>
+        </div>
+      </details>
+
+      <div class="step">
+        <h3>Prima osservazione (super utile): quali \(m_j\) ci sono?</h3>
+        <p>
+          Ogni termine è un prodotto \(|s,m_s\rangle|l,m_l\rangle\).
+          Qui \(m_s=-3/2\) sempre; \(m_l=-1\) oppure \(m_l=0\).
+          Quindi:
+        </p>
+        <ul>
+          <li>Termine 1: \(m_j=m_s+m_l=-\frac{3}{2}+(-1)=-\frac{5}{2}\).</li>
+          <li>Termine 2: \(m_j=m_s+m_l=-\frac{3}{2}+0=-\frac{3}{2}\).</li>
+        </ul>
+        <div class="result">
+          <b>Quindi una misura di \(J_z\) può dare solo:</b>
+          \[
+            J_z=-\frac{5}{2}\hbar \quad(\text{prob. } \tfrac{3}{5}),
+            \qquad
+            J_z=-\frac{3}{2}\hbar \quad(\text{prob. } \tfrac{2}{5}).
+          \]
+          (Perché i coefficienti sono \(\sqrt{3/5}\) e \(\sqrt{2/5}\) ⇒ le probabilità sono i quadrati: \(3/5\) e \(2/5\).)
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>(a) Misura di \(J^2\): possibili \(j\) e decomposizione</h3>
+        <p>
+          Con \(s=3/2\) e \(l=1\) i valori possibili di \(j\) sono:
+        </p>
+        \[
+          j=|l-s|,\ |l-s|+1,\dots,l+s
+          =\left|\;1-\frac{3}{2}\right|,\dots,1+\frac{3}{2}
+          =\frac{1}{2},\frac{3}{2},\frac{5}{2}.
+        \]
+        <p>
+          Però attenzione: un componente con \(m_j=-5/2\) può esistere solo se \(j\ge 5/2\).
+          Quindi il primo termine (con \(m_j=-5/2\)) è <b>necessariamente</b> lo stato:
+        </p>
+        \[
+          \left|\frac{3}{2},-\frac{3}{2};1,-1\right\rangle
+          =\left|\frac{5}{2},-\frac{5}{2}\right\rangle.
+        \]
+        <p>
+          Il secondo termine (con \(m_j=-3/2\)) invece può appartenere a \(j=5/2\) oppure \(j=3/2\)
+          (non a \(j=1/2\), perché \(1/2\) non ha \(m=-3/2\)).
+        </p>
+
+        <div class="hr"></div>
+
+        <h3>Costruiamo \(\left|\frac{5}{2},-\frac{3}{2}\right\rangle\) con \(J_+\)</h3>
+        <p>
+          Partiamo da \(\left|\frac{5}{2},-\frac{5}{2}\right\rangle=|1,-1\rangle|3/2,-3/2\rangle\).
+          Applichiamo \(J_+=L_+ + S_+\).
+        </p>
+        <p>
+          Lato “accoppiato”:
+          per \(j=5/2,m=-5/2\):
+          \(j(j+1)=\frac{35}{4}\),
+          \(m(m+1)=\left(-\frac{5}{2}\right)\left(-\frac{3}{2}\right)=\frac{15}{4}\),
+          differenza \(\frac{20}{4}=5\), radice \(\sqrt5\).
+        </p>
+        \[
+          J_+\left|\frac{5}{2},-\frac{5}{2}\right\rangle
+          =\hbar\sqrt5\left|\frac{5}{2},-\frac{3}{2}\right\rangle.
+        \]
+        <p>
+          Lato “prodotto”:
+        </p>
+        <ul>
+          <li>
+            \(L_+|1,-1\rangle\):
+            \(l(l+1)=2\);
+            \(m(m+1)=(-1)\cdot 0=0\);
+            coefficiente \(\sqrt2\).
+            Quindi \(L_+|1,-1\rangle=\hbar\sqrt2|1,0\rangle\).
+          </li>
+          <li>
+            \(S_+|3/2,-3/2\rangle\):
+            \(s(s+1)=\frac{15}{4}\);
+            \(m(m+1)=\left(-\frac{3}{2}\right)\left(-\frac{1}{2}\right)=\frac{3}{4}\);
+            differenza \(\frac{12}{4}=3\);
+            coefficiente \(\sqrt3\).
+            Quindi \(S_+|3/2,-3/2\rangle=\hbar\sqrt3|3/2,-1/2\rangle\).
+          </li>
+        </ul>
+        <p>
+          Quindi:
+        </p>
+        \[
+          J_+|1,-1\rangle|3/2,-3/2\rangle
+          =\hbar\sqrt2|1,0\rangle|3/2,-3/2\rangle
+          +\hbar\sqrt3|1,-1\rangle|3/2,-1/2\rangle.
+        \]
+        <p>
+          Uguaglio i due risultati, divido per \(\hbar\sqrt5\):
+        </p>
+        <div class="result">
+          \[
+            \left|\frac{5}{2},-\frac{3}{2}\right\rangle
+            =
+            \sqrt{\frac{2}{5}}\,|1,0\rangle|3/2,-3/2\rangle
+            +\sqrt{\frac{3}{5}}\,|1,-1\rangle|3/2,-1/2\rangle.
+          \]
+        </div>
+
+        <div class="hr"></div>
+
+        <h3>Invertiamo: esprimere \(|1,0\rangle|3/2,-3/2\rangle\) in base \(|j,m\rangle\)</h3>
+        <p>
+          Nello spazio con \(m=-3/2\) ci sono due stati indipendenti.
+          Uno è \(|5/2,-3/2\rangle\). L’altro deve essere ortogonale: è \(|3/2,-3/2\rangle\).
+          Quindi possiamo scrivere (scelta di fase comoda):
+        </p>
+        \[
+          \left|\frac{3}{2},-\frac{3}{2}\right\rangle
+          =
+          \sqrt{\frac{3}{5}}\,|1,0\rangle|3/2,-3/2\rangle
+          -\sqrt{\frac{2}{5}}\,|1,-1\rangle|3/2,-1/2\rangle.
+        \]
+        <p>
+          Da queste due relazioni si ottiene (somma pesata che cancella il termine con \(|1,-1\rangle|3/2,-1/2\rangle\)):
+        </p>
+        <div class="result">
+          \[
+            |1,0\rangle|3/2,-3/2\rangle
+            =\sqrt{\frac{2}{5}}\left|\frac{5}{2},-\frac{3}{2}\right\rangle
+            +\sqrt{\frac{3}{5}}\left|\frac{3}{2},-\frac{3}{2}\right\rangle.
+          \]
+        </div>
+
+        <div class="hr"></div>
+
+        <h3>Decomposizione finale dello stato \(|\psi\rangle\)</h3>
+        <p>
+          Il nostro stato è:
+        </p>
+        \[
+          |\psi\rangle=
+          \sqrt{\frac{3}{5}}\,|1,-1\rangle|3/2,-3/2\rangle
+          +\sqrt{\frac{2}{5}}\,|1,0\rangle|3/2,-3/2\rangle.
+        \]
+        <p>
+          Sostituisco:
+          \(|1,-1\rangle|3/2,-3/2\rangle = |5/2,-5/2\rangle\),
+          e la formula appena trovata per \(|1,0\rangle|3/2,-3/2\rangle\).
+        </p>
+        \[
+          |\psi\rangle
+          =\sqrt{\frac{3}{5}}\left|\frac{5}{2},-\frac{5}{2}\right\rangle
+          +\sqrt{\frac{2}{5}}
+          \left(
+            \sqrt{\frac{2}{5}}\left|\frac{5}{2},-\frac{3}{2}\right\rangle
+            +\sqrt{\frac{3}{5}}\left|\frac{3}{2},-\frac{3}{2}\right\rangle
+          \right).
+        \]
+        <p>
+          Ora faccio i prodotti (passaggi banali):
+        </p>
+        <ul>
+          <li>\(\sqrt{\frac{2}{5}}\sqrt{\frac{2}{5}}=\frac{2}{5}\).</li>
+          <li>\(\sqrt{\frac{2}{5}}\sqrt{\frac{3}{5}}=\sqrt{\frac{6}{25}}=\frac{\sqrt6}{5}\).</li>
+        </ul>
+        <div class="result">
+          <b>Espansione in base accoppiata:</b>
+          \[
+            |\psi\rangle
+            =
+            \sqrt{\frac{3}{5}}\left|\frac{5}{2},-\frac{5}{2}\right\rangle
+            +\frac{2}{5}\left|\frac{5}{2},-\frac{3}{2}\right\rangle
+            +\frac{\sqrt6}{5}\left|\frac{3}{2},-\frac{3}{2}\right\rangle.
+          \]
+        </div>
+
+        <div class="hr"></div>
+
+        <h3>Probabilità per la misura di \(J^2\)</h3>
+        <p>
+          Misurare \(J^2\) significa ottenere un valore \(\hbar^2 j(j+1)\).
+          Le probabilità si ottengono sommando i moduli quadri dei coefficienti con lo stesso \(j\).
+        </p>
+        <p>
+          Per \(j=5/2\) abbiamo due componenti (con \(m=-5/2\) e \(m=-3/2\)):
+        </p>
+        \[
+          P\left(j=\frac{5}{2}\right)
+          =\left|\sqrt{\frac{3}{5}}\right|^2+\left|\frac{2}{5}\right|^2
+          =\frac{3}{5}+\frac{4}{25}.
+        \]
+        <p>
+          Metto a denominatore 25 (passaggio aritmetico esplicito):
+          \(\frac{3}{5}=\frac{3\cdot 5}{5\cdot 5}=\frac{15}{25}\).
+          Quindi:
+        </p>
+        \[
+          P\left(j=\frac{5}{2}\right)=\frac{15}{25}+\frac{4}{25}=\frac{19}{25}.
+        \]
+        <p>
+          Per \(j=3/2\):
+        </p>
+        \[
+          P\left(j=\frac{3}{2}\right)=\left|\frac{\sqrt6}{5}\right|^2=\frac{6}{25}.
+        \]
+        <p>
+          (Controllo banale: \(19/25+6/25=25/25=1\).)
+        </p>
+        <div class="result">
+          <b>Risultati misura \(J^2\):</b>
+          <ul>
+            <li>
+              \(j=\frac{5}{2}\Rightarrow J^2=\hbar^2\frac{5}{2}\frac{7}{2}=\hbar^2\frac{35}{4}\),
+              con probabilità \(\boxed{\frac{19}{25}}\).
+            </li>
+            <li>
+              \(j=\frac{3}{2}\Rightarrow J^2=\hbar^2\frac{3}{2}\frac{5}{2}=\hbar^2\frac{15}{4}\),
+              con probabilità \(\boxed{\frac{6}{25}}\).
+            </li>
+            <li>
+              \(j=\frac{1}{2}\Rightarrow\) probabilità \(0\).
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>(b) Misura simultanea di \(S_z\) e \(L_z\)</h3>
+        <p>
+          Qui non serve la base accoppiata: lo stato è già scritto come sovrapposizione di autostati comuni di \(S_z\) e \(L_z\).
+        </p>
+        <p>
+          Possibili risultati:
+        </p>
+        <ul>
+          <li>
+            \(m_s=-3/2\Rightarrow S_z=-\frac{3}{2}\hbar\) (sempre),
+            e \(m_l=-1\Rightarrow L_z=-\hbar\) con probabilità \(3/5\).
+          </li>
+          <li>
+            \(m_s=-3/2\Rightarrow S_z=-\frac{3}{2}\hbar\) (sempre),
+            e \(m_l=0\Rightarrow L_z=0\) con probabilità \(2/5\).
+          </li>
+        </ul>
+        <div class="result">
+          <b>Risultati e probabilità:</b>
+          \[
+            (S_z=-\tfrac{3}{2}\hbar,\; L_z=-\hbar)\ \text{con prob. }\tfrac{3}{5},
+            \qquad
+            (S_z=-\tfrac{3}{2}\hbar,\; L_z=0)\ \text{con prob. }\tfrac{2}{5}.
+          \]
+        </div>
+      </div>
+    </section>
+
     <footer>
-        Generato automaticamente - Set 10 momento totale
+      Set 10 (momento angolare totale, spin combinati).
     </footer>
+
+  </div>
 </body>
 </html>

@@ -1,41 +1,1471 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set 7 parita oscillatore</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set 7: Parità, valori medi, oscillatore armonico, commutatori</title>
+
+  <!-- MathJax (LaTeX in HTML) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    :root{
+      --bg0:#070a14;
+      --bg1:#0b1020;
+      --card:#0f172a;
+      --card2:#0b1224;
+      --text:#e5e7eb;
+      --muted:#a7b0c0;
+      --accent:#38bdf8;
+      --accent2:#a78bfa;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --line: rgba(148,163,184,.18);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(56,189,248,.18), transparent 55%),
+        radial-gradient(900px 500px at 85% 15%, rgba(167,139,250,.14), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 40%, #060813);
+      line-height: 1.65;
+      padding: 26px 18px 60px;
+    }
+
+    .container{
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:16px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background: rgba(15,23,42,.55);
+      border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.25);
+      color: var(--muted);
+      font-size: .95rem;
+      flex-wrap: wrap;
+    }
+    .pill b{ color: var(--text); }
+
+    a{
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover{ text-decoration: underline; }
+
+    header.hero{
+      background: linear-gradient(135deg, rgba(56,189,248,.20), rgba(167,139,250,.12));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+      margin-bottom: 18px;
+    }
+    header.hero:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(800px 300px at 20% 20%, rgba(56,189,248,.20), transparent 55%),
+                  radial-gradient(700px 300px at 80% 30%, rgba(167,139,250,.16), transparent 55%);
+      filter: blur(0px);
+      opacity: .9;
+      pointer-events:none;
+    }
+    header.hero > *{ position:relative; z-index:1; }
+
+    h1{
+      margin:0 0 6px;
+      font-size: 1.65rem;
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .card{
+      background: rgba(15,23,42,.70);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .card .head{
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(2,6,23,.35);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .card h2{
+      margin:0;
+      font-size: 1.2rem;
+    }
+    .tag{
+      font-size: .85rem;
+      color: var(--muted);
+      border:1px solid var(--line);
+      padding:6px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.55);
+      white-space: nowrap;
+    }
+
+    .content{
+      padding: 14px 16px 18px;
+    }
+
+    .toc{
+      padding: 12px 16px 16px;
+    }
+    .toc h3{
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    .toc ul{
+      margin:0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .toc li{ margin: 6px 0; }
+    .toc a{ color: var(--accent); }
+
+    details{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(11,18,36,.55);
+      overflow:hidden;
+      margin: 12px 0;
+    }
+    summary{
+      cursor:pointer;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: var(--text);
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    summary .mini{
+      font-weight:600;
+      font-size:.9rem;
+      color: var(--muted);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding: 4px 10px;
+      background: rgba(2,6,23,.25);
+    }
+    details .inner{
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .box{
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.25);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .box strong{ color: var(--text); }
+    .box .muted{ color: var(--muted); }
+
+    .box.ok{ border-left: 5px solid var(--ok); }
+    .box.warn{ border-left: 5px solid var(--warn); }
+    .box.danger{ border-left: 5px solid var(--danger); }
+    .box.accent{ border-left: 5px solid var(--accent); }
+
+    .step{
+      margin: 10px 0;
+      padding-left: 18px;
+    }
+    .step li{
+      margin: 8px 0;
+      color: var(--text);
+    }
+
+    .eq{
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px dashed rgba(56,189,248,.35);
+      background: rgba(56,189,248,.08);
+      display:inline-block;
+    }
+
+    .hl{
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: rgba(167,139,250,.14);
+      border: 1px solid rgba(167,139,250,.22);
+    }
+
+    .mono{
+      font-family: var(--mono);
+      font-size: .95rem;
+      color: #cbd5e1;
+    }
+
+    .hr{
+      height:1px;
+      background: var(--line);
+      margin: 14px 0;
+    }
+
+    footer{
+      margin-top: 22px;
+      color: var(--muted);
+      text-align:center;
+      font-size:.92rem;
+      opacity:.95;
+    }
+
+    .katex-note{
+      color: var(--muted);
+      font-size: .95rem;
+      margin-top: 10px;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Set 7 parita oscillatore</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 7 parita oscillatore. Grazie per la pazienza!</p>
+  <div class="container">
+
+    <div class="topbar">
+      <div class="pill">
+        <b>MQ</b> · Set 7 · <span class="mono">parità</span> · <span class="mono">valori medi</span> · <span class="mono">oscillatore armonico</span> · <span class="mono">commutatori</span>
+      </div>
+      <div class="pill">
+        <a href="1mq.html">← Torna alla pagina principale</a>
+      </div>
+    </div>
+
+    <header class="hero">
+      <h1>Set 7 — Parità, valori medi e commutatori</h1>
+      <p class="subtitle">
+        Testo + soluzioni <u>complete</u>, con passaggi banali inclusi (anche conti “facili”).
+        Notazione LaTeX renderizzata con MathJax.
+      </p>
+      <p class="katex-note">
+        Suggerimento: se MathJax non carica, controlla la connessione (CDN) oppure usa una copia locale.
+      </p>
+    </header>
+
+    <section class="card toc">
+      <h3>Indice rapido</h3>
+      <ul>
+        <li><a href="#es1">Esercizio 1</a> — Buca infinita centrata, <b>parità</b> e probabilità su mezza buca</li>
+        <li><a href="#es2">Esercizio 2</a> — Oscillatore armonico: \(\langle x\rangle,\langle p\rangle\), \(\Delta x,\Delta p\), energia potenziale/cinetica</li>
+        <li><a href="#es3">Esercizio 3</a> — Operatori \(a,a^\dagger\), costanti \(c_n,d_n\), stato \(|u\rangle\), Heisenberg, evoluzione</li>
+        <li><a href="#es4">Esercizio 4</a> — Commutatori: \([x,p^n]\), \([x^m,p]\), \([f(x),p]\), \([x,g(p)]\)</li>
+      </ul>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- ESERCIZIO 1 -->
+    <section class="card" id="es1">
+      <div class="head">
+        <h2>1) Buca infinita centrata: parità e probabilità su \([0,a/2]\)</h2>
+        <div class="tag">Parità · Interferenza · Dipendenza temporale</div>
+      </div>
+
+      <div class="content">
+        <details open>
+          <summary>
+            Testo
+            <span class="mini">dal foglio Set 7</span>
+          </summary>
+          <div class="inner">
+            <p>
+              Si consideri il problema di una particella in una buca di potenziale:
+              \[
+                V(x)=0 \ \text{per}\ |x|\le a/2,\qquad V(x)=+\infty\ \text{altrove}.
+              \]
+              il cui stato in funzione del tempo è descritto da
+              \[
+                \psi(x,t)=\sqrt{\frac{2}{3}}\,\psi_2(x,t)+\frac{i}{\sqrt{3}}\,\psi_3(x,t),
+              \]
+              dove \(\psi_{2,3}(x,t)\) sono stati stazionari di Schrödinger (energie \(E_{2,3}\)) e
+              \[
+                \phi_2(x)=\sqrt{\frac{2}{a}}\sin\!\left(\frac{2\pi x}{a}\right),\qquad
+                \phi_3(x)=\sqrt{\frac{2}{a}}\cos\!\left(\frac{3\pi x}{a}\right).
+              \]
+            </p>
+
+            <p>
+              (a) \(\psi(x,t)\) è autostato dell’operatore parità \(\hat P\)? E \(\psi_3(x,t)\)?
+              Calcolare \(\langle \hat P\rangle_\psi\) e lo scarto quadratico medio \(\Delta P\); discutere la dipendenza dal tempo.
+            </p>
+            <p>
+              (b) Calcolare la probabilità \(P(t)\) che la particella si trovi nella regione \([0,a/2]\);
+              determinare massimo, minimo e i tempi corrispondenti.
+            </p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            Soluzione completa (con passaggi banali)
+            <span class="mini">step-by-step</span>
+          </summary>
+          <div class="inner">
+
+            <div class="box accent">
+              <strong>Prima osservazione (importantissima):</strong>
+              in una buca infinita <u>centrata in 0</u>, la parità è una simmetria.
+              Quindi \([\hat H,\hat P]=0\) e gli autostati stazionari possono essere scelti di parità definita.
+            </div>
+
+            <div class="box ok">
+              <strong>Definizione:</strong> \((\hat P\psi)(x)=\psi(-x)\). Se \(\hat P\psi=\lambda\psi\),
+              allora \(\lambda=\pm 1\) (perché \(\hat P^2=\mathbb{I}\)).
+            </div>
+
+            <h3>(a) Parità di \(\psi_2\), \(\psi_3\) e dello stato \(\psi\)</h3>
+
+            <ul class="step">
+              <li>
+                Gli stati stazionari sono del tipo
+                \[
+                  \psi_n(x,t)=\phi_n(x)\,e^{-iE_n t/\hbar},
+                \]
+                quindi la parità dipende solo da \(\phi_n(x)\) (la fase temporale non cambia la simmetria in \(x\)).
+              </li>
+
+              <li>
+                Controllo parità di \(\phi_2(x)=\sqrt{\frac{2}{a}}\sin(2\pi x/a)\):
+                \[
+                  \phi_2(-x)=\sqrt{\frac{2}{a}}\sin\!\left(-\frac{2\pi x}{a}\right)
+                  =-\sqrt{\frac{2}{a}}\sin\!\left(\frac{2\pi x}{a}\right)=-\phi_2(x).
+                \]
+                Quindi \(\phi_2\) (e \(\psi_2\)) è <span class="hl"><b>dispari</b></span> \(\Rightarrow \hat P|\psi_2\rangle=-|\psi_2\rangle\).
+              </li>
+
+              <li>
+                Controllo parità di \(\phi_3(x)=\sqrt{\frac{2}{a}}\cos(3\pi x/a)\):
+                \[
+                  \phi_3(-x)=\sqrt{\frac{2}{a}}\cos\!\left(-\frac{3\pi x}{a}\right)
+                  =\sqrt{\frac{2}{a}}\cos\!\left(\frac{3\pi x}{a}\right)=\phi_3(x).
+                \]
+                Quindi \(\phi_3\) (e \(\psi_3\)) è <span class="hl"><b>pari</b></span> \(\Rightarrow \hat P|\psi_3\rangle=+|\psi_3\rangle\).
+              </li>
+
+              <li>
+                Ora lo stato dato è una <u>sovrapposizione</u> di una parte dispari e una pari:
+                \[
+                  |\psi\rangle=\sqrt{\frac{2}{3}}\,|\psi_2\rangle+\frac{i}{\sqrt{3}}\,|\psi_3\rangle.
+                \]
+                Una sovrapposizione di parità diversa <b>non</b> è (in generale) autostato di \(\hat P\).
+                Quindi: <span class="hl"><b>\(\psi\) NON è autostato di \(\hat P\)</b></span>.
+              </li>
+            </ul>
+
+            <div class="hr"></div>
+
+            <h3>Calcolo di \(\langle \hat P\rangle_\psi\)</h3>
+
+            <div class="box">
+              Usiamo la base \(\{|\psi_2\rangle,|\psi_3\rangle\}\) ortonormale:
+              \(\langle \psi_2|\psi_3\rangle=0\).
+              Inoltre:
+              \[
+                \hat P|\psi_2\rangle=-|\psi_2\rangle,\qquad \hat P|\psi_3\rangle=+|\psi_3\rangle.
+              \]
+            </div>
+
+            <ul class="step">
+              <li>
+                Coefficienti (moduli al quadrato):
+                \[
+                  c_2=\sqrt{\frac{2}{3}}\Rightarrow |c_2|^2=\frac{2}{3},\qquad
+                  c_3=\frac{i}{\sqrt{3}}\Rightarrow |c_3|^2=\frac{1}{3}.
+                \]
+              </li>
+              <li>
+                L’aspettazione:
+                \[
+                  \langle \hat P\rangle
+                  =\langle \psi|\hat P|\psi\rangle
+                  =|c_2|^2(-1)+|c_3|^2(+1)
+                \]
+                (i termini incrociati sono zero perché \(\langle \psi_2|\psi_3\rangle=0\)).
+              </li>
+              <li>
+                Conto “banale” (lo scrivo tutto):
+                \[
+                  \langle \hat P\rangle
+                  =\left(\frac{2}{3}\right)(-1)+\left(\frac{1}{3}\right)(+1)
+                  =-\frac{2}{3}+\frac{1}{3}
+                  =-\frac{1}{3}.
+                \]
+                Quindi <span class="eq">\(\boxed{\langle \hat P\rangle_\psi=-\frac{1}{3}}\)</span>.
+              </li>
+            </ul>
+
+            <div class="box ok">
+              <strong>Dipendenza dal tempo:</strong>
+              \(\langle \hat P\rangle\) è <u>costante</u> nel tempo perché
+              \([\hat H,\hat P]=0\) e perché i moduli \(|c_2|^2,|c_3|^2\) non cambiano nel tempo.
+            </div>
+
+            <div class="hr"></div>
+
+            <h3>Calcolo di \(\Delta P\)</h3>
+
+            <ul class="step">
+              <li>
+                Per definizione:
+                \[
+                  \Delta P=\sqrt{\langle \hat P^2\rangle-\langle \hat P\rangle^2}.
+                \]
+              </li>
+              <li>
+                Ma \(\hat P^2=\mathbb{I}\) \(\Rightarrow \langle \hat P^2\rangle=1\).
+              </li>
+              <li>
+                Quindi:
+                \[
+                  \Delta P=\sqrt{1-\left(-\frac{1}{3}\right)^2}
+                  =\sqrt{1-\frac{1}{9}}
+                  =\sqrt{\frac{8}{9}}
+                  =\frac{2\sqrt{2}}{3}.
+                \]
+                Risultato: <span class="eq">\(\boxed{\Delta P=\frac{2\sqrt2}{3}}\)</span>, <u>costante nel tempo</u>.
+              </li>
+            </ul>
+
+            <div class="hr"></div>
+
+            <h3>(b) Probabilità \(P(t)\) di trovare la particella in \([0,a/2]\)</h3>
+
+            <div class="box warn">
+              <strong>Idea chiave:</strong> la probabilità su una <u>regione</u> dipende da un proiettore
+              \(\hat\Pi_{[0,a/2]}\) che in generale <b>non</b> commuta con \(\hat H\).
+              Quindi \(P(t)\) può oscillare nel tempo anche se \(\langle \hat P\rangle\) resta costante.
+            </div>
+
+            <p>
+              Scriviamo esplicitamente:
+              \[
+                \psi_2(x,t)=\phi_2(x)e^{-iE_2t/\hbar},\qquad
+                \psi_3(x,t)=\phi_3(x)e^{-iE_3t/\hbar}.
+              \]
+              La probabilità richiesta è:
+              \[
+                P(t)=\int_{0}^{a/2}|\psi(x,t)|^2\,dx.
+              \]
+            </p>
+
+            <h4>Step 1 — Espansione di \(|\psi|^2\)</h4>
+            <p>
+              Con \(c_2=\sqrt{2/3}\), \(c_3=i/\sqrt3\):
+              \[
+                |\psi|^2 = |c_2|^2|\psi_2|^2 + |c_3|^2|\psi_3|^2
+                + 2\operatorname{Re}\!\big(c_2^*c_3\,\psi_2^*\psi_3\big).
+              \]
+            </p>
+
+            <h4>Step 2 — I due contributi “diagonali”</h4>
+            <p>
+              Per simmetria (e si può verificare con integrale diretto) vale:
+              \[
+                \int_{0}^{a/2}|\phi_2(x)|^2dx=\frac12,\qquad
+                \int_{0}^{a/2}|\phi_3(x)|^2dx=\frac12.
+              \]
+              Quindi:
+              \[
+                |c_2|^2\frac12 + |c_3|^2\frac12
+                =\left(\frac23\right)\frac12+\left(\frac13\right)\frac12
+                =\frac12\left(\frac23+\frac13\right)=\frac12\cdot 1=\frac12.
+              \]
+              <span class="eq">\(\Rightarrow\)</span> la parte “costante” è \(1/2\).
+            </p>
+
+            <h4>Step 3 — Il termine di interferenza (qui nasce la dipendenza temporale)</h4>
+
+            <p>
+              Prima calcoliamo il fattore di fase:
+              \[
+                \psi_2^*\psi_3=\phi_2\phi_3\,e^{i(E_2-E_3)t/\hbar}
+                =\phi_2\phi_3\,e^{-i\Omega t},
+              \]
+              dove
+              \[
+                \Omega=\frac{E_3-E_2}{\hbar}.
+              \]
+              Per la buca infinita di larghezza \(a\) (centrata in \(0\)):
+              \[
+                E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}
+                \quad\Rightarrow\quad
+                E_3-E_2=\frac{(9-4)\pi^2\hbar^2}{2ma^2}
+                =\frac{5\pi^2\hbar^2}{2ma^2},
+              \]
+              quindi
+              \[
+                \Omega=\frac{5\pi^2\hbar}{2ma^2}.
+              \]
+            </p>
+
+            <p>
+              Ora il coefficiente complesso:
+              \[
+                c_2^*c_3=\sqrt{\frac{2}{3}}\cdot\frac{i}{\sqrt3}
+                = i\frac{\sqrt2}{3}.
+              \]
+              Quindi:
+              \[
+                2\operatorname{Re}\big(c_2^*c_3 e^{-i\Omega t}\big)
+                = 2\operatorname{Re}\left(i\frac{\sqrt2}{3}e^{-i\Omega t}\right).
+              \]
+              Usiamo \(e^{-i\Omega t}=\cos(\Omega t)-i\sin(\Omega t)\):
+              \[
+                i e^{-i\Omega t}
+                = i(\cos\Omega t - i\sin\Omega t)
+                = i\cos\Omega t + \sin\Omega t.
+              \]
+              La parte reale è \(\sin(\Omega t)\). Quindi:
+              \[
+                2\operatorname{Re}\left(i\frac{\sqrt2}{3}e^{-i\Omega t}\right)
+                =2\cdot\frac{\sqrt2}{3}\sin(\Omega t).
+              \]
+            </p>
+
+            <p>
+              Ci resta l’integrale spaziale:
+              \[
+                J=\int_{0}^{a/2}\phi_2(x)\phi_3(x)\,dx.
+              \]
+              Calcoliamolo “senza saltare i passaggi”.
+            </p>
+
+            <div class="box">
+              <p>
+                \[
+                  \phi_2\phi_3=
+                  \left(\sqrt{\frac{2}{a}}\sin\frac{2\pi x}{a}\right)
+                  \left(\sqrt{\frac{2}{a}}\cos\frac{3\pi x}{a}\right)
+                  =\frac{2}{a}\sin\frac{2\pi x}{a}\cos\frac{3\pi x}{a}.
+                \]
+                Usiamo l’identità:
+                \[
+                  \sin A\cos B=\frac12\big(\sin(A+B)+\sin(A-B)\big).
+                \]
+                Qui \(A=\frac{2\pi x}{a}\), \(B=\frac{3\pi x}{a}\):
+                \[
+                  \sin\frac{2\pi x}{a}\cos\frac{3\pi x}{a}
+                  =\frac12\left(\sin\frac{5\pi x}{a}+\sin\left(-\frac{\pi x}{a}\right)\right)
+                  =\frac12\left(\sin\frac{5\pi x}{a}-\sin\frac{\pi x}{a}\right).
+                \]
+                Quindi:
+                \[
+                  \phi_2\phi_3=\frac{2}{a}\cdot\frac12\left(\sin\frac{5\pi x}{a}-\sin\frac{\pi x}{a}\right)
+                  =\frac{1}{a}\left(\sin\frac{5\pi x}{a}-\sin\frac{\pi x}{a}\right).
+                \]
+              </p>
+
+              <p>
+                Dunque:
+                \[
+                  J=\frac{1}{a}\left(\int_0^{a/2}\sin\frac{5\pi x}{a}\,dx-\int_0^{a/2}\sin\frac{\pi x}{a}\,dx\right).
+                \]
+                Primo integrale:
+                \[
+                  \int \sin(kx)\,dx = -\frac{\cos(kx)}{k}.
+                \]
+                Con \(k=\frac{5\pi}{a}\):
+                \[
+                  \int_0^{a/2}\sin\frac{5\pi x}{a}\,dx
+                  =\left[-\frac{\cos\left(\frac{5\pi x}{a}\right)}{5\pi/a}\right]_0^{a/2}
+                  =-\frac{a}{5\pi}\left(\cos\frac{5\pi}{2}-\cos 0\right).
+                \]
+                Ora \(\cos(5\pi/2)=0\), \(\cos0=1\), quindi:
+                \[
+                  -\frac{a}{5\pi}(0-1)=\frac{a}{5\pi}.
+                \]
+                Secondo integrale (con \(k=\frac{\pi}{a}\)):
+                \[
+                  \int_0^{a/2}\sin\frac{\pi x}{a}\,dx
+                  =-\frac{a}{\pi}\left(\cos\frac{\pi}{2}-\cos0\right)
+                  =-\frac{a}{\pi}(0-1)=\frac{a}{\pi}.
+                \]
+                Allora:
+                \[
+                  J=\frac{1}{a}\left(\frac{a}{5\pi}-\frac{a}{\pi}\right)
+                  =\frac{1}{a}\cdot a\left(\frac{1}{5\pi}-\frac{1}{\pi}\right)
+                  =\frac{1}{\pi}\left(\frac15-1\right)
+                  =-\frac{4}{5\pi}.
+                \]
+                Quindi <span class="eq">\(\boxed{J=-\frac{4}{5\pi}}\)</span>.
+              </p>
+            </div>
+
+            <h4>Step 4 — Mettiamo tutto insieme</h4>
+
+            <p>
+              Termine di interferenza integrato:
+              \[
+                2\operatorname{Re}(c_2^*c_3 e^{-i\Omega t})\,J
+                =\left(2\frac{\sqrt2}{3}\sin(\Omega t)\right)\left(-\frac{4}{5\pi}\right)
+                =-\frac{8\sqrt2}{15\pi}\sin(\Omega t).
+              \]
+              Quindi:
+              \[
+                \boxed{
+                P(t)=\frac12-\frac{8\sqrt2}{15\pi}\sin(\Omega t)
+                }
+                \qquad\text{con}\quad
+                \Omega=\frac{E_3-E_2}{\hbar}=\frac{5\pi^2\hbar}{2ma^2}.
+              \]
+            </p>
+
+            <div class="box ok">
+              <strong>Controllo “di buon senso”:</strong>
+              l’ampiezza \(\frac{8\sqrt2}{15\pi}\approx 0.240\), quindi
+              \(P(t)\) resta tra \(0.5\pm0.240\), cioè tra ~0.26 e ~0.74: tutto ok (resta tra 0 e 1).
+            </div>
+
+            <h4>Massimo, minimo e tempi corrispondenti</h4>
+
+            <ul class="step">
+              <li>
+                Scriviamo \(A=\frac{8\sqrt2}{15\pi}>0\). Allora:
+                \[
+                  P(t)=\frac12 - A\sin(\Omega t).
+                \]
+              </li>
+              <li>
+                <u>Massimo</u> quando \(\sin(\Omega t)=-1\):
+                \[
+                  P_{\max}=\frac12 + A
+                  =\frac12+\frac{8\sqrt2}{15\pi}.
+                \]
+                Tempi:
+                \[
+                  \Omega t=\frac{3\pi}{2}+2k\pi
+                  \quad\Rightarrow\quad
+                  t_{\max}=\frac{\frac{3\pi}{2}+2k\pi}{\Omega}.
+                \]
+              </li>
+              <li>
+                <u>Minimo</u> quando \(\sin(\Omega t)=+1\):
+                \[
+                  P_{\min}=\frac12 - A
+                  =\frac12-\frac{8\sqrt2}{15\pi}.
+                \]
+                Tempi:
+                \[
+                  \Omega t=\frac{\pi}{2}+2k\pi
+                  \quad\Rightarrow\quad
+                  t_{\min}=\frac{\frac{\pi}{2}+2k\pi}{\Omega}.
+                \]
+              </li>
+              <li>
+                Periodo delle oscillazioni:
+                \[
+                  T=\frac{2\pi}{\Omega}=\frac{2\pi\hbar}{E_3-E_2}.
+                \]
+              </li>
+            </ul>
+
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- ESERCIZIO 2 -->
+    <section class="card" id="es2">
+      <div class="head">
+        <h2>2) Oscillatore armonico: valori medi, scarti quadratici medi, energie</h2>
+        <div class="tag">Heisenberg · Viriale · \(\langle T\rangle=\langle V\rangle\)</div>
+      </div>
+
+      <div class="content">
+        <details open>
+          <summary>Testo <span class="mini">dal foglio Set 7</span></summary>
+          <div class="inner">
+            <p>
+              Si calcolino i valori medi dell’operatore coordinata e dell’operatore impulso e i corrispondenti
+              scarti quadratici medi \(\Delta A=\sqrt{\langle \hat A^2\rangle-\langle \hat A\rangle^2}\)
+              per un oscillatore lineare unidimensionale, adottando la rappresentazione delle coordinate.
+              Si discuta il risultato ottenuto alla luce del principio di indeterminazione di Heisenberg.
+            </p>
+            <p>
+              Si calcolino i valori medi dell’energia potenziale e dell’energia cinetica e se ne discuta
+              il risultato rispetto al caso classico.
+            </p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Soluzione (caso standard: autostati \(|n\rangle\) dell’oscillatore) <span class="mini">completa</span></summary>
+          <div class="inner">
+
+            <div class="box accent">
+              <strong>Scelta standard (coerente con “oscillatore armonico”):</strong>
+              consideriamo lo stato stazionario \(|n\rangle\) (autostato di \(\hat H\)).
+              In coordinate: \(\psi_n(x)\) ha parità definita \((-)^n\) e quindi molte medie “cadono” per simmetria.
+            </div>
+
+            <div class="box">
+              Richiami utili (formule “canoniche”):
+              \[
+                \hat x=\sqrt{\frac{\hbar}{2m\omega}}\,(a+a^\dagger),\qquad
+                \hat p=i\sqrt{\frac{\hbar m\omega}{2}}\,(a^\dagger-a),
+              \]
+              \[
+                \hat H=\hbar\omega\left(a^\dagger a+\frac12\right),\qquad
+                a|n\rangle=\sqrt{n}\,|n-1\rangle,\quad a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle.
+              \]
+            </div>
+
+            <h3>Valori medi \(\langle x\rangle\), \(\langle p\rangle\)</h3>
+
+            <ul class="step">
+              <li>
+                In \(|n\rangle\), \(\langle n|a|n\rangle=0\) perché \(a|n\rangle\propto|n-1\rangle\) ed è ortogonale a \(|n\rangle\).
+                Analogamente \(\langle n|a^\dagger|n\rangle=0\).
+              </li>
+              <li>
+                Quindi:
+                \[
+                  \langle x\rangle_n=\sqrt{\frac{\hbar}{2m\omega}}\left(\langle a\rangle+\langle a^\dagger\rangle\right)=0,
+                  \qquad
+                  \langle p\rangle_n=i\sqrt{\frac{\hbar m\omega}{2}}\left(\langle a^\dagger\rangle-\langle a\rangle\right)=0.
+                \]
+                Risultato: <span class="eq">\(\boxed{\langle x\rangle_n=0,\ \langle p\rangle_n=0}\)</span>.
+              </li>
+            </ul>
+
+            <h3>Calcolo di \(\langle x^2\rangle\) e \(\Delta x\)</h3>
+
+            <p>
+              Espandiamo:
+              \[
+                \hat x^2=\frac{\hbar}{2m\omega}(a+a^\dagger)^2
+                =\frac{\hbar}{2m\omega}\left(a^2+a^{\dagger 2}+aa^\dagger+a^\dagger a\right).
+              \]
+            </p>
+
+            <ul class="step">
+              <li>
+                In \(|n\rangle\), i termini \(\langle a^2\rangle\) e \(\langle a^{\dagger2}\rangle\) sono zero perché cambiano \(n\) di 2:
+                \(\langle n|n\pm2\rangle=0\).
+              </li>
+              <li>
+                Usiamo \(aa^\dagger=a^\dagger a + 1\). Allora:
+                \[
+                  \langle aa^\dagger\rangle=\langle a^\dagger a\rangle + 1 = n+1,
+                  \qquad
+                  \langle a^\dagger a\rangle = n.
+                \]
+              </li>
+              <li>
+                Quindi:
+                \[
+                  \langle x^2\rangle_n=\frac{\hbar}{2m\omega}\big(0+0+(n+1)+n\big)
+                  =\frac{\hbar}{2m\omega}(2n+1)
+                  =\frac{\hbar}{m\omega}\left(n+\frac12\right).
+                \]
+              </li>
+              <li>
+                Dato che \(\langle x\rangle_n=0\):
+                \[
+                  \Delta x=\sqrt{\langle x^2\rangle-\langle x\rangle^2}
+                  =\sqrt{\langle x^2\rangle_n}
+                  =\sqrt{\frac{\hbar}{m\omega}\left(n+\frac12\right)}.
+                \]
+                <span class="eq">\(\boxed{\Delta x_n=\sqrt{\frac{\hbar}{m\omega}\left(n+\frac12\right)}}\)</span>.
+              </li>
+            </ul>
+
+            <h3>Calcolo di \(\langle p^2\rangle\) e \(\Delta p\)</h3>
+
+            <p>
+              Analogamente:
+              \[
+                \hat p=i\sqrt{\frac{\hbar m\omega}{2}}(a^\dagger-a)
+                \quad\Rightarrow\quad
+                \hat p^2=\frac{\hbar m\omega}{2}\left(aa^\dagger+a^\dagger a - a^2 - a^{\dagger 2}\right).
+              \]
+            </p>
+
+            <ul class="step">
+              <li>
+                Come prima: \(\langle a^2\rangle=\langle a^{\dagger2}\rangle=0\).
+              </li>
+              <li>
+                Quindi:
+                \[
+                  \langle p^2\rangle_n
+                  =\frac{\hbar m\omega}{2}\big((n+1)+n\big)
+                  =\frac{\hbar m\omega}{2}(2n+1)
+                  =m\hbar\omega\left(n+\frac12\right).
+                \]
+              </li>
+              <li>
+                Poiché \(\langle p\rangle_n=0\):
+                \[
+                  \Delta p_n=\sqrt{\langle p^2\rangle_n}
+                  =\sqrt{m\hbar\omega\left(n+\frac12\right)}.
+                \]
+                <span class="eq">\(\boxed{\Delta p_n=\sqrt{m\hbar\omega\left(n+\frac12\right)}}\)</span>.
+              </li>
+            </ul>
+
+            <h3>Prodotto di indeterminazione</h3>
+
+            <p>
+              Moltiplichiamo (passo banale incluso):
+              \[
+                \Delta x_n\Delta p_n
+                =\sqrt{\frac{\hbar}{m\omega}\left(n+\frac12\right)}\,
+                  \sqrt{m\hbar\omega\left(n+\frac12\right)}
+                =\sqrt{\hbar^2\left(n+\frac12\right)^2}
+                =\hbar\left(n+\frac12\right).
+              \]
+              Quindi:
+              <span class="eq">\(\boxed{\Delta x_n\Delta p_n=\hbar\left(n+\frac12\right)\ge\frac{\hbar}{2}}\)</span>.
+              L’uguaglianza vale per \(n=0\) (stato fondamentale).
+            </p>
+
+            <div class="hr"></div>
+
+            <h3>Energia cinetica e potenziale medie</h3>
+
+            <p>
+              Per l’oscillatore:
+              \[
+                \hat V=\frac12 m\omega^2 \hat x^2,\qquad
+                \hat T=\frac{\hat p^2}{2m}.
+              \]
+            </p>
+
+            <ul class="step">
+              <li>
+                \[
+                  \langle V\rangle_n=\frac12 m\omega^2\langle x^2\rangle_n
+                  =\frac12 m\omega^2\cdot \frac{\hbar}{m\omega}\left(n+\frac12\right)
+                  =\frac12\hbar\omega\left(n+\frac12\right).
+                \]
+              </li>
+              <li>
+                \[
+                  \langle T\rangle_n=\frac{1}{2m}\langle p^2\rangle_n
+                  =\frac{1}{2m}\cdot m\hbar\omega\left(n+\frac12\right)
+                  =\frac12\hbar\omega\left(n+\frac12\right).
+                \]
+              </li>
+              <li>
+                Quindi:
+                <span class="eq">\(\boxed{\langle T\rangle_n=\langle V\rangle_n=\frac12 E_n}\)</span>,
+                con \(E_n=\hbar\omega\left(n+\frac12\right)\).
+              </li>
+            </ul>
+
+            <div class="box ok">
+              <strong>Confronto col caso classico:</strong>
+              anche classicamente (media temporale su un periodo) vale \(\overline{T}=\overline{V}\).
+              Qui è una conseguenza del teorema del viriale e della struttura quadratica del potenziale.
+            </div>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- ESERCIZIO 3 -->
+    <section class="card" id="es3">
+      <div class="head">
+        <h2>3) Ladder operators: \(c_n,d_n\), stato \(|u\rangle\), Heisenberg, evoluzione</h2>
+        <div class="tag">Operatori \(a,a^\dagger\) · Stato sovrapposto · Evoluzione temporale</div>
+      </div>
+
+      <div class="content">
+        <details open>
+          <summary>Testo <span class="mini">dal foglio Set 7</span></summary>
+          <div class="inner">
+            <p>
+              Si consideri l’Hamiltoniana dell’oscillatore armonico unidimensionale
+              \[
+                \hat H=\hbar\omega\left(a^\dagger a + \frac12\right),\qquad [a,a^\dagger]=1.
+              \]
+              Valgono inoltre:
+              \[
+                \hat H|u_n\rangle=E_n|u_n\rangle=(n+\tfrac12)\hbar\omega|u_n\rangle,\quad n=0,1,2,\dots
+              \]
+              \[
+                a^\dagger a|u_n\rangle=n|u_n\rangle,\quad
+                a|u_n\rangle=c_n|u_{n-1}\rangle,\quad
+                a^\dagger|u_n\rangle=d_n|u_{n+1}\rangle,\quad
+                \langle u_n|u_m\rangle=\delta_{nm}.
+              \]
+              (a) Determinare \(c_n,d_n\).<br/>
+              (b) Per \(|u\rangle=a_0|u_0\rangle+a_1|u_1\rangle+a_2|u_2\rangle\), calcolare \(\langle u|\hat H|u\rangle\) e \(\langle u|\hat x|u\rangle\).<br/>
+              (c) Sia \(a_0=\tfrac{1}{\sqrt2}\), \(a_1=i\sqrt{\tfrac12}\): determinare \(a_2\) per normalizzare \(|u\rangle\).<br/>
+              (d) Verificare Heisenberg per \(\hat x\) e \(\hat p\) nello stato del punto (c).<br/>
+              (e) Se \(|\psi(0)\rangle=|u\rangle\) come in (c), determinare \(|\psi(t)\rangle\) e calcolare \(\langle \hat H\rangle(t)\), \(\langle \hat x\rangle(t)\).
+            </p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Soluzione completa <span class="mini">tutti i passaggi</span></summary>
+          <div class="inner">
+
+            <h3>(a) Determinazione di \(c_n\) e \(d_n\)</h3>
+
+            <div class="box">
+              Useremo la normalizzazione: \(\|a|n\rangle\|^2=\langle n|a^\dagger a|n\rangle\).
+              (Qui scrivo \(|n\rangle\equiv|u_n\rangle\) per alleggerire.)
+            </div>
+
+            <ul class="step">
+              <li>
+                Dato \(a|n\rangle=c_n|n-1\rangle\), allora
+                \[
+                  \|a|n\rangle\|^2=\langle n|a^\dagger a|n\rangle=n.
+                \]
+                Ma anche
+                \[
+                  \|a|n\rangle\|^2=\|c_n|n-1\rangle\|^2=|c_n|^2\underbrace{\langle n-1|n-1\rangle}_{=1}=|c_n|^2.
+                \]
+                Quindi: \(|c_n|^2=n \Rightarrow c_n=\sqrt{n}\) (scelta standard reale positiva).
+              </li>
+
+              <li>
+                Analogamente per \(a^\dagger|n\rangle=d_n|n+1\rangle\):
+                \[
+                  \|a^\dagger|n\rangle\|^2=\langle n|aa^\dagger|n\rangle.
+                \]
+                Ma \(aa^\dagger=a^\dagger a + 1\), quindi
+                \[
+                  \langle n|aa^\dagger|n\rangle=\langle n|(a^\dagger a + 1)|n\rangle = n+1.
+                \]
+                E anche \(\|a^\dagger|n\rangle\|^2=|d_n|^2\).
+                Quindi: \(|d_n|^2=n+1\Rightarrow d_n=\sqrt{n+1}\).
+              </li>
+            </ul>
+
+            <p class="eq">
+              \(\boxed{c_n=\sqrt{n},\qquad d_n=\sqrt{n+1}.}\)
+            </p>
+
+            <div class="hr"></div>
+
+            <h3>(b) \(\langle u|\hat H|u\rangle\) e \(\langle u|\hat x|u\rangle\)</h3>
+
+            <div class="box">
+              In base energetica: \(\hat H|n\rangle=(n+\tfrac12)\hbar\omega|n\rangle\) e gli autostati sono ortonormali.
+              Inoltre:
+              \[
+                \hat x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+              \]
+            </div>
+
+            <h4>\(\langle H\rangle\)</h4>
+            <p>
+              Con \(|u\rangle=a_0|0\rangle+a_1|1\rangle+a_2|2\rangle\),
+              usando ortonormalità (nessun termine incrociato):
+              \[
+                \langle H\rangle
+                =\hbar\omega\left(\frac12|a_0|^2+\frac32|a_1|^2+\frac52|a_2|^2\right)
+                \quad\text{(se \(|u\rangle\) è normalizzato)}.
+              \]
+            </p>
+
+            <h4>\(\langle x\rangle\)</h4>
+            <p>
+              \[
+                \langle x\rangle=\sqrt{\frac{\hbar}{2m\omega}}\left(\langle a\rangle+\langle a^\dagger\rangle\right).
+              \]
+              Calcoliamo \(\langle a\rangle=\langle u|a|u\rangle\).
+            </p>
+
+            <div class="box">
+              Applichiamo \(a\) a \(|u\rangle\) (passo banale scritto):
+              \[
+                a|u\rangle=a(a_0|0\rangle+a_1|1\rangle+a_2|2\rangle)
+                =a_0\,a|0\rangle+a_1\,a|1\rangle+a_2\,a|2\rangle.
+              \]
+              Ma:
+              \[
+                a|0\rangle=0,\quad a|1\rangle=\sqrt1\,|0\rangle=|0\rangle,\quad a|2\rangle=\sqrt2\,|1\rangle.
+              \]
+              Quindi:
+              \[
+                a|u\rangle=a_1|0\rangle+\sqrt2\,a_2|1\rangle.
+              \]
+              Ora:
+              \[
+                \langle u| = a_0^*\langle0|+a_1^*\langle1|+a_2^*\langle2|.
+              \]
+              Pertanto:
+              \[
+                \langle a\rangle=\langle u|a|u\rangle
+                =a_0^*a_1\langle0|0\rangle + a_1^*(\sqrt2 a_2)\langle1|1\rangle
+                =a_0^*a_1+\sqrt2\,a_1^*a_2.
+              \]
+              E quindi \(\langle a^\dagger\rangle=(\langle a\rangle)^*\).
+            </div>
+
+            <p>
+              Risultato compatto:
+              \[
+                \boxed{
+                \langle x\rangle
+                =\sqrt{\frac{\hbar}{2m\omega}}\left[\left(a_0^*a_1+\sqrt2\,a_1^*a_2\right)+\left(a_0 a_1^*+\sqrt2\,a_1 a_2^*\right)\right]
+                }
+              \]
+              cioè \(\langle x\rangle=2\sqrt{\frac{\hbar}{2m\omega}}\operatorname{Re}\!\left(a_0^*a_1+\sqrt2\,a_1^*a_2\right)\).
+            </p>
+
+            <div class="hr"></div>
+
+            <h3>(c) Normalizzazione: trovare \(a_2\)</h3>
+
+            <p>
+              La normalizzazione richiede:
+              \[
+                |a_0|^2+|a_1|^2+|a_2|^2=1.
+              \]
+              Dati:
+              \[
+                a_0=\frac{1}{\sqrt2}\Rightarrow |a_0|^2=\frac12,\qquad
+                a_1=i\sqrt{\frac12}=\frac{i}{\sqrt2}\Rightarrow |a_1|^2=\frac12.
+              \]
+              Quindi:
+              \[
+                |a_0|^2+|a_1|^2=\frac12+\frac12=1.
+              \]
+              Allora necessariamente:
+              \[
+                1+|a_2|^2=1\Rightarrow |a_2|^2=0 \Rightarrow a_2=0.
+              \]
+              <span class="eq">\(\boxed{a_2=0}\)</span>.
+            </p>
+
+            <div class="hr"></div>
+
+            <h3>(d) Verifica di Heisenberg nello stato del punto (c)</h3>
+
+            <div class="box warn">
+              Stato finale:
+              \[
+                |\psi\rangle=\frac{1}{\sqrt2}|0\rangle+\frac{i}{\sqrt2}|1\rangle.
+              \]
+              Useremo \(\hat x=\alpha(a+a^\dagger)\), \(\hat p=i\beta(a^\dagger-a)\) con
+              \(\alpha=\sqrt{\frac{\hbar}{2m\omega}}\), \(\beta=\sqrt{\frac{\hbar m\omega}{2}}\).
+            </div>
+
+            <h4>Calcolo di \(\langle x\rangle\) e \(\langle x^2\rangle\)</h4>
+
+            <ul class="step">
+              <li>
+                Prima \(\langle a\rangle\).
+                Applichiamo \(a|\psi\rangle\):
+                \[
+                  a|\psi\rangle=\frac{1}{\sqrt2}a|0\rangle+\frac{i}{\sqrt2}a|1\rangle
+                  =0+\frac{i}{\sqrt2}|0\rangle=\frac{i}{\sqrt2}|0\rangle.
+                \]
+                Con \(\langle\psi|=\frac{1}{\sqrt2}\langle0|-\frac{i}{\sqrt2}\langle1|\),
+                \[
+                  \langle a\rangle=\langle\psi|a|\psi\rangle
+                  =\left(\frac{1}{\sqrt2}\langle0|-\frac{i}{\sqrt2}\langle1|\right)\left(\frac{i}{\sqrt2}|0\rangle\right)
+                  =\frac{i}{2}.
+                \]
+                Quindi \(\langle a^\dagger\rangle=-\frac{i}{2}\).
+              </li>
+              <li>
+                \[
+                  \langle x\rangle=\alpha(\langle a\rangle+\langle a^\dagger\rangle)
+                  =\alpha\left(\frac{i}{2}-\frac{i}{2}\right)=0.
+                \]
+              </li>
+              <li>
+                Per \(\langle x^2\rangle\):
+                \[
+                  x^2=\alpha^2(a^2+a^{\dagger2}+aa^\dagger+a^\dagger a).
+                \]
+                In questo stato \(\langle a^2\rangle=\langle a^{\dagger2}\rangle=0\).
+                Inoltre \(\langle a^\dagger a\rangle=\langle n\rangle\):
+                probabilità \(n=0\) è \(1/2\), probabilità \(n=1\) è \(1/2\), quindi
+                \[
+                  \langle n\rangle=0\cdot\frac12+1\cdot\frac12=\frac12
+                  \Rightarrow \langle a^\dagger a\rangle=\frac12.
+                \]
+                E
+                \[
+                  \langle aa^\dagger\rangle=\langle a^\dagger a\rangle+1=\frac12+1=\frac32.
+                \]
+                Quindi:
+                \[
+                  \langle x^2\rangle=\alpha^2\left(\frac32+\frac12\right)=\alpha^2\cdot 2=2\alpha^2
+                  =2\cdot\frac{\hbar}{2m\omega}=\frac{\hbar}{m\omega}.
+                \]
+              </li>
+              <li>
+                \[
+                  \Delta x=\sqrt{\langle x^2\rangle-\langle x\rangle^2}=\sqrt{\frac{\hbar}{m\omega}}.
+                \]
+              </li>
+            </ul>
+
+            <h4>Calcolo di \(\langle p\rangle\) e \(\langle p^2\rangle\)</h4>
+
+            <ul class="step">
+              <li>
+                \[
+                  \langle p\rangle=i\beta(\langle a^\dagger\rangle-\langle a\rangle)
+                  =i\beta\left(-\frac{i}{2}-\frac{i}{2}\right)
+                  =i\beta(-i)=\beta
+                  =\sqrt{\frac{\hbar m\omega}{2}}.
+                \]
+              </li>
+              <li>
+                \[
+                  p^2=\beta^2(aa^\dagger+a^\dagger a-a^2-a^{\dagger2}).
+                \]
+                Ancora \(\langle a^2\rangle=\langle a^{\dagger2}\rangle=0\), quindi
+                \[
+                  \langle p^2\rangle=\beta^2\left(\frac32+\frac12\right)=2\beta^2
+                  =2\cdot\frac{\hbar m\omega}{2}=m\hbar\omega.
+                \]
+              </li>
+              <li>
+                Varianza:
+                \[
+                  (\Delta p)^2=\langle p^2\rangle-\langle p\rangle^2
+                  =m\hbar\omega-\left(\frac{\hbar m\omega}{2}\right)
+                  =\frac{\hbar m\omega}{2}.
+                \]
+                Quindi:
+                \[
+                  \Delta p=\sqrt{\frac{\hbar m\omega}{2}}.
+                \]
+              </li>
+            </ul>
+
+            <h4>Prodotto \(\Delta x\,\Delta p\)</h4>
+            <p>
+              \[
+                \Delta x\,\Delta p
+                =\sqrt{\frac{\hbar}{m\omega}}\cdot\sqrt{\frac{\hbar m\omega}{2}}
+                =\sqrt{\frac{\hbar^2}{2}}
+                =\frac{\hbar}{\sqrt2}.
+              \]
+              Confronto:
+              \[
+                \frac{\hbar}{\sqrt2} \ge \frac{\hbar}{2}
+                \quad (\text{vero, perché } \frac{1}{\sqrt2}\approx 0.707 > 0.5).
+              \]
+              <span class="eq">\(\boxed{\Delta x\,\Delta p=\hbar/\sqrt2}\)</span>.
+            </p>
+
+            <div class="hr"></div>
+
+            <h3>(e) Evoluzione \(|\psi(t)\rangle\) e medie \(\langle H\rangle(t)\), \(\langle x\rangle(t)\)</h3>
+
+            <p>
+              Con \(E_0=\frac12\hbar\omega\), \(E_1=\frac32\hbar\omega\):
+              \[
+                |\psi(t)\rangle=\frac{1}{\sqrt2}e^{-iE_0t/\hbar}|0\rangle+\frac{i}{\sqrt2}e^{-iE_1t/\hbar}|1\rangle
+                =\frac{1}{\sqrt2}e^{-i\omega t/2}|0\rangle+\frac{i}{\sqrt2}e^{-i3\omega t/2}|1\rangle.
+              \]
+            </p>
+
+            <div class="box ok">
+              <strong>\(\langle H\rangle(t)\) è costante:</strong>
+              \(\hat H\) è diagonale in \(|n\rangle\) e i moduli dei coefficienti non cambiano con il tempo.
+            </div>
+
+            <p>
+              Calcolo esplicito (banale):
+              \[
+                \langle H\rangle
+                =\hbar\omega\left(\frac12\cdot\frac12+\frac32\cdot\frac12\right)
+                =\hbar\omega\left(\frac14+\frac34\right)=\hbar\omega.
+              \]
+              Quindi <span class="eq">\(\boxed{\langle H\rangle(t)=\hbar\omega}\)</span>.
+            </p>
+
+            <p>
+              Per \(\langle x\rangle(t)\): in generale per una sovrapposizione \(|0\rangle\)–\(|1\rangle\)
+              la media oscilla con frequenza \(\omega\).
+              Calcoliamo \(\langle a\rangle(t)\) (passo “pulito”):
+              \[
+                a|0\rangle=0,\quad a|1\rangle=|0\rangle
+                \Rightarrow a|\psi(t)\rangle=\left(\frac{i}{\sqrt2}e^{-i3\omega t/2}\right)|0\rangle.
+              \]
+              \[
+                \langle a\rangle(t)=\langle\psi(t)|a|\psi(t)\rangle
+                =\left(\frac{1}{\sqrt2}e^{+i\omega t/2}\right)\left(\frac{i}{\sqrt2}e^{-i3\omega t/2}\right)
+                =\frac{i}{2}e^{-i\omega t}.
+              \]
+              Quindi \(\langle a^\dagger\rangle(t)=-\frac{i}{2}e^{+i\omega t}\).
+            </p>
+
+            <p>
+              Allora:
+              \[
+                \langle x\rangle(t)=\alpha\left(\langle a\rangle(t)+\langle a^\dagger\rangle(t)\right)
+                =\alpha\left(\frac{i}{2}e^{-i\omega t}-\frac{i}{2}e^{i\omega t}\right)
+                =\alpha\sin(\omega t).
+              \]
+              Risultato:
+              <span class="eq">\(\boxed{\langle x\rangle(t)=\sqrt{\frac{\hbar}{2m\omega}}\;\sin(\omega t)}\)</span>.
+            </p>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- ESERCIZIO 4 -->
+    <section class="card" id="es4">
+      <div class="head">
+        <h2>4) Commutatori fondamentali e generalizzazioni</h2>
+        <div class="tag">\([x,p]=i\hbar\) · Derivate · Induzione</div>
+      </div>
+
+      <div class="content">
+        <details open>
+          <summary>Testo <span class="mini">dal foglio Set 7</span></summary>
+          <div class="inner">
+            <p>
+              Calcolare i seguenti commutatori:
+              <br/>
+              (a) \([\hat x,\hat p^n]\), \([\hat x^m,\hat p]\);
+              <br/>
+              (b) \([f(\hat x),\hat p]\), \([\hat x,g(\hat p)]\) (dove \(f,g\) sono funzioni di operatori);
+              <br/>
+              utilizzando sia il commutatore fondamentale \([\hat x,\hat p]=i\hbar\) sia la loro azione su una funzione d’onda
+              generica \(\psi(x)\) o \(\phi(p)\).
+            </p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Soluzione completa <span class="mini">con dimostrazioni</span></summary>
+          <div class="inner">
+
+            <div class="box accent">
+              <strong>Regola pratica:</strong> useremo l’identità
+              \[
+                [A,BC]=[A,B]C + B[A,C]
+              \]
+              e il commutatore base \(\,[\hat x,\hat p]=i\hbar\).
+            </div>
+
+            <h3>(a1) \([\hat x,\hat p^n]\)</h3>
+
+            <div class="box">
+              <strong>Dimostrazione per induzione</strong> (scritta in modo esplicito).
+            </div>
+
+            <ul class="step">
+              <li>
+                Caso base \(n=1\): \([\hat x,\hat p]=i\hbar\) (dato).
+              </li>
+              <li>
+                Passo induttivo: supponiamo vero per \(n\), cioè
+                \[
+                  [\hat x,\hat p^n]=i\hbar\,n\,\hat p^{n-1}.
+                \]
+                Allora per \(n+1\):
+                \[
+                  [\hat x,\hat p^{n+1}]
+                  =[\hat x,\hat p^n\hat p]
+                  =[\hat x,\hat p^n]\hat p+\hat p^n[\hat x,\hat p].
+                \]
+                Sostituiamo:
+                \[
+                  =\left(i\hbar n\hat p^{n-1}\right)\hat p+\hat p^n(i\hbar)
+                  =i\hbar n\hat p^n+i\hbar\hat p^n
+                  =i\hbar(n+1)\hat p^n.
+                \]
+              </li>
+              <li>
+                Quindi:
+                <span class="eq">\(\boxed{[\hat x,\hat p^n]=i\hbar\,n\,\hat p^{\,n-1}}\)</span>.
+              </li>
+            </ul>
+
+            <div class="hr"></div>
+
+            <h3>(a2) \([\hat x^m,\hat p]\)</h3>
+
+            <p>
+              Anche qui si può fare per induzione, oppure usare l’analogo:
+              \[
+                [AB,C]=A[B,C]+[A,C]B.
+              \]
+            </p>
+
+            <ul class="step">
+              <li>
+                Caso base \(m=1\): \([\hat x,\hat p]=i\hbar\).
+              </li>
+              <li>
+                Passo: \(\hat x^{m+1}=\hat x^m\hat x\):
+                \[
+                  [\hat x^{m+1},\hat p]=[\hat x^m\hat x,\hat p]=\hat x^m[\hat x,\hat p]+[\hat x^m,\hat p]\hat x.
+                \]
+                Se \([\hat x^m,\hat p]=i\hbar m\hat x^{m-1}\), allora:
+                \[
+                  [\hat x^{m+1},\hat p]=\hat x^m(i\hbar) + (i\hbar m\hat x^{m-1})\hat x
+                  =i\hbar\hat x^m+i\hbar m\hat x^m
+                  =i\hbar(m+1)\hat x^m.
+                \]
+              </li>
+              <li>
+                Quindi:
+                <span class="eq">\(\boxed{[\hat x^m,\hat p]=i\hbar\,m\,\hat x^{\,m-1}}\)</span>.
+              </li>
+            </ul>
+
+            <div class="hr"></div>
+
+            <h3>(b1) \([f(\hat x),\hat p]\)</h3>
+
+            <div class="box ok">
+              <strong>Risultato finale:</strong>
+              \[
+                \boxed{[f(\hat x),\hat p]=i\hbar\,f'(\hat x)}
+              \]
+              (valido per funzioni “ben comportate”, espandibili in serie).
+            </div>
+
+            <p>
+              <strong>Dimostrazione via azione su \(\psi(x)\)</strong> (coordinate):
+              in rappresentazione delle coordinate:
+              \[
+                \hat x\to x,\qquad \hat p\to -i\hbar\frac{d}{dx}.
+              \]
+              Allora:
+              \[
+                [f(\hat x),\hat p]\psi(x)=f(x)\left(-i\hbar\psi'(x)\right) - \left(-i\hbar\frac{d}{dx}(f(x)\psi(x))\right).
+              \]
+              Calcoliamo il secondo termine (passo banale):
+              \[
+                \frac{d}{dx}(f\psi)=f'\psi+f\psi'.
+              \]
+              Quindi:
+              \[
+                -i\hbar\frac{d}{dx}(f\psi)=-i\hbar(f'\psi+f\psi').
+              \]
+              Ora mettiamo insieme:
+              \[
+                [f,\hat p]\psi=-i\hbar f\psi' -\left(-i\hbar(f'\psi+f\psi')\right)
+                =-i\hbar f\psi' + i\hbar f'\psi + i\hbar f\psi'
+                =i\hbar f'(x)\psi(x).
+              \]
+              Quindi come operatore:
+              \[
+                [f(\hat x),\hat p]=i\hbar f'(\hat x).
+              \]
+            </p>
+
+            <div class="hr"></div>
+
+            <h3>(b2) \([\hat x,g(\hat p)]\)</h3>
+
+            <div class="box ok">
+              <strong>Risultato finale:</strong>
+              \[
+                \boxed{[\hat x,g(\hat p)]=i\hbar\,g'(\hat p)}
+              \]
+            </div>
+
+            <p>
+              <strong>Dimostrazione via rappresentazione in \(p\)-spazio:</strong>
+              in rappresentazione dell’impulso:
+              \[
+                \hat p\to p,\qquad \hat x\to i\hbar\frac{d}{dp}.
+              \]
+              Allora, su una \(\phi(p)\):
+              \[
+                [\hat x,g(\hat p)]\phi(p)
+                =i\hbar\frac{d}{dp}\left(g(p)\phi(p)\right)-g(p)\,i\hbar\phi'(p).
+              \]
+              Deriviamo:
+              \[
+                \frac{d}{dp}(g\phi)=g'\phi+g\phi'.
+              \]
+              Quindi:
+              \[
+                i\hbar(g'\phi+g\phi')-i\hbar g\phi'=i\hbar g'(p)\phi(p).
+              \]
+              Quindi:
+              \[
+                [\hat x,g(\hat p)]=i\hbar g'(\hat p).
+              \]
+            </p>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
     <footer>
-        Generato automaticamente - Set 7 parita oscillatore
+      Generato automaticamente — Set 7 (soluzioni).<br/>
     </footer>
+
+  </div>
 </body>
 </html>
