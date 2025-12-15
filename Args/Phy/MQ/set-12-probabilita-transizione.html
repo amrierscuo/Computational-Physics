@@ -1,41 +1,894 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set 12 probabilita transizione</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set 12 — Probabilità di transizione (Oscillatore armonico + Idrogeno)</title>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,0.08);
+      --panel2: rgba(255,255,255,0.06);
+      --text: #e8eefc;
+      --muted: rgba(232,238,252,0.72);
+      --accent: #6ee7ff;
+      --accent2:#a78bfa;
+      --ok:#34d399;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(110,231,255,0.25), transparent 60%),
+        radial-gradient(900px 600px at 80% 15%, rgba(167,139,250,0.20), transparent 55%),
+        radial-gradient(900px 600px at 50% 90%, rgba(52,211,153,0.12), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      padding: 28px 18px 60px;
+    }
+
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    header.hero{
+      padding: 22px 22px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(110,231,255,0.16), rgba(167,139,250,0.12));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    header.hero h1{
+      margin: 0 0 8px 0;
+      font-size: 1.55rem;
+      letter-spacing: 0.2px;
+    }
+
+    header.hero p{
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .topbar{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+      margin-top: 14px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+      text-decoration:none;
+      font-size: 0.92rem;
+    }
+    .pill:hover{ background: rgba(255,255,255,0.12); }
+
+    nav.toc{
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: var(--shadow);
+    }
+    nav.toc h2{
+      margin: 0 0 8px 0;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    nav.toc ul{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    nav.toc a{ color: var(--accent); text-decoration: none; }
+    nav.toc a:hover{ text-decoration: underline; }
+
+    .card{
+      margin-top: 18px;
+      padding: 18px 18px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: var(--shadow);
+    }
+
+    .card h2{
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
+    }
+
+    .badge{
+      display:inline-block;
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: var(--muted);
+      vertical-align: middle;
+    }
+
+    .block{
+      margin-top: 12px;
+      padding: 14px 14px;
+      border-radius: 14px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .problem-title{
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .sol-title{
+      font-weight: 800;
+      color: var(--ok);
+      margin-bottom: 6px;
+    }
+
+    .note{
+      border-left: 4px solid var(--warn);
+      padding-left: 12px;
+      color: rgba(232,238,252,0.86);
+      margin: 10px 0 0;
+    }
+
+    .important{
+      border-left: 4px solid var(--accent2);
+      padding-left: 12px;
+      margin: 10px 0 0;
+      color: rgba(232,238,252,0.92);
+    }
+
+    .result{
+      border-left: 4px solid var(--ok);
+      padding-left: 12px;
+      margin-top: 12px;
+      color: rgba(232,238,252,0.95);
+    }
+
+    .underline{
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(110,231,255,0.85);
+      text-underline-offset: 3px;
+    }
+
+    code.k{
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 2px 6px;
+      border-radius: 8px;
+      color: rgba(232,238,252,0.92);
+    }
+
+    details{
+      margin-top: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    details > summary{
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    footer{
+      margin-top: 24px;
+      color: rgba(232,238,252,0.60);
+      text-align:center;
+      font-size: 0.92rem;
+    }
+  </style>
+
+  <!-- MathJax (per rendere \(...\) e \[...\]) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]']],
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
+
 <body>
-    <h1>Set 12 probabilita transizione</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 12 probabilita transizione. Grazie per la pazienza!</p>
+  <div class="container">
+
+    <header class="hero">
+      <h1>Set 12 — Probabilità di transizione <span class="badge">Teoria delle perturbazioni dipendenti dal tempo</span></h1>
+      <p>
+        Obiettivo: calcolare <span class="underline">ampiezze</span> e <span class="underline">probabilità</span> di transizione al I ordine,
+        con tutti i passaggi (anche “banali”) esplicitati.
+      </p>
+
+      <div class="topbar">
+        <a class="pill" href="1mq.html">← Torna a MQ</a>
+        <a class="pill" href="#es1">Vai a Esercizio 1</a>
+        <a class="pill" href="#es2">Vai a Esercizio 2</a>
+        <a class="pill" href="#es3">Vai a Esercizio 3</a>
+      </div>
+    </header>
+
+    <nav class="toc">
+      <h2>Indice</h2>
+      <ul>
+        <li><a href="#es1">Esercizio 1 — Campo elettrico costante per durata \(\tau\) (oscillatore armonico carico)</a></li>
+        <li><a href="#es2">Esercizio 2 — Perturbazione \(V(x,t)=A x^2 e^{-bt}\) (da \(n=0\))</a></li>
+        <li><a href="#es3">Esercizio 3 — Idrogeno \(1s\) in campo elettrico oscillante \(E=E_0\sin\omega t\)</a></li>
+      </ul>
+    </nav>
+
+    <!-- ====================================================== -->
+    <section id="es1" class="card">
+      <h2>Esercizio 1 <span class="badge">Oscillatore armonico + campo costante</span></h2>
+
+      <div class="block">
+        <div class="problem-title">Testo</div>
+        <p style="margin:0">
+          Un oscillatore armonico unidimensionale <b>carico</b> (parametri \(m,\omega,q\)) è sottoposto ad un
+          <b>campo elettrico costante</b> per una durata \(\tau\).
+          Calcolare, <b>al primo ordine perturbativo</b>, le probabilità di transizione:
+        </p>
+        <ul style="margin:10px 0 0 18px">
+          <li>(a) dallo stato fondamentale al primo stato eccitato \((n=1)\);</li>
+          <li>(b) dal primo stato eccitato agli stati con \(n=2\) e \(n=3\).</li>
+        </ul>
+        <p class="important">
+          Si ricordi: \(\; x=\sqrt{\frac{\hbar}{2m\omega}}\,(a+a^\dagger)\).
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="sol-title">Soluzione (I ordine) — schema generale</div>
+
+        <p style="margin:0">
+          Assumiamo (scelta standard) che il campo sia acceso in \(0\le t\le \tau\) e spento fuori da quell’intervallo.
+          Un campo elettrico costante \(E\) lungo \(x\) dà una perturbazione (energia potenziale):
+        </p>
+        <p class="important">
+          \[
+            V(t)= -q E\,x \qquad (0\le t\le \tau), \qquad V(t)=0 \quad \text{altrove.}
+          \]
+        </p>
+
+        <p style="margin:0">
+          La formula di teoria delle perturbazioni dipendenti dal tempo (I ordine) per l’ampiezza \(c_{f}^{(1)}\) è:
+        </p>
+        <p class="important">
+          \[
+            c_f^{(1)}(\tau)= -\frac{i}{\hbar}\int_{0}^{\tau}\!dt'\; \langle f|V|i\rangle\,e^{\,i\omega_{fi}t'},
+            \qquad \omega_{fi}=\frac{E_f-E_i}{\hbar}.
+          \]
+        </p>
+
+        <p style="margin:0">
+          Qui \(\langle f|V|i\rangle\) è costante nel tempo (perché \(E\) è costante), quindi:
+        </p>
+
+        <p class="important">
+          \[
+            c_f^{(1)}(\tau)= -\frac{i}{\hbar}\,\langle f|V|i\rangle \int_{0}^{\tau}\!dt'\;e^{i\omega_{fi}t'}.
+          \]
+        </p>
+
+        <details open>
+          <summary>Calcolo “banale” dell’integrale \(\int_0^\tau e^{i\omega t}\,dt\)</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              Usiamo la primitiva:
+              \[
+                \int e^{i\omega t}\,dt=\frac{e^{i\omega t}}{i\omega}.
+              \]
+              Quindi
+              \[
+                \int_0^\tau e^{i\omega t}\,dt
+                =\left[\frac{e^{i\omega t}}{i\omega}\right]_0^\tau
+                =\frac{e^{i\omega\tau}-1}{i\omega}.
+              \]
+              È spesso utile anche la forma con il seno:
+              \[
+                e^{i\omega\tau}-1
+                =e^{i\omega\tau/2}\left(e^{i\omega\tau/2}-e^{-i\omega\tau/2}\right)
+                =e^{i\omega\tau/2}\,(2i)\sin(\omega\tau/2),
+              \]
+              dunque
+              \[
+                \int_0^\tau e^{i\omega t}\,dt
+                =e^{i\omega\tau/2}\,\frac{2\sin(\omega\tau/2)}{\omega}.
+              \]
+            </p>
+          </div>
+        </details>
+
+        <p style="margin:0">
+          La probabilità al I ordine è \(P_{i\to f}\approx |c_f^{(1)}(\tau)|^2\), quindi:
+        </p>
+
+        <p class="result">
+          \[
+            P_{i\to f}(\tau)
+            =\frac{|\langle f|V|i\rangle|^2}{\hbar^2}\;
+            \frac{4\sin^2\!\left(\omega_{fi}\tau/2\right)}{\omega_{fi}^2}.
+          \]
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="sol-title">(a) Transizione \(0\to 1\)</div>
+
+        <p style="margin:0">
+          Serve il <b>matrix element</b> \(\langle 1|x|0\rangle\).
+          Usiamo:
+          \[
+            x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),
+            \quad a|n\rangle=\sqrt{n}\,|n-1\rangle,
+            \quad a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle.
+          \]
+        </p>
+
+        <details open>
+          <summary>Calcolo di \(\langle 1|x|0\rangle\) passo-passo</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              \[
+                \langle 1|x|0\rangle
+                =\sqrt{\frac{\hbar}{2m\omega}}\left(\langle 1|a|0\rangle+\langle 1|a^\dagger|0\rangle\right).
+              \]
+              Ora:
+              <br><br>
+              - \(a|0\rangle = \sqrt{0}\,|-1\rangle = 0\) ⇒ \(\langle 1|a|0\rangle=0\).<br>
+              - \(a^\dagger|0\rangle=\sqrt{1}\,|1\rangle=|1\rangle\) ⇒ \(\langle 1|a^\dagger|0\rangle=\langle 1|1\rangle=1\).<br><br>
+              Quindi
+              \[
+                \boxed{\langle 1|x|0\rangle=\sqrt{\frac{\hbar}{2m\omega}}.}
+              \]
+            </p>
+          </div>
+        </details>
+
+        <p style="margin:0">
+          Siccome \(V=-qEx\), allora:
+          \[
+            \langle 1|V|0\rangle = -qE\,\langle 1|x|0\rangle = -qE\sqrt{\frac{\hbar}{2m\omega}}.
+          \]
+          Inoltre per l’oscillatore:
+          \[
+            E_n=\hbar\omega\left(n+\frac{1}{2}\right)
+            \Rightarrow
+            \omega_{10}=\frac{E_1-E_0}{\hbar}=\frac{\hbar\omega}{\hbar}=\omega.
+          \]
+        </p>
+
+        <p class="result">
+          \[
+            \boxed{
+            P_{0\to 1}(\tau)
+            =\frac{|-qE|^2\left(\frac{\hbar}{2m\omega}\right)}{\hbar^2}\;
+            \frac{4\sin^2(\omega\tau/2)}{\omega^2}
+            =\frac{2q^2E^2}{m\hbar\omega^3}\,\sin^2\!\left(\frac{\omega\tau}{2}\right).
+            }
+          \]
+        </p>
+
+        <p class="note">
+          Osservazione: se \(\tau = \frac{2\pi}{\omega}k\) con \(k\in\mathbb{Z}\),
+          allora \(\sin(\omega\tau/2)=\sin(k\pi)=0\) e la probabilità (al I ordine) è zero.
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="sol-title">(b) Transizioni \(1\to 2\) e \(1\to 3\)</div>
+
+        <p style="margin:0">
+          Serve \(\langle 2|x|1\rangle\) e \(\langle 3|x|1\rangle\).
+        </p>
+
+        <details open>
+          <summary>Calcolo di \(\langle 2|x|1\rangle\) e regola di selezione \(\Delta n=\pm 1\)</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              \[
+                \langle 2|x|1\rangle
+                =\sqrt{\frac{\hbar}{2m\omega}}\left(\langle 2|a|1\rangle+\langle 2|a^\dagger|1\rangle\right).
+              \]
+              - \(a|1\rangle=\sqrt{1}\,|0\rangle\) ⇒ \(\langle 2|a|1\rangle=\langle 2|0\rangle=0\).<br>
+              - \(a^\dagger|1\rangle=\sqrt{2}\,|2\rangle\) ⇒ \(\langle 2|a^\dagger|1\rangle=\sqrt{2}\langle 2|2\rangle=\sqrt{2}\).<br><br>
+              Quindi
+              \[
+                \boxed{\langle 2|x|1\rangle=\sqrt{\frac{\hbar}{2m\omega}}\sqrt{2}=\sqrt{\frac{\hbar}{m\omega}}.}
+              \]
+              Per \(\langle 3|x|1\rangle\):<br>
+              - \(a|1\rangle\propto |0\rangle\), non \(|3\rangle\).<br>
+              - \(a^\dagger|1\rangle\propto |2\rangle\), non \(|3\rangle\).<br><br>
+              Quindi
+              \[
+                \boxed{\langle 3|x|1\rangle=0.}
+              \]
+              <p class="important" style="margin:10px 0 0">
+                Regola di selezione (qui): \(x\propto a+a^\dagger\Rightarrow \Delta n=\pm 1\) al I ordine.
+              </p>
+            </p>
+          </div>
+        </details>
+
+        <p style="margin:0">
+          Dunque:
+          \[
+            \langle 2|V|1\rangle = -qE\,\langle 2|x|1\rangle
+            =-qE\sqrt{\frac{\hbar}{m\omega}},
+            \qquad
+            \langle 3|V|1\rangle = 0.
+          \]
+          Inoltre:
+          \[
+            \omega_{21}=\frac{E_2-E_1}{\hbar}=\omega,\qquad \omega_{31}=2\omega.
+          \]
+        </p>
+
+        <p class="result">
+          \[
+            \boxed{
+            P_{1\to 2}(\tau)
+            =\frac{|\langle 2|V|1\rangle|^2}{\hbar^2}\frac{4\sin^2(\omega\tau/2)}{\omega^2}
+            =\frac{4q^2E^2}{m\hbar\omega^3}\,\sin^2\!\left(\frac{\omega\tau}{2}\right)
+            }
+          \]
+          \[
+            \boxed{
+            P_{1\to 3}(\tau)=0 \quad \text{(al I ordine, perché } \Delta n=2\text{).}
+            }
+          \]
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================== -->
+    <section id="es2" class="card">
+      <h2>Esercizio 2 <span class="badge">Perturbazione \(Ax^2 e^{-bt}\)</span></h2>
+
+      <div class="block">
+        <div class="problem-title">Testo</div>
+        <p style="margin:0">
+          Su uno oscillatore armonico nello stato fondamentale agisce a partire dal tempo \(t=0\) una perturbazione
+          \[
+            V(x,t)=A\,x^2\,e^{-bt}.
+          \]
+          Determinare gli stati verso cui può transire il sistema e le relative probabilità di transizione,
+          dopo un lungo tempo, al primo ordine perturbativo.
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="sol-title">Soluzione</div>
+
+        <p style="margin:0">
+          Stato iniziale: \(|i\rangle=|0\rangle\).<br>
+          Formula I ordine (per \(t\to+\infty\)):
+        </p>
+
+        <p class="important">
+          \[
+            c_n^{(1)}(\infty)= -\frac{i}{\hbar}\int_0^\infty dt'\; \langle n|A x^2 e^{-bt'}|0\rangle\,e^{i\omega_{n0}t'}.
+          \]
+        </p>
+
+        <p style="margin:0">
+          Il pezzo temporale è un integrale esponenziale. La parte “selettiva” è \(\langle n|x^2|0\rangle\).
+          Scriviamo \(x^2\) con i ladder:
+          \[
+            x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger)\equiv x_0(a+a^\dagger)
+            \quad\Rightarrow\quad
+            x^2=x_0^2(a+a^\dagger)^2.
+          \]
+        </p>
+
+        <details open>
+          <summary>Espansione di \(x^2\) (con passaggio “banale” del commutatore)</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              \[
+                (a+a^\dagger)^2=a^2+a^{\dagger 2}+aa^\dagger+a^\dagger a.
+              \]
+              Usiamo \(aa^\dagger=a^\dagger a+1\). Quindi:
+              \[
+                aa^\dagger+a^\dagger a=(a^\dagger a+1)+a^\dagger a=2a^\dagger a+1.
+              \]
+              In conclusione:
+              \[
+                x^2=x_0^2\big(a^2+a^{\dagger 2}+2a^\dagger a+1\big),
+                \qquad x_0^2=\frac{\hbar}{2m\omega}.
+              \]
+            </p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Azione su \(|0\rangle\) ⇒ quali \(n\) sono raggiungibili</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              Applichiamo i termini a \(|0\rangle\):
+              <br><br>
+              - \(a|0\rangle=0\Rightarrow a^2|0\rangle=0\).<br>
+              - \(a^\dagger a|0\rangle=0\) (perché \(a|0\rangle=0\)).<br>
+              - Il termine \(1\) dà \(1\cdot|0\rangle=|0\rangle\).<br>
+              - Resta \(a^{\dagger 2}|0\rangle\). Calcoliamolo “banalmente”:
+              \[
+                a^\dagger|0\rangle=|1\rangle,\qquad
+                a^{\dagger 2}|0\rangle=a^\dagger(a^\dagger|0\rangle)=a^\dagger|1\rangle=\sqrt{2}\,|2\rangle.
+              \]
+              Quindi:
+              \[
+                x^2|0\rangle=x_0^2\left(\sqrt{2}\,|2\rangle+|0\rangle\right).
+              \]
+              Conclusione fondamentale:
+              <p class="important" style="margin:10px 0 0">
+                \(\boxed{\langle n|x^2|0\rangle\neq 0 \text{ solo per } n=0 \text{ e } n=2.}\)
+              </p>
+            </p>
+          </div>
+        </details>
+
+        <p style="margin:0">
+          Il “vero” canale di transizione (cambio di livello) è \(0\to 2\).
+          Calcoliamo il matrix element:
+        </p>
+
+        <p class="important">
+          \[
+            \langle 2|x^2|0\rangle
+            =x_0^2\sqrt{2}
+            =\sqrt{2}\,\frac{\hbar}{2m\omega}.
+          \]
+        </p>
+
+        <p style="margin:0">
+          Ora la parte temporale:
+          \[
+            \int_0^\infty e^{-bt'}e^{i\omega_{20}t'}dt'
+            =\int_0^\infty e^{-(b-i\omega_{20})t'}dt'
+            =\frac{1}{b-i\omega_{20}}.
+          \]
+          Per l’oscillatore armonico:
+          \[
+            \omega_{20}=\frac{E_2-E_0}{\hbar}=\frac{\hbar\omega(2)}{\hbar}=2\omega.
+          \]
+        </p>
+
+        <p class="result">
+          \[
+            c_2^{(1)}(\infty)
+            =-\frac{i}{\hbar}\,A\,\langle 2|x^2|0\rangle\;\frac{1}{b-i2\omega}.
+          \]
+          \[
+            P_{0\to 2}\approx |c_2^{(1)}(\infty)|^2
+            =\frac{A^2\,|\langle 2|x^2|0\rangle|^2}{\hbar^2}\;\frac{1}{b^2+4\omega^2}.
+          \]
+        </p>
+
+        <details open>
+          <summary>Semplificazione “contabile” (con cancellazioni esplicite)</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              \[
+                |\langle 2|x^2|0\rangle|^2
+                =\left(\sqrt{2}\frac{\hbar}{2m\omega}\right)^2
+                =2\cdot\frac{\hbar^2}{4m^2\omega^2}
+                =\frac{\hbar^2}{2m^2\omega^2}.
+              \]
+              Sostituiamo:
+              \[
+                P_{0\to 2}
+                =\frac{A^2}{\hbar^2}\cdot\frac{\hbar^2}{2m^2\omega^2}\cdot\frac{1}{b^2+4\omega^2}.
+              \]
+              Ora la cancellazione “banale” \(\hbar^2/\hbar^2=1\):
+              \[
+                \boxed{
+                P_{0\to 2}
+                =\frac{A^2}{2m^2\omega^2\,(b^2+4\omega^2)}.
+                }
+              \]
+            </p>
+          </div>
+        </details>
+
+        <p class="note">
+          Il termine \(n=0\) non è una “transizione” a livello diverso: produce una correzione di fase (al I ordine)
+          e non cambia la probabilità di restare in \(n=0\) a questo ordine.
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================== -->
+    <section id="es3" class="card">
+      <h2>Esercizio 3 <span class="badge">Idrogeno + risonanza dipolare</span></h2>
+
+      <div class="block">
+        <div class="problem-title">Testo</div>
+        <p style="margin:0">
+          Si consideri un atomo di idrogeno nello stato fondamentale sottoposto all’azione di un campo elettrico uniforme
+          diretto lungo l’asse \(z\):
+          \[
+            E(t)=E_0\sin(\omega t).
+          \]
+          Determinare:
+        </p>
+        <ul style="margin:10px 0 0 18px">
+          <li>(a) il valore di \(\omega\) per cui si ha una transizione risonante al primo livello eccitato;</li>
+          <li>(b) i valori di \(l\) e \(m\) raggiungibili nello stato eccitato;</li>
+          <li>(c) la probabilità di transizione in risonanza al primo ordine perturbativo.</li>
+        </ul>
+        <p class="important">
+          Verificare le condizioni di applicabilità del I ordine per \(E_0\simeq 10^6\ \text{V/m}\).
+          Dati: \(\hbar=1.05\cdot 10^{-34}\ \text{J s}\), \(a_0=5.3\cdot 10^{-11}\ \text{m}\).
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="sol-title">(a) Frequenza di risonanza</div>
+
+        <p style="margin:0">
+          I livelli dell’idrogeno (non relativistico) dipendono solo da \(n\):
+          \[
+            E_n=-\frac{13.6\ \text{eV}}{n^2}.
+          \]
+          Il “primo livello eccitato” è \(n=2\).
+          Quindi:
+          \[
+            E_1=-13.6\ \text{eV},\qquad E_2=-\frac{13.6}{4}\ \text{eV}=-3.4\ \text{eV}.
+          \]
+          La differenza è:
+          \[
+            \Delta E = E_2-E_1=(-3.4)-(-13.6)=10.2\ \text{eV}.
+          \]
+        </p>
+
+        <details open>
+          <summary>Conversione “banale” e calcolo di \(\omega=\Delta E/\hbar\)</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              Convertiamo in Joule (usiamo \(1\ \text{eV}\approx 1.6\cdot 10^{-19}\ \text{J}\)):
+              \[
+                \Delta E \approx 10.2\cdot (1.6\cdot 10^{-19})\ \text{J}.
+              \]
+              Moltiplicazione “a pezzi”:
+              <br>
+              \(10\cdot 1.6=16.0\) e \(0.2\cdot 1.6=0.32\). Somma: \(16.0+0.32=16.32\).
+              <br><br>
+              Quindi:
+              \[
+                \Delta E \approx 16.32\cdot 10^{-19}\ \text{J}=1.632\cdot 10^{-18}\ \text{J}.
+              \]
+              Ora:
+              \[
+                \omega_{\text{res}}=\frac{\Delta E}{\hbar}
+                =\frac{1.632\cdot 10^{-18}}{1.05\cdot 10^{-34}}\ \text{s}^{-1}.
+              \]
+              Divisione “banale” dei coefficienti:
+              \[
+                \frac{1.632}{1.05}\approx 1.554\quad (\text{perché }1.05\cdot 1.554\approx 1.6317).
+              \]
+              E sulle potenze:
+              \[
+                \frac{10^{-18}}{10^{-34}}=10^{16}.
+              \]
+              Quindi:
+              \[
+                \boxed{\omega_{\text{res}}\approx 1.55\cdot 10^{16}\ \text{rad/s}.}
+              \]
+            </p>
+          </div>
+        </details>
+
+      </div>
+
+      <div class="block">
+        <div class="sol-title">(b) Quali \(l,m\) sono raggiungibili</div>
+
+        <p style="margin:0">
+          L’interazione con il campo elettrico lungo \(z\) (dipolo elettrico) è:
+          \[
+            V(t)= -e\,E_0\,z\,\sin(\omega t),
+            \qquad z=r\cos\theta.
+          \]
+          L’operatore \(z\) ha la struttura angolare di un armonico sferico con \(l=1\) e \(m=0\).
+          Quindi le regole di selezione dipolari sono:
+        </p>
+
+        <p class="important">
+          \[
+            \Delta l=\pm 1,
+            \qquad
+            \Delta m=0 \quad (\text{polarizzazione lungo } z).
+          \]
+        </p>
+
+        <p style="margin:0">
+          Stato iniziale: \(1s\Rightarrow n=1,\ l=0,\ m=0\).<br>
+          Per arrivare a \(n=2\), l’unico canale permesso è verso uno stato \(2p\) con:
+        </p>
+
+        <p class="result">
+          \[
+            \boxed{n=2,\quad l=1,\quad m=0.}
+          \]
+        </p>
+
+        <p class="note">
+          Il livello \(n=2\) contiene anche \(2s\) (\(l=0\)), ma è vietato al I ordine dipolare perché \(\Delta l=0\).
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="sol-title">(c) Probabilità di transizione in risonanza (I ordine)</div>
+
+        <p style="margin:0">
+          Consideriamo la transizione \(|i\rangle=|1s\rangle\to |f\rangle=|2p,m=0\rangle\).
+          Scriviamo la formula generale:
+        </p>
+
+        <p class="important">
+          \[
+            c_f^{(1)}(t)= -\frac{i}{\hbar}\int_0^t dt'\;\langle f|V(t')|i\rangle\,e^{i\omega_{fi}t'}.
+          \]
+        </p>
+
+        <p style="margin:0">
+          Poiché \(V(t')=-eE_0 z \sin(\omega t')\), definiamo il matrix element:
+          \[
+            z_{fi}=\langle f|z|i\rangle.
+          \]
+          Allora:
+          \[
+            \langle f|V(t')|i\rangle = -eE_0\,z_{fi}\,\sin(\omega t').
+          \]
+        </p>
+
+        <details open>
+          <summary>Integrale standard con \(\sin(\omega t)\): forma utile (con due termini)</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              Inserendo \(\sin(\omega t)=\frac{e^{i\omega t}-e^{-i\omega t}}{2i}\) si ottiene:
+              \[
+                c_f^{(1)}(t)=\frac{eE_0 z_{fi}}{\hbar}\cdot
+                \frac{1}{2}\left[
+                \frac{e^{i(\omega_{fi}-\omega)t}-1}{\omega_{fi}-\omega}
+                -
+                \frac{e^{i(\omega_{fi}+\omega)t}-1}{\omega_{fi}+\omega}
+                \right].
+              \]
+              Il secondo termine (con \(\omega_{fi}+\omega\)) oscilla molto velocemente ed è tipicamente piccolo.
+            </p>
+          </div>
+        </details>
+
+        <p style="margin:0">
+          In <b>risonanza</b> poniamo \(\omega=\omega_{fi}\) (cioè \(\omega=\omega_{\text{res}}\)).
+          Allora il primo denominatore va a zero e il limite produce crescita lineare in \(t\):
+          \[
+            \lim_{\Delta\to 0}\frac{e^{i\Delta t}-1}{\Delta}=it.
+          \]
+          Quindi (trascurando il termine “veloce”):
+        </p>
+
+        <p class="result">
+          \[
+            \boxed{
+            c_f^{(1)}(t)\simeq -\frac{eE_0 z_{fi}}{2\hbar}\,t
+            \quad\Longrightarrow\quad
+            P_{i\to f}(t)\simeq \left(\frac{eE_0 |z_{fi}|}{2\hbar}\right)^2 t^2.
+            }
+          \]
+        </p>
+
+        <details open>
+          <summary>(Extra utile) Stima di \(z_{fi}=\langle 2p,0|z|1s\rangle\) (ordine di grandezza + calcolo)</summary>
+          <div class="block" style="margin-top:10px">
+            <p style="margin:0">
+              Scriviamo \(z=r\cos\theta\) e separiamo radiale/angolare:
+              \[
+                z_{fi}=\left(\int_0^\infty r^3 R_{21}(r)R_{10}(r)\,dr\right)
+                \left(\int Y_{10}^*(\Omega)\cos\theta\,Y_{00}(\Omega)\,d\Omega\right).
+              \]
+              L’integrale angolare vale:
+              \[
+                \int Y_{10}^*\cos\theta\,Y_{00}\,d\Omega=\frac{1}{\sqrt{3}}.
+              \]
+              Con le forme note:
+              \[
+                R_{10}(r)=2a_0^{-3/2}e^{-r/a_0},\qquad
+                R_{21}(r)=\frac{1}{2\sqrt{6}}a_0^{-3/2}\left(\frac{r}{a_0}\right)e^{-r/(2a_0)}.
+              \]
+              Si ottiene:
+              \[
+                \int_0^\infty r^3 R_{21}R_{10}\,dr=\frac{256}{81\sqrt{6}}\,a_0,
+              \]
+              dunque:
+              \[
+                z_{fi}=\frac{256}{81\sqrt{6}}\cdot\frac{1}{\sqrt{3}}a_0
+                =\frac{256}{81\sqrt{18}}a_0
+                =\boxed{\frac{256}{243\sqrt{2}}\,a_0\;\approx\;0.745\,a_0.}
+              \]
+            </p>
+          </div>
+        </details>
+
+        <div class="block">
+          <div class="sol-title">Controllo “applicabilità” per \(E_0\simeq 10^6\ \text{V/m}\)</div>
+
+          <p style="margin:0">
+            Una condizione pratica di “campo debole” è che l’energia tipica della perturbazione
+            \(\sim eE_0 a_0\) sia molto minore della separazione di livelli \(\Delta E\):
+          </p>
+
+          <details open>
+            <summary>Conto numerico “banale” di \(eE_0 a_0\) e confronto con \(\Delta E\)</summary>
+            <div class="block" style="margin-top:10px">
+              <p style="margin:0">
+                Calcoliamo:
+                \[
+                  eE_0 a_0 \approx (1.6\cdot 10^{-19})\,(10^6)\,(5.3\cdot 10^{-11})\ \text{J}.
+                \]
+                Prima \(1.6\cdot 10^{-19}\cdot 10^6 =1.6\cdot 10^{-13}\). Poi:
+                \[
+                  1.6\cdot 10^{-13}\cdot 5.3\cdot 10^{-11}
+                  =(1.6\cdot 5.3)\cdot 10^{-24}.
+                \]
+                Moltiplicazione “banale” \(1.6\cdot 5.3 = 8.48\). Quindi:
+                \[
+                  eE_0 a_0 \approx 8.48\cdot 10^{-24}\ \text{J}.
+                \]
+                Confronto con \(\Delta E \approx 1.632\cdot 10^{-18}\ \text{J}\):
+                \[
+                  \frac{eE_0 a_0}{\Delta E}\approx \frac{8.48\cdot 10^{-24}}{1.632\cdot 10^{-18}}
+                  =\frac{8.48}{1.632}\cdot 10^{-6}\approx 5.2\cdot 10^{-6}\ll 1.
+                \]
+                Quindi il campo è <b>molto debole</b> rispetto alla separazione energetica.
+              </p>
+            </div>
+          </details>
+
+          <p class="note">
+            Nota importante: in risonanza \(P(t)\propto t^2\) al I ordine, quindi per tempi molto lunghi la teoria al I ordine
+            <b>inevitabilmente</b> smette di valere (bisogna usare la dinamica di Rabi).
+            Un criterio semplice: richiedere \(P(t)\ll 1\), cioè
+            \(\left(\frac{eE_0|z_{fi}|}{2\hbar}\right)t\ll 1\).
+          </p>
+        </div>
+
+      </div>
+    </section>
+
     <footer>
-        Generato automaticamente - Set 12 probabilita transizione
+       Set 12 (sol) • Meccanica Quantistica
     </footer>
+
+  </div>
 </body>
 </html>
