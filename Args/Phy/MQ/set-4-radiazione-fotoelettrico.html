@@ -1,41 +1,997 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set 4 radiazione fotoelettrico</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set 4 — Radiazione, effetto fotoelettrico, Compton, ...</title>
+
+  <!-- MathJax (per scrivere formule tipo \( ... \) e \[ ... \]) -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --muted: rgba(11,16,32,.72);
+      --paper: rgba(255,255,255,.92);
+      --paper2: rgba(255,255,255,.80);
+      --glass: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.22);
+      --shadow: rgba(0,0,0,.22);
+
+      --c1:#00e5ff;
+      --c2:#ff4ecd;
+      --c3:#ffe34d;
+      --c4:#52ff9c;
+
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      line-height: 1.65;
+
+      background:
+        radial-gradient(1100px 700px at 12% 10%, rgba(0,229,255,.18), transparent 60%),
+        radial-gradient(900px 700px at 92% 18%, rgba(255,78,205,.14), transparent 60%),
+        radial-gradient(1200px 900px at 55% 95%, rgba(82,255,156,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.88), rgba(240,246,255,.92));
+      min-height: 100vh;
+      padding: 28px 16px 44px;
+    }
+
+    a{ color:#146cb8; text-decoration:none; font-weight: 800; }
+    a:hover{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; }
+
+    .top-actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .back{
+      display:inline-flex;
+      gap: 10px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.70);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      font-weight: 900;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.26);
+      background:
+        radial-gradient(700px 120px at 10% 0%, rgba(0,229,255,.20), transparent 60%),
+        radial-gradient(700px 120px at 90% 0%, rgba(255,78,205,.16), transparent 60%),
+        rgba(10,16,30,.62);
+      color: rgba(255,255,255,.92);
+      box-shadow: 0 18px 46px rgba(0,0,0,.18);
+      backdrop-filter: blur(10px);
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+
+    header.hero{
+      border-radius: var(--radius);
+      padding: 20px 18px;
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(0,229,255,.22), transparent 60%),
+        radial-gradient(900px 420px at 90% 10%, rgba(255,78,205,.16), transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,.95), rgba(255,255,255,.72));
+      box-shadow:
+        0 18px 46px rgba(0,0,0,.16),
+        0 2px 0 rgba(255,255,255,.35) inset;
+      border: 2px solid rgba(255,255,255,.42);
+      position: relative;
+      overflow:hidden;
+    }
+    header.hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(135deg, rgba(0,0,0,.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.25;
+    }
+    .hero h1{
+      margin:0 0 8px;
+      font-size: 26px;
+      line-height: 1.15;
+      letter-spacing: .2px;
+    }
+    .hero .sub{
+      margin:0;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    nav.toc{
+      margin-top: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      padding: 14px 14px;
+    }
+    .toc-title{
+      margin:0 0 10px;
+      font-weight: 1000;
+      letter-spacing: .2px;
+    }
+    .toc ul{
+      margin:0;
+      padding-left: 18px;
+      display:grid;
+      gap: 6px;
+    }
+    .toc li{ color: rgba(11,16,32,.88); }
+    .toc a{ font-weight: 900; }
+
+    .card{
+      margin-top: 16px;
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 2px solid rgba(255,255,255,.42);
+      box-shadow: 0 18px 46px rgba(0,0,0,.14);
+      overflow:hidden;
+      position: relative;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset: 10px;
+      border-radius: calc(var(--radius) - 10px);
+      border: 2px solid rgba(0,0,0,.06);
+      pointer-events:none;
+    }
+    .card-head{
+      padding: 16px 16px 10px;
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      background:
+        radial-gradient(900px 240px at 20% 0%, rgba(0,229,255,.12), transparent 55%),
+        radial-gradient(900px 240px at 80% 0%, rgba(255,78,205,.10), transparent 55%),
+        rgba(255,255,255,.70);
+    }
+    .card-head h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: .2px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.04);
+      border: 1px solid rgba(0,0,0,.08);
+      font-weight: 900;
+      color: rgba(11,16,32,.84);
+      white-space: nowrap;
+    }
+    .dot{
+      width: 10px; height: 10px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--c1), var(--c2));
+      box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+    }
+
+    .card-body{ padding: 16px; }
+
+    .problem{
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.08);
+      padding: 12px 12px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.08);
+    }
+    .problem h3{
+      margin:0 0 6px;
+      font-size: 14px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: rgba(11,16,32,.74);
+    }
+
+    details.solution{
+      margin-top: 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 10px 18px rgba(0,0,0,.08);
+      overflow:hidden;
+    }
+    details.solution > summary{
+      cursor:pointer;
+      padding: 12px 12px;
+      font-weight: 1000;
+      list-style:none;
+      position: relative;
+      background:
+        radial-gradient(700px 140px at 12% 0%, rgba(0,229,255,.16), transparent 60%),
+        radial-gradient(700px 140px at 88% 0%, rgba(255,78,205,.12), transparent 60%),
+        rgba(10,16,30,.70);
+      color: rgba(255,255,255,.94);
+    }
+    details.solution > summary::-webkit-details-marker{ display:none; }
+    .sol-inner{ padding: 12px 12px 14px; color: rgba(11,16,32,.90); }
+
+    .step{
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      margin: 10px 0;
+    }
+    .step-title{
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+
+    .note{
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: rgba(0,229,255,.08);
+      border: 1px solid rgba(0,229,255,.18);
+      color: rgba(0,70,90,.95);
+      margin: 10px 0;
+      font-weight: 750;
+    }
+    .warn{
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: rgba(255,227,77,.14);
+      border: 1px solid rgba(255,227,77,.35);
+      color: rgba(90,70,0,.95);
+      margin: 10px 0;
+      font-weight: 850;
+    }
+
+    .result{
+      padding: 12px 12px;
+      border-radius: 14px;
+      background:
+        radial-gradient(800px 180px at 10% 0%, rgba(82,255,156,.18), transparent 60%),
+        radial-gradient(800px 180px at 90% 0%, rgba(255,78,205,.12), transparent 60%),
+        rgba(255,255,255,.82);
+      border: 2px solid rgba(0,0,0,.06);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      margin-top: 12px;
+    }
+    .result b{ font-weight: 1000; }
+    .u{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .95em;
+      background: rgba(0,0,0,.04);
+      border: 1px solid rgba(0,0,0,.06);
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(0,0,0,.08);
+      color: rgba(11,16,32,.72);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      text-align:center;
+      font-weight: 750;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Set 4 radiazione fotoelettrico</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 4 radiazione fotoelettrico. Grazie per la pazienza!</p>
+  <div class="wrap">
+    <div class="top-actions">
+      <a class="back" href="1mq.html#esercizi-set">← Torna all’indice MQ</a>
+      <div class="pill">Set 4 • Radiazione / Fotoelettrico / Diffrazione</div>
+    </div>
+
+    <header class="hero">
+      <h1>Set 4 — Radiazione, effetto fotoelettrico, Compton, …</h1>
+      <p class="sub">
+        Testo + <span class="u">soluzioni super-dettagliate</span> (con passaggi “banali” inclusi).
+        Dove manca un dato fisico (es. potenza della lampadina) faccio un’assunzione esplicita e ti lascio la formula generale.
+      </p>
+    </header>
+
+    <nav class="toc">
+      <p class="toc-title">Indice rapido</p>
+      <ul>
+        <li><a href="#q1">Esercizio 1 — Fotoni emessi da una lampadina</a></li>
+        <li><a href="#q2">Esercizio 2 — Effetto fotoelettrico (h, W, soglia)</a></li>
+        <li><a href="#q3">Esercizio 3 — Davisson–Germer (diffrazione elettroni)</a></li>
+        <li><a href="#q4">Esercizio 4 — De Broglie di un granello di polvere</a></li>
+        <li><a href="#q5">Esercizio 5 — Neutroni termici e reticolo cristallino</a></li>
+      </ul>
+    </nav>
+
+    <!-- ===================================================== -->
+    <section class="card" id="q1">
+      <div class="card-head">
+        <h2>1) Lampadina domestica: quanti fotoni (λ ≃ 600 nm) al secondo?</h2>
+        <div class="badge"><span class="dot"></span> Set 4 • Esercizio 1</div>
+      </div>
+      <div class="card-body">
+        <div class="problem">
+          <h3>Testo</h3>
+          <p>
+            Si consideri una comune lampadina di uso domestico.
+            Quanti fotoni nel visibile (lunghezza d’onda: \(\lambda \simeq 600\,\mathrm{nm}\))
+            vengono emessi ogni secondo?
+          </p>
+        </div>
+
+        <details class="solution" open>
+          <summary>Soluzione (con tutti i passaggi)</summary>
+          <div class="sol-inner">
+
+            <div class="warn">
+              <b>Nota importante (dato mancante):</b> nel testo non è indicata la potenza \(P\) della lampadina
+              né la frazione di potenza effettivamente emessa nel visibile.  
+              Quindi: (i) scrivo la formula generale; (ii) faccio una stima tipica con \(P=60\,\mathrm{W}\)
+              (modifica \(P\) se la tua lampadina è diversa).
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 1 — Energia di un fotone a \(\lambda=600\,\mathrm{nm}\)</div>
+              <p>
+                L’energia di un fotone vale:
+                \[
+                  E_\gamma=\frac{hc}{\lambda}.
+                \]
+                Usiamo:
+                <span class="mono">\(h=6.626\times10^{-34}\,\mathrm{J\,s}\)</span>,
+                <span class="mono">\(c=3.00\times10^{8}\,\mathrm{m/s}\)</span>,
+                <span class="mono">\(\lambda=600\,\mathrm{nm}=600\times10^{-9}\,\mathrm{m}=6.00\times10^{-7}\,\mathrm{m}\)</span>.
+              </p>
+
+              <p>
+                Calcolo “banale” di \(hc\):
+                \[
+                hc=(6.626\times10^{-34})(3.00\times10^8)
+                =(6.626\cdot 3.00)\times10^{-26}
+                =19.878\times10^{-26}
+                =1.9878\times10^{-25}\,\mathrm{J\,m}.
+                \]
+              </p>
+
+              <p>
+                Ora divido per \(\lambda=6.00\times10^{-7}\,\mathrm{m}\):
+                \[
+                E_\gamma=\frac{1.9878\times10^{-25}}{6.00\times10^{-7}}
+                =\left(\frac{1.9878}{6.00}\right)\times10^{-18}
+                =0.3313\times10^{-18}
+                =3.313\times10^{-19}\,\mathrm{J}.
+                \]
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 2 — Fotoni al secondo: formula generale</div>
+              <p>
+                Se la lampadina emette nel visibile una potenza \(P_{\text{vis}}\) (in watt = J/s),
+                il numero di fotoni al secondo è:
+                \[
+                  \dot N=\frac{P_{\text{vis}}}{E_\gamma}
+                  =\frac{P_{\text{vis}}}{hc/\lambda}
+                  =\frac{P_{\text{vis}}\lambda}{hc}.
+                \]
+              </p>
+              <p class="note">
+                Se conosci solo la potenza elettrica \(P\) e una frazione \(\eta\) finisce nel visibile,
+                allora \(P_{\text{vis}}=\eta P\) e quindi \(\dot N=\eta\,\dfrac{P}{E_\gamma}\).
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 3 — Stima numerica (esempio: \(P=60\,\mathrm{W}\) tutta nel visibile)</div>
+              <p>
+                Assumo (stima “massima”) \(P_{\text{vis}}=60\,\mathrm{W}=60\,\mathrm{J/s}\).
+              </p>
+              <p>
+                \[
+                  \dot N=\frac{60}{3.313\times10^{-19}}
+                  =\left(\frac{60}{3.313}\right)\times10^{19}
+                  \approx 18.11\times10^{19}
+                  =1.811\times10^{20}\ \text{fotoni/s}.
+                \]
+              </p>
+              <p>
+                (Ho fatto: \(60/3.313 \approx 18.11\).)
+              </p>
+
+              <div class="result">
+                <b>Risultato (ordine di grandezza):</b>
+                \[
+                  \boxed{\dot N \approx 1.8\times10^{20}\ \text{fotoni/s} \quad \text{(se } P_{\text{vis}}=60\,\mathrm{W}\text{)}}
+                \]
+                <p style="margin:8px 0 0;">
+                  Formula “scalabile”:
+                  \[
+                  \boxed{\dot N \approx 1.8\times10^{20}\,\Bigl(\frac{P_{\text{vis}}}{60\,\mathrm{W}}\Bigr)\ \text{fotoni/s}}
+                  \]
+                </p>
+              </div>
+
+              <div class="warn">
+                <b>Interpretazione fisica:</b> una lampadina reale <u>non</u> emette tutta la potenza nel visibile.
+                Se, ad esempio, solo il \(10\%\) è visibile (\(\eta=0.10\)), allora il risultato diventa
+                \(\dot N \approx 0.10\times 1.8\times10^{20}\approx 1.8\times10^{19}\) fotoni/s.
+              </div>
+            </div>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="q2">
+      <div class="card-head">
+        <h2>2) Effetto fotoelettrico su potassio: calcolo di \(h\), \(W\) e \(\nu_0\)</h2>
+        <div class="badge"><span class="dot"></span> Set 4 • Esercizio 2</div>
+      </div>
+      <div class="card-body">
+        <div class="problem">
+          <h3>Testo</h3>
+          <p>
+            In un esperimento sull’effetto fotoelettrico, luce monocromatica su una superficie di potassio.
+            Il potenziale di arresto è \(V_s=1.91\,\mathrm{V}\) per \(\lambda=3000\,\text{\AA}\) e
+            \(V_s=0.88\,\mathrm{V}\) per \(\lambda=4000\,\text{\AA}\). Calcolare:
+          </p>
+          <p style="margin-top:10px;">
+            (a) il valore della costante di Planck sapendo che \(e=1.60\times10^{-19}\,\mathrm{C}\)<br/>
+            (b) il potenziale di estrazione \(W\) del potassio<br/>
+            (c) la frequenza di soglia dell’effetto
+          </p>
+        </div>
+
+        <details class="solution" open>
+          <summary>Soluzione (con tutti i passaggi)</summary>
+          <div class="sol-inner">
+
+            <div class="step">
+              <div class="step-title">Step 0 — Formula di Einstein per il fotoelettrico</div>
+              <p>
+                L’equazione di Einstein (energia del fotone = lavoro di estrazione + energia cinetica massima) è:
+                \[
+                  h\nu = W + K_{\max}.
+                \]
+                Il potenziale di arresto \(V_s\) annulla l’energia cinetica massima:
+                \[
+                  K_{\max}=eV_s.
+                \]
+                Quindi:
+                \[
+                  eV_s = h\nu - W = \frac{hc}{\lambda} - W.
+                \]
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 1 — Scrivo le due equazioni (due lunghezze d’onda)</div>
+              <p>
+                Dati:
+                \[
+                  V_1=1.91\,\mathrm{V},\quad \lambda_1=3000\,\text{\AA};\qquad
+                  V_2=0.88\,\mathrm{V},\quad \lambda_2=4000\,\text{\AA}.
+                \]
+                Conversione angstrom → metri:
+                \[
+                  1\,\text{\AA}=10^{-10}\,\mathrm{m}.
+                \]
+                Quindi:
+                \[
+                  \lambda_1=3000\times10^{-10}=3.000\times10^{-7}\,\mathrm{m},\qquad
+                  \lambda_2=4000\times10^{-10}=4.000\times10^{-7}\,\mathrm{m}.
+                \]
+              </p>
+
+              <p>
+                Le due equazioni:
+                \[
+                  eV_1=\frac{hc}{\lambda_1}-W,\qquad
+                  eV_2=\frac{hc}{\lambda_2}-W.
+                \]
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 2 — Ricavo \(h\) sottraendo (elimino \(W\))</div>
+              <p>
+                Sottraggo la seconda dalla prima:
+                \[
+                  e(V_1-V_2)=hc\left(\frac{1}{\lambda_1}-\frac{1}{\lambda_2}\right).
+                \]
+                Quindi:
+                \[
+                  h=\frac{e(V_1-V_2)}{c\left(\frac{1}{\lambda_1}-\frac{1}{\lambda_2}\right)}.
+                \]
+              </p>
+
+              <p>
+                Calcoli “banali”:
+              </p>
+
+              <p>
+                1) Differenza di potenziale:
+                \[
+                  V_1-V_2 = 1.91-0.88 = 1.03\ \mathrm{V}.
+                \]
+              </p>
+
+              <p>
+                2) \(e(V_1-V_2)\):
+                \[
+                  e(V_1-V_2)=(1.60\times10^{-19})\cdot 1.03
+                  =(1.60\cdot 1.03)\times10^{-19}
+                  =1.648\times10^{-19}\,\mathrm{J}.
+                \]
+              </p>
+
+              <p>
+                3) Calcolo \(\left(\frac{1}{\lambda_1}-\frac{1}{\lambda_2}\right)\):
+                \[
+                  \frac{1}{\lambda_1}=\frac{1}{3.000\times10^{-7}}
+                  =\frac{1}{3.000}\times10^{7}
+                  =0.333333\ldots\times10^{7}
+                  =3.333333\times10^{6}\,\mathrm{m^{-1}},
+                \]
+                \[
+                  \frac{1}{\lambda_2}=\frac{1}{4.000\times10^{-7}}
+                  =\frac{1}{4.000}\times10^{7}
+                  =0.25\times10^{7}
+                  =2.5\times10^{6}\,\mathrm{m^{-1}}.
+                \]
+                Differenza:
+                \[
+                  \frac{1}{\lambda_1}-\frac{1}{\lambda_2}
+                  =(3.333333-2.5)\times10^{6}
+                  =0.833333\times10^{6}
+                  =8.33333\times10^{5}\,\mathrm{m^{-1}}.
+                \]
+              </p>
+
+              <p>
+                4) Moltiplico per \(c=3.00\times10^{8}\,\mathrm{m/s}\):
+                \[
+                  c\left(\frac{1}{\lambda_1}-\frac{1}{\lambda_2}\right)
+                  =(3.00\times10^{8})(8.33333\times10^{5})
+                  =(3.00\cdot 8.33333)\times10^{13}
+                  =25.0\times10^{13}
+                  =2.50\times10^{14}\,\mathrm{s^{-1}}.
+                \]
+              </p>
+
+              <p>
+                5) Ora divido:
+                \[
+                  h=\frac{1.648\times10^{-19}}{2.50\times10^{14}}
+                  =\left(\frac{1.648}{2.50}\right)\times10^{-33}
+                  =0.6592\times10^{-33}
+                  =6.592\times10^{-34}\,\mathrm{J\,s}.
+                \]
+              </p>
+
+              <div class="result">
+                <b>(a) Risultato:</b>
+                \[
+                  \boxed{h \approx 6.59\times10^{-34}\ \mathrm{J\,s}}
+                \]
+                <p style="margin:8px 0 0;">
+                  (Valore “vero” noto: \(6.626\times10^{-34}\,\mathrm{J\,s}\): ci siamo molto vicini.)
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 3 — Ricavo \(W\) (lavoro di estrazione)</div>
+              <p>
+                Uso una delle due equazioni, ad esempio la prima:
+                \[
+                  W=\frac{hc}{\lambda_1}-eV_1.
+                \]
+              </p>
+
+              <p>
+                1) Calcolo \(hc\):
+                \[
+                  hc=(6.592\times10^{-34})(3.00\times10^8)
+                  =(6.592\cdot 3.00)\times10^{-26}
+                  =19.776\times10^{-26}
+                  =1.9776\times10^{-25}\,\mathrm{J\,m}.
+                \]
+              </p>
+
+              <p>
+                2) Divido per \(\lambda_1=3.000\times10^{-7}\,\mathrm{m}\):
+                \[
+                  \frac{hc}{\lambda_1}
+                  =\frac{1.9776\times10^{-25}}{3.000\times10^{-7}}
+                  =\left(\frac{1.9776}{3.000}\right)\times10^{-18}
+                  =0.6592\times10^{-18}
+                  =6.592\times10^{-19}\,\mathrm{J}.
+                \]
+              </p>
+
+              <p>
+                3) Calcolo \(eV_1\):
+                \[
+                  eV_1=(1.60\times10^{-19})\cdot 1.91
+                  =(1.60\cdot 1.91)\times10^{-19}
+                  =3.056\times10^{-19}\,\mathrm{J}.
+                \]
+              </p>
+
+              <p>
+                4) Sottraggo:
+                \[
+                  W = 6.592\times10^{-19}-3.056\times10^{-19}
+                  =(6.592-3.056)\times10^{-19}
+                  =3.536\times10^{-19}\,\mathrm{J}.
+                \]
+              </p>
+
+              <p>
+                Se lo voglio in eV (divido per \(e=1.60\times10^{-19}\,\mathrm{J/eV}\)):
+                \[
+                  W_{\mathrm{eV}}=\frac{3.536\times10^{-19}}{1.60\times10^{-19}}=\frac{3.536}{1.60}=2.21\,\mathrm{eV}.
+                \]
+              </p>
+
+              <div class="result">
+                <b>(b) Risultato:</b>
+                \[
+                  \boxed{W \approx 3.54\times10^{-19}\ \mathrm{J}\ \approx 2.21\ \mathrm{eV}}
+                \]
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 4 — Frequenza di soglia \(\nu_0\)</div>
+              <p>
+                La soglia è quando l’energia cinetica massima va a zero: \(eV_s=0\Rightarrow h\nu_0=W\).
+                Quindi:
+                \[
+                  \nu_0=\frac{W}{h}.
+                \]
+              </p>
+
+              <p>
+                Inserisco i numeri:
+                \[
+                  \nu_0=\frac{3.536\times10^{-19}}{6.592\times10^{-34}}
+                  =\left(\frac{3.536}{6.592}\right)\times10^{15}
+                  =0.5364\times10^{15}
+                  =5.364\times10^{14}\,\mathrm{Hz}.
+                \]
+              </p>
+
+              <div class="result">
+                <b>(c) Risultato:</b>
+                \[
+                  \boxed{\nu_0 \approx 5.36\times10^{14}\ \mathrm{Hz}}
+                \]
+                <p style="margin:8px 0 0;">
+                  (Equivalente lunghezza d’onda di soglia: \(\lambda_0=\dfrac{c}{\nu_0}\approx
+                  \dfrac{3.00\times10^{8}}{5.36\times10^{14}}\approx 5.6\times10^{-7}\,\mathrm{m}\approx 560\,\mathrm{nm}\).)
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="q3">
+      <div class="card-head">
+        <h2>3) Esperimento di Davisson–Germer: diffrazione di elettroni da cristallo</h2>
+        <div class="badge"><span class="dot"></span> Set 4 • Esercizio 3</div>
+      </div>
+      <div class="card-body">
+        <div class="problem">
+          <h3>Testo</h3>
+          <p>Esperimento di Davisson e Germer sulla diffrazione di elettroni da cristallo.</p>
+        </div>
+
+        <details class="solution" open>
+          <summary>Spiegazione + formule chiave (risposta “da compito”)</summary>
+          <div class="sol-inner">
+
+            <div class="step">
+              <div class="step-title">Idea fisica</div>
+              <p>
+                L’esperimento di Davisson–Germer (1927) mostra che un fascio di elettroni,
+                quando viene diffuso da un cristallo (es. Nickel), produce <b>massimi e minimi di intensità</b>
+                in funzione dell’angolo, esattamente come farebbe un’onda che subisce <b>diffrazione</b>.
+                Questo conferma la natura ondulatoria della materia (ipotesi di de Broglie).
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">De Broglie + Bragg (le due formule che “chiudono” il problema)</div>
+              <p>
+                Un elettrone con quantità di moto \(p\) ha lunghezza d’onda di de Broglie:
+                \[
+                  \lambda_{dB}=\frac{h}{p}.
+                \]
+                Se l’elettrone è accelerato da una differenza di potenziale \(V\),
+                (regime non relativistico) la sua energia cinetica vale \(K=eV=\frac{p^2}{2m_e}\),
+                quindi:
+                \[
+                  p=\sqrt{2m_e eV}
+                  \quad\Rightarrow\quad
+                  \lambda_{dB}=\frac{h}{\sqrt{2m_e eV}}.
+                \]
+              </p>
+              <p>
+                Il cristallo funziona come “reticolo” con passo \(d\). La condizione per massimi di diffrazione è la legge di Bragg:
+                \[
+                  2d\sin\theta = n\lambda_{dB}\qquad (n=1,2,3,\dots).
+                \]
+                Quindi i picchi osservati sperimentalmente “misurano” \(\lambda_{dB}\) e sono compatibili con la formula di de Broglie.
+              </p>
+            </div>
+
+            <div class="result">
+              <b>Conclusione:</b> gli elettroni mostrano diffrazione (come onde) e l’angolo dei massimi soddisfa
+              \(\boxed{2d\sin\theta=n\lambda_{dB}}\) con \(\boxed{\lambda_{dB}=h/\sqrt{2m_e eV}}\).
+            </div>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="q4">
+      <div class="card-head">
+        <h2>4) Granello di polvere: lunghezza d’onda di de Broglie e “quantistico sì/no”</h2>
+        <div class="badge"><span class="dot"></span> Set 4 • Esercizio 4</div>
+      </div>
+      <div class="card-body">
+        <div class="problem">
+          <h3>Testo</h3>
+          <p>
+            Si consideri un granello di polvere di diametro \(d=10^{-6}\,\mathrm{m}\),
+            massa \(m=10^{-15}\,\mathrm{kg}\), che si muove con velocità \(v=10^{-3}\,\mathrm{m/s}\).
+            Calcolare la lunghezza d’onda di de Broglie. Ci si aspetta che gli effetti quantistici siano rilevanti? Motivare.
+          </p>
+        </div>
+
+        <details class="solution" open>
+          <summary>Soluzione (con conti espliciti)</summary>
+          <div class="sol-inner">
+
+            <div class="step">
+              <div class="step-title">Step 1 — Quantità di moto</div>
+              <p>
+                La quantità di moto classica è:
+                \[
+                  p = mv.
+                \]
+                Inserisco i dati:
+                \[
+                  p=(10^{-15}\,\mathrm{kg})(10^{-3}\,\mathrm{m/s})=10^{-18}\,\mathrm{kg\,m/s}.
+                \]
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 2 — De Broglie</div>
+              <p>
+                \[
+                  \lambda_{dB}=\frac{h}{p}.
+                \]
+                Con \(h\simeq 6.626\times10^{-34}\,\mathrm{J\,s}\):
+                \[
+                  \lambda_{dB}=\frac{6.626\times10^{-34}}{10^{-18}}
+                  =6.626\times10^{-16}\,\mathrm{m}.
+                \]
+              </p>
+
+              <div class="result">
+                <b>Risultato:</b>
+                \[
+                  \boxed{\lambda_{dB}\approx 6.6\times10^{-16}\ \mathrm{m}}
+                \]
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 3 — Sono rilevanti gli effetti quantistici?</div>
+              <p>
+                Il diametro del granello è \(d=10^{-6}\,\mathrm{m}\).
+                Confronto:
+                \[
+                  \frac{\lambda_{dB}}{d}=\frac{6.6\times10^{-16}}{10^{-6}}=6.6\times10^{-10}.
+                \]
+                Quindi \(\lambda_{dB}\) è <b>circa 10 miliardi di volte più piccola</b> della dimensione del granello.
+              </p>
+              <div class="warn">
+                <b>Motivazione:</b> fenomeni quantistici ondulatori (interferenza/diffrazione) diventano evidenti quando
+                \(\lambda_{dB}\) è comparabile con la scala geometrica del problema (fenditure, reticoli, ecc.).
+                Qui \(\lambda_{dB}\ll d\) ⇒ il comportamento è essenzialmente classico.
+              </div>
+            </div>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="q5">
+      <div class="card-head">
+        <h2>5) Neutroni termici su reticolo (passo ~ Å): cosa si osserva?</h2>
+        <div class="badge"><span class="dot"></span> Set 4 • Esercizio 5</div>
+      </div>
+      <div class="card-body">
+        <div class="problem">
+          <h3>Testo</h3>
+          <p>
+            Si consideri un fascio di neutroni termici, \(m_n=1.67\cdot10^{-27}\,\mathrm{kg}\),
+            a temperatura \(T=300\,\mathrm{K}\), che incidono su un reticolo cristallino con un passo reticolare dell’ordine
+            dell’Ångström (\(10^{-10}\,\mathrm{m}\)).
+            Quali effetti si osserveranno? Motivare.
+            <br/>
+            [Per un neutrone termico l’energia è \(E=\frac{3}{2}kT\)
+            (\(k=1.38\cdot10^{-23}\,\mathrm{J/K}\) costante di Boltzmann).]
+          </p>
+        </div>
+
+        <details class="solution" open>
+          <summary>Soluzione (calcolo λ + interpretazione)</summary>
+          <div class="sol-inner">
+
+            <div class="step">
+              <div class="step-title">Step 1 — Energia termica del neutrone</div>
+              <p>
+                \[
+                  E=\frac{3}{2}kT.
+                \]
+                Inserisco \(k=1.38\times10^{-23}\,\mathrm{J/K}\) e \(T=300\,\mathrm{K}\):
+              </p>
+              <p>
+                Prima calcolo \(kT\):
+                \[
+                  kT=(1.38\times10^{-23})\cdot 300
+                  =(1.38\cdot 300)\times10^{-23}
+                  =414\times10^{-23}
+                  =4.14\times10^{-21}\,\mathrm{J}.
+                \]
+              </p>
+              <p>
+                Poi moltiplico per \(3/2=1.5\):
+                \[
+                  E=\frac{3}{2}kT=1.5\cdot 4.14\times10^{-21}
+                  =6.21\times10^{-21}\,\mathrm{J}.
+                \]
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 2 — Ricavo il modulo della quantità di moto \(p\)</div>
+              <p>
+                Per un neutrone non relativistico:
+                \[
+                  E=\frac{p^2}{2m_n}
+                  \quad\Rightarrow\quad
+                  p=\sqrt{2m_nE}.
+                \]
+              </p>
+
+              <p>
+                Calcolo \(2m_nE\):
+                \[
+                  2m_nE = 2\cdot (1.67\times10^{-27})\cdot (6.21\times10^{-21}).
+                \]
+                Prima \(2\cdot 1.67 = 3.34\). Poi \(3.34\cdot 6.21 = 20.7414\).  
+                Quindi:
+                \[
+                  2m_nE = 20.7414\times10^{-48} = 2.07414\times10^{-47}.
+                \]
+              </p>
+
+              <p>
+                Ora la radice:
+                \[
+                  p=\sqrt{2.07414\times10^{-47}}
+                  =\sqrt{2.07414}\times10^{-23.5}.
+                \]
+                \(\sqrt{2.07414}\approx 1.44\). Inoltre \(10^{-23.5}=10^{-23}\cdot 10^{-0.5}=10^{-23}\cdot 0.316\).
+                Quindi:
+                \[
+                  p \approx 1.44\cdot 0.316 \times10^{-23}
+                  \approx 0.455 \times10^{-23}
+                  =4.55\times10^{-24}\,\mathrm{kg\,m/s}.
+                \]
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 3 — Lunghezza d’onda di de Broglie</div>
+              <p>
+                \[
+                  \lambda_{dB}=\frac{h}{p}.
+                \]
+                Con \(h=6.626\times10^{-34}\,\mathrm{J\,s}\) e \(p\approx 4.55\times10^{-24}\):
+                \[
+                  \lambda_{dB}\approx \frac{6.626\times10^{-34}}{4.55\times10^{-24}}
+                  =\left(\frac{6.626}{4.55}\right)\times10^{-10}
+                  \approx 1.46\times10^{-10}\,\mathrm{m}.
+                \]
+              </p>
+
+              <div class="result">
+                <b>Lunghezza d’onda:</b>
+                \[
+                  \boxed{\lambda_{dB}\approx 1.46\times10^{-10}\,\mathrm{m}\approx 1.46\,\text{\AA}}
+                \]
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 4 — Cosa si osserva sul reticolo?</div>
+              <p>
+                Il passo reticolare è dell’ordine di \(d\sim 10^{-10}\,\mathrm{m}\sim 1\,\text{\AA}\).
+                Abbiamo trovato \(\lambda_{dB}\sim 1.46\,\text{\AA}\), quindi <b>comparabile</b> a \(d\).
+              </p>
+              <div class="note">
+                Quando \(\lambda\) è confrontabile con il passo di un reticolo cristallino si osserva
+                <b>diffrazione (Bragg)</b>:
+                \[
+                  \boxed{2d\sin\theta = n\lambda_{dB}}.
+                \]
+                Quindi si osservano massimi di scattering a specifici angoli:
+                <b>pattern di diffrazione di neutroni</b> (strumento standard per studiare la struttura cristallina).
+              </div>
+
+              <div class="result">
+                <b>Conclusione:</b> si osservano <span class="u">diffrazione/interferenza</span> dei neutroni (effetti quantistici ondulatori evidenti),
+                perché \(\lambda_{dB}\) è dell’ordine dell’Ångström.
+              </div>
+            </div>
+
+          </div>
+        </details>
+      </div>
+    </section>
+
     <footer>
-        Generato automaticamente - Set 4 radiazione fotoelettrico
+      Set 4 - Pagina soluzioni (testo + svolgimento) •
     </footer>
+  </div>
 </body>
 </html>
