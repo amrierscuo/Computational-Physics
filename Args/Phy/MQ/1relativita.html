@@ -197,8 +197,9 @@
             padding: 0 15px;
         }
 
+        /* ✅ FIX: alziamo tantissimo il max-height per non tagliare le soluzioni */
         .soluzione.open {
-            max-height: 500px;
+            max-height: 20000px;
             padding: 15px;
         }
 
@@ -220,6 +221,7 @@
             font-size: 1.2rem;
             text-align: center;
             border-left: 4px solid #6a8cff;
+            overflow-x: auto;
         }
 
         footer {
@@ -236,36 +238,72 @@
             h1 {
                 font-size: 2.5rem;
             }
-            
+
             .esercitazione {
                 padding: 20px;
             }
-            
+
             .esercitazione h2 {
                 font-size: 1.7rem;
             }
-            
+
             .esercitazione-header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .download-btn {
                 margin-top: 15px;
             }
         }
+
+        /* Dettagli interni alle soluzioni */
+        .soluzione-content details {
+            margin-top: 10px;
+            background: rgba(0,0,0,0.18);
+            border: 1px solid rgba(140, 180, 255, 0.18);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .soluzione-content summary {
+            cursor: pointer;
+            color: #c7d7ff;
+            font-weight: 800;
+        }
+
+        .soluzione-content .mini {
+            color: #d6d6ff;
+            margin-top: 8px;
+            font-size: 1.02rem;
+        }
+
+        .soluzione-content .hint {
+            color: #a9b8ff;
+            margin-top: 12px;
+            font-size: 0.98rem;
+            padding: 10px 12px;
+            border-left: 4px solid rgba(106, 140, 255, 0.6);
+            background: rgba(0,0,0,0.18);
+            border-radius: 8px;
+        }
+
+        .soluzione-content ul, .soluzione-content ol { margin-left: 18px; }
+        .soluzione-content b u { text-decoration-thickness: 2px; }
+        .soluzione-content hr { border: 0; border-top: 1px solid rgba(140,180,255,0.2); margin: 12px 0; }
+        .soluzione-content code { background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 6px; }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div id="three-container"></div>
-    
+
     <div class="container">
         <header>
             <h1>Fondamenti di Fisica Teorica: Relatività Speciale</h1>
             <p class="subtitle">Usa il Barone, qui ho messo solo i testi dei primi 3 tutoraggi</p>
         </header>
-        
+
         <!-- ESERCITAZIONE 1 -->
         <section class="esercitazione">
             <div class="esercitazione-header">
@@ -274,11 +312,11 @@
                     <i class="fas fa-download"></i> Scarica PDF Esercitazione 1
                 </a>
             </div>
-            
+
             <div class="esercitazione-img">
                 <img src="img/es1.jpg" alt="Esercitazione 1">
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 1</h3>
                 <div class="testo-esercizio">
@@ -289,11 +327,110 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Impostazione: trasformazioni di Galilei e ipotesi su ψ</summary>
+                            <div class="mini">
+                                Consideriamo due sistemi inerziali <b>S</b> e <b>S'</b> con S' che si muove lungo x con velocità costante <b>v</b> rispetto a S.
+                                Le trasformazioni di Galilei (moto lungo x) sono:
+                                <div class="formula">
+                                    x' = x − v t<br>
+                                    y' = y<br>
+                                    z' = z<br>
+                                    t' = t
+                                </div>
+                                L’ipotesi del testo è che il campo sia “invariante” nel senso:
+                                <div class="formula">ψ'(x',t') = ψ(x,t)</div>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Derivate spaziali: cosa succede a ∇²ψ</summary>
+                            <div class="mini">
+                                Poiché <b>x = x' + v t'</b> e <b>t = t'</b>, la derivata spaziale rispetto a x coincide con quella rispetto a x':
+                                <div class="formula">
+                                    ∂/∂x = ∂/∂x' , &nbsp; ∂/∂y = ∂/∂y' , &nbsp; ∂/∂z = ∂/∂z'
+                                </div>
+                                Quindi:
+                                <div class="formula">∇²ψ = ∇'²ψ'</div>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Derivata temporale: regola della catena, un passaggio alla volta</summary>
+                            <div class="mini">
+                                Siccome <b>x' = x − v t</b>, allora x' dipende da t. Con ψ'(x',t') = ψ(x,t) usiamo la catena:
+                                <div class="formula">
+                                    ∂ψ/∂t = (∂ψ'/∂t')·(∂t'/∂t) + (∂ψ'/∂x')·(∂x'/∂t)
+                                </div>
+                                Ora:
+                                <div class="formula">
+                                    t' = t ⇒ ∂t'/∂t = 1<br>
+                                    x' = x − v t ⇒ ∂x'/∂t = −v
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    ∂/∂t = ∂/∂t' − v ∂/∂x'
+                                </div>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Seconda derivata temporale: sviluppo completo senza saltare passaggi</summary>
+                            <div class="mini">
+                                Applichiamo di nuovo l’operatore:
+                                <div class="formula">
+                                    ∂²/∂t² = (∂/∂t' − v ∂/∂x') (∂/∂t' − v ∂/∂x')
+                                </div>
+                                Sviluppiamo:
+                                <div class="formula">
+                                    = ∂²/∂t'² − v ∂²/(∂x'∂t') − v ∂²/(∂t'∂x') + v² ∂²/∂x'²
+                                </div>
+                                Poiché (su funzioni regolari) le derivate miste commutano:
+                                <div class="formula">
+                                    ∂²/(∂x'∂t') = ∂²/(∂t'∂x')
+                                </div>
+                                allora:
+                                <div class="formula">
+                                    ∂²/∂t² = ∂²/∂t'² − 2v ∂²/(∂x'∂t') + v² ∂²/∂x'²
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Sostituzione nell’equazione delle onde e confronto di forma</summary>
+                            <div class="mini">
+                                In S:
+                                <div class="formula">∇²ψ − (1/c²) ∂²ψ/∂t² = 0</div>
+                                Sostituiamo ψ = ψ'(x',t'), ∇² = ∇'², e la formula per ∂²/∂t²:
+                                <div class="formula">
+                                    ∇'²ψ' − (1/c²)[ ∂²ψ'/∂t'² − 2v ∂²ψ'/(∂x'∂t') + v² ∂²ψ'/∂x'² ] = 0
+                                </div>
+                                Distribuiamo il segno −(1/c²):
+                                <div class="formula">
+                                    ∇'²ψ' − (1/c²)∂²ψ'/∂t'²
+                                    + (2v/c²) ∂²ψ'/(∂x'∂t')
+                                    − (v²/c²) ∂²ψ'/∂x'² = 0
+                                </div>
+                                L’equazione “stessa forma” in S' sarebbe:
+                                <div class="formula">∇'²ψ' − (1/c²) ∂²ψ'/∂t'² = 0</div>
+                                Ma qui compaiono <b><u>termini extra</u></b>:
+                                <ul class="mini">
+                                    <li>(2v/c²) ∂²ψ'/(∂x'∂t')</li>
+                                    <li>−(v²/c²) ∂²ψ'/∂x'²</li>
+                                </ul>
+                                Quindi <b><u>non è invariante in forma</u></b> sotto Galilei.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Messaggio fisico:</b> l’equazione delle onde “preferisce” le trasformazioni di Lorentz (dove c è invariata), non quelle di Galilei.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 2</h3>
                 <div class="testo-esercizio">
@@ -302,11 +439,160 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Obiettivo: cosa si voleva misurare</summary>
+                            <div class="mini">
+                                Si confrontano i tempi di volo della luce lungo due bracci perpendicolari (lunghezza <b>L</b>).
+                                Nell’idea classica con “etere”, l’apparato si muove nell’etere con velocità <b>v</b>.
+                                Se i due tempi sono diversi, cambia la fase relativa dei due fasci ⇒ spostamento delle frange.
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Braccio parallelo al moto: tempo di andata + ritorno</summary>
+                            <div class="mini">
+                                <ul>
+                                    <li><b>Andata</b>: la luce rincorre lo specchio ⇒ velocità relativa <b>c − v</b> ⇒ tempo <b>t₁ = L/(c−v)</b>.</li>
+                                    <li><b>Ritorno</b>: la luce torna verso il beam-splitter ⇒ velocità relativa <b>c + v</b> ⇒ tempo <b>t₂ = L/(c+v)</b>.</li>
+                                </ul>
+                                Sommiamo:
+                                <div class="formula">
+                                    t∥ = L/(c−v) + L/(c+v)
+                                </div>
+                                Denominatore comune (c−v)(c+v)=c²−v²:
+                                <div class="formula">
+                                    t∥ = L[(c+v)+(c−v)]/(c²−v²) = L(2c)/(c²−v²)
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    t∥ = (2L/c) · 1/(1−v²/c²)
+                                </div>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Braccio perpendicolare: triangolo e componente trasversa</summary>
+                            <div class="mini">
+                                Sul braccio perpendicolare la luce deve “inclinarsi” per colpire lo specchio mentre l’apparato scorre.
+                                Se la luce ha modulo c rispetto all’etere:
+                                <div class="formula">
+                                    c² = v² + u_y²  ⇒  u_y = √(c² − v²)
+                                </div>
+                                Tempo di andata:
+                                <div class="formula">t_and = L/√(c²−v²)</div>
+                                Ritorno identico:
+                                <div class="formula">
+                                    t⊥ = 2L/√(c²−v²) = (2L/c) · 1/√(1−v²/c²)
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Differenza dei tempi e frange: sviluppo fino a (v/c)²</summary>
+                            <div class="mini">
+                                Definiamo β = v/c.
+                                <div class="formula">
+                                    t∥ = (2L/c) · 1/(1−β²)
+                                    <br>
+                                    t⊥ = (2L/c) · 1/√(1−β²)
+                                </div>
+
+                                Per β ≪ 1 usiamo:
+                                <div class="formula">
+                                    1/(1−β²) ≈ 1 + β²
+                                    <br>
+                                    1/√(1−β²) ≈ 1 + β²/2
+                                </div>
+
+                                Quindi:
+                                <div class="formula">
+                                    t∥ ≈ (2L/c)(1+β²)
+                                    <br>
+                                    t⊥ ≈ (2L/c)(1+β²/2)
+                                </div>
+
+                                Sottraiamo:
+                                <div class="formula">
+                                    Δt = t∥ − t⊥
+                                    ≈ (2L/c)[(1+β²) − (1+β²/2)]
+                                    = (2L/c)(β²/2)
+                                    = (L/c)β²
+                                </div>
+
+                                Il cammino ottico equivalente è cΔt, quindi numero di frange:
+                                <div class="formula">
+                                    N = (cΔt)/λ ≈ (c/λ)(L/c)β² = (L/λ)β² = (L/λ)(v²/c²)
+                                </div>
+
+                                Ruotando l’apparato di 90° il segno si inverte ⇒ spostamento totale atteso:
+                                <div class="formula">
+                                    ΔN_rot ≈ 2(L/λ)(v²/c²)
+                                </div>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Stima numerica tipica (con conti espliciti, riga per riga)</summary>
+                            <div class="mini">
+                                Prendiamo valori tipici:
+                                <div class="formula">
+                                    λ ≈ 500 nm = 500×10⁻⁹ m = 5×10⁻⁷ m
+                                    <br>
+                                    v ≈ 30 km/s = 30×10³ m/s = 3×10⁴ m/s
+                                    <br>
+                                    c ≈ 3×10⁸ m/s
+                                    <br>
+                                    L ≈ 11 m
+                                </div>
+
+                                <b>1) Calcolo v²</b>
+                                <div class="formula">
+                                    v = 3×10⁴  ⇒  v² = (3×10⁴)² = 3² × (10⁴)² = 9×10⁸
+                                </div>
+
+                                <b>2) Calcolo c²</b>
+                                <div class="formula">
+                                    c = 3×10⁸  ⇒  c² = (3×10⁸)² = 3² × (10⁸)² = 9×10¹⁶
+                                </div>
+
+                                <b>3) Rapporto v²/c²</b>
+                                <div class="formula">
+                                    v²/c² = (9×10⁸)/(9×10¹⁶)
+                                    = (9/9)×10^(8−16)
+                                    = 1×10⁻⁸
+                                    = 10⁻⁸
+                                </div>
+
+                                <b>4) Rapporto L/λ</b>
+                                <div class="formula">
+                                    L/λ = 11 / (5×10⁻⁷)
+                                    = (11/5)×10⁷
+                                    = 2.2×10⁷
+                                </div>
+
+                                <b>5) Spostamento di frange atteso dopo rotazione</b>
+                                <div class="formula">
+                                    ΔN_rot ≈ 2(L/λ)(v²/c²)
+                                    = 2 · (2.2×10⁷) · (10⁻⁸)
+                                </div>
+                                Moltiplichiamo (2.2×10⁷)·(10⁻⁸) = 2.2×10^(7−8) = 2.2×10⁻¹ = 0.22:
+                                <div class="formula">
+                                    ΔN_rot ≈ 2 · 0.22 = 0.44
+                                </div>
+
+                                Quindi lo spostamento atteso era ~ <b>0.4 frange</b>, osservabile, ma il risultato sperimentale fu compatibile con <b>zero</b>.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Conclusione:</b> la costanza di c e l’assenza di “vento d’etere” portano naturalmente alle trasformazioni di Lorentz.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 3</h3>
                 <div class="testo-esercizio">
@@ -315,11 +601,98 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Che cosa cambia: contrazione solo lungo la direzione del moto</summary>
+                            <div class="mini">
+                                Nel sistema di riposo della Terra il raggio è:
+                                <div class="formula">R₀ = 6400 km</div>
+
+                                Per un osservatore che vede la Terra muoversi a velocità v:
+                                <ul class="mini">
+                                    <li>la dimensione <b>parallela</b> al moto si contrae: <b>R∥ = R₀/γ</b></li>
+                                    <li>la dimensione <b>perpendicolare</b> al moto resta: <b>R⊥ = R₀</b></li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Velocità della Terra vista dal Sole (stima)</summary>
+                            <div class="mini">
+                                Usiamo la velocità orbitale media:
+                                <div class="formula">
+                                    v ≈ 30 km/s = 3×10⁴ m/s
+                                    <br>
+                                    c ≈ 3×10⁸ m/s
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Calcolo di γ e della variazione del raggio (passaggi numerici completi)</summary>
+                            <div class="mini">
+                                <b>1) Calcolo β = v/c</b>
+                                <div class="formula">
+                                    β = (3×10⁴)/(3×10⁸) = 10⁻⁴
+                                </div>
+
+                                <b>2) Calcolo β²</b>
+                                <div class="formula">
+                                    β² = (10⁻⁴)² = 10⁻⁸
+                                </div>
+
+                                <b>3) Fattore di Lorentz</b>
+                                <div class="formula">
+                                    γ = 1/√(1−β²) = 1/√(1−10⁻⁸)
+                                </div>
+                                Poiché 10⁻⁸ è molto piccolo:
+                                <div class="formula">
+                                    √(1−10⁻⁸) ≈ 1 − (10⁻⁸)/2 = 1 − 5×10⁻⁹
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    γ = 1/(1−5×10⁻⁹) ≈ 1 + 5×10⁻⁹
+                                </div>
+
+                                <b>4) Contrazione del raggio lungo il moto</b>
+                                <div class="formula">
+                                    R∥ = R₀/γ ≈ R₀(1 − 5×10⁻⁹)
+                                </div>
+
+                                <b>5) Differenza assoluta ΔR</b>
+                                <div class="formula">
+                                    ΔR = R₀ − R∥ ≈ R₀·(5×10⁻⁹)
+                                </div>
+
+                                Convertiamo R₀ in metri:
+                                <div class="formula">
+                                    R₀ = 6400 km = 6400×10³ m = 6.4×10⁶ m
+                                </div>
+
+                                Moltiplichiamo:
+                                <div class="formula">
+                                    ΔR ≈ (6.4×10⁶)(5×10⁻⁹)
+                                    = (6.4·5)×10^(6−9)
+                                    = 32×10⁻³
+                                    = 0.032 m
+                                </div>
+
+                                Quindi la variazione è circa:
+                                <div class="formula">
+                                    ΔR ≈ 3.2 cm
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risposta:</b> l’osservatore sul Sole vede un raggio lungo la direzione del moto leggermente più piccolo:
+                            <b>R∥ ≈ R₀/γ</b>, con riduzione ~ <b>3 cm</b>. Il raggio trasverso resta <b>R⊥ = R₀</b>.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 4</h3>
                 <div class="testo-esercizio">
@@ -332,11 +705,157 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Formula usata: trasformazioni di Lorentz (configurazione standard)</summary>
+                            <div class="mini">
+                                Assumiamo S' che si muove lungo +x con velocità <b>v</b> rispetto a S.
+                                Le trasformazioni (da S a S') sono:
+                                <div class="formula">
+                                    x' = γ(x − v t)
+                                    <br>
+                                    t' = γ(t − v x / c²)
+                                </div>
+                                dove:
+                                <div class="formula">γ = 1/√(1−v²/c²)</div>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Calcolo di γ quando v = 0.6c (tutti i passaggi)</summary>
+                            <div class="mini">
+                                <div class="formula">
+                                    v = 0.6c  ⇒  v²/c² = (0.6)² = 0.36
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    1−v²/c² = 1 − 0.36 = 0.64
+                                </div>
+                                Radice:
+                                <div class="formula">
+                                    √0.64 = 0.8
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    γ = 1/0.8 = 1.25
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>(a) Evento 1: t = 2×10⁻⁷ s, x = 50 m → calcolo di t'</summary>
+                            <div class="mini">
+                                Usiamo:
+                                <div class="formula">t' = γ(t − v x / c²)</div>
+
+                                Calcoliamo prima il termine <b>v x / c²</b>.
+
+                                Siccome v = 0.6c:
+                                <div class="formula">
+                                    v x / c² = (0.6c · x)/c² = 0.6 · x / c
+                                </div>
+
+                                Mettiamo x = 50 m:
+                                <div class="formula">
+                                    v x / c² = 0.6 · 50 / c = 30 / c
+                                </div>
+
+                                Ora sostituiamo c = 3×10⁸ m/s:
+                                <div class="formula">
+                                    30/c = 30/(3×10⁸) s
+                                    = (30/3)×10⁻⁸ s
+                                    = 10×10⁻⁸ s
+                                    = 1×10⁻⁷ s
+                                </div>
+
+                                Quindi:
+                                <div class="formula">
+                                    t − v x / c² = 2×10⁻⁷ − 1×10⁻⁷ = 1×10⁻⁷ s
+                                </div>
+
+                                Moltiplichiamo per γ = 1.25:
+                                <div class="formula">
+                                    t' = 1.25 · (1×10⁻⁷) = 1.25×10⁻⁷ s
+                                </div>
+
+                                <b>Risposta (a):</b> <b><u>t' = 1.25×10⁻⁷ s</u></b>.
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>(b) Evento 2: t = 3×10⁻⁷ s, x = 10 m → t' e intervallo Δt'</summary>
+                            <div class="mini">
+                                Calcoliamo t₂' con la stessa formula:
+                                <div class="formula">t₂' = γ(t₂ − v x₂ / c²)</div>
+
+                                <b>1) Calcolo v x₂ / c²</b>
+                                <div class="formula">
+                                    v x₂ / c² = 0.6 · x₂ / c = 0.6 · 10 / c = 6/c
+                                </div>
+
+                                Con c = 3×10⁸:
+                                <div class="formula">
+                                    6/c = 6/(3×10⁸) s
+                                    = (6/3)×10⁻⁸ s
+                                    = 2×10⁻⁸ s
+                                </div>
+
+                                <b>2) Sottrazione</b>
+                                <div class="formula">
+                                    t₂ − v x₂/c² = 3×10⁻⁷ − 2×10⁻⁸
+                                </div>
+                                Riscriviamo 3×10⁻⁷ come 30×10⁻⁸:
+                                <div class="formula">
+                                    3×10⁻⁷ = 30×10⁻⁸
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    30×10⁻⁸ − 2×10⁻⁸ = 28×10⁻⁸ = 2.8×10⁻⁷ s
+                                </div>
+
+                                <b>3) Moltiplicazione per γ = 1.25</b>
+                                <div class="formula">
+                                    t₂' = 1.25 · 2.8×10⁻⁷
+                                </div>
+                                Facciamo 2.8·1.25:
+                                <div class="formula">
+                                    1.25 = 5/4
+                                    <br>
+                                    2.8·(5/4) = (2.8·5)/4 = 14/4 = 3.5
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    t₂' = 3.5×10⁻⁷ s
+                                </div>
+
+                                <b>4) Intervallo di tempo tra i due eventi in S'</b>
+                                <div class="formula">
+                                    Δt' = t₂' − t₁' = 3.5×10⁻⁷ − 1.25×10⁻⁷
+                                </div>
+                                Riscriviamo 3.5×10⁻⁷ come 350×10⁻⁹ e 1.25×10⁻⁷ come 125×10⁻⁹:
+                                <div class="formula">
+                                    3.5×10⁻⁷ = 350×10⁻⁹
+                                    <br>
+                                    1.25×10⁻⁷ = 125×10⁻⁹
+                                </div>
+                                Sottrazione:
+                                <div class="formula">
+                                    350×10⁻⁹ − 125×10⁻⁹ = 225×10⁻⁹ = 2.25×10⁻⁷ s
+                                </div>
+
+                                <b>Risposta (b):</b> <b><u>Δt' = 2.25×10⁻⁷ s</u></b>.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Controllo rapido (senza cambiare il risultato):</b> si può anche usare direttamente
+                            <b>Δt' = γ(Δt − vΔx/c²)</b> con Δt = 1×10⁻⁷ s e Δx = 10−50 = −40 m.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 5</h3>
                 <div class="testo-esercizio">
@@ -345,12 +864,137 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Dati e trasformazioni per intervalli (Δx, Δt)</summary>
+                            <div class="mini">
+                                In S:
+                                <div class="formula">
+                                    Δt = 0
+                                    <br>
+                                    Δx = 1 km = 1000 m
+                                </div>
+                                In S' viene misurata una separazione spaziale:
+                                <div class="formula">Δx' = 2 km = 2000 m</div>
+
+                                Per un boost lungo x (da S a S'):
+                                <div class="formula">
+                                    Δx' = γ(Δx − vΔt)
+                                    <br>
+                                    Δt' = γ(Δt − vΔx/c²)
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>1) Ricaviamo γ dal dato sulla distanza: Δt = 0 ⇒ Δx' = γΔx</summary>
+                            <div class="mini">
+                                Poiché Δt = 0:
+                                <div class="formula">
+                                    Δx' = γ(Δx − v·0) = γΔx
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    γ = Δx'/Δx = (2 km)/(1 km) = 2
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>2) Ricaviamo β = v/c dal valore di γ (tutti i passaggi)</summary>
+                            <div class="mini">
+                                <div class="formula">
+                                    γ = 1/√(1−β²)
+                                </div>
+                                Mettiamo γ = 2:
+                                <div class="formula">
+                                    2 = 1/√(1−β²)
+                                </div>
+                                Invertiamo entrambi i membri:
+                                <div class="formula">
+                                    1/2 = √(1−β²)
+                                </div>
+                                Eleviamo al quadrato:
+                                <div class="formula">
+                                    (1/2)² = 1−β²
+                                    <br>
+                                    1/4 = 1−β²
+                                </div>
+                                Portiamo β² a sinistra e 1/4 a destra:
+                                <div class="formula">
+                                    β² = 1 − 1/4 = 3/4
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    β = √(3/4) = √3 / 2 ≈ 0.866
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>3) Calcolo di Δt' usando Δt' = γ(Δt − vΔx/c²)</summary>
+                            <div class="mini">
+                                Poiché Δt = 0:
+                                <div class="formula">
+                                    Δt' = γ(0 − vΔx/c²) = −γ vΔx/c²
+                                </div>
+                                Scriviamo v = βc:
+                                <div class="formula">
+                                    Δt' = −γ (βc) Δx / c² = −γβ Δx / c
+                                </div>
+
+                                Calcoliamo γβ:
+                                <div class="formula">
+                                    γβ = 2 · (√3/2) = √3
+                                </div>
+
+                                Quindi:
+                                <div class="formula">
+                                    Δt' = −√3 · (Δx/c)
+                                </div>
+
+                                Ora calcoliamo Δx/c con Δx = 1000 m e c = 3×10⁸ m/s:
+                                <div class="formula">
+                                    Δx/c = 1000/(3×10⁸) s
+                                    = (1×10³)/(3×10⁸) s
+                                    = (1/3)×10^(3−8) s
+                                    = (1/3)×10⁻⁵ s
+                                    = 0.333...×10⁻⁵ s
+                                    = 3.333...×10⁻⁶ s
+                                </div>
+
+                                Moltiplichiamo per √3 ≈ 1.732:
+                                <div class="formula">
+                                    |Δt'| = 1.732 · (3.333...×10⁻⁶) s
+                                </div>
+                                Moltiplicazione:
+                                <div class="formula">
+                                    1.732 · 3.333 ≈ 5.773
+                                </div>
+                                quindi:
+                                <div class="formula">
+                                    |Δt'| ≈ 5.773×10⁻⁶ s
+                                </div>
+
+                                <b>Risposta:</b>
+                                <div class="formula">
+                                    Δt' ≈ −5.77×10⁻⁶ s
+                                    <br>
+                                    (se l’evento a x maggiore è il “secondo” in S)
+                                </div>
+                                In valore assoluto: <b><u>5.77 μs</u></b>.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Interpretazione del segno:</b> la simultaneità dipende dal sistema. Il segno dice quale evento risulta “prima” in S'.
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <!-- ESERCITAZIONE 2 -->
         <section class="esercitazione">
             <div class="esercitazione-header">
@@ -359,11 +1003,11 @@
                     <i class="fas fa-download"></i> Scarica PDF Esercitazione 2
                 </a>
             </div>
-            
+
             <div class="esercitazione-img">
                 <img src="img/es2.jpg" alt="Esercitazione 2">
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 1</h3>
                 <div class="testo-esercizio">
@@ -372,11 +1016,138 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Idea: perché è un problema “classico”</summary>
+                            <div class="mini">
+                                I muoni prodotti in alta atmosfera hanno una vita media a riposo <b>τ₀</b> (circa 2.2 μs).
+                                Se viaggiassero a velocità prossima a c senza effetti relativistici,
+                                la distanza media percorsa sarebbe circa <b>cτ₀</b>, che è dell’ordine di centinaia di metri,
+                                molto più piccola dell’altezza dell’atmosfera dove vengono prodotti (ordine di km).
+                                Eppure arrivano al suolo in grande quantità.
+                                La spiegazione è la <b><u>dilatazione dei tempi</u></b>.
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Formula di base: vita media osservata e lunghezza media di decadimento</summary>
+                            <div class="mini">
+                                Se nel sistema del muone la vita media è <b>τ₀</b>, nel laboratorio (Terra) vale:
+                                <div class="formula">τ = γ τ₀</div>
+                                con:
+                                <div class="formula">γ = 1/√(1−v²/c²)</div>
+
+                                La distanza media percorsa nel laboratorio prima del decadimento è:
+                                <div class="formula">
+                                    L_dec = v τ = v γ τ₀
+                                </div>
+
+                                Se v ≈ c, una stima rapida è:
+                                <div class="formula">
+                                    L_dec ≈ c γ τ₀
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Confronto: senza e con relatività (esempio numerico completo)</summary>
+                            <div class="mini">
+                                Usiamo numeri tipici (per capire gli ordini di grandezza):
+                                <div class="formula">
+                                    τ₀ ≈ 2.2 μs = 2.2×10⁻⁶ s
+                                    <br>
+                                    c ≈ 3×10⁸ m/s
+                                    <br>
+                                    altezza tipica h ≈ 10 km = 10×10³ m = 1×10⁴ m
+                                </div>
+
+                                <b>1) Distanza media senza dilatazione (γ=1)</b>
+                                <div class="formula">
+                                    L₀ = c τ₀ = (3×10⁸)(2.2×10⁻⁶) m
+                                </div>
+                                Moltiplichiamo 3·2.2:
+                                <div class="formula">
+                                    3·2.2 = 6.6
+                                </div>
+                                Sommiamo gli esponenti 10⁸·10⁻⁶ = 10²:
+                                <div class="formula">
+                                    L₀ = 6.6×10² m = 660 m
+                                </div>
+                                Quindi 660 m ≪ 10 km: in media non arriverebbero.
+
+                                <hr>
+
+                                <b>2) Quanto γ serve per arrivare a terra da h ≈ 10 km?</b><br>
+                                Vogliamo:
+                                <div class="formula">
+                                    L_dec ≈ c γ τ₀ ≳ h
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    γ ≳ h/(cτ₀)
+                                </div>
+                                Calcoliamo h/(cτ₀):
+                                <div class="formula">
+                                    cτ₀ = 660 m
+                                    <br>
+                                    h = 10000 m
+                                    <br>
+                                    h/(cτ₀) = 10000/660
+                                </div>
+                                Divisione:
+                                <div class="formula">
+                                    10000/660 = (1000/66) ≈ 15.15
+                                </div>
+                                Quindi serve un γ dell’ordine di <b>15</b>.
+
+                                <hr>
+
+                                <b>3) Quale velocità corrisponde a γ ≈ 15?</b><br>
+                                Usiamo:
+                                <div class="formula">
+                                    γ = 1/√(1−β²)  ⇒  1−β² = 1/γ²
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    β² = 1 − 1/γ²
+                                </div>
+                                Se γ = 15:
+                                <div class="formula">
+                                    1/γ² = 1/225 ≈ 0.004444...
+                                    <br>
+                                    β² = 1 − 0.004444... = 0.995555...
+                                </div>
+                                Radice:
+                                <div class="formula">
+                                    β ≈ √0.995555 ≈ 0.9978
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    v ≈ 0.998c
+                                </div>
+                                che è compatibile con muoni cosmici molto energetici.
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>Probabilità di sopravvivenza (forma utile, se serve)</summary>
+                            <div class="mini">
+                                Il decadimento è esponenziale. Nel laboratorio:
+                                <div class="formula">
+                                    P(\text{sopravvive fino a distanza }h) = exp( − h / (vγτ₀) )
+                                </div>
+                                Se v≈c e γ è grande, il denominatore aumenta ⇒ l’esponente diminuisce ⇒ molti muoni sopravvivono fino al suolo.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Conclusione:</b> la dilatazione dei tempi (τ = γτ₀) spiega perché muoni con v≈c arrivano al suolo nonostante τ₀ sia di pochi microsecondi.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 2</h3>
                 <div class="testo-esercizio">
@@ -385,11 +1156,117 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Dati e relazione tra distanza e vita media</summary>
+                            <div class="mini">
+                                Dati:
+                                <div class="formula">
+                                    τ₀ = 2.5×10⁻¹⁰ s
+                                    <br>
+                                    L = 0.05 m
+                                </div>
+                                In laboratorio:
+                                <div class="formula">
+                                    τ = γτ₀
+                                    <br>
+                                    L = v τ = v γ τ₀
+                                </div>
+                                Introduciamo β = v/c:
+                                <div class="formula">
+                                    L = (βc)γτ₀  ⇒  L/(cτ₀) = βγ
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>1) Calcolo del numero R = L/(cτ₀)</summary>
+                            <div class="mini">
+                                Calcoliamo prima cτ₀:
+                                <div class="formula">
+                                    cτ₀ = (3×10⁸)(2.5×10⁻¹⁰) m
+                                </div>
+                                Moltiplichiamo 3·2.5:
+                                <div class="formula">3·2.5 = 7.5</div>
+                                Sommiamo gli esponenti 10⁸·10⁻¹⁰ = 10⁻²:
+                                <div class="formula">
+                                    cτ₀ = 7.5×10⁻² m = 0.075 m
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    R = L/(cτ₀) = 0.05 / 0.075
+                                </div>
+                                Riscriviamo 0.05 = 50×10⁻³ e 0.075 = 75×10⁻³:
+                                <div class="formula">
+                                    0.05/0.075 = (50×10⁻³)/(75×10⁻³) = 50/75 = 2/3
+                                </div>
+                                Quindi:
+                                <div class="formula">R = 2/3</div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>2) Risolviamo βγ = R → ricaviamo β</summary>
+                            <div class="mini">
+                                Sappiamo:
+                                <div class="formula">
+                                    γ = 1/√(1−β²)
+                                    <br>
+                                    βγ = β/√(1−β²) = R
+                                </div>
+
+                                Eleviamo al quadrato:
+                                <div class="formula">
+                                    β²/(1−β²) = R²
+                                </div>
+                                Moltiplichiamo entrambi i membri per (1−β²):
+                                <div class="formula">
+                                    β² = R²(1−β²) = R² − R²β²
+                                </div>
+                                Portiamo R²β² a sinistra:
+                                <div class="formula">
+                                    β² + R²β² = R²
+                                    <br>
+                                    β²(1+R²) = R²
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    β² = R²/(1+R²)
+                                </div>
+
+                                Ora R = 2/3 ⇒ R² = 4/9:
+                                <div class="formula">
+                                    1 + R² = 1 + 4/9 = (9/9 + 4/9) = 13/9
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    β² = (4/9)/(13/9) = 4/13
+                                </div>
+                                Radice:
+                                <div class="formula">
+                                    β = √(4/13) = 2/√13
+                                </div>
+                                Stima numerica: √13 ≈ 3.605:
+                                <div class="formula">
+                                    β ≈ 2/3.605 ≈ 0.555
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    v = βc ≈ 0.555·(3×10⁸) m/s ≈ 1.665×10⁸ m/s
+                                </div>
+
+                                <b>Risposta:</b> <b><u>v ≈ 0.555c</u></b>.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Check veloce:</b> βγ = R = 2/3 ⇒ vγ = (2/3)c ⇒ (vγ)τ₀ = (2/3)cτ₀ = (2/3)·0.075 = 0.05 m ✔
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 3</h3>
                 <div class="testo-esercizio">
@@ -398,11 +1275,69 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Scelta degli assi e formula di composizione relativistica</summary>
+                            <div class="mini">
+                                Consideriamo un asse x lungo la direzione nord-sud.
+                                La particella 1 ha velocità:
+                                <div class="formula">u = +0.8c</div>
+                                La particella 2 va nella direzione opposta:
+                                <div class="formula">v = −0.6c</div>
+
+                                La velocità della 2 vista dalla 1 si ottiene con:
+                                <div class="formula">
+                                    u_rel = (v − u) / (1 − uv/c²)
+                                </div>
+                                In alternativa, la velocità di avvicinamento (modulo) quando sono opposte si può scrivere come:
+                                <div class="formula">
+                                    w = (0.8c + 0.6c)/(1 + 0.8·0.6)
+                                </div>
+                                (qui w è il modulo della velocità relativa).
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Calcolo numerico completo</summary>
+                            <div class="mini">
+                                <b>1) Numeratore</b>
+                                <div class="formula">
+                                    0.8c + 0.6c = 1.4c
+                                </div>
+
+                                <b>2) Denominatore</b>
+                                <div class="formula">
+                                    0.8·0.6 = 0.48
+                                    <br>
+                                    1 + 0.48 = 1.48
+                                </div>
+
+                                <b>3) Divisione</b>
+                                <div class="formula">
+                                    w = (1.4/1.48)c
+                                </div>
+                                Calcolo 1.4/1.48:
+                                <div class="formula">
+                                    1.4/1.48 ≈ 0.9459
+                                </div>
+
+                                Quindi:
+                                <div class="formula">
+                                    w ≈ 0.946c
+                                </div>
+
+                                <b>Risposta:</b> <b><u>la velocità relativa di avvicinamento è circa 0.946c</u></b>.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Nota:</b> in relatività non si può superare c: anche se 0.8c+0.6c=1.4c, la formula corretta restituisce sempre w&lt;c.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 4</h3>
                 <div class="testo-esercizio">
@@ -415,11 +1350,183 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>(a) Dimostrazione in 1D: formula di somma delle velocità</summary>
+                            <div class="mini">
+                                Per moto lungo x, la trasformazione della velocità è:
+                                <div class="formula">
+                                    u' = (u − v)/(1 − uv/c²)
+                                </div>
+                                Usiamo β_u = u/c e β = v/c:
+                                <div class="formula">
+                                    u'/c = (β_u − β)/(1 − β_uβ)
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>(a) Mostriamo che se |u|&lt;c allora |u'|&lt;c (passaggi algebrici)</summary>
+                            <div class="mini">
+                                Vogliamo dimostrare:
+                                <div class="formula">
+                                    |u'| &lt; c  ⇔  1 − (u'^2/c²) &gt; 0
+                                </div>
+                                Partiamo da:
+                                <div class="formula">
+                                    u'/c = (β_u − β)/(1 − β_uβ)
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    (u'^2/c²) = (β_u − β)²/(1 − β_uβ)²
+                                </div>
+                                Allora:
+                                <div class="formula">
+                                    1 − u'^2/c² = 1 − (β_u − β)²/(1 − β_uβ)²
+                                </div>
+                                Mettiamo tutto su denominatore comune (1−β_uβ)²:
+                                <div class="formula">
+                                    1 − u'^2/c²
+                                    = [(1 − β_uβ)² − (β_u − β)²] / (1 − β_uβ)²
+                                </div>
+                                Ora sviluppiamo i quadrati uno per uno:
+
+                                <b>1) (1 − β_uβ)²</b>
+                                <div class="formula">
+                                    (1 − β_uβ)² = 1 − 2β_uβ + β_u²β²
+                                </div>
+
+                                <b>2) (β_u − β)²</b>
+                                <div class="formula">
+                                    (β_u − β)² = β_u² − 2β_uβ + β²
+                                </div>
+
+                                Sottraiamo:
+                                <div class="formula">
+                                    (1 − 2β_uβ + β_u²β²) − (β_u² − 2β_uβ + β²)
+                                </div>
+                                Il termine −2β_uβ si cancella con +2β_uβ:
+                                <div class="formula">
+                                    = 1 + β_u²β² − β_u² − β²
+                                </div>
+                                Raggruppiamo:
+                                <div class="formula">
+                                    = (1 − β_u²) − β²(1 − β_u²)
+                                    = (1 − β_u²)(1 − β²)
+                                </div>
+
+                                Quindi otteniamo l’identità:
+                                <div class="formula">
+                                    1 − u'^2/c² = (1 − β_u²)(1 − β²) / (1 − β_uβ)²
+                                </div>
+
+                                Se |u|&lt;c ⇒ |β_u|&lt;1 ⇒ (1−β_u²)&gt;0.
+                                Se |v|&lt;c ⇒ |β|&lt;1 ⇒ (1−β²)&gt;0.
+                                Il denominatore (1−β_uβ)² è sempre ≥0 e in pratica &gt;0 finché β_uβ≠1.
+                                Quindi:
+                                <div class="formula">
+                                    1 − u'^2/c² &gt; 0  ⇒  |u'| &lt; c
+                                </div>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>(a) Caso u = c: perché resta u' = c</summary>
+                            <div class="mini">
+                                Mettiamo u = c ⇒ β_u = 1 nella formula:
+                                <div class="formula">
+                                    u'/c = (1 − β)/(1 − β) = 1
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    u' = c
+                                </div>
+                                Analogamente, se u = −c allora u' = −c.
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>(b) Trasformazione componenti: u'x, u'y, direzione e modulo</summary>
+                            <div class="mini">
+                                Dati:
+                                <div class="formula">
+                                    v = 3c/4 = 0.75c
+                                    <br>
+                                    u_x = 3c/4 = 0.75c
+                                    <br>
+                                    u_y = c/2 = 0.5c
+                                    <br>
+                                    u_z = 0
+                                </div>
+
+                                Per boost lungo x:
+                                <div class="formula">
+                                    u'_x = (u_x − v)/(1 − u_x v / c²)
+                                    <br>
+                                    u'_y = u_y / [γ(1 − u_x v / c²)]
+                                    <br>
+                                    u'_z = u_z / [γ(1 − u_x v / c²)]
+                                </div>
+
+                                <b>1) Calcolo γ</b>
+                                <div class="formula">
+                                    β = v/c = 0.75
+                                    <br>
+                                    β² = 0.75² = 0.5625
+                                    <br>
+                                    1−β² = 1−0.5625 = 0.4375 = 7/16
+                                    <br>
+                                    √(1−β²) = √(7/16) = √7/4
+                                    <br>
+                                    γ = 1/(√7/4) = 4/√7
+                                </div>
+
+                                <b>2) Denominatore comune D = 1 − u_x v/c²</b>
+                                <div class="formula">
+                                    u_x v/c² = (0.75)(0.75) = 0.5625
+                                    <br>
+                                    D = 1 − 0.5625 = 0.4375 = 7/16
+                                </div>
+
+                                <b>3) u'_x</b>
+                                <div class="formula">
+                                    u'_x = (0.75c − 0.75c)/D = 0/D = 0
+                                </div>
+
+                                <b>4) u'_y</b>
+                                <div class="formula">
+                                    u'_y = (0.5c)/[γD]
+                                </div>
+                                Calcoliamo γD:
+                                <div class="formula">
+                                    γD = (4/√7)·(7/16) = 28/(16√7) = 7/(4√7) = √7/4
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    u'_y = (0.5c)/(√7/4) = 0.5c · (4/√7) = 2c/√7
+                                </div>
+                                Valore numerico: √7 ≈ 2.6458:
+                                <div class="formula">
+                                    u'_y ≈ 2c/2.6458 ≈ 0.756c
+                                </div>
+
+                                <b>5) Modulo e direzione</b>
+                                <div class="formula">
+                                    u' = √(u'_x² + u'_y² + u'_z²) = √(0² + (2c/√7)² + 0²)
+                                    = 2c/√7 ≈ 0.756c
+                                </div>
+                                Direzione: solo asse y' (perché u'_x=0).
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risposta (b):</b> in S' la particella si muove lungo <b>y'</b> con velocità <b><u>u' ≈ 0.756c</u></b>.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 5</h3>
                 <div class="testo-esercizio">
@@ -428,12 +1535,162 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Formula: effetto Doppler relativistico (moto lungo la linea di vista)</summary>
+                            <div class="mini">
+                                Indichiamo:
+                                <div class="formula">
+                                    λ₀ = lunghezza d’onda “a riposo” (galassia ferma)
+                                    <br>
+                                    λ = lunghezza d’onda osservata
+                                    <br>
+                                    β = v/c
+                                </div>
+
+                                Se la sorgente <b>si allontana</b> (redshift):
+                                <div class="formula">
+                                    λ = λ₀ √((1+β)/(1−β))
+                                </div>
+
+                                Se la sorgente <b>si avvicina</b> (blueshift):
+                                <div class="formula">
+                                    λ = λ₀ √((1−β)/(1+β))
+                                </div>
+
+                                Per ricavare β conviene usare il rapporto r = λ/λ₀ e poi elevare al quadrato.
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Galassia A: 550 nm → 450 nm (blueshift ⇒ avvicinamento)</summary>
+                            <div class="mini">
+                                Dati:
+                                <div class="formula">
+                                    λ₀ = 550 nm
+                                    <br>
+                                    λ_A = 450 nm
+                                </div>
+                                Rapporto:
+                                <div class="formula">
+                                    r_A = λ_A/λ₀ = 450/550
+                                </div>
+                                Riduciamo la frazione dividendo per 50:
+                                <div class="formula">
+                                    450/550 = 9/11 ≈ 0.818181...
+                                </div>
+                                Quadrato:
+                                <div class="formula">
+                                    r_A² = (9/11)² = 81/121 ≈ 0.669421...
+                                </div>
+
+                                Per avvicinamento:
+                                <div class="formula">
+                                    r_A² = (1−β)/(1+β)
+                                </div>
+                                Risolviamo:
+                                <div class="formula">
+                                    r_A²(1+β) = 1−β
+                                    <br>
+                                    r_A² + r_A²β = 1 − β
+                                </div>
+                                Portiamo i β a sinistra e i termini senza β a destra:
+                                <div class="formula">
+                                    r_A²β + β = 1 − r_A²
+                                    <br>
+                                    β(r_A² + 1) = 1 − r_A²
+                                    <br>
+                                    β = (1 − r_A²)/(1 + r_A²)
+                                </div>
+
+                                Inseriamo r_A² ≈ 0.669421:
+                                <div class="formula">
+                                    1 − r_A² ≈ 1 − 0.669421 = 0.330579
+                                    <br>
+                                    1 + r_A² ≈ 1 + 0.669421 = 1.669421
+                                </div>
+                                Divisione:
+                                <div class="formula">
+                                    β_A ≈ 0.330579 / 1.669421 ≈ 0.198
+                                </div>
+
+                                Quindi:
+                                <div class="formula">
+                                    v_A ≈ 0.198c
+                                </div>
+                                Direzione: <b><u>verso di noi</u></b> (blueshift).
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Galassia B: 550 nm → 700 nm (redshift ⇒ allontanamento)</summary>
+                            <div class="mini">
+                                Dati:
+                                <div class="formula">
+                                    λ₀ = 550 nm
+                                    <br>
+                                    λ_B = 700 nm
+                                </div>
+                                Rapporto:
+                                <div class="formula">
+                                    r_B = λ_B/λ₀ = 700/550
+                                </div>
+                                Dividiamo per 50:
+                                <div class="formula">
+                                    700/550 = 14/11 ≈ 1.272727...
+                                </div>
+                                Quadrato:
+                                <div class="formula">
+                                    r_B² = (14/11)² = 196/121 ≈ 1.620661...
+                                </div>
+
+                                Per allontanamento:
+                                <div class="formula">
+                                    r_B² = (1+β)/(1−β)
+                                </div>
+                                Risolviamo:
+                                <div class="formula">
+                                    r_B²(1−β) = 1+β
+                                    <br>
+                                    r_B² − r_B²β = 1 + β
+                                </div>
+                                Portiamo i β a destra:
+                                <div class="formula">
+                                    r_B² − 1 = r_B²β + β = β(r_B² + 1)
+                                    <br>
+                                    β = (r_B² − 1)/(r_B² + 1)
+                                </div>
+
+                                Inseriamo r_B² ≈ 1.620661:
+                                <div class="formula">
+                                    r_B² − 1 ≈ 0.620661
+                                    <br>
+                                    r_B² + 1 ≈ 2.620661
+                                </div>
+                                Divisione:
+                                <div class="formula">
+                                    β_B ≈ 0.620661 / 2.620661 ≈ 0.237
+                                </div>
+
+                                Quindi:
+                                <div class="formula">
+                                    v_B ≈ 0.237c
+                                </div>
+                                Direzione: <b><u>si allontana da noi</u></b> (redshift).
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risultati finali:</b><br>
+                            Galassia A: <b>v ≈ 0.20c</b> verso l’osservatore (blueshift).<br>
+                            Galassia B: <b>v ≈ 0.24c</b> lontano dall’osservatore (redshift).
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <!-- ESERCITAZIONE 3 -->
         <section class="esercitazione">
             <div class="esercitazione-header">
@@ -442,11 +1699,11 @@
                     <i class="fas fa-download"></i> Scarica PDF Esercitazione 3
                 </a>
             </div>
-            
+
             <div class="esercitazione-img">
                 <img src="img/es3.jpg" alt="Esercitazione 3">
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 1</h3>
                 <div class="testo-esercizio">
@@ -455,11 +1712,146 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Setup minimo (scelta comoda degli assi)</summary>
+                            <div class="mini">
+                                Consideriamo un campo elettrico uniforme e costante diretto lungo x:
+                                <div class="formula">E = (E, 0, 0)</div>
+                                Per una carica q e massa m, la forza (in laboratorio) è:
+                                <div class="formula">F = qE</div>
+                                In relatività:
+                                <div class="formula">
+                                    p = γ m v
+                                    <br>
+                                    dp/dt = F
+                                </div>
+                                Qui p e v sono lungo x, quindi possiamo trattare tutto in 1D.
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>1) Integrazione di dp/dt = qE → p(t)</summary>
+                            <div class="mini">
+                                L’equazione del moto è:
+                                <div class="formula">dp/dt = qE</div>
+                                Separiamo e integriamo nel tempo:
+                                <div class="formula">
+                                    dp = qE dt
+                                    <br>
+                                    ∫ dp = ∫ qE dt
+                                </div>
+                                Se qE è costante:
+                                <div class="formula">
+                                    p(t) − p(0) = qE (t − 0)
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    p(t) = p₀ + qE t
+                                </div>
+                                (dove p₀ = p(0)).
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>2) Da p(t) a γ(t) e v(t) (passo per passo)</summary>
+                            <div class="mini">
+                                Relazione energia-impulso:
+                                <div class="formula">
+                                    E² = (pc)² + (mc²)²
+                                </div>
+                                Dividiamo per (mc²)²:
+                                <div class="formula">
+                                    (E/mc²)² = (pc/mc²)² + 1
+                                </div>
+                                Ma E = γmc² ⇒ E/mc² = γ e pc/mc² = p/(mc). Quindi:
+                                <div class="formula">
+                                    γ² = 1 + (p/(mc))²
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    γ(t) = √(1 + (p(t)/(mc))² )
+                                </div>
+
+                                Ora v si ottiene da p = γmv:
+                                <div class="formula">
+                                    v = p/(γm)
+                                </div>
+                                Sostituiamo γ(t):
+                                <div class="formula">
+                                    v(t) = [p(t)/m] / √(1 + (p(t)/(mc))² )
+                                </div>
+
+                                Caso molto usato: p₀ = 0 ⇒ p(t) = qEt:
+                                <div class="formula">
+                                    v(t) = (qEt/m) / √(1 + (qEt/(mc))² )
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>3) Posizione x(t): integrazione di v(t) (con sostituzione)</summary>
+                            <div class="mini">
+                                Consideriamo per chiarezza il caso p₀=0 (partenza da fermo).
+                                Allora:
+                                <div class="formula">
+                                    v(t) = (qEt/m) / √(1 + (qEt/(mc))² )
+                                </div>
+                                Scriviamo:
+                                <div class="formula">
+                                    a₀ = qE/m  (ha dimensioni di accelerazione)
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    v(t) = a₀ t / √(1 + (a₀ t / c)² )
+                                </div>
+
+                                Ora:
+                                <div class="formula">
+                                    x(t) − x(0) = ∫₀ᵗ v(t') dt'
+                                </div>
+
+                                Inseriamo v:
+                                <div class="formula">
+                                    x(t) − x(0) = ∫₀ᵗ [a₀ t' / √(1 + (a₀ t'/c)²)] dt'
+                                </div>
+
+                                Sostituzione:
+                                <div class="formula">
+                                    u = a₀ t'/c  ⇒  t' = (c/a₀)u  ⇒  dt' = (c/a₀) du
+                                </div>
+
+                                Sostituiamo nel numeratore a₀ t' = a₀ (c/a₀)u = cu:
+                                <div class="formula">
+                                    x(t) − x(0) = ∫ [cu / √(1+u²)] · (c/a₀) du
+                                    = (c²/a₀) ∫ u/√(1+u²) du
+                                </div>
+
+                                L’integrale:
+                                <div class="formula">
+                                    ∫ u/√(1+u²) du = √(1+u²) + costante
+                                </div>
+                                Quindi tra 0 e u(t)=a₀t/c:
+                                <div class="formula">
+                                    x(t) − x(0) = (c²/a₀)[ √(1+u(t)²) − √(1+0²) ]
+                                    = (c²/a₀)[ √(1+(a₀t/c)²) − 1 ]
+                                </div>
+
+                                Sostituendo a₀=qE/m:
+                                <div class="formula">
+                                    x(t) = x(0) + (mc²/(qE)) [ √(1+(qEt/(mc))²) − 1 ]
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Comportamento qualitativo:</b> per t grande, p cresce linearmente, ma v(t) tende a c (non la supera mai).
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 2</h3>
                 <div class="testo-esercizio">
@@ -468,11 +1860,118 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Setup: scegliamo B lungo z</summary>
+                            <div class="mini">
+                                Consideriamo un campo magnetico uniforme e costante:
+                                <div class="formula">B = (0, 0, B)</div>
+                                La forza di Lorentz è:
+                                <div class="formula">F = q v × B</div>
+                                In relatività:
+                                <div class="formula">dp/dt = q v × B</div>
+                                con p = γmv.
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>1) Il campo magnetico non cambia l’energia: dimostrazione passo per passo</summary>
+                            <div class="mini">
+                                L’energia relativistica è:
+                                <div class="formula">E = γmc²</div>
+                                La potenza è:
+                                <div class="formula">
+                                    dE/dt = F · v
+                                </div>
+                                Ma:
+                                <div class="formula">
+                                    F = q(v × B)
+                                </div>
+                                e il prodotto scalare:
+                                <div class="formula">
+                                    (v × B) · v = 0
+                                </div>
+                                perché v×B è perpendicolare a v.
+                                Quindi:
+                                <div class="formula">
+                                    dE/dt = q(v × B) · v = 0
+                                </div>
+                                Dunque E è costante ⇒ γ è costante ⇒ anche il modulo di v è costante.
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>2) Equazioni per le componenti e frequenza ciclotronica relativistica</summary>
+                            <div class="mini">
+                                Con B lungo z:
+                                <div class="formula">
+                                    v × B = (v_y B, −v_x B, 0)
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    dp_x/dt = qB v_y
+                                    <br>
+                                    dp_y/dt = −qB v_x
+                                    <br>
+                                    dp_z/dt = 0
+                                </div>
+                                Poiché γ è costante, p = γmv ⇒ v_x = p_x/(γm), v_y = p_y/(γm).
+                                Sostituiamo:
+                                <div class="formula">
+                                    dp_x/dt = qB (p_y/(γm))
+                                    <br>
+                                    dp_y/dt = −qB (p_x/(γm))
+                                </div>
+                                Definiamo:
+                                <div class="formula">
+                                    ω = qB/(γm)
+                                </div>
+                                Allora:
+                                <div class="formula">
+                                    dp_x/dt = ω p_y
+                                    <br>
+                                    dp_y/dt = −ω p_x
+                                </div>
+                                Questa è una rotazione uniforme nel piano xy.
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>3) Soluzione: moto circolare (o elicoidale) e raggio</summary>
+                            <div class="mini">
+                                Le soluzioni standard sono:
+                                <div class="formula">
+                                    p_x(t) = p_⊥ cos(ωt + φ₀)
+                                    <br>
+                                    p_y(t) = p_⊥ sin(ωt + φ₀)
+                                </div>
+                                e p_z è costante (perché dp_z/dt=0).
+
+                                Siccome v = p/(γm), anche v_x e v_y ruotano con la stessa ω.
+
+                                Il raggio dell’orbita nel piano perpendicolare a B è:
+                                <div class="formula">
+                                    r = p_⊥/(qB)
+                                </div>
+                                perché per moto circolare p_⊥ = qBr.
+
+                                Se esiste anche una componente v_z ≠ 0, allora:
+                                <ul class="mini">
+                                    <li>nel piano xy c’è un moto circolare</li>
+                                    <li>lungo z c’è moto uniforme</li>
+                                </ul>
+                                ⇒ traiettoria elicoidale.
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risultato chiave:</b> nel campo magnetico l’energia (γ) resta costante; cambia solo la direzione dell’impulso. La frequenza è <b>ω = qB/(γm)</b>.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 3</h3>
                 <div class="testo-esercizio">
@@ -487,11 +1986,178 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details open>
+                            <summary>(a) Massa a riposo dalla relazione energia-impulso</summary>
+                            <div class="mini">
+                                Usiamo:
+                                <div class="formula">
+                                    E² = (pc)² + (mc²)²
+                                </div>
+                                Dati:
+                                <div class="formula">
+                                    E = 5 GeV
+                                    <br>
+                                    p = 3 GeV/c  ⇒  pc = 3 GeV
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    (mc²)² = E² − (pc)² = 5² − 3²
+                                </div>
+                                Calcolo dei quadrati:
+                                <div class="formula">
+                                    5² = 25
+                                    <br>
+                                    3² = 9
+                                </div>
+                                Sottrazione:
+                                <div class="formula">
+                                    25 − 9 = 16
+                                </div>
+                                Radice:
+                                <div class="formula">
+                                    mc² = √16 = 4 GeV
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    m = 4 GeV/c²
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>(b) Energia quando il momento è 4 GeV/c (stessa massa)</summary>
+                            <div class="mini">
+                                In un altro sistema, la massa a riposo non cambia:
+                                <div class="formula">mc² = 4 GeV</div>
+                                Dato:
+                                <div class="formula">
+                                    p' = 4 GeV/c  ⇒  p'c = 4 GeV
+                                </div>
+                                Allora:
+                                <div class="formula">
+                                    E'² = (p'c)² + (mc²)² = 4² + 4²
+                                </div>
+                                Calcolo:
+                                <div class="formula">
+                                    4² = 16
+                                    <br>
+                                    16 + 16 = 32
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    E' = √32 = √(16·2) = 4√2 ≈ 5.657 GeV
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>(c) Velocità relativa tra i due sistemi (boost lungo la direzione del moto)</summary>
+                            <div class="mini">
+                                Assumiamo l’impulso lungo x. Con un boost lungo x:
+                                <div class="formula">
+                                    p'c = γ(pc − βE)
+                                </div>
+                                Lavoriamo in unità GeV con c=1 per i calcoli (equivalente perché abbiamo pc in GeV).
+                                Quindi:
+                                <div class="formula">
+                                    p' = γ(p − βE)
+                                </div>
+                                Dati:
+                                <div class="formula">
+                                    p = 3,  E = 5,  p' = 4
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    4 = γ(3 − 5β)
+                                </div>
+                                Con γ = 1/√(1−β²):
+                                <div class="formula">
+                                    4 = (3 − 5β)/√(1−β²)
+                                </div>
+                                Moltiplichiamo per √(1−β²):
+                                <div class="formula">
+                                    4√(1−β²) = 3 − 5β
+                                </div>
+                                Eleviamo al quadrato:
+                                <div class="formula">
+                                    16(1−β²) = (3 − 5β)²
+                                </div>
+                                Sviluppiamo i due lati.
+
+                                Lato sinistro:
+                                <div class="formula">
+                                    16(1−β²) = 16 − 16β²
+                                </div>
+
+                                Lato destro:
+                                <div class="formula">
+                                    (3 − 5β)² = 3² − 2·3·5β + (5β)²
+                                    = 9 − 30β + 25β²
+                                </div>
+
+                                Uguagliamo:
+                                <div class="formula">
+                                    16 − 16β² = 9 − 30β + 25β²
+                                </div>
+                                Portiamo tutto a sinistra:
+                                <div class="formula">
+                                    16 − 16β² − 9 + 30β − 25β² = 0
+                                </div>
+                                Sommiamo i termini:
+                                <div class="formula">
+                                    (16−9) + 30β + (−16β²−25β²) = 0
+                                    <br>
+                                    7 + 30β − 41β² = 0
+                                </div>
+                                Moltiplichiamo per −1:
+                                <div class="formula">
+                                    41β² − 30β − 7 = 0
+                                </div>
+
+                                Formula risolutiva:
+                                <div class="formula">
+                                    β = [30 ± √(30² + 4·41·7)] / (2·41)
+                                </div>
+                                Calcoliamo dentro la radice:
+                                <div class="formula">
+                                    30² = 900
+                                    <br>
+                                    4·41·7 = 4·287 = 1148
+                                    <br>
+                                    900 + 1148 = 2048
+                                </div>
+                                Radice:
+                                <div class="formula">
+                                    √2048 = √(1024·2) = 32√2 ≈ 45.255
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    β = (30 ± 45.255)/82
+                                </div>
+                                Due soluzioni:
+                                <div class="formula">
+                                    β₁ = (30 + 45.255)/82 ≈ 75.255/82 ≈ 0.918
+                                    <br>
+                                    β₂ = (30 − 45.255)/82 ≈ (−15.255)/82 ≈ −0.186
+                                </div>
+
+                                Interpretazione: la soluzione <b>β ≈ −0.186</b> corrisponde a un sistema che si muove in verso opposto al moto della particella e ne aumenta il momento da 3 a 4.
+                                In modulo:
+                                <div class="formula">
+                                    |v| ≈ 0.186c
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risposte:</b> (a) m = 4 GeV/c². (b) E' = 4√2 ≈ 5.66 GeV. (c) velocità relativa ≈ 0.186c (direzione opposta all’impulso per aumentarlo).
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 4</h3>
                 <div class="testo-esercizio">
@@ -504,11 +2170,106 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details open>
+                            <summary>1) (Classico) potenziale necessario per arrivare a v=c</summary>
+                            <div class="mini">
+                                In classica:
+                                <div class="formula">
+                                    K = (1/2) m v²
+                                </div>
+                                Se vogliamo v = c:
+                                <div class="formula">
+                                    K_class = (1/2) m c²
+                                </div>
+                                L’energia acquistata da una carica e su una differenza di potenziale V è:
+                                <div class="formula">
+                                    K = eV
+                                </div>
+                                Quindi imponiamo:
+                                <div class="formula">
+                                    eV = (1/2) m c²  ⇒  V = (1/2)(mc²/e)
+                                </div>
+
+                                Per l’elettrone:
+                                <div class="formula">
+                                    mc² ≈ 511 keV
+                                </div>
+                                Metà:
+                                <div class="formula">
+                                    (1/2)mc² ≈ 255.5 keV
+                                </div>
+                                Siccome 1 eV corrisponde a 1 V per una carica e:
+                                <div class="formula">
+                                    V ≈ 255.5 kV = 2.555×10⁵ V
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>2) (a) Velocità relativistica con lo stesso V</summary>
+                            <div class="mini">
+                                In relatività:
+                                <div class="formula">
+                                    K = (γ − 1)mc²
+                                </div>
+                                Ma K = eV e abbiamo trovato eV = (1/2)mc².
+                                Quindi:
+                                <div class="formula">
+                                    (γ − 1)mc² = (1/2)mc²
+                                </div>
+                                Dividiamo per mc²:
+                                <div class="formula">
+                                    γ − 1 = 1/2  ⇒  γ = 1 + 1/2 = 3/2 = 1.5
+                                </div>
+                                Ora:
+                                <div class="formula">
+                                    γ = 1/√(1−β²)  ⇒  1−β² = 1/γ²
+                                </div>
+                                Calcoliamo 1/γ²:
+                                <div class="formula">
+                                    γ² = 1.5² = 2.25
+                                    <br>
+                                    1/γ² = 1/2.25 = 0.444444...
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    β² = 1 − 0.444444... = 0.555555...
+                                </div>
+                                Radice:
+                                <div class="formula">
+                                    β = √0.555555... ≈ 0.745356
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    v ≈ 0.745c
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>3) (b) Energia totale e cinetica</summary>
+                            <div class="mini">
+                                Energia totale:
+                                <div class="formula">
+                                    E = γmc² = 1.5 · 511 keV = 766.5 keV
+                                </div>
+                                Energia cinetica:
+                                <div class="formula">
+                                    K = (γ−1)mc² = 0.5 · 511 keV = 255.5 keV
+                                </div>
+                                Che coincide con eV (come deve essere).
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risultati:</b> V_class ≈ 2.56×10⁵ V. Con questo V, relativisticamente v≈0.745c, E≈766.5 keV, K≈255.5 keV.
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 5</h3>
                 <div class="testo-esercizio">
@@ -517,11 +2278,103 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Partenza: metrica di Minkowski in coordinate cartesiane</summary>
+                            <div class="mini">
+                                Con firma (−,+,+,+):
+                                <div class="formula">
+                                    ds² = −c²dt² + dx² + dy² + dz²
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Passaggio a coordinate cilindriche: x=ρcosφ, y=ρsinφ</summary>
+                            <div class="mini">
+                                Definiamo:
+                                <div class="formula">
+                                    x = ρ cosφ
+                                    <br>
+                                    y = ρ sinφ
+                                    <br>
+                                    z = z
+                                    <br>
+                                    t = t
+                                </div>
+
+                                Calcoliamo dx e dy.
+
+                                <b>1) dx</b>
+                                <div class="formula">
+                                    dx = d(ρcosφ) = cosφ dρ + ρ d(cosφ)
+                                </div>
+                                Ma d(cosφ)=−sinφ dφ:
+                                <div class="formula">
+                                    dx = cosφ dρ − ρ sinφ dφ
+                                </div>
+
+                                <b>2) dy</b>
+                                <div class="formula">
+                                    dy = d(ρsinφ) = sinφ dρ + ρ d(sinφ)
+                                </div>
+                                Ma d(sinφ)=cosφ dφ:
+                                <div class="formula">
+                                    dy = sinφ dρ + ρ cosφ dφ
+                                </div>
+
+                                Ora calcoliamo dx²+dy².
+
+                                <b>3) dx²</b>
+                                <div class="formula">
+                                    dx² = (cosφ dρ − ρ sinφ dφ)²
+                                        = cos²φ dρ² − 2ρ cosφ sinφ dρ dφ + ρ² sin²φ dφ²
+                                </div>
+
+                                <b>4) dy²</b>
+                                <div class="formula">
+                                    dy² = (sinφ dρ + ρ cosφ dφ)²
+                                        = sin²φ dρ² + 2ρ sinφ cosφ dρ dφ + ρ² cos²φ dφ²
+                                </div>
+
+                                <b>5) Somma dx²+dy²</b>
+                                <div class="formula">
+                                    dx²+dy² =
+                                    (cos²φ+sin²φ)dρ²
+                                    + [−2ρcosφsinφ + 2ρsinφcosφ] dρ dφ
+                                    + ρ²(sin²φ+cos²φ)dφ²
+                                </div>
+
+                                Usiamo cos²φ+sin²φ=1 e cancellazione del termine misto:
+                                <div class="formula">
+                                    dx²+dy² = dρ² + ρ² dφ²
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Metrica finale e tensore metrico gμν</summary>
+                            <div class="mini">
+                                Sostituiamo in ds²:
+                                <div class="formula">
+                                    ds² = −c²dt² + dρ² + ρ² dφ² + dz²
+                                </div>
+
+                                Se usiamo coordinate (t, ρ, φ, z), la matrice gμν è diagonale:
+                                <div class="formula">
+                                    gμν = diag(−c², 1, ρ², 1)
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risultato:</b> ds² = −c²dt² + dρ² + ρ²dφ² + dz², quindi g = diag(−c², 1, ρ², 1).
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="esercizio">
                 <h3>Esercizio 6</h3>
                 <div class="testo-esercizio">
@@ -530,12 +2383,119 @@
                 <button class="soluzione-toggle">Mostra Soluzione</button>
                 <div class="soluzione">
                     <div class="soluzione-content">
-                        <!-- La soluzione verrà inserita qui -->
+
+                        <details>
+                            <summary>Ipotesi: “tipo luce” e ortogonalità</summary>
+                            <div class="mini">
+                                Con metrica di Minkowski (−,+,+,+) e coordinate (ct,x,y,z):
+                                <div class="formula">
+                                    A è null (tipo luce) ⇒ A·A = 0
+                                    <br>
+                                    B è null (tipo luce) ⇒ B·B = 0
+                                    <br>
+                                    ortogonali ⇒ A·B = 0
+                                </div>
+                                Dobbiamo concludere:
+                                <div class="formula">
+                                    B = λA  (per qualche numero reale λ)
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Passo 1: scegliamo un sistema in cui A è “standard” (rotazioni + boost)</summary>
+                            <div class="mini">
+                                Un vettore nullo A può essere portato (con una rotazione spaziale) lungo l’asse x.
+                                Possiamo scegliere un sistema in cui:
+                                <div class="formula">
+                                    A = (a, a, 0, 0)
+                                </div>
+                                Verifica che è nullo:
+                                <div class="formula">
+                                    A·A = −a² + a² + 0 + 0 = 0
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Passo 2: imponiamo A·B = 0 e ricaviamo una relazione tra componenti di B</summary>
+                            <div class="mini">
+                                Scriviamo:
+                                <div class="formula">
+                                    B = (b₀, b₁, b₂, b₃)
+                                </div>
+                                Il prodotto scalare con metrica (−,+,+,+) è:
+                                <div class="formula">
+                                    A·B = −A₀B₀ + A₁B₁ + A₂B₂ + A₃B₃
+                                </div>
+                                Con A=(a,a,0,0):
+                                <div class="formula">
+                                    A·B = −a b₀ + a b₁ + 0 + 0 = a(−b₀ + b₁)
+                                </div>
+                                Impongo A·B=0:
+                                <div class="formula">
+                                    a(−b₀ + b₁)=0
+                                </div>
+                                Se a≠0:
+                                <div class="formula">
+                                    −b₀ + b₁ = 0  ⇒  b₁ = b₀
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Passo 3: imponiamo che B sia nullo e forziamo b₂=b₃=0</summary>
+                            <div class="mini">
+                                Condizione “tipo luce” per B:
+                                <div class="formula">
+                                    B·B = −b₀² + b₁² + b₂² + b₃² = 0
+                                </div>
+                                Sostituiamo b₁=b₀:
+                                <div class="formula">
+                                    0 = −b₀² + b₀² + b₂² + b₃² = b₂² + b₃²
+                                </div>
+                                Ma una somma di quadrati è zero solo se ogni termine è zero:
+                                <div class="formula">
+                                    b₂² = 0 ⇒ b₂ = 0
+                                    <br>
+                                    b₃² = 0 ⇒ b₃ = 0
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    B = (b₀, b₀, 0, 0)
+                                </div>
+                            </div>
+                        </details>
+
+                        <details open>
+                            <summary>Conclusione: B è proporzionale ad A</summary>
+                            <div class="mini">
+                                Abbiamo:
+                                <div class="formula">
+                                    A = (a, a, 0, 0)
+                                    <br>
+                                    B = (b₀, b₀, 0, 0)
+                                </div>
+                                Quindi:
+                                <div class="formula">
+                                    B = (b₀/a) A
+                                </div>
+                                cioè:
+                                <div class="formula">
+                                    B = λA  con  λ = b₀/a
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="hint">
+                            <b>Risultato:</b> due quadrivettori nulli e ortogonali in Minkowski non possono essere “indipendenti”: devono essere paralleli (multipli).
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <footer>
             <p>Fondamenti di Fisica Teorica: Relatività Speciale - Esercitazioni</p>
         </footer>
@@ -544,64 +2504,64 @@
     <script>
         // Inizializzazione Three.js per lo sfondo animato
         let scene, camera, renderer, particles;
-        
+
         function initThree() {
             // Creazione della scena
             scene = new THREE.Scene();
-            
+
             // Creazione della camera
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 5;
-            
+
             // Creazione del renderer
             renderer = new THREE.WebGLRenderer({ alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.getElementById('three-container').appendChild(renderer.domElement);
-            
+
             // Creazione delle particelle per lo sfondo
             const particleCount = 500;
             const particles = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
-            
+
             for (let i = 0; i < particleCount * 3; i += 3) {
                 // Posizioni casuali
                 positions[i] = (Math.random() - 0.5) * 100;
                 positions[i + 1] = (Math.random() - 0.5) * 100;
                 positions[i + 2] = (Math.random() - 0.5) * 100;
-                
+
                 // Colori casuali con tonalità blu/viola
                 colors[i] = Math.random() * 0.2 + 0.4;     // R
                 colors[i + 1] = Math.random() * 0.2 + 0.3; // G
                 colors[i + 2] = Math.random() * 0.3 + 0.7; // B
             }
-            
+
             particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            
+
             const particleMaterial = new THREE.PointsMaterial({
                 size: 0.1,
                 vertexColors: true,
                 transparent: true,
                 opacity: 0.6
             });
-            
+
             const particleSystem = new THREE.Points(particles, particleMaterial);
             scene.add(particleSystem);
-            
+
             // Animazione
             function animate() {
                 requestAnimationFrame(animate);
-                
+
                 // Rotazione lenta delle particelle
                 particleSystem.rotation.x += 0.0001;
                 particleSystem.rotation.y += 0.0002;
-                
+
                 renderer.render(scene, camera);
             }
-            
+
             animate();
-            
+
             // Gestione del ridimensionamento della finestra
             window.addEventListener('resize', function() {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -609,16 +2569,16 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
         }
-        
+
         // Inizializzazione degli eventi per i toggle delle soluzioni
         function initToggleButtons() {
             const toggleButtons = document.querySelectorAll('.soluzione-toggle');
-            
+
             toggleButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const soluzione = this.nextElementSibling;
                     soluzione.classList.toggle('open');
-                    
+
                     if (soluzione.classList.contains('open')) {
                         this.textContent = 'Nascondi Soluzione';
                     } else {
@@ -627,7 +2587,7 @@
                 });
             });
         }
-        
+
         // Inizializzazione quando il DOM è caricato
         document.addEventListener('DOMContentLoaded', function() {
             initThree();
