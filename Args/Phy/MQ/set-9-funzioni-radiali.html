@@ -1,41 +1,908 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set 9 funzioni radiali</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set 9 — Funzioni radiali idrogeno, probabilità, Stern–Gerlach</title>
+
+  <!-- MathJax (per formule LaTeX) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]']]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1b33;
+      --card2:#0c1730;
+      --text:#eaf0ff;
+      --muted:#b9c6e6;
+      --accent:#60a5fa;
+      --accent2:#34d399;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --border: 1px solid rgba(255,255,255,.10);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(96,165,250,.25), transparent 55%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(52,211,153,.18), transparent 55%),
+                  radial-gradient(900px 500px at 30% 90%, rgba(251,191,36,.10), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 28px 18px 60px;
+    }
+
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero{
+      padding: 22px 22px;
+      border: var(--border);
+      background: linear-gradient(135deg, rgba(96,165,250,.18), rgba(52,211,153,.10));
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero h1{
+      margin: 0 0 6px;
+      font-size: 1.55rem;
+      letter-spacing: .2px;
+    }
+    .hero p{
+      margin: 0;
+      color: var(--muted);
+      max-width: 75ch;
+    }
+    .badges{
+      margin-top: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .badge{
+      font-size: .86rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+    }
+    .badge strong{ color: var(--text); }
+
+    .toc{
+      margin-top: 16px;
+      padding: 14px 16px;
+      border: var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .toc h2{
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    .toc ul{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .toc li{ margin: 6px 0; }
+
+    .card{
+      margin-top: 18px;
+      border: var(--border);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card header{
+      padding: 14px 16px;
+      background: rgba(96,165,250,.12);
+      border-bottom: var(--border);
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .card header h2{
+      margin: 0;
+      font-size: 1.15rem;
+    }
+    .card header .tag{
+      font-size:.85rem;
+      color: var(--muted);
+      border: var(--border);
+      background: rgba(0,0,0,.15);
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 14px 16px 18px;
+    }
+
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 1fr 1.25fr; }
+    }
+
+    .panel{
+      border: var(--border);
+      border-radius: 14px;
+      background: rgba(11,18,32,.35);
+      padding: 12px 12px 14px;
+    }
+    .panel h3{
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: var(--text);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .panel h3 .dot{
+      width:10px; height:10px;
+      border-radius: 50%;
+      background: var(--accent);
+      display:inline-block;
+      box-shadow: 0 0 0 4px rgba(96,165,250,.18);
+    }
+    .panel.problem h3 .dot{ background: var(--warn); box-shadow: 0 0 0 4px rgba(251,191,36,.16); }
+    .panel.solution h3 .dot{ background: var(--accent2); box-shadow: 0 0 0 4px rgba(52,211,153,.16); }
+
+    .muted{ color: var(--muted); }
+
+    .callout{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+    }
+
+    .steps{
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+    .steps li{
+      margin: 8px 0;
+    }
+
+    .result{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(52,211,153,.35);
+      background: linear-gradient(135deg, rgba(52,211,153,.14), rgba(96,165,250,.10));
+    }
+    .result strong{ color: var(--text); }
+    .result u{ text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+    .mono{
+      font-family: var(--mono);
+      font-size: .92rem;
+      color: #dbe7ff;
+      background: rgba(255,255,255,.05);
+      border: var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      overflow-x:auto;
+    }
+
+    details{
+      border: var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+    summary{
+      cursor:pointer;
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    footer{
+      margin-top: 26px;
+      text-align:center;
+      color: var(--muted);
+      font-size:.92rem;
+      opacity:.95;
+    }
+    footer .mini{
+      margin-top: 6px;
+      font-size:.85rem;
+      opacity:.9;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Set 9 funzioni radiali</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 9 funzioni radiali. Grazie per la pazienza!</p>
+  <div class="container">
+    <div class="hero">
+      <h1>Set 9 — Funzioni radiali (idrogeno), probabilità, Stern–Gerlach</h1>
+      <p>
+        Pagina con <strong>testo + soluzioni complete</strong> (con passaggi “banali” inclusi).
+        Le formule sono in \(\LaTeX\) (render con MathJax).
+      </p>
+      <div class="badges">
+        <div class="badge"><strong>Argomenti:</strong> idrogeno (radiale), armoniche sferiche, probabilità angolare, spin \(1/2\)</div>
+        <div class="badge"><strong>Livello:</strong> MQ base/intermedio</div>
+        <div class="badge"><strong>Nota:</strong> convenzioni \(a=a_0/Z\) per atomo idrogenoide</div>
+      </div>
+    </div>
+
+    <nav class="toc" aria-label="Indice">
+      <h2>Indice rapido</h2>
+      <ul>
+        <li><a href="#ex1">Esercizio 1 — Costanti di normalizzazione radiali \(n=1,2,3\)</a></li>
+        <li><a href="#ex2">Esercizio 2 — Stato \(n=2\), \(p\)-stato: vincoli su \(L_z\) e probabilità in \(\varphi\)</a></li>
+        <li><a href="#ex3">Esercizio 3 — Stato fondamentale idrogeno: massimo e \(\langle r\rangle\)</a></li>
+        <li><a href="#ex4">Esercizio 4 — Stern–Gerlach: probabilità vs angolo \(\theta\)</a></li>
+      </ul>
+    </nav>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex1">
+      <header>
+        <h2>Esercizio 1</h2>
+        <div class="tag">Idrogenoide • Radiale • Normalizzazione</div>
+      </header>
+
+      <div class="grid">
+        <div class="panel problem">
+          <h3><span class="dot"></span> Testo</h3>
+          <p>
+            Calcolare le <strong>costanti di normalizzazione</strong> per le funzioni radiali di un atomo
+            <strong>idrogenoide</strong> per \(n=1,2,3\).
+          </p>
+          <div class="callout">
+            <strong>Richiamo:</strong> la normalizzazione del radiale \(R_{n\ell}(r)\) è
+            \[
+              \int_{0}^{\infty} |R_{n\ell}(r)|^2\,r^2\,dr = 1.
+            \]
+          </div>
+        </div>
+
+        <div class="panel solution">
+          <h3><span class="dot"></span> Soluzione (passo-passo)</h3>
+
+          <p class="muted">
+            Per un atomo idrogenoide (numero atomico \(Z\)), conviene introdurre
+            \[
+              a \equiv \frac{a_0}{Z},
+            \]
+            così tutte le formule dell’idrogeno si riusano sostituendo \(a_0 \to a\).
+          </p>
+
+          <details>
+            <summary>Formula “standard” (già normalizzata) per \(R_{n\ell}(r)\)</summary>
+            <div class="callout">
+              Una forma molto usata è:
+              \[
+              R_{n\ell}(r)=
+              \underbrace{\frac{2}{n^2\,a^{3/2}}
+              \sqrt{\frac{(n-\ell-1)!}{(n+\ell)!}}}_{\text{costante di normalizzazione }N_{n\ell}}
+              \,e^{-r/(na)}\left(\frac{2r}{na}\right)^\ell
+              L_{n-\ell-1}^{2\ell+1}\!\left(\frac{2r}{na}\right).
+              \]
+              Quindi la “costante” richiesta spesso è proprio
+              \[
+                \boxed{\,N_{n\ell}=\frac{2}{n^2\,a^{3/2}}
+                \sqrt{\frac{(n-\ell-1)!}{(n+\ell)!}}\, }.
+              \]
+            </div>
+          </details>
+
+          <p>
+            Per \(n\le 3\) elenchiamo tutte le \(\ell\) ammesse:
+            <strong>\(\ell=0,\ldots,n-1\)</strong>.
+            Quindi:
+          </p>
+
+          <ol class="steps">
+            <li>
+              <strong>\(n=1\)</strong> \(\Rightarrow \ell=0\).
+              <div class="mono">
+                (n,ℓ) = (1,0)
+              </div>
+              Calcolo della costante:
+              \[
+              N_{10}=\frac{2}{1^2 a^{3/2}}\sqrt{\frac{(1-0-1)!}{(1+0)!}}
+              =\frac{2}{a^{3/2}}\sqrt{\frac{0!}{1!}}
+              =\frac{2}{a^{3/2}}\sqrt{\frac{1}{1}}
+              =\frac{2}{a^{3/2}}.
+              \]
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                  \boxed{R_{10}(r)=\frac{2}{a^{3/2}}\,e^{-r/a}}.
+                \]
+              </div>
+            </li>
+
+            <li>
+              <strong>\(n=2\)</strong> \(\Rightarrow \ell=0,1\).
+              <div class="mono">
+                (n,ℓ) = (2,0) e (2,1)
+              </div>
+
+              <p>
+                <u>Caso \((2,0)\) (2s)</u>:
+              </p>
+              \[
+              N_{20}=\frac{2}{2^2 a^{3/2}}
+              \sqrt{\frac{(2-0-1)!}{(2+0)!}}
+              =\frac{2}{4 a^{3/2}}\sqrt{\frac{1!}{2!}}
+              =\frac{1}{2 a^{3/2}}\sqrt{\frac{1}{2}}
+              =\frac{1}{2\sqrt{2}\,a^{3/2}}.
+              \]
+              Il polinomio di Laguerre dà \(L_{1}^{1}(\rho)=2-\rho\) con \(\rho=r/a\).
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                \boxed{R_{20}(r)=\frac{1}{2\sqrt{2}\,a^{3/2}}\,(2-\tfrac{r}{a})\,e^{-r/(2a)}}.
+                \]
+              </div>
+
+              <p>
+                <u>Caso \((2,1)\) (2p)</u>:
+              </p>
+              \[
+              N_{21}=\frac{2}{4 a^{3/2}}
+              \sqrt{\frac{(2-1-1)!}{(2+1)!}}
+              =\frac{1}{2 a^{3/2}}\sqrt{\frac{0!}{3!}}
+              =\frac{1}{2 a^{3/2}}\sqrt{\frac{1}{6}}
+              =\frac{1}{2\sqrt{6}\,a^{3/2}}.
+              \]
+              Qui \(L_{0}^{3}(\rho)=1\) e compare il fattore \(\rho^\ell=(\tfrac{r}{a})^1\).
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                \boxed{R_{21}(r)=\frac{1}{2\sqrt{6}\,a^{3/2}}\,\Bigl(\tfrac{r}{a}\Bigr)\,e^{-r/(2a)}}.
+                \]
+              </div>
+            </li>
+
+            <li>
+              <strong>\(n=3\)</strong> \(\Rightarrow \ell=0,1,2\).
+              <div class="mono">
+                (n,ℓ) = (3,0), (3,1), (3,2)
+              </div>
+
+              <p><u>Caso \((3,0)\) (3s)</u>:</p>
+              \[
+              N_{30}=\frac{2}{3^2 a^{3/2}}
+              \sqrt{\frac{(3-0-1)!}{(3+0)!}}
+              =\frac{2}{9 a^{3/2}}\sqrt{\frac{2!}{3!}}
+              =\frac{2}{9 a^{3/2}}\sqrt{\frac{2}{6}}
+              =\frac{2}{9 a^{3/2}}\sqrt{\frac{1}{3}}
+              =\frac{2}{9\sqrt{3}\,a^{3/2}}.
+              \]
+              Con \(\rho=\frac{2r}{3a}\), \(L_{2}^{1}(\rho)=\frac{1}{2}(\rho^2-6\rho+6)\),
+              che porta alla forma classica:
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                \boxed{
+                R_{30}(r)=\frac{2}{81\sqrt{3}\,a^{3/2}}
+                \Bigl(27-18\,\tfrac{r}{a}+2(\tfrac{r}{a})^2\Bigr)\,e^{-r/(3a)}
+                }.
+                \]
+              </div>
+
+              <p><u>Caso \((3,1)\) (3p)</u>:</p>
+              \[
+              N_{31}=\frac{2}{9 a^{3/2}}
+              \sqrt{\frac{(3-1-1)!}{(3+1)!}}
+              =\frac{2}{9 a^{3/2}}\sqrt{\frac{1!}{4!}}
+              =\frac{2}{9 a^{3/2}}\sqrt{\frac{1}{24}}
+              =\frac{2}{9 a^{3/2}}\cdot\frac{1}{2\sqrt{6}}
+              =\frac{1}{9\sqrt{6}\,a^{3/2}}.
+              \]
+              Con \(\rho=\frac{2r}{3a}\), \(L_{1}^{3}(\rho)=4-\rho\), quindi una forma utile è:
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                \boxed{
+                R_{31}(r)=\frac{8}{27\sqrt{6}\,a^{3/2}}
+                \Bigl(\tfrac{r}{a}\Bigr)\Bigl(1-\tfrac{r}{6a}\Bigr)\,e^{-r/(3a)}
+                }.
+                \]
+              </div>
+
+              <p><u>Caso \((3,2)\) (3d)</u>:</p>
+              \[
+              N_{32}=\frac{2}{9 a^{3/2}}
+              \sqrt{\frac{(3-2-1)!}{(3+2)!}}
+              =\frac{2}{9 a^{3/2}}\sqrt{\frac{0!}{5!}}
+              =\frac{2}{9 a^{3/2}}\sqrt{\frac{1}{120}}
+              =\frac{2}{9 a^{3/2}}\cdot\frac{1}{2\sqrt{30}}
+              =\frac{1}{9\sqrt{30}\,a^{3/2}}.
+              \]
+              Poiché \(L_{0}^{5}(\rho)=1\) e compare \(\rho^2\), otteniamo:
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                \boxed{
+                R_{32}(r)=\frac{4}{81\sqrt{30}\,a^{3/2}}
+                \Bigl(\tfrac{r}{a}\Bigr)^2\,e^{-r/(3a)}
+                }.
+                \]
+              </div>
+            </li>
+          </ol>
+
+          <div class="callout">
+            <strong>Check “banale” ma importante:</strong> tutte le costanti hanno dimensione \(a^{-3/2}\),
+            così che \( |R|^2 r^2 dr \) sia adimensionale (come deve essere per una probabilità).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex2">
+      <header>
+        <h2>Esercizio 2</h2>
+        <div class="tag">Idrogeno • Stato \(n=2\) • Vincoli su \(L_z\) e \(\varphi\)</div>
+      </header>
+
+      <div class="grid">
+        <div class="panel problem">
+          <h3><span class="dot"></span> Testo</h3>
+          <p>
+            Determinare lo stato di un atomo di idrogeno di cui si sa che:
+          </p>
+          <ul class="steps">
+            <li>(a) è in uno stato <strong>\(p\)</strong> con \(n=2\);</li>
+            <li>(b) la probabilità che una misura di \(L_z\) dia zero è nulla, e così \(\langle L_z\rangle=0\);</li>
+            <li>(c) la probabilità di trovare l’elettrone nel primo quadrante \((0 \le \varphi \le \pi/2)\) vale il \(25\%\).</li>
+          </ul>
+        </div>
+
+        <div class="panel solution">
+          <h3><span class="dot"></span> Soluzione (passo-passo)</h3>
+
+          <p>
+            Dato “<strong>stato \(p\)</strong> con \(n=2\)” significa:
+            \[
+              n=2,\qquad \ell=1,\qquad m=-1,0,+1.
+            \]
+          </p>
+
+          <p>
+            Scriviamo lo stato più generale nella base \(\{|2,1,m\rangle\}\):
+            \[
+              |\Psi\rangle = c_{+1}|2,1,+1\rangle + c_0|2,1,0\rangle + c_{-1}|2,1,-1\rangle.
+            \]
+          </p>
+
+          <ol class="steps">
+            <li>
+              <strong>Vincolo (b1):</strong> “la probabilità che \(L_z=0\) è nulla”.
+              <br/>
+              La probabilità di misurare \(m=0\) è \(|c_0|^2\). Dire che è nulla significa
+              \[
+                |c_0|^2=0 \quad\Rightarrow\quad c_0=0.
+              \]
+              Quindi:
+              \[
+                |\Psi\rangle = c_{+1}|2,1,+1\rangle + c_{-1}|2,1,-1\rangle.
+              \]
+            </li>
+
+            <li>
+              <strong>Normalizzazione:</strong>
+              \[
+                \langle \Psi|\Psi\rangle = |c_{+1}|^2 + |c_{-1}|^2 = 1.
+              \]
+            </li>
+
+            <li>
+              <strong>Vincolo (b2):</strong> \(\langle L_z\rangle=0\).
+              <br/>
+              Poiché \(L_z|2,1,m\rangle=\hbar m|2,1,m\rangle\),
+              \[
+                \langle L_z\rangle = \hbar\bigl(+1\cdot |c_{+1}|^2 + (-1)\cdot |c_{-1}|^2\bigr)
+                = \hbar\,(|c_{+1}|^2 - |c_{-1}|^2).
+              \]
+              Imporre \(\langle L_z\rangle=0\) significa:
+              \[
+                |c_{+1}|^2 - |c_{-1}|^2 = 0
+                \quad\Rightarrow\quad
+                |c_{+1}|^2 = |c_{-1}|^2.
+              \]
+              Con la normalizzazione \( |c_{+1}|^2 + |c_{-1}|^2=1\) otteniamo:
+              \[
+                |c_{+1}|^2=|c_{-1}|^2=\frac{1}{2}.
+              \]
+              Quindi:
+              \[
+                |c_{+1}|=\frac{1}{\sqrt{2}},\qquad |c_{-1}|=\frac{1}{\sqrt{2}}.
+              \]
+              Possiamo parametrizzare le fasi così (togliendo una fase globale inutile):
+              \[
+                c_{+1}=\frac{1}{\sqrt{2}},\qquad c_{-1}=\frac{e^{i\delta}}{\sqrt{2}}.
+              \]
+            </li>
+
+            <li>
+              <strong>Vincolo (c):</strong> probabilità nel primo quadrante in \(\varphi\) pari al \(25\%\).
+              <br/>
+              La dipendenza in \(\varphi\) per \(m=\pm 1\) sta nelle armoniche sferiche:
+              \[
+                Y_{1,+1}\propto e^{+i\varphi},\qquad Y_{1,-1}\propto e^{-i\varphi}.
+              \]
+              Con \(c_{+1}=1/\sqrt{2}\) e \(c_{-1}=e^{i\delta}/\sqrt{2}\) la densità di probabilità contiene un termine
+              d’interferenza \(\propto \cos(2\varphi-\delta)\).
+              <br/><br/>
+              Se la probabilità in \(\varphi\in[0,\pi/2]\) è esattamente \(1/4\) di quella totale in \([0,2\pi]\),
+              l’integrale del termine oscillante su \([0,\pi/2]\) deve dare zero. Si ottiene la condizione:
+              \[
+                \sin\delta=0 \quad\Rightarrow\quad \delta=0 \ \text{oppure}\ \delta=\pi.
+              \]
+            </li>
+          </ol>
+
+          <div class="result">
+            <strong>Risultato finale (stato):</strong>
+            \[
+              \boxed{
+              |\Psi\rangle=\frac{1}{\sqrt{2}}\Bigl(|2,1,+1\rangle \pm |2,1,-1\rangle\Bigr)
+              }.
+            \]
+            <p class="muted" style="margin:8px 0 0">
+              (Il segno \(\pm\) corrisponde a due combinazioni reali equivalenti a rotazioni nel piano:
+              in termini orbitali “reali” sono combinazioni tipo \(p_x\) e \(p_y\), a fase globale irrilevante.)
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex3">
+      <header>
+        <h2>Esercizio 3</h2>
+        <div class="tag">Idrogeno • \(1s\) • Massimo e \(\langle r\rangle\)</div>
+      </header>
+
+      <div class="grid">
+        <div class="panel problem">
+          <h3><span class="dot"></span> Testo</h3>
+          <p>
+            La funzione d’onda per lo stato fondamentale dell’atomo di idrogeno è
+          </p>
+          \[
+            \psi_{100}=\sqrt{\frac{1}{\pi a_0^3}}\,e^{-r/a_0},
+            \qquad
+            a_0=\frac{4\pi\varepsilon_0\hbar^2}{me^2}.
+          \]
+          <ul class="steps">
+            <li>(a) Determinare a quale distanza dal nucleo la densità di probabilità di trovare l’elettrone è massima.</li>
+            <li>(b) Determinare il valor medio della posizione dell’elettrone.</li>
+          </ul>
+        </div>
+
+        <div class="panel solution">
+          <h3><span class="dot"></span> Soluzione (passo-passo)</h3>
+
+          <p>
+            Prima scriviamo la densità:
+            \[
+              |\psi_{100}|^2 = \frac{1}{\pi a_0^3}\,e^{-2r/a_0}.
+            \]
+          </p>
+
+          <details>
+            <summary>Nota importante: “densità” vs “probabilità radiale”</summary>
+            <div class="callout">
+              In 3D, la probabilità in un guscio \([r,r+dr]\) è
+              \[
+                dP = |\psi|^2\,dV = |\psi|^2 (4\pi r^2 dr).
+              \]
+              Per questo spesso si massimizza la <strong>distribuzione radiale</strong>
+              \[
+                P(r)=4\pi r^2|\psi|^2,
+              \]
+              non semplicemente \(|\psi|^2\).
+            </div>
+          </details>
+
+          <ol class="steps">
+            <li>
+              <strong>(a) Massimo</strong>
+              <ul class="steps">
+                <li>
+                  Se interpretiamo “densità” come \(|\psi|^2\), allora:
+                  \(|\psi|^2\) decresce con \(r\) e quindi è massima a
+                  \[
+                    \boxed{r=0}.
+                  \]
+                </li>
+                <li>
+                  Se invece (più fisico) massimizziamo la <strong>probabilità per guscio</strong>:
+                  \[
+                    P(r)=4\pi r^2\frac{1}{\pi a_0^3}e^{-2r/a_0}
+                    =\frac{4}{a_0^3}\,r^2 e^{-2r/a_0}.
+                  \]
+                  Deriviamo:
+                  \[
+                    \frac{d}{dr}\bigl(r^2 e^{-2r/a_0}\bigr)
+                    = 2r e^{-2r/a_0} + r^2 e^{-2r/a_0}\left(-\frac{2}{a_0}\right).
+                  \]
+                  Mettiamo in evidenza \(e^{-2r/a_0}\):
+                  \[
+                    = e^{-2r/a_0}\left(2r - \frac{2r^2}{a_0}\right)
+                    = 2r\,e^{-2r/a_0}\left(1-\frac{r}{a_0}\right).
+                  \]
+                  Condizione di massimo/minimo:
+                  \[
+                    2r\,e^{-2r/a_0}\left(1-\frac{r}{a_0}\right)=0
+                    \quad\Rightarrow\quad
+                    r=0\ \text{oppure}\ r=a_0.
+                  \]
+                  Poiché \(P(0)=0\) (c’è il fattore \(r^2\)), il massimo non può stare in \(r=0\).
+                  Quindi:
+                  \[
+                    \boxed{r_{\max}=a_0}.
+                  \]
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>(b) Valor medio della posizione</strong>
+              <br/>
+              In un problema sferico il “valor medio della posizione” spesso significa \(\langle r\rangle\)
+              (distanza media). Calcoliamo:
+              \[
+                \langle r\rangle=\int r\,|\psi|^2\,dV
+                =\int_0^\infty r\,|\psi|^2 (4\pi r^2 dr)
+                =4\pi\int_0^\infty r^3|\psi|^2\,dr.
+              \]
+              Sostituiamo \(|\psi|^2=\frac{1}{\pi a_0^3}e^{-2r/a_0}\):
+              \[
+                \langle r\rangle
+                =4\pi \int_0^\infty r^3\left(\frac{1}{\pi a_0^3}e^{-2r/a_0}\right)dr
+                =\frac{4}{a_0^3}\int_0^\infty r^3 e^{-2r/a_0}\,dr.
+              \]
+              Usiamo la formula (standard):
+              \[
+                \int_0^\infty r^n e^{-\beta r}\,dr=\frac{n!}{\beta^{n+1}}.
+              \]
+              Qui \(n=3\Rightarrow 3!=6\) e \(\beta=2/a_0\). Quindi:
+              \[
+                \int_0^\infty r^3 e^{-(2/a_0) r}\,dr
+                =\frac{6}{(2/a_0)^4}.
+              \]
+              Ora facciamo i conti <u>banalissimi</u>:
+              \[
+                (2/a_0)^4=\frac{2^4}{a_0^4}=\frac{16}{a_0^4}
+                \quad\Rightarrow\quad
+                \frac{6}{(2/a_0)^4}=\frac{6}{16/a_0^4}=6\cdot\frac{a_0^4}{16}=\frac{6a_0^4}{16}=\frac{3a_0^4}{8}.
+              \]
+              Quindi:
+              \[
+                \langle r\rangle=\frac{4}{a_0^3}\cdot\frac{3a_0^4}{8}
+                =\frac{12a_0}{8}
+                =\frac{3a_0}{2}.
+              \]
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                  \boxed{\langle r\rangle=\frac{3}{2}a_0}.
+                \]
+                <p class="muted" style="margin:8px 0 0">
+                  Invece \(\langle \vec r\rangle=0\) per simmetria sferica (la “posizione vettoriale media” è nulla).
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <section class="card" id="ex4">
+      <header>
+        <h2>Esercizio 4</h2>
+        <div class="tag">Spin \(1/2\) • Stern–Gerlach • Dipendenza da \(\theta\)</div>
+      </header>
+
+      <div class="grid">
+        <div class="panel problem">
+          <h3><span class="dot"></span> Testo</h3>
+          <p>
+            Si consideri un fascio di particelle di spin \(1/2\) che attraversa un campo magnetico disomogeneo \(B\)
+            (apparato sperimentale di Stern e Gerlach). Si selezioni il fascio con spin “up”
+            lungo la direzione del campo magnetico:
+          </p>
+          <ul class="steps">
+            <li>
+              (a) Sia \(\mathbf{B}=B_0\,\hat z\); se si misura \(S_z\), con quale probabilità si ottiene \(+\hbar/2\),
+              con quale \(-\hbar/2\)?
+            </li>
+            <li>
+              (b) Sia \(\mathbf{B}\) nel piano \(xz\):
+              <ol class="steps" style="list-style: lower-roman; padding-left: 18px;">
+                <li>se si misura \(S_z\), con quale probabilità \(+\hbar/2\), con quale \(-\hbar/2\)?</li>
+                <li>e se si misura \(S_x\)?</li>
+                <li>qual è il valor medio di \(S_z\)?</li>
+              </ol>
+              Si rappresentino e si discutano i risultati in funzione dell’angolo polare \(\theta\) individuato dal campo magnetico.
+            </li>
+          </ul>
+        </div>
+
+        <div class="panel solution">
+          <h3><span class="dot"></span> Soluzione (passo-passo)</h3>
+
+          <p>
+            “Selezionare lo spin <strong>up lungo \(\mathbf{B}\)</strong>” significa:
+            lo stato dopo il selettore è
+            \[
+              |+\rangle_{\mathbf{n}},
+            \]
+            dove \(\mathbf{n}\) è il versore nella direzione di \(\mathbf{B}\).
+          </p>
+
+          <ol class="steps">
+            <li>
+              <strong>(a) \(\mathbf{B}=B_0\hat z\)</strong>
+              <br/>
+              Qui \(\mathbf{n}=\hat z\), quindi lo stato selezionato è proprio \(|+\rangle_z\).
+              Se misuro \(S_z\):
+              \[
+                S_z|+\rangle_z = +\frac{\hbar}{2}|+\rangle_z,\qquad
+                S_z|-\rangle_z = -\frac{\hbar}{2}|-\rangle_z.
+              \]
+              Dato che lo stato è già un autostato di \(S_z\):
+              <div class="result">
+                <strong>Risultato:</strong>
+                \[
+                  \boxed{P(S_z=+\hbar/2)=1,\qquad P(S_z=-\hbar/2)=0.}
+                \]
+              </div>
+            </li>
+
+            <li>
+              <strong>(b) \(\mathbf{B}\) nel piano \(xz\)</strong>
+              <br/>
+              Sia \(\theta\) l’angolo tra \(\mathbf{B}\) e l’asse \(z\) (quindi \(\theta=0\Rightarrow \mathbf{B}\parallel z\),
+              \(\theta=\pi/2\Rightarrow \mathbf{B}\parallel x\)).
+              <br/><br/>
+              Una scelta comoda (nessuna fase “strana” perché \(\varphi=0\)) è:
+              \[
+                |+\rangle_{\mathbf{n}}=\cos\!\left(\frac{\theta}{2}\right)|+\rangle_z
+                +\sin\!\left(\frac{\theta}{2}\right)|-\rangle_z.
+              \]
+
+              <ul class="steps">
+                <li>
+                  <strong>(i) Misura di \(S_z\)</strong>:
+                  <br/>
+                  Ampiezze:
+                  \[
+                    \langle +_z|+_{\mathbf{n}}\rangle=\cos(\theta/2),\qquad
+                    \langle -_z|+_{\mathbf{n}}\rangle=\sin(\theta/2).
+                  \]
+                  Probabilità (quadrati dei moduli):
+                  <div class="result">
+                    <strong>Risultato:</strong>
+                    \[
+                      \boxed{
+                      P(S_z=+\hbar/2)=\cos^2\!\left(\frac{\theta}{2}\right),\quad
+                      P(S_z=-\hbar/2)=\sin^2\!\left(\frac{\theta}{2}\right).
+                      }
+                    \]
+                  </div>
+                </li>
+
+                <li>
+                  <strong>(ii) Misura di \(S_x\)</strong>:
+                  <br/>
+                  Usiamo:
+                  \[
+                    |+\rangle_x=\frac{1}{\sqrt{2}}\Bigl(|+\rangle_z+|-\rangle_z\Bigr),\qquad
+                    |-\rangle_x=\frac{1}{\sqrt{2}}\Bigl(|+\rangle_z-|-\rangle_z\Bigr).
+                  \]
+                  Calcoliamo l’ampiezza \(A_+=\langle +_x|+_{\mathbf{n}}\rangle\):
+                  \[
+                    A_+=\frac{1}{\sqrt{2}}\Bigl(\cos(\theta/2)+\sin(\theta/2)\Bigr).
+                  \]
+                  Quindi:
+                  \[
+                    P(S_x=+\hbar/2)=|A_+|^2
+                    =\frac{1}{2}\Bigl(\cos(\theta/2)+\sin(\theta/2)\Bigr)^2.
+                  \]
+                  Sviluppiamo il quadrato <u>passo-passo</u>:
+                  \[
+                    (\cos+\sin)^2=\cos^2+\sin^2+2\sin\cos = 1 + \sin\theta,
+                  \]
+                  perché \(\cos^2+\sin^2=1\) e \(2\sin(\theta/2)\cos(\theta/2)=\sin\theta\).
+                  Quindi:
+                  \[
+                    P(S_x=+\hbar/2)=\frac{1}{2}(1+\sin\theta).
+                  \]
+                  Analogamente:
+                  \[
+                    P(S_x=-\hbar/2)=\frac{1}{2}(1-\sin\theta).
+                  \]
+                  <div class="result">
+                    <strong>Risultato:</strong>
+                    \[
+                      \boxed{
+                      P(S_x=+\hbar/2)=\frac{1}{2}(1+\sin\theta),\quad
+                      P(S_x=-\hbar/2)=\frac{1}{2}(1-\sin\theta).
+                      }
+                    \]
+                  </div>
+                </li>
+
+                <li>
+                  <strong>(iii) Valor medio di \(S_z\)</strong>:
+                  <br/>
+                  Per una variabile con due esiti \(+\hbar/2\) e \(-\hbar/2\),
+                  \[
+                    \langle S_z\rangle = \left(+\frac{\hbar}{2}\right)P_+ + \left(-\frac{\hbar}{2}\right)P_-.
+                  \]
+                  Qui \(P_+=\cos^2(\theta/2)\), \(P_-=\sin^2(\theta/2)\), quindi:
+                  \[
+                    \langle S_z\rangle
+                    =\frac{\hbar}{2}\Bigl(\cos^2(\theta/2)-\sin^2(\theta/2)\Bigr)
+                    =\frac{\hbar}{2}\cos\theta.
+                  \]
+                  <div class="result">
+                    <strong>Risultato:</strong>
+                    \[
+                      \boxed{\langle S_z\rangle=\frac{\hbar}{2}\cos\theta.}
+                    \]
+                  </div>
+                </li>
+              </ul>
+
+              <div class="callout">
+                <strong>Discussione veloce (controlli limite):</strong><br/>
+                • \(\theta=0\Rightarrow\) campo lungo \(z\): \(P(S_z=+\hbar/2)=1\).<br/>
+                • \(\theta=\pi/2\Rightarrow\) campo lungo \(x\): \(P(S_z=\pm\hbar/2)=1/2\) (massima incertezza su \(z\)).<br/>
+                • \(\langle S_z\rangle\) segue una legge \(\propto\cos\theta\), proprio come il “proiettare” il momento di spin lungo \(z\).
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
     <footer>
-        Generato automaticamente - Set 9 funzioni radiali
+      <div> Set 9 </div>
     </footer>
+  </div>
 </body>
 </html>

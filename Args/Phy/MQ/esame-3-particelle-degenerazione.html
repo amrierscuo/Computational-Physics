@@ -1,41 +1,924 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esame 3 particelle degenerazione</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esame 3 (17-07-2019) — Soluzioni (MQ)</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --ink2:rgba(11,16,32,.82);
+      --paper:rgba(255,255,255,.92);
+      --paper2:rgba(255,255,255,.78);
+      --shadow:rgba(0,0,0,.14);
+      --shadow2:rgba(0,0,0,.22);
+      --a1:#00e5ff;
+      --a2:#ff4ecd;
+      --a3:#52ff9c;
+      --a4:#ffe34d;
+      --radius:18px;
+      --radius-sm:12px;
+      --max:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      padding:22px 16px 46px;
+      color:var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1100px 760px at 12% 10%, rgba(0,229,255,0.18), transparent 58%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,78,205,0.14), transparent 60%),
+        radial-gradient(1200px 900px at 60% 92%, rgba(82,255,156,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(240,246,255,0.92));
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; }
+
+    header.hero{
+      position:relative;
+      padding:22px 18px;
+      border-radius:var(--radius);
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(0,229,255,0.22), transparent 60%),
+        radial-gradient(900px 420px at 90% 10%, rgba(255,78,205,0.16), transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+      border:2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+    }
+    header.hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.22;
+      mix-blend-mode:multiply;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(11,16,32,.72);
+      margin-bottom:8px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      background: linear-gradient(135deg, rgba(0,229,255,0.88), rgba(255,227,77,0.78));
+      color:#0b1020;
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: 0 12px 22px rgba(0,229,255,.14);
+    }
+    h1{
+      margin:6px 0 6px;
+      line-height:1.15;
+      letter-spacing:.2px;
+      font-size: 26px;
+    }
+    .sub{
+      margin:0;
+      color:var(--ink2);
+      font-size: 15px;
+      max-width: 84ch;
+    }
+    .top-actions{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.80);
+      color: rgba(11,16,32,.92);
+      font-weight: 900;
+      text-decoration:none;
+      box-shadow: 0 12px 26px rgba(0,0,0,.12);
+      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(1px); filter: brightness(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,42,109,0.92), rgba(255,227,77,0.78));
+      border-color: rgba(255,255,255,0.30);
+      color:#0b1020;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 320px 1fr; align-items:start; }
+    }
+
+    nav.toc{
+      position:sticky;
+      top: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.80);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 34px var(--shadow);
+      padding: 14px;
+      overflow:hidden;
+    }
+    nav.toc h2{
+      margin:0 0 10px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    nav.toc ul{ margin:0; padding-left: 18px; }
+    nav.toc li{ margin: 8px 0; }
+    nav.toc a{
+      color: rgba(11,16,32,.92);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    nav.toc a:hover{ text-decoration: underline; text-decoration-color: rgba(0,229,255,0.85); }
+
+    section.card{
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+      position:relative;
+    }
+    section.card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.18;
+      mix-blend-mode:multiply;
+    }
+    .card-head{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      background:
+        radial-gradient(900px 280px at 12% 0%, rgba(0,229,255,0.12), transparent 60%),
+        radial-gradient(900px 280px at 90% 10%, rgba(255,78,205,0.10), transparent 60%),
+        rgba(255,255,255,0.72);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-head h2{ margin:10px 0 0; font-size: 18px; line-height:1.2; }
+    .card-body{ position:relative; z-index:1; padding: 16px; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.76);
+      color: rgba(11,16,32,.80);
+    }
+    .badge .dot{
+      width:10px; height:10px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--a1), var(--a2));
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.65);
+    }
+
+    .block{
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .block h3{ margin:0 0 10px; font-size: 14px; letter-spacing:.2px; }
+
+    .steps{ margin:0; padding-left: 18px; }
+    .steps li{ margin: 10px 0; }
+
+    .note{ border-left: 4px solid rgba(0,229,255,0.85); }
+    .warn{ border-left: 4px solid rgba(255,42,109,0.75); background: rgba(255,240,245,0.78); }
+    .result{ border-left: 4px solid rgba(82,255,156,0.85); background: rgba(240,255,248,0.82); }
+
+    .tiny{ color: rgba(11,16,32,.72); font-size: 12.5px; margin-top: 8px; }
+    .hr{ height:1px; background: rgba(0,0,0,0.06); margin: 14px 0; border-radius: 999px; }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+      color: rgba(11,16,32,.75);
+      font-size: 12.5px;
+      text-align:center;
+    }
+
+    mjx-container[display="true"]{ margin: 10px 0 !important; }
+    code.k{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Esame 3 particelle degenerazione</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Esame 3 particelle degenerazione. Grazie per la pazienza!</p>
-    <footer>
-        Generato automaticamente - Esame 3 particelle degenerazione
-    </footer>
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="kicker">
+        <span class="pill">MQ • Soluzioni</span>
+        <span>Esame 3 — 17/07/2019</span>
+      </div>
+
+      <h1>Esame 3 (17-07-2019) — Momento angolare composto, degenerazione + perturbazione, transizioni indotte</h1>
+      <p class="sub">
+        Qui trovi: <b>testo completo</b> + <b>soluzioni passo‑passo</b> (anche conti “banali”),
+        con risultati finali evidenziati e commentati.
+      </p>
+
+      <div class="top-actions">
+        <a class="btn" href="1mq.html">← Torna all’indice</a>
+        <a class="btn primary" href="#ex1">Vai all’Esercizio 1</a>
+        <a class="btn" href="#fine">↓ Fine pagina</a>
+      </div>
+
+      <p class="tiny">
+        <b>Convenzioni:</b> per il momento angolare totale \(\mathbf{L}=\mathbf{L}_1+\mathbf{L}_2\),
+        \[
+          L^2|L,M\rangle=\hbar^2L(L+1)|L,M\rangle,\qquad L_z|L,M\rangle=\hbar M\,|L,M\rangle.
+        \]
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <nav class="toc">
+        <h2>Contenuti</h2>
+        <ul>
+          <li><a href="#ex1">Esercizio 1 — Somma di due momenti \(l_1=l_2=1\): valori di \(L^2\), \(L_z\) e probabilità</a></li>
+          <li><a href="#ex2">Esercizio 2 — Perturbazione con degenerazione: diagonalizzazione nel sottospazio degenere</a></li>
+          <li><a href="#ex3">Esercizio 3 — Campo gaussiano \( \mathcal{E}(t)\): selezione \(\Delta n=\pm1\) e probabilità</a></li>
+        </ul>
+
+        <div class="block note" style="margin-top:12px;">
+          <h3>Mini‑mappa (super utile)</h3>
+          <ul class="steps">
+            <li><b>Addizione momenti angolari:</b> calcola \(M=m_1+m_2\) (qui è “sicuro”).</li>
+            <li><b>Degenerazione:</b> al I ordine devi diagonalizzare \(H'\) <u>nel sottospazio degenere</u>.</li>
+            <li><b>Oscillatore + perturbazione \(\propto x\):</b> solo \(\Delta n=\pm1\).</li>
+          </ul>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex1">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 1</span>
+            <h2>Somma di due momenti angolari \(l_1=l_2=1\): possibili \(L^2\), \(L_z\) e probabilità</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Lo stato di un sistema di due particelle è rappresentato, nella base
+                \(|l_1,m_1\rangle|l_2,m_2\rangle\) degli autostati di \(L_1^2,L_{1z},L_2^2,L_{2z}\), dal vettore:
+              </p>
+              \[
+                |\psi\rangle=|1,1\rangle|1,-1\rangle.
+              \]
+              <p>
+                Quali sono i possibili valori di una misura di \(L^2\) e \(L_z\) (\(\mathbf{L}=\mathbf{L}_1+\mathbf{L}_2\))
+                e quali le probabilità di ottenerli?
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione</h3>
+
+              <ol class="steps">
+                <li>
+                  <b>Prima cosa (facilissima):</b> il numero quantico totale \(M\) è la somma dei due \(m\):
+                  \[
+                    M=m_1+m_2=1+(-1)=0.
+                  \]
+                  Quindi una misura di \(L_z\) dà <b>sempre</b>:
+                  \[
+                    L_z=\hbar M=\hbar\cdot 0=0.
+                  \]
+                  <div class="block result">
+                    <h3>Risultato immediato</h3>
+                    \[
+                      \boxed{P(L_z=0)=1\quad\text{(e nessun altro risultato è possibile).}}
+                    \]
+                  </div>
+                </li>
+
+                <li>
+                  Ora per \(L^2\): con \(l_1=1\) e \(l_2=1\) il totale può essere
+                  \[
+                    L=|l_1-l_2|,\ |l_1-l_2|+1,\dots,l_1+l_2 \quad\Rightarrow\quad L=0,1,2.
+                  \]
+                  Quindi i possibili autovalori di \(L^2\) sono:
+                  \[
+                    L=0 \Rightarrow L^2=0,
+                    \qquad
+                    L=1 \Rightarrow L^2=\hbar^2\cdot 1\cdot 2=2\hbar^2,
+                    \qquad
+                    L=2 \Rightarrow L^2=\hbar^2\cdot 2\cdot 3=6\hbar^2.
+                  \]
+                </li>
+
+                <li class="note">
+                  Serve <b>espandere</b> lo stato prodotto \(|1,1\rangle|1,-1\rangle\) sulla base accoppiata \(|L,M\rangle\).
+                  Qui \(M=0\), quindi useremo solo \(|L,0\rangle\) con \(L=0,1,2\).
+                </li>
+
+                <li>
+                  Per \(l_1=l_2=1\), i tre stati accoppiati con \(M=0\) (formule standard dei coefficienti di Clebsch–Gordan) sono:
+                  \[
+                    |2,0\rangle=\frac{1}{\sqrt6}\Bigl(|1,1;1,-1\rangle+2|1,0;1,0\rangle+|1,-1;1,1\rangle\Bigr),
+                  \]
+                  \[
+                    |1,0\rangle=\frac{1}{\sqrt2}\Bigl(|1,1;1,-1\rangle-|1,-1;1,1\rangle\Bigr),
+                  \]
+                  \[
+                    |0,0\rangle=\frac{1}{\sqrt3}\Bigl(|1,1;1,-1\rangle-|1,0;1,0\rangle+|1,-1;1,1\rangle\Bigr).
+                  \]
+                  (Qui ho abbreviato \(|1,m_1;1,m_2\rangle\equiv |1,m_1\rangle|1,m_2\rangle\).)
+                </li>
+
+                <li>
+                  Ora “inverto” per ricavare proprio il nostro stato
+                  \(|1,1;1,-1\rangle\) in funzione di \(|2,0\rangle,|1,0\rangle,|0,0\rangle\).
+                  Il risultato (si può verificare moltiplicando e confrontando i coefficienti) è:
+                  \[
+                    \boxed{
+                    |1,1;1,-1\rangle=
+                    \frac{1}{\sqrt6}|2,0\rangle+\frac{1}{\sqrt2}|1,0\rangle+\frac{1}{\sqrt3}|0,0\rangle.}
+                  \]
+                  <p class="tiny">
+                    Controllo “banale” della normalizzazione (somma delle probabilità):
+                    \(\frac{1}{6}+\frac{1}{2}+\frac{1}{3}=\frac{1}{6}+\frac{3}{6}+\frac{2}{6}=\frac{6}{6}=1\).
+                  </p>
+                </li>
+
+                <li>
+                  Quindi le probabilità sono i moduli quadri dei coefficienti:
+                  \[
+                    P(L=2,M=0)=\left|\frac{1}{\sqrt6}\right|^2=\frac{1}{6},\quad
+                    P(L=1,M=0)=\left|\frac{1}{\sqrt2}\right|^2=\frac{1}{2},\quad
+                    P(L=0,M=0)=\left|\frac{1}{\sqrt3}\right|^2=\frac{1}{3}.
+                  \]
+                </li>
+              </ol>
+
+              <div class="block result">
+                <h3>Risposta finale (Esercizio 1)</h3>
+
+                <p style="margin:0 0 8px;"><b>Misura di \(L_z\):</b></p>
+                \[
+                  \boxed{L_z=0\ \text{con probabilità }1.}
+                \]
+
+                <p style="margin:12px 0 8px;"><b>Misura di \(L^2\):</b></p>
+                \[
+                  \boxed{
+                    \begin{aligned}
+                      L=0 &\Rightarrow L^2=0 \quad &P=\frac{1}{3},\\
+                      L=1 &\Rightarrow L^2=2\hbar^2 \quad &P=\frac{1}{2},\\
+                      L=2 &\Rightarrow L^2=6\hbar^2 \quad &P=\frac{1}{6}.
+                    \end{aligned}}
+                \]
+                <p class="tiny">
+                  Se misuri simultaneamente \(L^2\) e \(L_z\), le coppie possibili sono solo
+                  \((L,M)=(0,0),(1,0),(2,0)\) con le stesse probabilità.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex2" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 2</span>
+            <h2>Hamiltoniana con degenerazione: autostati e autovalori al I ordine (e discussione)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>Si consideri l’Hamiltoniana \(H=H_0+H'\), dove</p>
+              \[
+                H_0=
+                \begin{pmatrix}
+                  \hbar\omega & 0 & 0\\
+                  0 & \hbar\omega & 0\\
+                  0 & 0 & 2\hbar\omega
+                \end{pmatrix},
+                \qquad
+                H'=
+                a\begin{pmatrix}
+                  -1 & i\sqrt{2} & 0\\
+                  -i\sqrt{2} & 0 & 0\\
+                  0 & 0 & 0
+                \end{pmatrix},
+              \]
+              <p>con \(a\ll\hbar\omega\). Determinare autostati e autovalori dell’energia al primo ordine perturbativo. Discutere il risultato.</p>
+            </div>
+
+            <div class="block note">
+              <h3>Idea‑chiave (degenerazione)</h3>
+              <p style="margin:0;">
+                I primi due livelli di \(H_0\) sono <b>degeneri</b>:
+                \[
+                  E_1^{(0)}=\hbar\omega,\qquad E_2^{(0)}=\hbar\omega.
+                \]
+                Con degenerazione, <b>non</b> basta fare \(E_n^{(1)}=\langle n|H'|n\rangle\) sulla base arbitraria:
+                bisogna <u>diagonalizzare \(H'\) nel sottospazio degenere</u>.
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione passo‑passo</h3>
+              <ol class="steps">
+                <li>
+                  Gli autostati di \(H_0\) sono i vettori base:
+                  \[
+                    |1\rangle=\begin{pmatrix}1\\0\\0\end{pmatrix},\quad
+                    |2\rangle=\begin{pmatrix}0\\1\\0\end{pmatrix},\quad
+                    |3\rangle=\begin{pmatrix}0\\0\\1\end{pmatrix}.
+                  \]
+                  Le energie non perturbate sono:
+                  \[
+                    E_1^{(0)}=\hbar\omega,\quad E_2^{(0)}=\hbar\omega,\quad E_3^{(0)}=2\hbar\omega.
+                  \]
+                </li>
+
+                <li>
+                  Il sottospazio degenere è \(\text{span}\{|1\rangle,|2\rangle\}\).
+                  La restrizione di \(H'\) a questo sottospazio è la matrice \(2\times 2\):
+                  \[
+                    W = a\begin{pmatrix}
+                      -1 & i\sqrt{2}\\
+                      -i\sqrt{2} & 0
+                    \end{pmatrix}.
+                  \]
+                  Per trovare le correzioni al I ordine, devo trovare gli autovalori di \(W\).
+                </li>
+
+                <li>
+                  Metto in evidenza \(a\): cerco prima gli autovalori \(\mu\) della matrice
+                  \[
+                    M=\begin{pmatrix}
+                      -1 & i\sqrt{2}\\
+                      -i\sqrt{2} & 0
+                    \end{pmatrix}
+                    \quad\Rightarrow\quad
+                    W=aM.
+                  \]
+                  Quindi \(\lambda=a\mu\).
+                </li>
+
+                <li>
+                  Calcolo il polinomio caratteristico (passi “banali” inclusi):
+                  \[
+                    \det(M-\mu I)=
+                    \det\begin{pmatrix}
+                      -1-\mu & i\sqrt{2}\\
+                      -i\sqrt{2} & -\mu
+                    \end{pmatrix}
+                    =(-1-\mu)(-\mu)-(i\sqrt2)(-i\sqrt2).
+                  \]
+                  Ora:
+                  \[
+                    (-1-\mu)(-\mu)=\mu(1+\mu)=\mu+\mu^2.
+                  \]
+                  E:
+                  \[
+                    (i\sqrt2)(-i\sqrt2)=-(i\cdot i)\cdot 2=-(i^2)\cdot 2=-(-1)\cdot 2=2.
+                  \]
+                  Quindi:
+                  \[
+                    \det(M-\mu I)=\mu^2+\mu-2.
+                  \]
+                  Risolvo \(\mu^2+\mu-2=0\):
+                  \[
+                    \mu=\frac{-1\pm\sqrt{1+8}}{2}=\frac{-1\pm 3}{2}.
+                  \]
+                  Quindi:
+                  \[
+                    \mu_+=1,\qquad \mu_-=-2.
+                  \]
+                </li>
+
+                <li>
+                  Quindi gli autovalori di \(W\) sono:
+                  \[
+                    \lambda_+=a,\qquad \lambda_-=-2a.
+                  \]
+                  E le energie al primo ordine (splitting della degenerazione) sono:
+                  \[
+                    \boxed{
+                    E_+ \simeq \hbar\omega + a,\qquad
+                    E_- \simeq \hbar\omega - 2a.}
+                  \]
+                  Il terzo livello ha correzione al I ordine:
+                  \[
+                    E_3^{(1)}=\langle 3|H'|3\rangle=0 \quad\Rightarrow\quad
+                    \boxed{E_3\simeq 2\hbar\omega.}
+                  \]
+                </li>
+
+                <li>
+                  Ora trovo gli <b>autostati corretti</b> (nel sottospazio \(|1\rangle,|2\rangle\)).
+                  <div class="hr"></div>
+                  <b>Per \(\mu_+=1\):</b> risolvo \((M-I)\mathbf{v}=0\):
+                  \[
+                    \begin{pmatrix}
+                      -2 & i\sqrt2\\
+                      -i\sqrt2 & -1
+                    \end{pmatrix}
+                    \begin{pmatrix}v_1\\v_2\end{pmatrix}=\begin{pmatrix}0\\0\end{pmatrix}.
+                  \]
+                  Dalla prima riga:
+                  \[
+                    -2v_1+i\sqrt2\,v_2=0\quad\Rightarrow\quad
+                    v_1=\frac{i\sqrt2}{2}v_2=\frac{i}{\sqrt2}v_2.
+                  \]
+                  Scelgo (per comodità) \(v_2=1\) \(\Rightarrow v_1=\frac{i}{\sqrt2}\).
+                  Quindi un autovettore è \(\left(\frac{i}{\sqrt2},1\right)\).
+                  Normalizzo:
+                  \[
+                    \left|\frac{i}{\sqrt2}\right|^2+|1|^2=\frac{1}{2}+1=\frac{3}{2}.
+                  \]
+                  Quindi la norma è \(\sqrt{\frac{3}{2}}=\frac{\sqrt3}{\sqrt2}\).
+                  Divido per la norma:
+                  \[
+                    \mathbf{v}_+=\left(\frac{i}{\sqrt2},1\right)\cdot\frac{\sqrt2}{\sqrt3}
+                    =\left(\frac{i}{\sqrt3},\sqrt{\frac{2}{3}}\right).
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{|+\rangle=\frac{i}{\sqrt3}|1\rangle+\sqrt{\frac{2}{3}}|2\rangle,\qquad E_+=\hbar\omega+a.}
+                  \]
+                </li>
+
+                <li>
+                  <b>Per \(\mu_-=-2\):</b> risolvo \((M+2I)\mathbf{v}=0\):
+                  \[
+                    \begin{pmatrix}
+                      1 & i\sqrt2\\
+                      -i\sqrt2 & 2
+                    \end{pmatrix}
+                    \begin{pmatrix}v_1\\v_2\end{pmatrix}=\begin{pmatrix}0\\0\end{pmatrix}.
+                  \]
+                  Dalla prima riga:
+                  \[
+                    v_1+i\sqrt2\,v_2=0 \Rightarrow v_1=-i\sqrt2\,v_2.
+                  \]
+                  Scelgo \(v_2=1\Rightarrow v_1=-i\sqrt2\).
+                  Norma:
+                  \[
+                    |-i\sqrt2|^2+|1|^2=2+1=3.
+                  \]
+                  Quindi normalizzo dividendo per \(\sqrt3\):
+                  \[
+                    \mathbf{v}_-=\left(-i\sqrt{\frac{2}{3}},\frac{1}{\sqrt3}\right).
+                  \]
+                  Posso moltiplicare per una fase globale \(i\) (non cambia la fisica) per ottenere un coefficiente reale sul primo componente:
+                  \[
+                    i\,\mathbf{v}_-=\left(\sqrt{\frac{2}{3}},\frac{i}{\sqrt3}\right).
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{|-\rangle=\sqrt{\frac{2}{3}}|1\rangle+\frac{i}{\sqrt3}|2\rangle,\qquad E_-=\hbar\omega-2a.}
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Discussione importante:</b> qui \(H'\) <u>non</u> accoppia lo stato \(|3\rangle\) con \(|1\rangle,|2\rangle\)
+                  (la terza riga/colonna sono nulle). Quindi l’Hamiltoniana totale è a blocchi:
+                  \[
+                    H=
+                    \begin{pmatrix}
+                      \hbar\omega-a & ia\sqrt2 & 0\\
+                      -ia\sqrt2 & \hbar\omega & 0\\
+                      0&0&2\hbar\omega
+                    \end{pmatrix}.
+                  \]
+                  Il blocco \(2\times2\) si diagonalizza <b>esattamente</b> e produce proprio \(E_+=\hbar\omega+a\), \(E_-=\hbar\omega-2a\).
+                  Quindi, in pratica, il “primo ordine” qui coincide con l’esatto (nessuna correzione di ordini superiori).
+                </li>
+              </ol>
+
+              <div class="block result">
+                <h3>Risultati finali (Esercizio 2)</h3>
+                \[
+                  \boxed{
+                    E_+=\hbar\omega+a,\quad
+                    E_-=\hbar\omega-2a,\quad
+                    E_3=2\hbar\omega.}
+                \]
+                \[
+                  \boxed{
+                    |+\rangle=\frac{i}{\sqrt3}|1\rangle+\sqrt{\frac{2}{3}}|2\rangle,\qquad
+                    |-\rangle=\sqrt{\frac{2}{3}}|1\rangle+\frac{i}{\sqrt3}|2\rangle,\qquad
+                    |3\rangle=\begin{pmatrix}0\\0\\1\end{pmatrix}.}
+                \]
+                <p class="tiny">
+                  Nota: i vettori possono cambiare di una fase globale (es. moltiplicare per \(e^{i\phi}\)) senza cambiare alcuna probabilità.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex3" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 3</span>
+            <h2>Oscillatore armonico in \(n=2\) + campo gaussiano: stati accessibili e probabilità al I ordine</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Su uno oscillatore armonico carico nel <b>secondo stato eccitato</b> agisce a partire dal tempo \(t=-\infty\)
+                un campo elettrico
+                \[
+                  \mathcal{E}(t)=\mathcal{E}_0\,\exp\!\left(-\frac{t^2}{\tau^2}\right).
+                \]
+                Determinare gli stati verso cui può transire il sistema e le relative probabilità di transizione
+                al primo ordine perturbativo, dopo un lungo periodo di tempo.
+              </p>
+
+              <p class="tiny">Si ricordi che</p>
+              \[
+                x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+              \]
+              <p class="tiny">
+                (Assumo il classico accoppiamento dipolare \(V(t)=-q\,\mathcal{E}(t)\,x\), cioè carica \(q\) nel campo elettrico.)
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (super dettagliata)</h3>
+
+              <ol class="steps">
+                <li>
+                  “Secondo stato eccitato” significa \(n=2\) (con \(n=0\) fondamentale).
+                  Quindi lo stato iniziale è:
+                  \[
+                    |i\rangle=|2\rangle.
+                  \]
+                </li>
+
+                <li>
+                  La perturbazione tempo‑dipendente è:
+                  \[
+                    V(t)=-q\,\mathcal{E}(t)\,x
+                    =-q\,\mathcal{E}_0\,e^{-t^2/\tau^2}\,x.
+                  \]
+                </li>
+
+                <li class="note">
+                  Siccome \(x\propto (a+a^\dagger)\), e
+                  \[
+                    a|n\rangle=\sqrt{n}\,|n-1\rangle,\qquad
+                    a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle,
+                  \]
+                  allora <b>la regola di selezione</b> è:
+                  \[
+                    \boxed{\Delta n=\pm 1.}
+                  \]
+                  Quindi da \(|2\rangle\) posso andare solo in:
+                  \[
+                    |1\rangle \quad \text{oppure}\quad |3\rangle.
+                  \]
+                </li>
+
+                <li>
+                  Formula di perturbazione al primo ordine (ampiezza a \(t\to +\infty\)):
+                  \[
+                    c_f^{(1)}(+\infty)= -\frac{i}{\hbar}\int_{-\infty}^{+\infty}\!dt\;
+                    \langle f|V(t)|i\rangle\,e^{i\omega_{fi}t},
+                  \]
+                  con
+                  \[
+                    \omega_{fi}=\frac{E_f-E_i}{\hbar}.
+                  \]
+                </li>
+
+                <li>
+                  Calcolo il matrix element:
+                  \[
+                    \langle f|V(t)|2\rangle=-q\mathcal{E}_0\,e^{-t^2/\tau^2}\,\langle f|x|2\rangle.
+                  \]
+                  Quindi:
+                  \[
+                    c_f^{(1)}(+\infty)=
+                    \frac{i\,q\mathcal{E}_0}{\hbar}\,\langle f|x|2\rangle
+                    \int_{-\infty}^{+\infty}\!dt\;e^{-t^2/\tau^2}e^{i\omega_{f2}t}.
+                  \]
+                </li>
+
+                <li>
+                  Serve l’integrale gaussiano (lo faccio “bene”):
+                  \[
+                    I(\Omega)=\int_{-\infty}^{+\infty} e^{-t^2/\tau^2}e^{i\Omega t}\,dt.
+                  \]
+                  Completo il quadrato:
+                  \[
+                    -\frac{t^2}{\tau^2}+i\Omega t
+                    =-\frac{1}{\tau^2}\left(t^2-i\Omega\tau^2 t\right)
+                    =-\frac{1}{\tau^2}\left[\left(t-\frac{i\Omega\tau^2}{2}\right)^2+\frac{\Omega^2\tau^4}{4}\right].
+                  \]
+                  Quindi:
+                  \[
+                    -\frac{t^2}{\tau^2}+i\Omega t
+                    =-\frac{\left(t-\frac{i\Omega\tau^2}{2}\right)^2}{\tau^2}-\frac{\Omega^2\tau^2}{4}.
+                  \]
+                  Allora:
+                  \[
+                    I(\Omega)=e^{-\Omega^2\tau^2/4}\int_{-\infty}^{+\infty}
+                    \exp\!\left(-\frac{\left(t-\frac{i\Omega\tau^2}{2}\right)^2}{\tau^2}\right)\,dt.
+                  \]
+                  La traslazione complessa non cambia il valore della gaussiana (risultato standard), quindi:
+                  \[
+                    \int_{-\infty}^{+\infty} e^{-u^2/\tau^2}du=\sqrt{\pi}\,\tau.
+                  \]
+                  Conclusione:
+                  \[
+                    \boxed{I(\Omega)=\sqrt{\pi}\,\tau\,e^{-\Omega^2\tau^2/4}.}
+                  \]
+                </li>
+
+                <li>
+                  Quindi l’ampiezza diventa:
+                  \[
+                    c_f^{(1)}(+\infty)=
+                    \frac{i\,q\mathcal{E}_0}{\hbar}\,\langle f|x|2\rangle\;
+                    \sqrt{\pi}\tau\,e^{-\omega_{f2}^2\tau^2/4}.
+                  \]
+                  La probabilità (al primo ordine) è:
+                  \[
+                    P_{2\to f}\approx |c_f^{(1)}(+\infty)|^2
+                    =\frac{q^2\mathcal{E}_0^2}{\hbar^2}\,|\langle f|x|2\rangle|^2\;
+                    \pi\tau^2\,e^{-\omega_{f2}^2\tau^2/2}.
+                  \]
+                  (Passo banale: \(|e^{-\omega^2\tau^2/4}|^2=e^{-\omega^2\tau^2/2}\).)
+                </li>
+
+                <li>
+                  Ora calcolo i due matrix element di \(x\).
+                  Ricordo:
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+                  \]
+                  Quindi:
+                  \[
+                    \langle 1|x|2\rangle=\sqrt{\frac{\hbar}{2m\omega}}\langle 1|(a+a^\dagger)|2\rangle
+                    =\sqrt{\frac{\hbar}{2m\omega}}\left(\langle 1|a|2\rangle+\langle 1|a^\dagger|2\rangle\right).
+                  \]
+                  Ma:
+                  \[
+                    a|2\rangle=\sqrt2\,|1\rangle \Rightarrow \langle 1|a|2\rangle=\sqrt2,
+                    \qquad
+                    a^\dagger|2\rangle=\sqrt3\,|3\rangle \Rightarrow \langle 1|a^\dagger|2\rangle=0.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{\langle 1|x|2\rangle=\sqrt{\frac{\hbar}{2m\omega}}\sqrt2.}
+                  \]
+                  Analogamente:
+                  \[
+                    \langle 3|x|2\rangle=\sqrt{\frac{\hbar}{2m\omega}}\left(\langle 3|a|2\rangle+\langle 3|a^\dagger|2\rangle\right)
+                    =\sqrt{\frac{\hbar}{2m\omega}}\left(0+\sqrt3\right)
+                    =\boxed{\sqrt{\frac{\hbar}{2m\omega}}\sqrt3.}
+                  \]
+                </li>
+
+                <li>
+                  Calcolo i moduli quadri (banalissimo ma esplicito):
+                  \[
+                    |\langle 1|x|2\rangle|^2=\frac{\hbar}{2m\omega}\cdot 2=\frac{\hbar}{m\omega}.
+                  \]
+                  \[
+                    |\langle 3|x|2\rangle|^2=\frac{\hbar}{2m\omega}\cdot 3=\frac{3\hbar}{2m\omega}.
+                  \]
+                </li>
+
+                <li>
+                  Ora \(\omega_{f2}\). Per l’oscillatore:
+                  \[
+                    E_n=\hbar\omega\left(n+\frac12\right).
+                  \]
+                  Quindi:
+                  \[
+                    E_1-E_2=\hbar\omega\left(\frac32-\frac52\right)=-\hbar\omega \Rightarrow \omega_{12}=-\omega,
+                  \]
+                  \[
+                    E_3-E_2=\hbar\omega\left(\frac72-\frac52\right)=+\hbar\omega \Rightarrow \omega_{32}=+\omega.
+                  \]
+                  Poiché compare \(\omega_{f2}^2\), il fattore gaussiano è <b>lo stesso</b> per \(f=1\) e \(f=3\):
+                  \[
+                    e^{-\omega_{f2}^2\tau^2/2}=e^{-\omega^2\tau^2/2}.
+                  \]
+                </li>
+
+                <li>
+                  Metto tutto insieme:
+                  \[
+                    \boxed{
+                    P_{2\to 1}=\frac{q^2\mathcal{E}_0^2}{\hbar^2}\left(\frac{\hbar}{m\omega}\right)\pi\tau^2\,e^{-\omega^2\tau^2/2}
+                    =\frac{\pi q^2\mathcal{E}_0^2\tau^2}{m\omega\hbar}\,e^{-\omega^2\tau^2/2}.}
+                  \]
+                  \[
+                    \boxed{
+                    P_{2\to 3}=\frac{q^2\mathcal{E}_0^2}{\hbar^2}\left(\frac{3\hbar}{2m\omega}\right)\pi\tau^2\,e^{-\omega^2\tau^2/2}
+                    =\frac{3}{2}\frac{\pi q^2\mathcal{E}_0^2\tau^2}{m\omega\hbar}\,e^{-\omega^2\tau^2/2}.}
+                  \]
+                  Nota carina: il rapporto è
+                  \[
+                    \frac{P_{2\to 3}}{P_{2\to 1}}=\frac{3/2}{1}=\frac{3}{2}.
+                  \]
+                </li>
+
+                <li class="warn">
+                  <b>Nota fisica:</b> a “primo ordine perturbativo” la probabilità di restare in \(|2\rangle\) è circa
+                  \[
+                    P_{2\to2}\approx 1-(P_{2\to1}+P_{2\to3}),
+                  \]
+                  ma questa è già un’aggiunta “a posteriori” (perché \(P\) è dell’ordine del quadrato della perturbazione).
+                </li>
+              </ol>
+
+              <div class="block result">
+                <h3>Risposta finale (Esercizio 3)</h3>
+                <p style="margin:0 0 10px;">
+                  <b>Stati accessibili:</b> solo \(\boxed{|1\rangle \text{ e } |3\rangle}\) (selezione \(\Delta n=\pm1\)).
+                </p>
+                \[
+                  \boxed{
+                  P_{2\to 1}=\frac{\pi q^2\mathcal{E}_0^2\tau^2}{m\omega\hbar}\,e^{-\omega^2\tau^2/2},\qquad
+                  P_{2\to 3}=\frac{3}{2}\frac{\pi q^2\mathcal{E}_0^2\tau^2}{m\omega\hbar}\,e^{-\omega^2\tau^2/2}.}
+                \]
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <div id="fine"></div>
+        <footer>
+          Soluzioni complete — Esame 3 (17-07-2019).<br/>
+        </footer>
+
+      </main>
+    </div>
+  </div>
 </body>
 </html>

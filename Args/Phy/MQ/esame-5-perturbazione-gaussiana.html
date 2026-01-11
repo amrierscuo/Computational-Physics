@@ -1,41 +1,890 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esame 5 perturbazione gaussiana</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esame 5 (27-01-2021) — Soluzioni (MQ)</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --ink2:rgba(11,16,32,.82);
+      --paper:rgba(255,255,255,.92);
+      --paper2:rgba(255,255,255,.78);
+      --shadow:rgba(0,0,0,.14);
+      --shadow2:rgba(0,0,0,.22);
+      --a1:#00e5ff;
+      --a2:#ff4ecd;
+      --a3:#52ff9c;
+      --a4:#ffe34d;
+      --radius:18px;
+      --radius-sm:12px;
+      --max:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      padding:22px 16px 46px;
+      color:var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1100px 760px at 12% 10%, rgba(0,229,255,0.18), transparent 58%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,78,205,0.14), transparent 60%),
+        radial-gradient(1200px 900px at 60% 92%, rgba(82,255,156,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(240,246,255,0.92));
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; }
+
+    header.hero{
+      position:relative;
+      padding:22px 18px;
+      border-radius:var(--radius);
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(0,229,255,0.22), transparent 60%),
+        radial-gradient(900px 420px at 90% 10%, rgba(255,78,205,0.16), transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+      border:2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+    }
+    header.hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.22;
+      mix-blend-mode:multiply;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(11,16,32,.72);
+      margin-bottom:8px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      background: linear-gradient(135deg, rgba(0,229,255,0.88), rgba(255,227,77,0.78));
+      color:#0b1020;
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: 0 12px 22px rgba(0,229,255,.14);
+    }
+    h1{
+      margin:6px 0 6px;
+      line-height:1.15;
+      letter-spacing:.2px;
+      font-size: 26px;
+    }
+    .sub{
+      margin:0;
+      color:var(--ink2);
+      font-size: 15px;
+      max-width: 92ch;
+    }
+    .top-actions{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.80);
+      color: rgba(11,16,32,.92);
+      font-weight: 900;
+      text-decoration:none;
+      box-shadow: 0 12px 26px rgba(0,0,0,.12);
+      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(1px); filter: brightness(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,42,109,0.92), rgba(255,227,77,0.78));
+      border-color: rgba(255,255,255,0.30);
+      color:#0b1020;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 320px 1fr; align-items:start; }
+    }
+
+    nav.toc{
+      position:sticky;
+      top: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.80);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 34px var(--shadow);
+      padding: 14px;
+      overflow:hidden;
+    }
+    nav.toc h2{
+      margin:0 0 10px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    nav.toc ul{ margin:0; padding-left: 18px; }
+    nav.toc li{ margin: 8px 0; }
+    nav.toc a{
+      color: rgba(11,16,32,.92);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    nav.toc a:hover{ text-decoration: underline; text-decoration-color: rgba(0,229,255,0.85); }
+
+    section.card{
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+      position:relative;
+    }
+    section.card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.18;
+      mix-blend-mode:multiply;
+    }
+    .card-head{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      background:
+        radial-gradient(900px 280px at 12% 0%, rgba(0,229,255,0.12), transparent 60%),
+        radial-gradient(900px 280px at 90% 10%, rgba(255,78,205,0.10), transparent 60%),
+        rgba(255,255,255,0.72);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-head h2{ margin:10px 0 0; font-size: 18px; line-height:1.2; }
+    .card-body{ position:relative; z-index:1; padding: 16px; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.76);
+      color: rgba(11,16,32,.80);
+    }
+    .badge .dot{
+      width:10px; height:10px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--a1), var(--a2));
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.65);
+    }
+
+    .block{
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .block h3{ margin:0 0 10px; font-size: 14px; letter-spacing:.2px; }
+
+    .steps{ margin:0; padding-left: 18px; }
+    .steps li{ margin: 10px 0; }
+
+    .note{ border-left: 4px solid rgba(0,229,255,0.85); }
+    .warn{ border-left: 4px solid rgba(255,42,109,0.75); background: rgba(255,240,245,0.78); }
+    .result{ border-left: 4px solid rgba(82,255,156,0.85); background: rgba(240,255,248,0.82); }
+
+    .tiny{ color: rgba(11,16,32,.72); font-size: 12.5px; margin-top: 8px; }
+    .hr{ height:1px; background: rgba(0,0,0,0.06); margin: 14px 0; border-radius: 999px; }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+      color: rgba(11,16,32,.75);
+      font-size: 12.5px;
+      text-align:center;
+    }
+
+    mjx-container[display="true"]{ margin: 10px 0 !important; }
+    code.k{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .u{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  </style>
 </head>
+
 <body>
-    <h1>Esame 5 perturbazione gaussiana</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Esame 5 perturbazione gaussiana. Grazie per la pazienza!</p>
-    <footer>
-        Generato automaticamente - Esame 5 perturbazione gaussiana
-    </footer>
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="kicker">
+        <span class="pill">MQ • Soluzioni</span>
+        <span>Esame 5 — 27/01/2021</span>
+      </div>
+
+      <h1>Esame 5 (27-01-2021) — Oscillatore armonico (⟨H⟩, ΔH, stato), composizione di spin, perturbazione gaussiana nel tempo</h1>
+      <p class="sub">
+        Pagina “full‑detail”: <b>testo</b> + <b>soluzioni</b> con tutti i passaggi (anche quelli banali),
+        risultati finali in evidenza e commenti per evitare errori tipici.
+      </p>
+
+      <div class="top-actions">
+        <a class="btn" href="1mq.html">← Torna all’indice</a>
+        <a class="btn primary" href="#ex1">Vai al primo esercizio</a>
+        <a class="btn" href="#fine">↓ Fine pagina</a>
+      </div>
+
+      <p class="tiny">
+        <b>Promemoria (oscillatore armonico):</b>
+        \[
+          E_n=\hbar\omega\left(n+\frac12\right),\qquad
+          H=\hbar\omega\left(a^\dagger a+\frac12\right),\qquad
+          x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+        \]
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <nav class="toc">
+        <h2>Contenuti</h2>
+        <ul>
+          <li><a href="#ex1">Esercizio 1 — ⟨H⟩, ΔH, livelli ≤ \(3\hbar\omega\): probabilità, stato a \(t=0\), ⟨H⟩ e ⟨x⟩(t)</a></li>
+          <li><a href="#ex2">Esercizio 2 — Due spin \(s_1=2\), \(s_2=3\), stato \(|s=5,m=4\rangle\): misure di \(S_{1z},S_{2z}\) e probabilità</a></li>
+          <li><a href="#ex3">Esercizio 3 — Perturbazione \(V(t)=-qEx\,e^{-t^2/\tau^2}\): probabilità \(0\to n\) al I ordine</a></li>
+        </ul>
+
+        <div class="block note" style="margin-top:12px;">
+          <h3>Mini‑mappa (super utile)</h3>
+          <ul class="steps">
+            <li><b>Ex 1:</b> “nessuna energia > \(3\hbar\omega\)” ⇒ solo \(n=0,1,2\). Poi usi ⟨H⟩ e ΔH per trovare \(p_0,p_1,p_2\).</li>
+            <li><b>Ex 2:</b> per \(s=s_1+s_2\) massimo, parti da \(|5,5\rangle=|2,2\rangle|3,3\rangle\) e abbassi con \(S_-\).</li>
+            <li><b>Ex 3:</b> \(x\propto a+a^\dagger\) ⇒ da \(|0\rangle\) puoi andare <u>solo</u> a \(|1\rangle\) al I ordine.</li>
+          </ul>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex1">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 1</span>
+            <h2>Oscillatore armonico: probabilità dei livelli, stato a \(t=0\), \(\langle H\rangle\) e \(\langle x\rangle(t)\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Un oscillatore armonico di massa \(m\) e pulsazione \(\omega\) si trova in uno stato tale che
+              </p>
+              \[
+                \langle H\rangle=\frac{3}{2}\hbar\omega,
+                \qquad
+                \Delta H=\sqrt{\langle H^2\rangle-\langle H\rangle^2}=\frac{1}{\sqrt{2}}\hbar\omega.
+              \]
+              <p>
+                Inoltre sappiamo che una misura di energia su questo stato <b>non può fornire un valore maggiore di</b> \(3\hbar\omega\).
+              </p>
+              <p>
+                (a) Quali risultati si possono ottenere effettuando una misura dell’energia e con quali probabilità?
+                <br/>
+                (b) Scrivere lo stato a \(t=0\) nella base degli autostati dell’hamiltoniana, compatibile con i dati e con coefficienti reali positivi.
+                <br/>
+                (c) Calcolare \(\langle H\rangle(t)\) e \(\langle x\rangle(t)\).
+              </p>
+              <p class="tiny">Si ricordi che \(x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger)\).</p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione passo‑passo</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  <b>Prima cosa (fondamentale):</b> gli autovalori dell’energia sono
+                  \[
+                    E_n=\hbar\omega\left(n+\frac12\right).
+                  \]
+                  La condizione “<span class="u">nessun valore maggiore di</span> \(3\hbar\omega\)” implica:
+                  \[
+                    E_n\le 3\hbar\omega \quad\Rightarrow\quad \hbar\omega\left(n+\frac12\right)\le 3\hbar\omega
+                    \Rightarrow n+\frac12\le 3 \Rightarrow n\le \frac{5}{2}.
+                  \]
+                  Siccome \(n\) è intero:
+                  \[
+                    \boxed{n\in\{0,1,2\}.}
+                  \]
+                  Quindi la misura dell’energia può dare solo:
+                  \[
+                    E_0=\frac12\hbar\omega,\quad E_1=\frac32\hbar\omega,\quad E_2=\frac52\hbar\omega.
+                  \]
+                </li>
+
+                <li>
+                  Metto le probabilità:
+                  \[
+                    p_0=\Pr(E_0),\quad p_1=\Pr(E_1),\quad p_2=\Pr(E_2),
+                    \qquad p_0+p_1+p_2=1.
+                  \]
+                </li>
+
+                <li>
+                  Uso la condizione sul valor medio:
+                  \[
+                    \langle H\rangle=p_0E_0+p_1E_1+p_2E_2=\frac32\hbar\omega.
+                  \]
+                  Divido tutto per \(\hbar\omega\) (passo “banale”, ma comodissimo):
+                  \[
+                    \frac12 p_0+\frac32 p_1+\frac52 p_2=\frac32.
+                  \]
+                  Moltiplico per 2 (per eliminare i mezzi):
+                  \[
+                    p_0+3p_1+5p_2=3. \quad \text{(Eq. A)}
+                  \]
+                </li>
+
+                <li class="note">
+                  Ora uso la varianza. Dato:
+                  \[
+                    \Delta H=\frac{1}{\sqrt2}\hbar\omega \quad\Rightarrow\quad
+                    (\Delta H)^2=\frac12(\hbar\omega)^2.
+                  \]
+                  Per definizione:
+                  \[
+                    (\Delta H)^2=\langle H^2\rangle-\langle H\rangle^2
+                    \Rightarrow
+                    \langle H^2\rangle=(\Delta H)^2+\langle H\rangle^2.
+                  \]
+                  Calcolo \(\langle H\rangle^2\) “banale”:
+                  \[
+                    \langle H\rangle^2=\left(\frac32\hbar\omega\right)^2=\frac{9}{4}(\hbar\omega)^2.
+                  \]
+                  Quindi:
+                  \[
+                    \langle H^2\rangle=\left(\frac12+\frac{9}{4}\right)(\hbar\omega)^2
+                    =\left(\frac{2}{4}+\frac{9}{4}\right)(\hbar\omega)^2
+                    =\frac{11}{4}(\hbar\omega)^2.
+                  \]
+                </li>
+
+                <li>
+                  Scrivo \(\langle H^2\rangle\) con le probabilità:
+                  \[
+                    \langle H^2\rangle=p_0E_0^2+p_1E_1^2+p_2E_2^2.
+                  \]
+                  Ora:
+                  \[
+                    E_0^2=\left(\frac12\hbar\omega\right)^2=\frac14(\hbar\omega)^2,\quad
+                    E_1^2=\left(\frac32\hbar\omega\right)^2=\frac94(\hbar\omega)^2,\quad
+                    E_2^2=\left(\frac52\hbar\omega\right)^2=\frac{25}{4}(\hbar\omega)^2.
+                  \]
+                  Quindi (dividendo per \((\hbar\omega)^2\)):
+                  \[
+                    \frac14 p_0+\frac94 p_1+\frac{25}{4}p_2=\frac{11}{4}.
+                  \]
+                  Moltiplico per 4:
+                  \[
+                    p_0+9p_1+25p_2=11.\quad \text{(Eq. B)}
+                  \]
+                </li>
+
+                <li class="warn">
+                  <b>Risolvo il sistema</b> con:
+                  \[
+                    \begin{cases}
+                      p_0+p_1+p_2=1 & \text{(Eq. S)}\\
+                      p_0+3p_1+5p_2=3 & \text{(Eq. A)}\\
+                      p_0+9p_1+25p_2=11 & \text{(Eq. B)}
+                    \end{cases}
+                  \]
+                  Faccio (A)−(S):
+                  \[
+                    (p_0+3p_1+5p_2)-(p_0+p_1+p_2)=3-1
+                    \Rightarrow 2p_1+4p_2=2.
+                  \]
+                  Divido per 2:
+                  \[
+                    p_1+2p_2=1 \Rightarrow p_1=1-2p_2. \quad \text{(Eq. C)}
+                  \]
+                  Ora (B)−(A):
+                  \[
+                    (p_0+9p_1+25p_2)-(p_0+3p_1+5p_2)=11-3
+                    \Rightarrow 6p_1+20p_2=8.
+                  \]
+                  Divido per 2:
+                  \[
+                    3p_1+10p_2=4.
+                  \]
+                  Sostituisco \(p_1=1-2p_2\):
+                  \[
+                    3(1-2p_2)+10p_2=4
+                    \Rightarrow 3-6p_2+10p_2=4
+                    \Rightarrow 3+4p_2=4
+                    \Rightarrow 4p_2=1
+                    \Rightarrow p_2=\frac14.
+                  \]
+                  Poi:
+                  \[
+                    p_1=1-2\cdot\frac14=1-\frac12=\frac12,
+                    \qquad
+                    p_0=1-p_1-p_2=1-\frac12-\frac14=\frac14.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Risposta (a): risultati misure + probabilità</h3>
+                  \[
+                    \boxed{
+                      \Pr\!\left(E_0=\frac12\hbar\omega\right)=\frac14,\quad
+                      \Pr\!\left(E_1=\frac32\hbar\omega\right)=\frac12,\quad
+                      \Pr\!\left(E_2=\frac52\hbar\omega\right)=\frac14.}
+                  \]
+                </li>
+
+                <li>
+                  (b) Coefficienti reali positivi ⇒
+                  \[
+                    |\psi(0)\rangle=c_0|0\rangle+c_1|1\rangle+c_2|2\rangle,
+                    \quad c_n\in\mathbb{R},\ c_n\ge 0,\quad |c_n|^2=p_n.
+                  \]
+                  Quindi:
+                  \[
+                    c_0=\sqrt{\frac14}=\frac12,\qquad
+                    c_1=\sqrt{\frac12}=\frac{1}{\sqrt2},\qquad
+                    c_2=\sqrt{\frac14}=\frac12.
+                  \]
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Risposta (b): stato a \(t=0\)</h3>
+                    \[
+                      \boxed{|\psi(0)\rangle=\frac12|0\rangle+\frac{1}{\sqrt2}|1\rangle+\frac12|2\rangle.}
+                    \]
+                  </div>
+                </li>
+
+                <li class="note">
+                  (c) Evoluzione temporale:
+                  \[
+                    |\psi(t)\rangle=\sum_{n=0}^2 c_n\,e^{-iE_nt/\hbar}|n\rangle
+                    =\sum_{n=0}^2 c_n\,e^{-i\omega(n+\frac12)t}|n\rangle.
+                  \]
+                  <b>Per \(\langle H\rangle(t)\):</b> l’energia non cambia nel tempo (sistema isolato, Hamiltoniana non dipendente dal tempo qui):
+                  \[
+                    \boxed{\langle H\rangle(t)=\langle H\rangle(0)=\frac32\hbar\omega.}
+                  \]
+                </li>
+
+                <li>
+                  Ora \(\langle x\rangle(t)\). Uso:
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger)
+                    \quad\Rightarrow\quad
+                    \langle x\rangle=\sqrt{\frac{\hbar}{2m\omega}}\Big(\langle a\rangle+\langle a^\dagger\rangle\Big)
+                    =2\sqrt{\frac{\hbar}{2m\omega}}\Re(\langle a\rangle).
+                  \]
+                  In base \(|n\rangle\):
+                  \[
+                    \langle a\rangle(t)=\sum_{n\ge 0}\sqrt{n+1}\,c_n^*(t)c_{n+1}(t),
+                  \]
+                  dove \(c_n(t)=c_n e^{-iE_nt/\hbar}\).
+                  Qui ci servono solo i termini \(0\to 1\) e \(1\to 2\) (perché \(c_3=0\)):
+                  \[
+                    \langle a\rangle(t)=c_0^*(t)c_1(t)\sqrt1 + c_1^*(t)c_2(t)\sqrt2.
+                  \]
+                </li>
+
+                <li>
+                  Calcolo i pezzi (con conti “banali” sugli esponenti):
+                  \[
+                    c_0(t)=\frac12 e^{-i\omega t/2},\quad
+                    c_1(t)=\frac{1}{\sqrt2}e^{-i3\omega t/2},\quad
+                    c_2(t)=\frac12 e^{-i5\omega t/2}.
+                  \]
+                  Primo termine:
+                  \[
+                    c_0^*(t)c_1(t)=\left(\frac12 e^{+i\omega t/2}\right)\left(\frac{1}{\sqrt2}e^{-i3\omega t/2}\right)
+                    =\frac{1}{2\sqrt2}\,e^{-i\omega t}.
+                  \]
+                  (perché \(+\omega/2-3\omega/2=-\omega\)).
+                  <br/><br/>
+                  Secondo termine:
+                  \[
+                    c_1^*(t)c_2(t)=\left(\frac{1}{\sqrt2}e^{+i3\omega t/2}\right)\left(\frac12 e^{-i5\omega t/2}\right)
+                    =\frac{1}{2\sqrt2}\,e^{-i\omega t}.
+                  \]
+                  Moltiplico per \(\sqrt2\):
+                  \[
+                    \sqrt2\,c_1^*(t)c_2(t)=\sqrt2\cdot\frac{1}{2\sqrt2}e^{-i\omega t}=\frac12e^{-i\omega t}.
+                  \]
+                  Quindi:
+                  \[
+                    \langle a\rangle(t)=\left(\frac{1}{2\sqrt2}+\frac12\right)e^{-i\omega t}
+                    =\frac{\sqrt2+1}{2\sqrt2}\,e^{-i\omega t}.
+                  \]
+                </li>
+
+                <li class="result">
+                  Allora:
+                  \[
+                    \Re(\langle a\rangle(t))=\frac{\sqrt2+1}{2\sqrt2}\cos(\omega t),
+                  \]
+                  e dunque:
+                  \[
+                    \boxed{
+                    \langle x\rangle(t)=2\sqrt{\frac{\hbar}{2m\omega}}\cdot\frac{\sqrt2+1}{2\sqrt2}\cos(\omega t)
+                    =\sqrt{\frac{\hbar}{2m\omega}}\left(\frac{\sqrt2+1}{\sqrt2}\right)\cos(\omega t).}
+                  \]
+                  Forma equivalente (più “leggibile”):
+                  \[
+                    \boxed{\langle x\rangle(t)=\sqrt{\frac{\hbar}{2m\omega}}\left(1+\frac{1}{\sqrt2}\right)\cos(\omega t).}
+                  \]
+                </li>
+
+                <li class="note">
+                  (Extra — non richiesto, ma utile come check)
+                  \[
+                    \langle p\rangle(t)=i\sqrt{\frac{\hbar m\omega}{2}}(\langle a^\dagger\rangle-\langle a\rangle)
+                    =-\,\sqrt{\frac{\hbar m\omega}{2}}\left(1+\frac{1}{\sqrt2}\right)\sin(\omega t).
+                  \]
+                  Quindi \(\langle x\rangle\) e \(\langle p\rangle\) oscillano “come un classico”, sfasati di \(\pi/2\).
+                </li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex2" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 2</span>
+            <h2>Due particelle di spin \(s_1=2\), \(s_2=3\) in \(|s=5,m=4\rangle\): misure di \(S_{1z},S_{2z}\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Due particelle di spin \(s_1=2\) e \(s_2=3\) sono a riposo in una configurazione di spin totale
+                \(s=5\) e componente lungo \(z\), \(m=+4\).
+              </p>
+              <p>
+                (a) Quali valori possiamo ottenere in una misura simultanea delle componenti \(z\) dello spin delle due particelle e con quali probabilità?
+                <br/>
+                (b) Qual è la probabilità di ottenere un valore negativo o nullo per la componente \(z\) dello spin della particella 1?
+              </p>
+              <p class="tiny">
+                Si ricordi che
+                \[
+                  S_-|s,m\rangle=\hbar\sqrt{s(s+1)-m(m-1)}\,|s,m-1\rangle.
+                \]
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (metodo “abbassamento” — il più rapido e sicuro)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Siamo nello stato accoppiato \(|s=5,m=4\rangle\), con \(s= s_1+s_2\) massimo.
+                  <br/>
+                  Per gli stati massimi vale:
+                  \[
+                    |5,5\rangle = |2,2\rangle\,|3,3\rangle.
+                  \]
+                </li>
+
+                <li>
+                  Applico l’operatore totale \(S_- = S_{1-}+S_{2-}\) a \(|5,5\rangle\).
+                  <br/><br/>
+                  Lato sinistro:
+                  \[
+                    S_-|5,5\rangle=\hbar\sqrt{s(s+1)-m(m-1)}\,|5,4\rangle.
+                  \]
+                  Qui \(s=5\), \(m=5\):
+                  \[
+                    s(s+1)=5\cdot 6=30,\qquad m(m-1)=5\cdot 4=20,
+                  \]
+                  \[
+                    s(s+1)-m(m-1)=30-20=10 \Rightarrow \sqrt{10}.
+                  \]
+                  Quindi:
+                  \[
+                    S_-|5,5\rangle=\hbar\sqrt{10}\,|5,4\rangle.
+                  \]
+                </li>
+
+                <li>
+                  Lato destro:
+                  \[
+                    S_- \big(|2,2\rangle|3,3\rangle\big)=
+                    (S_{1-}|2,2\rangle)|3,3\rangle + |2,2\rangle(S_{2-}|3,3\rangle).
+                  \]
+                  Calcolo \(S_{1-}|2,2\rangle\):
+                  \[
+                    S_{1-}|2,2\rangle=\hbar\sqrt{2(2+1)-2(2-1)}\,|2,1\rangle
+                    =\hbar\sqrt{6-2}\,|2,1\rangle
+                    =\hbar\sqrt{4}\,|2,1\rangle
+                    =2\hbar\,|2,1\rangle.
+                  \]
+                  Calcolo \(S_{2-}|3,3\rangle\):
+                  \[
+                    S_{2-}|3,3\rangle=\hbar\sqrt{3(3+1)-3(3-1)}\,|3,2\rangle
+                    =\hbar\sqrt{12-6}\,|3,2\rangle
+                    =\hbar\sqrt{6}\,|3,2\rangle.
+                  \]
+                  Quindi:
+                  \[
+                    S_-|2,2\rangle|3,3\rangle
+                    =2\hbar\,|2,1\rangle|3,3\rangle + \hbar\sqrt6\,|2,2\rangle|3,2\rangle.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Uguaglio i due risultati:
+                  \[
+                    \hbar\sqrt{10}\,|5,4\rangle
+                    = 2\hbar\,|2,1\rangle|3,3\rangle + \hbar\sqrt6\,|2,2\rangle|3,2\rangle.
+                  \]
+                  Divido per \(\hbar\sqrt{10}\):
+                  \[
+                    |5,4\rangle
+                    = \frac{2}{\sqrt{10}}\,|2,1\rangle|3,3\rangle
+                    + \frac{\sqrt6}{\sqrt{10}}\,|2,2\rangle|3,2\rangle.
+                  \]
+                  Riscrivo in forma “pulita”:
+                  \[
+                    \frac{2}{\sqrt{10}}=\sqrt{\frac{4}{10}}=\sqrt{\frac{2}{5}},\qquad
+                    \frac{\sqrt6}{\sqrt{10}}=\sqrt{\frac{6}{10}}=\sqrt{\frac{3}{5}}.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{|5,4\rangle=\sqrt{\frac{2}{5}}\,|2,1\rangle|3,3\rangle+\sqrt{\frac{3}{5}}\,|2,2\rangle|3,2\rangle.}
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Risposta (a): esiti e probabilità</h3>
+                  Una misura simultanea di \(S_{1z}\) e \(S_{2z}\) può dare solo le coppie:
+                  \[
+                    (m_1,m_2)=(1,3)\quad \text{oppure}\quad (2,2),
+                  \]
+                  con probabilità:
+                  \[
+                    \boxed{\Pr(m_1=1,m_2=3)=\frac{2}{5},\qquad \Pr(m_1=2,m_2=2)=\frac{3}{5}.}
+                  \]
+                  (dove \(S_{1z}=\hbar m_1\), \(S_{2z}=\hbar m_2\)).
+                </li>
+
+                <li class="result">
+                  <h3>Risposta (b): probabilità che \(S_{1z}\le 0\)</h3>
+                  In questo stato \(m_1\) può essere solo \(1\) oppure \(2\) ⇒ è sempre positivo.
+                  <br/>
+                  Quindi:
+                  \[
+                    \boxed{\Pr(m_1\le 0)=0.}
+                  \]
+                  <p class="tiny" style="margin:8px 0 0;">
+                    Check “furbo”: \(m=m_1+m_2=4\) e \(m_2\le 3\) ⇒ \(m_1\ge 1\).
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex3" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 3</span>
+            <h2>Oscillatore fondamentale a \(t\to-\infty\) con \(V(t)=-qEx\,e^{-t^2/\tau^2}\): probabilità \(0\to n\) (I ordine)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Si consideri un oscillatore armonico unidimensionale nello stato fondamentale al tempo \(t\sim-\infty\)
+                in presenza della perturbazione
+              </p>
+              \[
+                V(t)=-qEx\,e^{-t^2/\tau^2}.
+              \]
+              <p>
+                Qual è la probabilità, al I ordine perturbativo, che al tempo \(t\sim+\infty\) si trovi nello stato \(|n\rangle\)?
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (teoria perturbativa dipendente dal tempo)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Al primo ordine, l’ampiezza di transizione \(0\to n\) è:
+                  \[
+                    c_n^{(1)}(+\infty)=\frac{1}{i\hbar}\int_{-\infty}^{+\infty}\!dt\;
+                    \langle n|V(t)|0\rangle\,e^{i\omega_{n0}t},
+                    \qquad \omega_{n0}=\frac{E_n-E_0}{\hbar}.
+                  \]
+                  Qui \(E_n-E_0=\hbar\omega n\), quindi:
+                  \[
+                    \boxed{\omega_{n0}=n\omega.}
+                  \]
+                </li>
+
+                <li>
+                  Inserisco \(V(t)=-qEx\,e^{-t^2/\tau^2}\):
+                  \[
+                    \langle n|V(t)|0\rangle=-qE\,e^{-t^2/\tau^2}\langle n|x|0\rangle.
+                  \]
+                  Quindi:
+                  \[
+                    c_n^{(1)}(+\infty)=\frac{-qE}{i\hbar}\langle n|x|0\rangle
+                    \int_{-\infty}^{+\infty}\!dt\; e^{-t^2/\tau^2}\,e^{in\omega t}.
+                  \]
+                </li>
+
+                <li class="warn">
+                  <b>Selezione degli stati (passaggio chiave):</b>
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+                  \]
+                  Applico \(x\) a \(|0\rangle\):
+                  \[
+                    a|0\rangle=0,\qquad a^\dagger|0\rangle=\sqrt1\,|1\rangle=|1\rangle,
+                  \]
+                  quindi:
+                  \[
+                    x|0\rangle=\sqrt{\frac{\hbar}{2m\omega}}\,|1\rangle.
+                  \]
+                  Perciò:
+                  \[
+                    \langle n|x|0\rangle=\sqrt{\frac{\hbar}{2m\omega}}\langle n|1\rangle
+                    =\sqrt{\frac{\hbar}{2m\omega}}\,\delta_{n1}.
+                  \]
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Conclusione immediata</h3>
+                    \[
+                      \boxed{c_n^{(1)}=0\ \text{per}\ n\neq 1.}
+                    \]
+                    Solo la transizione \(\boxed{0\to 1}\) è possibile al I ordine.
+                  </div>
+                </li>
+
+                <li>
+                  Calcolo ora \(c_1^{(1)}\). Metto \(n=1\):
+                  \[
+                    c_1^{(1)}(+\infty)=\frac{-qE}{i\hbar}\sqrt{\frac{\hbar}{2m\omega}}
+                    \int_{-\infty}^{+\infty}\!dt\; e^{-t^2/\tau^2}e^{i\omega t}.
+                  \]
+                  L’integrale gaussiano standard è:
+                  \[
+                    \int_{-\infty}^{+\infty}\!dt\; e^{-t^2/\tau^2}e^{i\omega t}
+                    =\sqrt{\pi}\,\tau\,e^{-(\omega\tau/2)^2}.
+                  \]
+                  Quindi:
+                  \[
+                    c_1^{(1)}(+\infty)=\frac{-qE}{i\hbar}\sqrt{\frac{\hbar}{2m\omega}}
+                    \left(\sqrt{\pi}\tau e^{-(\omega\tau/2)^2}\right).
+                  \]
+                  Nota “banale ma utile”: \(\frac{-1}{i}=i\). Quindi:
+                  \[
+                    \boxed{
+                    c_1^{(1)}(+\infty)= i\,\frac{qE}{\hbar}\sqrt{\frac{\hbar}{2m\omega}}\;\sqrt{\pi}\tau\;e^{-(\omega\tau/2)^2}.}
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Probabilità finale</h3>
+                  \[
+                    P_{0\to 1}^{(1)}=|c_1^{(1)}|^2
+                    =\left(\frac{qE}{\hbar}\right)^2\left(\frac{\hbar}{2m\omega}\right)\pi\tau^2\;e^{-2(\omega\tau/2)^2}.
+                  \]
+                  Ora:
+                  \[
+                    2(\omega\tau/2)^2=2\cdot\frac{\omega^2\tau^2}{4}=\frac{\omega^2\tau^2}{2}.
+                  \]
+                  Quindi:
+                  \[
+                    \boxed{
+                      P_{0\to 1}^{(1)}=\frac{\pi q^2E^2\tau^2}{2m\omega\,\hbar}\;e^{-\omega^2\tau^2/2}.}
+                  \]
+                  E per \(n\neq 1\):
+                  \[
+                    \boxed{P_{0\to n}^{(1)}=0\quad(n\neq 1).}
+                  \]
+                </li>
+              </ol>
+
+              <div class="block note">
+                <h3>Commento (intuizione fisica)</h3>
+                <p style="margin:0;">
+                  La perturbazione è proporzionale a \(x\), che collega stati con \(\Delta n=\pm 1\).
+                  Partendo dal fondamentale \(|0\rangle\), l’unico canale al primo ordine è \(|1\rangle\).
+                  Il fattore \(e^{-\omega^2\tau^2/2}\) dice che se il “pulse” è molto lento rispetto al periodo (\(\tau\) grande),
+                  la transizione è soppressa (adiabaticità).
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        <div id="fine"></div>
+        <footer>
+          Soluzioni complete — Esame 5 (27-01-2021).<br/>
+        </footer>
+
+      </main>
+    </div>
+  </div>
 </body>
 </html>

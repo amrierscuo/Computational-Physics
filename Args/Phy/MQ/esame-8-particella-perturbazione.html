@@ -1,41 +1,885 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esame 8 particella perturbazione</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #3498db;
-        }
-        p {
-            background: #fff;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esame 8 (19-01-2022) — Soluzioni (MQ)</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --ink2:rgba(11,16,32,.82);
+      --paper:rgba(255,255,255,.92);
+      --paper2:rgba(255,255,255,.78);
+      --shadow:rgba(0,0,0,.14);
+      --shadow2:rgba(0,0,0,.22);
+      --a1:#00e5ff;
+      --a2:#ff4ecd;
+      --a3:#52ff9c;
+      --a4:#ffe34d;
+      --aR:#ff2a6d;
+      --radius:18px;
+      --radius-sm:12px;
+      --max:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      padding:22px 16px 46px;
+      color:var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1100px 760px at 12% 10%, rgba(0,229,255,0.18), transparent 58%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,78,205,0.14), transparent 60%),
+        radial-gradient(1200px 900px at 60% 92%, rgba(82,255,156,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(240,246,255,0.92));
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; }
+
+    header.hero{
+      position:relative;
+      padding:22px 18px;
+      border-radius:var(--radius);
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(0,229,255,0.22), transparent 60%),
+        radial-gradient(900px 420px at 90% 10%, rgba(255,78,205,0.16), transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+      border:2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+    }
+    header.hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.22;
+      mix-blend-mode:multiply;
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(11,16,32,.72);
+      margin-bottom:8px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      background: linear-gradient(135deg, rgba(0,229,255,0.88), rgba(255,227,77,0.78));
+      color:#0b1020;
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: 0 12px 22px rgba(0,229,255,.14);
+    }
+    h1{
+      margin:6px 0 6px;
+      line-height:1.15;
+      letter-spacing:.2px;
+      font-size: 26px;
+    }
+    .sub{
+      margin:0;
+      color:var(--ink2);
+      font-size: 15px;
+      max-width: 92ch;
+    }
+
+    .top-actions{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.80);
+      color: rgba(11,16,32,.92);
+      font-weight: 900;
+      text-decoration:none;
+      box-shadow: 0 12px 26px rgba(0,0,0,.12);
+      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(1px); filter: brightness(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,42,109,0.92), rgba(255,227,77,0.78));
+      border-color: rgba(255,255,255,0.30);
+      color:#0b1020;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 320px 1fr; align-items:start; }
+    }
+
+    nav.toc{
+      position:sticky;
+      top: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.80);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 34px var(--shadow);
+      padding: 14px;
+      overflow:hidden;
+    }
+    nav.toc h2{
+      margin:0 0 10px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    nav.toc ul{ margin:0; padding-left: 18px; }
+    nav.toc li{ margin: 8px 0; }
+    nav.toc a{
+      color: rgba(11,16,32,.92);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    nav.toc a:hover{ text-decoration: underline; text-decoration-color: rgba(0,229,255,0.85); }
+
+    section.card{
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 18px 52px var(--shadow2), 0 2px 0 rgba(255,255,255,.45) inset;
+      overflow:hidden;
+      position:relative;
+    }
+    section.card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0 1px, rgba(0,0,0,0) 1px 14px);
+      opacity:.18;
+      mix-blend-mode:multiply;
+    }
+    .card-head{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      background:
+        radial-gradient(900px 280px at 12% 0%, rgba(0,229,255,0.12), transparent 60%),
+        radial-gradient(900px 280px at 90% 10%, rgba(255,78,205,0.10), transparent 60%),
+        rgba(255,255,255,0.72);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-head h2{ margin:10px 0 0; font-size: 18px; line-height:1.2; }
+    .card-body{ position:relative; z-index:1; padding: 16px; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.76);
+      color: rgba(11,16,32,.80);
+    }
+    .badge .dot{
+      width:10px; height:10px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--a1), var(--a2));
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.65);
+    }
+
+    .block{
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .block h3{ margin:0 0 10px; font-size: 14px; letter-spacing:.2px; }
+
+    .steps{ margin:0; padding-left: 18px; }
+    .steps li{ margin: 10px 0; }
+
+    .note{ border-left: 4px solid rgba(0,229,255,0.85); }
+    .warn{ border-left: 4px solid rgba(255,42,109,0.75); background: rgba(255,240,245,0.78); }
+    .result{ border-left: 4px solid rgba(82,255,156,0.85); background: rgba(240,255,248,0.82); }
+
+    .tiny{ color: rgba(11,16,32,.72); font-size: 12.5px; margin-top: 8px; }
+    .hr{ height:1px; background: rgba(0,0,0,0.06); margin: 14px 0; border-radius: 999px; }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+      color: rgba(11,16,32,.75);
+      font-size: 12.5px;
+      text-align:center;
+    }
+
+    mjx-container[display="true"]{ margin: 10px 0 !important; }
+
+    .u{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  </style>
 </head>
+
 <body>
-    <h1>Esame 8 particella perturbazione</h1>
-    <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Esame 8 particella perturbazione. Grazie per la pazienza!</p>
-    <footer>
-        Generato automaticamente - Esame 8 particella perturbazione
-    </footer>
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="kicker">
+        <span class="pill">MQ • Soluzioni</span>
+        <span>Esame 8 — 19/01/2022</span>
+      </div>
+
+      <h1>Esame 8 (19-01-2022) — Accoppiamento \(l=1\) e \(s=\tfrac12\), oscillatore con due livelli, perturbazione gaussiana</h1>
+
+      <p class="sub">
+        Pagina “full‑detail”: <b>testo</b> + <b>soluzioni</b> con passaggi <span class="u">espliciti</span>
+        (anche conti banali). Stesso design delle altre pagine.
+      </p>
+
+      <div class="top-actions">
+        <a class="btn" href="1mq.html">← Torna all’indice</a>
+        <a class="btn primary" href="#ex1">Vai al primo esercizio</a>
+        <a class="btn" href="#fine">↓ Fine pagina</a>
+      </div>
+
+      <p class="tiny">
+        <b>Richiami rapidi:</b>
+        \[
+          L_z|l,m\rangle = m\hbar |l,m\rangle,\qquad
+          S_z|s,m_s\rangle = m_s\hbar |s,m_s\rangle,\qquad
+          E_n=\hbar\omega\left(n+\frac12\right).
+        \]
+        \[
+          x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger),\quad
+          p=i\sqrt{\frac{\hbar m\omega}{2}}(a^\dagger-a),\quad
+          a|n\rangle=\sqrt{n}\,|n-1\rangle,\ a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle.
+        \]
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <nav class="toc">
+        <h2>Contenuti</h2>
+        <ul>
+          <li><a href="#ex1">Esercizio 1 — \(H=AL_z+BS_z\): decomposizione, evoluzione, tempo di ritorno</a></li>
+          <li><a href="#ex2">Esercizio 2 — Oscillatore: \(P_0=0.75\), \(P_1=0.25\), \(\langle x\rangle=0\), \(\langle p\rangle<0\) → \(\langle x\rangle(t)\)</a></li>
+          <li><a href="#ex3">Esercizio 3 — Perturbazione \(V(t)=-qEx\,e^{-t^2/\tau^2}\): probabilità \(P_{0\to n}\)</a></li>
+        </ul>
+
+        <div class="block note" style="margin-top:12px;">
+          <h3>Mini‑mappa (30 secondi)</h3>
+          <ul class="steps">
+            <li><b>Ex 1:</b> usa Clebsch‑Gordan per \(l=1\) e \(s=\tfrac12\). Poi evolvi in base \(|l,m_l\rangle|s,m_s\rangle\) (perché \(H\) è diagonale lì). Infine ricomponi in \(|j,m\rangle\). Tempo di ritorno: \((A-B)t=2\pi k\).</li>
+            <li><b>Ex 2:</b> stato \(|\psi(0)\rangle=c_0|0\rangle+c_1|1\rangle\). Condizioni \(\langle x\rangle(0)=0\Rightarrow \cos\phi=0\). Poi \(\langle p\rangle(0)<0\Rightarrow \sin\phi<0\). Ottieni \(\phi=-\pi/2\). Quindi \(\langle x\rangle(t)\propto -\sin(\omega t)\).</li>
+            <li><b>Ex 3:</b> I ordine: \(c_n^{(1)}\propto\int dt\,\langle n|x|0\rangle e^{-t^2/\tau^2}e^{i\omega_{n0}t}\). Selezione: da \(|0\rangle\) solo \(n=1\).</li>
+          </ul>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex1">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 1</span>
+            <h2>Particella con spin \(1/2\): \(H=AL_z+BS_z\) (decomposizione, evoluzione, tempo di ritorno)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Considerare una particella con spin \(1/2\) la cui Hamiltoniana è
+              </p>
+              \[
+                H = A L_z + B S_z,
+              \]
+              <p>
+                ove \(A\) e \(B\) sono costanti. All’istante \(t=0\) la particella si trova in uno stato con
+                \(\ell=1\), \(j=\tfrac32\), \(m_j=\tfrac12\), cioè
+              </p>
+              \[
+                |\Psi(0)\rangle=\left|j=\frac{3}{2},\,m_j=\frac{1}{2};\,\ell=1,\,s=\frac{1}{2}\right\rangle
+                \equiv \left|j=\frac{3}{2},\,m_j=\frac{1}{2}\right\rangle.
+              \]
+              <ul class="steps">
+                <li>(a) esprimere lo stato iniziale in base \(|\ell,m_\ell\rangle|s,m_s\rangle\) (autostati di \(L^2,L_z,S^2,S_z\));</li>
+                <li>(b) trovare \(|\Psi(t)\rangle\) e scriverlo come combinazione di autostati di \(J^2,J_z,L^2,S^2\);</li>
+                <li>(c) dopo quanto tempo la particella si ritroverà per la prima volta nello stato iniziale?</li>
+              </ul>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (a): decomposizione con Clebsch‑Gordan</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Qui \( \ell=1 \) e \( s=\tfrac12 \). Per \(j=\tfrac32\) e \(m=\tfrac12\) le uniche coppie \((m_\ell,m_s)\) che sommano a \(m=\tfrac12\) sono:
+                  \[
+                    m_\ell=0,\ m_s=\frac12
+                    \qquad \text{e} \qquad
+                    m_\ell=1,\ m_s=-\frac12.
+                  \]
+                </li>
+
+                <li class="note">
+                  Uso i coefficienti di Clebsch‑Gordan standard (segni convenzionali “positivi” per lo stato massimo).
+                  Si ottiene:
+                  \[
+                    \boxed{
+                    \left|\frac32,\frac12\right\rangle
+                    =
+                    \sqrt{\frac{2}{3}}\,|1,0\rangle\left|\frac12,\frac12\right\rangle
+                    +
+                    \sqrt{\frac{1}{3}}\,|1,1\rangle\left|\frac12,-\frac12\right\rangle
+                    }.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Risposta (a)</h3>
+                  \[
+                    \boxed{
+                      |\Psi(0)\rangle
+                      =
+                      \sqrt{\frac{2}{3}}\,|\,\ell=1,m_\ell=0\rangle\,|\,s=\tfrac12,m_s=\tfrac12\rangle
+                      +
+                      \sqrt{\frac{1}{3}}\,|\,\ell=1,m_\ell=1\rangle\,|\,s=\tfrac12,m_s=-\tfrac12\rangle
+                    }.
+                  \]
+                  <p class="tiny" style="margin:10px 0 0;">
+                    Check “banale” di normalizzazione: \(\frac{2}{3}+\frac{1}{3}=1\).
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (b): evoluzione temporale + riscrittura in base \(|j,m\rangle\)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  <b>Punto chiave:</b> \(H=AL_z+BS_z\) è <span class="u">diagonale</span> nella base prodotto
+                  \(|\ell,m_\ell\rangle|s,m_s\rangle\), perché:
+                  \[
+                    L_z|\ell,m_\ell\rangle=m_\ell\hbar|\ell,m_\ell\rangle,\qquad
+                    S_z|s,m_s\rangle=m_s\hbar|s,m_s\rangle.
+                  \]
+                  Quindi su uno stato prodotto:
+                  \[
+                    H|\ell,m_\ell\rangle|s,m_s\rangle
+                    = \hbar\,(A m_\ell + B m_s)\,|\ell,m_\ell\rangle|s,m_s\rangle.
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Evoluzione:</b>
+                  \[
+                    |\Psi(t)\rangle=e^{-iHt/\hbar}|\Psi(0)\rangle.
+                  \]
+                  Ogni componente prende una fase \(e^{-i(A m_\ell + B m_s)t}\) (perché la \(\hbar\) cancella).
+                </li>
+
+                <li class="warn">
+                  Applico alle due componenti (conti espliciti):
+                  <ul class="steps">
+                    <li>
+                      per \((m_\ell=0, m_s=\tfrac12)\):
+                      \[
+                        A m_\ell + B m_s = A\cdot 0 + B\cdot\frac12=\frac{B}{2},
+                        \quad\Rightarrow\quad
+                        e^{-i(A m_\ell+B m_s)t}=e^{-i(B/2)t}.
+                      \]
+                    </li>
+                    <li>
+                      per \((m_\ell=1, m_s=-\tfrac12)\):
+                      \[
+                        A m_\ell + B m_s = A\cdot 1 + B\cdot\left(-\frac12\right)=A-\frac{B}{2},
+                        \quad\Rightarrow\quad
+                        e^{-i(A m_\ell+B m_s)t}=e^{-i(A-B/2)t}.
+                      \]
+                    </li>
+                  </ul>
+
+                  Quindi:
+                  \[
+                    \boxed{
+                    |\Psi(t)\rangle
+                    =
+                    \sqrt{\frac{2}{3}}\,e^{-i(B/2)t}\,|1,0\rangle\left|\frac12,\frac12\right\rangle
+                    +
+                    \sqrt{\frac{1}{3}}\,e^{-i(A-B/2)t}\,|1,1\rangle\left|\frac12,-\frac12\right\rangle
+                    }.
+                  \]
+                </li>
+
+                <li class="note">
+                  Ora lo riscrivo in base di autostati di \(J^2,J_z,L^2,S^2\), cioè nella base accoppiata
+                  \(\{|j=\tfrac32,m=\tfrac12\rangle,\ |j=\tfrac12,m=\tfrac12\rangle\}\) (stessi \(\ell=1,s=\tfrac12\)).
+                  <br/><br/>
+                  Ricordo anche l’altro CG (ortogonale) per \(m=\tfrac12\):
+                  \[
+                    \left|\frac12,\frac12\right\rangle
+                    =
+                    \sqrt{\frac{1}{3}}\,|1,0\rangle\left|\frac12,\frac12\right\rangle
+                    -
+                    \sqrt{\frac{2}{3}}\,|1,1\rangle\left|\frac12,-\frac12\right\rangle.
+                  \]
+                </li>
+
+                <li class="note">
+                  Inversione (conti espliciti):
+                  \[
+                    |1,0\rangle\left|\frac12,\frac12\right\rangle
+                    =
+                    \sqrt{\frac{2}{3}}\left|\frac32,\frac12\right\rangle
+                    +
+                    \sqrt{\frac{1}{3}}\left|\frac12,\frac12\right\rangle,
+                  \]
+                  \[
+                    |1,1\rangle\left|\frac12,-\frac12\right\rangle
+                    =
+                    \sqrt{\frac{1}{3}}\left|\frac32,\frac12\right\rangle
+                    -
+                    \sqrt{\frac{2}{3}}\left|\frac12,\frac12\right\rangle.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Coefficiente davanti a \(\left|\frac32,\frac12\right\rangle\) e \(\left|\frac12,\frac12\right\rangle\)</h3>
+
+                  <p style="margin:0 0 8px;">
+                    Sostituisco nell’espressione di \(|\Psi(t)\rangle\).
+                    <br/>
+                    Coefficiente di \(\left|\frac32,\frac12\right\rangle\):
+                  </p>
+                  \[
+                    C_{3/2}(t)
+                    =
+                    \sqrt{\frac{2}{3}}e^{-i(B/2)t}\sqrt{\frac{2}{3}}
+                    +
+                    \sqrt{\frac{1}{3}}e^{-i(A-B/2)t}\sqrt{\frac{1}{3}}
+                    =
+                    \frac{2}{3}e^{-i(B/2)t}+\frac{1}{3}e^{-i(A-B/2)t}.
+                  \]
+                  <p style="margin:10px 0 8px;">
+                    Coefficiente di \(\left|\frac12,\frac12\right\rangle\):
+                  </p>
+                  \[
+                    C_{1/2}(t)
+                    =
+                    \sqrt{\frac{2}{3}}e^{-i(B/2)t}\sqrt{\frac{1}{3}}
+                    +
+                    \sqrt{\frac{1}{3}}e^{-i(A-B/2)t}\left(-\sqrt{\frac{2}{3}}\right)
+                    =
+                    \frac{\sqrt2}{3}\left(e^{-i(B/2)t}-e^{-i(A-B/2)t}\right).
+                  \]
+
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Risposta (b)</h3>
+                    \[
+                      \boxed{
+                      |\Psi(t)\rangle
+                      =
+                      \Bigl(\frac{2}{3}e^{-i(B/2)t}+\frac{1}{3}e^{-i(A-B/2)t}\Bigr)\left|\frac32,\frac12\right\rangle
+                      +
+                      \frac{\sqrt2}{3}\Bigl(e^{-i(B/2)t}-e^{-i(A-B/2)t}\Bigr)\left|\frac12,\frac12\right\rangle
+                      }.
+                    \]
+                    <p class="tiny" style="margin:10px 0 0;">
+                      Qui \(\ell=1\) e \(s=\tfrac12\) sono sottintesi (sono “buoni” quanti perché \(H\) commuta con \(L^2\) e \(S^2\)).
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (c): primo tempo di ritorno nello stato iniziale</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Lo stato iniziale è puro \(\left|\frac32,\frac12\right\rangle\). Per “ritornare” allo stato iniziale (a meno di una fase globale),
+                  devo avere <span class="u">zero</span> componente su \(\left|\frac12,\frac12\right\rangle\), cioè:
+                  \[
+                    C_{1/2}(t)=0.
+                  \]
+                </li>
+
+                <li class="warn">
+                  Impongo:
+                  \[
+                    \frac{\sqrt2}{3}\left(e^{-i(B/2)t}-e^{-i(A-B/2)t}\right)=0.
+                  \]
+                  Il prefattore \(\frac{\sqrt2}{3}\neq 0\), quindi:
+                  \[
+                    e^{-i(B/2)t}=e^{-i(A-B/2)t}.
+                  \]
+                  Porto da una parte (divisione “banale”):
+                  \[
+                    \frac{e^{-i(B/2)t}}{e^{-i(A-B/2)t}}=1
+                    \quad\Rightarrow\quad
+                    e^{i(A-B)t}=1
+                    \quad\Rightarrow\quad
+                    e^{-i(A-B)t}=1.
+                  \]
+                  Quindi:
+                  \[
+                    (A-B)t=2\pi k,\qquad k\in\mathbb{Z}.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Primo tempo positivo</h3>
+                  Se \(A\neq B\):
+                  \[
+                    \boxed{t_{\text{ritorno}}=\frac{2\pi}{|A-B|}.}
+                  \]
+                  <p class="tiny" style="margin:10px 0 0;">
+                    Caso speciale: se \(A=B\), allora \(H=A(L_z+S_z)=AJ_z\) e lo stato rimane sempre proporzionale allo stato iniziale
+                    (cambia solo una fase globale). In tal caso “ritorna” in ogni istante (la prima volta è immediata).
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex2" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 2</span>
+            <h2>Oscillatore armonico: \(\langle x\rangle(t)\) dati \(P_0,P_1\) e segno di \(\langle p\rangle\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Un oscillatore armonico quantistico all’istante \(t=0\) si trova in uno stato tale che:
+              </p>
+              <ul class="steps">
+                <li>(a) \(P_0=0.75\) (stato fondamentale), \(P_1=0.25\) (primo eccitato);</li>
+                <li>(b) \(\langle x\rangle(0)=0\);</li>
+                <li>(c) \(\langle p\rangle(0)<0\).</li>
+              </ul>
+              <p>
+                Calcolare \(\langle x\rangle(t)\) all’istante \(t\) arbitrario.
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione passo‑passo</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  Siccome solo \(n=0\) e \(n=1\) hanno probabilità non nulla, scrivo:
+                  \[
+                    |\psi(0)\rangle=c_0|0\rangle+c_1|1\rangle,
+                    \qquad |c_0|^2=\frac34,\quad |c_1|^2=\frac14.
+                  \]
+                </li>
+
+                <li class="note">
+                  Posso fissare la fase globale rendendo \(c_0\) reale e positivo:
+                  \[
+                    c_0=\sqrt{\frac34}=\frac{\sqrt3}{2}.
+                  \]
+                  Per \(c_1\) metto una fase \(\phi\):
+                  \[
+                    c_1=\sqrt{\frac14}\,e^{i\phi}=\frac12\,e^{i\phi}.
+                  \]
+                </li>
+
+                <li class="warn">
+                  <b>Condizione \(\langle x\rangle(0)=0\).</b>
+                  <br/><br/>
+                  Per l’oscillatore:
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+                  \]
+                  In uno stato con \(|0\rangle\) e \(|1\rangle\), l’unico elemento utile è:
+                  \[
+                    \langle 0|a|1\rangle = 1,\qquad \langle 0|a^\dagger|1\rangle=0.
+                  \]
+                  (perché \(a|1\rangle=\sqrt1|0\rangle\) e \(a^\dagger|1\rangle\propto|2\rangle\), ortogonale a \(|0\rangle\)).
+                  <br/><br/>
+                  Si ottiene in generale:
+                  \[
+                    \langle x\rangle(0)=2\sqrt{\frac{\hbar}{2m\omega}}\ \Re\!\big(c_0^*c_1\big).
+                  \]
+                  Ora \(c_0^*=c_0=\frac{\sqrt3}{2}\), quindi
+                  \[
+                    c_0^*c_1=\frac{\sqrt3}{2}\cdot\frac12 e^{i\phi}=\frac{\sqrt3}{4}e^{i\phi}.
+                  \]
+                  La parte reale è \(\frac{\sqrt3}{4}\cos\phi\), perciò:
+                  \[
+                    \langle x\rangle(0)=2\sqrt{\frac{\hbar}{2m\omega}}\cdot\frac{\sqrt3}{4}\cos\phi
+                    =\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}\cos\phi.
+                  \]
+                  Impongo \(\langle x\rangle(0)=0\Rightarrow \cos\phi=0\Rightarrow \phi=\pm\frac{\pi}{2}\ (\text{mod } \pi)\).
+                </li>
+
+                <li class="warn">
+                  <b>Condizione \(\langle p\rangle(0)<0\).</b>
+                  <br/><br/>
+                  Per l’oscillatore:
+                  \[
+                    p=i\sqrt{\frac{\hbar m\omega}{2}}(a^\dagger-a).
+                  \]
+                  Si ricava (analogo calcolo):
+                  \[
+                    \langle p\rangle(0)=2\sqrt{\frac{\hbar m\omega}{2}}\ \Im\!\big(c_0^*c_1\big)
+                    =2\sqrt{\frac{\hbar m\omega}{2}}\cdot \frac{\sqrt3}{4}\sin\phi
+                    =\frac{\sqrt3}{2}\sqrt{\frac{\hbar m\omega}{2}}\sin\phi.
+                  \]
+                  Per avere \(\langle p\rangle(0)<0\) devo avere \(\sin\phi<0\).
+                  Con \(\cos\phi=0\), le possibilità sono \(\phi=+\frac{\pi}{2}\) (sin \(>0\)) oppure \(\phi=-\frac{\pi}{2}\) (sin \(<0\)).
+                  Quindi scelgo:
+                  \[
+                    \boxed{\phi=-\frac{\pi}{2}}\quad\Rightarrow\quad
+                    c_1=\frac12 e^{-i\pi/2}=-\frac{i}{2}.
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Stato iniziale determinato:</b>
+                  \[
+                    \boxed{
+                      |\psi(0)\rangle=\frac{\sqrt3}{2}|0\rangle-\frac{i}{2}|1\rangle
+                    }.
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Evoluzione nel tempo:</b>
+                  \[
+                    |\psi(t)\rangle=\frac{\sqrt3}{2}e^{-iE_0 t/\hbar}|0\rangle-\frac{i}{2}e^{-iE_1 t/\hbar}|1\rangle,
+                    \qquad E_n=\hbar\omega\left(n+\frac12\right).
+                  \]
+                  Quindi:
+                  \[
+                    E_0=\frac12\hbar\omega,\quad E_1=\frac32\hbar\omega.
+                  \]
+                  Il fattore relativo tra i due è \(e^{-i(E_1-E_0)t/\hbar}=e^{-i\omega t}\).
+                </li>
+
+                <li class="result">
+                  <h3>Calcolo di \(\langle x\rangle(t)\)</h3>
+                  In generale:
+                  \[
+                    \langle x\rangle(t)=2\sqrt{\frac{\hbar}{2m\omega}}\ \Re\!\big(c_0^*c_1\,e^{-i\omega t}\big).
+                  \]
+                  Ma \(c_0^*c_1=\frac{\sqrt3}{2}\cdot\left(-\frac{i}{2}\right)=-\frac{i\sqrt3}{4}\).
+                  Quindi:
+                  \[
+                    c_0^*c_1\,e^{-i\omega t}=-\frac{i\sqrt3}{4}(\cos\omega t-i\sin\omega t)
+                    =-\frac{i\sqrt3}{4}\cos\omega t-\frac{\sqrt3}{4}\sin\omega t.
+                  \]
+                  La parte reale è \(-\frac{\sqrt3}{4}\sin\omega t\). Allora:
+                  \[
+                    \langle x\rangle(t)=2\sqrt{\frac{\hbar}{2m\omega}}\left(-\frac{\sqrt3}{4}\sin\omega t\right)
+                    =-\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}\sin(\omega t).
+                  \]
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Risposta finale</h3>
+                    \[
+                      \boxed{
+                        \langle x\rangle(t)=-\frac{\sqrt3}{2}\sqrt{\frac{\hbar}{2m\omega}}\ \sin(\omega t)
+                      }.
+                    \]
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ===================================================== -->
+        <section class="card" id="ex3" style="margin-top:16px;">
+          <div class="card-head">
+            <span class="badge"><span class="dot"></span> Esercizio 3</span>
+            <h2>Perturbazione gaussiana \(V(t)=-qEx\,e^{-t^2/\tau^2}\): probabilità \(P_{0\to n}\)</h2>
+          </div>
+
+          <div class="card-body">
+
+            <div class="block">
+              <h3>Testo</h3>
+              <p>
+                Si consideri un oscillatore armonico unidimensionale nello stato fondamentale al tempo \(t\sim-\infty\)
+                in presenza della perturbazione
+              </p>
+              \[
+                V(t) = -q E x\, e^{-t^2/\tau^2}.
+              \]
+              <p>
+                Qual è la probabilità, al I ordine perturbativo, che al tempo \(t\sim+\infty\) si trovi nello stato \(|n\rangle\)?
+              </p>
+            </div>
+
+            <div class="block">
+              <h3>Soluzione (I ordine perturbativo)</h3>
+
+              <ol class="steps">
+                <li class="note">
+                  In teoria perturbativa dipendente dal tempo, l’ampiezza di transizione al primo ordine è:
+                  \[
+                    c_n^{(1)}(+\infty)= -\frac{i}{\hbar}\int_{-\infty}^{+\infty}\!dt\,
+                    \langle n|V(t)|0\rangle\,e^{i\omega_{n0}t},
+                    \qquad \omega_{n0}=\frac{E_n-E_0}{\hbar}.
+                  \]
+                </li>
+
+                <li class="note">
+                  Qui
+                  \[
+                    \langle n|V(t)|0\rangle = -qE\,e^{-t^2/\tau^2}\,\langle n|x|0\rangle.
+                  \]
+                  Inoltre
+                  \[
+                    x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger).
+                  \]
+                  Quindi:
+                  \[
+                    \langle n|x|0\rangle=\sqrt{\frac{\hbar}{2m\omega}}\left(\langle n|a|0\rangle+\langle n|a^\dagger|0\rangle\right).
+                  \]
+                </li>
+
+                <li class="warn">
+                  <b>Selezione degli stati (passaggio cruciale).</b>
+                  <br/><br/>
+                  \[
+                    a|0\rangle = 0
+                    \quad\Rightarrow\quad
+                    \langle n|a|0\rangle = 0 \ \ \forall n.
+                  \]
+                  Invece:
+                  \[
+                    a^\dagger|0\rangle = \sqrt{1}\,|1\rangle=|1\rangle
+                    \quad\Rightarrow\quad
+                    \langle n|a^\dagger|0\rangle = \langle n|1\rangle=\delta_{n1}.
+                  \]
+                  Dunque:
+                  \[
+                    \boxed{\langle n|x|0\rangle = \sqrt{\frac{\hbar}{2m\omega}}\ \delta_{n1}.}
+                  \]
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Conseguenza immediata</h3>
+                    \[
+                      \boxed{P_{0\to n}^{(1)}=0\ \text{per}\ n\neq 1.}
+                    \]
+                  </div>
+                </li>
+
+                <li class="note">
+                  Calcolo ora l’ampiezza per \(n=1\).
+                  Per \(n=1\),
+                  \[
+                    \langle 1|x|0\rangle=\sqrt{\frac{\hbar}{2m\omega}}.
+                  \]
+                  Inoltre \(\omega_{10}=\omega\) (perché \(E_1-E_0=\hbar\omega\)).
+                </li>
+
+                <li class="warn">
+                  Inserisco tutto:
+                  \[
+                    c_1^{(1)}(+\infty)= -\frac{i}{\hbar}\int_{-\infty}^{+\infty}\!dt\,
+                    \left(-qE\,e^{-t^2/\tau^2}\sqrt{\frac{\hbar}{2m\omega}}\right)e^{i\omega t}.
+                  \]
+                  Il doppio “meno” dà “più”:
+                  \[
+                    c_1^{(1)}(+\infty)= \frac{i\,qE}{\hbar}\sqrt{\frac{\hbar}{2m\omega}}
+                    \int_{-\infty}^{+\infty}\!dt\,e^{-t^2/\tau^2}e^{i\omega t}.
+                  \]
+                </li>
+
+                <li class="note">
+                  <b>Integrale gaussiano (Fourier):</b>
+                  \[
+                    \int_{-\infty}^{+\infty} e^{-t^2/\tau^2}e^{i\omega t}\,dt
+                    =\sqrt{\pi}\,\tau\,e^{-\omega^2\tau^2/4}.
+                  \]
+                </li>
+
+                <li class="result">
+                  <h3>Ampiezza e probabilità</h3>
+                  \[
+                    c_1^{(1)}(+\infty)=
+                    \frac{i\,qE}{\hbar}\sqrt{\frac{\hbar}{2m\omega}}
+                    \left(\sqrt{\pi}\tau\,e^{-\omega^2\tau^2/4}\right).
+                  \]
+                  La probabilità è il modulo quadro:
+                  \[
+                    P_{0\to 1}^{(1)}=|c_1^{(1)}|^2
+                    =
+                    \left(\frac{q^2E^2}{\hbar^2}\right)\left(\frac{\hbar}{2m\omega}\right)\left(\pi\tau^2\right)e^{-\omega^2\tau^2/2}.
+                  \]
+                  Semplifico \(\hbar^2\) con \(\hbar\): rimane una \(\hbar\) al denominatore.
+                  <div class="result block" style="margin-top:10px;">
+                    <h3>Risposta finale</h3>
+                    \[
+                      \boxed{
+                        P_{0\to n}^{(1)}=
+                        \begin{cases}
+                          \displaystyle \frac{\pi q^2E^2\tau^2}{2m\omega\,\hbar}\,e^{-\omega^2\tau^2/2}, & n=1,\\[8pt]
+                          0, & n\neq 1.
+                        \end{cases}
+                      }
+                    \]
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </section>
+
+        <div id="fine"></div>
+        <footer>
+          Soluzioni complete — Esame 8 (19-01-2022).<br/>
+        </footer>
+
+      </main>
+    </div>
+  </div>
 </body>
 </html>
