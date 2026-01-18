@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark light"/>
+  <title>MQ - Indice interattivo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2310151f'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='72' fill='%23dbeafe'%3E%CF%88%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/game.css">
+
+  <!-- MathJax (LaTeX) for bossfight formulas.
+       Note: if you run completely offline, formulas will remain as raw TeX but the game still works. -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]'], ['$$','$$']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" id="brandHome" title="Torna su">
+        <div class="brand-badge">ψ</div>
+        <div class="brand-title">
+          <strong>MQ - Soluzioni orale</strong>
+          <span>Indice interattivo • studio per blocchi</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="FisicaTeoricaMeccanicaQuantistica_compresso.pdf" target="_blank" rel="noreferrer">
+          <span class="dot"></span>
+          <span>Apri PDF</span>
+        </a>
+        <button class="btn" id="btnGlossario">
+          <span class="dot"></span>
+          <span>Glossario</span>
+        </button>
+        <button class="btn" id="btnAchievements">
+          <span class="dot"></span>
+          <span>Achievements</span>
+        </button>
+        <button class="btn" id="btnJukebox" style="display:none">
+          <span class="dot" id="jukeboxDot"></span>
+          <span>Jukebox</span>
+        </button>
+        <button class="btn secondary" id="btnSfx" title="Suoni UI" aria-label="Suoni UI"><span id="sfxIcon">🔊</span></button>
+        <button class="btn" id="btnWallet">
+          <span class="dot"></span>
+          <span>Wallet</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quantum Coins HUD -->
+  <div class="qc-hud" aria-label="Quantum Coins HUD">
+    <div class="qc-line" title="QC Silver - click: micro hint easter egg">
+      <button class="coin-wrap" id="silverBtn" type="button" aria-label="QC Silver">
+        <div class="coin coin--silver" id="silverCoin" aria-hidden="true">
+          <div class="coin-face coin-front"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+          <div class="coin-face coin-back"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+        </div>
+        <div class="coin-burst" id="silverBurst" aria-hidden="true"></div>
+      </button>
+      <div class="coin-count" aria-live="polite" aria-atomic="true">
+        <span class="coin-count-label">QC (Silver)</span>
+        <span class="coin-count-value" id="silverCount">0</span>
+      </div>
+    </div>
+
+    <div class="qc-line" title="QC Gold - rarissime, servono per la bossfight">
+      <button class="coin-wrap" id="goldBtn" type="button" aria-label="QC Gold">
+        <div class="coin coin--gold" id="goldCoin" aria-hidden="true">
+          <div class="coin-face coin-front"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+          <div class="coin-face coin-back"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+        </div>
+        <div class="coin-burst" id="goldBurst" aria-hidden="true"></div>
+      </button>
+      <div class="coin-count" aria-live="polite" aria-atomic="true">
+        <span class="coin-count-label">QC (Gold)</span>
+        <span class="coin-count-value" id="goldCount">0</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="hero-inner">
+		<div>
+		  <h1>Quantum Mission - Studio a Blocchi (P1 + P2)</h1>
+
+		  <p>
+			Benvenuto: ogni <b>DIM</b> e una missione. Apri il blocco, studia nel <b>lettore</b> e poi fai <b>Allenati</b>.
+			Le <b>Soluzioni</b> sono opzionali: usale solo per controllare.
+		  </p>
+
+		  <p style="margin:.6rem 0 0;">
+			<b>P1</b> = <b>Prima Parte del Programma</b> &nbsp;&nbsp;|&nbsp;&nbsp;
+			<b>P2</b> = <b>Seconda Parte del Programma</b>
+		  </p>
+
+		  <div class="intro-steps" style="margin:.9rem 0 .6rem; display:grid; gap:.35rem;">
+			<div>1) Scegli una DIM</div>
+			<div>2) Apri il blocco e usa le anteprime per trovare la pagina giusta</div>
+			<div>3) Studia nel lettore, poi premi <b>Allenati</b></div>
+		  </div>
+
+		  <p class="note">
+			<em>
+			  Alcune pagine sono divise in 2 immagini: qui sono gia in ordine (1/2 poi 2/2).
+			  Segui la sequenza e basta.
+			</em>
+		  </p>
+
+		  <p class="note" style="margin-top:.6rem;">
+			<em>
+			  Quando completi il <b>Wall</b> (tutte le DIM obbligatorie), sblocchi la <b>Bossfight</b>:
+			  la lista delle domande finali da ripassare e affrontare.
+			</em>
+		  </p>
+		</div>
+
+
+        <div class="hero-panel">
+          <div class="stats">
+            <div class="stat"><b id="statDone">0</b><span>blocchi completati</span></div>
+            <div class="stat"><b id="statTotal">0</b><span>blocchi totali</span></div>
+            <div class="stat"><b id="statTracks">0/6</b><span>musiche sbloccate</span></div>
+            <div class="stat"><b id="statBoss">🔒</b><span>bossfight</span></div>
+          </div>
+          <div>
+            <div class="muted" style="display:flex;justify-content:space-between;gap:8px;">
+              <span>Progressione</span>
+              <span id="statPct">0%</span>
+            </div>
+            <div class="progress-bar" aria-label="progressione">
+              <div id="progressFill"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;">
+            <button class="btn" id="btnExpandAll"><span class="dot"></span><span>Espandi tutto</span></button>
+            <button class="btn" id="btnCollapseAll"><span class="dot"></span><span>Chiudi tutto</span></button>
+            <button class="btn" id="btnBoss" title="Simulazione orale (bossfight)">
+              <span class="dot" id="bossDot"></span>
+              <span>Bossfight</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="secP1">
+      <div class="section-h">
+        <div>
+          <h2>P1</h2>
+          <p>Primo blocco del programma. La traccia <b>IV</b> si sblocca quando completi tutti i blocchi di P1 (28).</p>
+        </div>
+        <div class="tools">
+          <span class="chip"><b id="p1Done">0</b><span>/</span><span id="p1Total">0</span><span>completati</span></span>
+        </div>
+      </div>
+      <div class="blocks" id="listP1"></div>
+    </section>
+
+    <section class="section" id="secP2">
+      <div class="section-h">
+        <div>
+          <h2>P2</h2>
+          <p>Secondo blocco del programma. Completa P2 per chiudere la run (e prepararti alla bossfight).</p>
+        </div>
+        <div class="tools">
+          <span class="chip"><b id="p2Done">0</b><span>/</span><span id="p2Total">0</span><span>completati</span></span>
+        </div>
+      </div>
+      <div class="blocks" id="listP2"></div>
+    </section>
+
+    <section class="section" id="secWall">
+      <div class="section-h">
+        <div>
+          <h2>Progress Wall</h2>
+          <p>Mappa quantistica: ogni tassello è un blocco. Completa tutto per aprire la Bossfight.</p>
+        </div>
+        <div class="tools">
+          <button class="btn" id="btnReset" title="Reset progressi (localStorage)">
+            <span class="dot warn"></span>
+            <span>Reset</span>
+          </button>
+        </div>
+      </div>
+      <div class="wall">
+        <div class="wall-grid" id="wallGrid"></div>
+        <div class="muted" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span>Tip: il viewer ha <b>← →</b> e <b>ESC</b>. Quando arrivi all’ultima pagina di un blocco, lo segni come completato.</span>
+          <button class="btn" id="btnMainIndex"><span class="dot"></span><span>Torna all’indice principale</span></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+  <!-- Viewer Modal -->
+  <div class="modal" id="viewerModal" role="dialog" aria-modal="true" aria-label="Viewer pagine">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong id="vTitle">Viewer</strong>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <span class="chip"><b id="vIdx">1</b><span>/</span><span id="vTot">1</span></span>
+          <button class="icon-btn" id="vPrev" title="Precedente (←)">⟵</button>
+          <button class="icon-btn" id="vNext" title="Successiva (→)">⟶</button>
+          <button class="icon-btn" id="vClose" title="Chiudi (ESC)">✕</button>
+        </div>
+      </div>
+
+      <div class="dialog-b">
+        <div class="side">
+          <div class="muted" id="vPath" style="margin:4px 0 10px;"></div>
+          <div class="list" id="vThumbList"></div>
+        </div>
+        <div class="main">
+          <div class="viewer" id="viewer">
+            <div class="nav">
+              <button class="icon-btn" id="vZoom" title="Zoom">🔎</button>
+              <button class="icon-btn" id="vMark" title="Segna blocco completato">✓</button>
+            </div>
+            <img id="vImg" alt="pagina"/>
+            <div class="v-cap" id="vCap">-</div>
+          </div>
+
+          <div class="li">
+            <strong>Ricompensa blocco</strong>
+            <p id="vReward">-</p>
+          </div>
+          <div class="muted" id="vHint" style="margin-top:-4px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zoom Modal (super semplice) -->
+  <div class="modal" id="zoomModal" role="dialog" aria-modal="true" aria-label="Zoom pagina">
+    <div class="dialog" style="max-height: 92vh;">
+      <div class="dialog-h">
+        <strong>Zoom</strong>
+        <button class="icon-btn" id="zClose">✕</button>
+      </div>
+      <div style="padding:10px; overflow:auto;">
+        <img id="zImg" alt="zoom" style="width:100%; height:auto; border-radius: 14px; border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.22);"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Glossary Modal -->
+  <div class="modal" id="glossModal" role="dialog" aria-modal="true" aria-label="Glossario">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong>Glossario</strong>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input id="glossSearch" placeholder="Cerca..." style="padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);color:rgba(255,255,255,.9);min-width:min(420px, 52vw);"/>
+          <button class="icon-btn" id="glossClose">✕</button>
+        </div>
+      </div>
+      <div style="padding:10px; overflow:auto;">
+        <div class="list" id="glossList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievements Modal -->
+  <div class="modal" id="achModal" role="dialog" aria-modal="true" aria-label="Achievements">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong>Achievements</strong>
+        <button class="icon-btn" id="achClose">✕</button>
+      </div>
+      <div style="padding:10px; overflow:auto;">
+        <div class="list" id="achList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wallet Modal -->
+  <div class="modal" id="walletModal" role="dialog" aria-modal="true" aria-label="Wallet">
+    <div class="dialog" style="max-height: 78vh;">
+      <div class="dialog-h">
+        <strong>Wallet</strong>
+        <button class="icon-btn" id="walletClose">✕</button>
+      </div>
+      <div style="padding:10px; overflow:auto; display:grid; gap:10px;">
+        <div class="li">
+          <strong>QC Silver → QC Gold</strong>
+          <p>Conversione: <b>100 Silver</b> → <b>1 Gold</b>. Le Gold sono rare e servono per la bossfight (15).</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center;">
+            <button class="btn" id="btnConvert"><span class="dot"></span><span>Converti 100 → 1</span></button>
+            <span class="muted" id="convertHint">-</span>
+          </div>
+        </div>
+
+        <div class="li">
+          <strong>Easter egg (musica segreta)</strong>
+          <p>La traccia <b>V</b> si sblocca solo dopo le prime 4 e trovando un easter egg.</p>
+          <p class="muted" id="eggHint">Hint: ↑↑↓↓←→←→BA • oppure clicca la moneta Silver <b>7 volte</b> in 2 secondi.</p>
+        </div>
+
+        <div class="li">
+          <strong>Bossfight</strong>
+          <p>Per entrare nella simulazione orale serve: <b>programma completato</b> + <b>15 QC Gold</b> (poi resta sbloccata).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jukebox Modal -->
+  <div class="modal" id="jukeboxModal" role="dialog" aria-modal="true" aria-label="Jukebox">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong>Jukebox</strong>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <span class="chip"><b id="nowPlaying">-</b></span>
+          <button class="icon-btn" id="jbStop">⏹ Stop</button>
+          <button class="icon-btn" id="jbClose">✕</button>
+        </div>
+      </div>
+      <div style="padding:10px; overflow:auto; display:grid; gap:10px;">
+        <div class="li">
+          <strong>Musiche</strong>
+          <p class="muted">Le tracce si sbloccano con i progressi. La V richiede easter egg. La VI (Classical Pack) si sblocca quando completi tutte le DIM della bossfight (incluse le Extra).</p>
+        </div>
+        <div id="trackList" style="display:grid; gap:10px;"></div>
+
+        <details class="legend" id="legendClassical">
+          <summary>Playlist - Classical Pack v1</summary>
+          <ul class="legend-list">
+            <li>Bach - Cello Suite No. 1 in G major, BWV 1007 - I. Prelude</li>
+            <li>Debussy - Cello Sonata - III. Finale - Anime - L. 135</li>
+            <li>Elgar, Edward - Salut d'amour - Op. 12</li>
+            <li>Paganini - Caprice No. 24 in A minor - 24 Caprices, Op. 1</li>
+            <li>Mendelssohn - Songs Without Words - Book 2, Op. 30 - No. 6 in F-sharp minor (Venetian Gondola Song)</li>
+            <li>Czerny - 30 Études de mécanisme, Op. 849 - No. 4, Allegro (C major)</li>
+            <li>Bach - Air on the G String - BWV 1068 (Arr. for Woodwinds and Strings)</li>
+            <li>Vivaldi - The Four Seasons - Winter (Mvt. 1) Allegro non molto (John Harrison / Wichita State University Chamber Players)</li>
+            <li>Tchaikovsky - Piano Concerto No. 1, Op. 23 - 3rd Movement (Arr. for 2 Pianos)</li>
+            <li>Beethoven - Piano Sonata No. 17, Op. 31 No. 2 - III. Allegretto</li>
+          </ul>
+        </details>
+        <div class="li" id="eggPanel" style="display:none;">
+          <strong>🔎 Hai fiutato qualcosa…</strong>
+          <p class="muted">Se hai già le prime 4: prova il cheat-code oppure il click rapido sulla moneta Silver.</p>
+          <button class="btn" id="btnKonami" title="Non è magia, è simmetria."><span class="dot"></span><span>Mostra hint</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Bossfight modal (DIM list) -->
+  <div class="modal" id="bossModal" aria-hidden="true">
+    <div class="modal-card boss-card">
+      <div class="modal-head">
+        <h3>Bossfight · Dimostrazioni</h3>
+        <button class="iconbtn" id="bossClose" aria-label="Chiudi">✕</button>
+      </div>
+
+      <div class="boss-top">
+        <div class="boss-hp">
+          <div class="hpbar" aria-label="HP Boss">
+            <div class="hpfill" id="bossHPFill"></div>
+          </div>
+          <div class="hpline">
+            <span id="bossHPText">-</span>
+            <span class="muted" id="bossHintText"></span>
+          </div>
+        </div>
+
+        <div class="boss-actions">
+          <button class="btn primary" id="bossRandomBtn">Sfida casuale</button>
+          <button class="btn" id="bossResetBtn" title="Resetta solo i check della bossfight">Reset boss</button>
+        </div>
+      </div>
+
+      <div class="boss-challenge" id="bossChallenge" hidden>
+        <div class="challenge-head">
+          <strong id="challengeTitle">-</strong>
+          <button class="iconbtn" id="challengeClose" aria-label="Chiudi">✕</button>
+        </div>
+        <div class="challenge-text" id="challengeText"></div>
+        <div class="challenge-bar">
+          <button class="btn sm" id="challengeStartBtn">Avvia timer</button>
+          <span class="timer" id="challengeTimer">01:30</span>
+          <button class="btn sm primary" id="challengeDoneBtn">Ho risposto</button>
+        </div>
+      </div>
+
+      <div class="boss-list" id="bossList"></div>
+
+      <div class="boss-footer">
+        <div class="muted"><em>Nota:</em> qui c’è solo la lista delle DIM. Le soluzioni sono facoltative e saranno immagini (una o più) che potrai aggiungere tu in seguito. Se non esistono ancora, non succede nulla.</div>
+        <div class="row">
+          <button class="btn" id="bossBackHome">Ritorna al menu</button>
+          <button class="btn ghost" id="bossScrollTop">Torna su</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Bossfight intro overlay -->
+  <div class="boss-intro" id="bossIntro" aria-hidden="true">
+    <div class="boss-card">
+      <div class="boss-card-h">
+        <strong>Bossfight • Ice Mode</strong>
+        <span class="muted">Modalità ghiaccio attiva</span>
+      </div>
+      <div class="boss-card-b">
+        <div class="chipwall" id="bossChipWall"></div>
+      </div>
+    </div>
+  </div>
+
+  
+    <footer class="page-footer" id="pageFooter">
+      <div class="foot">
+        <div>
+          <div style="font-weight:800; margin-bottom:.15rem">Ritorno rapido</div>
+          <div class="muted"><em>Scorciatoia:</em> puoi segnare tutto come completato e saltare direttamente alla Bossfight.</div>
+        </div>
+        <div class="foot-actions">
+          <button class="btn secondary" id="btnMainIndexFooter">Indice principale</button>
+          <button class="btn success" id="btnCompleteAll">Completa tutto</button>
+          <button class="btn primary" id="btnBossFooter">Bossfight</button>
+        </div>
+      </div>
+    </footer>
+
+  <!-- Toast -->
+  <div class="toastEl" id="toastEl" role="status" aria-live="polite">
+    <div style="display:flex;flex-direction:column;gap:2px;">
+      <b id="toastTitle">-</b>
+      <span id="toastMsg">-</span>
+    </div>
+    <button class="icon-btn" id="toastClose">OK</button>
+  </div>
+
+  <!-- Floating actions -->
+  <div class="fab" id="fab">
+    <button class="icon-btn" id="btnToTop" style="display:none" title="Torna su">↑</button>
+    <button class="icon-btn" id="btnToBottom" style="display:none" title="Vai giù">↓</button>
+  </div>
+
+  <audio id="audio" preload="none"></audio>
+
+  <script src="assets/game.js?v=6" defer></script>
+</body>
+</html>
