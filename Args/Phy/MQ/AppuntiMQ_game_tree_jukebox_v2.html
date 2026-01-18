@@ -1,0 +1,2327 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark light"/>
+  <title>MQ - Indice interattivo</title>
+  <style>
+    :root{
+      --bg0:#0b0d12;
+      --bg1:rgba(12,14,20,.86);
+      --card:rgba(18,22,30,.78);
+      --card2:rgba(18,22,30,.62);
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.16);
+      --txt:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --muted2:rgba(255,255,255,.52);
+      --ok:#39d98a;
+      --warn:#ffcc66;
+      --bad:#ff5b5b;
+      --accent:#7dd3fc;
+      --accent2:#c4b5fd;
+      --shadow: 0 18px 40px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 14px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+
+      /* Background textures */
+      --tex: url('img/texture_legno_hd.png');
+      --texOpacity: .16;
+      --heroGlow: radial-gradient(1200px 600px at 20% -10%, rgba(125,211,252,.26), transparent 55%),
+                  radial-gradient(900px 500px at 90% 0%, rgba(196,181,253,.20), transparent 55%);
+    }
+
+    body.ice-mode{
+      --accent:#93c5fd;
+      --accent2:#a5b4fc;
+      --tex: url('img/texture_ghiaccio.png');
+      --texOpacity: .18;
+      --heroGlow: radial-gradient(1200px 600px at 18% -10%, rgba(147,197,253,.22), transparent 55%),
+                  radial-gradient(900px 500px at 90% 0%, rgba(165,180,252,.20), transparent 55%);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--txt);
+      background:
+        var(--heroGlow),
+        radial-gradient(1200px 800px at 60% 140%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(180deg, #070911, #05060b);
+      overflow-x:hidden;
+    }
+
+    /* texture overlay */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image: var(--tex);
+      background-size: 920px auto;
+      background-repeat: repeat;
+      opacity: var(--texOpacity);
+      filter: contrast(110%) saturate(110%);
+      pointer-events:none;
+      z-index:-1;
+      transform: translateZ(0);
+    }
+
+    a{ color:inherit; }
+    button{ font-family:inherit; }
+
+    .wrap{
+      width:min(1150px, 92vw);
+      margin:0 auto;
+      padding: 18px 0 44px;
+    }
+
+    /* Topbar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: linear-gradient(180deg, rgba(7,9,17,.92), rgba(7,9,17,.50));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .topbar-inner{
+      width:min(1150px, 92vw);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 0;
+      gap: 12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .brand-badge{
+      width:38px; height:38px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.24), rgba(255,255,255,0) 55%),
+                  linear-gradient(135deg, rgba(125,211,252,.42), rgba(196,181,253,.26));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow: 0 12px 26px rgba(0,0,0,.45);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      letter-spacing:.02em;
+    }
+    .brand-title{
+      display:flex;
+      flex-direction:column;
+      line-height:1.05;
+    }
+    .brand-title strong{ font-size:14px; letter-spacing:.04em; }
+    .brand-title span{ font-size:12px; color:var(--muted); }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(18,22,30,.62);
+      color:var(--txt);
+      border-radius: 14px;
+      padding: 9px 12px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      box-shadow: 0 10px 24px rgba(0,0,0,.32);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.24); background: rgba(18,22,30,.74); }
+    .btn:active{ transform: translateY(0); }
+    .btn[disabled]{ opacity:.5; cursor:not-allowed; transform:none; }
+
+    .btn .dot{
+      width:9px;height:9px;border-radius:999px;
+      background: rgba(255,255,255,.26);
+      box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset;
+    }
+    .btn .dot.ok{ background: var(--ok); }
+    .btn .dot.warn{ background: var(--warn); }
+
+    /* Hero */
+    .hero{
+      margin-top: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(18,22,30,.76), rgba(18,22,30,.56));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(900px 420px at 16% 10%, rgba(125,211,252,.18), transparent 56%),
+        radial-gradient(900px 420px at 90% 10%, rgba(196,181,253,.16), transparent 56%);
+      pointer-events:none;
+    }
+
+    .hero-inner{
+      padding: 18px 18px 16px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      align-items:stretch;
+    }
+    @media (max-width: 880px){
+      .hero-inner{ grid-template-columns: 1fr; }
+    }
+
+    .hero h1{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.02em;
+    }
+    .hero p{ margin: 8px 0 0; color:var(--muted); }
+    .hero .note{
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,.78);
+    }
+    .hero .note em{ color: rgba(255,255,255,.82); }
+
+    .hero-panel{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(0,0,0,.22);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      justify-content:space-between;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat{
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(18,22,30,.58);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .stat b{ display:block; font-size: 18px; letter-spacing:.02em; }
+    .stat span{ display:block; margin-top:2px; font-size: 12px; color:var(--muted2); }
+
+    .progress-bar{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .progress-bar > div{
+      height:100%; width:0%;
+      background: linear-gradient(90deg, rgba(125,211,252,.78), rgba(196,181,253,.72));
+      border-radius:999px;
+      transition: width .28s ease;
+    }
+
+    /* Sections */
+    .section{
+      margin-top: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      background: rgba(18,22,30,.52);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .section-h{
+      padding: 14px 16px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.16);
+    }
+    .section-h h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.09em;
+      text-transform:uppercase;
+    }
+    .section-h p{
+      margin:4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      max-width: 58ch;
+    }
+
+    .tools{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    /* Block list */
+    .blocks{
+      padding: 10px;
+      display:grid;
+      gap: 10px;
+    }
+
+    details.block{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    details.block[open]{
+      border-color: rgba(255,255,255,.18);
+      background: rgba(0,0,0,.24);
+    }
+
+    summary.block-sum{
+      list-style:none;
+      cursor:pointer;
+      padding: 12px 12px;
+      display:grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items:center;
+      user-select:none;
+    }
+    summary.block-sum::-webkit-details-marker{ display:none; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(18,22,30,.55);
+      font-size: 12px;
+      color: rgba(255,255,255,.86);
+      white-space:nowrap;
+    }
+    .pill small{ color: var(--muted2); font-size: 11px; }
+    .pill .chk{ width: 9px; height: 9px; border-radius: 999px; background: rgba(255,255,255,.22); }
+    .pill.done .chk{ background: var(--ok); }
+
+    .btitle{ min-width:0; }
+    .btitle strong{ display:block; font-size: 14px; letter-spacing:.01em; }
+    .btitle span{ display:block; margin-top:2px; font-size: 12px; color: var(--muted); }
+
+    .bmeta{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+
+    .chip{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(18,22,30,.45);
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+    }
+    .chip b{ color: rgba(255,255,255,.86); font-weight:800; }
+
+    .block-body{
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      display:grid;
+      gap: 12px;
+    }
+
+    .block-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .block-actions .left{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .muted{
+      color: var(--muted2);
+      font-size: 12px;
+    }
+
+    .thumbs{
+      display:grid;
+      grid-template-columns: repeat(6, minmax(0,1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 980px){
+      .thumbs{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+    }
+    @media (max-width: 620px){
+      .thumbs{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    .thumb{
+      position:relative;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(18,22,30,.40);
+      overflow:hidden;
+      cursor:pointer;
+      min-height: 92px;
+      display:grid;
+      place-items:center;
+    }
+
+    .thumb img{
+      width:100%;
+      height: 118px;
+      object-fit: contain;
+      display:block;
+      background: rgba(0,0,0,.10);
+    }
+
+    .thumb .cap{
+      position:absolute;
+      left:8px;
+      bottom:8px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.56);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+      font-size: 11px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: calc(100% - 16px);
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .thumb .badge{
+      position:absolute;
+      top:8px;
+      right:8px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.56);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.82);
+      font-size: 11px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .thumb:hover{ border-color: rgba(255,255,255,.20); transform: translateY(-1px); }
+
+    /* Modal base */
+    .modal{
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .modal.show{ display:flex; }
+
+    .dialog{
+      width: min(1080px, 95vw);
+      max-height: min(84vh, 760px);
+      overflow:hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(18,22,30,.92), rgba(18,22,30,.74));
+      box-shadow: 0 30px 80px rgba(0,0,0,.60);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .dialog-h{
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+    }
+    .dialog-h strong{ font-size: 13px; letter-spacing:.06em; text-transform:uppercase; }
+
+    .dialog-b{
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 0;
+      flex: 1;
+    }
+
+    @media (max-width: 880px){
+      .dialog{ max-height: 90vh; }
+      .dialog-b{ grid-template-columns: 1fr; grid-template-rows: 180px 1fr; }
+    }
+
+    .side{
+      border-right: 1px solid rgba(255,255,255,.10);
+      padding: 10px;
+      overflow:auto;
+    }
+    @media (max-width: 880px){
+      .side{ border-right:none; border-bottom:1px solid rgba(255,255,255,.10);} 
+    }
+
+    .main{
+      padding: 10px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      min-height:0;
+    }
+
+    .viewer{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      padding: 10px;
+      min-height: 320px;
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .viewer img{
+      max-width: 100%;
+      max-height: 68vh;
+      width:auto;
+      height:auto;
+      object-fit: contain;
+      border-radius: 12px;
+      background: rgba(0,0,0,.12);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .viewer .v-cap{
+      position:absolute;
+      left: 10px;
+      bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.62);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.90);
+      font-size: 12px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: calc(100% - 20px);
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .viewer .nav{
+      position:absolute;
+      top:10px;
+      right:10px;
+      display:flex;
+      gap:8px;
+    }
+
+    .icon-btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(18,22,30,.60);
+      color: rgba(255,255,255,.90);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
+      transition: transform .12s ease, border-color .12s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .icon-btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.24); }
+    .icon-btn:active{ transform:none; }
+
+    .list{
+      display:grid;
+      gap:8px;
+    }
+
+    .li{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .li strong{ display:block; font-size: 13px; }
+    .li p{ margin: 6px 0 0; font-size: 12px; color: var(--muted); }
+
+    /* Jukebox */
+    .track{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+    }
+    .track strong{ font-size: 13px; }
+    .track .tmeta{ font-size: 12px; color: var(--muted2); margin-top:2px; }
+    .track .left{ display:flex; flex-direction:column; min-width:0; }
+    .lock{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .lock .ic{ width: 10px; height: 10px; border-radius: 4px; background: rgba(255,255,255,.26); }
+    .lock.on{ color: rgba(255,255,255,.86); }
+    .lock.on .ic{ background: var(--ok); }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 200;
+      min-width: min(640px, 92vw);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(18,22,30,.86);
+      border-radius: 16px;
+      padding: 10px 12px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .toast.show{ display:flex; }
+    .toast b{ font-size: 13px; }
+    .toast span{ color: var(--muted); font-size: 12px; }
+
+    /* Floating buttons */
+    .fab{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 80;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      pointer-events:none;
+    }
+    .fab .icon-btn{ pointer-events:auto; }
+
+    /* Progress wall (compact grid) */
+    .wall{
+      padding: 12px;
+      display:grid;
+      gap: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .wall-grid{
+      display:grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 6px;
+    }
+    @media (max-width: 980px){
+      .wall-grid{ grid-template-columns: repeat(8, minmax(0,1fr)); }
+    }
+    @media (max-width: 620px){
+      .wall-grid{ grid-template-columns: repeat(6, minmax(0,1fr)); }
+    }
+    .tile{
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding: 8px 8px;
+      text-align:center;
+      font-size: 11px;
+      color: rgba(255,255,255,.84);
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space:nowrap;
+    }
+    .tile.done{ border-color: rgba(57,217,138,.45); background: rgba(57,217,138,.10); }
+    .tile small{ color: var(--muted2); font-size: 10px; }
+
+    /* ==== Quantum Coin HUD (from user's sample, adapted) ==== */
+    .qc-hud{
+      position: fixed;
+      top: 78px;
+      right: 16px;
+      z-index: 90;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      align-items:flex-end;
+    }
+    @media (max-width: 520px){
+      .qc-hud{ top: 68px; right: 12px; }
+    }
+
+    .qc-line{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+
+    .coin-wrap{
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(20,20,20,.44);
+      box-shadow: 0 12px 26px rgba(0,0,0,.40);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .coin{
+      width: 38px;
+      height: 38px;
+      position:relative;
+      transform-style: preserve-3d;
+      transform: rotateY(14deg) rotateX(6deg);
+    }
+
+    .coin-face{
+      position:absolute;
+      inset:0;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      backface-visibility:hidden;
+      background:
+        radial-gradient(circle at 30% 20%, var(--c1), rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 60% 80%, var(--c2), rgba(255,255,255,0) 60%),
+        linear-gradient(135deg, rgba(0,0,0,.15), rgba(255,255,255,.10)),
+        conic-gradient(from 120deg, var(--c3), var(--c4), var(--c3));
+      box-shadow:
+        inset 0 0 0 3px rgba(255,255,255,.18),
+        inset 0 0 0 10px rgba(0,0,0,.06),
+        0 0 0 1px rgba(0,0,0,.12);
+    }
+
+    .coin-front{ transform: translateZ(2px); }
+    .coin-back{ transform: rotateY(180deg) translateZ(2px); }
+
+    .coin-sigil{
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: .02em;
+      color: rgba(20,20,20,.92);
+      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+      user-select:none;
+    }
+    .coin-sigil sup{ font-size: 10px; margin-left:1px; }
+
+    .coin--silver{
+      --c1: rgba(255,255,255,.85);
+      --c2: rgba(210,210,210,.35);
+      --c3: rgba(255,255,255,.92);
+      --c4: rgba(150,150,150,.25);
+    }
+    .coin--gold{
+      --c1: rgba(255,236,190,.92);
+      --c2: rgba(255,205,120,.42);
+      --c3: rgba(255,245,210,.95);
+      --c4: rgba(170,120,40,.22);
+    }
+
+    .coin.coin-spin{ animation: coinSpin 820ms cubic-bezier(.2,.9,.2,1) both; }
+    @keyframes coinSpin{ 0%{transform:rotateY(14deg) rotateX(6deg) scale(1)} 35%{transform:rotateY(220deg) rotateX(18deg) scale(1.12)} 70%{transform:rotateY(520deg) rotateX(8deg) scale(1.06)} 100%{transform:rotateY(732deg) rotateX(6deg) scale(1)} }
+
+    .coin.coin-spin-gold{ animation: coinSpinGold 980ms cubic-bezier(.2,.9,.2,1) both; filter: drop-shadow(0 14px 18px rgba(0,0,0,.26)) drop-shadow(0 0 14px rgba(255,215,125,.16)); }
+    @keyframes coinSpinGold{ 0%{transform:rotateY(12deg) rotateX(6deg) scale(1)} 30%{transform:rotateY(260deg) rotateX(20deg) scale(1.16)} 70%{transform:rotateY(720deg) rotateX(10deg) scale(1.07)} 100%{transform:rotateY(860deg) rotateX(6deg) scale(1)} }
+
+    .coin-burst{ position:absolute; inset:-18px; pointer-events:none; }
+    .coin-burst span{ position:absolute; left:50%; top:50%; width:7px; height:7px; border-radius:999px; transform:translate(-50%,-50%); opacity:0; animation: coinPop 680ms ease-out forwards; box-shadow:0 0 0 1px rgba(0,0,0,.08); background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 55%), conic-gradient(from 120deg, rgba(255,255,255,.9), rgba(200,200,200,.35), rgba(255,255,255,.9)); }
+    @keyframes coinPop{ 0%{opacity:0; transform:translate(-50%,-50%) scale(.65)} 10%{opacity:1} 100%{opacity:0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1)} }
+
+    .coin-count{
+      min-width: 92px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(20,20,20,.54);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+      display:grid;
+      gap: 2px;
+      line-height:1.05;
+      box-shadow: 0 12px 26px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .coin-count-label{ font-size: 11px; opacity:.78; letter-spacing:.08em; }
+    .coin-count-value{ font-size: 18px; font-weight: 900; }
+
+    @media (prefers-reduced-motion: reduce){
+      .coin, .coin.coin-spin, .coin.coin-spin-gold, .coin-burst span{ animation:none !important; transition:none !important; }
+    }
+
+    /* Bossfight intro */
+    .boss-intro{
+      position: fixed;
+      inset: 0;
+      z-index: 160;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .boss-intro.show{ display:grid; }
+    .boss-card{
+      width: min(900px, 92vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(18,22,30,.92), rgba(18,22,30,.72));
+      box-shadow: 0 30px 80px rgba(0,0,0,.62);
+      overflow:hidden;
+    }
+    .boss-card-h{
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      background: rgba(0,0,0,.20);
+    }
+    .boss-card-h strong{ letter-spacing:.08em; text-transform:uppercase; font-size: 13px; }
+    .boss-card-b{ padding: 12px; }
+    .chipwall{
+      display:grid;
+      grid-template-columns: repeat(8, minmax(0,1fr));
+      gap: 8px;
+    }
+    @media (max-width: 720px){ .chipwall{ grid-template-columns: repeat(5, minmax(0,1fr)); } }
+
+    .mini{
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding: 10px 10px;
+      font-size: 12px;
+      text-align:center;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transform: translateX(-40px);
+      opacity: 0;
+      animation: slideIn .8s ease forwards;
+    }
+    .mini.done{ border-color: rgba(57,217,138,.45); background: rgba(57,217,138,.10); }
+    @keyframes slideIn{ to { transform: translateX(0); opacity: 1; } }
+
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" id="brandHome" title="Torna su">
+        <div class="brand-badge">ψ</div>
+        <div class="brand-title">
+          <strong>MQ - Soluzioni orale</strong>
+          <span>Indice interattivo • studio per blocchi</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="FisicaTeoricaMeccanicaQuantistica_compresso.pdf" target="_blank" rel="noreferrer">
+          <span class="dot"></span>
+          <span>Apri PDF</span>
+        </a>
+        <button class="btn" id="btnGlossario">
+          <span class="dot"></span>
+          <span>Glossario</span>
+        </button>
+        <button class="btn" id="btnAchievements">
+          <span class="dot"></span>
+          <span>Achievements</span>
+        </button>
+        <button class="btn" id="btnJukebox" style="display:none">
+          <span class="dot" id="jukeboxDot"></span>
+          <span>Jukebox</span>
+        </button>
+        <button class="btn" id="btnWallet">
+          <span class="dot"></span>
+          <span>Wallet</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quantum Coins HUD -->
+  <div class="qc-hud" aria-label="Quantum Coins HUD">
+    <div class="qc-line" title="QC Silver - click: micro hint easter egg">
+      <button class="coin-wrap" id="silverBtn" type="button" aria-label="QC Silver">
+        <div class="coin coin--silver" id="silverCoin" aria-hidden="true">
+          <div class="coin-face coin-front"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+          <div class="coin-face coin-back"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+        </div>
+        <div class="coin-burst" id="silverBurst" aria-hidden="true"></div>
+      </button>
+      <div class="coin-count" aria-live="polite" aria-atomic="true">
+        <span class="coin-count-label">QC (Silver)</span>
+        <span class="coin-count-value" id="silverCount">0</span>
+      </div>
+    </div>
+
+    <div class="qc-line" title="QC Gold - rarissime, servono per la bossfight">
+      <button class="coin-wrap" id="goldBtn" type="button" aria-label="QC Gold">
+        <div class="coin coin--gold" id="goldCoin" aria-hidden="true">
+          <div class="coin-face coin-front"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+          <div class="coin-face coin-back"><span class="coin-sigil">ψ<sup>2</sup></span></div>
+        </div>
+        <div class="coin-burst" id="goldBurst" aria-hidden="true"></div>
+      </button>
+      <div class="coin-count" aria-live="polite" aria-atomic="true">
+        <span class="coin-count-label">QC (Gold)</span>
+        <span class="coin-count-value" id="goldCount">0</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="hero-inner">
+        <div>
+          <h1>Studio per blocchi (P1 + P2)</h1>
+          <p>Apri un blocco, usa le <b>anteprime</b> e leggi le pagine nel <b>lettore</b> (niente scroll infinito).</p>
+          <p class="note"><em>Alcune pagine sono divise in 2 immagini (parte 1/2). Qui sono già in ordine: segui la sequenza, senza pensare ai nomi dei file.</em></p>
+        </div>
+
+        <div class="hero-panel">
+          <div class="stats">
+            <div class="stat"><b id="statDone">0</b><span>blocchi completati</span></div>
+            <div class="stat"><b id="statTotal">0</b><span>blocchi totali</span></div>
+            <div class="stat"><b id="statTracks">0/6</b><span>musiche sbloccate</span></div>
+            <div class="stat"><b id="statBoss">🔒</b><span>bossfight</span></div>
+          </div>
+          <div>
+            <div class="muted" style="display:flex;justify-content:space-between;gap:8px;">
+              <span>Progressione</span>
+              <span id="statPct">0%</span>
+            </div>
+            <div class="progress-bar" aria-label="progressione">
+              <div id="progressFill"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;">
+            <button class="btn" id="btnExpandAll"><span class="dot"></span><span>Espandi tutto</span></button>
+            <button class="btn" id="btnCollapseAll"><span class="dot"></span><span>Chiudi tutto</span></button>
+            <button class="btn" id="btnBoss" title="Simulazione orale (bossfight)">
+              <span class="dot" id="bossDot"></span>
+              <span>Bossfight</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="secP1">
+      <div class="section-h">
+        <div>
+          <h2>P1</h2>
+          <p>Primo blocco del programma. La traccia <b>IV</b> si sblocca quando completi tutti i blocchi di P1 (28).</p>
+        </div>
+        <div class="tools">
+          <span class="chip"><b id="p1Done">0</b><span>/</span><span id="p1Total">0</span><span>completati</span></span>
+        </div>
+      </div>
+      <div class="blocks" id="listP1"></div>
+    </section>
+
+    <section class="section" id="secP2">
+      <div class="section-h">
+        <div>
+          <h2>P2</h2>
+          <p>Secondo blocco del programma. Completa P2 per chiudere la run (e prepararti alla bossfight).</p>
+        </div>
+        <div class="tools">
+          <span class="chip"><b id="p2Done">0</b><span>/</span><span id="p2Total">0</span><span>completati</span></span>
+        </div>
+      </div>
+      <div class="blocks" id="listP2"></div>
+    </section>
+
+    <section class="section" id="secWall">
+      <div class="section-h">
+        <div>
+          <h2>Progress Wall</h2>
+          <p>Vista super-compatta: ogni tassello = 1 blocco. Utile per capire “cosa manca” senza scroll infinito.</p>
+        </div>
+        <div class="tools">
+          <button class="btn" id="btnReset" title="Reset progressi (localStorage)">
+            <span class="dot warn"></span>
+            <span>Reset</span>
+          </button>
+        </div>
+      </div>
+      <div class="wall">
+        <div class="wall-grid" id="wallGrid"></div>
+        <div class="muted" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span>Tip: il viewer ha <b>← →</b> e <b>ESC</b>. Quando arrivi all’ultima pagina di un blocco, lo segni come completato.</span>
+          <button class="btn" id="btnMainIndex"><span class="dot"></span><span>Torna all’indice principale</span></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+  <!-- Viewer Modal -->
+  <div class="modal" id="viewerModal" role="dialog" aria-modal="true" aria-label="Viewer pagine">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong id="vTitle">Viewer</strong>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <span class="chip"><b id="vIdx">1</b><span>/</span><span id="vTot">1</span></span>
+          <button class="icon-btn" id="vPrev" title="Precedente (←)">⟵</button>
+          <button class="icon-btn" id="vNext" title="Successiva (→)">⟶</button>
+          <button class="icon-btn" id="vClose" title="Chiudi (ESC)">✕</button>
+        </div>
+      </div>
+
+      <div class="dialog-b">
+        <div class="side">
+          <div class="muted" id="vPath" style="margin:4px 0 10px;"></div>
+          <div class="list" id="vThumbList"></div>
+        </div>
+        <div class="main">
+          <div class="viewer" id="viewer">
+            <div class="nav">
+              <button class="icon-btn" id="vZoom" title="Zoom">🔎</button>
+              <button class="icon-btn" id="vMark" title="Segna blocco completato">✓</button>
+            </div>
+            <img id="vImg" alt="pagina"/>
+            <div class="v-cap" id="vCap">-</div>
+          </div>
+
+          <div class="li">
+            <strong>Ricompensa blocco</strong>
+            <p id="vReward">-</p>
+          </div>
+          <div class="muted" id="vHint" style="margin-top:-4px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zoom Modal (super semplice) -->
+  <div class="modal" id="zoomModal" role="dialog" aria-modal="true" aria-label="Zoom pagina">
+    <div class="dialog" style="max-height: 92vh;">
+      <div class="dialog-h">
+        <strong>Zoom</strong>
+        <button class="icon-btn" id="zClose">✕</button>
+      </div>
+      <div style="padding:10px; overflow:auto;">
+        <img id="zImg" alt="zoom" style="width:100%; height:auto; border-radius: 14px; border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.22);"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Glossary Modal -->
+  <div class="modal" id="glossModal" role="dialog" aria-modal="true" aria-label="Glossario">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong>Glossario</strong>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input id="glossSearch" placeholder="Cerca..." style="padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);color:rgba(255,255,255,.9);min-width:min(420px, 52vw);"/>
+          <button class="icon-btn" id="glossClose">✕</button>
+        </div>
+      </div>
+      <div style="padding:10px; overflow:auto;">
+        <div class="list" id="glossList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievements Modal -->
+  <div class="modal" id="achModal" role="dialog" aria-modal="true" aria-label="Achievements">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong>Achievements</strong>
+        <button class="icon-btn" id="achClose">✕</button>
+      </div>
+      <div style="padding:10px; overflow:auto;">
+        <div class="list" id="achList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wallet Modal -->
+  <div class="modal" id="walletModal" role="dialog" aria-modal="true" aria-label="Wallet">
+    <div class="dialog" style="max-height: 78vh;">
+      <div class="dialog-h">
+        <strong>Wallet</strong>
+        <button class="icon-btn" id="walletClose">✕</button>
+      </div>
+      <div style="padding:10px; overflow:auto; display:grid; gap:10px;">
+        <div class="li">
+          <strong>QC Silver → QC Gold</strong>
+          <p>Conversione: <b>100 Silver</b> → <b>1 Gold</b>. Le Gold sono rare e servono per la bossfight (15).</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center;">
+            <button class="btn" id="btnConvert"><span class="dot"></span><span>Converti 100 → 1</span></button>
+            <span class="muted" id="convertHint">-</span>
+          </div>
+        </div>
+
+        <div class="li">
+          <strong>Easter egg (musica segreta)</strong>
+          <p>La traccia <b>V</b> si sblocca solo dopo le prime 4 e trovando un easter egg.</p>
+          <p class="muted" id="eggHint">Hint: ↑↑↓↓←→←→BA • oppure clicca la moneta Silver <b>7 volte</b> in 2 secondi.</p>
+        </div>
+
+        <div class="li">
+          <strong>Bossfight</strong>
+          <p>Per entrare nella simulazione orale serve: <b>programma completato</b> + <b>15 QC Gold</b> (poi resta sbloccata).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jukebox Modal -->
+  <div class="modal" id="jukeboxModal" role="dialog" aria-modal="true" aria-label="Jukebox">
+    <div class="dialog">
+      <div class="dialog-h">
+        <strong>Jukebox</strong>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <span class="chip"><b id="nowPlaying">-</b></span>
+          <button class="icon-btn" id="jbStop">⏹ Stop</button>
+          <button class="icon-btn" id="jbClose">✕</button>
+        </div>
+      </div>
+      <div style="padding:10px; overflow:auto; display:grid; gap:10px;">
+        <div class="li">
+          <strong>Musiche</strong>
+          <p class="muted">Le tracce si sbloccano con i progressi. La V richiede easter egg. La VI si sblocca entrando in bossfight.</p>
+        </div>
+        <div id="trackList" style="display:grid; gap:10px;"></div>
+        <div class="li" id="eggPanel" style="display:none;">
+          <strong>🔎 Hai fiutato qualcosa…</strong>
+          <p class="muted">Se hai già le prime 4: prova il cheat-code oppure il click rapido sulla moneta Silver.</p>
+          <button class="btn" id="btnKonami" title="Non è magia, è simmetria."><span class="dot"></span><span>Mostra hint</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bossfight intro overlay -->
+  <div class="boss-intro" id="bossIntro" aria-hidden="true">
+    <div class="boss-card">
+      <div class="boss-card-h">
+        <strong>Bossfight • Ice Mode</strong>
+        <span class="muted">showoff run (1s)</span>
+      </div>
+      <div class="boss-card-b">
+        <div class="chipwall" id="bossChipWall"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <div style="display:flex;flex-direction:column;gap:2px;">
+      <b id="toastTitle">-</b>
+      <span id="toastMsg">-</span>
+    </div>
+    <button class="icon-btn" id="toastClose">OK</button>
+  </div>
+
+  <!-- Floating actions -->
+  <div class="fab" id="fab">
+    <button class="icon-btn" id="btnToTop" style="display:none">↑ Menu</button>
+  </div>
+
+  <audio id="audio" preload="none"></audio>
+
+  <script>
+  (function(){
+    "use strict";
+
+    // =========================
+    // Data (TIMELINE from tree)
+    // =========================
+
+    function r(a,b){
+      const out=[];
+      for(let i=a;i<=b;i++) out.push(`${i}.jpg`);
+      return out;
+    }
+
+    const TIMELINE = [
+      // --- P1 ---
+      { id:'p1-01', part:'P1', key:'P1·1', title:'1) Esperimenti e intro', subtitle:'Full Exp e intro', path:'P1 › 1) Esperimenti e intro › Full Exp e intro', pages:'1–18', files:[...r(1,17),'18_p1t01.jpg'] },
+      { id:'p1-02', part:'P1', key:'P1·2', title:'2) Analogie Ottica–Meccanica', subtitle:'Exp doppia fenditura', path:'P1 › 2) Analogie Ottica–Meccanica + Exp doppia fenditura', pages:'18–26', files:['18_p1t02.jpg',...r(19,26)] },
+      { id:'p1-03', part:'P1', key:'P1·3', title:'3) Pacchetti d’onda gaussiani', subtitle:'TISE/TDSE + intro', path:'P1 › 3) Pac. onde gaussiane + tise_tdse + intro2', pages:'27–43', files:r(27,43) },
+      { id:'p1-04', part:'P1', key:'P1·4', title:'4) Continuità + conservazione prob.', subtitle:'', path:'P1 › 4) Continuita_corrente e cons prob tot', pages:'44–46', files:[...r(44,45),'46_p1t01.jpg'] },
+      { id:'p1-05', part:'P1', key:'P1·5', title:'5) Proprietà e valori medi', subtitle:'', path:'P1 › 5) Proprietà e val medi', pages:'46–53', files:['46_p1t02.jpg',...r(47,52),'53_p1t01.jpg'] },
+      { id:'p1-06', part:'P1', key:'P1·6', title:'6) Teorema di Ehrenfest', subtitle:'', path:'P1 › 6) Th. Ehrenfest', pages:'53–56', files:['53_p1t02.jpg',...r(54,56)] },
+      { id:'p1-07', part:'P1', key:'P1·7', title:'7) Intro (conti + valori medi)', subtitle:'', path:'P1 › 7) Intro3_conti_val medi_ris eq S', pages:'57–66', files:r(57,66) },
+      { id:'p1-08', part:'P1', key:'P1·8', title:'8) Prob. 1D - buca', subtitle:'potenziale generico + part. libera', path:'P1 › 8) Prob1D-Buca-profgenericopotenziale-part_libera', pages:'67–83', files:[...r(67,82),'83_p1t01.jpg'] },
+      { id:'p1-09', part:'P1', key:'P1·9', title:'9) Step/Barriera', subtitle:'analogia ottica', path:'P1 › 9) Prob1D-Step_Barriera+an_ottica', pages:'83–93', files:['83_p1t02.jpg',...r(84,93)] },
+      { id:'p1-10', part:'P1', key:'P1·10', title:'10) Buca 2++', subtitle:'', path:'P1 › 10)Buca2++', pages:'94–100', files:[...r(94,99),'100_p1t01.jpg'] },
+
+      { id:'p1-11a', part:'P1', key:'P1·11A', title:'11) OA QM vs CL', subtitle:'qm vs cl', path:'P1 › 11) OA qm vs cl + regressioni matematiche › qm vs cl', pages:'100–108', files:['100_p1t02.jpg',...r(101,107),'108_p1t01.jpg'] },
+      { id:'p1-11b', part:'P1', key:'P1·11B', title:'11) OA QM vs CL', subtitle:'regressioni matematiche', path:'P1 › 11) OA qm vs cl + regressioni matematiche › Regressioni matematiche', pages:'108–125', files:['108_p1t02.jpg',...r(109,125)] },
+
+      { id:'p1-12', part:'P1', key:'P1·12', title:'12) OA operatoriale', subtitle:'notazione matriciale', path:'P1 › 12) OA operatoriale + not matriciale', pages:'126–132', files:[...r(126,131),'132_p1t01.jpg'] },
+      { id:'p1-13', part:'P1', key:'P1·13', title:'13) Postulati', subtitle:'', path:'P1 › 13) Postulati', pages:'132–137', files:['132_p1t02.jpg',...r(133,136),'137_p1t01.jpg'] },
+
+      { id:'p1-14a', part:'P1', key:'P1·14A', title:'14) Osservabili compatibili', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › oss compatibili', pages:'137–141', files:['137_p1t02.jpg',...r(138,140),'141_p1t02.jpg'] },
+      { id:'p1-14b', part:'P1', key:'P1·14B', title:'14) Analogia ottica', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › an ottica', pages:'141–142', files:['141_p1t01.jpg','142_p1t01.jpg'] },
+
+      { id:'p1-15', part:'P1', key:'P1·15', title:'15) Indeterminazione', subtitle:'', path:'P1 › 15) Principio di Indeterminazione', pages:'142–145', files:['142_p1t02.jpg',...r(143,145)] },
+      { id:'p1-16', part:'P1', key:'P1·16', title:'16) Conticini / commutatori', subtitle:'', path:'P1 › 16) conticini commutatori', pages:'146–147', files:['146.jpg','147_p1t01.jpg'] },
+
+      { id:'p1-17a', part:'P1', key:'P1·17A', title:'17) Momento angolare', subtitle:'intro', path:'P1 › 17) Mom Ang + Sferiche › mom ang › intro mom ang', pages:'147–152', files:['147_p1t02.jpg',...r(148,151),'152_p1t01.jpg'] },
+      { id:'p1-17b', part:'P1', key:'P1·17B', title:'17) Armoniche sferiche', subtitle:'spazio coordinate + extra', path:'P1 › 17) Mom Ang + Sferiche › spazio coordinate e armoniche sferiche', pages:'152–165', files:['152_p1t02.jpg',...r(153,156),...r(157,164),'165_p1t01.jpg'] },
+
+      { id:'p1-18', part:'P1', key:'P1·18', title:'18) Evoluzione temporale', subtitle:'', path:'P1 › 18)Evoluzione Temporale', pages:'165–169', files:['165_p1t02.jpg',...r(166,168),'169_p1t01.jpg'] },
+      { id:'p1-19', part:'P1', key:'P1·19', title:'19) Conservazione + simm. continue', subtitle:'prodotto diretto', path:'P1 › 19)Leggi conservazione-simm continue e prodotto diretto', pages:'169–175', files:['169_p1t02.jpg',...r(170,174),'175_p1t01.jpg'] },
+
+      { id:'p1-20a', part:'P1', key:'P1·20A', title:'20) Potenziale centrale', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › centrale', pages:'175–178', files:['175_p1t02.jpg',...r(176,177),'178_p1t01.jpg'] },
+      { id:'p1-20b', part:'P1', key:'P1·20B', title:'20) Coulombiano + Kummer', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › coulombiano + kummer', pages:'178–185', files:['178_p1t02.jpg',...r(179,185)] },
+
+      { id:'p1-21a', part:'P1', key:'P1·21A', title:'21) Zeeman', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Zeeman', pages:'186–188', files:['186.jpg','187.jpg','188_p1t02.jpg'] },
+      { id:'p1-21b', part:'P1', key:'P1·21B', title:'21) Exp Stern–Gerlach + Spin', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Exp SG e Spin', pages:'188–199', files:['188_p1t01.jpg',...r(189,199)] },
+      { id:'p1-21c', part:'P1', key:'P1·21C', title:'21) Particelle non interagenti', subtitle:'intro', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Particelle non interagenti intro', pages:'200–202', files:r(200,202) },
+
+      { id:'p1-22', part:'P1', key:'P1·22', title:'22) 3D EqS', subtitle:'particella libera + OA', path:'P1 › 22)3D eqS-partLibera-OA', pages:'203–207', files:r(203,207) },
+
+      // --- P2 ---
+      { id:'p2-23a', part:'P2', key:'P2·23A', title:'23) Composizione J', subtitle:'composizione', path:'P2 › 23)Composizione_J › Composizione', pages:'208–214', files:[...r(208,213),'214_p2t02.jpg'] },
+      { id:'p2-23b', part:'P2', key:'P2·23B', title:'23) Composizione J', subtitle:'2 fermioni', path:'P2 › 23)Composizione_J › 2 fermioni', pages:'214–215', files:['214_p2t01.jpg','215_p2t01.jpg'] },
+
+      { id:'p2-24', part:'P2', key:'P2·24', title:'24) Particelle identiche', subtitle:'', path:'P2 › 24) Particelle identiche', pages:'215–220', files:['215_p2t02.jpg',...r(216,219),'220_p2t01.jpg'] },
+
+      { id:'p2-25a', part:'P2', key:'P2·25A', title:'25) Perturbazioni stazionarie', subtitle:'non degeneri', path:'P2 › 25) Pert staz › non-deg', pages:'220–223', files:['220_p2t02.jpg',...r(221,223)] },
+      { id:'p2-25b', part:'P2', key:'P2·25B', title:'25) Perturbazioni stazionarie', subtitle:'degeneri', path:'P2 › 25) Pert staz › deg', pages:'224–227', files:[...r(224,226),'227_p2t01.jpg'] },
+
+      { id:'p2-26', part:'P2', key:'P2·26', title:'26) Struttura fine', subtitle:'correzioni relativistiche', path:'P2 › 26)Struttura Affine e correzioni relativistiche', pages:'227–236', files:['227_p2t02.jpg',...r(228,235),'236_p2t01.jpg'] },
+
+      { id:'p2-27', part:'P2', key:'P2·27', title:'27) Hellmann–Feynman', subtitle:'', path:'P2 › 27)Th. Hellman-Feynman', pages:'236–237', files:['236_p2t02.jpg','237_p2t01.jpg'] },
+
+      { id:'p2-28a', part:'P2', key:'P2·28A', title:'28) Pert. dip. dal tempo', subtitle:'TPDT', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › tpdt', pages:'237–240', files:['237_p2t02.jpg','238.jpg','239.jpg','240_p2t02.jpg'] },
+      { id:'p2-28b', part:'P2', key:'P2·28B', title:'28) Pert. dip. dal tempo', subtitle:'costante/periodico/risonanza', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › costante-periodico-risonanza e puls bohr', pages:'240–243', files:['240_p2t01.jpg',...r(241,243)] },
+      { id:'p2-28c', part:'P2', key:'P2·28C', title:'28) Caso continuo', subtitle:'conclusione', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › Caso al continuo e conclusione', pages:'244–249', files:r(244,249) },
+    ];
+
+    const TOTAL_BLOCKS = TIMELINE.length;
+
+    // =========================
+    // Glossary (minimal but useful)
+    // =========================
+
+    const GLOSSARY = [
+      { term:'Ehrenfest', desc:'Relazione tra evoluzione quantistica e valori medi (ponte con la classica).', see:['p1-06'] },
+      { term:'Continuità', desc:'Equazione di continuità e densità/corrente di probabilità.', see:['p1-04'] },
+      { term:'Indeterminazione', desc:'ΔxΔp e limiti di misura. Collegato a commutatori.', see:['p1-15','p1-16'] },
+      { term:'Barriera/Step', desc:'Riflessione/trasmissione in 1D e analogie ottiche.', see:['p1-09'] },
+      { term:'Operatori', desc:'Notazione operatoriale, matrici e postulati.', see:['p1-12','p1-13'] },
+      { term:'Osservabili compatibili', desc:'Commutazione, misure simultanee e base comune.', see:['p1-14a'] },
+      { term:'Momento angolare', desc:'Operatori L, armoniche sferiche, base |l,m⟩.', see:['p1-17a','p1-17b'] },
+      { term:'Coulomb / Kummer', desc:'Soluzione del problema idrogenoide e funzioni speciali.', see:['p1-20b'] },
+      { term:'Stern–Gerlach', desc:'Quantizzazione dello spin e misura discreta.', see:['p1-21b'] },
+      { term:'Particelle identiche', desc:'Simmetrizzazione (bosoni/fermioni), stati multipli.', see:['p2-24'] },
+      { term:'Perturbazioni staz.', desc:'Degeneri e non degeneri.', see:['p2-25a','p2-25b'] },
+      { term:'TPDT', desc:'Perturbazioni dipendenti dal tempo, transizioni e casi limite.', see:['p2-28a','p2-28b','p2-28c'] },
+    ];
+
+    // =========================
+    // Tracks / Jukebox
+    // =========================
+
+    const TRACKS = [
+      { id:'t1', label:'I) Quantum Warmup',    file:'audio/music-201745.mp3', unlockBlocks: 2,  requiresEgg:false },
+      { id:'t2', label:'II) Symmetry Engine',  file:'audio/music-423648.mp3', unlockBlocks: 8,  requiresEgg:false },
+      { id:'t3', label:'III) Operator Groove', file:'audio/music-417477.mp3', unlockBlocks: 16, requiresEgg:false },
+      { id:'t4', label:'IV) The Hidden Eigenbeat', file:'audio/music-467173.mp3', unlockBlocks: 28, requiresEgg:false },
+      // Easter egg: sbloccabile solo dopo le prime 4 + egg
+      { id:'t5', label:'V) Wavepacket Ride (Easter Egg)', file:'audio/music-bounce-on-it-184234.mp3', unlockBlocks: 999, requiresEgg:true },
+      // Bossfight finale
+      { id:'t6', label:'VI) Glacial Bossfight (Finale)', file:'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3', unlockBlocks: 999, requiresEgg:false, requiresBoss:true },
+    ];
+
+    // =========================
+    // State
+    // =========================
+
+    const STORAGE_KEY = 'mq_game_tree_jukebox_v2';
+
+    const DEFAULT_STATE = {
+      v: 2,
+      completed: {},   // { blockId: true }
+      maxSeen: {},     // { blockId: maxIndex }
+      coins: { silver: 0, gold: 0 },
+      achievements: {},
+      jukeboxUnlocked: false,
+      eggFound: false,
+      bossUnlockedOnce: false,
+      bossMusicUnlocked: false,
+      lastPlayed: null,
+      steps: 0,
+      lastToastAt: 0,
+    };
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return structuredClone(DEFAULT_STATE);
+        const s = JSON.parse(raw);
+        return { ...structuredClone(DEFAULT_STATE), ...s, coins: { ...structuredClone(DEFAULT_STATE.coins), ...(s.coins||{}) } };
+      }catch(e){
+        return structuredClone(DEFAULT_STATE);
+      }
+    }
+    function saveState(){
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+    }
+
+    let state = loadState();
+
+    // =========================
+    // DOM
+    // =========================
+
+    const $ = (q, el=document) => el.querySelector(q);
+    const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+
+    const listP1 = $('#listP1');
+    const listP2 = $('#listP2');
+
+    const statDone = $('#statDone');
+    const statTotal = $('#statTotal');
+    const statTracks = $('#statTracks');
+    const statBoss = $('#statBoss');
+    const statPct = $('#statPct');
+    const progressFill = $('#progressFill');
+
+    const p1DoneEl = $('#p1Done');
+    const p1TotalEl = $('#p1Total');
+    const p2DoneEl = $('#p2Done');
+    const p2TotalEl = $('#p2Total');
+
+    const wallGrid = $('#wallGrid');
+
+    const btnExpandAll = $('#btnExpandAll');
+    const btnCollapseAll = $('#btnCollapseAll');
+    const btnReset = $('#btnReset');
+    const btnMainIndex = $('#btnMainIndex');
+
+    const btnGlossario = $('#btnGlossario');
+    const btnAchievements = $('#btnAchievements');
+    const btnJukebox = $('#btnJukebox');
+    const jukeboxDot = $('#jukeboxDot');
+    const btnWallet = $('#btnWallet');
+
+    const btnBoss = $('#btnBoss');
+    const bossDot = $('#bossDot');
+
+    const viewerModal = $('#viewerModal');
+    const vTitle = $('#vTitle');
+    const vPath = $('#vPath');
+    const vThumbList = $('#vThumbList');
+    const vImg = $('#vImg');
+    const vCap = $('#vCap');
+    const vIdx = $('#vIdx');
+    const vTot = $('#vTot');
+    const vPrev = $('#vPrev');
+    const vNext = $('#vNext');
+    const vClose = $('#vClose');
+    const vZoom = $('#vZoom');
+    const vMark = $('#vMark');
+    const vReward = $('#vReward');
+    const vHint = $('#vHint');
+
+    const zoomModal = $('#zoomModal');
+    const zImg = $('#zImg');
+    const zClose = $('#zClose');
+
+    const glossModal = $('#glossModal');
+    const glossList = $('#glossList');
+    const glossSearch = $('#glossSearch');
+    const glossClose = $('#glossClose');
+
+    const achModal = $('#achModal');
+    const achList = $('#achList');
+    const achClose = $('#achClose');
+
+    const walletModal = $('#walletModal');
+    const walletClose = $('#walletClose');
+    const btnConvert = $('#btnConvert');
+    const convertHint = $('#convertHint');
+
+    const jukeboxModal = $('#jukeboxModal');
+    const trackList = $('#trackList');
+    const jbClose = $('#jbClose');
+    const jbStop = $('#jbStop');
+    const nowPlaying = $('#nowPlaying');
+    const eggPanel = $('#eggPanel');
+    const btnKonami = $('#btnKonami');
+
+    const toast = $('#toast');
+    const toastTitle = $('#toastTitle');
+    const toastMsg = $('#toastMsg');
+    const toastClose = $('#toastClose');
+
+    const fab = $('#fab');
+    const btnToTop = $('#btnToTop');
+
+    const brandHome = $('#brandHome');
+
+    const bossIntro = $('#bossIntro');
+    const bossChipWall = $('#bossChipWall');
+
+    // Coin HUD
+    const silverBtn = $('#silverBtn');
+    const goldBtn = $('#goldBtn');
+    const silverCoin = $('#silverCoin');
+    const goldCoin = $('#goldCoin');
+    const silverBurst = $('#silverBurst');
+    const goldBurst = $('#goldBurst');
+    const silverCountEl = $('#silverCount');
+    const goldCountEl = $('#goldCount');
+
+    // Audio
+    const audio = $('#audio');
+
+    // Viewer state
+    let currentBlock = null;
+    let currentIndex = 0;
+
+    // =========================
+    // Helpers
+    // =========================
+
+    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+    function toastShow(title, msg){
+      toastTitle.textContent = title;
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      state.lastToastAt = Date.now();
+      saveState();
+    }
+    function toastHide(){ toast.classList.remove('show'); }
+
+    function openModal(el){ el.classList.add('show'); }
+    function closeModal(el){ el.classList.remove('show'); }
+
+    function humanLabel(file){
+      // 12.jpg -> Pag. 12
+      const m = /^([0-9]+)\.jpg$/i.exec(file);
+      if(m) return `Pag. ${m[1]}`;
+      const v = /^([0-9]+)_p([12])t0?([12])\.jpg$/i.exec(file);
+      if(v){
+        const n = v[1];
+        const part = v[2];
+        const t = v[3];
+        return `Pag. ${n} · parte ${t}/2`;
+      }
+      return file;
+    }
+
+    function blockReward(block){
+      const n = block.files.length;
+      const silver = 6 + Math.ceil(n/3); // silver easy
+      // gold mostly through milestones; small random via drop chance
+      return { silver, gold: 0 };
+    }
+
+    // =========================
+    // Coin system
+    // =========================
+
+    const GOLD_DROP_CHANCE_PER_SILVER = 0.03;
+    const CONVERT_COST_SILVER = 100;
+
+    function spin(coinEl, gold=false){
+      if(reducedMotion) return;
+      coinEl.classList.remove('coin-spin','coin-spin-gold');
+      void coinEl.offsetWidth;
+      coinEl.classList.add(gold ? 'coin-spin-gold' : 'coin-spin');
+    }
+
+    function burst(burstEl){
+      if(reducedMotion) return;
+      burstEl.innerHTML = '';
+      const n = 14;
+      for(let i=0;i<n;i++){
+        const p = document.createElement('span');
+        const angle = (Math.PI*2) * (i/n);
+        const radius = 26 + Math.random()*18;
+        const dx = Math.cos(angle)*radius;
+        const dy = Math.sin(angle)*radius;
+        p.style.setProperty('--dx', dx.toFixed(1)+'px');
+        p.style.setProperty('--dy', dy.toFixed(1)+'px');
+        p.style.animationDelay = (Math.random()*70)+'ms';
+        burstEl.appendChild(p);
+      }
+    }
+
+    function refreshCoins(){
+      silverCountEl.textContent = state.coins.silver;
+      goldCountEl.textContent = state.coins.gold;
+      const canConvert = state.coins.silver >= CONVERT_COST_SILVER;
+      btnConvert.disabled = !canConvert;
+      convertHint.textContent = canConvert ? 'Pronto.' : `Ti mancano ${Math.max(0, CONVERT_COST_SILVER - state.coins.silver)} Silver.`;
+    }
+
+    function earnSilver(amount, reason=''){
+      const n = Math.max(0, Math.floor(amount||0));
+      if(!n) return { silver:0, gold:0 };
+      let goldDrops = 0;
+      for(let i=0;i<n;i++) if(Math.random() < GOLD_DROP_CHANCE_PER_SILVER) goldDrops++;
+
+      state.coins.silver += n;
+      if(goldDrops>0) state.coins.gold += goldDrops;
+      saveState();
+
+      spin(silverCoin,false);
+      burst(silverBurst);
+      if(goldDrops>0){ spin(goldCoin,true); burst(goldBurst); }
+      refreshCoins();
+
+      if(reason){
+        if(goldDrops>0) toastShow('QC + reward', `${reason} · +${n} Silver · +${goldDrops} Gold (drop raro)`);
+        else toastShow('QC + reward', `${reason} · +${n} Silver`);
+      }
+      return { silver:n, gold:goldDrops };
+    }
+
+    function earnGold(amount, reason=''){
+      const n = Math.max(0, Math.floor(amount||0));
+      if(!n) return;
+      state.coins.gold += n;
+      saveState();
+      spin(goldCoin,true);
+      burst(goldBurst);
+      refreshCoins();
+      if(reason) toastShow('QC Gold', `${reason} · +${n} Gold`);
+    }
+
+    function convertSilverToGold(){
+      if(state.coins.silver < CONVERT_COST_SILVER) return;
+      state.coins.silver -= CONVERT_COST_SILVER;
+      state.coins.gold += 1;
+      saveState();
+      spin(goldCoin,true);
+      burst(goldBurst);
+      refreshCoins();
+      toastShow('Conversione', `-100 Silver → +1 Gold`);
+      renderAll();
+    }
+
+    // =========================
+    // Achievements
+    // =========================
+
+    const ACH = [
+      { id:'firstBlock', title:'Primo blocco', desc:'Completa 1 blocco.', check: s => completedCount(s) >= 1, reward: () => ({silver: 20, gold:0}) },
+      { id:'eight', title:'8 blocchi', desc:'Arriva a 8 blocchi completati.', check: s => completedCount(s) >= 8, reward: () => ({silver: 40, gold:1}) },
+      { id:'p1done', title:'P1 clear', desc:'Completa tutti i 28 blocchi di P1.', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'p2done', title:'P2 clear', desc:'Completa tutti i blocchi di P2.', check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'fullclear', title:'Full clear', desc:'Completa tutti i blocchi (P1+P2).', check: s => completedCount(s) >= TOTAL_BLOCKS, reward: () => ({silver: 100, gold:5}) },
+      { id:'egg', title:'Easter egg', desc:'Trova la traccia segreta.', check: s => !!s.eggFound, reward: () => ({silver: 25, gold:2}) },
+    ];
+
+    function grantAchievement(id){
+      if(state.achievements[id]) return;
+      const a = ACH.find(x=>x.id===id);
+      if(!a) return;
+      state.achievements[id] = { at: Date.now() };
+      saveState();
+      const r = a.reward();
+      if(r.silver) earnSilver(r.silver, `Achievement: ${a.title}`);
+      if(r.gold) earnGold(r.gold, `Achievement: ${a.title}`);
+    }
+
+    function checkAchievements(){
+      for(const a of ACH){
+        if(!state.achievements[a.id] && a.check(state)){
+          grantAchievement(a.id);
+        }
+      }
+    }
+
+    // =========================
+    // Progress helpers
+    // =========================
+
+    function completedCount(s=state){ return Object.keys(s.completed).length; }
+
+    function p1Total(){ return TIMELINE.filter(b=>b.part==='P1').length; }
+    function p2Total(){ return TIMELINE.filter(b=>b.part==='P2').length; }
+
+    function p1Done(s=state){
+      const p1Ids = new Set(TIMELINE.filter(b=>b.part==='P1').map(b=>b.id));
+      return Object.keys(s.completed).filter(id=>p1Ids.has(id)).length;
+    }
+    function p2Done(s=state){
+      const p2Ids = new Set(TIMELINE.filter(b=>b.part==='P2').map(b=>b.id));
+      return Object.keys(s.completed).filter(id=>p2Ids.has(id)).length;
+    }
+
+    function isBlockDone(id){ return !!state.completed[id]; }
+
+    function unlockJukeboxIfNeeded(){
+      if(state.jukeboxUnlocked) return;
+      if(completedCount() >= 1){
+        state.jukeboxUnlocked = true;
+        saveState();
+        toastShow('Sblocco', 'Hai sbloccato il Jukebox 🎧');
+      }
+    }
+
+    function trackUnlocked(track){
+      if(track.requiresBoss) return !!state.bossMusicUnlocked;
+      if(track.requiresEgg){
+        const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
+        return baseUnlocked && !!state.eggFound;
+      }
+      return completedCount() >= track.unlockBlocks;
+    }
+
+    function unlockedTracksCount(){
+      return TRACKS.filter(trackUnlocked).length;
+    }
+
+    function canEnterBoss(){
+      const allDone = completedCount() >= TOTAL_BLOCKS;
+      const hasGold = state.coins.gold >= 15;
+      return allDone && (state.bossUnlockedOnce || hasGold);
+    }
+
+    // =========================
+    // Rendering
+    // =========================
+
+    function makeBlockCard(block){
+      const done = isBlockDone(block.id);
+      const reward = blockReward(block);
+      const hasSplit = block.files.some(f=>/_p[12]t0?[12]\.jpg$/i.test(f));
+
+      const el = document.createElement('details');
+      el.className = 'block';
+      el.dataset.blockId = block.id;
+      el.innerHTML = `
+        <summary class="block-sum">
+          <span class="pill ${done?'done':''}"><span class="chk"></span><span>${block.key}</span><small>${block.pages}</small></span>
+          <span class="btitle">
+            <strong>${escapeHtml(block.title)}</strong>
+            <span>${escapeHtml(block.subtitle || '-')}</span>
+          </span>
+          <span class="bmeta">
+            <span class="chip"><b>${block.files.length}</b><span>img</span></span>
+            <span class="chip"><b>+${reward.silver}</b><span>Silver</span></span>
+            ${hasSplit ? '<span class="chip" title="Contiene pagine divise in 2">½</span>' : ''}
+            <span class="chip" style="${done?'border-color:rgba(57,217,138,.45);background:rgba(57,217,138,.10);':''}">
+              <b>${done ? 'DONE' : 'TODO'}</b>
+            </span>
+          </span>
+        </summary>
+        <div class="block-body">
+          <div class="block-actions">
+            <div class="left">
+              <button class="btn" data-action="open" title="Apri viewer (prima pagina)"><span class="dot"></span><span>Apri viewer</span></button>
+              <button class="btn" data-action="mark" title="Segna completato"><span class="dot ok"></span><span>Completa</span></button>
+            </div>
+            <div class="muted">${escapeHtml(block.path)}</div>
+          </div>
+          <div class="thumbs" data-thumbs="${block.id}"></div>
+          <div class="muted"><em>Tip:</em> clicca una miniatura per aprire la pagina in grande. Arrivando all’ultima pagina si completa automaticamente.</div>
+        </div>
+      `;
+
+      // On open: lazy-generate thumbnails once
+      el.addEventListener('toggle', ()=>{
+        if(!el.open) return;
+        const box = el.querySelector(`[data-thumbs="${block.id}"]`);
+        if(box && !box.dataset.ready){
+          box.dataset.ready = '1';
+          buildThumbnails(block, box);
+        }
+      });
+
+      // Buttons
+      el.addEventListener('click', (ev)=>{
+        const btn = ev.target.closest('button');
+        if(!btn) return;
+        const act = btn.dataset.action;
+        if(act==='open'){
+          ev.preventDefault();
+          openViewer(block.id, 0);
+        }
+        if(act==='mark'){
+          ev.preventDefault();
+          markBlockDone(block.id, btn);
+        }
+      });
+
+      return el;
+    }
+
+    function buildThumbnails(block, container){
+      const maxThumbs = block.files.length;
+      for(let i=0;i<maxThumbs;i++){
+        const file = block.files[i];
+        const t = document.createElement('div');
+        t.className = 'thumb';
+        t.tabIndex = 0;
+        t.dataset.blockId = block.id;
+        t.dataset.index = String(i);
+
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = humanLabel(file);
+        img.src = `img/${file}`;
+
+        const cap = document.createElement('div');
+        cap.className = 'cap';
+        cap.textContent = humanLabel(file);
+
+        const badge = document.createElement('div');
+        badge.className = 'badge';
+        badge.textContent = `${i+1}/${block.files.length}`;
+
+        t.appendChild(img);
+        t.appendChild(cap);
+        t.appendChild(badge);
+
+        t.addEventListener('click', ()=> openViewer(block.id, i));
+        t.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openViewer(block.id, i); }
+        });
+
+        container.appendChild(t);
+      }
+    }
+
+    function renderLists(){
+      listP1.innerHTML = '';
+      listP2.innerHTML = '';
+
+      const p1 = TIMELINE.filter(b=>b.part==='P1');
+      const p2 = TIMELINE.filter(b=>b.part==='P2');
+
+      for(const b of p1) listP1.appendChild(makeBlockCard(b));
+      for(const b of p2) listP2.appendChild(makeBlockCard(b));
+
+      p1TotalEl.textContent = String(p1.length);
+      p2TotalEl.textContent = String(p2.length);
+    }
+
+    function renderWall(){
+      wallGrid.innerHTML = '';
+      for(const b of TIMELINE){
+        const t = document.createElement('div');
+        t.className = 'tile' + (isBlockDone(b.id) ? ' done' : '');
+        t.title = `${b.key} - ${b.title}`;
+        t.innerHTML = `${escapeHtml(b.key)}<br/><small>${escapeHtml(b.pages)}</small>`;
+        t.addEventListener('click', ()=>{
+          // open/expand block and scroll to it
+          const det = document.querySelector(`details.block[data-block-id="${b.id}"]`);
+          if(det){
+            det.open = true;
+            det.scrollIntoView({behavior:'smooth', block:'center'});
+            setTimeout(()=> openViewer(b.id, 0), 240);
+          }else{
+            openViewer(b.id, 0);
+          }
+        });
+        wallGrid.appendChild(t);
+      }
+    }
+
+    function renderStats(){
+      statTotal.textContent = String(TOTAL_BLOCKS);
+
+      const done = completedCount();
+      statDone.textContent = String(done);
+
+      const pct = TOTAL_BLOCKS ? Math.round((done/TOTAL_BLOCKS)*100) : 0;
+      statPct.textContent = pct + '%';
+      progressFill.style.width = pct + '%';
+
+      p1DoneEl.textContent = String(p1Done());
+      p2DoneEl.textContent = String(p2Done());
+
+      const unlocked = unlockedTracksCount();
+      statTracks.textContent = `${unlocked}/6`;
+
+      const bossReady = canEnterBoss();
+      statBoss.textContent = bossReady ? '⚔️' : '🔒';
+      bossDot.className = 'dot ' + (bossReady ? 'ok' : '');
+
+      // Jukebox button visibility
+      if(state.jukeboxUnlocked){
+        btnJukebox.style.display = '';
+        const anyNew = TRACKS.some(t => trackUnlocked(t) && state.lastPlayed !== t.id);
+        jukeboxDot.className = 'dot ' + (anyNew ? 'ok' : '');
+      }else{
+        btnJukebox.style.display = 'none';
+      }
+
+      refreshCoins();
+    }
+
+    function renderGlossary(){
+      const q = (glossSearch.value || '').trim().toLowerCase();
+      glossList.innerHTML = '';
+
+      const items = GLOSSARY.filter(g => !q || g.term.toLowerCase().includes(q) || g.desc.toLowerCase().includes(q));
+
+      for(const g of items){
+        const li = document.createElement('div');
+        li.className = 'li';
+        const blocks = (g.see||[]).map(id => TIMELINE.find(b=>b.id===id)).filter(Boolean);
+        li.innerHTML = `
+          <strong>${escapeHtml(g.term)}</strong>
+          <p>${escapeHtml(g.desc)}</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+            ${blocks.map(b=>`<button class="btn" data-open="${b.id}"><span class="dot"></span><span>${escapeHtml(b.key)} · ${escapeHtml(b.title)}</span></button>`).join('')}
+          </div>
+        `;
+        li.addEventListener('click', (e)=>{
+          const btn = e.target.closest('button[data-open]');
+          if(!btn) return;
+          const id = btn.getAttribute('data-open');
+          closeModal(glossModal);
+          const det = document.querySelector(`details.block[data-block-id="${id}"]`);
+          if(det){
+            det.open = true;
+            det.scrollIntoView({behavior:'smooth', block:'start'});
+            setTimeout(()=> openViewer(id, 0), 250);
+          }else{
+            openViewer(id, 0);
+          }
+        });
+        glossList.appendChild(li);
+      }
+    }
+
+    function renderAchievements(){
+      achList.innerHTML = '';
+      for(const a of ACH){
+        const got = !!state.achievements[a.id];
+        const li = document.createElement('div');
+        li.className = 'li';
+        const reward = a.reward();
+        li.innerHTML = `
+          <strong>${got ? '✅' : '⬜'} ${escapeHtml(a.title)}</strong>
+          <p>${escapeHtml(a.desc)}</p>
+          <p class="muted">Reward: +${reward.silver} Silver · +${reward.gold} Gold</p>
+        `;
+        achList.appendChild(li);
+      }
+    }
+
+    function renderJukebox(){
+      trackList.innerHTML = '';
+      const done = completedCount();
+
+      const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
+      eggPanel.style.display = baseUnlocked && !state.eggFound ? '' : 'none';
+
+      for(const t of TRACKS){
+        const unlocked = trackUnlocked(t);
+        const row = document.createElement('div');
+        row.className = 'track';
+        const req = t.requiresBoss ? 'bossfight' : (t.requiresEgg ? 'easter egg' : `≥ ${t.unlockBlocks} blocchi`);
+        row.innerHTML = `
+          <div class="left">
+            <strong>${escapeHtml(t.label)}</strong>
+            <div class="tmeta">Sblocco: ${escapeHtml(req)}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="lock ${unlocked?'on':''}"><span class="ic"></span><span>${unlocked ? 'sbloccata' : 'bloccata'}</span></span>
+            <button class="btn" ${unlocked?'':'disabled'} data-play="${t.id}"><span class="dot"></span><span>Play</span></button>
+          </div>
+        `;
+        row.querySelector('button[data-play]')?.addEventListener('click', ()=>{
+          playTrack(t.id);
+          state.lastPlayed = t.id;
+          saveState();
+          renderStats();
+        });
+        trackList.appendChild(row);
+      }
+
+      nowPlaying.textContent = audio && !audio.paused && audio.dataset.track ? audio.dataset.track : '-';
+    }
+
+    function renderAll(){
+      renderStats();
+      renderWall();
+      renderGlossary();
+      renderAchievements();
+      renderJukebox();
+    }
+
+    // =========================
+    // Viewer
+    // =========================
+
+    function openViewer(blockId, idx){
+      const block = TIMELINE.find(b=>b.id===blockId);
+      if(!block) return;
+      currentBlock = block;
+      currentIndex = clamp(idx, 0, block.files.length-1);
+
+      vTitle.textContent = `${block.key} · ${block.title}`;
+      vPath.textContent = block.path;
+      vTot.textContent = String(block.files.length);
+
+      // Build side list (mini, but in viewer)
+      vThumbList.innerHTML = '';
+      for(let i=0;i<block.files.length;i++){
+        const f = block.files[i];
+        const li = document.createElement('div');
+        li.className = 'li';
+        li.style.cursor = 'pointer';
+        li.innerHTML = `<strong>${humanLabel(f)}</strong><p>${i+1}/${block.files.length}</p>`;
+        li.addEventListener('click', ()=> setViewerIndex(i));
+        vThumbList.appendChild(li);
+      }
+
+      vReward.textContent = `Completa il blocco per ottenere +${blockReward(block).silver} Silver (più eventuale drop Gold).`;
+      vHint.textContent = isBlockDone(block.id)
+        ? 'Blocco già completato. Puoi comunque rivedere le pagine.'
+        : 'Completa arrivando all’ultima pagina o premendo ✓.';
+
+      openModal(viewerModal);
+      setViewerIndex(currentIndex);
+    }
+
+    function setViewerIndex(i){
+      if(!currentBlock) return;
+      const n = currentBlock.files.length;
+      currentIndex = clamp(i, 0, n-1);
+      const file = currentBlock.files[currentIndex];
+      vImg.src = `img/${file}`;
+      vCap.textContent = `${humanLabel(file)}  •  ${currentIndex+1}/${n}`;
+      vIdx.textContent = String(currentIndex+1);
+
+      // save max seen
+      const prevMax = state.maxSeen[currentBlock.id] ?? -1;
+      if(currentIndex > prevMax){
+        state.maxSeen[currentBlock.id] = currentIndex;
+        saveState();
+      }
+
+      // auto complete when last page reached
+      if(currentIndex === n-1 && !isBlockDone(currentBlock.id)){
+        markBlockDone(currentBlock.id, vMark);
+      }
+
+      // highlight selected in side list
+      $$('#vThumbList .li').forEach((el, idx)=>{
+        el.style.borderColor = idx===currentIndex ? 'rgba(125,211,252,.34)' : 'rgba(255,255,255,.10)';
+        el.style.background = idx===currentIndex ? 'rgba(125,211,252,.10)' : 'rgba(0,0,0,.16)';
+      });
+
+      // keep selected visible
+      const sel = $$('#vThumbList .li')[currentIndex];
+      if(sel){
+        sel.scrollIntoView({ block:'nearest' });
+      }
+    }
+
+    // =========================
+    // Completing blocks
+    // =========================
+
+    function markBlockDone(blockId, sourceEl){
+      const already = isBlockDone(blockId);
+      if(already){
+        toastShow('OK', 'Blocco già segnato come completato.');
+        return;
+      }
+      state.completed[blockId] = true;
+      state.steps++;
+      saveState();
+
+      const block = TIMELINE.find(b=>b.id===blockId);
+      const reward = block ? blockReward(block) : {silver: 10, gold:0};
+      earnSilver(reward.silver, `${block ? block.key : 'Blocco'} completato`);
+
+      // unlock features
+      unlockJukeboxIfNeeded();
+
+      // milestone gold (guarantee 15 total on full completion)
+      // - P1 complete
+      if(p1Done() === p1Total()){
+        earnGold(5, 'Milestone: P1 completato');
+      }
+      // - P2 complete
+      if(p2Done() === p2Total()){
+        earnGold(5, 'Milestone: P2 completato');
+      }
+      // - full clear
+      if(completedCount() === TOTAL_BLOCKS){
+        earnGold(5, 'Milestone: Full clear');
+      }
+
+      checkAchievements();
+
+      renderStats();
+      renderWall();
+
+      // update card UI quick
+      const det = document.querySelector(`details.block[data-block-id="${blockId}"]`);
+      if(det){
+        const pill = det.querySelector('.pill');
+        pill?.classList.add('done');
+        const chk = pill?.querySelector('.chk');
+        if(chk) chk.style.background = 'var(--ok)';
+        const todo = det.querySelector('.bmeta .chip:last-child b');
+        if(todo) todo.textContent = 'DONE';
+        const lastChip = det.querySelector('.bmeta .chip:last-child');
+        if(lastChip){
+          lastChip.style.borderColor = 'rgba(57,217,138,.45)';
+          lastChip.style.background = 'rgba(57,217,138,.10)';
+        }
+      }
+
+      // prompt for boss readiness
+      if(canEnterBoss() && !state.bossUnlockedOnce){
+        toastShow('Bossfight pronta', 'Hai completato il programma. Se hai 15 Gold, puoi entrare nella simulazione orale.');
+      }
+
+      renderJukebox();
+    }
+
+    // =========================
+    // Bossfight
+    // =========================
+
+    function startBossfight(){
+      const allDone = completedCount() >= TOTAL_BLOCKS;
+      if(!allDone){
+        toastShow('Bossfight', 'Per entrare devi completare tutti i blocchi (P1 + P2).');
+        return;
+      }
+
+      // first time: pay 15 gold
+      if(!state.bossUnlockedOnce){
+        if(state.coins.gold < 15){
+          toastShow('Bossfight', 'Ti servono 15 QC Gold. Usa conversione o completa milestone/achievement.');
+          return;
+        }
+        state.coins.gold -= 15;
+        state.bossUnlockedOnce = true;
+        saveState();
+        refreshCoins();
+        toastShow('Bossfight', 'Ticket consumato: -15 Gold. Da ora in poi resta sbloccata.');
+      }
+
+      // Intro showoff (≤ 1.2s)
+      document.body.classList.add('ice-mode');
+      bossChipWall.innerHTML = '';
+      const chips = TIMELINE.map((b, idx)=>{
+        const c = document.createElement('div');
+        c.className = 'mini' + (isBlockDone(b.id) ? ' done' : '');
+        c.style.animationDelay = (idx * 14) + 'ms'; // 38 * 14ms ~ 532ms + 800ms anim
+        c.textContent = b.key;
+        bossChipWall.appendChild(c);
+        return c;
+      });
+
+      bossIntro.classList.add('show');
+
+      // stop current track and play finale (user gesture already here)
+      playTrack('t6', { force:true, showToast:false });
+      state.bossMusicUnlocked = true;
+      saveState();
+
+      // hide intro and show a small overlay as placeholder
+      setTimeout(()=>{
+        bossIntro.classList.remove('show');
+        toastShow('Ice Mode', 'Bossfight attiva. Musica finale sbloccata (VI).');
+        renderAll();
+      }, 1200);
+    }
+
+    // =========================
+    // Audio
+    // =========================
+
+    function playTrack(id, opts={}){
+      const track = TRACKS.find(t=>t.id===id);
+      if(!track) return;
+
+      const unlocked = trackUnlocked(track) || opts.force;
+      if(!unlocked){
+        toastShow('Jukebox', 'Traccia ancora bloccata.');
+        return;
+      }
+
+      try{
+        audio.pause();
+        audio.currentTime = 0;
+      }catch(e){}
+
+      audio.src = track.file;
+      audio.dataset.track = track.label;
+      const playPromise = audio.play();
+      if(playPromise && typeof playPromise.then==='function'){
+        playPromise.then(()=>{
+          if(opts.showToast!==false) toastShow('🎧 Now playing', track.label);
+          nowPlaying.textContent = track.label;
+        }).catch(()=>{
+          // Autoplay blocked or missing file
+          if(opts.showToast!==false) toastShow('Audio', 'Impossibile avviare (autoplay bloccato o file mancante).');
+        });
+      }else{
+        if(opts.showToast!==false) toastShow('🎧 Now playing', track.label);
+      }
+    }
+
+    function stopAudio(){
+      try{ audio.pause(); }catch(e){}
+      try{ audio.currentTime = 0; }catch(e){}
+      nowPlaying.textContent = '-';
+    }
+
+    // =========================
+    // Easter egg
+    // =========================
+
+    const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let keyBuf = [];
+
+    function enableEgg(reason=''){
+      if(state.eggFound) return;
+      state.eggFound = true;
+      saveState();
+      toastShow('Easter egg найден', `Hai trovato l’easter egg! ${reason ? '· '+reason : ''}`);
+      checkAchievements();
+      renderJukebox();
+      renderStats();
+    }
+
+    // click 7 times in 2 seconds on silver coin
+    let clickTimes = [];
+    silverBtn.addEventListener('click', ()=>{
+      const t = Date.now();
+      clickTimes.push(t);
+      clickTimes = clickTimes.filter(x => t - x < 2000);
+      if(clickTimes.length >= 7){
+        enableEgg('ψ×7');
+        clickTimes = [];
+      }
+    });
+
+    document.addEventListener('keydown', (e)=>{
+      const k = e.key;
+      keyBuf.push(k);
+      keyBuf = keyBuf.slice(-KONAMI.length);
+      const ok = keyBuf.every((x, i) => {
+        const target = KONAMI[i];
+        if(target.length === 1) return String(x).toLowerCase() === target;
+        return x === target;
+      });
+      if(ok){
+        enableEgg('Konami');
+        keyBuf = [];
+      }
+
+      // Viewer shortcuts
+      if(viewerModal.classList.contains('show')){
+        if(k === 'Escape'){ closeModal(viewerModal); }
+        if(k === 'ArrowLeft'){ setViewerIndex(currentIndex-1); }
+        if(k === 'ArrowRight'){ setViewerIndex(currentIndex+1); }
+      }
+      if(zoomModal.classList.contains('show') && k === 'Escape') closeModal(zoomModal);
+      if(glossModal.classList.contains('show') && k === 'Escape') closeModal(glossModal);
+      if(achModal.classList.contains('show') && k === 'Escape') closeModal(achModal);
+      if(walletModal.classList.contains('show') && k === 'Escape') closeModal(walletModal);
+      if(jukeboxModal.classList.contains('show') && k === 'Escape') closeModal(jukeboxModal);
+    });
+
+    // =========================
+    // Events
+    // =========================
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>\"']/g, (c)=>({
+        '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'
+      }[c] || c));
+    }
+
+    btnExpandAll.addEventListener('click', ()=>{
+      $$('details.block').forEach(d=> d.open = true);
+      toastShow('Indice', 'Tutti i blocchi espansi.');
+    });
+    btnCollapseAll.addEventListener('click', ()=>{
+      $$('details.block').forEach(d=> d.open = false);
+      toastShow('Indice', 'Tutti i blocchi chiusi.');
+    });
+
+    btnReset.addEventListener('click', ()=>{
+      const ok = confirm('Reset totale progressi? (solo sul browser: localStorage)');
+      if(!ok) return;
+      localStorage.removeItem(STORAGE_KEY);
+      state = loadState();
+      toastShow('Reset', 'Progressi resettati.');
+      location.reload();
+    });
+
+    function confirmLeaveIndex(){
+      const ok = confirm('Vuoi tornare all’indice principale?');
+      if(ok){
+        window.location.href = 'https://amrierscuo.github.io/Computational-Physics/Args/Phy/Phy.html';
+      }
+    }
+
+    btnMainIndex.addEventListener('click', confirmLeaveIndex);
+
+    brandHome.addEventListener('click', ()=>{
+      window.scrollTo({ top:0, behavior:'smooth' });
+    });
+
+    btnToTop.addEventListener('click', ()=> window.scrollTo({ top:0, behavior:'smooth' }));
+
+    window.addEventListener('scroll', ()=>{
+      const y = window.scrollY || document.documentElement.scrollTop;
+      btnToTop.style.display = y > 600 ? '' : 'none';
+    }, { passive:true });
+
+    // Viewer controls
+    vPrev.addEventListener('click', ()=> setViewerIndex(currentIndex-1));
+    vNext.addEventListener('click', ()=> setViewerIndex(currentIndex+1));
+    vClose.addEventListener('click', ()=> closeModal(viewerModal));
+
+    vZoom.addEventListener('click', ()=>{
+      zImg.src = vImg.src;
+      openModal(zoomModal);
+    });
+    zClose.addEventListener('click', ()=> closeModal(zoomModal));
+
+    vMark.addEventListener('click', ()=>{
+      if(!currentBlock) return;
+      markBlockDone(currentBlock.id, vMark);
+    });
+
+    // Glossary
+    btnGlossario.addEventListener('click', ()=>{ renderGlossary(); openModal(glossModal); glossSearch.focus(); });
+    glossClose.addEventListener('click', ()=> closeModal(glossModal));
+    glossSearch.addEventListener('input', renderGlossary);
+
+    // Achievements
+    btnAchievements.addEventListener('click', ()=>{ renderAchievements(); openModal(achModal); });
+    achClose.addEventListener('click', ()=> closeModal(achModal));
+
+    // Wallet
+    btnWallet.addEventListener('click', ()=>{ refreshCoins(); openModal(walletModal); });
+    walletClose.addEventListener('click', ()=> closeModal(walletModal));
+    btnConvert.addEventListener('click', convertSilverToGold);
+
+    // Jukebox
+    btnJukebox.addEventListener('click', ()=>{ renderJukebox(); openModal(jukeboxModal); });
+    jbClose.addEventListener('click', ()=> closeModal(jukeboxModal));
+    jbStop.addEventListener('click', stopAudio);
+
+    btnKonami.addEventListener('click', ()=>{
+      toastShow('Hint', '↑↑↓↓←→←→BA  (oppure ψ×7 sulla moneta Silver)');
+    });
+
+    // Boss
+    btnBoss.addEventListener('click', startBossfight);
+
+    // Toast
+    toastClose.addEventListener('click', toastHide);
+    toast.addEventListener('click', (e)=>{
+      if(e.target === toast) toastHide();
+    });
+
+    // Coin clicks: little feedback
+    goldBtn.addEventListener('click', ()=> spin(goldCoin,true));
+
+    // =========================
+    // Boot
+    // =========================
+
+    function boot(){
+      renderLists();
+      renderAll();
+
+      // unlock jukebox if already eligible (coming back)
+      unlockJukeboxIfNeeded();
+      checkAchievements();
+      renderStats();
+
+      // viewer modal click outside to close
+      viewerModal.addEventListener('click', (e)=>{ if(e.target === viewerModal) closeModal(viewerModal); });
+      zoomModal.addEventListener('click', (e)=>{ if(e.target === zoomModal) closeModal(zoomModal); });
+      glossModal.addEventListener('click', (e)=>{ if(e.target === glossModal) closeModal(glossModal); });
+      achModal.addEventListener('click', (e)=>{ if(e.target === achModal) closeModal(achModal); });
+      walletModal.addEventListener('click', (e)=>{ if(e.target === walletModal) closeModal(walletModal); });
+      jukeboxModal.addEventListener('click', (e)=>{ if(e.target === jukeboxModal) closeModal(jukeboxModal); });
+    }
+
+    boot();
+
+  })();
+  </script>
+</body>
+</html>
