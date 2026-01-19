@@ -465,6 +465,15 @@
     function openModal(el){ el.classList.add('show'); }
     function closeModal(el){ el.classList.remove('show'); }
 
+    // Blocca / sblocca lo scroll della pagina (utile per modal lunghi su Desktop).
+    // Nota: lo scroll interno ai contenuti del modal continua a funzionare.
+    function setPageScrollLocked(on){
+      const flag = !!on;
+      document.documentElement.classList.toggle('modal-lock', flag);
+      document.body.classList.toggle('modal-lock', flag);
+    }
+
+
     function humanLabel(file){
       // 12.jpg -> Pag. 12
       const m = /^([0-9]+)\.jpg$/i.exec(file);
@@ -1569,6 +1578,7 @@ function renderBossIntro(){
 
     function bossOpenModal(){
       bossRenderList();
+      setPageScrollLocked(true);
       openModal(bossModal);
       ensureBossMusicBtn();
       updateBossMusicBtn();
@@ -1578,6 +1588,7 @@ function renderBossIntro(){
 
     function bossCloseModal(){
       closeModal(bossModal);
+      setPageScrollLocked(false);
       // stop timer
       challengeStop();
       if(bossChallenge) bossChallenge.hidden = true;
