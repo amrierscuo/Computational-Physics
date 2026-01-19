@@ -74,9 +74,6 @@
     const THUMB_SCALE = 0.32;   // thumbnails
     const VIEW_SCALE  = 2.00;   // viewer (qualita' alta, ma 1 pagina alla volta)
 
-    // Placeholder 1x1 (evita glitch mentre la pagina PDF viene renderizzata)
-    const TINY_BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-
     function getPdfjs(){
       const lib = window.pdfjsLib;
       if(!lib){
@@ -563,14 +560,6 @@
 
     function openModal(el){ el.classList.add('show'); }
     function closeModal(el){ el.classList.remove('show'); }
-
-    // Blocca / sblocca lo scroll della pagina (utile per modal lunghi su Desktop).
-    // Nota: lo scroll interno ai contenuti del modal continua a funzionare.
-    function setPageScrollLocked(on){
-      const flag = !!on;
-      document.documentElement.classList.toggle('modal-lock', flag);
-      document.body.classList.toggle('modal-lock', flag);
-    }
 
     function humanLabel(f){
       // PDF pages: numero -> "p.X"
@@ -1670,7 +1659,6 @@ function renderBossIntro(){
 
     function bossOpenModal(){
       bossRenderList();
-      setPageScrollLocked(true);
       openModal(bossModal);
       ensureBossMusicBtn();
       updateBossMusicBtn();
@@ -1680,7 +1668,6 @@ function renderBossIntro(){
 
     function bossCloseModal(){
       closeModal(bossModal);
-      setPageScrollLocked(false);
       // stop timer
       challengeStop();
       if(bossChallenge) bossChallenge.hidden = true;
@@ -1961,28 +1948,9 @@ function stopAudio(){
     vNext.addEventListener('click', ()=> setViewerIndex(currentIndex+1));
     vClose.addEventListener('click', ()=> closeModal(viewerModal));
 
-    let zoomReqId = 0;
     vZoom.addEventListener('click', ()=>{
-      if(!currentBlock) return;
-      const files = currentBlock.files || [];
-      const pageNum = files[currentIndex];
-      if(!pageNum) return;
-
-      // Renderizza di nuovo a scala piu' alta: zoom molto piu nitido rispetto al semplice resize.
-      zImg.src = TINY_BLANK;
+      zImg.src = vImg.src;
       openModal(zoomModal);
-
-      const req = String(++zoomReqId);
-      zImg.dataset.req = req;
-
-      const ZOOM_SCALE = Math.max(VIEW_SCALE, 3.0);
-      pdfPageToImgUrl(Number(pageNum), ZOOM_SCALE)
-        .then((url)=>{
-          if(zImg.isConnected && zoomModal.classList.contains('show') && zImg.dataset.req === req){
-            zImg.src = url;
-          }
-        })
-        .catch(()=>{ /* placeholder */ });
     });
     zClose.addEventListener('click', ()=> closeModal(zoomModal));
 
@@ -2149,3 +2117,24 @@ function stopAudio(){
 
   })();
   
+
+// =========================
+// Mobile UX tweak: keep qc-hud under topbar height (avoid overlap on some phones)
+// =========================
+(function(){
+  const topbar = document.querySelector('.topbar');
+  if(!topbar) return;
+
+  const setH = ()=>{
+    const h = Math.ceil(topbar.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--topbarH', h + 'px');
+  };
+
+  setH();
+  window.addEventListener('resize', setH, { passive:true });
+
+  if('ResizeObserver' in window){
+    const ro = new ResizeObserver(setH);
+    ro.observe(topbar);
+  }
+})();
