@@ -465,7 +465,45 @@
     function openModal(el){ el.classList.add('show'); }
     function closeModal(el){ el.classList.remove('show'); }
 
-    function humanLabel(file){
+    
+
+// Page scroll lock (iOS-safe) for modals that must capture scroll (Bossfight)
+let __scrollLockDepth = 0;
+let __scrollLockY = 0;
+
+function lockPageScroll(){
+  __scrollLockDepth += 1;
+  if(__scrollLockDepth > 1) return;
+
+  __scrollLockY = window.scrollY || window.pageYOffset || 0;
+  document.documentElement.classList.add('modal-lock');
+  document.body.classList.add('modal-lock');
+
+  // iOS-friendly lock
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${__scrollLockY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+}
+
+function unlockPageScroll(){
+  if(__scrollLockDepth <= 0) return;
+  __scrollLockDepth -= 1;
+  if(__scrollLockDepth > 0) return;
+
+  document.documentElement.classList.remove('modal-lock');
+  document.body.classList.remove('modal-lock');
+
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+
+  window.scrollTo(0, __scrollLockY);
+}
+function humanLabel(file){
       // 12.jpg -> Pag. 12
       const m = /^([0-9]+)\.jpg$/i.exec(file);
       if(m) return `Pag. ${m[1]}`;
@@ -1569,6 +1607,7 @@ function renderBossIntro(){
 
     function bossOpenModal(){
       bossRenderList();
+      lockPageScroll();
       openModal(bossModal);
       ensureBossMusicBtn();
       updateBossMusicBtn();
@@ -1578,6 +1617,7 @@ function renderBossIntro(){
 
     function bossCloseModal(){
       closeModal(bossModal);
+      unlockPageScroll();
       // stop timer
       challengeStop();
       if(bossChallenge) bossChallenge.hidden = true;
