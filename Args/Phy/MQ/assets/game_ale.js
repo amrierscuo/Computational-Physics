@@ -6,55 +6,170 @@
     // Data (TIMELINE from tree)
     // =========================
 
-    function rangePages(a,b){
-      const out=[];
+    function r(a,b){
+      const out = [];
       for(let i=a;i<=b;i++) out.push(i);
       return out;
     }
 
-    // Immagini (77 pagine): img/page_1.jpg ... img/page_77.jpg
-    const IMG_DIR = 'img';
-    function imgUrlForPage(page){
-      return `${IMG_DIR}/page_${page}.jpg`;
-    }
 
-    const TIMELINE = [
-      // --- P1 (capitoli 0–2) ---
-      { id:'c0',   part:'P1', key:'0',   title:'0 - Limiti della fisica classica', subtitle:'', path:'0 › Limiti della fisica classica', pages:'2-4',  files: rangePages(2,4) },
+    const PDF_URL = 'Meccanica Quantistica.pdf'; // rinomina pure (es: mq.pdf) e aggiorna qui
+    const PDF_LAST_PAGE = 77;
 
-      { id:'c1_0', part:'P1', key:'1',   title:'1 - Meccanica ondulatoria (intro)', subtitle:'', path:'1 › Meccanica ondulatoria', pages:'5-6',  files: rangePages(5,6) },
-      { id:'c1_1', part:'P1', key:'1.1', title:"1.1 Pacchetto d'onda", subtitle:'', path:"1 › 1.1 Pacchetto d'onda", pages:'7-8',  files: rangePages(7,8) },
-      { id:'c1_2', part:'P1', key:'1.2', title:'1.2 Equazione di Schrödinger', subtitle:'', path:'1 › 1.2 Equazione di Schrödinger', pages:'9-11', files: rangePages(9,11) },
-      { id:'c1_2b',part:'P1', key:'1.2b',title:'1.2 Valori di aspettazione', subtitle:'', path:'1 › 1.2 Valori di aspettazione', pages:'12-14', files: rangePages(12,14) },
-      { id:'c1_3', part:'P1', key:'1.3', title:'1.3 Schrödinger in sistemi conservativi', subtitle:'', path:'1 › 1.3 Sistemi conservativi', pages:'15-17', files: rangePages(15,17) },
-      { id:'c1_4', part:'P1', key:'1.4', title:'1.4 Problemi unidimensionali', subtitle:'', path:'1 › 1.4 Problemi 1D', pages:'18-28', files: rangePages(18,28) },
-
-      { id:'c2_0', part:'P1', key:'2',   title:'2 - Formalismo matematico (intro)', subtitle:'', path:'2 › Formalismo matematico', pages:'29-30', files: rangePages(29,30) },
-      { id:'c2_1', part:'P1', key:'2.1', title:'2.1 Trasformazioni Unitarie', subtitle:'', path:'2 › 2.1 Trasformazioni Unitarie', pages:'31-32', files: rangePages(31,32) },
-      { id:'c2_2', part:'P1', key:'2.2', title:'2.2 Oscillatore armonico rivisitato', subtitle:'', path:'2 › 2.2 Oscillatore armonico rivisitato', pages:'33-34', files: rangePages(33,34) },
-      { id:'c2_3', part:'P1', key:'2.3', title:'2.3 Postulati della Meccanica Quantistica', subtitle:'', path:'2 › 2.3 Postulati della MQ', pages:'35-37', files: rangePages(35,37) },
-      { id:'c2_4', part:'P1', key:'2.4', title:'2.4 Osservabili compatibili', subtitle:'', path:'2 › 2.4 Osservabili compatibili', pages:'38-39', files: rangePages(38,39) },
-
-      // --- P2 (capitoli 3–5) ---
-      { id:'c3_0', part:'P2', key:'3',   title:'3 - Momento angolare (intro)', subtitle:'', path:'3 › Momento angolare', pages:'40-41', files: rangePages(40,41) },
-      { id:'c3_1', part:'P2', key:'3.1', title:'3.1 Armoniche Sferiche', subtitle:'', path:'3 › 3.1 Armoniche Sferiche', pages:'42-43', files: rangePages(42,43) },
-      { id:'c3_2', part:'P2', key:'3.2', title:'3.2 Momento angolare totale', subtitle:'', path:'3 › 3.2 Momento angolare totale', pages:'44-46', files: rangePages(44,46) },
-      { id:'c3_3', part:'P2', key:'3.3', title:'3.3 Simmetrie e leggi di conservazione', subtitle:'', path:'3 › 3.3 Simmetrie e conservazione', pages:'47-48', files: rangePages(47,48) },
-      { id:'c3_4', part:'P2', key:'3.4', title:'3.4 Prodotto diretto', subtitle:'', path:'3 › 3.4 Prodotto diretto', pages:'49-50', files: rangePages(49,50) },
-      { id:'c3_5', part:'P2', key:'3.5', title:'3.5 Potenziale centrale', subtitle:'', path:'3 › 3.5 Potenziale centrale', pages:'51-53', files: rangePages(51,53) },
-
-      { id:'c4_0', part:'P2', key:'4',   title:'4 - Spin (intro)', subtitle:'', path:'4 › Spin', pages:'54-55', files: rangePages(54,55) },
-      { id:'c4_1', part:'P2', key:'4.1', title:'4.1 Rappresentazioni matriciali', subtitle:'', path:'4 › 4.1 Rappresentazioni matriciali', pages:'56-58', files: rangePages(56,58) },
-      { id:'c4_2', part:'P2', key:'4.2', title:'4.2 Composizione dei momenti angolari', subtitle:'', path:'4 › 4.2 Composizione dei momenti angolari', pages:'59-61', files: rangePages(59,61) },
-      { id:'c4_3', part:'P2', key:'4.3', title:'4.3 Particelle identiche', subtitle:'', path:'4 › 4.3 Particelle identiche', pages:'62-63', files: rangePages(62,63) },
-
-      { id:'c5_0', part:'P2', key:'5',   title:'5 - Teoria delle perturbazioni (intro)', subtitle:'', path:'5 › Teoria delle perturbazioni', pages:'64-66', files: rangePages(64,66) },
-      { id:'c5_1', part:'P2', key:'5.1', title:"5.1 Struttura fine dell'atomo di H", subtitle:'', path:'5 › 5.1 Struttura fine', pages:'67-71', files: rangePages(67,71) },
-      { id:'c5_2', part:'P2', key:'5.2', title:'5.2 Perturbazioni dipendenti dal tempo', subtitle:'', path:'5 › 5.2 Perturbazioni dipendenti dal tempo', pages:'72-74', files: rangePages(72,74) },
-      { id:'c5_2b',part:'P2', key:'5.2b',title:'5.2 Relazione tempo-energia', subtitle:'', path:'5 › 5.2 Relazione tempo-energia', pages:'75-77', files: rangePages(75,77) },
+    // Indice (come nel PDF)
+    const PDF_TOC = [
+      { num:'0', title:"LIMITI DELLA FISICA CLASSICA", page:2 },
+      { num:'1', title:"MECCANICA ONDULATORIA", page:5 },
+      { num:'1.1', title:"Pacchetto d'onda", page:7 },
+      { num:'1.2', title:"Equazione di Schroedinger", page:9 },
+      { num:'1.2b', title:"Valori di aspettazione", page:12 },
+      { num:'1.3', title:"Schroedinger in sistemi conservativi", page:15 },
+      { num:'1.4', title:"Problemi unidimensionali", page:18 },
+      { num:'2', title:"FORMALISMO MATEMATICO", page:29 },
+      { num:'2.1', title:"Trasformazioni Unitarie", page:31 },
+      { num:'2.2', title:"Oscillatore armonico rivisitato", page:33 },
+      { num:'2.3', title:"Postulati della Meccanica Quantistica", page:35 },
+      { num:'2.4', title:"Osservabili compatibili", page:38 },
+      { num:'3', title:"MOMENTO ANGOLARE", page:40 },
+      { num:'3.1', title:"Armoniche Sferiche", page:42 },
+      { num:'3.2', title:"Momento angolare totale", page:44 },
+      { num:'3.3', title:"Simmetrie e leggi di conservazione", page:47 },
+      { num:'3.4', title:"Prodotto diretto", page:49 },
+      { num:'3.5', title:"Potenziale centrale", page:51 },
+      { num:'4', title:"SPIN", page:54 },
+      { num:'4.1', title:"Rappresentazioni matriciali", page:56 },
+      { num:'4.2', title:"Composizione dei momenti angolari", page:59 },
+      { num:'4.3', title:"Particelle identiche", page:62 },
+      { num:'5', title:"TEORIA DELLE PERTURBAZIONI", page:64 },
+      { num:'5.1', title:"Struttura fine dell'atomo di H", page:67 },
+      { num:'5.2', title:"Perturbazioni dipendenti dal tempo", page:72 },
+      { num:'5.2b', title:"Relazione tempo-energia", page:75 }
     ];
 
-const TOTAL_BLOCKS = TIMELINE.length;
+    // TIMELINE generata dall'indice: ogni voce -> range pagine fino alla prossima voce
+    const TIMELINE = PDF_TOC.map((it, idx) => {
+      const start = it.page;
+      const end = (PDF_TOC[idx+1] ? (PDF_TOC[idx+1].page - 1) : PDF_LAST_PAGE);
+      const chapter = parseInt(String(it.num).split('.')[0], 10);
+      const part = (chapter <= 2) ? 'P1' : 'P2';
+      const safe = String(it.num).replace(/[^a-z0-9]+/ig, '-');
+      return {
+        id: `mq-${safe}`,
+        part,
+        key: it.num,
+        title: `${it.num} - ${it.title}`,
+        subtitle: '',
+        path: `Meccanica Quantistica (PDF) - ${it.num} - ${it.title}`,
+        pages: `${start}-${end}`,
+        files: r(start, end), // qui "files" = numeri pagina PDF
+      };
+    });
+
+    // -----------------------------
+    // PDF.js helpers (render PDF page -> <img src="blob:...">)
+    // -----------------------------
+    const PDFJS_VERSION = '3.11.174';
+    const PDFJS_WORKER_SRC = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build/pdf.worker.min.js`;
+
+    const THUMB_SCALE = 0.32;   // thumbnails
+    const VIEW_SCALE  = 2.00;   // viewer (qualita' alta, ma 1 pagina alla volta)
+
+    // Placeholder 1x1 (evita glitch mentre la pagina PDF viene renderizzata)
+    const TINY_BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+
+    function getPdfjs(){
+      const lib = window.pdfjsLib;
+      if(!lib){
+        throw new Error('pdfjsLib non caricato: includi pdf.min.js prima di game_ale.js');
+      }
+      lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_SRC;
+      return lib;
+    }
+
+    let PDF_DOC_PROMISE = null;
+
+    function getPdfDoc(){
+      if(!PDF_DOC_PROMISE){
+        const lib = getPdfjs();
+        const url = encodeURI(PDF_URL);
+        PDF_DOC_PROMISE = lib.getDocument(url).promise;
+      }
+      return PDF_DOC_PROMISE;
+    }
+
+    const IMG_CACHE = new Map();
+    const IMG_CACHE_MAX = 120;
+
+    function cachePut(key, url){
+      IMG_CACHE.set(key, url);
+      if(IMG_CACHE.size <= IMG_CACHE_MAX) return;
+      const firstKey = IMG_CACHE.keys().next().value;
+      const firstUrl = IMG_CACHE.get(firstKey);
+      if(firstUrl && typeof firstUrl === 'string' && firstUrl.startsWith('blob:')){
+        try{ URL.revokeObjectURL(firstUrl); }catch(e){}
+      }
+      IMG_CACHE.delete(firstKey);
+    }
+
+    function quantizeScale(s){
+      // per cache migliore (evita 2.00000001 ecc.)
+      return Math.round(s * 100) / 100;
+    }
+
+    async function pdfPageToImgUrl(pageNum, scale){
+      const sc = quantizeScale(scale);
+      const key = `p${pageNum}@${sc}`;
+      if(IMG_CACHE.has(key)) return IMG_CACHE.get(key);
+
+      const doc = await getPdfDoc();
+      const page = await doc.getPage(pageNum);
+      const viewport = page.getViewport({ scale: sc });
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d', { alpha:false });
+
+      canvas.width  = Math.max(1, Math.floor(viewport.width));
+      canvas.height = Math.max(1, Math.floor(viewport.height));
+
+      await page.render({ canvasContext: ctx, viewport }).promise;
+
+      const blob = await new Promise((resolve)=> canvas.toBlob(resolve, 'image/jpeg', 0.92));
+      if(!blob){
+        const dataUrl = canvas.toDataURL('image/png');
+        cachePut(key, dataUrl);
+        return dataUrl;
+      }
+
+      const url = URL.createObjectURL(blob);
+      cachePut(key, url);
+      return url;
+    }
+
+    // thumbnails lazy-load
+    let thumbReqId = 0;
+    async function loadThumbImage(imgEl){
+      if(!imgEl || imgEl.dataset.loaded === '1') return;
+      const page = parseInt(imgEl.dataset.page || '0', 10);
+      if(!page) return;
+
+      imgEl.dataset.loaded = '1';
+      const req = String(++thumbReqId);
+      imgEl.dataset.req = req;
+
+      try{
+        const scale = parseFloat(imgEl.dataset.scale || String(THUMB_SCALE));
+        const url = await pdfPageToImgUrl(page, scale);
+        if(imgEl.isConnected && imgEl.dataset.req === req){
+          imgEl.src = url;
+        }
+      }catch(err){
+        // lascia placeholder
+      }
+    }
+
+
+
+    const TOTAL_BLOCKS = TIMELINE.length;
 
     // =========================
     // Glossary (minimal but useful)
@@ -83,14 +198,13 @@ const TOTAL_BLOCKS = TIMELINE.length;
       { id:'t1', label:'I) Quantum Warmup',    file:'audio/music-201745.mp3', unlockBlocks: 2,  requiresEgg:false },
       { id:'t2', label:'II) Symmetry Engine',  file:'audio/music-423648.mp3', unlockBlocks: 8,  requiresEgg:false },
       { id:'t3', label:'III) Operator Groove', file:'audio/music-417477.mp3', unlockBlocks: 16, requiresEgg:false },
-      { id:'t4', label:'IV) The Hidden Eigenbeat', file:'audio/music-467173.mp3', unlockBlocks: 12, requiresEgg:false },
+      { id:'t4', label:'IV) The Hidden Eigenbeat', file:'audio/music-467173.mp3', unlockBlocks: 24, requiresEgg:false },
       // Easter egg: sbloccabile solo dopo le prime 4 + egg
       { id:'t5', label:'V) Wavepacket Ride (Easter Egg)', file:'audio/music-bounce-on-it-184234.mp3', unlockBlocks: 999, requiresEgg:true },
-      // Bossfight theme (si sblocca quando puoi entrare in Bossfight)
-      { id:'tBF', label:'Bossfight Theme (1BF)', file:'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3', unlockBlocks: 999, requiresEgg:false, requiresBoss:false, requiresBossfight:true },
       // Boss reward (si sblocca dopo aver completato TUTTE le DIM della bossfight)
       // Nota: nel pacchetto zip includiamo un placeholder; puoi sostituirlo con il tuo file reale.
       { id:'t6', label:'VI) Classical Pack (Endgame)', file:'audio/classical-pack-v1.mp3', unlockBlocks: 999, requiresEgg:false, requiresBoss:true },
+      { id:'tb', label:'Bossfight Theme', file:'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3', unlockBlocks: 999, requiresEgg:false, requiresBossAccess:true, hidden:true }
     ];
 
 
@@ -242,8 +356,8 @@ const TOTAL_BLOCKS = TIMELINE.length;
     // State
     // =========================
 
-    const STORAGE_KEY = 'mq_bibbia_ale_pdf_v1';
-    const STORAGE_KEY_FALLBACK = 'mq_bibbia_ale_pdf_v0';
+    const STORAGE_KEY = 'mq_game_ale_pdf_v1';
+    const STORAGE_KEY_FALLBACK = 'mq_game_tree_jukebox_v2';
 
     const DEFAULT_STATE = {
       v: 3,
@@ -415,7 +529,7 @@ const TOTAL_BLOCKS = TIMELINE.length;
     // Bossfight music (auto-play on enter; toggle inside Bossfight)
     // Riusa un file gia presente nel progetto (traccia IV). Puoi cambiarlo se vuoi.
     const BOSS_MUSIC_FILE = 'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3';
-    const BOSS_MUSIC_LABEL = 'Bossfight Theme (1BF)';
+    const BOSS_MUSIC_LABEL = 'Bossfight Theme';
     let bossMusicBtn = null;
 
     // Viewer state
@@ -450,23 +564,26 @@ const TOTAL_BLOCKS = TIMELINE.length;
     function openModal(el){ el.classList.add('show'); }
     function closeModal(el){ el.classList.remove('show'); }
 
-    function humanLabel(file){
-      // file puo' essere un numero pagina (PDF) oppure una stringa
-      if(typeof file === 'number') return `Pag. ${file}`;
-      const s = String(file);
-      const m = /^([0-9]+)\.jpg$/i.exec(s);
-      if(m) return `Pag. ${m[1]}`;
-      const v = /^([0-9]+)_p([12])t0?([12])\.jpg$/i.exec(s);
-      if(v){
-        const n = v[1];
-        const t = v[3];
-        return `Pag. ${n} · parte ${t}/2`;
-      }
-      // fallback: prova a leggere 'p40'
-      const p = /^p?([0-9]+)$/i.exec(s);
-      if(p) return `Pag. ${p[1]}`;
+    // Blocca / sblocca lo scroll della pagina (utile per modal lunghi su Desktop).
+    // Nota: lo scroll interno ai contenuti del modal continua a funzionare.
+    function setPageScrollLocked(on){
+      const flag = !!on;
+      document.documentElement.classList.toggle('modal-lock', flag);
+      document.body.classList.toggle('modal-lock', flag);
+    }
+
+    function humanLabel(f){
+      // PDF pages: numero -> "p.X"
+      if(typeof f === 'number') return `p.${f}`;
+      if(typeof f === 'string' && /^\d+$/.test(f)) return `p.${Number(f)}`;
+
+      // fallback (se mai riusi anche immagini)
+      const s = String(f || '');
+      const m = s.match(/^(\d+)(?:_.*)?\.(jpg|png|webp)$/i);
+      if(m) return `p.${m[1]}`;
       return s;
     }
+
 
     // =========================
     // MathJax helper (LaTeX in bossfight)
@@ -641,8 +758,8 @@ const TOTAL_BLOCKS = TIMELINE.length;
     const ACH = [
       { id:'firstBlock', title:'Primo blocco', desc:'Completa 1 blocco.', check: s => completedCount(s) >= 1, reward: () => ({silver: 20, gold:0}) },
       { id:'eight', title:'8 blocchi', desc:'Arriva a 8 blocchi completati.', check: s => completedCount(s) >= 8, reward: () => ({silver: 40, gold:1}) },
-      { id:'p1done', title:'P1 clear', desc:'Completa tutti i blocchi di P1.', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
-      { id:'p2done', title:'P2 clear', desc:'Completa tutti i blocchi di P2.', check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'p1done', title:'P1 clear', desc:'Completa tutti i blocchi di P1', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'p2done', title:'P2 clear', desc:'Completa tutti i blocchi di P2', check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
       { id:'fullclear', title:'Full clear', desc:'Completa tutti i blocchi (P1+P2).', check: s => completedCount(s) >= TOTAL_BLOCKS, reward: () => ({silver: 100, gold:5}) },
       { id:'egg', title:'Easter egg', desc:'Trova la traccia segreta.', check: s => !!s.eggFound, reward: () => ({silver: 25, gold:2}) },
     ];
@@ -696,10 +813,10 @@ const TOTAL_BLOCKS = TIMELINE.length;
     }
 
     function trackUnlocked(track){
+      if(track.requiresBossAccess) return canEnterBoss() || !!state.bossUnlockedOnce;
       if(track.requiresBoss) return !!state.bossRewardUnlocked;
-      if(track.requiresBossfight) return canEnterBoss();
       if(track.requiresEgg){
-        const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
+        const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss && !t.requiresBossAccess && !t.hidden).every(t=>trackUnlocked(t));
         return baseUnlocked && !!state.eggFound;
       }
       return completedCount() >= track.unlockBlocks;
@@ -722,7 +839,7 @@ const TOTAL_BLOCKS = TIMELINE.length;
     function makeBlockCard(block){
       const done = isBlockDone(block.id);
       const reward = blockReward(block);
-      const hasSplit = false; // PDF: niente pagine spezzate
+            const hasSplit = block.files.some(f => (typeof f === 'string') && /_p[12]t0?[12]\.jpg$/i.test(f));
 
       const el = document.createElement('details');
       el.className = 'block';
@@ -735,9 +852,9 @@ const TOTAL_BLOCKS = TIMELINE.length;
             <span>${escapeHtml(block.subtitle || '-')}</span>
           </span>
           <span class="bmeta">
-            <span class="chip"><b>${block.files.length}</b><span>pag</span></span>
+            <span class="chip"><b>${block.files.length}</b><span>pg</span></span>
             <span class="chip"><b>+${reward.silver}</b><span>Silver</span></span>
-            
+            ${hasSplit ? '<span class="chip" title="Contiene pagine divise in 2">½</span>' : ''}
             <span class="chip" style="${done?'border-color:rgba(57,217,138,.45);background:rgba(57,217,138,.10);':''}">
               <b>${done ? 'DONE' : 'TODO'}</b>
             </span>
@@ -785,18 +902,33 @@ const TOTAL_BLOCKS = TIMELINE.length;
     }
 
     function buildThumbnails(block, container){
-      // Versione IMG: usa img/page_N.jpg gia' esportate.
-      const pages = block.files;
-      const total = pages.length;
+      // Caricamento "a batch" + lazy reale: evita freeze con immagini molto grandi
+      const files = block.files;
+      const total = files.length;
 
       const isMobile = window.matchMedia && window.matchMedia('(max-width: 620px)').matches;
-      const batchSize = isMobile ? 6 : 10;
+      const batchSize = isMobile ? 4 : 6;
+
+      const TINY = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+
+      // IntersectionObserver globale: assegna la src vera solo quando entra in viewport
+      if(!window.__thumbIO){
+        window.__thumbIO = new IntersectionObserver((entries, obs)=>{
+          for(const e of entries){
+            if(!e.isIntersecting) continue;
+            const img = e.target;
+            loadThumbImage(img);
+            obs.unobserve(img);
+          }
+        }, { root: null, rootMargin: '160px', threshold: 0.01 });
+      }
+      const io = window.__thumbIO;
 
       let loaded = 0;
       container.innerHTML = '';
 
       function createThumb(i){
-        const page = pages[i];
+        const file = files[i];
 
         const t = document.createElement('div');
         t.className = 'thumb';
@@ -807,18 +939,23 @@ const TOTAL_BLOCKS = TIMELINE.length;
         const img = document.createElement('img');
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.src = imgUrlForPage(page);
-        img.alt = `Pag. ${page}`;
-        t.appendChild(img);
+        img.alt = humanLabel(file);
+        img.src = TINY;
+        img.dataset.page = String(file);
+        img.dataset.scale = String(THUMB_SCALE);
+        img.dataset.loaded = '0';
+        img.setAttribute('fetchpriority','low');
+        io.observe(img);
 
         const cap = document.createElement('div');
         cap.className = 'cap';
-        cap.textContent = `Pag. ${page}`;
+        cap.textContent = humanLabel(file);
 
         const badge = document.createElement('div');
         badge.className = 'badge';
-        badge.textContent = `${i+1}/${total}`;
+        badge.textContent = `${i+1}/${files.length}`;
 
+        t.appendChild(img);
         t.appendChild(cap);
         t.appendChild(badge);
 
@@ -838,10 +975,13 @@ const TOTAL_BLOCKS = TIMELINE.length;
         t.className = 'thumb more';
         t.tabIndex = 0;
         t.setAttribute('role','button');
-        t.setAttribute('aria-label', `Carica altre pagine (restanti ${remaining})`);
+        t.setAttribute('aria-label', `Carica altre miniature (restanti ${remaining})`);
         t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>Carica altre</small></div>`;
 
-        const doLoad = ()=>{ t.remove(); loadNextBatch(); };
+        const doLoad = ()=>{
+          t.remove();
+          loadNextBatch();
+        };
         t.addEventListener('click', doLoad);
         t.addEventListener('keydown', (e)=>{
           if(e.key==='Enter' || e.key===' '){ e.preventDefault(); doLoad(); }
@@ -859,13 +999,21 @@ const TOTAL_BLOCKS = TIMELINE.length;
 
       function loadNextBatch(){
         const end = Math.min(total, loaded + batchSize);
-        const chunk = 4;
+
+        // Micro-chunk per frame: non blocca il thread UI
+        const chunk = 2;
         function step(){
           const until = Math.min(end, loaded + chunk);
-          for(let i = loaded; i < until; i++) createThumb(i);
+          for(let i = loaded; i < until; i++){
+            createThumb(i);
+          }
           loaded = until;
-          if(loaded < end) requestAnimationFrame(step);
-          else refreshMoreTile();
+
+          if(loaded < end){
+            requestAnimationFrame(step);
+          } else {
+            refreshMoreTile();
+          }
         }
         requestAnimationFrame(step);
       }
@@ -923,7 +1071,7 @@ const TOTAL_BLOCKS = TIMELINE.length;
       p2DoneEl.textContent = String(p2Done());
 
       const unlocked = unlockedTracksCount();
-      statTracks.textContent = `${unlocked}/7`;
+      statTracks.textContent = `${unlocked}/${TRACKS.length}`;
 
       const bossReady = canEnterBoss();
       statBoss.textContent = bossReady ? '⚔️' : '🔒';
@@ -996,14 +1144,14 @@ const TOTAL_BLOCKS = TIMELINE.length;
       trackList.innerHTML = '';
       const done = completedCount();
 
-      const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
+      const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss && !t.requiresBossAccess && !t.hidden).every(t=>trackUnlocked(t));
       eggPanel.style.display = baseUnlocked && !state.eggFound ? '' : 'none';
 
-      for(const t of TRACKS){
+      for(const t of TRACKS.filter(t=>!t.hidden)){
         const unlocked = trackUnlocked(t);
         const row = document.createElement('div');
         row.className = 'track';
-        const req = t.requiresBoss ? 'boss reward' : (t.requiresBossfight ? 'bossfight' : (t.requiresEgg ? 'easter egg' : `≥ ${t.unlockBlocks} blocchi`));
+        const req = t.requiresBoss ? 'bossfight' : (t.requiresEgg ? 'easter egg' : `≥ ${t.unlockBlocks} blocchi`);
         row.innerHTML = `
           <div class="left">
             <strong>${escapeHtml(t.label)}</strong>
@@ -1055,15 +1203,7 @@ const TOTAL_BLOCKS = TIMELINE.length;
         const li = document.createElement('div');
         li.className = 'li';
         li.style.cursor = 'pointer';
-        li.innerHTML = `
-          <div style="display:flex;gap:10px;align-items:center;">
-            <img src="${imgUrlForPage(f)}" alt="" loading="lazy" decoding="async" style="width:72px;height:72px;object-fit:contain;border-radius:10px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.14);flex:0 0 auto;">
-            <div style="min-width:0;">
-              <strong>${escapeHtml(humanLabel(f))}</strong>
-              <p>${i+1}/${block.files.length}</p>
-            </div>
-          </div>
-        `;
+        li.innerHTML = `<strong>${humanLabel(f)}</strong><p>${i+1}/${block.files.length}</p>`;
         li.addEventListener('click', ()=> setViewerIndex(i));
         vThumbList.appendChild(li);
       }
@@ -1077,39 +1217,32 @@ const TOTAL_BLOCKS = TIMELINE.length;
       setViewerIndex(currentIndex);
     }
 
+    let viewerReqId = 0;
+
     function setViewerIndex(i){
       if(!currentBlock) return;
-      const n = currentBlock.files.length;
-      currentIndex = clamp(i, 0, n-1);
-      const file = currentBlock.files[currentIndex];
-      vImg.src = imgUrlForPage(file);
-      vCap.textContent = `${humanLabel(file)}  •  ${currentIndex+1}/${n}`;
-      vIdx.textContent = String(currentIndex+1);
+      const files = currentBlock.files || [];
+      currentIndex = Math.max(0, Math.min(i, files.length - 1));
 
-      // save max seen
-      const prevMax = state.maxSeen[currentBlock.id] ?? -1;
-      if(currentIndex > prevMax){
-        state.maxSeen[currentBlock.id] = currentIndex;
-        saveState();
-      }
+      const pageNum = files[currentIndex];
+      vIdx.textContent = String(currentIndex + 1);
+      vCap.textContent = humanLabel(pageNum);
 
-      // auto complete when last page reached
-      if(currentIndex === n-1 && !isBlockDone(currentBlock.id)){
-        markBlockDone(currentBlock.id, vMark);
-      }
+      // placeholder mentre renderizza
+      vImg.src = TINY_BLANK;
 
-      // highlight selected in side list
-      $$('#vThumbList .li').forEach((el, idx)=>{
-        el.style.borderColor = idx===currentIndex ? 'rgba(125,211,252,.34)' : 'rgba(255,255,255,.10)';
-        el.style.background = idx===currentIndex ? 'rgba(125,211,252,.10)' : 'rgba(0,0,0,.16)';
-      });
+      const req = String(++viewerReqId);
+      vImg.dataset.req = req;
 
-      // keep selected visible
-      const sel = $$('#vThumbList .li')[currentIndex];
-      if(sel){
-        sel.scrollIntoView({ block:'nearest' });
-      }
+      pdfPageToImgUrl(Number(pageNum), VIEW_SCALE)
+        .then((url)=>{
+          if(vImg.isConnected && vImg.dataset.req === req){
+            vImg.src = url;
+          }
+        })
+        .catch(()=>{ /* placeholder */ });
     }
+
 
     // =========================
     // Completing blocks
@@ -1190,7 +1323,7 @@ function renderBossIntro(){
   for(let i=0;i<TIMELINE.length;i++){
     const b = TIMELINE[i];
     const chip = document.createElement('div');
-    chip.className = 'boss-mini';
+    chip.className = 'mini';
     if(state.completed && state.completed[b.id]) chip.classList.add('done');
     chip.textContent = b.key || b.id;
     chip.style.animationDelay = (i * 0.03).toFixed(2) + 's';
@@ -1338,11 +1471,15 @@ function renderBossIntro(){
               for(const e of entries){
                 if(!e.isIntersecting) continue;
                 const img = e.target;
-                const src = img.dataset.src;
-                if(src){
-                  img.src = src;
-                  img.removeAttribute('data-src');
-                }
+                if(img.dataset.page){
+              loadThumbImage(img);
+            } else {
+              const src = img.dataset.src;
+              if(src){
+                img.src = src;
+                img.removeAttribute('data-src');
+              }
+            }
                 obs.unobserve(img);
               }
             }, { root: null, rootMargin: '160px', threshold: 0.01 });
@@ -1533,6 +1670,7 @@ function renderBossIntro(){
 
     function bossOpenModal(){
       bossRenderList();
+      setPageScrollLocked(true);
       openModal(bossModal);
       ensureBossMusicBtn();
       updateBossMusicBtn();
@@ -1542,6 +1680,7 @@ function renderBossIntro(){
 
     function bossCloseModal(){
       closeModal(bossModal);
+      setPageScrollLocked(false);
       // stop timer
       challengeStop();
       if(bossChallenge) bossChallenge.hidden = true;
@@ -1822,12 +1961,28 @@ function stopAudio(){
     vNext.addEventListener('click', ()=> setViewerIndex(currentIndex+1));
     vClose.addEventListener('click', ()=> closeModal(viewerModal));
 
+    let zoomReqId = 0;
     vZoom.addEventListener('click', ()=>{
       if(!currentBlock) return;
-      const page = currentBlock.files[currentIndex];
-      // Modal zoom: usa lo stesso viewer PDF del browser (toolbar interna)
-      zImg.src = imgUrlForPage(page);
+      const files = currentBlock.files || [];
+      const pageNum = files[currentIndex];
+      if(!pageNum) return;
+
+      // Renderizza di nuovo a scala piu' alta: zoom molto piu nitido rispetto al semplice resize.
+      zImg.src = TINY_BLANK;
       openModal(zoomModal);
+
+      const req = String(++zoomReqId);
+      zImg.dataset.req = req;
+
+      const ZOOM_SCALE = Math.max(VIEW_SCALE, 3.0);
+      pdfPageToImgUrl(Number(pageNum), ZOOM_SCALE)
+        .then((url)=>{
+          if(zImg.isConnected && zoomModal.classList.contains('show') && zImg.dataset.req === req){
+            zImg.src = url;
+          }
+        })
+        .catch(()=>{ /* placeholder */ });
     });
     zClose.addEventListener('click', ()=> closeModal(zoomModal));
 

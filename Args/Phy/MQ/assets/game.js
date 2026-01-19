@@ -7,68 +7,167 @@
     // =========================
 
     function r(a,b){
-      const out=[];
-      for(let i=a;i<=b;i++) out.push(`${i}.jpg`);
+      const out = [];
+      for(let i=a;i<=b;i++) out.push(i);
       return out;
     }
 
-    const TIMELINE = [
-      // --- P1 ---
-      { id:'p1-01', part:'P1', key:'P1·1', title:'1) Esperimenti e intro', subtitle:'Full Exp e intro', path:'P1 › 1) Esperimenti e intro › Full Exp e intro', pages:'1-18', files:[...r(1,17),'18_p1t01.jpg'] },
-      { id:'p1-02', part:'P1', key:'P1·2', title:'2) Analogie Ottica-Meccanica', subtitle:'Exp doppia fenditura', path:'P1 › 2) Analogie Ottica-Meccanica + Exp doppia fenditura', pages:'18-26', files:['18_p1t02.jpg',...r(19,26)] },
-      { id:'p1-03', part:'P1', key:'P1·3', title:'3) Pacchetti d’onda gaussiani', subtitle:'TISE/TDSE + intro', path:'P1 › 3) Pac. onde gaussiane + tise_tdse + intro2', pages:'27-43', files:r(27,43) },
-      { id:'p1-04', part:'P1', key:'P1·4', title:'4) Continuità + conservazione prob.', subtitle:'', path:'P1 › 4) Continuita_corrente e cons prob tot', pages:'44-46', files:[...r(44,45),'46_p1t01.jpg'] },
-      { id:'p1-05', part:'P1', key:'P1·5', title:'5) Proprietà e valori medi', subtitle:'', path:'P1 › 5) Proprietà e val medi', pages:'46-53', files:['46_p1t02.jpg',...r(47,52),'53_p1t01.jpg'] },
-      { id:'p1-06', part:'P1', key:'P1·6', title:'6) Teorema di Ehrenfest', subtitle:'', path:'P1 › 6) Th. Ehrenfest', pages:'53-56', files:['53_p1t02.jpg',...r(54,56)] },
-      { id:'p1-07', part:'P1', key:'P1·7', title:'7) Intro (conti + valori medi)', subtitle:'', path:'P1 › 7) Intro3_conti_val medi_ris eq S', pages:'57-66', files:r(57,66) },
-      { id:'p1-08', part:'P1', key:'P1·8', title:'8) Prob. 1D - buca', subtitle:'potenziale generico + part. libera', path:'P1 › 8) Prob1D-Buca-profgenericopotenziale-part_libera', pages:'67-83', files:[...r(67,82),'83_p1t01.jpg'] },
-      { id:'p1-09', part:'P1', key:'P1·9', title:'9) Step/Barriera', subtitle:'analogia ottica', path:'P1 › 9) Prob1D-Step_Barriera+an_ottica', pages:'83-93', files:['83_p1t02.jpg',...r(84,93)] },
-      { id:'p1-10', part:'P1', key:'P1·10', title:'10) Buca 2++', subtitle:'', path:'P1 › 10)Buca2++', pages:'94-100', files:[...r(94,99),'100_p1t01.jpg'] },
 
-      { id:'p1-11a', part:'P1', key:'P1·11A', title:'11) OA QM vs CL', subtitle:'qm vs cl', path:'P1 › 11) OA qm vs cl + regressioni matematiche › qm vs cl', pages:'100-108', files:['100_p1t02.jpg',...r(101,107),'108_p1t01.jpg'] },
-      { id:'p1-11b', part:'P1', key:'P1·11B', title:'11) OA QM vs CL', subtitle:'regressioni matematiche', path:'P1 › 11) OA qm vs cl + regressioni matematiche › Regressioni matematiche', pages:'108-125', files:['108_p1t02.jpg',...r(109,125)] },
+    const PDF_URL = 'Meccanica Quantistica.pdf'; // rinomina pure (es: mq.pdf) e aggiorna qui
+    const PDF_LAST_PAGE = 77;
 
-      { id:'p1-12', part:'P1', key:'P1·12', title:'12) OA operatoriale', subtitle:'notazione matriciale', path:'P1 › 12) OA operatoriale + not matriciale', pages:'126-132', files:[...r(126,131),'132_p1t01.jpg'] },
-      { id:'p1-13', part:'P1', key:'P1·13', title:'13) Postulati', subtitle:'', path:'P1 › 13) Postulati', pages:'132-137', files:['132_p1t02.jpg',...r(133,136),'137_p1t01.jpg'] },
-
-      { id:'p1-14a', part:'P1', key:'P1·14A', title:'14) Osservabili compatibili', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › oss compatibili', pages:'137-141', files:['137_p1t02.jpg',...r(138,140),'141_p1t02.jpg'] },
-      { id:'p1-14b', part:'P1', key:'P1·14B', title:'14) Analogia ottica', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › an ottica', pages:'141-142', files:['141_p1t01.jpg','142_p1t01.jpg'] },
-
-      { id:'p1-15', part:'P1', key:'P1·15', title:'15) Indeterminazione', subtitle:'', path:'P1 › 15) Principio di Indeterminazione', pages:'142-145', files:['142_p1t02.jpg',...r(143,145)] },
-      { id:'p1-16', part:'P1', key:'P1·16', title:'16) Conticini / commutatori', subtitle:'', path:'P1 › 16) conticini commutatori', pages:'146-147', files:['146.jpg','147_p1t01.jpg'] },
-
-      { id:'p1-17a', part:'P1', key:'P1·17A', title:'17) Momento angolare', subtitle:'intro', path:'P1 › 17) Mom Ang + Sferiche › mom ang › intro mom ang', pages:'147-152', files:['147_p1t02.jpg',...r(148,151),'152_p1t01.jpg'] },
-      { id:'p1-17b', part:'P1', key:'P1·17B', title:'17) Armoniche sferiche', subtitle:'spazio coordinate + extra', path:'P1 › 17) Mom Ang + Sferiche › spazio coordinate e armoniche sferiche', pages:'152-165', files:['152_p1t02.jpg',...r(153,156),...r(157,164),'165_p1t01.jpg'] },
-
-      { id:'p1-18', part:'P1', key:'P1·18', title:'18) Evoluzione temporale', subtitle:'', path:'P1 › 18)Evoluzione Temporale', pages:'165-169', files:['165_p1t02.jpg',...r(166,168),'169_p1t01.jpg'] },
-      { id:'p1-19', part:'P1', key:'P1·19', title:'19) Conservazione + simm. continue', subtitle:'prodotto diretto', path:'P1 › 19)Leggi conservazione-simm continue e prodotto diretto', pages:'169-175', files:['169_p1t02.jpg',...r(170,174),'175_p1t01.jpg'] },
-
-      { id:'p1-20a', part:'P1', key:'P1·20A', title:'20) Potenziale centrale', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › centrale', pages:'175-178', files:['175_p1t02.jpg',...r(176,177),'178_p1t01.jpg'] },
-      { id:'p1-20b', part:'P1', key:'P1·20B', title:'20) Coulombiano + Kummer', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › coulombiano + kummer', pages:'178-185', files:['178_p1t02.jpg',...r(179,185)] },
-
-      { id:'p1-21a', part:'P1', key:'P1·21A', title:'21) Zeeman', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Zeeman', pages:'186-188', files:['186.jpg','187.jpg','188_p1t02.jpg'] },
-      { id:'p1-21b', part:'P1', key:'P1·21B', title:'21) Exp Stern-Gerlach + Spin', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Exp SG e Spin', pages:'188-199', files:['188_p1t01.jpg',...r(189,199)] },
-      { id:'p1-21c', part:'P1', key:'P1·21C', title:'21) Particelle non interagenti', subtitle:'intro', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Particelle non interagenti intro', pages:'200-202', files:r(200,202) },
-
-      { id:'p1-22', part:'P1', key:'P1·22', title:'22) 3D EqS', subtitle:'particella libera + OA', path:'P1 › 22)3D eqS-partLibera-OA', pages:'203-207', files:r(203,207) },
-
-      // --- P2 ---
-      { id:'p2-23a', part:'P2', key:'P2·23A', title:'23) Composizione J', subtitle:'composizione', path:'P2 › 23)Composizione_J › Composizione', pages:'208-214', files:[...r(208,213),'214_p2t02.jpg'] },
-      { id:'p2-23b', part:'P2', key:'P2·23B', title:'23) Composizione J', subtitle:'2 fermioni', path:'P2 › 23)Composizione_J › 2 fermioni', pages:'214-215', files:['214_p2t01.jpg','215_p2t01.jpg'] },
-
-      { id:'p2-24', part:'P2', key:'P2·24', title:'24) Particelle identiche', subtitle:'', path:'P2 › 24) Particelle identiche', pages:'215-220', files:['215_p2t02.jpg',...r(216,219),'220_p2t01.jpg'] },
-
-      { id:'p2-25a', part:'P2', key:'P2·25A', title:'25) Perturbazioni stazionarie', subtitle:'non degeneri', path:'P2 › 25) Pert staz › non-deg', pages:'220-223', files:['220_p2t02.jpg',...r(221,223)] },
-      { id:'p2-25b', part:'P2', key:'P2·25B', title:'25) Perturbazioni stazionarie', subtitle:'degeneri', path:'P2 › 25) Pert staz › deg', pages:'224-227', files:[...r(224,226),'227_p2t01.jpg'] },
-
-      { id:'p2-26', part:'P2', key:'P2·26', title:'26) Struttura fine', subtitle:'correzioni relativistiche', path:'P2 › 26)Struttura Affine e correzioni relativistiche', pages:'227-236', files:['227_p2t02.jpg',...r(228,235),'236_p2t01.jpg'] },
-
-      { id:'p2-27', part:'P2', key:'P2·27', title:'27) Hellmann-Feynman', subtitle:'', path:'P2 › 27)Th. Hellman-Feynman', pages:'236-237', files:['236_p2t02.jpg','237_p2t01.jpg'] },
-
-      { id:'p2-28a', part:'P2', key:'P2·28A', title:'28) Pert. dip. dal tempo', subtitle:'TPDT', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › tpdt', pages:'237-240', files:['237_p2t02.jpg','238.jpg','239.jpg','240_p2t02.jpg'] },
-      { id:'p2-28b', part:'P2', key:'P2·28B', title:'28) Pert. dip. dal tempo', subtitle:'costante/periodico/risonanza', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › costante-periodico-risonanza e puls bohr', pages:'240-243', files:['240_p2t01.jpg',...r(241,243)] },
-      { id:'p2-28c', part:'P2', key:'P2·28C', title:'28) Caso continuo', subtitle:'conclusione', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › Caso al continuo e conclusione', pages:'244-249', files:r(244,249) },
+    // Indice (come nel PDF)
+    const PDF_TOC = [
+      { num:'0', title:"LIMITI DELLA FISICA CLASSICA", page:2 },
+      { num:'1', title:"MECCANICA ONDULATORIA", page:5 },
+      { num:'1.1', title:"Pacchetto d'onda", page:7 },
+      { num:'1.2', title:"Equazione di Schroedinger", page:9 },
+      { num:'1.2b', title:"Valori di aspettazione", page:12 },
+      { num:'1.3', title:"Schroedinger in sistemi conservativi", page:15 },
+      { num:'1.4', title:"Problemi unidimensionali", page:18 },
+      { num:'2', title:"FORMALISMO MATEMATICO", page:29 },
+      { num:'2.1', title:"Trasformazioni Unitarie", page:31 },
+      { num:'2.2', title:"Oscillatore armonico rivisitato", page:33 },
+      { num:'2.3', title:"Postulati della Meccanica Quantistica", page:35 },
+      { num:'2.4', title:"Osservabili compatibili", page:38 },
+      { num:'3', title:"MOMENTO ANGOLARE", page:40 },
+      { num:'3.1', title:"Armoniche Sferiche", page:42 },
+      { num:'3.2', title:"Momento angolare totale", page:44 },
+      { num:'3.3', title:"Simmetrie e leggi di conservazione", page:47 },
+      { num:'3.4', title:"Prodotto diretto", page:49 },
+      { num:'3.5', title:"Potenziale centrale", page:51 },
+      { num:'4', title:"SPIN", page:54 },
+      { num:'4.1', title:"Rappresentazioni matriciali", page:56 },
+      { num:'4.2', title:"Composizione dei momenti angolari", page:59 },
+      { num:'4.3', title:"Particelle identiche", page:62 },
+      { num:'5', title:"TEORIA DELLE PERTURBAZIONI", page:64 },
+      { num:'5.1', title:"Struttura fine dell'atomo di H", page:67 },
+      { num:'5.2', title:"Perturbazioni dipendenti dal tempo", page:72 },
+      { num:'5.2b', title:"Relazione tempo-energia", page:75 }
     ];
+
+    // TIMELINE generata dall'indice: ogni voce -> range pagine fino alla prossima voce
+    const TIMELINE = PDF_TOC.map((it, idx) => {
+      const start = it.page;
+      const end = (PDF_TOC[idx+1] ? (PDF_TOC[idx+1].page - 1) : PDF_LAST_PAGE);
+      const chapter = parseInt(String(it.num).split('.')[0], 10);
+      const part = (chapter <= 2) ? 'P1' : 'P2';
+      const safe = String(it.num).replace(/[^a-z0-9]+/ig, '-');
+      return {
+        id: `mq-${safe}`,
+        part,
+        key: it.num,
+        title: `${it.num} - ${it.title}`,
+        subtitle: '',
+        path: `Meccanica Quantistica (PDF) - ${it.num} - ${it.title}`,
+        pages: `${start}-${end}`,
+        files: r(start, end), // qui "files" = numeri pagina PDF
+      };
+    });
+
+    // -----------------------------
+    // PDF.js helpers (render PDF page -> <img src="blob:...">)
+    // -----------------------------
+    const PDFJS_VERSION = '3.11.174';
+    const PDFJS_WORKER_SRC = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build/pdf.worker.min.js`;
+
+    const THUMB_SCALE = 0.32;   // thumbnails
+    const VIEW_SCALE  = 2.00;   // viewer (qualita' alta, ma 1 pagina alla volta)
+
+    // Placeholder 1x1 (evita glitch mentre la pagina PDF viene renderizzata)
+    const TINY_BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+
+    function getPdfjs(){
+      const lib = window.pdfjsLib;
+      if(!lib){
+        throw new Error('pdfjsLib non caricato: includi pdf.min.js prima di game_ale.js');
+      }
+      lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_SRC;
+      return lib;
+    }
+
+    let PDF_DOC_PROMISE = null;
+
+    function getPdfDoc(){
+      if(!PDF_DOC_PROMISE){
+        const lib = getPdfjs();
+        const url = encodeURI(PDF_URL);
+        PDF_DOC_PROMISE = lib.getDocument(url).promise;
+      }
+      return PDF_DOC_PROMISE;
+    }
+
+    const IMG_CACHE = new Map();
+    const IMG_CACHE_MAX = 120;
+
+    function cachePut(key, url){
+      IMG_CACHE.set(key, url);
+      if(IMG_CACHE.size <= IMG_CACHE_MAX) return;
+      const firstKey = IMG_CACHE.keys().next().value;
+      const firstUrl = IMG_CACHE.get(firstKey);
+      if(firstUrl && typeof firstUrl === 'string' && firstUrl.startsWith('blob:')){
+        try{ URL.revokeObjectURL(firstUrl); }catch(e){}
+      }
+      IMG_CACHE.delete(firstKey);
+    }
+
+    function quantizeScale(s){
+      // per cache migliore (evita 2.00000001 ecc.)
+      return Math.round(s * 100) / 100;
+    }
+
+    async function pdfPageToImgUrl(pageNum, scale){
+      const sc = quantizeScale(scale);
+      const key = `p${pageNum}@${sc}`;
+      if(IMG_CACHE.has(key)) return IMG_CACHE.get(key);
+
+      const doc = await getPdfDoc();
+      const page = await doc.getPage(pageNum);
+      const viewport = page.getViewport({ scale: sc });
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d', { alpha:false });
+
+      canvas.width  = Math.max(1, Math.floor(viewport.width));
+      canvas.height = Math.max(1, Math.floor(viewport.height));
+
+      await page.render({ canvasContext: ctx, viewport }).promise;
+
+      const blob = await new Promise((resolve)=> canvas.toBlob(resolve, 'image/jpeg', 0.92));
+      if(!blob){
+        const dataUrl = canvas.toDataURL('image/png');
+        cachePut(key, dataUrl);
+        return dataUrl;
+      }
+
+      const url = URL.createObjectURL(blob);
+      cachePut(key, url);
+      return url;
+    }
+
+    // thumbnails lazy-load
+    let thumbReqId = 0;
+    async function loadThumbImage(imgEl){
+      if(!imgEl || imgEl.dataset.loaded === '1') return;
+      const page = parseInt(imgEl.dataset.page || '0', 10);
+      if(!page) return;
+
+      imgEl.dataset.loaded = '1';
+      const req = String(++thumbReqId);
+      imgEl.dataset.req = req;
+
+      try{
+        const scale = parseFloat(imgEl.dataset.scale || String(THUMB_SCALE));
+        const url = await pdfPageToImgUrl(page, scale);
+        if(imgEl.isConnected && imgEl.dataset.req === req){
+          imgEl.src = url;
+        }
+      }catch(err){
+        // lascia placeholder
+      }
+    }
+
+
 
     const TOTAL_BLOCKS = TIMELINE.length;
 
@@ -99,7 +198,7 @@
       { id:'t1', label:'I) Quantum Warmup',    file:'audio/music-201745.mp3', unlockBlocks: 2,  requiresEgg:false },
       { id:'t2', label:'II) Symmetry Engine',  file:'audio/music-423648.mp3', unlockBlocks: 8,  requiresEgg:false },
       { id:'t3', label:'III) Operator Groove', file:'audio/music-417477.mp3', unlockBlocks: 16, requiresEgg:false },
-      { id:'t4', label:'IV) The Hidden Eigenbeat', file:'audio/music-467173.mp3', unlockBlocks: 28, requiresEgg:false },
+      { id:'t4', label:'IV) The Hidden Eigenbeat', file:'audio/music-467173.mp3', unlockBlocks: 24, requiresEgg:false },
       // Easter egg: sbloccabile solo dopo le prime 4 + egg
       { id:'t5', label:'V) Wavepacket Ride (Easter Egg)', file:'audio/music-bounce-on-it-184234.mp3', unlockBlocks: 999, requiresEgg:true },
       // Boss reward (si sblocca dopo aver completato TUTTE le DIM della bossfight)
@@ -257,7 +356,7 @@
     // State
     // =========================
 
-    const STORAGE_KEY = 'mq_game_tree_jukebox_v3';
+    const STORAGE_KEY = 'mq_game_ale_pdf_v1';
     const STORAGE_KEY_FALLBACK = 'mq_game_tree_jukebox_v2';
 
     const DEFAULT_STATE = {
@@ -473,20 +572,18 @@
       document.body.classList.toggle('modal-lock', flag);
     }
 
+    function humanLabel(f){
+      // PDF pages: numero -> "p.X"
+      if(typeof f === 'number') return `p.${f}`;
+      if(typeof f === 'string' && /^\d+$/.test(f)) return `p.${Number(f)}`;
 
-    function humanLabel(file){
-      // 12.jpg -> Pag. 12
-      const m = /^([0-9]+)\.jpg$/i.exec(file);
-      if(m) return `Pag. ${m[1]}`;
-      const v = /^([0-9]+)_p([12])t0?([12])\.jpg$/i.exec(file);
-      if(v){
-        const n = v[1];
-        const part = v[2];
-        const t = v[3];
-        return `Pag. ${n} · parte ${t}/2`;
-      }
-      return file;
+      // fallback (se mai riusi anche immagini)
+      const s = String(f || '');
+      const m = s.match(/^(\d+)(?:_.*)?\.(jpg|png|webp)$/i);
+      if(m) return `p.${m[1]}`;
+      return s;
     }
+
 
     // =========================
     // MathJax helper (LaTeX in bossfight)
@@ -661,8 +758,8 @@
     const ACH = [
       { id:'firstBlock', title:'Primo blocco', desc:'Completa 1 blocco.', check: s => completedCount(s) >= 1, reward: () => ({silver: 20, gold:0}) },
       { id:'eight', title:'8 blocchi', desc:'Arriva a 8 blocchi completati.', check: s => completedCount(s) >= 8, reward: () => ({silver: 40, gold:1}) },
-      { id:'p1done', title:'P1 clear', desc:'Completa tutti i 28 blocchi di P1.', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
-      { id:'p2done', title:'P2 clear', desc:'Completa tutti i blocchi di P2.', check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'p1done', title:'P1 clear', desc:'Completa tutti i blocchi di P1', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'p2done', title:'P2 clear', desc:'Completa tutti i blocchi di P2', check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
       { id:'fullclear', title:'Full clear', desc:'Completa tutti i blocchi (P1+P2).', check: s => completedCount(s) >= TOTAL_BLOCKS, reward: () => ({silver: 100, gold:5}) },
       { id:'egg', title:'Easter egg', desc:'Trova la traccia segreta.', check: s => !!s.eggFound, reward: () => ({silver: 25, gold:2}) },
     ];
@@ -742,7 +839,7 @@
     function makeBlockCard(block){
       const done = isBlockDone(block.id);
       const reward = blockReward(block);
-      const hasSplit = block.files.some(f=>/_p[12]t0?[12]\.jpg$/i.test(f));
+            const hasSplit = block.files.some(f => (typeof f === 'string') && /_p[12]t0?[12]\.jpg$/i.test(f));
 
       const el = document.createElement('details');
       el.className = 'block';
@@ -755,7 +852,7 @@
             <span>${escapeHtml(block.subtitle || '-')}</span>
           </span>
           <span class="bmeta">
-            <span class="chip"><b>${block.files.length}</b><span>img</span></span>
+            <span class="chip"><b>${block.files.length}</b><span>pg</span></span>
             <span class="chip"><b>+${reward.silver}</b><span>Silver</span></span>
             ${hasSplit ? '<span class="chip" title="Contiene pagine divise in 2">½</span>' : ''}
             <span class="chip" style="${done?'border-color:rgba(57,217,138,.45);background:rgba(57,217,138,.10);':''}">
@@ -820,11 +917,7 @@
           for(const e of entries){
             if(!e.isIntersecting) continue;
             const img = e.target;
-            const src = img.dataset.src;
-            if(src){
-              img.src = src;
-              img.removeAttribute('data-src');
-            }
+            loadThumbImage(img);
             obs.unobserve(img);
           }
         }, { root: null, rootMargin: '160px', threshold: 0.01 });
@@ -848,7 +941,9 @@
         img.decoding = 'async';
         img.alt = humanLabel(file);
         img.src = TINY;
-        img.dataset.src = `img/${file}`;
+        img.dataset.page = String(file);
+        img.dataset.scale = String(THUMB_SCALE);
+        img.dataset.loaded = '0';
         img.setAttribute('fetchpriority','low');
         io.observe(img);
 
@@ -1122,39 +1217,32 @@
       setViewerIndex(currentIndex);
     }
 
+    let viewerReqId = 0;
+
     function setViewerIndex(i){
       if(!currentBlock) return;
-      const n = currentBlock.files.length;
-      currentIndex = clamp(i, 0, n-1);
-      const file = currentBlock.files[currentIndex];
-      vImg.src = `img/${file}`;
-      vCap.textContent = `${humanLabel(file)}  •  ${currentIndex+1}/${n}`;
-      vIdx.textContent = String(currentIndex+1);
+      const files = currentBlock.files || [];
+      currentIndex = Math.max(0, Math.min(i, files.length - 1));
 
-      // save max seen
-      const prevMax = state.maxSeen[currentBlock.id] ?? -1;
-      if(currentIndex > prevMax){
-        state.maxSeen[currentBlock.id] = currentIndex;
-        saveState();
-      }
+      const pageNum = files[currentIndex];
+      vIdx.textContent = String(currentIndex + 1);
+      vCap.textContent = humanLabel(pageNum);
 
-      // auto complete when last page reached
-      if(currentIndex === n-1 && !isBlockDone(currentBlock.id)){
-        markBlockDone(currentBlock.id, vMark);
-      }
+      // placeholder mentre renderizza
+      vImg.src = TINY_BLANK;
 
-      // highlight selected in side list
-      $$('#vThumbList .li').forEach((el, idx)=>{
-        el.style.borderColor = idx===currentIndex ? 'rgba(125,211,252,.34)' : 'rgba(255,255,255,.10)';
-        el.style.background = idx===currentIndex ? 'rgba(125,211,252,.10)' : 'rgba(0,0,0,.16)';
-      });
+      const req = String(++viewerReqId);
+      vImg.dataset.req = req;
 
-      // keep selected visible
-      const sel = $$('#vThumbList .li')[currentIndex];
-      if(sel){
-        sel.scrollIntoView({ block:'nearest' });
-      }
+      pdfPageToImgUrl(Number(pageNum), VIEW_SCALE)
+        .then((url)=>{
+          if(vImg.isConnected && vImg.dataset.req === req){
+            vImg.src = url;
+          }
+        })
+        .catch(()=>{ /* placeholder */ });
     }
+
 
     // =========================
     // Completing blocks
@@ -1383,11 +1471,15 @@ function renderBossIntro(){
               for(const e of entries){
                 if(!e.isIntersecting) continue;
                 const img = e.target;
-                const src = img.dataset.src;
-                if(src){
-                  img.src = src;
-                  img.removeAttribute('data-src');
-                }
+                if(img.dataset.page){
+              loadThumbImage(img);
+            } else {
+              const src = img.dataset.src;
+              if(src){
+                img.src = src;
+                img.removeAttribute('data-src');
+              }
+            }
                 obs.unobserve(img);
               }
             }, { root: null, rootMargin: '160px', threshold: 0.01 });
@@ -1869,9 +1961,28 @@ function stopAudio(){
     vNext.addEventListener('click', ()=> setViewerIndex(currentIndex+1));
     vClose.addEventListener('click', ()=> closeModal(viewerModal));
 
+    let zoomReqId = 0;
     vZoom.addEventListener('click', ()=>{
-      zImg.src = vImg.src;
+      if(!currentBlock) return;
+      const files = currentBlock.files || [];
+      const pageNum = files[currentIndex];
+      if(!pageNum) return;
+
+      // Renderizza di nuovo a scala piu' alta: zoom molto piu nitido rispetto al semplice resize.
+      zImg.src = TINY_BLANK;
       openModal(zoomModal);
+
+      const req = String(++zoomReqId);
+      zImg.dataset.req = req;
+
+      const ZOOM_SCALE = Math.max(VIEW_SCALE, 3.0);
+      pdfPageToImgUrl(Number(pageNum), ZOOM_SCALE)
+        .then((url)=>{
+          if(zImg.isConnected && zoomModal.classList.contains('show') && zImg.dataset.req === req){
+            zImg.src = url;
+          }
+        })
+        .catch(()=>{ /* placeholder */ });
     });
     zClose.addEventListener('click', ()=> closeModal(zoomModal));
 
