@@ -1,4 +1,3 @@
-/* Versione Ale (PDF) — copia di game.css (Edo). */
 
     :root{
       --bg0:#0b0d12;
@@ -407,6 +406,19 @@
       background: rgba(0,0,0,.10);
     }
 
+    /* PDF mode (no JPEG thumbnails): numeric mini preview */
+    .thumb .pdfmini{
+      width:100%;
+      height: 118px;
+      display:grid;
+      place-items:center;
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: .02em;
+      color: rgba(255,255,255,.88);
+      background: rgba(0,0,0,.10);
+    }
+
     .thumb .cap{
       position:absolute;
       left:8px;
@@ -553,6 +565,14 @@
       width:auto;
       height:auto;
       object-fit: contain;
+      border-radius: 12px;
+      background: rgba(0,0,0,.12);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .viewer iframe{
+      width: 100%;
+      height: 68vh;
       border-radius: 12px;
       background: rgba(0,0,0,.12);
       border:1px solid rgba(255,255,255,.08);
@@ -1022,20 +1042,25 @@
       font-size: 12px;
     }
 
+/* ==========================================================
+   Mobile layout fixes:
+   1) qc-hud always below topbar real height (no overlap)
+   2) topbar actions stay on one row with horizontal scroll
+   ========================================================== */
+.qc-hud{
+  top: calc(var(--topbarH, 78px) + env(safe-area-inset-top, 0px) + 10px);
+}
 
-    /* ==========================================================
-       Bossfight: fix scroll su Desktop
-       - Rende la card della bossfight scrollabile
-       - Impedisce lo "scroll chaining" sul background
-       ========================================================== */
-    #bossModal .modal-card{
-      max-height: calc(100vh - 32px); /* 32px = padding (16+16) del .modal */
-      overflow: auto;
-      overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    /* Se blocchiamo lo scroll della pagina (quando la bossfight e' aperta) */
-    html.modal-lock, body.modal-lock{
-      overflow: hidden;
-    }
+@media (max-width: 520px){
+  .actions{
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    min-width: 0;
+    padding-bottom: 2px;
+  }
+  .actions::-webkit-scrollbar{ display:none; }
+  .actions .btn{ white-space: nowrap; }
+}

@@ -14,60 +14,60 @@
 
     const TIMELINE = [
       // --- P1 ---
-      { id:'p1-01', part:'P1', key:'P1·1', title:'1) Esperimenti e intro', subtitle:'Full Exp e intro', path:'P1 › 1) Esperimenti e intro › Full Exp e intro', pages:'1–18', files:[...r(1,17),'18_p1t01.jpg'] },
-      { id:'p1-02', part:'P1', key:'P1·2', title:'2) Analogie Ottica–Meccanica', subtitle:'Exp doppia fenditura', path:'P1 › 2) Analogie Ottica–Meccanica + Exp doppia fenditura', pages:'18–26', files:['18_p1t02.jpg',...r(19,26)] },
-      { id:'p1-03', part:'P1', key:'P1·3', title:'3) Pacchetti d’onda gaussiani', subtitle:'TISE/TDSE + intro', path:'P1 › 3) Pac. onde gaussiane + tise_tdse + intro2', pages:'27–43', files:r(27,43) },
-      { id:'p1-04', part:'P1', key:'P1·4', title:'4) Continuità + conservazione prob.', subtitle:'', path:'P1 › 4) Continuita_corrente e cons prob tot', pages:'44–46', files:[...r(44,45),'46_p1t01.jpg'] },
-      { id:'p1-05', part:'P1', key:'P1·5', title:'5) Proprietà e valori medi', subtitle:'', path:'P1 › 5) Proprietà e val medi', pages:'46–53', files:['46_p1t02.jpg',...r(47,52),'53_p1t01.jpg'] },
-      { id:'p1-06', part:'P1', key:'P1·6', title:'6) Teorema di Ehrenfest', subtitle:'', path:'P1 › 6) Th. Ehrenfest', pages:'53–56', files:['53_p1t02.jpg',...r(54,56)] },
-      { id:'p1-07', part:'P1', key:'P1·7', title:'7) Intro (conti + valori medi)', subtitle:'', path:'P1 › 7) Intro3_conti_val medi_ris eq S', pages:'57–66', files:r(57,66) },
-      { id:'p1-08', part:'P1', key:'P1·8', title:'8) Prob. 1D — buca', subtitle:'potenziale generico + part. libera', path:'P1 › 8) Prob1D-Buca-profgenericopotenziale-part_libera', pages:'67–83', files:[...r(67,82),'83_p1t01.jpg'] },
-      { id:'p1-09', part:'P1', key:'P1·9', title:'9) Step/Barriera', subtitle:'analogia ottica', path:'P1 › 9) Prob1D-Step_Barriera+an_ottica', pages:'83–93', files:['83_p1t02.jpg',...r(84,93)] },
-      { id:'p1-10', part:'P1', key:'P1·10', title:'10) Buca 2++', subtitle:'', path:'P1 › 10)Buca2++', pages:'94–100', files:[...r(94,99),'100_p1t01.jpg'] },
+      { id:'p1-01', part:'P1', key:'P1·1', title:'1) Esperimenti e intro', subtitle:'Full Exp e intro', path:'P1 › 1) Esperimenti e intro › Full Exp e intro', pages:'1-18', files:[...r(1,17),'18_p1t01.jpg'] },
+      { id:'p1-02', part:'P1', key:'P1·2', title:'2) Analogie Ottica-Meccanica', subtitle:'Exp doppia fenditura', path:'P1 › 2) Analogie Ottica-Meccanica + Exp doppia fenditura', pages:'18-26', files:['18_p1t02.jpg',...r(19,26)] },
+      { id:'p1-03', part:'P1', key:'P1·3', title:'3) Pacchetti d’onda gaussiani', subtitle:'TISE/TDSE + intro', path:'P1 › 3) Pac. onde gaussiane + tise_tdse + intro2', pages:'27-43', files:r(27,43) },
+      { id:'p1-04', part:'P1', key:'P1·4', title:'4) Continuità + conservazione prob.', subtitle:'', path:'P1 › 4) Continuita_corrente e cons prob tot', pages:'44-46', files:[...r(44,45),'46_p1t01.jpg'] },
+      { id:'p1-05', part:'P1', key:'P1·5', title:'5) Proprietà e valori medi', subtitle:'', path:'P1 › 5) Proprietà e val medi', pages:'46-53', files:['46_p1t02.jpg',...r(47,52),'53_p1t01.jpg'] },
+      { id:'p1-06', part:'P1', key:'P1·6', title:'6) Teorema di Ehrenfest', subtitle:'', path:'P1 › 6) Th. Ehrenfest', pages:'53-56', files:['53_p1t02.jpg',...r(54,56)] },
+      { id:'p1-07', part:'P1', key:'P1·7', title:'7) Intro (conti + valori medi)', subtitle:'', path:'P1 › 7) Intro3_conti_val medi_ris eq S', pages:'57-66', files:r(57,66) },
+      { id:'p1-08', part:'P1', key:'P1·8', title:'8) Prob. 1D - buca', subtitle:'potenziale generico + part. libera', path:'P1 › 8) Prob1D-Buca-profgenericopotenziale-part_libera', pages:'67-83', files:[...r(67,82),'83_p1t01.jpg'] },
+      { id:'p1-09', part:'P1', key:'P1·9', title:'9) Step/Barriera', subtitle:'analogia ottica', path:'P1 › 9) Prob1D-Step_Barriera+an_ottica', pages:'83-93', files:['83_p1t02.jpg',...r(84,93)] },
+      { id:'p1-10', part:'P1', key:'P1·10', title:'10) Buca 2++', subtitle:'', path:'P1 › 10)Buca2++', pages:'94-100', files:[...r(94,99),'100_p1t01.jpg'] },
 
-      { id:'p1-11a', part:'P1', key:'P1·11A', title:'11) OA QM vs CL', subtitle:'qm vs cl', path:'P1 › 11) OA qm vs cl + regressioni matematiche › qm vs cl', pages:'100–108', files:['100_p1t02.jpg',...r(101,107),'108_p1t01.jpg'] },
-      { id:'p1-11b', part:'P1', key:'P1·11B', title:'11) OA QM vs CL', subtitle:'regressioni matematiche', path:'P1 › 11) OA qm vs cl + regressioni matematiche › Regressioni matematiche', pages:'108–125', files:['108_p1t02.jpg',...r(109,125)] },
+      { id:'p1-11a', part:'P1', key:'P1·11A', title:'11) OA QM vs CL', subtitle:'qm vs cl', path:'P1 › 11) OA qm vs cl + regressioni matematiche › qm vs cl', pages:'100-108', files:['100_p1t02.jpg',...r(101,107),'108_p1t01.jpg'] },
+      { id:'p1-11b', part:'P1', key:'P1·11B', title:'11) OA QM vs CL', subtitle:'regressioni matematiche', path:'P1 › 11) OA qm vs cl + regressioni matematiche › Regressioni matematiche', pages:'108-125', files:['108_p1t02.jpg',...r(109,125)] },
 
-      { id:'p1-12', part:'P1', key:'P1·12', title:'12) OA operatoriale', subtitle:'notazione matriciale', path:'P1 › 12) OA operatoriale + not matriciale', pages:'126–132', files:[...r(126,131),'132_p1t01.jpg'] },
-      { id:'p1-13', part:'P1', key:'P1·13', title:'13) Postulati', subtitle:'', path:'P1 › 13) Postulati', pages:'132–137', files:['132_p1t02.jpg',...r(133,136),'137_p1t01.jpg'] },
+      { id:'p1-12', part:'P1', key:'P1·12', title:'12) OA operatoriale', subtitle:'notazione matriciale', path:'P1 › 12) OA operatoriale + not matriciale', pages:'126-132', files:[...r(126,131),'132_p1t01.jpg'] },
+      { id:'p1-13', part:'P1', key:'P1·13', title:'13) Postulati', subtitle:'', path:'P1 › 13) Postulati', pages:'132-137', files:['132_p1t02.jpg',...r(133,136),'137_p1t01.jpg'] },
 
-      { id:'p1-14a', part:'P1', key:'P1·14A', title:'14) Osservabili compatibili', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › oss compatibili', pages:'137–141', files:['137_p1t02.jpg',...r(138,140),'141_p1t02.jpg'] },
-      { id:'p1-14b', part:'P1', key:'P1·14B', title:'14) Analogia ottica', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › an ottica', pages:'141–142', files:['141_p1t01.jpg','142_p1t01.jpg'] },
+      { id:'p1-14a', part:'P1', key:'P1·14A', title:'14) Osservabili compatibili', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › oss compatibili', pages:'137-141', files:['137_p1t02.jpg',...r(138,140),'141_p1t02.jpg'] },
+      { id:'p1-14b', part:'P1', key:'P1·14B', title:'14) Analogia ottica', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › an ottica', pages:'141-142', files:['141_p1t01.jpg','142_p1t01.jpg'] },
 
-      { id:'p1-15', part:'P1', key:'P1·15', title:'15) Indeterminazione', subtitle:'', path:'P1 › 15) Principio di Indeterminazione', pages:'142–145', files:['142_p1t02.jpg',...r(143,145)] },
-      { id:'p1-16', part:'P1', key:'P1·16', title:'16) Conticini / commutatori', subtitle:'', path:'P1 › 16) conticini commutatori', pages:'146–147', files:['146.jpg','147_p1t01.jpg'] },
+      { id:'p1-15', part:'P1', key:'P1·15', title:'15) Indeterminazione', subtitle:'', path:'P1 › 15) Principio di Indeterminazione', pages:'142-145', files:['142_p1t02.jpg',...r(143,145)] },
+      { id:'p1-16', part:'P1', key:'P1·16', title:'16) Conticini / commutatori', subtitle:'', path:'P1 › 16) conticini commutatori', pages:'146-147', files:['146.jpg','147_p1t01.jpg'] },
 
-      { id:'p1-17a', part:'P1', key:'P1·17A', title:'17) Momento angolare', subtitle:'intro', path:'P1 › 17) Mom Ang + Sferiche › mom ang › intro mom ang', pages:'147–152', files:['147_p1t02.jpg',...r(148,151),'152_p1t01.jpg'] },
-      { id:'p1-17b', part:'P1', key:'P1·17B', title:'17) Armoniche sferiche', subtitle:'spazio coordinate + extra', path:'P1 › 17) Mom Ang + Sferiche › spazio coordinate e armoniche sferiche', pages:'152–165', files:['152_p1t02.jpg',...r(153,156),...r(157,164),'165_p1t01.jpg'] },
+      { id:'p1-17a', part:'P1', key:'P1·17A', title:'17) Momento angolare', subtitle:'intro', path:'P1 › 17) Mom Ang + Sferiche › mom ang › intro mom ang', pages:'147-152', files:['147_p1t02.jpg',...r(148,151),'152_p1t01.jpg'] },
+      { id:'p1-17b', part:'P1', key:'P1·17B', title:'17) Armoniche sferiche', subtitle:'spazio coordinate + extra', path:'P1 › 17) Mom Ang + Sferiche › spazio coordinate e armoniche sferiche', pages:'152-165', files:['152_p1t02.jpg',...r(153,156),...r(157,164),'165_p1t01.jpg'] },
 
-      { id:'p1-18', part:'P1', key:'P1·18', title:'18) Evoluzione temporale', subtitle:'', path:'P1 › 18)Evoluzione Temporale', pages:'165–169', files:['165_p1t02.jpg',...r(166,168),'169_p1t01.jpg'] },
-      { id:'p1-19', part:'P1', key:'P1·19', title:'19) Conservazione + simm. continue', subtitle:'prodotto diretto', path:'P1 › 19)Leggi conservazione-simm continue e prodotto diretto', pages:'169–175', files:['169_p1t02.jpg',...r(170,174),'175_p1t01.jpg'] },
+      { id:'p1-18', part:'P1', key:'P1·18', title:'18) Evoluzione temporale', subtitle:'', path:'P1 › 18)Evoluzione Temporale', pages:'165-169', files:['165_p1t02.jpg',...r(166,168),'169_p1t01.jpg'] },
+      { id:'p1-19', part:'P1', key:'P1·19', title:'19) Conservazione + simm. continue', subtitle:'prodotto diretto', path:'P1 › 19)Leggi conservazione-simm continue e prodotto diretto', pages:'169-175', files:['169_p1t02.jpg',...r(170,174),'175_p1t01.jpg'] },
 
-      { id:'p1-20a', part:'P1', key:'P1·20A', title:'20) Potenziale centrale', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › centrale', pages:'175–178', files:['175_p1t02.jpg',...r(176,177),'178_p1t01.jpg'] },
-      { id:'p1-20b', part:'P1', key:'P1·20B', title:'20) Coulombiano + Kummer', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › coulombiano + kummer', pages:'178–185', files:['178_p1t02.jpg',...r(179,185)] },
+      { id:'p1-20a', part:'P1', key:'P1·20A', title:'20) Potenziale centrale', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › centrale', pages:'175-178', files:['175_p1t02.jpg',...r(176,177),'178_p1t01.jpg'] },
+      { id:'p1-20b', part:'P1', key:'P1·20B', title:'20) Coulombiano + Kummer', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › coulombiano + kummer', pages:'178-185', files:['178_p1t02.jpg',...r(179,185)] },
 
-      { id:'p1-21a', part:'P1', key:'P1·21A', title:'21) Zeeman', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Zeeman', pages:'186–188', files:['186.jpg','187.jpg','188_p1t02.jpg'] },
-      { id:'p1-21b', part:'P1', key:'P1·21B', title:'21) Exp Stern–Gerlach + Spin', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Exp SG e Spin', pages:'188–199', files:['188_p1t01.jpg',...r(189,199)] },
-      { id:'p1-21c', part:'P1', key:'P1·21C', title:'21) Particelle non interagenti', subtitle:'intro', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Particelle non interagenti intro', pages:'200–202', files:r(200,202) },
+      { id:'p1-21a', part:'P1', key:'P1·21A', title:'21) Zeeman', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Zeeman', pages:'186-188', files:['186.jpg','187.jpg','188_p1t02.jpg'] },
+      { id:'p1-21b', part:'P1', key:'P1·21B', title:'21) Exp Stern-Gerlach + Spin', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Exp SG e Spin', pages:'188-199', files:['188_p1t01.jpg',...r(189,199)] },
+      { id:'p1-21c', part:'P1', key:'P1·21C', title:'21) Particelle non interagenti', subtitle:'intro', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Particelle non interagenti intro', pages:'200-202', files:r(200,202) },
 
-      { id:'p1-22', part:'P1', key:'P1·22', title:'22) 3D EqS', subtitle:'particella libera + OA', path:'P1 › 22)3D eqS-partLibera-OA', pages:'203–207', files:r(203,207) },
+      { id:'p1-22', part:'P1', key:'P1·22', title:'22) 3D EqS', subtitle:'particella libera + OA', path:'P1 › 22)3D eqS-partLibera-OA', pages:'203-207', files:r(203,207) },
 
       // --- P2 ---
-      { id:'p2-23a', part:'P2', key:'P2·23A', title:'23) Composizione J', subtitle:'composizione', path:'P2 › 23)Composizione_J › Composizione', pages:'208–214', files:[...r(208,213),'214_p2t02.jpg'] },
-      { id:'p2-23b', part:'P2', key:'P2·23B', title:'23) Composizione J', subtitle:'2 fermioni', path:'P2 › 23)Composizione_J › 2 fermioni', pages:'214–215', files:['214_p2t01.jpg','215_p2t01.jpg'] },
+      { id:'p2-23a', part:'P2', key:'P2·23A', title:'23) Composizione J', subtitle:'composizione', path:'P2 › 23)Composizione_J › Composizione', pages:'208-214', files:[...r(208,213),'214_p2t02.jpg'] },
+      { id:'p2-23b', part:'P2', key:'P2·23B', title:'23) Composizione J', subtitle:'2 fermioni', path:'P2 › 23)Composizione_J › 2 fermioni', pages:'214-215', files:['214_p2t01.jpg','215_p2t01.jpg'] },
 
-      { id:'p2-24', part:'P2', key:'P2·24', title:'24) Particelle identiche', subtitle:'', path:'P2 › 24) Particelle identiche', pages:'215–220', files:['215_p2t02.jpg',...r(216,219),'220_p2t01.jpg'] },
+      { id:'p2-24', part:'P2', key:'P2·24', title:'24) Particelle identiche', subtitle:'', path:'P2 › 24) Particelle identiche', pages:'215-220', files:['215_p2t02.jpg',...r(216,219),'220_p2t01.jpg'] },
 
-      { id:'p2-25a', part:'P2', key:'P2·25A', title:'25) Perturbazioni stazionarie', subtitle:'non degeneri', path:'P2 › 25) Pert staz › non-deg', pages:'220–223', files:['220_p2t02.jpg',...r(221,223)] },
-      { id:'p2-25b', part:'P2', key:'P2·25B', title:'25) Perturbazioni stazionarie', subtitle:'degeneri', path:'P2 › 25) Pert staz › deg', pages:'224–227', files:[...r(224,226),'227_p2t01.jpg'] },
+      { id:'p2-25a', part:'P2', key:'P2·25A', title:'25) Perturbazioni stazionarie', subtitle:'non degeneri', path:'P2 › 25) Pert staz › non-deg', pages:'220-223', files:['220_p2t02.jpg',...r(221,223)] },
+      { id:'p2-25b', part:'P2', key:'P2·25B', title:'25) Perturbazioni stazionarie', subtitle:'degeneri', path:'P2 › 25) Pert staz › deg', pages:'224-227', files:[...r(224,226),'227_p2t01.jpg'] },
 
-      { id:'p2-26', part:'P2', key:'P2·26', title:'26) Struttura fine', subtitle:'correzioni relativistiche', path:'P2 › 26)Struttura Affine e correzioni relativistiche', pages:'227–236', files:['227_p2t02.jpg',...r(228,235),'236_p2t01.jpg'] },
+      { id:'p2-26', part:'P2', key:'P2·26', title:'26) Struttura fine', subtitle:'correzioni relativistiche', path:'P2 › 26)Struttura Affine e correzioni relativistiche', pages:'227-236', files:['227_p2t02.jpg',...r(228,235),'236_p2t01.jpg'] },
 
-      { id:'p2-27', part:'P2', key:'P2·27', title:'27) Hellmann–Feynman', subtitle:'', path:'P2 › 27)Th. Hellman-Feynman', pages:'236–237', files:['236_p2t02.jpg','237_p2t01.jpg'] },
+      { id:'p2-27', part:'P2', key:'P2·27', title:'27) Hellmann-Feynman', subtitle:'', path:'P2 › 27)Th. Hellman-Feynman', pages:'236-237', files:['236_p2t02.jpg','237_p2t01.jpg'] },
 
-      { id:'p2-28a', part:'P2', key:'P2·28A', title:'28) Pert. dip. dal tempo', subtitle:'TPDT', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › tpdt', pages:'237–240', files:['237_p2t02.jpg','238.jpg','239.jpg','240_p2t02.jpg'] },
-      { id:'p2-28b', part:'P2', key:'P2·28B', title:'28) Pert. dip. dal tempo', subtitle:'costante/periodico/risonanza', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › costante-periodico-risonanza e puls bohr', pages:'240–243', files:['240_p2t01.jpg',...r(241,243)] },
-      { id:'p2-28c', part:'P2', key:'P2·28C', title:'28) Caso continuo', subtitle:'conclusione', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › Caso al continuo e conclusione', pages:'244–249', files:r(244,249) },
+      { id:'p2-28a', part:'P2', key:'P2·28A', title:'28) Pert. dip. dal tempo', subtitle:'TPDT', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › tpdt', pages:'237-240', files:['237_p2t02.jpg','238.jpg','239.jpg','240_p2t02.jpg'] },
+      { id:'p2-28b', part:'P2', key:'P2·28B', title:'28) Pert. dip. dal tempo', subtitle:'costante/periodico/risonanza', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › costante-periodico-risonanza e puls bohr', pages:'240-243', files:['240_p2t01.jpg',...r(241,243)] },
+      { id:'p2-28c', part:'P2', key:'P2·28C', title:'28) Caso continuo', subtitle:'conclusione', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › Caso al continuo e conclusione', pages:'244-249', files:r(244,249) },
     ];
 
     const TOTAL_BLOCKS = TIMELINE.length;
@@ -85,7 +85,7 @@
       { term:'Osservabili compatibili', desc:'Commutazione, misure simultanee e base comune.', see:['p1-14a'] },
       { term:'Momento angolare', desc:'Operatori L, armoniche sferiche, base |l,m⟩.', see:['p1-17a','p1-17b'] },
       { term:'Coulomb / Kummer', desc:'Soluzione del problema idrogenoide e funzioni speciali.', see:['p1-20b'] },
-      { term:'Stern–Gerlach', desc:'Quantizzazione dello spin e misura discreta.', see:['p1-21b'] },
+      { term:'Stern-Gerlach', desc:'Quantizzazione dello spin e misura discreta.', see:['p1-21b'] },
       { term:'Particelle identiche', desc:'Simmetrizzazione (bosoni/fermioni), stati multipli.', see:['p2-24'] },
       { term:'Perturbazioni staz.', desc:'Degeneri e non degeneri.', see:['p2-25a','p2-25b'] },
       { term:'TPDT', desc:'Perturbazioni dipendenti dal tempo, transizioni e casi limite.', see:['p2-28a','p2-28b','p2-28c'] },
@@ -105,6 +105,7 @@
       // Boss reward (si sblocca dopo aver completato TUTTE le DIM della bossfight)
       // Nota: nel pacchetto zip includiamo un placeholder; puoi sostituirlo con il tuo file reale.
       { id:'t6', label:'VI) Classical Pack (Endgame)', file:'audio/classical-pack-v1.mp3', unlockBlocks: 999, requiresEgg:false, requiresBoss:true },
+      { id:'tb', label:'Bossfight Theme', file:'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3', unlockBlocks: 999, requiresEgg:false, requiresBossAccess:true, hidden:true }
     ];
 
 
@@ -117,49 +118,49 @@
         part: 1,
         title: 'DIM 0 (Base)',
         plain: 'DIM 0 (Base): Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d\'Onda, 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un\'Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d\'Onda (Collasso della Funzione d\'Onda)',
-        html: `<b>DIM 0 (Base):</b> Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d&rsquo;Onda, 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un&rsquo;Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d&rsquo;Onda (Collasso della Funzione d&rsquo;Onda)`,
+        html: String.raw`<b>DIM 0 (Base):</b> Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d&rsquo;Onda, 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un&rsquo;Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d&rsquo;Onda (Collasso della Funzione d&rsquo;Onda)`,
       },
       {
         id: 1,
         part: 1,
         title: 'DIM 1',
         plain: 'DIM 1: [Conservazione Globale e "Locale" della Probabilita] (Hermiticita di H + [Equazione di Continuita]) (fino a j⃗ e Gauss-Green)',
-        html: `<b>DIM 1:</b> <span class="br">[Conservazione Globale e &quot;Locale&quot; della Probabilita]</span> <em>(Hermiticita di \(H\) + <span class="br">[Equazione di Continuita]</span>) (fino a \(\vec{j}\) e Gauss-Green)</em>`,
+        html: String.raw`<b>DIM 1:</b> <span class="br">[Conservazione Globale e &quot;Locale&quot; della Probabilita]</span> <em>(Hermiticita di \(H\) + <span class="br">[Equazione di Continuita]</span>) (fino a \(\vec{j}\) e Gauss-Green)</em>`,
       },
       {
         id: 2,
         part: 1,
         title: 'DIM 2',
         plain: 'DIM 2: [Indeterminazione di Heisenberg] (da commutatori): (ΔA)^2(ΔB)^2 >= 1/4 |<[A,B]>|^2, con A=x, B=p. Identificazione dell\'indeterminazione minima (uguaglianza) e commento sul pacchetto d\'onda gaussiano (stato a minima indeterminazione).',
-        html: `<b>DIM 2:</b> <span class="br">[Indeterminazione di Heisenberg]</span> <em>(da commutatori)</em>: \((\Delta A)^2(\Delta B)^2 \ge \frac{1}{4}\,|\langle [A,B]\rangle|^2\), con \(A=x\), \(B=p\). Identificazione dell&rsquo;indeterminazione minima <em>(uguaglianza)</em> e commento sul pacchetto d&rsquo;onda gaussiano (stato a minima indeterminazione).`,
+        html: String.raw`<b>DIM 2:</b> <span class="br">[Indeterminazione di Heisenberg]</span> <em>(da commutatori)</em>: \((\Delta A)^2(\Delta B)^2 \ge \frac{1}{4}\,|\langle [A,B]\rangle|^2\), con \(A=x\), \(B=p\). Identificazione dell&rsquo;indeterminazione minima <em>(uguaglianza)</em> e commento sul pacchetto d&rsquo;onda gaussiano (stato a minima indeterminazione).`,
       },
       {
         id: 3,
         part: 1,
         title: 'DIM 3',
         plain: 'DIM 3: [Compatibili] <=> [A,B] = 0 ([Commutano]) (Non-deg + Deg)',
-        html: `<b>DIM 3:</b> <span class="br">[Compatibili]</span> &lt;=&gt; \([A,B]=0\) (<span class="br">[Commutano]</span>) (Non-deg + Deg)`,
+        html: String.raw`<b>DIM 3:</b> <span class="br">[Compatibili]</span> &lt;=&gt; \([A,B]=0\) (<span class="br">[Commutano]</span>) (Non-deg + Deg)`,
       },
       {
         id: 4,
         part: 1,
         title: 'DIM 4',
         plain: 'DIM 4: Valori di Aspettazione e [Th. di Ehrenfest] + d<x>/dt, d<p>/dt + Evoluzione temporale degli operatori (Schrodinger/Heisenberg/Interaction) + Simmetrie e conservazione (generatori di traslazioni/rotazioni)',
-        html: `<b>DIM 4:</b> Valori di Aspettazione e <span class="br">[Th. di Ehrenfest]</span> + \(\frac{d\langle x\rangle}{dt}\), \(\frac{d\langle p\rangle}{dt}\) + Evoluzione temporale degli operatori (Schrodinger/Heisenberg/Interaction) + Simmetrie e conservazione (generatori di traslazioni/rotazioni)`,
+        html: String.raw`<b>DIM 4:</b> Valori di Aspettazione e <span class="br">[Th. di Ehrenfest]</span> + \(\frac{d\langle x\rangle}{dt}\), \(\frac{d\langle p\rangle}{dt}\) + Evoluzione temporale degli operatori (Schrodinger/Heisenberg/Interaction) + Simmetrie e conservazione (generatori di traslazioni/rotazioni)`,
       },
       {
         id: 5,
         part: 1,
         title: 'DIM 5',
         plain: 'DIM 5: Considerazioni Fisiche (Energetiche e Potenziale) + Profilo Generico del Potenziale / [Particella Libera] (autofunzioni di p-hat) + Confronto QM/CL + Step/[Gradino] + [Barriera] + [Buca (finite/infinite)]: Forme ψ, Bordi, R, T via Corrente + Analogia Ottica + [Parita] + Stati legati vs diffusione',
-        html: `<b>DIM 5:</b> Considerazioni Fisiche <em>(Energetiche e Potenziale)</em> + Profilo Generico del Potenziale / <span class="br">[Particella Libera]</span> (autofunzioni di \(\hat p\)) + Confronto QM/CL + Step/<span class="br">[Gradino]</span> + <span class="br">[Barriera]</span> + <span class="br">[Buca (finite/infinite)]</span>: Forme \(\psi\), Bordi, \(R\), \(T\) via Corrente + Analogia Ottica + <span class="br">[Parita]</span> + Stati legati vs diffusione`,
+        html: String.raw`<b>DIM 5:</b> Considerazioni Fisiche <em>(Energetiche e Potenziale)</em> + Profilo Generico del Potenziale / <span class="br">[Particella Libera]</span> (autofunzioni di \(\hat p\)) + Confronto QM/CL + Step/<span class="br">[Gradino]</span> + <span class="br">[Barriera]</span> + <span class="br">[Buca (finite/infinite)]</span>: Forme \(\psi\), Bordi, \(R\), \(T\) via Corrente + Analogia Ottica + <span class="br">[Parita]</span> + Stati legati vs diffusione`,
       },
       {
         id: 6,
         part: 1,
         title: 'DIM 6',
         plain: 'DIM 6: Considerazioni Fisiche (Energetiche e Potenziale) + Confronto QM/CL + [OA Operationale]: a, a†, N, Spettro, Ladder',
-        html: `<b>DIM 6:</b> Considerazioni Fisiche <em>(Energetiche e Potenziale)</em> + Confronto QM/CL + <span class="br">[OA Operationale]</span>: \(a, a^\dagger, N\), Spettro, Ladder`,
+        html: String.raw`<b>DIM 6:</b> Considerazioni Fisiche <em>(Energetiche e Potenziale)</em> + Confronto QM/CL + <span class="br">[OA Operationale]</span>: \(a, a^\dagger, N\), Spettro, Ladder`,
       },
 
       {
@@ -167,35 +168,35 @@
         part: 2,
         title: 'DIM 7',
         plain: 'DIM 7: Perturbazioni [Stazionarie] - [Non-deg] E^(1), |ψ^(1)>, E^(2) + [Deg] (Secolare + Diagonalizzazione in S_n)',
-        html: `<b>DIM 7:</b> Perturbazioni <span class="br">[Stazionarie]</span> - <span class="br">[Non-deg]</span> \(E^{(1)},\ |\psi^{(1)}\rangle,\ E^{(2)}\) + <span class="br">[Deg]</span> (Secolare + Diagonalizzazione in \(S_n\))`,
+        html: String.raw`<b>DIM 7:</b> Perturbazioni <span class="br">[Stazionarie]</span> - <span class="br">[Non-deg]</span> \(E^{(1)},\ |\psi^{(1)}\rangle,\ E^{(2)}\) + <span class="br">[Deg]</span> (Secolare + Diagonalizzazione in \(S_n\))`,
       },
       {
         id: 8,
         part: 2,
         title: 'DIM 8',
         plain: 'DIM 8: [Composizione Momenti Angolari (generici)] J = J1 + J2: ICOC, CG, Ladder + Esempio Fermioni 1/2 + 1/2: Tripletto/Singoloetto (costruzione con J_-)',
-        html: `<b>DIM 8:</b> <span class="br">[Composizione Momenti Angolari (generici)]</span> \(J = J_1 + J_2\): ICOC, CG, Ladder + Esempio Fermioni \(\tfrac12 + \tfrac12\): Tripletto/Singoloetto (costruzione con \(J_-\))`,
+        html: String.raw`<b>DIM 8:</b> <span class="br">[Composizione Momenti Angolari (generici)]</span> \(J = J_1 + J_2\): ICOC, CG, Ladder + Esempio Fermioni \(\tfrac12 + \tfrac12\): Tripletto/Singoloetto (costruzione con \(J_-\))`,
       },
       {
         id: 9,
         part: 2,
         title: 'DIM 9',
         plain: 'DIM 9: [Particelle Identiche] (N particelle interagenti): P_ij, Autovalori ±1, [P, H] = 0, Simmetrico/Antisimmetrico, Pauli/Slater + Regola Singoletto/Tripletto <-> ℓ Pari/Dispari (Scambio => (-1)^ℓ)',
-        html: `<b>DIM 9:</b> <span class="br">[Particelle Identiche]</span> <em>(N particelle interagenti)</em>: \(P_{ij}\), Autovalori \(\pm 1\), \([P,H]=0\), Simmetrico/Antisimmetrico, Pauli/Slater + Regola Singoletto/Tripletto &lt;-&gt; \(\ell\) Pari/Dispari (Scambio =&gt; \((-1)^{\ell}\))`,
+        html: String.raw`<b>DIM 9:</b> <span class="br">[Particelle Identiche]</span> <em>(N particelle interagenti)</em>: \(P_{ij}\), Autovalori \(\pm 1\), \([P,H]=0\), Simmetrico/Antisimmetrico, Pauli/Slater + Regola Singoletto/Tripletto &lt;-&gt; \(\ell\) Pari/Dispari (Scambio =&gt; \((-1)^{\ell}\))`,
       },
       {
         id: 10,
         part: 2,
         title: 'DIM 10',
         plain: 'DIM 10: [Th. di Hellmann-Feynman] + Notazione spettroscopica: dE_n/dλ = <n|∂H/∂λ|n>',
-        html: `<b>DIM 10:</b> <span class="br">[Th. di Hellmann-Feynman]</span> + Notazione spettroscopica: \(\frac{dE_n}{d\lambda} = \langle n\,|\,\frac{\partial H}{\partial \lambda}\,|\,n\rangle\)`,
+        html: String.raw`<b>DIM 10:</b> <span class="br">[Th. di Hellmann-Feynman]</span> + Notazione spettroscopica: \(\frac{dE_n}{d\lambda} = \langle n\,|\,\frac{\partial H}{\partial \lambda}\,|\,n\rangle\)`,
       },
       {
         id: 11,
         part: 2,
         title: 'DIM 11',
         plain: 'DIM 11: Correzioni Relativistiche: H_MV, H_D, [Spin-Orbita] H_SO (completo) + struttura fine dell\'idrogeno',
-        html: `<b>DIM 11:</b> Correzioni Relativistiche: \(H_{MV}\), \(H_D\), <span class="br">[Spin-Orbita]</span> \(H_{SO}\) (completo) + struttura fine dell&rsquo;idrogeno`,
+        html: String.raw`<b>DIM 11:</b> Correzioni Relativistiche: \(H_{MV}\), \(H_D\), <span class="br">[Spin-Orbita]</span> \(H_{SO}\) (completo) + struttura fine dell&rsquo;idrogeno`,
       },
       {
         id: 12,
@@ -244,8 +245,8 @@
         id: 18,
         part: 3,
         title: 'DIM 18',
-        plain: 'DIM 18: Limiti della classica + Esperimenti: Corpo Nero (BB), Effetto Fotoelettrico, [Compton (metodo covariante)] (risoluzione completa + significato fisico), Atomo di Bohr, spettri atomici, Doppia Fenditura, esperimento con elettroni, analogia ottica–meccanica',
-        html: `<b>DIM 18:</b> Limiti della classica + Esperimenti: Corpo Nero (BB), Effetto Fotoelettrico, <span class="br">[Compton (metodo covariante)]</span> (risoluzione completa + significato fisico), Atomo di Bohr, spettri atomici, Doppia Fenditura, esperimento con elettroni, analogia ottica–meccanica`,
+        plain: 'DIM 18: Limiti della classica + Esperimenti: Corpo Nero (BB), Effetto Fotoelettrico, [Compton (metodo covariante)] (risoluzione completa + significato fisico), Atomo di Bohr, spettri atomici, Doppia Fenditura, esperimento con elettroni, analogia ottica-meccanica',
+        html: `<b>DIM 18:</b> Limiti della classica + Esperimenti: Corpo Nero (BB), Effetto Fotoelettrico, <span class="br">[Compton (metodo covariante)]</span> (risoluzione completa + significato fisico), Atomo di Bohr, spettri atomici, Doppia Fenditura, esperimento con elettroni, analogia ottica-meccanica`,
       },
     ];
 
@@ -426,6 +427,12 @@
     // Audio
     const audio = $('#audio');
 
+    // Bossfight music (auto-play on enter; toggle inside Bossfight)
+    // Riusa un file gia presente nel progetto (traccia IV). Puoi cambiarlo se vuoi.
+    const BOSS_MUSIC_FILE = 'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3';
+    const BOSS_MUSIC_LABEL = 'Bossfight Theme';
+    let bossMusicBtn = null;
+
     // Viewer state
     let currentBlock = null;
     let currentIndex = 0;
@@ -475,38 +482,15 @@
     // =========================
     // MathJax helper (LaTeX in bossfight)
     // =========================
-    // Robust: if MathJax isn't loaded yet when we render bossfight, we retry a few times.
     function typesetMath(rootEl){
-      const attempt = () => {
-        const MJ = window.MathJax;
-        if(!MJ || typeof MJ.typesetPromise !== 'function') return false;
-        try{
-          MJ.typesetPromise([rootEl]).catch(()=>{});
-        }catch(e){
-          // ignore
-        }
-        return true;
-      };
-
-      if (attempt()) return;
-
-      // Retry: MathJax loads async (defer). We poll briefly after first render.
-      let tries = 0;
-      const maxTries = 20;
-      const t = setInterval(() => {
-        tries += 1;
-        if (attempt() || tries >= maxTries){
-          clearInterval(t);
-        }
-      }, 250);
-
-      // Also hook into MathJax startup if present later
+      const MJ = window.MathJax;
+      if(!MJ || typeof MJ.typesetPromise !== 'function') return;
+      // typesetPromise expects elements array; guard to avoid throwing in older versions
       try{
-        const MJ = window.MathJax;
-        if (MJ && MJ.startup && MJ.startup.promise){
-          MJ.startup.promise.then(() => attempt()).catch(()=>{});
-        }
-      }catch(e){}
+        MJ.typesetPromise([rootEl]).catch(()=>{});
+      }catch(e){
+        // ignore
+      }
     }
 
     function blockReward(block){
@@ -723,9 +707,10 @@
     }
 
     function trackUnlocked(track){
+      if(track.requiresBossAccess) return canEnterBoss() || !!state.bossUnlockedOnce;
       if(track.requiresBoss) return !!state.bossRewardUnlocked;
       if(track.requiresEgg){
-        const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
+        const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss && !t.requiresBossAccess && !t.hidden).every(t=>trackUnlocked(t));
         return baseUnlocked && !!state.eggFound;
       }
       return completedCount() >= track.unlockBlocks;
@@ -758,7 +743,7 @@
           <span class="pill ${done?'done':''}"><span class="chk"></span><span>${block.key}</span><small>${block.pages}</small></span>
           <span class="btitle">
             <strong>${escapeHtml(block.title)}</strong>
-            <span>${escapeHtml(block.subtitle || '—')}</span>
+            <span>${escapeHtml(block.subtitle || '-')}</span>
           </span>
           <span class="bmeta">
             <span class="chip"><b>${block.files.length}</b><span>img</span></span>
@@ -811,9 +796,38 @@
     }
 
     function buildThumbnails(block, container){
-      const maxThumbs = block.files.length;
-      for(let i=0;i<maxThumbs;i++){
-        const file = block.files[i];
+      // Caricamento "a batch" + lazy reale: evita freeze con immagini molto grandi
+      const files = block.files;
+      const total = files.length;
+
+      const isMobile = window.matchMedia && window.matchMedia('(max-width: 620px)').matches;
+      const batchSize = isMobile ? 4 : 6;
+
+      const TINY = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+
+      // IntersectionObserver globale: assegna la src vera solo quando entra in viewport
+      if(!window.__thumbIO){
+        window.__thumbIO = new IntersectionObserver((entries, obs)=>{
+          for(const e of entries){
+            if(!e.isIntersecting) continue;
+            const img = e.target;
+            const src = img.dataset.src;
+            if(src){
+              img.src = src;
+              img.removeAttribute('data-src');
+            }
+            obs.unobserve(img);
+          }
+        }, { root: null, rootMargin: '160px', threshold: 0.01 });
+      }
+      const io = window.__thumbIO;
+
+      let loaded = 0;
+      container.innerHTML = '';
+
+      function createThumb(i){
+        const file = files[i];
+
         const t = document.createElement('div');
         t.className = 'thumb';
         t.tabIndex = 0;
@@ -824,7 +838,10 @@
         img.loading = 'lazy';
         img.decoding = 'async';
         img.alt = humanLabel(file);
-        img.src = `img/${file}`;
+        img.src = TINY;
+        img.dataset.src = `img/${file}`;
+        img.setAttribute('fetchpriority','low');
+        io.observe(img);
 
         const cap = document.createElement('div');
         cap.className = 'cap';
@@ -832,7 +849,7 @@
 
         const badge = document.createElement('div');
         badge.className = 'badge';
-        badge.textContent = `${i+1}/${block.files.length}`;
+        badge.textContent = `${i+1}/${files.length}`;
 
         t.appendChild(img);
         t.appendChild(cap);
@@ -845,6 +862,59 @@
 
         container.appendChild(t);
       }
+
+      function createMoreTile(){
+        const remaining = total - loaded;
+        if(remaining <= 0) return null;
+
+        const t = document.createElement('div');
+        t.className = 'thumb more';
+        t.tabIndex = 0;
+        t.setAttribute('role','button');
+        t.setAttribute('aria-label', `Carica altre miniature (restanti ${remaining})`);
+        t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>Carica altre</small></div>`;
+
+        const doLoad = ()=>{
+          t.remove();
+          loadNextBatch();
+        };
+        t.addEventListener('click', doLoad);
+        t.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); doLoad(); }
+        });
+
+        return t;
+      }
+
+      function refreshMoreTile(){
+        const existing = container.querySelector('.thumb.more');
+        if(existing) existing.remove();
+        const more = createMoreTile();
+        if(more) container.appendChild(more);
+      }
+
+      function loadNextBatch(){
+        const end = Math.min(total, loaded + batchSize);
+
+        // Micro-chunk per frame: non blocca il thread UI
+        const chunk = 2;
+        function step(){
+          const until = Math.min(end, loaded + chunk);
+          for(let i = loaded; i < until; i++){
+            createThumb(i);
+          }
+          loaded = until;
+
+          if(loaded < end){
+            requestAnimationFrame(step);
+          } else {
+            refreshMoreTile();
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      loadNextBatch();
     }
 
     function renderLists(){
@@ -866,7 +936,7 @@
       for(const b of TIMELINE){
         const t = document.createElement('div');
         t.className = 'tile' + (isBlockDone(b.id) ? ' done' : '');
-        t.title = `${b.key} — ${b.title}`;
+        t.title = `${b.key} - ${b.title}`;
         t.innerHTML = `${escapeHtml(b.key)}<br/><small>${escapeHtml(b.pages)}</small>`;
         t.addEventListener('click', ()=>{
           // open/expand block and scroll to it
@@ -897,7 +967,7 @@
       p2DoneEl.textContent = String(p2Done());
 
       const unlocked = unlockedTracksCount();
-      statTracks.textContent = `${unlocked}/6`;
+      statTracks.textContent = `${unlocked}/7`;
 
       const bossReady = canEnterBoss();
       statBoss.textContent = bossReady ? '⚔️' : '🔒';
@@ -970,10 +1040,10 @@
       trackList.innerHTML = '';
       const done = completedCount();
 
-      const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
+      const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss && !t.requiresBossAccess && !t.hidden).every(t=>trackUnlocked(t));
       eggPanel.style.display = baseUnlocked && !state.eggFound ? '' : 'none';
 
-      for(const t of TRACKS){
+      for(const t of TRACKS.filter(t=>!t.hidden)){
         const unlocked = trackUnlocked(t);
         const row = document.createElement('div');
         row.className = 'track';
@@ -997,7 +1067,7 @@
         trackList.appendChild(row);
       }
 
-      nowPlaying.textContent = audio && !audio.paused && audio.dataset.track ? audio.dataset.track : '—';
+      nowPlaying.textContent = audio && !audio.paused && audio.dataset.track ? audio.dataset.track : '-';
     }
 
     function renderAll(){
@@ -1156,7 +1226,7 @@ function renderBossIntro(){
   for(let i=0;i<TIMELINE.length;i++){
     const b = TIMELINE[i];
     const chip = document.createElement('div');
-    chip.className = 'boss-mini';
+    chip.className = 'mini';
     if(state.completed && state.completed[b.id]) chip.classList.add('done');
     chip.textContent = b.key || b.id;
     chip.style.animationDelay = (i * 0.03).toFixed(2) + 's';
@@ -1285,25 +1355,121 @@ function renderBossIntro(){
           const body = document.createElement('div');
           body.className = 'spoiler-body';
           const base = `boss/solbf${d.id}`;
+
+          // Soluzioni - thumbnails leggere (come block-body): batch + lazy reale
           const hint = document.createElement('div');
           hint.className = 'muted small';
-          hint.innerHTML = `Metti le immagini in <code>${base}_1.jpg</code>, <code>${base}_2.jpg</code> ... (cartella <code>boss/</code>). Se non ci sono ancora, nessun problema.`;
+          hint.innerHTML = `Metti le immagini in <code>${base}_1.jpg</code> ... <code>${base}_6.jpg</code> (nella cartella <code>boss/</code>). Se non ci sono ancora, nessun problema.`;
           body.appendChild(hint);
 
           const grid = document.createElement('div');
           grid.className = 'sol-grid';
-          for(let k=1;k<=6;k++){
+
+          const TINY = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+          const maxImgs = 6;
+          const batch = 2;
+
+          if(!window.__thumbIO){
+            window.__thumbIO = new IntersectionObserver((entries, obs)=>{
+              for(const e of entries){
+                if(!e.isIntersecting) continue;
+                const img = e.target;
+                const src = img.dataset.src;
+                if(src){
+                  img.src = src;
+                  img.removeAttribute('data-src');
+                }
+                obs.unobserve(img);
+              }
+            }, { root: null, rootMargin: '160px', threshold: 0.01 });
+          }
+          const io = window.__thumbIO;
+
+          let shown = 0;
+
+          function makeSolThumb(k){
+            const wrap = document.createElement('div');
+            wrap.className = 'sol-thumb';
+            wrap.tabIndex = 0;
+
             const img = document.createElement('img');
             img.className = 'sol-img';
             img.loading = 'lazy';
+            img.decoding = 'async';
             img.alt = `Soluzione DIM ${d.id} (${k})`;
-            img.src = `${base}_${k}.jpg`;
-            img.onerror = () => { img.remove(); };
-            grid.appendChild(img);
-          }
-          body.appendChild(grid);
+            img.src = TINY;
+            img.dataset.src = `${base}_${k}.jpg`;
+            img.setAttribute('fetchpriority','low');
+            io.observe(img);
 
-          det.appendChild(body);
+            img.onerror = () => { wrap.remove(); refreshMore(); };
+
+            const badge = document.createElement('div');
+            badge.className = 'sol-badge';
+            badge.textContent = String(k);
+
+            wrap.appendChild(img);
+            wrap.appendChild(badge);
+
+            const openFull = ()=>{
+              const src = img.dataset.src || img.src;
+              if(src && src !== TINY) window.open(src, '_blank', 'noopener');
+            };
+            wrap.addEventListener('click', openFull);
+            wrap.addEventListener('keydown', (e)=>{
+              if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openFull(); }
+            });
+
+            grid.appendChild(wrap);
+          }
+
+          function makeMoreTile(remaining){
+            const t = document.createElement('div');
+            t.className = 'sol-more';
+            t.tabIndex = 0;
+            t.setAttribute('role','button');
+            t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>Carica altre</small></div>`;
+
+            const doLoad = ()=>{
+              t.remove();
+              loadNext();
+            };
+            t.addEventListener('click', doLoad);
+            t.addEventListener('keydown', (e)=>{
+              if(e.key==='Enter' || e.key===' '){ e.preventDefault(); doLoad(); }
+            });
+            grid.appendChild(t);
+          }
+
+          function refreshMore(){
+            const oldMore = grid.querySelector('.sol-more');
+            if(oldMore) oldMore.remove();
+            const remaining = maxImgs - shown;
+            if(remaining > 0){
+              makeMoreTile(remaining);
+            }
+          }
+
+          function loadNext(){
+            const target = Math.min(maxImgs, shown + batch);
+            const chunk = 1;
+            function step(){
+              const until = Math.min(target, shown + chunk);
+              for(let k = shown + 1; k <= until; k++){
+                makeSolThumb(k);
+              }
+              shown = until;
+              if(shown < target){
+                requestAnimationFrame(step);
+              } else {
+                refreshMore();
+              }
+            }
+            requestAnimationFrame(step);
+          }
+
+          body.appendChild(grid);
+          loadNext();det.appendChild(body);
           actions.appendChild(det);
 
           item.appendChild(left);
@@ -1404,6 +1570,8 @@ function renderBossIntro(){
     function bossOpenModal(){
       bossRenderList();
       openModal(bossModal);
+      ensureBossMusicBtn();
+      updateBossMusicBtn();
       // ensure top inside modal
       try{ bossModal.querySelector('.modal-card').scrollTop = 0; }catch(e){}
     }
@@ -1416,9 +1584,7 @@ function renderBossIntro(){
 
       // revert theme (and stop boss music if it's currently playing)
       document.body.classList.remove('ice-mode');
-      if(audio && audio.dataset.trackId === 't6'){
-        audio.pause();
-      }
+      stopBossMusic();
     }
 
 
@@ -1441,11 +1607,10 @@ function renderBossIntro(){
         updateCoins();
       }
 
-      // Entrata arena: fermiamo la musica corrente.
-      // La traccia VI (Classical Pack) si sblocca solo dopo aver spuntato TUTTE le DIM (incluse le Extra).
-      if(audio && !audio.paused){
-        audio.pause();
-      }
+      // Entrata arena: avviamo la musica della Bossfight (auto).
+      // Nota: viene chiamata dentro il click, cosi autoplay e' molto piu probabile.
+      playBossMusic();
+
 
       // Ice theme
       document.body.classList.add('ice-mode');
@@ -1466,6 +1631,8 @@ function renderBossIntro(){
 
     function playTrack(id, opts={}){
       const track = TRACKS.find(t=>t.id===id);
+      // se stavi usando la musica boss, passando a una traccia jukebox la disattiviamo
+      try{ audio.dataset.bossMusic = '0'; }catch(e){}
       if(!track) return;
 
       const unlocked = trackUnlocked(track) || opts.force;
@@ -1496,11 +1663,89 @@ function renderBossIntro(){
       }
     }
 
-    function stopAudio(){
+    
+    // =========================
+    // Bossfight music controls
+    // =========================
+
+    function updateBossMusicBtn(){
+      if(!bossMusicBtn) return;
+      const on = audio && audio.dataset.bossMusic === '1' && !audio.paused;
+      bossMusicBtn.innerHTML = on
+        ? '<span class="dot ok"></span><span>Musica: ON</span>'
+        : '<span class="dot"></span><span>Musica: OFF</span>';
+    }
+
+    function ensureBossMusicBtn(){
+      if(bossMusicBtn) return;
+      if(!bossClose) return;
+      const host = bossClose.parentElement || (bossModal ? bossModal.querySelector('.modal-head') : null) || (bossModal ? bossModal.querySelector('.modal-card') : null) || bossModal;
+      if(!host) return;
+
+      const btn = document.createElement('button');
+      btn.id = 'bossMusicBtn';
+      btn.className = 'btn sm';
+      btn.title = 'Avvia/Ferma la musica della Bossfight';
+      btn.style.marginRight = '8px';
+      btn.addEventListener('click', ()=>{
+        if(audio && audio.dataset.bossMusic === '1' && !audio.paused) stopBossMusic();
+        else playBossMusic();
+      });
+
+      host.insertBefore(btn, bossClose);
+      bossMusicBtn = btn;
+      updateBossMusicBtn();
+    }
+
+    function playBossMusic(){
+      if(!audio) return;
+      ensureBossMusicBtn();
+
+      audio.dataset.bossMusic = '1';
+      audio.dataset.trackId = 'boss';
+      audio.dataset.track = BOSS_MUSIC_LABEL;
+
+      try{ audio.pause(); audio.currentTime = 0; }catch(e){}
+      audio.src = BOSS_MUSIC_FILE;
+
+      const p = audio.play();
+      if(p && typeof p.then === 'function'){
+        p.then(()=>{
+          nowPlaying.textContent = BOSS_MUSIC_LABEL;
+          updateBossMusicBtn();
+        }).catch(()=>{
+          updateBossMusicBtn();
+          toastShow('Audio', 'Autoplay bloccato: premi "Musica" nella Bossfight per avviare.');
+        });
+      }else{
+        nowPlaying.textContent = BOSS_MUSIC_LABEL;
+        updateBossMusicBtn();
+      }
+    }
+
+    function stopBossMusic(){
+      if(!audio) return;
+      if(audio.dataset.bossMusic === '1'){
+        try{ audio.pause(); }catch(e){}
+        try{ audio.currentTime = 0; }catch(e){}
+        audio.dataset.bossMusic = '0';
+        if(audio.dataset.trackId === 'boss') audio.dataset.trackId = '';
+        if(audio.dataset.track === BOSS_MUSIC_LABEL) audio.dataset.track = '';
+        nowPlaying.textContent = '-';
+      }
+      updateBossMusicBtn();
+    }
+
+function stopAudio(){
       try{ audio.pause(); }catch(e){}
       try{ audio.currentTime = 0; }catch(e){}
-      nowPlaying.textContent = '—';
+      // Se era musica boss, spegniamo il flag (cosi non interferisce con altre tracce)
+      try{ audio.dataset.bossMusic = '0'; }catch(e){}
+      nowPlaying.textContent = '-';
     }
+
+    // aggiorna pulsante musica boss quando finisce
+    try{ audio.addEventListener('ended', ()=>{ updateBossMusicBtn(); }); }catch(e){}
 
     // =========================
     // Easter egg
@@ -1781,11 +2026,8 @@ function renderBossIntro(){
     boot();
 
   })();
-  
 
-// =========================
-// Mobile UX tweak: keep qc-hud under topbar height (avoid overlap on some phones)
-// =========================
+// Sync altezza topbar -> CSS var (evita che qc-hud copra i bottoni su certi telefoni)
 (function(){
   const topbar = document.querySelector('.topbar');
   if(!topbar) return;
