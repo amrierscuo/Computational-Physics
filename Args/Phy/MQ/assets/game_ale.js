@@ -6,71 +6,55 @@
     // Data (TIMELINE from tree)
     // =========================
 
-    function r(a,b){
+    function rangePages(a,b){
       const out=[];
-      for(let i=a;i<=b;i++) out.push(`${i}.jpg`);
+      for(let i=a;i<=b;i++) out.push(i);
       return out;
     }
 
+    // Immagini (77 pagine): img/page_1.jpg ... img/page_77.jpg
+    const IMG_DIR = 'img';
+    function imgUrlForPage(page){
+      return `${IMG_DIR}/page_${page}.jpg`;
+    }
+
     const TIMELINE = [
-      // --- P1 ---
-      { id:'p1-01', part:'P1', key:'P1·1', title:'1) Esperimenti e intro', subtitle:'Full Exp e intro', path:'P1 › 1) Esperimenti e intro › Full Exp e intro', pages:'1-18', files:[...r(1,17),'18_p1t01.jpg'] },
-      { id:'p1-02', part:'P1', key:'P1·2', title:'2) Analogie Ottica-Meccanica', subtitle:'Exp doppia fenditura', path:'P1 › 2) Analogie Ottica-Meccanica + Exp doppia fenditura', pages:'18-26', files:['18_p1t02.jpg',...r(19,26)] },
-      { id:'p1-03', part:'P1', key:'P1·3', title:'3) Pacchetti d’onda gaussiani', subtitle:'TISE/TDSE + intro', path:'P1 › 3) Pac. onde gaussiane + tise_tdse + intro2', pages:'27-43', files:r(27,43) },
-      { id:'p1-04', part:'P1', key:'P1·4', title:'4) Continuità + conservazione prob.', subtitle:'', path:'P1 › 4) Continuita_corrente e cons prob tot', pages:'44-46', files:[...r(44,45),'46_p1t01.jpg'] },
-      { id:'p1-05', part:'P1', key:'P1·5', title:'5) Proprietà e valori medi', subtitle:'', path:'P1 › 5) Proprietà e val medi', pages:'46-53', files:['46_p1t02.jpg',...r(47,52),'53_p1t01.jpg'] },
-      { id:'p1-06', part:'P1', key:'P1·6', title:'6) Teorema di Ehrenfest', subtitle:'', path:'P1 › 6) Th. Ehrenfest', pages:'53-56', files:['53_p1t02.jpg',...r(54,56)] },
-      { id:'p1-07', part:'P1', key:'P1·7', title:'7) Intro (conti + valori medi)', subtitle:'', path:'P1 › 7) Intro3_conti_val medi_ris eq S', pages:'57-66', files:r(57,66) },
-      { id:'p1-08', part:'P1', key:'P1·8', title:'8) Prob. 1D - buca', subtitle:'potenziale generico + part. libera', path:'P1 › 8) Prob1D-Buca-profgenericopotenziale-part_libera', pages:'67-83', files:[...r(67,82),'83_p1t01.jpg'] },
-      { id:'p1-09', part:'P1', key:'P1·9', title:'9) Step/Barriera', subtitle:'analogia ottica', path:'P1 › 9) Prob1D-Step_Barriera+an_ottica', pages:'83-93', files:['83_p1t02.jpg',...r(84,93)] },
-      { id:'p1-10', part:'P1', key:'P1·10', title:'10) Buca 2++', subtitle:'', path:'P1 › 10)Buca2++', pages:'94-100', files:[...r(94,99),'100_p1t01.jpg'] },
+      // --- P1 (capitoli 0–2) ---
+      { id:'c0',   part:'P1', key:'0',   title:'0 - Limiti della fisica classica', subtitle:'', path:'0 › Limiti della fisica classica', pages:'2-4',  files: rangePages(2,4) },
 
-      { id:'p1-11a', part:'P1', key:'P1·11A', title:'11) OA QM vs CL', subtitle:'qm vs cl', path:'P1 › 11) OA qm vs cl + regressioni matematiche › qm vs cl', pages:'100-108', files:['100_p1t02.jpg',...r(101,107),'108_p1t01.jpg'] },
-      { id:'p1-11b', part:'P1', key:'P1·11B', title:'11) OA QM vs CL', subtitle:'regressioni matematiche', path:'P1 › 11) OA qm vs cl + regressioni matematiche › Regressioni matematiche', pages:'108-125', files:['108_p1t02.jpg',...r(109,125)] },
+      { id:'c1_0', part:'P1', key:'1',   title:'1 - Meccanica ondulatoria (intro)', subtitle:'', path:'1 › Meccanica ondulatoria', pages:'5-6',  files: rangePages(5,6) },
+      { id:'c1_1', part:'P1', key:'1.1', title:"1.1 Pacchetto d'onda", subtitle:'', path:"1 › 1.1 Pacchetto d'onda", pages:'7-8',  files: rangePages(7,8) },
+      { id:'c1_2', part:'P1', key:'1.2', title:'1.2 Equazione di Schrödinger', subtitle:'', path:'1 › 1.2 Equazione di Schrödinger', pages:'9-11', files: rangePages(9,11) },
+      { id:'c1_2b',part:'P1', key:'1.2b',title:'1.2 Valori di aspettazione', subtitle:'', path:'1 › 1.2 Valori di aspettazione', pages:'12-14', files: rangePages(12,14) },
+      { id:'c1_3', part:'P1', key:'1.3', title:'1.3 Schrödinger in sistemi conservativi', subtitle:'', path:'1 › 1.3 Sistemi conservativi', pages:'15-17', files: rangePages(15,17) },
+      { id:'c1_4', part:'P1', key:'1.4', title:'1.4 Problemi unidimensionali', subtitle:'', path:'1 › 1.4 Problemi 1D', pages:'18-28', files: rangePages(18,28) },
 
-      { id:'p1-12', part:'P1', key:'P1·12', title:'12) OA operatoriale', subtitle:'notazione matriciale', path:'P1 › 12) OA operatoriale + not matriciale', pages:'126-132', files:[...r(126,131),'132_p1t01.jpg'] },
-      { id:'p1-13', part:'P1', key:'P1·13', title:'13) Postulati', subtitle:'', path:'P1 › 13) Postulati', pages:'132-137', files:['132_p1t02.jpg',...r(133,136),'137_p1t01.jpg'] },
+      { id:'c2_0', part:'P1', key:'2',   title:'2 - Formalismo matematico (intro)', subtitle:'', path:'2 › Formalismo matematico', pages:'29-30', files: rangePages(29,30) },
+      { id:'c2_1', part:'P1', key:'2.1', title:'2.1 Trasformazioni Unitarie', subtitle:'', path:'2 › 2.1 Trasformazioni Unitarie', pages:'31-32', files: rangePages(31,32) },
+      { id:'c2_2', part:'P1', key:'2.2', title:'2.2 Oscillatore armonico rivisitato', subtitle:'', path:'2 › 2.2 Oscillatore armonico rivisitato', pages:'33-34', files: rangePages(33,34) },
+      { id:'c2_3', part:'P1', key:'2.3', title:'2.3 Postulati della Meccanica Quantistica', subtitle:'', path:'2 › 2.3 Postulati della MQ', pages:'35-37', files: rangePages(35,37) },
+      { id:'c2_4', part:'P1', key:'2.4', title:'2.4 Osservabili compatibili', subtitle:'', path:'2 › 2.4 Osservabili compatibili', pages:'38-39', files: rangePages(38,39) },
 
-      { id:'p1-14a', part:'P1', key:'P1·14A', title:'14) Osservabili compatibili', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › oss compatibili', pages:'137-141', files:['137_p1t02.jpg',...r(138,140),'141_p1t02.jpg'] },
-      { id:'p1-14b', part:'P1', key:'P1·14B', title:'14) Analogia ottica', subtitle:'', path:'P1 › 14) Oss compatibili + an Ottica › an ottica', pages:'141-142', files:['141_p1t01.jpg','142_p1t01.jpg'] },
+      // --- P2 (capitoli 3–5) ---
+      { id:'c3_0', part:'P2', key:'3',   title:'3 - Momento angolare (intro)', subtitle:'', path:'3 › Momento angolare', pages:'40-41', files: rangePages(40,41) },
+      { id:'c3_1', part:'P2', key:'3.1', title:'3.1 Armoniche Sferiche', subtitle:'', path:'3 › 3.1 Armoniche Sferiche', pages:'42-43', files: rangePages(42,43) },
+      { id:'c3_2', part:'P2', key:'3.2', title:'3.2 Momento angolare totale', subtitle:'', path:'3 › 3.2 Momento angolare totale', pages:'44-46', files: rangePages(44,46) },
+      { id:'c3_3', part:'P2', key:'3.3', title:'3.3 Simmetrie e leggi di conservazione', subtitle:'', path:'3 › 3.3 Simmetrie e conservazione', pages:'47-48', files: rangePages(47,48) },
+      { id:'c3_4', part:'P2', key:'3.4', title:'3.4 Prodotto diretto', subtitle:'', path:'3 › 3.4 Prodotto diretto', pages:'49-50', files: rangePages(49,50) },
+      { id:'c3_5', part:'P2', key:'3.5', title:'3.5 Potenziale centrale', subtitle:'', path:'3 › 3.5 Potenziale centrale', pages:'51-53', files: rangePages(51,53) },
 
-      { id:'p1-15', part:'P1', key:'P1·15', title:'15) Indeterminazione', subtitle:'', path:'P1 › 15) Principio di Indeterminazione', pages:'142-145', files:['142_p1t02.jpg',...r(143,145)] },
-      { id:'p1-16', part:'P1', key:'P1·16', title:'16) Conticini / commutatori', subtitle:'', path:'P1 › 16) conticini commutatori', pages:'146-147', files:['146.jpg','147_p1t01.jpg'] },
+      { id:'c4_0', part:'P2', key:'4',   title:'4 - Spin (intro)', subtitle:'', path:'4 › Spin', pages:'54-55', files: rangePages(54,55) },
+      { id:'c4_1', part:'P2', key:'4.1', title:'4.1 Rappresentazioni matriciali', subtitle:'', path:'4 › 4.1 Rappresentazioni matriciali', pages:'56-58', files: rangePages(56,58) },
+      { id:'c4_2', part:'P2', key:'4.2', title:'4.2 Composizione dei momenti angolari', subtitle:'', path:'4 › 4.2 Composizione dei momenti angolari', pages:'59-61', files: rangePages(59,61) },
+      { id:'c4_3', part:'P2', key:'4.3', title:'4.3 Particelle identiche', subtitle:'', path:'4 › 4.3 Particelle identiche', pages:'62-63', files: rangePages(62,63) },
 
-      { id:'p1-17a', part:'P1', key:'P1·17A', title:'17) Momento angolare', subtitle:'intro', path:'P1 › 17) Mom Ang + Sferiche › mom ang › intro mom ang', pages:'147-152', files:['147_p1t02.jpg',...r(148,151),'152_p1t01.jpg'] },
-      { id:'p1-17b', part:'P1', key:'P1·17B', title:'17) Armoniche sferiche', subtitle:'spazio coordinate + extra', path:'P1 › 17) Mom Ang + Sferiche › spazio coordinate e armoniche sferiche', pages:'152-165', files:['152_p1t02.jpg',...r(153,156),...r(157,164),'165_p1t01.jpg'] },
-
-      { id:'p1-18', part:'P1', key:'P1·18', title:'18) Evoluzione temporale', subtitle:'', path:'P1 › 18)Evoluzione Temporale', pages:'165-169', files:['165_p1t02.jpg',...r(166,168),'169_p1t01.jpg'] },
-      { id:'p1-19', part:'P1', key:'P1·19', title:'19) Conservazione + simm. continue', subtitle:'prodotto diretto', path:'P1 › 19)Leggi conservazione-simm continue e prodotto diretto', pages:'169-175', files:['169_p1t02.jpg',...r(170,174),'175_p1t01.jpg'] },
-
-      { id:'p1-20a', part:'P1', key:'P1·20A', title:'20) Potenziale centrale', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › centrale', pages:'175-178', files:['175_p1t02.jpg',...r(176,177),'178_p1t01.jpg'] },
-      { id:'p1-20b', part:'P1', key:'P1·20B', title:'20) Coulombiano + Kummer', subtitle:'', path:'P1 › 20) Pot Centrale e Coulombiano -Exp SG e Spin › coulombiano + kummer', pages:'178-185', files:['178_p1t02.jpg',...r(179,185)] },
-
-      { id:'p1-21a', part:'P1', key:'P1·21A', title:'21) Zeeman', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Zeeman', pages:'186-188', files:['186.jpg','187.jpg','188_p1t02.jpg'] },
-      { id:'p1-21b', part:'P1', key:'P1·21B', title:'21) Exp Stern-Gerlach + Spin', subtitle:'', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Exp SG e Spin', pages:'188-199', files:['188_p1t01.jpg',...r(189,199)] },
-      { id:'p1-21c', part:'P1', key:'P1·21C', title:'21) Particelle non interagenti', subtitle:'intro', path:'P1 › 21)Zeeman +expSG+ Spin e part interagenti › Particelle non interagenti intro', pages:'200-202', files:r(200,202) },
-
-      { id:'p1-22', part:'P1', key:'P1·22', title:'22) 3D EqS', subtitle:'particella libera + OA', path:'P1 › 22)3D eqS-partLibera-OA', pages:'203-207', files:r(203,207) },
-
-      // --- P2 ---
-      { id:'p2-23a', part:'P2', key:'P2·23A', title:'23) Composizione J', subtitle:'composizione', path:'P2 › 23)Composizione_J › Composizione', pages:'208-214', files:[...r(208,213),'214_p2t02.jpg'] },
-      { id:'p2-23b', part:'P2', key:'P2·23B', title:'23) Composizione J', subtitle:'2 fermioni', path:'P2 › 23)Composizione_J › 2 fermioni', pages:'214-215', files:['214_p2t01.jpg','215_p2t01.jpg'] },
-
-      { id:'p2-24', part:'P2', key:'P2·24', title:'24) Particelle identiche', subtitle:'', path:'P2 › 24) Particelle identiche', pages:'215-220', files:['215_p2t02.jpg',...r(216,219),'220_p2t01.jpg'] },
-
-      { id:'p2-25a', part:'P2', key:'P2·25A', title:'25) Perturbazioni stazionarie', subtitle:'non degeneri', path:'P2 › 25) Pert staz › non-deg', pages:'220-223', files:['220_p2t02.jpg',...r(221,223)] },
-      { id:'p2-25b', part:'P2', key:'P2·25B', title:'25) Perturbazioni stazionarie', subtitle:'degeneri', path:'P2 › 25) Pert staz › deg', pages:'224-227', files:[...r(224,226),'227_p2t01.jpg'] },
-
-      { id:'p2-26', part:'P2', key:'P2·26', title:'26) Struttura fine', subtitle:'correzioni relativistiche', path:'P2 › 26)Struttura Affine e correzioni relativistiche', pages:'227-236', files:['227_p2t02.jpg',...r(228,235),'236_p2t01.jpg'] },
-
-      { id:'p2-27', part:'P2', key:'P2·27', title:'27) Hellmann-Feynman', subtitle:'', path:'P2 › 27)Th. Hellman-Feynman', pages:'236-237', files:['236_p2t02.jpg','237_p2t01.jpg'] },
-
-      { id:'p2-28a', part:'P2', key:'P2·28A', title:'28) Pert. dip. dal tempo', subtitle:'TPDT', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › tpdt', pages:'237-240', files:['237_p2t02.jpg','238.jpg','239.jpg','240_p2t02.jpg'] },
-      { id:'p2-28b', part:'P2', key:'P2·28B', title:'28) Pert. dip. dal tempo', subtitle:'costante/periodico/risonanza', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › costante-periodico-risonanza e puls bohr', pages:'240-243', files:['240_p2t01.jpg',...r(241,243)] },
-      { id:'p2-28c', part:'P2', key:'P2·28C', title:'28) Caso continuo', subtitle:'conclusione', path:'P2 › 28)pert dip da t - puls bohr - caso continuo e fine › Caso al continuo e conclusione', pages:'244-249', files:r(244,249) },
+      { id:'c5_0', part:'P2', key:'5',   title:'5 - Teoria delle perturbazioni (intro)', subtitle:'', path:'5 › Teoria delle perturbazioni', pages:'64-66', files: rangePages(64,66) },
+      { id:'c5_1', part:'P2', key:'5.1', title:"5.1 Struttura fine dell'atomo di H", subtitle:'', path:'5 › 5.1 Struttura fine', pages:'67-71', files: rangePages(67,71) },
+      { id:'c5_2', part:'P2', key:'5.2', title:'5.2 Perturbazioni dipendenti dal tempo', subtitle:'', path:'5 › 5.2 Perturbazioni dipendenti dal tempo', pages:'72-74', files: rangePages(72,74) },
+      { id:'c5_2b',part:'P2', key:'5.2b',title:'5.2 Relazione tempo-energia', subtitle:'', path:'5 › 5.2 Relazione tempo-energia', pages:'75-77', files: rangePages(75,77) },
     ];
 
-    const TOTAL_BLOCKS = TIMELINE.length;
+const TOTAL_BLOCKS = TIMELINE.length;
 
     // =========================
     // Glossary (minimal but useful)
@@ -99,13 +83,14 @@
       { id:'t1', label:'I) Quantum Warmup',    file:'audio/music-201745.mp3', unlockBlocks: 2,  requiresEgg:false },
       { id:'t2', label:'II) Symmetry Engine',  file:'audio/music-423648.mp3', unlockBlocks: 8,  requiresEgg:false },
       { id:'t3', label:'III) Operator Groove', file:'audio/music-417477.mp3', unlockBlocks: 16, requiresEgg:false },
-      { id:'t4', label:'IV) The Hidden Eigenbeat', file:'audio/music-467173.mp3', unlockBlocks: 28, requiresEgg:false },
+      { id:'t4', label:'IV) The Hidden Eigenbeat', file:'audio/music-467173.mp3', unlockBlocks: 12, requiresEgg:false },
       // Easter egg: sbloccabile solo dopo le prime 4 + egg
       { id:'t5', label:'V) Wavepacket Ride (Easter Egg)', file:'audio/music-bounce-on-it-184234.mp3', unlockBlocks: 999, requiresEgg:true },
+      // Bossfight theme (si sblocca quando puoi entrare in Bossfight)
+      { id:'tBF', label:'Bossfight Theme (1BF)', file:'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3', unlockBlocks: 999, requiresEgg:false, requiresBoss:false, requiresBossfight:true },
       // Boss reward (si sblocca dopo aver completato TUTTE le DIM della bossfight)
       // Nota: nel pacchetto zip includiamo un placeholder; puoi sostituirlo con il tuo file reale.
       { id:'t6', label:'VI) Classical Pack (Endgame)', file:'audio/classical-pack-v1.mp3', unlockBlocks: 999, requiresEgg:false, requiresBoss:true },
-      { id:'tb', label:'Bossfight Theme', file:'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3', unlockBlocks: 999, requiresEgg:false, requiresBossAccess:true, hidden:true }
     ];
 
 
@@ -257,8 +242,8 @@
     // State
     // =========================
 
-    const STORAGE_KEY = 'mq_game_tree_jukebox_v3';
-    const STORAGE_KEY_FALLBACK = 'mq_game_tree_jukebox_v2';
+    const STORAGE_KEY = 'mq_bibbia_ale_pdf_v1';
+    const STORAGE_KEY_FALLBACK = 'mq_bibbia_ale_pdf_v0';
 
     const DEFAULT_STATE = {
       v: 3,
@@ -430,7 +415,7 @@
     // Bossfight music (auto-play on enter; toggle inside Bossfight)
     // Riusa un file gia presente nel progetto (traccia IV). Puoi cambiarlo se vuoi.
     const BOSS_MUSIC_FILE = 'audio/1BF-haween-bgmeinherjar-421376_NJNZJFZh.mp3';
-    const BOSS_MUSIC_LABEL = 'Bossfight Theme';
+    const BOSS_MUSIC_LABEL = 'Bossfight Theme (1BF)';
     let bossMusicBtn = null;
 
     // Viewer state
@@ -466,17 +451,21 @@
     function closeModal(el){ el.classList.remove('show'); }
 
     function humanLabel(file){
-      // 12.jpg -> Pag. 12
-      const m = /^([0-9]+)\.jpg$/i.exec(file);
+      // file puo' essere un numero pagina (PDF) oppure una stringa
+      if(typeof file === 'number') return `Pag. ${file}`;
+      const s = String(file);
+      const m = /^([0-9]+)\.jpg$/i.exec(s);
       if(m) return `Pag. ${m[1]}`;
-      const v = /^([0-9]+)_p([12])t0?([12])\.jpg$/i.exec(file);
+      const v = /^([0-9]+)_p([12])t0?([12])\.jpg$/i.exec(s);
       if(v){
         const n = v[1];
-        const part = v[2];
         const t = v[3];
         return `Pag. ${n} · parte ${t}/2`;
       }
-      return file;
+      // fallback: prova a leggere 'p40'
+      const p = /^p?([0-9]+)$/i.exec(s);
+      if(p) return `Pag. ${p[1]}`;
+      return s;
     }
 
     // =========================
@@ -652,7 +641,7 @@
     const ACH = [
       { id:'firstBlock', title:'Primo blocco', desc:'Completa 1 blocco.', check: s => completedCount(s) >= 1, reward: () => ({silver: 20, gold:0}) },
       { id:'eight', title:'8 blocchi', desc:'Arriva a 8 blocchi completati.', check: s => completedCount(s) >= 8, reward: () => ({silver: 40, gold:1}) },
-      { id:'p1done', title:'P1 clear', desc:'Completa tutti i 28 blocchi di P1.', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'p1done', title:'P1 clear', desc:'Completa tutti i blocchi di P1.', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
       { id:'p2done', title:'P2 clear', desc:'Completa tutti i blocchi di P2.', check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
       { id:'fullclear', title:'Full clear', desc:'Completa tutti i blocchi (P1+P2).', check: s => completedCount(s) >= TOTAL_BLOCKS, reward: () => ({silver: 100, gold:5}) },
       { id:'egg', title:'Easter egg', desc:'Trova la traccia segreta.', check: s => !!s.eggFound, reward: () => ({silver: 25, gold:2}) },
@@ -707,10 +696,10 @@
     }
 
     function trackUnlocked(track){
-      if(track.requiresBossAccess) return canEnterBoss() || !!state.bossUnlockedOnce;
       if(track.requiresBoss) return !!state.bossRewardUnlocked;
+      if(track.requiresBossfight) return canEnterBoss();
       if(track.requiresEgg){
-        const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss && !t.requiresBossAccess && !t.hidden).every(t=>trackUnlocked(t));
+        const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
         return baseUnlocked && !!state.eggFound;
       }
       return completedCount() >= track.unlockBlocks;
@@ -733,7 +722,7 @@
     function makeBlockCard(block){
       const done = isBlockDone(block.id);
       const reward = blockReward(block);
-      const hasSplit = block.files.some(f=>/_p[12]t0?[12]\.jpg$/i.test(f));
+      const hasSplit = false; // PDF: niente pagine spezzate
 
       const el = document.createElement('details');
       el.className = 'block';
@@ -746,9 +735,9 @@
             <span>${escapeHtml(block.subtitle || '-')}</span>
           </span>
           <span class="bmeta">
-            <span class="chip"><b>${block.files.length}</b><span>img</span></span>
+            <span class="chip"><b>${block.files.length}</b><span>pag</span></span>
             <span class="chip"><b>+${reward.silver}</b><span>Silver</span></span>
-            ${hasSplit ? '<span class="chip" title="Contiene pagine divise in 2">½</span>' : ''}
+            
             <span class="chip" style="${done?'border-color:rgba(57,217,138,.45);background:rgba(57,217,138,.10);':''}">
               <b>${done ? 'DONE' : 'TODO'}</b>
             </span>
@@ -796,37 +785,18 @@
     }
 
     function buildThumbnails(block, container){
-      // Caricamento "a batch" + lazy reale: evita freeze con immagini molto grandi
-      const files = block.files;
-      const total = files.length;
+      // Versione IMG: usa img/page_N.jpg gia' esportate.
+      const pages = block.files;
+      const total = pages.length;
 
       const isMobile = window.matchMedia && window.matchMedia('(max-width: 620px)').matches;
-      const batchSize = isMobile ? 4 : 6;
-
-      const TINY = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-
-      // IntersectionObserver globale: assegna la src vera solo quando entra in viewport
-      if(!window.__thumbIO){
-        window.__thumbIO = new IntersectionObserver((entries, obs)=>{
-          for(const e of entries){
-            if(!e.isIntersecting) continue;
-            const img = e.target;
-            const src = img.dataset.src;
-            if(src){
-              img.src = src;
-              img.removeAttribute('data-src');
-            }
-            obs.unobserve(img);
-          }
-        }, { root: null, rootMargin: '160px', threshold: 0.01 });
-      }
-      const io = window.__thumbIO;
+      const batchSize = isMobile ? 6 : 10;
 
       let loaded = 0;
       container.innerHTML = '';
 
       function createThumb(i){
-        const file = files[i];
+        const page = pages[i];
 
         const t = document.createElement('div');
         t.className = 'thumb';
@@ -837,21 +807,18 @@
         const img = document.createElement('img');
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.alt = humanLabel(file);
-        img.src = TINY;
-        img.dataset.src = `img/${file}`;
-        img.setAttribute('fetchpriority','low');
-        io.observe(img);
+        img.src = imgUrlForPage(page);
+        img.alt = `Pag. ${page}`;
+        t.appendChild(img);
 
         const cap = document.createElement('div');
         cap.className = 'cap';
-        cap.textContent = humanLabel(file);
+        cap.textContent = `Pag. ${page}`;
 
         const badge = document.createElement('div');
         badge.className = 'badge';
-        badge.textContent = `${i+1}/${files.length}`;
+        badge.textContent = `${i+1}/${total}`;
 
-        t.appendChild(img);
         t.appendChild(cap);
         t.appendChild(badge);
 
@@ -871,13 +838,10 @@
         t.className = 'thumb more';
         t.tabIndex = 0;
         t.setAttribute('role','button');
-        t.setAttribute('aria-label', `Carica altre miniature (restanti ${remaining})`);
+        t.setAttribute('aria-label', `Carica altre pagine (restanti ${remaining})`);
         t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>Carica altre</small></div>`;
 
-        const doLoad = ()=>{
-          t.remove();
-          loadNextBatch();
-        };
+        const doLoad = ()=>{ t.remove(); loadNextBatch(); };
         t.addEventListener('click', doLoad);
         t.addEventListener('keydown', (e)=>{
           if(e.key==='Enter' || e.key===' '){ e.preventDefault(); doLoad(); }
@@ -895,21 +859,13 @@
 
       function loadNextBatch(){
         const end = Math.min(total, loaded + batchSize);
-
-        // Micro-chunk per frame: non blocca il thread UI
-        const chunk = 2;
+        const chunk = 4;
         function step(){
           const until = Math.min(end, loaded + chunk);
-          for(let i = loaded; i < until; i++){
-            createThumb(i);
-          }
+          for(let i = loaded; i < until; i++) createThumb(i);
           loaded = until;
-
-          if(loaded < end){
-            requestAnimationFrame(step);
-          } else {
-            refreshMoreTile();
-          }
+          if(loaded < end) requestAnimationFrame(step);
+          else refreshMoreTile();
         }
         requestAnimationFrame(step);
       }
@@ -967,7 +923,7 @@
       p2DoneEl.textContent = String(p2Done());
 
       const unlocked = unlockedTracksCount();
-      statTracks.textContent = `${unlocked}/${TRACKS.length}`;
+      statTracks.textContent = `${unlocked}/7`;
 
       const bossReady = canEnterBoss();
       statBoss.textContent = bossReady ? '⚔️' : '🔒';
@@ -1040,14 +996,14 @@
       trackList.innerHTML = '';
       const done = completedCount();
 
-      const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss && !t.requiresBossAccess && !t.hidden).every(t=>trackUnlocked(t));
+      const baseUnlocked = TRACKS.filter(t=>!t.requiresEgg && !t.requiresBoss).every(t=>trackUnlocked(t));
       eggPanel.style.display = baseUnlocked && !state.eggFound ? '' : 'none';
 
-      for(const t of TRACKS.filter(t=>!t.hidden)){
+      for(const t of TRACKS){
         const unlocked = trackUnlocked(t);
         const row = document.createElement('div');
         row.className = 'track';
-        const req = t.requiresBoss ? 'bossfight' : (t.requiresEgg ? 'easter egg' : `≥ ${t.unlockBlocks} blocchi`);
+        const req = t.requiresBoss ? 'boss reward' : (t.requiresBossfight ? 'bossfight' : (t.requiresEgg ? 'easter egg' : `≥ ${t.unlockBlocks} blocchi`));
         row.innerHTML = `
           <div class="left">
             <strong>${escapeHtml(t.label)}</strong>
@@ -1099,7 +1055,15 @@
         const li = document.createElement('div');
         li.className = 'li';
         li.style.cursor = 'pointer';
-        li.innerHTML = `<strong>${humanLabel(f)}</strong><p>${i+1}/${block.files.length}</p>`;
+        li.innerHTML = `
+          <div style="display:flex;gap:10px;align-items:center;">
+            <img src="${imgUrlForPage(f)}" alt="" loading="lazy" decoding="async" style="width:72px;height:72px;object-fit:contain;border-radius:10px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.14);flex:0 0 auto;">
+            <div style="min-width:0;">
+              <strong>${escapeHtml(humanLabel(f))}</strong>
+              <p>${i+1}/${block.files.length}</p>
+            </div>
+          </div>
+        `;
         li.addEventListener('click', ()=> setViewerIndex(i));
         vThumbList.appendChild(li);
       }
@@ -1118,7 +1082,7 @@
       const n = currentBlock.files.length;
       currentIndex = clamp(i, 0, n-1);
       const file = currentBlock.files[currentIndex];
-      vImg.src = `img/${file}`;
+      vImg.src = imgUrlForPage(file);
       vCap.textContent = `${humanLabel(file)}  •  ${currentIndex+1}/${n}`;
       vIdx.textContent = String(currentIndex+1);
 
@@ -1226,7 +1190,7 @@ function renderBossIntro(){
   for(let i=0;i<TIMELINE.length;i++){
     const b = TIMELINE[i];
     const chip = document.createElement('div');
-    chip.className = 'mini';
+    chip.className = 'boss-mini';
     if(state.completed && state.completed[b.id]) chip.classList.add('done');
     chip.textContent = b.key || b.id;
     chip.style.animationDelay = (i * 0.03).toFixed(2) + 's';
@@ -1859,7 +1823,10 @@ function stopAudio(){
     vClose.addEventListener('click', ()=> closeModal(viewerModal));
 
     vZoom.addEventListener('click', ()=>{
-      zImg.src = vImg.src;
+      if(!currentBlock) return;
+      const page = currentBlock.files[currentIndex];
+      // Modal zoom: usa lo stesso viewer PDF del browser (toolbar interna)
+      zImg.src = imgUrlForPage(page);
       openModal(zoomModal);
     });
     zClose.addEventListener('click', ()=> closeModal(zoomModal));
