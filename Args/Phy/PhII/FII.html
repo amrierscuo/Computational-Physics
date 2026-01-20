@@ -29,6 +29,7 @@ html{scroll-behavior:smooth}
 body{
   margin:0;
   padding-top: var(--header-h, 0px);
+  transition: padding-top 220ms ease;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
   background: radial-gradient(1200px 800px at 10% -10%, rgba(125,211,252,.18), transparent 55%),
               radial-gradient(1000px 700px at 90% 0%, rgba(167,139,250,.16), transparent 60%),
@@ -47,6 +48,11 @@ header{
   backdrop-filter: blur(10px);
   background: rgba(11,15,25,.82);
   border-bottom:1px solid rgba(35,49,77,.7);
+  transition: transform 220ms ease;
+  will-change: transform;
+}
+header.is-hidden{
+  transform: translateY(-100%);
 }
 .header-inner{
   max-width:1200px;
@@ -126,6 +132,7 @@ aside{
   position:sticky;
   top: calc(var(--header-h, 0px) + 18px);
   height: calc(100vh - var(--header-h, 0px) - 36px);
+  transition: top 220ms ease, height 220ms ease;
   overflow:auto;
   padding:14px;
   border-radius:var(--radius);
@@ -3912,15 +3919,86 @@ footer{
 <script>
 
 (function(){
-  // Sincronizza l'altezza dell'header fisso per evitare sovrapposizioni
+  // Header fisso: si nasconde scorrendo in giù e riappare scorrendo in su.
+  // In questo modo non copre la colonna di destra durante la lettura.
   const headerEl = document.querySelector('header');
-  const setHeaderH = () => {
-    if(!headerEl) return;
-    document.documentElement.style.setProperty('--header-h', `${headerEl.offsetHeight}px`);
+  let headerH = 0;
+  let headerHidden = false;
+  let lastY = window.scrollY || 0;
+
+  const setHeaderVar = (px) => {
+    document.documentElement.style.setProperty('--header-h', px);
   };
-  setHeaderH();
-  window.addEventListener('load', setHeaderH);
-  window.addEventListener('resize', () => requestAnimationFrame(setHeaderH));
+
+  const measureHeader = () => {
+    if(!headerEl) return;
+    headerH = headerEl.offsetHeight || 0;
+    // Mantieni lo spazio solo se l'header è visibile
+    if(!headerHidden){
+      setHeaderVar(`${headerH}px`);
+    }
+  };
+
+  const showHeader = () => {
+    if(!headerEl) return;
+    if(!headerHidden) return;
+    headerHidden = false;
+    headerEl.classList.remove('is-hidden');
+    setHeaderVar(`${headerH}px`);
+  };
+
+  const hideHeader = () => {
+    if(!headerEl) return;
+    if(headerHidden) return;
+    headerHidden = true;
+    headerEl.classList.add('is-hidden');
+    setHeaderVar('0px');
+  };
+
+  const doShow = () => {
+    if(!headerEl) return;
+    headerHidden = false;
+    headerEl.classList.remove('is-hidden');
+    setHeaderVar(`${headerH}px`);
+  };
+
+  // Init
+  measureHeader();
+  window.addEventListener('load', measureHeader);
+  window.addEventListener('resize', () => requestAnimationFrame(measureHeader));
+
+  const SCROLL_DELTA = 6;      // evita flickering
+  const HIDE_AFTER = 40;       // nascondi dopo un minimo di scroll
+
+  window.addEventListener('scroll', () => {
+    if(!headerEl) return;
+
+    const y = window.scrollY || 0;
+    const dy = y - lastY;
+
+    // In cima: header sempre visibile
+    if(y <= 5){
+      if(headerHidden) doShow();
+      lastY = y;
+      return;
+    }
+
+    // Scroll giù: nascondi
+    if(dy > SCROLL_DELTA && !headerHidden && y > HIDE_AFTER){
+      headerHidden = true;
+      headerEl.classList.add('is-hidden');
+      setHeaderVar('0px');
+    }
+
+    // Scroll su: mostra
+    if(dy < -SCROLL_DELTA && headerHidden){
+      headerHidden = false;
+      headerEl.classList.remove('is-hidden');
+      setHeaderVar(`${headerH}px`);
+    }
+
+    lastY = y;
+  }, {passive:true});
 
 
   const search = document.getElementById('tocSearch');
