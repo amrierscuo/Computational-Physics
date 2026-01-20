@@ -22,11 +22,13 @@
   --bad:#fb7185;
   --shadow: 0 10px 30px rgba(0,0,0,.35);
   --radius: 14px;
+  --header-h: 220px; /* altezza header (aggiornata via JS) */
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0;
+  padding-top: var(--header-h, 0px);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
   background: radial-gradient(1200px 800px at 10% -10%, rgba(125,211,252,.18), transparent 55%),
               radial-gradient(1000px 700px at 90% 0%, rgba(167,139,250,.16), transparent 60%),
@@ -37,8 +39,10 @@ body{
 a{color:var(--link); text-decoration:none}
 a:hover{text-decoration:underline}
 header{
-  position:sticky;
+  position:fixed;
   top:0;
+  left:0;
+  right:0;
   z-index:50;
   backdrop-filter: blur(10px);
   background: rgba(11,15,25,.82);
@@ -50,13 +54,14 @@ header{
   padding:14px 18px;
   display:flex;
   gap:14px;
-  align-items:center;
+  flex-wrap:wrap;
+  align-items:flex-start;
   justify-content:space-between;
 }
 .brand{
   display:flex;
   flex-direction:column;
-  gap:2px;
+  gap:6px;
 }
 .brand h1{
   font-size:18px;
@@ -68,10 +73,14 @@ header{
   color:var(--muted);
   font-size:13px;
 }
+.brand strong{color:var(--accent)}
+.notice{margin-top:6px; display:flex; gap:10px; flex-wrap:wrap;}
 .header-actions{
   display:flex;
   gap:10px;
   align-items:center;
+  flex-wrap:wrap;
+  margin-left:auto;
 }
 .pill{
   display:inline-flex;
@@ -115,8 +124,8 @@ header{
 }
 aside{
   position:sticky;
-  top:74px;
-  height: calc(100vh - 92px);
+  top: calc(var(--header-h, 0px) + 18px);
+  height: calc(100vh - var(--header-h, 0px) - 36px);
   overflow:auto;
   padding:14px;
   border-radius:var(--radius);
@@ -176,7 +185,7 @@ main{
   margin-bottom:14px;
 }
 .page{
-  scroll-margin-top: 92px;
+  scroll-margin-top: calc(var(--header-h, 0px) + 18px);
 }
 .page h2{
   margin:0 0 10px 0;
@@ -274,6 +283,8 @@ footer{
   color:var(--muted);
 }
 .small{font-size:12px; color:var(--muted)}
+
+
 @media (max-width: 980px){
   .layout{grid-template-columns: 1fr;}
   aside{position:relative; top:auto; height:auto;}
@@ -285,23 +296,42 @@ footer{
 <body id="top">
 <header>
 <div class="header-inner">
-<div class="brand">
-<h1>Appunti Fisica II - Pagine (con riassunto)</h1>
-<p>176 pagine (pagina 113 sostituita con la lezione sul potenziale vettore). Usa la ricerca per trovare argomenti rapidamentade.</p>
+  <div class="brand">
+    <h1>Appunti Fisica II - Pagine (con riassunto)</h1>
+    <p>
+      176 pagine totali.
+      <br>
+      <strong>Leti:</strong> p.1 - p.103 e p.114 - p.162 (corso principale).
+      <br>
+      <strong>Ale (Relatività Speciale):</strong> p.105 - p.111.
+      <br>
+      <strong>Manuel:</strong> introduzione al potenziale vettore p.113.1 - p.113.7 (lezione sostitutiva).
+      <br>
+      <strong>Ottica:</strong>
+      Mirco p.164 - p.166 e p.176 (con dimostrazioni);
+      Vale p.167 - p.175.
+      <br>
+      <strong>Domande orali:</strong> sezione finale con schemi e dimostrazioni.
+      <br>
+      Usa la ricerca per trovare rapidamente argomenti o numeri di pagina.
+    </p>
+    <div class="notice">
+      <a class="back-link" href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/PhII/FII.html">| Lezioni |</a>
+      <a class="back-link" href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/Phy.html">Ritorna all'Indice Principale |</a>
+    </div>
+  </div>
 
-</div>
-          <div class="notice" style="margin-top:10px">
-			<a class="back-link" href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/PhII/FII.html">| Lezioni |</a>
-			<a class="back-link" href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/Phy.html">Ritorna all'Indice Principale |</a>
-          </div>
-<div class="header-actions">
-<div class="pill" title="Filtra l'indice per parola o numero pagina">
-        🔎 <input id="tocSearch" placeholder="Cerca: es. Gauss, Faraday, 120..." type="text"/>
-</div>
-<a class="btn" href="#bottom">Vai a fine pagina ↓</a>
-</div>
+  <div class="header-actions">
+    <div class="pill" title="Filtra l'indice per parola o numero pagina">
+      🔎 <input id="tocSearch" placeholder="Cerca: es. Gauss, Faraday, 120..." type="text"/>
+    </div>
+    <a class="btn" href="files/AppuntiFII_compressed.pdf" download>Scarica PDF ⬇</a>
+    <a class="btn" href="#bottom">Vai a fine pagina ↓</a>
+  </div>
 </div>
 </header>
+
+
 <div class="layout">
 <aside>
 <h2>Indice pagine</h2>
@@ -482,6 +512,7 @@ footer{
 <li><a href="#p174"><span class="num">174</span><span class="txt">Massimi principali, massimi secondari e minimi del reticolo</span></a></li>
 <li><a href="#p175"><span class="num">175</span><span class="txt">Esempio N=6: struttura dei picchi e numero di massimi secondari</span></a></li>
 <li><a href="#p176"><span class="num">176</span><span class="txt">Diffrazione: Huygens-Fresnel, fenditura singola e criterio di Rayleigh</span></a></li>
+<li><a href="#oral"><span class="num">ORAL</span><span class="txt">Domande orali (Parte 1 + Parte 2)</span></a></li>
 </ul>
 <p class="small" style="margin-top:12px;">Suggerimento: premi <strong>Ctrl/Cmd + F</strong> per cercare anche dentro i riassunti.</p>
 </aside>
@@ -3801,9 +3832,76 @@ footer{
 <a href="#bottom">Fine →</a>
 </div>
 </article>
+
+<article class="card page" id="oral-questions">
+<h2>Domande per l'orale - Parte 1 e Parte 2</h2>
+<div class="badge"><span class="dot"></span><span><strong>Sezione:</strong> Domande orali</span></div>
+<div class="summary">
+  <div class="label">Nota</div>
+  <p>Due pagine di domande/argomenti per ripasso orale (Parte 1 e Parte 2).</p>
+</div>
+
+<figure class="figure">
+  <img alt="Domande orali - Parte 1" class="lazy" data-src="images/p1.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+  <figcaption><span>Domande orali - Parte 1</span><a href="images/p1.jpg" rel="noopener" target="_blank">Apri immagine</a></figcaption>
+</figure>
+
+<figure class="figure">
+  <img alt="Domande orali - Parte 2" class="lazy" data-src="images/p2.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+  <figcaption><span>Domande orali - Parte 2</span><a href="images/p2.jpg" rel="noopener" target="_blank">Apri immagine</a></figcaption>
+</figure>
+
+<div class="nav">
+  <a href="#p176">← Ultima pagina appunti</a>
+  <a href="#bottom">Fine →</a>
+</div>
+</article>
+
 </main>
 </div>
 <footer id="bottom">
+<div class="card" id="domande-orali" style="margin:0 0 14px 0;">
+  <h2 style="margin:0 0 10px 0;">Zoom Domande per orale - Parte 1 e Parte 2</h2>
+  <div class="badge"><span class="dot"></span><span><strong>Sezione:</strong> checklist orale</span></div>
+  <div class="summary">
+    <div class="label">Nota</div>
+    <p>Due pagine di riferimento con l’elenco dei temi/quesiti da saper discutere all’orale: <strong>p1 = Parte 1</strong> e <strong>p2 = Parte 2</strong>.</p>
+  </div>
+
+  <figure class="figure">
+    <img alt="Domande orale - Parte 1" class="lazy" data-src="images/p1.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+    <figcaption><span>Parte 1 (p1)</span><a href="images/p1.jpg" rel="noopener" target="_blank">Apri immagine</a></figcaption>
+  </figure>
+
+  <figure class="figure">
+    <img alt="Domande orale - Parte 2" class="lazy" data-src="images/p2.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+    <figcaption><span>Parte 2 (p2)</span><a href="images/p2.jpg" rel="noopener" target="_blank">Apri immagine</a></figcaption>
+  </figure>
+
+  <div class="nav">
+    <a href="#top">Torna in cima ↑</a>
+  </div>
+</div>
+<div class="card" style="margin:0;">
+<article class="card page" id="oral">
+<h2>Domande orali - Parte 1 e Parte 2</h2>
+<div class="badge"><span class="dot"></span><span><strong>Sezione:</strong> Domande per orale</span></div>
+<div class="summary">
+  <div class="label">Nota</div>
+  <p>Lista di domande/tracce per l'orale (Parte 1 e Parte 2). Le immagini devono trovarsi in <code>images/p1.jpg</code> e <code>images/p2.jpg</code>.</p>
+</div>
+
+<figure class="figure">
+  <img alt="Domande orali - Parte 1" class="lazy" data-src="images/p1.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+  <figcaption><span>Parte 1 (p1.jpg)</span><a href="images/p1.jpg" rel="noopener" target="_blank">Apri immagine</a></figcaption>
+</figure>
+
+<figure class="figure">
+  <img alt="Domande orali - Parte 2" class="lazy" data-src="images/p2.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+  <figcaption><span>Parte 2 (p2.jpg)</span><a href="images/p2.jpg" rel="noopener" target="_blank">Apri immagine</a></figcaption>
+</figure>
+</article>
+
 <div class="card" style="margin:0;">
 <h2 style="margin:0 0 8px 0;">Fine</h2>
 <p class="small" style="margin:0 0 12px 0;">Se la pagina sembra lenta, è normale: sono molte pagine. Le immagini vengono caricate in modo progressivo.</p>
@@ -3814,6 +3912,17 @@ footer{
 <script>
 
 (function(){
+  // Sincronizza l'altezza dell'header fisso per evitare sovrapposizioni
+  const headerEl = document.querySelector('header');
+  const setHeaderH = () => {
+    if(!headerEl) return;
+    document.documentElement.style.setProperty('--header-h', `${headerEl.offsetHeight}px`);
+  };
+  setHeaderH();
+  window.addEventListener('load', setHeaderH);
+  window.addEventListener('resize', () => requestAnimationFrame(setHeaderH));
+
+
   const search = document.getElementById('tocSearch');
   const tocList = document.getElementById('tocList');
   if(search && tocList){
