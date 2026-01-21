@@ -8,6 +8,7 @@
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <title>Indice MQ</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%234b1d8a'/%3E%3Cstop offset='100%25' stop-color='%23c4b5fd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='18' fill='url(%23g)'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='72' font-family='system-ui,Segoe UI,Arial' fill='%23ffffff'%3E%CF%88%3C/text%3E%3C/svg%3E">
 
   <style>
     :root{
@@ -179,7 +180,7 @@
     .toggle-btn{
       position: fixed;
       top: 14px;
-      left: 14px;
+      left: 64px;
       z-index: 1200;
       cursor: pointer;
       border: 1px solid rgba(255,255,255,0.22);
@@ -197,6 +198,69 @@
     }
     .toggle-btn:hover{ transform: translateY(-1px) scale(1.02); filter: brightness(1.08); }
     .toggle-btn:active{ transform: translateY(1px) scale(0.99); }
+	
+	/* ψ badge in alto a sinistra (violacciocco: viola scuro -> viola chiaro, non monocromatico) */
+.psi-corner{
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 1250;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+
+  display: grid;
+  place-items: center;
+
+  font-weight: 1000;
+  font-size: 24px;
+  letter-spacing: 0.2px;
+
+  color: rgba(255,255,255,0.95);
+  text-decoration: none;
+
+  border: 1px solid rgba(255,255,255,0.22);
+
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%),
+    radial-gradient(circle at 80% 85%, rgba(255,78,205,0.18), rgba(255,78,205,0) 55%),
+    linear-gradient(180deg, rgba(43,10,102,0.96), rgba(177,140,255,0.70));
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+  backdrop-filter: blur(8px);
+
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  overflow: hidden;
+}
+
+.psi-corner::after{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.55), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(0,229,255,0.14), transparent 60%);
+  transform: rotate(15deg);
+  opacity: 0.85;
+  pointer-events:none;
+}
+
+.psi-corner:hover{
+  transform: translateY(-1px) scale(1.02);
+  filter: brightness(1.08);
+  box-shadow: 0 14px 38px rgba(0,0,0,0.26);
+}
+.psi-corner:active{
+  transform: translateY(1px) scale(0.99);
+  filter: brightness(0.98);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+.psi-corner:focus-visible{
+  outline: 2px solid rgba(0,229,255,0.70);
+  outline-offset: 3px;
+}
+
 
     /* --- Sidebar --- */
     .sidebar{
@@ -1228,6 +1292,7 @@
     </button>
   </div>
 
+  <a class="psi-corner" href="index.html" title="Torna all’indice" aria-label="Torna all’indice">ψ</a>
   <button class="toggle-btn" onclick="toggleSidebar()" aria-label="Toggle Menu">☰ Menu</button>
 
   <div class="sidebar" id="sidebar" aria-label="Menu laterale">
