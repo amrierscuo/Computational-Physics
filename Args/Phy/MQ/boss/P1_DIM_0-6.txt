@@ -1,0 +1,2288 @@
+<<<DIM 0 START>>>
+# DIM 0 — Postulati + Eq. di Schrödinger + risoluzione TDSE/TISE
+**(versione “da ripetere a macchinetta” ma completa)**
+
+## Dove sta negli appunti
+- **Indizio boss:** `boss/solbf0_1.jpg`
+- **Postulati scritti bene:** `img/132.jpg` → `img/136.jpg`
+  - 132: postulati 1–2 + EqS
+  - 133: Born discreto/continuo
+  - 134: degenerazione + proiettori
+  - 135: valor medio
+  - 136: simmetrizzazione + riduzione pacchetto d’onda
+
+---
+
+# 1) Postulato 1 — Stato + Eq. di Schrödinger + sovrapposizione
+
+## 1A) Stato quantistico
+**Enunciato:** lo stato di un sistema è descritto da un vettore di stato
+\[
+|\psi(t)\rangle \in \mathcal S
+\]
+dove \(\mathcal S\) è uno **spazio di Hilbert** (spazio vettoriale complesso con prodotto interno).
+
+### Normalizzazione
+Per uno stato fisico:
+\[
+\langle \psi(t) | \psi(t) \rangle = 1.
+\]
+
+## 1B) Evoluzione temporale: TDSE
+**Enunciato:** esiste un operatore Hamiltoniano \(\hat H\) tale che
+\[
+i\hbar \,\frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle.
+\]
+
+- È un’equazione **del primo ordine nel tempo**: dato \(|\psi(t_0)\rangle\), l’evoluzione è determinata (unitaria).
+- Ma la teoria **non è deterministica nelle misure**: predice probabilità, non l’esito singolo.
+
+### Caso tipico (particella non relativistica)
+\[
+\hat H=\frac{\hat p^2}{2m}+V(\hat x)\qquad (\text{in 3D: }V(\hat{\vec x})).
+\]
+
+## 1C) TDSE in rappresentazione delle coordinate (forma differenziale)
+Definisco la funzione d’onda:
+\[
+\psi(x,t)=\langle x|\psi(t)\rangle.
+\]
+
+Parto dalla TDSE astratta:
+\[
+i\hbar \frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle.
+\]
+Moltiplico a sinistra per \(\langle x|\):
+\[
+i\hbar \frac{\partial}{\partial t}\langle x|\psi(t)\rangle
+= \langle x|\hat H|\psi(t)\rangle
+\]
+cioè
+\[
+i\hbar \frac{\partial}{\partial t}\psi(x,t)=\langle x|\hat H|\psi(t)\rangle.
+\]
+
+Uso che in rappresentazione \(x\):
+- \(\hat x \to x\),
+- \(\hat p \to -i\hbar \frac{\partial}{\partial x}\) (in 3D: \(-i\hbar\nabla\)),
+- quindi \(\hat p^2\to -\hbar^2\frac{\partial^2}{\partial x^2}\) (in 3D: \(-\hbar^2\nabla^2\)).
+
+Ottengo la **TDSE in coordinate (1D)**:
+\[
+i\hbar \frac{\partial \psi(x,t)}{\partial t}
+=
+\left[
+-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}+V(x)
+\right]\psi(x,t).
+\]
+(3D: sostituisci \(\partial_x^2\) con \(\nabla^2\).)
+
+## 1D) Principio di sovrapposizione
+Se \(|\psi_1\rangle\) e \(|\psi_2\rangle\) sono stati possibili, allora anche
+\[
+|\psi\rangle=c_1|\psi_1\rangle+c_2|\psi_2\rangle
+\]
+è uno stato (per \(c_1,c_2\in\mathbb C\)), dopo eventuale normalizzazione.
+
+**Significato fisico:** radice dell’**interferenza** (si sommano ampiezze, poi si fa il modulo quadro).
+
+---
+
+# 2) Postulato 2 — Misura: osservabili = operatori hermitiani
+Un’osservabile \(A\) è associata a un operatore \(\hat A\) **hermitiano**:
+\[
+\hat A^\dagger=\hat A.
+\]
+
+**Possibili risultati della misura:** gli **autovalori** \(a_n\) (o \(a\) nel continuo) della relazione:
+\[
+\hat A|u_n\rangle=a_n|u_n\rangle.
+\]
+
+**Perché hermitiano?** Autovalori reali (misure reali) e buona struttura di ortogonalità/completamento degli autostati.
+
+---
+
+# 3) Postulato 3 — Regola di Born (probabilità dell’esito)
+
+## 3A) Spettro discreto (non degenere)
+Espando lo stato nella base degli autostati di \(\hat A\):
+\[
+|\psi(t)\rangle=\sum_k c_k(t)\,|u_k\rangle,
+\qquad
+c_k(t)=\langle u_k|\psi(t)\rangle.
+\]
+
+**Born:**
+\[
+P(a_n)=|\langle u_n|\psi(t)\rangle|^2=|c_n(t)|^2.
+\]
+Se \(|\psi\rangle\) è normalizzato:
+\[
+\sum_k |c_k(t)|^2=1.
+\]
+
+## 3B) Spettro continuo
+\[
+|\psi(t)\rangle=\int c(a,t)\,|u_a\rangle\,da,
+\qquad
+dP(a)=|c(a,t)|^2\,da=|\langle u_a|\psi(t)\rangle|^2\,da.
+\]
+
+## 3C) Caso degenere: proiettori
+Se \(a_n\) è degenere: esistono \(r_n\) autostati diversi con lo stesso autovalore:
+\[
+\hat A|u_n^{(k)}\rangle=a_n|u_n^{(k)}\rangle,\qquad k=1,\dots,r_n.
+\]
+
+La probabilità di ottenere \(a_n\) è:
+\[
+P(a_n)=\sum_{k=1}^{r_n}\left|\langle u_n^{(k)}|\psi\rangle\right|^2.
+\]
+
+Definisco il **proiettore** sul sottospazio \(S_n\):
+\[
+\hat P_n=\sum_{k=1}^{r_n}|u_n^{(k)}\rangle\langle u_n^{(k)}|.
+\]
+Proprietà: \(\hat P_n^\dagger=\hat P_n\), \(\hat P_n^2=\hat P_n\).
+
+Born compatta:
+\[
+P(a_n)=\langle \psi|\hat P_n|\psi\rangle.
+\]
+
+---
+
+# 4) Postulato 4 — Valor medio (expectation value)
+Definizione operativa (media su molte misure identiche):
+\[
+\langle A\rangle=\sum_n a_n\,P(a_n).
+\]
+
+Dimostro che coincide con \(\langle\psi|\hat A|\psi\rangle\):
+\[
+\langle A\rangle
+=\sum_n a_n\,|\langle u_n|\psi\rangle|^2
+=\sum_n a_n\,\langle\psi|u_n\rangle\langle u_n|\psi\rangle.
+\]
+Uso \(a_n|u_n\rangle=\hat A|u_n\rangle\) e l’identità \(\sum_n|u_n\rangle\langle u_n|=\hat I\):
+\[
+\langle A\rangle
+= \langle\psi|\hat A\left(\sum_n|u_n\rangle\langle u_n|\right)|\psi\rangle
+=\langle\psi|\hat A|\psi\rangle.
+\]
+
+Esempio (posizione 1D):
+\[
+\langle x\rangle=\langle\psi|\hat x|\psi\rangle=\int x\,|\psi(x,t)|^2\,dx.
+\]
+
+---
+
+# 5) Postulato 5 — Simmetrizzazione (operator ordering)
+In classico hai prodotti tipo \(xp\). In quantistico \(\hat x\hat p\neq \hat p\hat x\) (non commutano).
+\[
+(\hat x\hat p)^\dagger=\hat p\hat x\neq \hat x\hat p.
+\]
+
+Per costruire un osservabile hermitiano dalla quantità classica \(xp\) uso la **simmetrizzazione**:
+\[
+xp \ \longrightarrow\ \frac{1}{2}(\hat x\hat p+\hat p\hat x).
+\]
+
+---
+
+# 6) Postulato 6 — Riduzione del pacchetto d’onda (collasso)
+Evoluzione unitaria fino a \(t_1\):
+\[
+|\psi(t_0)\rangle \xrightarrow{\text{TDSE}} |\psi(t_1)\rangle.
+\]
+
+Misuro \(\hat A\) e ottengo l’esito \(a_n\).
+
+## Caso non degenere
+\[
+|\psi(t_1^+)\rangle = \frac{|u_n\rangle\langle u_n|\psi(t_1)\rangle}{\sqrt{\langle\psi(t_1)|u_n\rangle\langle u_n|\psi(t_1)\rangle}}
+= \frac{|u_n\rangle\langle u_n|\psi(t_1)\rangle}{\sqrt{P(a_n)}}.
+\]
+
+## Caso degenere
+\[
+|\psi(t_1^+)\rangle = \frac{\hat P_n|\psi(t_1)\rangle}{\sqrt{\langle\psi(t_1)|\hat P_n|\psi(t_1)\rangle}}.
+\]
+
+**Conseguenza:** se ripeti subito la stessa misura di \(\hat A\), ottieni lo stesso valore con probabilità 1 (sei nell’autospazio).
+
+---
+
+# Risoluzione TDSE/TISE: come “si risolve” davvero
+
+## A) Hamiltoniano indipendente dal tempo → stati stazionari
+Se \(\hat H\) non dipende da \(t\), cerco soluzioni separabili:
+\[
+\psi(x,t)=\varphi(x)\,T(t).
+\]
+
+Inserisco nella TDSE e divido per \(\varphi T\):
+\[
+i\hbar \frac{1}{T}\frac{dT}{dt}
+=
+\frac{1}{\varphi}\left[-\frac{\hbar^2}{2m}\frac{d^2\varphi}{dx^2}+V(x)\varphi\right].
+\]
+LHS dipende solo da \(t\), RHS solo da \(x\) ⇒ entrambe uguali a una costante reale \(E\):
+\[
+i\hbar \frac{1}{T}\frac{dT}{dt}=E
+\quad\Rightarrow\quad
+T(t)=e^{-iEt/\hbar}.
+\]
+
+Ottengo la **TISE**:
+\[
+\left[-\frac{\hbar^2}{2m}\frac{d^2}{dx^2}+V(x)\right]\varphi(x)=E\varphi(x),
+\]
+cioè un problema agli autovalori:
+\[
+\hat H|\varphi\rangle = E|\varphi\rangle.
+\]
+
+## B) Soluzione generale (spettro discreto)
+Se \(\{\varphi_n\}\) è una base di autostati:
+\[
+\psi(x,t)=\sum_n c_n\,\varphi_n(x)\,e^{-iE_n t/\hbar},
+\qquad
+c_n=\langle \varphi_n|\psi(0)\rangle.
+\]
+(Se c’è anche continuo, si aggiunge un integrale.)
+
+**Significato fisico:** l’evoluzione unitaria “attacca fasi” \(e^{-iE_nt/\hbar}\) alle componenti energetiche.
+
+---
+
+# Dizionario simboli (da sapere “uno per uno”)
+- \(|\psi(t)\rangle\): stato del sistema al tempo \(t\).
+- \(\psi(x,t)=\langle x|\psi(t)\rangle\): funzione d’onda in rappresentazione delle coordinate.
+- \(\mathcal S\): spazio di Hilbert degli stati.
+- \(\langle \phi|\psi\rangle\): prodotto interno (ampiezza).
+- \(\hat H\): Hamiltoniano.
+- \(\hat A\): operatore associato a osservabile \(A\).
+- \(\hat A^\dagger\): aggiunto (coniugato trasposto).
+- \(|u_n\rangle\): autostato di \(\hat A\).
+- \(a_n\): autovalore (possibile esito della misura).
+- \(c_n=\langle u_n|\psi\rangle\): ampiezza nella base di \(\hat A\).
+- \(P(a_n)\): probabilità di misurare \(a_n\).
+- \(\hat I\): identità.
+- \(\hat P_n\): proiettore su sottospazio degenere.
+- \(\hbar\): costante di Planck ridotta.
+- \(i\): unità immaginaria (\(i^2=-1\)).
+- \(m\): massa.
+- \(V(x)\): potenziale.
+- \(\hat x\): operatore posizione.
+- \(\hat p=-i\hbar \partial_x\): operatore momento (in \(x\)).
+- \(\nabla,\nabla^2\): gradiente e Laplaciano (in 3D).
+
+---
+
+# Significato fisico “in una frase per pezzo”
+- **Stato \(|\psi\rangle\):** contiene tutta l’informazione disponibile sul sistema.
+- **Sovrapposizione:** sommo ampiezze → interferenza.
+- **Operatori hermitiani:** misure reali + autostati ortogonali.
+- **Born:** probabilità = modulo quadro dell’ampiezza.
+- **Valor medio:** media sperimentale = \(\langle\psi|\hat A|\psi\rangle\).
+- **Simmetrizzazione:** regola per ottenere osservabili reali da prodotti classici ambigui.
+- **TDSE:** evoluzione unitaria tra misure.
+- **Collasso:** proiezione + rinormalizzazione dopo un esito.
+- **TISE:** stati stazionari e quantizzazione dell’energia.
+
+---
+
+# Copione orale pronto (90–120 sec)
+“Lo stato quantistico è un vettore \(|\psi(t)\rangle\) in uno spazio di Hilbert e vale la sovrapposizione. L’evoluzione temporale è data da \(i\hbar\,\partial_t|\psi\rangle=\hat H|\psi\rangle\). In coordinate, con \(\hat H=\hat p^2/2m+V(\hat x)\) e \(\hat p=-i\hbar\partial_x\), ottengo \(i\hbar\,\partial_t\psi=[-\hbar^2/(2m)\partial_x^2+V(x)]\psi\). Un’osservabile corrisponde a un operatore hermitiano \(\hat A\), e i risultati possibili sono gli autovalori \(a_n\). La probabilità è \(P(a_n)=|\langle u_n|\psi\rangle|^2\); in caso degenere uso il proiettore \(\hat P_n\) e \(P(a_n)=\langle\psi|\hat P_n|\psi\rangle\). Il valor medio è \(\langle A\rangle=\sum_n a_nP(a_n)\) e si dimostra che è \(\langle\psi|\hat A|\psi\rangle\). Se ho prodotti non commutanti, per fare un osservabile simmetrizzo, ad esempio \(xp\to(\hat x\hat p+\hat p\hat x)/2\). Dopo una misura, lo stato collassa nella proiezione sull’autospazio misurato e poi riprende l’evoluzione con Schrödinger. Se \(\hat H\) non dipende da \(t\), separo \(\psi=\varphi T\), ottengo \(T=e^{-iEt/\hbar}\) e la TISE \([-\hbar^2/(2m)\partial_x^2+V]\varphi=E\varphi\).”
+<<<DIM 0 END>>>
+
+
+<<<DIM 1 START>>>
+# DIM 1 — Equazione di continuità + corrente di probabilità
+**(conservazione della probabilità)**
+
+## Dove sta negli appunti
+- **Indizio boss:** `boss/solbf1_1.jpg`
+- **Derivazione completa (3D) + teorema di Gauss:** `img/44.jpg` → `img/46.jpg`
+
+---
+
+# 0) Obiettivo “boss”
+Partendo dalla TDSE e dalla sua complessa coniugata, dimostrare che la densità di probabilità
+\[
+\rho(\vec r,t)=|\psi(\vec r,t)|^2=\psi^*(\vec r,t)\psi(\vec r,t)
+\]
+soddisfa l’equazione di continuità:
+\[
+\boxed{\;\frac{\partial \rho}{\partial t}+\nabla\cdot \vec j=0\;}
+\]
+dove la **corrente di probabilità** è
+\[
+\boxed{\;\vec j(\vec r,t)=\frac{\hbar}{2mi}\Big(\psi^*\nabla\psi-\psi\nabla\psi^*\Big)\;}
+\]
+e dedurre la forma integrale:
+\[
+\boxed{\;\frac{d}{dt}\int_V \rho\,d^3r = -\oint_{\partial V}\vec j\cdot d\vec S\;}
+\]
+
+---
+
+# 1) Setup: TDSE e complessa coniugata
+Per una particella non relativistica in 3D con potenziale reale \(V(\vec r)\in\mathbb R\),
+\[
+\hat H=-\frac{\hbar^2}{2m}\nabla^2+V(\vec r),
+\]
+la TDSE è:
+\[
+\boxed{\;i\hbar\,\frac{\partial \psi}{\partial t}=\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi\;}
+\]
+e prendendo la complessa coniugata (usando \(V^*=V\)):
+\[
+\boxed{\;-i\hbar\,\frac{\partial \psi^*}{\partial t}=\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi^*\;}
+\]
+
+---
+
+# 2) Passo chiave: deriva \(\rho=|\psi|^2\)
+Definisco:
+\[
+\rho(\vec r,t)=\psi^*\psi.
+\]
+Derivo rispetto al tempo:
+\[
+\frac{\partial \rho}{\partial t}
+=\left(\frac{\partial \psi^*}{\partial t}\right)\psi+\psi^*\left(\frac{\partial \psi}{\partial t}\right).
+\]
+
+Ricavo \(\partial_t\psi\) e \(\partial_t\psi^*\) dalle due Schrödinger:
+\[
+\frac{\partial \psi}{\partial t}
+=\frac{1}{i\hbar}\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi,
+\qquad
+\frac{\partial \psi^*}{\partial t}
+=-\frac{1}{i\hbar}\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi^*.
+\]
+
+Sostituisco:
+\[
+\frac{\partial \rho}{\partial t}
+=
+\frac{1}{i\hbar}\left[
+\psi^*\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi
+-\psi\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi^*
+\right].
+\]
+
+I termini col potenziale si cancellano perché \(V\) è reale:
+\[
+\psi^*(V\psi)-\psi(V\psi^*)=0.
+\]
+
+Resta:
+\[
+\frac{\partial \rho}{\partial t}
+=
+-\frac{\hbar}{2mi}\left[\psi^*\nabla^2\psi-\psi\nabla^2\psi^*\right].
+\]
+
+---
+
+# 3) Riscrittura come divergenza: nasce \(\vec j\)
+Uso l’identità vettoriale:
+\[
+\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)=
+\psi^*\nabla^2\psi-\psi\nabla^2\psi^*.
+\]
+
+Quindi:
+\[
+\frac{\partial \rho}{\partial t}
+=
+-\frac{\hbar}{2mi}\,\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*).
+\]
+
+Definisco allora la corrente:
+\[
+\boxed{\;\vec j \equiv \frac{\hbar}{2mi}\Big(\psi^*\nabla\psi-\psi\nabla\psi^*\Big)\;}
+\]
+e ottengo:
+\[
+\boxed{\;\frac{\partial \rho}{\partial t}+\nabla\cdot\vec j=0\;}
+\]
+✅ Dimostrazione locale finita.
+
+---
+
+# 4) Forma integrale e conservazione della probabilità totale
+Integro su un volume \(V\):
+\[
+\int_V \frac{\partial \rho}{\partial t}\,d^3r+\int_V \nabla\cdot\vec j\,d^3r=0.
+\]
+Porto fuori la derivata (volume fisso):
+\[
+\frac{d}{dt}\int_V \rho\,d^3r+\int_V \nabla\cdot\vec j\,d^3r=0.
+\]
+Uso il teorema della divergenza (Gauss–Green):
+\[
+\int_V \nabla\cdot\vec j\,d^3r=\oint_{\partial V}\vec j\cdot d\vec S.
+\]
+
+Quindi:
+\[
+\boxed{\;\frac{d}{dt}\int_V \rho\,d^3r = -\oint_{\partial V}\vec j\cdot d\vec S\;}
+\]
+
+Caso importante: se \(V\) è tutto lo spazio e \(\psi\) decade a infinito (o condizioni al contorno tali da annullare il flusso), allora
+\[
+\oint_{\infty}\vec j\cdot d\vec S=0
+\quad\Rightarrow\quad
+\boxed{\;\frac{d}{dt}\int_{\mathbb R^3}\rho\,d^3r=0\;}
+\]
+cioè la probabilità totale resta costante (se era 1, resta 1).
+
+---
+
+# 5) Versione 1D (se ti serve per step/barriere)
+In 1D:
+\[
+\rho(x,t)=|\psi(x,t)|^2,
+\qquad
+\boxed{\;j(x,t)=\frac{\hbar}{2mi}\left(\psi^*\frac{\partial\psi}{\partial x}-\psi\frac{\partial\psi^*}{\partial x}\right)\;}
+\]
+e:
+\[
+\boxed{\;\frac{\partial \rho}{\partial t}+\frac{\partial j}{\partial x}=0\;}
+\]
+
+---
+
+# Dizionario simboli (uno per uno)
+- \(\psi(\vec r,t)\): funzione d’onda in posizione.
+- \(\psi^*(\vec r,t)\): complessa coniugata.
+- \(\rho=|\psi|^2\): densità di probabilità.
+- \(\vec j\): corrente di probabilità.
+- \(\hbar\): costante di Planck ridotta.
+- \(i\): unità immaginaria.
+- \(m\): massa.
+- \(V(\vec r)\): potenziale (reale).
+- \(\nabla\): gradiente; \(\nabla^2\): Laplaciano.
+- \(V\) (volume): regione di integrazione; \(\partial V\): frontiera.
+- \(d\vec S\): elemento di superficie orientato.
+
+---
+
+# Significato fisico (frase per frase)
+- \(\rho\) è la probabilità per unità di volume di trovare la particella.
+- \(\vec j\) è il flusso di probabilità attraverso una superficie.
+- \(\partial_t\rho+\nabla\cdot\vec j=0\) è una legge di conservazione locale: la probabilità non si crea né si distrugge, può solo scorrere.
+- La conservazione della probabilità totale è legata all’hermiticità di \(\hat H\).
+
+---
+
+# Copione orale “da macchinetta” (60–90 sec)
+“Definisco \(\rho=|\psi|^2=\psi^*\psi\). Parto da Schrödinger \(i\hbar\partial_t\psi=[-(\hbar^2/2m)\nabla^2+V]\psi\) e dalla coniugata \(-i\hbar\partial_t\psi^*=[-(\hbar^2/2m)\nabla^2+V]\psi^*\) con \(V\) reale. Calcolo \(\partial_t\rho=(\partial_t\psi^*)\psi+\psi^*(\partial_t\psi)\) e sostituisco: i termini con \(V\) si cancellano e ottengo \(\partial_t\rho=-(\hbar/2mi)(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*)\). Uso \(\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)=\psi^*\nabla^2\psi-\psi\nabla^2\psi^*\) e definisco la corrente \(\vec j=(\hbar/2mi)(\psi^*\nabla\psi-\psi\nabla\psi^*)\). Ne segue \(\partial_t\rho+\nabla\cdot\vec j=0\). Integrando su un volume e usando Gauss ottengo \(d/dt\int_V\rho\,d^3r=-\oint_{\partial V}\vec j\cdot d\vec S\): la probabilità nel volume cambia solo per flusso attraverso il bordo; su tutto lo spazio resta costante se il flusso a infinito è nullo.”
+<<<DIM 1 END>>>
+
+
+<<<DIM 2 START>>>
+# DIM 2 — Principio di indeterminazione di Heisenberg
+**(da commutatori + Cauchy–Schwarz, poi caso \(x\)–\(p\) e stato a minima indeterminazione = gaussiana)**
+
+## Dove sta negli appunti
+- **Core (indeterminazione):** `img/142.jpg` → `img/145.jpg` (P1·15, “Principio di Indeterminazione”)
+- **Core (commutatori utili):** `img/146.jpg` → `img/147.jpg` (P1·16, “conticini/commutatori”)
+- **Per la gaussiana a minima indeterminazione:** `img/27.jpg` → `img/43.jpg` (P1·3, pacchetti gaussiani)
+- **Indizio boss:** `boss/solbf2_1.jpg`
+
+---
+
+# 0) Obiettivo “boss”
+Dimostrare (per osservabili hermitiane \(\hat A,\hat B\)):
+\[
+\boxed{\;\Delta A\,\Delta B \ge \frac12\left|\langle[\hat A,\hat B]\rangle\right|\;}
+\]
+e nel caso \(\hat x,\hat p\):
+\[
+\boxed{\;\Delta x\,\Delta p \ge \frac{\hbar}{2}\;}
+\]
+e dire chi **satura** il limite (gaussiana).
+
+---
+
+# 1) Definizioni fondamentali (base della dimostrazione)
+Sia \(|\psi\rangle\) uno stato **normalizzato**:
+\[
+\langle\psi|\psi\rangle=1.
+\]
+
+## 1A) Valor medio
+\[
+\langle A\rangle \equiv \langle\psi|\hat A|\psi\rangle,\qquad
+\langle B\rangle \equiv \langle\psi|\hat B|\psi\rangle.
+\]
+
+## 1B) Operatori “centrati” e incertezze
+Definisco gli operatori centrati:
+\[
+\hat A' \equiv \hat A-\langle A\rangle\,\hat I,\qquad
+\hat B' \equiv \hat B-\langle B\rangle\,\hat I.
+\]
+Varianze:
+\[
+(\Delta A)^2 \equiv \langle(\hat A')^2\rangle,\qquad
+(\Delta B)^2 \equiv \langle(\hat B')^2\rangle,
+\]
+e quindi:
+\[
+\Delta A=\sqrt{\langle(\hat A')^2\rangle},\qquad
+\Delta B=\sqrt{\langle(\hat B')^2\rangle}.
+\]
+
+---
+
+# 2) Trucco chiave: Cauchy–Schwarz in spazio di Hilbert
+Costruisco due vettori:
+\[
+|\alpha\rangle \equiv \hat A'|\psi\rangle,\qquad
+|\beta\rangle \equiv \hat B'|\psi\rangle.
+\]
+
+Cauchy–Schwarz:
+\[
+\langle\alpha|\alpha\rangle\,\langle\beta|\beta\rangle \ge |\langle\alpha|\beta\rangle|^2.
+\]
+
+## 2A) LHS = prodotto delle varianze
+Se \(\hat A\) è hermitiano, lo è anche \(\hat A'\) e quindi \((\hat A')^\dagger=\hat A'\). Allora:
+\[
+\langle\alpha|\alpha\rangle
+=\langle\psi|\hat A'^\dagger\hat A'|\psi\rangle
+=\langle(\hat A')^2\rangle
+=(\Delta A)^2.
+\]
+Analogamente:
+\[
+\langle\beta|\beta\rangle=(\Delta B)^2.
+\]
+Quindi:
+\[
+(\Delta A)^2(\Delta B)^2 \ge |\langle\alpha|\beta\rangle|^2.
+\]
+
+## 2B) RHS = \(|\langle \hat A'\hat B'\rangle|^2\)
+\[
+\langle\alpha|\beta\rangle
+=\langle\psi|\hat A'\hat B'|\psi\rangle
+\equiv \langle \hat A'\hat B'\rangle.
+\]
+Dunque:
+\[
+(\Delta A)^2(\Delta B)^2 \ge \left|\langle \hat A'\hat B'\rangle\right|^2.
+\]
+
+---
+
+# 3) Da \(\langle \hat A'\hat B'\rangle\) al commutatore
+Scrivo:
+\[
+\hat A'\hat B'=\frac12\{\hat A',\hat B'\}+\frac12[\hat A',\hat B'].
+\]
+Prendo il valor medio:
+\[
+\langle \hat A'\hat B'\rangle
+=\frac12\langle\{\hat A',\hat B'\}\rangle+\frac12\langle[\hat A',\hat B']\rangle.
+\]
+
+### Proprietà importante
+Se \(\hat A,\hat B\) (quindi anche \(\hat A',\hat B'\)) sono hermitiani:
+- \(\{\hat A',\hat B'\}\) è **hermitiano** \(\Rightarrow\ \langle\{\hat A',\hat B'\}\rangle\in\mathbb R\).
+- \([\hat A',\hat B']\) è **anti-hermitiano** \(\Rightarrow\ \langle[\hat A',\hat B']\rangle\) è **puramente immaginario** (o nullo).
+
+Chiamo:
+\[
+z\equiv \langle \hat A'\hat B'\rangle.
+\]
+Allora:
+\[
+\Im(z)=\frac{1}{2i}\langle[\hat A',\hat B']\rangle.
+\]
+Per un numero complesso:
+\[
+|z|^2=(\Re z)^2+(\Im z)^2 \ge (\Im z)^2.
+\]
+Quindi:
+\[
+\left|\langle \hat A'\hat B'\rangle\right|^2
+\ge
+\left(\frac{1}{2i}\langle[\hat A',\hat B']\rangle\right)^2
+=
+\frac14\left|\langle[\hat A',\hat B']\rangle\right|^2.
+\]
+
+Inserisco nella disuguaglianza di C–S:
+\[
+(\Delta A)^2(\Delta B)^2 \ge \frac14\left|\langle[\hat A',\hat B']\rangle\right|^2.
+\]
+
+Ora uso:
+\[
+[\hat A',\hat B']=[\hat A-\langle A\rangle\hat I,\hat B-\langle B\rangle\hat I]=[\hat A,\hat B]
+\]
+perché \(\langle A\rangle,\langle B\rangle\) sono numeri e commutano con tutto.
+
+Allora:
+\[
+(\Delta A)^2(\Delta B)^2 \ge \frac14\left|\langle[\hat A,\hat B]\rangle\right|^2
+\]
+e prendendo la radice:
+\[
+\boxed{\;\Delta A\,\Delta B \ge \frac12\left|\langle[\hat A,\hat B]\rangle\right|\;}
+\]
+
+✅ Dimostrazione finita.
+
+> Nota “da prof”: la forma più forte è Robertson–Schrödinger,
+\[
+(\Delta A)^2(\Delta B)^2 \ge \left(\frac12|\langle[\hat A,\hat B]\rangle|\right)^2
++\left(\frac12\langle\{\hat A',\hat B'\}\rangle\right)^2,
+\]
+ma qui abbiamo ricavato la versione più usata (Heisenberg/Robertson “ridotta”).
+
+---
+
+# 4) Caso fondamentale: posizione e quantità di moto
+Prendo:
+\[
+\hat A=\hat x,\qquad \hat B=\hat p,
+\]
+e uso il commutatore canonico:
+\[
+[\hat x,\hat p]=i\hbar.
+\]
+Quindi:
+\[
+\Delta x\,\Delta p \ge \frac12|\langle i\hbar\rangle|
+=\frac{\hbar}{2}.
+\]
+\[
+\boxed{\;\Delta x\,\Delta p \ge \frac{\hbar}{2}\;}
+\]
+
+---
+
+# 5) Chi satura il limite? Stato a minima indeterminazione = gaussiana
+## 5A) Condizione di uguaglianza in Cauchy–Schwarz
+In Cauchy–Schwarz l’uguaglianza vale se e solo se i vettori sono proporzionali:
+\[
+|\alpha\rangle = c\,|\beta\rangle
+\quad\Longleftrightarrow\quad
+\hat A'|\psi\rangle=c\,\hat B'|\psi\rangle,
+\qquad c\in\mathbb C.
+\]
+
+Per il caso \(x\)–\(p\) una forma standard è:
+\[
+(\hat x-\langle x\rangle + i\lambda(\hat p-\langle p\rangle))|\psi\rangle=0,
+\qquad \lambda\in\mathbb R^+.
+\]
+
+## 5B) Risolvo e ottengo una gaussiana
+In rappresentazione \(x\), \(\hat p=-i\hbar\,\frac{d}{dx}\). Pongo:
+\[
+x_0=\langle x\rangle,\qquad p_0=\langle p\rangle.
+\]
+L’equazione diventa:
+\[
+\left(x-x_0+i\lambda\left(-i\hbar\frac{d}{dx}-p_0\right)\right)\psi(x)=0
+\]
+cioè:
+\[
+\left(x-x_0+\lambda\hbar\frac{d}{dx}-i\lambda p_0\right)\psi(x)=0.
+\]
+Quindi:
+\[
+\lambda\hbar\,\frac{d\psi}{dx}=-(x-x_0)\psi+i\lambda p_0\,\psi
+\]
+\[
+\frac{d\psi}{dx}=-\frac{x-x_0}{\lambda\hbar}\psi+i\frac{p_0}{\hbar}\psi.
+\]
+Integro:
+\[
+\psi(x)=N\exp\!\left[-\frac{(x-x_0)^2}{2\lambda\hbar}+i\frac{p_0}{\hbar}x\right].
+\]
+È una **gaussiana** (modulo quadro gaussiano) con fase tipo onda piana.
+
+È comune riscriverla come:
+\[
+\psi(x)=\left(\frac{1}{2\pi\sigma^2}\right)^{1/4}
+\exp\!\left[-\frac{(x-x_0)^2}{4\sigma^2}+i\frac{p_0}{\hbar}x\right].
+\]
+
+## 5C) Calcolo di \(\Delta x\) e \(\Delta p\) per la gaussiana
+Per questa scelta:
+- \(|\psi|^2\) è gaussiana con varianza \(\sigma^2\), quindi:
+\[
+\Delta x=\sigma.
+\]
+
+Per il momento:
+\[
+\hat p\psi=-i\hbar\frac{d\psi}{dx}
+=\left(p_0+i\hbar\frac{x-x_0}{2\sigma^2}\right)\psi,
+\]
+quindi:
+\[
+(\hat p-p_0)\psi=i\hbar\frac{x-x_0}{2\sigma^2}\psi.
+\]
+Allora:
+\[
+(\Delta p)^2=\langle(\hat p-p_0)^2\rangle
+=\int |(\hat p-p_0)\psi|^2\,dx
+=\int \frac{\hbar^2(x-x_0)^2}{4\sigma^4}|\psi|^2\,dx
+=\frac{\hbar^2}{4\sigma^4}\,\sigma^2
+=\frac{\hbar^2}{4\sigma^2}.
+\]
+Quindi:
+\[
+\Delta p=\frac{\hbar}{2\sigma}.
+\]
+Moltiplicando:
+\[
+\boxed{\;\Delta x\,\Delta p=\sigma\cdot\frac{\hbar}{2\sigma}=\frac{\hbar}{2}\;}
+\]
+➡️ la gaussiana **satura** il limite.
+
+---
+
+# Dizionario simboli (da sapere “uno per uno”)
+- \(|\psi\rangle\): stato (normalizzato).
+- \(\hat A,\hat B\): osservabili (operatori hermitiani).
+- \(\langle A\rangle=\langle\psi|\hat A|\psi\rangle\): valor medio.
+- \(\hat I\): identità.
+- \(\hat A'=\hat A-\langle A\rangle\hat I\): operatore centrato.
+- \((\Delta A)^2=\langle(\hat A')^2\rangle\): varianza; \(\Delta A\) incertezza.
+- \([\hat A,\hat B]=\hat A\hat B-\hat B\hat A\): commutatore.
+- \(\{\hat A,\hat B\}=\hat A\hat B+\hat B\hat A\): anticommutatore.
+- \(\hbar\): costante di Planck ridotta.
+- \(\hat x\): operatore posizione; \(\hat p\): operatore quantità di moto.
+- \(N\): costante di normalizzazione.
+- \(x_0=\langle x\rangle\), \(p_0=\langle p\rangle\): medie di posizione e momento.
+- \(\sigma\): larghezza della gaussiana, coincide con \(\Delta x\).
+- \(\lambda\): parametro equivalente che fissa la larghezza (legato a \(\sigma\)).
+
+---
+
+# Significato fisico (come raccontarlo)
+- Non è un “errore dello strumento”: è un limite sulla **preparazione** dello stato.
+- Se due osservabili commutano, \([\hat A,\hat B]=0\), in principio puoi preparare stati con incertezze arbitrarie (compatibilità).
+- Se non commutano, la loro incompatibilità è quantificata dal commutatore e impone un bound sulle incertezze.
+- Per \(x\) e \(p\), la radice intuitiva è anche “di Fourier”: localizzare in \(x\) richiede una superposizione ampia di momenti \(\Rightarrow\) grande dispersione in \(p\).
+- La gaussiana è lo stato “più efficiente”: è il compromesso ottimo e satura il limite.
+
+---
+
+# Copione orale (90–120 sec, super ripetibile)
+“Definisco l’incertezza come varianza: \((\Delta A)^2=\langle(\hat A-\langle A\rangle)^2\rangle\). Metto \(\hat A'=\hat A-\langle A\rangle\) e \(\hat B'=\hat B-\langle B\rangle\). Costruisco i vettori \(|\alpha\rangle=\hat A'|\psi\rangle\) e \(|\beta\rangle=\hat B'|\psi\rangle\). Per Cauchy–Schwarz ho \(\langle\alpha|\alpha\rangle\langle\beta|\beta\rangle\ge|\langle\alpha|\beta\rangle|^2\), cioè \((\Delta A)^2(\Delta B)^2\ge|\langle \hat A'\hat B'\rangle|^2\). Poi scrivo \(\hat A'\hat B'=\frac12\{\hat A',\hat B'\}+\frac12[\hat A',\hat B']\). Per operatori hermitiani il valor medio dell’anticommutatore è reale e quello del commutatore è immaginario; quindi \(|\langle \hat A'\hat B'\rangle|^2\ge\frac14|\langle[\hat A',\hat B']\rangle|^2\). Ma \([\hat A',\hat B']=[\hat A,\hat B]\), dunque \(\Delta A\Delta B\ge\frac12|\langle[A,B]\rangle|\). Applicando a \(\hat x,\hat p\) con \([x,p]=i\hbar\) ottengo \(\Delta x\Delta p\ge\hbar/2\). La gaussiana satura il limite: \(\Delta x=\sigma\) e \(\Delta p=\hbar/(2\sigma)\), quindi il prodotto vale \(\hbar/2\).”
+<<<DIM 2 END>>>
+
+<<<DIM 3 START>>>
+# DIM 3 — Osservabili compatibili ⇔ \([\,\hat A,\hat B\,]=0\)  
+**(caso non degenere + caso degenere con sottospazi invarianti / diagonalizzazione dentro la degenerazione)**
+
+## Dove sta negli appunti
+- **Core:** `img/137.jpg` → `img/141.jpg` (P1·14A “Osservabili compatibili”)  
+- **Supporto (notazione bra-ket / operatori / completezza):** `img/126.jpg` → `img/132.jpg` (P1·12)  
+- **Supporto (commutatori):** `img/146.jpg` → `img/147.jpg` (P1·16)  
+- **Indizio boss:** `boss/solbf3_1.jpg`
+
+---
+
+# 0) Cosa devi dimostrare (obiettivo)
+Per due osservabili (operatori hermitiani) \(\hat A,\hat B\):
+
+1) **Se sono compatibili** (esiste una base di autostati comuni / misure simultanee ben definite), allora  
+\[
+\boxed{[\,\hat A,\hat B\,]=0.}
+\]
+
+2) **Viceversa**, se  
+\[
+\boxed{[\,\hat A,\hat B\,]=0,}
+\]
+allora puoi scegliere una base di stati che sono **autostati simultanei** di \(\hat A\) e \(\hat B\).  
+- Nel **caso non degenere** la dim è immediata.
+- Nel **caso degenere** devi spiegare che \(\hat B\) lascia invariati i sottospazi degeneri e che dentro ciascuno puoi diagonalizzare.
+
+> Nota “da prof”: in generale (spazi infiniti / operatori non limitati) ci sono dettagli di dominio; negli appunti d’esame di solito si ragiona nel caso “standard” (spettri discreti o comunque diagonalizzabili) e la dimostrazione qui è quella richiesta.
+
+---
+
+# 1) Definizione fisica/matematica di “compatibili”
+Due osservabili \(\hat A,\hat B\) sono **compatibili** se esiste un insieme completo di stati \(\{|a,b\rangle\}\) tali che:
+\[
+\hat A|a,b\rangle = a\,|a,b\rangle,\qquad
+\hat B|a,b\rangle = b\,|a,b\rangle,
+\]
+e questi stati costituiscono una **base completa** (o base generalizzata).  
+
+**Significato fisico:** posso preparare il sistema in uno stato con valori certi **sia** di \(A\) **sia** di \(B\); misurare \(A\) non “rovina” l’esito certo di \(B\) (e viceversa).
+
+---
+
+# 2) (⇒) Se esistono autostati comuni allora \([A,B]=0\)
+Prendo un autostato comune \(|a,b\rangle\). Calcolo:
+
+\[
+\hat A\hat B|a,b\rangle=\hat A(b|a,b\rangle)=b\hat A|a,b\rangle=ba|a,b\rangle.
+\]
+
+Analogamente:
+\[
+\hat B\hat A|a,b\rangle=\hat B(a|a,b\rangle)=a\hat B|a,b\rangle=ab|a,b\rangle.
+\]
+
+Quindi:
+\[
+(\hat A\hat B-\hat B\hat A)|a,b\rangle = 0
+\quad\Rightarrow\quad
+[\,\hat A,\hat B\,]|a,b\rangle=0
+\]
+per ogni \(|a,b\rangle\) della base.
+
+Se gli \(|a,b\rangle\) sono **completi**, l’operatore che annulla tutti i vettori della base è l’operatore nullo:
+\[
+\boxed{[\,\hat A,\hat B\,]=0.}
+\]
+
+✅ Prima direzione fatta.
+
+---
+
+# 3) (⇐) Se \([A,B]=0\) allora esistono autostati comuni
+Qui divido in due casi: **non degenere** e **degenere**.
+
+---
+
+## 3A) Caso NON degenere (il più “a macchinetta”)
+Supponi che \(\hat A\) abbia autovalori discreti **non degeneri**:
+\[
+\hat A|a_n\rangle=a_n|a_n\rangle
+\]
+e ogni \(a_n\) ha uno spazio di autostati di dimensione 1.
+
+Assumo:
+\[
+[\,\hat A,\hat B\,]=0 \quad\Rightarrow\quad \hat A\hat B=\hat B\hat A.
+\]
+
+Agisco su \(|a_n\rangle\):
+\[
+\hat A(\hat B|a_n\rangle)=\hat B(\hat A|a_n\rangle)=\hat B(a_n|a_n\rangle)=a_n(\hat B|a_n\rangle).
+\]
+
+**Interpretazione matematica:** \(\hat B|a_n\rangle\) è un autovettore di \(\hat A\) con autovalore \(a_n\).
+
+Ma l’autovalore \(a_n\) è **non degenere**, quindi lo spazio associato è 1D: qualunque vettore con quel valore è proporzionale a \(|a_n\rangle\). Dunque:
+\[
+\hat B|a_n\rangle = b_n |a_n\rangle.
+\]
+
+Quindi \(|a_n\rangle\) è anche autostato di \(\hat B\).  
+Conclusione:
+\[
+\boxed{\text{se }[A,B]=0\text{ e }A\text{ è non degenere, allora gli }|a_n\rangle\text{ sono autostati comuni.}}
+\]
+
+---
+
+## 3B) Caso DEGENERE (qui devi dire la cosa “giusta” sulla degenerazione)
+Ora \(\hat A\) ha autovalori \(a_n\) **degeneri**: per un certo \(a_n\) esistono più stati indipendenti:
+\[
+\hat A|a_n,k\rangle = a_n |a_n,k\rangle,\qquad k=1,\dots,r_n.
+\]
+
+Rifaccio lo stesso passaggio:
+\[
+\hat A(\hat B|a_n,k\rangle)=\hat B(\hat A|a_n,k\rangle)=a_n(\hat B|a_n,k\rangle).
+\]
+
+Questo non mi dice che \(\hat B|a_n,k\rangle\) è proporzionale a \(|a_n,k\rangle\), perché lo spazio con autovalore \(a_n\) è **dimensione \(r_n>1\)**.
+
+Però dice una cosa potentissima:
+
+### Fatto chiave (invarianza del sottospazio degenere)
+\[
+\hat B|a_n,k\rangle \in S_n
+\]
+dove \(S_n\) è il sottospazio generato dagli autostati di \(A\) con autovalore \(a_n\).
+
+Cioè: **\(\hat B\) non ti fa uscire dalla degenerazione di \(A\)**.  
+In altre parole, \(\hat B\) è “a blocchi” rispetto alla decomposizione in sottospazi di \(A\).
+
+### Come ottengo gli autostati comuni?
+Dentro ciascun sottospazio \(S_n\), considero l’operatore \(\hat B\) ristretto a \(S_n\).  
+Essendo \(\hat B\) hermitiano, la sua restrizione è ancora diagonalizzabile dentro \(S_n\). Quindi posso scegliere una base \(\{|a_n,\beta\rangle\}\) (con \(\beta=1,\dots,r_n\)) tale che:
+
+\[
+\hat A|a_n,\beta\rangle=a_n|a_n,\beta\rangle,
+\qquad
+\hat B|a_n,\beta\rangle=b_{n\beta}|a_n,\beta\rangle.
+\]
+
+✅ Questi sono **autostati simultanei**.
+
+### Frase da dire in modo pulito all’orale
+> “Se \([A,B]=0\), allora \(B\) lascia invariati gli autospazi degeneri di \(A\). Dentro ogni autospazio posso diagonalizzare \(B\), ottenendo una base di autostati comuni.”
+
+---
+
+## 3C) Collegamento elegante con i proiettori (se vuoi fare “bella figura”)
+Definisco il proiettore sull’autospazio di \(A\) con autovalore \(a_n\):
+\[
+\hat P_n=\sum_{k=1}^{r_n}|a_n,k\rangle\langle a_n,k|.
+\]
+
+Se \([A,B]=0\) allora (risultato standard degli appunti):
+\[
+[\,\hat P_n,\hat B\,]=0.
+\]
+
+Da qui segue:
+\[
+\hat B(\hat P_n|\psi\rangle)=\hat P_n(\hat B|\psi\rangle),
+\]
+cioè: “prima proietto in \(S_n\) e poi applico \(B\)” è uguale a “prima applico \(B\) e poi resto in \(S_n\)”: ancora una volta è la frase “\(B\) non mi fa uscire dal sottospazio”.
+
+---
+
+# 4) CSCO / ICOC (quando la degenerazione resta)
+Se \(\hat A\) e \(\hat B\) commutano ma rimane degenerazione (cioè \(\hat B\) non distingue tutti gli stati in \(S_n\)), allora si introduce un **insieme completo di osservabili compatibili** (ICOC / CSCO) \(\{\hat A,\hat B,\hat C,\dots\}\) tale che:
+- tutti commutano a due a due,
+- le etichette degli autovalori identificano **univocamente** lo stato.
+
+**Significato fisico:** servono abbastanza “quantum numbers” per etichettare uno stato senza ambiguità.
+
+---
+
+# Dizionario simboli (da sapere uno per uno)
+- \(\hat A,\hat B\): operatori (osservabili), **hermitiani**.
+- \([\,\hat A,\hat B\,]=\hat A\hat B-\hat B\hat A\): commutatore.
+- \(|a_n\rangle\): autostato di \(\hat A\) con autovalore \(a_n\).
+- \(a_n\): autovalore (risultato possibile della misura di \(A\)).
+- “non degenere”: per ogni \(a_n\) lo spazio di autostati ha dimensione 1.
+- “degenere”: per un certo \(a_n\) ci sono \(r_n>1\) stati indipendenti.
+- \(|a_n,k\rangle\): base qualunque del sottospazio degenere \(S_n\).
+- \(S_n\): sottospazio degli autostati di \(A\) con autovalore \(a_n\).
+- \(b_n\) o \(b_{n\beta}\): autovalori di \(B\) sugli autostati comuni.
+- \(\hat P_n\): proiettore sul sottospazio \(S_n\).
+- CSCO/ICOC: insieme completo di osservabili compatibili.
+
+---
+
+# Significato fisico (come la spieghi senza sembrare “solo algebra”)
+- **Compatibili** = “posso sapere entrambe le grandezze con certezza nello stesso stato”, e l’ordine delle misure non cambia la fisica.
+- **\([A,B]=0\)** è la versione matematica di “le due misure non si disturbano” e “posso scegliere una base di stati che diagonalizza entrambe”.
+- **Non commutanti** ⇒ non esiste base comune ⇒ non posso preparare stati con valori certi simultaneamente ⇒ entra in gioco l’indeterminazione (DIM 2).
+
+**Esempi rapidi da citare:**
+- In un potenziale centrale: \([\,\hat H,\hat L^2\,]=0\) e \([\,\hat H,\hat L_z\,]=0\) ⇒ stati etichettati da \(n,\ell,m\).
+- \([\,\hat x,\hat p\,]=i\hbar\neq 0\) ⇒ non compatibili ⇒ \(\Delta x\Delta p\ge \hbar/2\).
+
+---
+
+# Copione orale “da recitare” (90–120 sec)
+“Due osservabili sono compatibili se esiste una base di autostati comuni. Se \(|a,b\rangle\) è autostato simultaneo, allora \(AB|a,b\rangle=ab|a,b\rangle\) e \(BA|a,b\rangle=ab|a,b\rangle\), quindi \([A,B]|a,b\rangle=0\) su una base completa, perciò \([A,B]=0\). Viceversa, se \([A,B]=0\), prendo un autostato di \(A\): \(A|a_n\rangle=a_n|a_n\rangle\). Allora \(A(B|a_n\rangle)=B(A|a_n\rangle)=a_n(B|a_n\rangle)\), quindi \(B|a_n\rangle\) sta nello stesso autospazio di \(A\). Se \(A\) è non degenere, l’autospazio è 1D e dunque \(B|a_n\rangle=b_n|a_n\rangle\): sono autostati comuni. Se è degenere, \(B\) lascia invariato ciascun sottospazio degenere e dentro quel sottospazio posso diagonalizzare \(B\), ottenendo una base \(|a_n,\beta\rangle\) con \(A|a_n,\beta\rangle=a_n|a_n,\beta\rangle\) e \(B|a_n,\beta\rangle=b_{n\beta}|a_n,\beta\rangle\). Quindi \([A,B]=0\) equivale a compatibilità.”
+<<<DIM 3 END>>>
+
+<<<DIM 4 START>>>
+# DIM 4 — Valori medi, teorema di Ehrenfest, evoluzione temporale (U, Heisenberg) e simmetrie ⇒ quantità conservate
+
+## Dove sta negli appunti
+- **Valori medi / varianze (base):** `img/46.jpg` → `img/53.jpg` (P1·5 “Proprietà e valori medi”)  
+- **Ehrenfest:** `img/53.jpg` → `img/56.jpg` (P1·6 “Ehrenfest”)  
+- **Evoluzione temporale / quadri Schr–Heis–Int:** `img/165.jpg` → `img/169.jpg` (P1·18)  
+- **Simmetrie continue / generatori / quantità conservate:** `img/169.jpg` → `img/175.jpg` (P1·19)  
+- **Comm. utili:** `img/146.jpg` → `img/147.jpg` (P1·16)  
+- **Indizio boss:** `boss/solbf4_1.jpg`
+
+---
+
+# 0) Obiettivo “boss” (cosa devi dimostrare)
+1) Formula generale:
+\[
+\boxed{\;\frac{d}{dt}\langle \hat A\rangle
+=\frac{i}{\hbar}\langle[\hat H,\hat A]\rangle+\left\langle\frac{\partial \hat A}{\partial t}\right\rangle\;}
+\]
+(Teorema di Ehrenfest “generale”, in quadro di Schrödinger)
+
+2) Applicazione a \(\hat x,\hat p\) per ottenere le due equazioni di Ehrenfest:
+\[
+\boxed{\;\frac{d}{dt}\langle \hat x\rangle=\frac{1}{m}\langle \hat p\rangle\;}
+\qquad
+\boxed{\;\frac{d}{dt}\langle \hat p\rangle=-\langle\nabla V(\hat x)\rangle\;}
+\]
+
+3) Costruire l’operatore di evoluzione \( \hat U(t,t_0)\), mostrare che è **unitario** se \(\hat H\) è hermitiano, e passare al quadro di Heisenberg:
+\[
+\hat A_H(t)=\hat U^\dagger(t)\,\hat A_S(t)\,\hat U(t)
+\]
+e dimostrare l’equazione di Heisenberg:
+\[
+\boxed{\;\frac{d\hat A_H}{dt}=\frac{i}{\hbar}[\hat H_H,\hat A_H]+\left(\frac{\partial \hat A_S}{\partial t}\right)_H\;}
+\]
+
+4) Simmetrie continue: se \( \hat U(\varepsilon)=e^{-i\varepsilon \hat G/\hbar}\) lascia invariato \(\hat H\), allora
+\[
+[\,\hat H,\hat G\,]=0 \ \Rightarrow\  \hat G \text{ è conservata (se } \partial_t \hat G=0\text{)}.
+\]
+
+---
+
+# 1) Valore medio: definizione (richiamo corto ma serve)
+In uno stato normalizzato \(|\psi(t)\rangle\),
+\[
+\langle \hat A\rangle(t)=\langle\psi(t)|\hat A(t)|\psi(t)\rangle.
+\]
+Qui metto \(\hat A(t)\) perché **alcuni operatori possono dipendere esplicitamente dal tempo** (es. interazione con campi esterni).
+
+---
+
+# 2) DIMOSTRAZIONE: derivata temporale di \(\langle \hat A\rangle\) (Ehrenfest generale)
+
+Parto da:
+\[
+\langle \hat A\rangle=\langle\psi|\hat A|\psi\rangle.
+\]
+
+Derivo nel tempo (regola di Leibniz):
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\langle\dot\psi|\hat A|\psi\rangle+\langle\psi|\dot{\hat A}|\psi\rangle+\langle\psi|\hat A|\dot\psi\rangle.
+\]
+Dove \(\dot{\hat A}\equiv \frac{\partial \hat A}{\partial t}\) è la dipendenza **esplicita** di \(\hat A\) dal tempo.
+
+Ora uso la TDSE:
+\[
+i\hbar|\dot\psi\rangle=\hat H|\psi\rangle
+\quad\Rightarrow\quad
+|\dot\psi\rangle=\frac{1}{i\hbar}\hat H|\psi\rangle.
+\]
+
+E la coniugata (prendo il dagger):
+\[
+-i\hbar\langle\dot\psi|=\langle\psi|\hat H
+\quad\Rightarrow\quad
+\langle\dot\psi|=-\frac{1}{i\hbar}\langle\psi|\hat H,
+\]
+dove ho usato \(\hat H^\dagger=\hat H\) (Hamiltoniano hermitiano).
+
+Sostituisco:
+
+### Primo termine
+\[
+\langle\dot\psi|\hat A|\psi\rangle
+=
+-\frac{1}{i\hbar}\langle\psi|\hat H\hat A|\psi\rangle.
+\]
+
+### Terzo termine
+\[
+\langle\psi|\hat A|\dot\psi\rangle
+=
+\frac{1}{i\hbar}\langle\psi|\hat A\hat H|\psi\rangle.
+\]
+
+Sommo primo + terzo:
+\[
+-\frac{1}{i\hbar}\langle\hat H\hat A\rangle
++\frac{1}{i\hbar}\langle\hat A\hat H\rangle
+=
+\frac{1}{i\hbar}\langle\hat A\hat H-\hat H\hat A\rangle
+=
+\frac{1}{i\hbar}\langle[\hat A,\hat H]\rangle.
+\]
+
+Uso \([\hat A,\hat H]=-[\hat H,\hat A]\) e \(1/i=-i\), ottengo la forma standard:
+\[
+\frac{1}{i\hbar}\langle[\hat A,\hat H]\rangle
+=
+\frac{i}{\hbar}\langle[\hat H,\hat A]\rangle.
+\]
+
+Il termine centrale resta:
+\[
+\langle\psi|\dot{\hat A}|\psi\rangle=\left\langle\frac{\partial \hat A}{\partial t}\right\rangle.
+\]
+
+✅ Conclusione:
+\[
+\boxed{\;\frac{d}{dt}\langle \hat A\rangle
+=\frac{i}{\hbar}\langle[\hat H,\hat A]\rangle+\left\langle\frac{\partial \hat A}{\partial t}\right\rangle\;}
+\]
+
+---
+
+# 3) Applicazione: Ehrenfest per \(\hat x\) e \(\hat p\)
+
+Prendo l’Hamiltoniano standard non relativistico (3D, ma in 1D è uguale con derivate normali):
+\[
+\hat H=\frac{\hat p^2}{2m}+V(\hat x),
+\qquad
+\text{con }V\text{ reale}.
+\]
+
+## 3A) Prima equazione: \(d\langle x\rangle/dt\)
+Metto \(\hat A=\hat x\). Non dipende esplicitamente dal tempo ⇒ \(\partial_t \hat x=0\). Quindi:
+\[
+\frac{d}{dt}\langle \hat x\rangle=\frac{i}{\hbar}\langle[\hat H,\hat x]\rangle.
+\]
+
+Calcolo il commutatore:
+\[
+[\hat H,\hat x]=\left[\frac{\hat p^2}{2m},\hat x\right]+[V(\hat x),\hat x].
+\]
+Ma \([V(\hat x),\hat x]=0\) (funzione di \(\hat x\) commuta con \(\hat x\)). Quindi:
+\[
+[\hat H,\hat x]=\frac{1}{2m}[\hat p^2,\hat x].
+\]
+
+Uso l’identità:
+\[
+[\hat p^2,\hat x]=\hat p[\hat p,\hat x]+[\hat p,\hat x]\hat p.
+\]
+E \([\hat x,\hat p]=i\hbar \Rightarrow [\hat p,\hat x]=-i\hbar\). Quindi:
+\[
+[\hat p^2,\hat x]=\hat p(-i\hbar)+(-i\hbar)\hat p=-2i\hbar\,\hat p.
+\]
+
+Allora:
+\[
+[\hat H,\hat x]=\frac{1}{2m}(-2i\hbar\hat p)= -\frac{i\hbar}{m}\hat p.
+\]
+
+Inserisco:
+\[
+\frac{d}{dt}\langle \hat x\rangle
+=\frac{i}{\hbar}\left\langle -\frac{i\hbar}{m}\hat p\right\rangle
+=\frac{1}{m}\langle \hat p\rangle.
+\]
+
+\[
+\boxed{\;\frac{d}{dt}\langle \hat x\rangle=\frac{1}{m}\langle \hat p\rangle\;}
+\]
+
+---
+
+## 3B) Seconda equazione: \(d\langle p\rangle/dt\)
+Metto \(\hat A=\hat p\). Anche qui \(\partial_t\hat p=0\). Quindi:
+\[
+\frac{d}{dt}\langle \hat p\rangle=\frac{i}{\hbar}\langle[\hat H,\hat p]\rangle.
+\]
+
+Calcolo:
+\[
+[\hat H,\hat p]=\left[\frac{\hat p^2}{2m},\hat p\right]+[V(\hat x),\hat p].
+\]
+Il primo è zero perché \([\hat p^2,\hat p]=0\). Resta:
+\[
+[\hat H,\hat p]=[V(\hat x),\hat p].
+\]
+
+In 1D vale l’identità standard:
+\[
+[f(\hat x),\hat p]=i\hbar\,f'(\hat x).
+\]
+Quindi:
+\[
+[V(\hat x),\hat p]=i\hbar\,\frac{\partial V}{\partial x}(\hat x).
+\]
+
+Allora:
+\[
+\frac{d}{dt}\langle \hat p\rangle
+=\frac{i}{\hbar}\left\langle i\hbar\,\frac{\partial V}{\partial x}(\hat x)\right\rangle
+= -\left\langle\frac{\partial V}{\partial x}(\hat x)\right\rangle.
+\]
+
+In 3D diventa:
+\[
+\boxed{\;\frac{d}{dt}\langle \hat{\vec p}\rangle=-\langle\nabla V(\hat{\vec x})\rangle\;}
+\]
+
+---
+
+## 3C) Commento “fisico” che piace
+Le equazioni di Ehrenfest assomigliano alle equazioni di Newton:
+\[
+m\frac{d^2}{dt^2}\langle x\rangle = -\left\langle \frac{\partial V}{\partial x}\right\rangle.
+\]
+Se il pacchetto è molto localizzato e \(V\) non varia troppo sul pacchetto,
+\[
+\left\langle \frac{\partial V}{\partial x}\right\rangle \approx \frac{\partial V}{\partial x}(\langle x\rangle),
+\]
+e allora \(\langle x\rangle\) segue (circa) la traiettoria classica.
+
+---
+
+# 4) Operatore di evoluzione \(U(t,t_0)\) e unitarietà
+La TDSE in forma astratta:
+\[
+i\hbar\frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle.
+\]
+Definisco \( \hat U(t,t_0)\) tale che:
+\[
+|\psi(t)\rangle=\hat U(t,t_0)|\psi(t_0)\rangle.
+\]
+
+Allora \(U\) soddisfa:
+\[
+i\hbar\,\frac{d\hat U}{dt}=\hat H\,\hat U,
+\qquad
+\hat U(t_0,t_0)=\hat I.
+\]
+
+### Caso \(\hat H\) indipendente dal tempo
+La soluzione è:
+\[
+\boxed{\;\hat U(t,t_0)=e^{-\frac{i}{\hbar}\hat H (t-t_0)}\;}
+\]
+
+### Unitarietà (perché è cruciale)
+Se \(\hat H=\hat H^\dagger\), allora:
+\[
+\hat U^\dagger(t,t_0)\hat U(t,t_0)=\hat I
+\]
+⇒ preserva la norma:
+\[
+\langle\psi(t)|\psi(t)\rangle=\langle\psi(t_0)|\psi(t_0)\rangle.
+\]
+(È la versione “operatoriale” della conservazione di probabilità che hai fatto in DIM 1.)
+
+---
+
+# 5) Quadri di Schrödinger e Heisenberg + equazione di Heisenberg
+
+## 5A) Quadro di Schrödinger (S)
+- Stati: evolvono \(|\psi_S(t)\rangle\)
+- Operatori: fissi \(\hat A_S\) (salvo dipendenza esplicita \(t\))
+
+## 5B) Quadro di Heisenberg (H)
+Scelgo lo stato fisso:
+\[
+|\psi_H\rangle = |\psi_S(t_0)\rangle
+\]
+e faccio evolvere gli operatori:
+\[
+\boxed{\;\hat A_H(t)=\hat U^\dagger(t,t_0)\,\hat A_S(t)\,\hat U(t,t_0)\;}
+\]
+
+### Derivazione dell’equazione di Heisenberg
+Derivo:
+\[
+\frac{d\hat A_H}{dt}
+=
+\frac{d\hat U^\dagger}{dt}\hat A_S\hat U+\hat U^\dagger\frac{\partial \hat A_S}{\partial t}\hat U+\hat U^\dagger\hat A_S\frac{d\hat U}{dt}.
+\]
+
+Uso:
+\[
+\frac{d\hat U}{dt}=-\frac{i}{\hbar}\hat H\,\hat U,
+\qquad
+\frac{d\hat U^\dagger}{dt}=+\frac{i}{\hbar}\hat U^\dagger \hat H
+\]
+(quest’ultima viene prendendo il dagger e usando hermiticità).
+
+Sostituisco:
+\[
+\frac{d\hat A_H}{dt}
+=
+\frac{i}{\hbar}\hat U^\dagger\hat H\hat A_S\hat U
++\hat U^\dagger\frac{\partial \hat A_S}{\partial t}\hat U
+-\frac{i}{\hbar}\hat U^\dagger\hat A_S\hat H\hat U.
+\]
+
+Raccolgo:
+\[
+\frac{d\hat A_H}{dt}
+=
+\frac{i}{\hbar}\hat U^\dagger[\hat H,\hat A_S]\hat U
++\left(\frac{\partial \hat A_S}{\partial t}\right)_H.
+\]
+
+Ma \(\hat U^\dagger[\hat H,\hat A_S]\hat U = [\hat H_H,\hat A_H]\). Quindi:
+
+\[
+\boxed{\;\frac{d\hat A_H}{dt}=\frac{i}{\hbar}[\hat H_H,\hat A_H]+\left(\frac{\partial \hat A_S}{\partial t}\right)_H\;}
+\]
+
+---
+
+# 6) Quantità conservate (criterio “secco”)
+Se \(\hat A\) **non dipende esplicitamente** dal tempo e commuta con \(\hat H\):
+\[
+\frac{\partial \hat A}{\partial t}=0,
+\qquad
+[\hat H,\hat A]=0,
+\]
+allora:
+\[
+\boxed{\;\frac{d}{dt}\langle \hat A\rangle=0\;}
+\]
+cioè \(\langle \hat A\rangle\) è costante (quantità conservata).
+
+In quadro di Heisenberg è ancora più “forte”: se \([\hat H,\hat A]=0\) e \(\partial_t\hat A=0\), allora
+\[
+\frac{d\hat A_H}{dt}=0
+\]
+⇒ l’operatore è costante nel tempo.
+
+---
+
+# 7) Simmetrie continue ⇒ generatori ⇒ conservazione
+
+## 7A) Trasformazione continua unitaria
+Una simmetria continua si rappresenta con un operatore unitario vicino all’identità:
+\[
+\boxed{\;\hat U(\varepsilon)=e^{-\frac{i}{\hbar}\varepsilon \hat G}\;}
+\]
+dove:
+- \(\varepsilon\) è un parametro reale “piccolo”
+- \(\hat G=\hat G^\dagger\) è il **generatore** (hermitiano)
+
+Espansione al primo ordine:
+\[
+\hat U(\varepsilon)\approx \hat I-\frac{i}{\hbar}\varepsilon \hat G.
+\]
+
+## 7B) Invarianza dell’Hamiltoniana ⇒ commutatore nullo
+Dire che la simmetria lascia invariato il sistema significa:
+\[
+\hat U(\varepsilon)\,\hat H\,\hat U^\dagger(\varepsilon)=\hat H.
+\]
+
+Sviluppo al primo ordine:
+\[
+(\hat I-\tfrac{i}{\hbar}\varepsilon\hat G)\hat H(\hat I+\tfrac{i}{\hbar}\varepsilon\hat G)
+=
+\hat H+\tfrac{i}{\hbar}\varepsilon(\hat H\hat G-\hat G\hat H)
+=
+\hat H+\tfrac{i}{\hbar}\varepsilon[\hat H,\hat G].
+\]
+
+Perché sia uguale a \(\hat H\) per ogni \(\varepsilon\), deve essere:
+\[
+\boxed{\;[\hat H,\hat G]=0.\;}
+\]
+
+## 7C) Da \([\hat H,\hat G]=0\) a “\(\hat G\) conservata”
+Uso la formula di Ehrenfest (se \(\partial_t\hat G=0\)):
+\[
+\frac{d}{dt}\langle \hat G\rangle=\frac{i}{\hbar}\langle[\hat H,\hat G]\rangle=0.
+\]
+Quindi:
+\[
+\boxed{\;\langle \hat G\rangle=\text{costante nel tempo}\;}
+\]
+
+---
+
+## 7D) Esempi canonici da saper dire (molto richiesti)
+
+### (1) Traslazioni spaziali ⇒ quantità di moto conservata
+Traslazione di vettore \(\vec a\):
+\[
+\hat U(\vec a)=e^{-\frac{i}{\hbar}\vec a\cdot \hat{\vec P}}.
+\]
+Il generatore è \(\hat{\vec P}\) (momento totale).
+
+Se \(\hat H\) è invariato per traslazioni (potenziale costante o dipende solo da differenze di coordinate), allora:
+\[
+[\hat H,\hat{\vec P}]=0 \Rightarrow \langle \hat{\vec P}\rangle=\text{costante}.
+\]
+
+### (2) Rotazioni ⇒ momento angolare conservato
+Rotazione di angolo-vettore \(\vec\theta\):
+\[
+\hat U(\vec\theta)=e^{-\frac{i}{\hbar}\vec\theta\cdot \hat{\vec L}}.
+\]
+Se il potenziale è centrale \(V(\hat r)\), il sistema è isotropo ⇒
+\[
+[\hat H,\hat{\vec L}]=0 \quad\text{(o almeno }[\hat H,\hat L^2]=[\hat H,\hat L_z]=0\text{)}
+\]
+⇒ conservazione del momento angolare (quantum numbers \(\ell,m\)).
+
+### (3) Traslazioni temporali ⇒ energia conservata
+Se \(\hat H\) non dipende esplicitamente dal tempo:
+\[
+\frac{d}{dt}\langle \hat H\rangle
+=\left\langle\frac{\partial \hat H}{\partial t}\right\rangle=0
+\]
+⇒ energia costante (per sistema chiuso).
+
+---
+
+# Dizionario simboli (da ripetere senza inciampi)
+- \(|\psi(t)\rangle\): stato al tempo \(t\).
+- \(\hat A(t)\): operatore osservabile (può avere dipendenza esplicita da \(t\)).
+- \(\langle \hat A\rangle=\langle\psi|\hat A|\psi\rangle\): valore medio.
+- \(\hat H\): Hamiltoniano (energia come operatore); hermitiano.
+- \(\hbar\): costante di Planck ridotta.
+- \( [\hat H,\hat A]=\hat H\hat A-\hat A\hat H\): commutatore.
+- \(\partial \hat A/\partial t\): variazione **esplicita** di \(\hat A\) col tempo (non dovuta alla dinamica dello stato).
+- \(\hat x,\hat p\): posizione e quantità di moto; \([\hat x,\hat p]=i\hbar\).
+- \(V(\hat x)\): potenziale (operatore funzione della posizione).
+- \(\nabla V\): gradiente del potenziale (forza classica = \(-\nabla V\)).
+- \(\hat U(t,t_0)\): operatore di evoluzione temporale.
+- “unitario”: \(\hat U^\dagger \hat U=\hat I\).
+- \(\hat A_S, \hat A_H\): operatore in quadro Schrödinger / Heisenberg.
+- \(\hat U(\varepsilon)=e^{-i\varepsilon \hat G/\hbar}\): simmetria continua.
+- \(\hat G\): generatore hermitiano della simmetria (candidato a quantità conservata).
+- \(\hat{\vec P}\): momento (generatore traslazioni); \(\hat{\vec L}\): momento angolare (generatore rotazioni).
+
+---
+
+# Significato fisico (da dire “da 30 e lode”, ma breve)
+- La formula di Ehrenfest dice **come cambiano nel tempo i valori medi**: la dinamica quantistica “proietta” su grandezze misurabili.
+- Le equazioni di Ehrenfest per \(\langle x\rangle, \langle p\rangle\) mostrano che i valori medi obbediscono a una forma “newtoniana”; nel limite di pacchetto stretto recuperi quasi la classica.
+- L’unitarietà di \(U\) è ciò che garantisce conservazione della norma (quindi probabilità) e coerenza della teoria.
+- Le simmetrie continue sono collegate a conservazioni: “invarianza ⇒ commutatore nullo ⇒ quantità conservata” (versione QM del teorema di Noether).
+
+---
+
+# Copione orale “da macchinetta” (circa 2 minuti)
+“Parto da \(\langle A\rangle=\langle\psi|A|\psi\rangle\). Derivo: \(\frac{d}{dt}\langle A\rangle=\langle\dot\psi|A|\psi\rangle+\langle\psi|\partial_t A|\psi\rangle+\langle\psi|A|\dot\psi\rangle\). Con Schrödinger \(i\hbar|\dot\psi\rangle=H|\psi\rangle\) e coniugata \(-i\hbar\langle\dot\psi|=\langle\psi|H\). Sostituendo ottengo \(\frac{d}{dt}\langle A\rangle=\frac{i}{\hbar}\langle[H,A]\rangle+\langle\partial_t A\rangle\). Applicando a \(x\) con \(H=p^2/2m+V(x)\): \([H,x]=[p^2/2m,x]=-(i\hbar/m)p\), quindi \(d\langle x\rangle/dt=\langle p\rangle/m\). Applicando a \(p\): \([H,p]=[V(x),p]=i\hbar\,\partial_x V\), quindi \(d\langle p\rangle/dt=-\langle\partial_x V\rangle\), e in 3D \(-\langle\nabla V\rangle\). Poi definisco l’evoluzione \(|\psi(t)\rangle=U(t,t_0)|\psi(t_0)\rangle\), con \(U=\exp[-iH(t-t_0)/\hbar]\) se \(H\) è costante; se \(H\) è hermitiano \(U\) è unitario. In Heisenberg gli operatori evolvono: \(A_H=U^\dagger A_S U\) e soddisfano \(dA_H/dt=(i/\hbar)[H_H,A_H]+(\partial_t A_S)_H\). Infine, se \(\partial_t A=0\) e \([H,A]=0\) allora \(d\langle A\rangle/dt=0\): è conservata. Per una simmetria continua \(U(\varepsilon)=e^{-i\varepsilon G/\hbar}\), l’invarianza di \(H\) implica \([H,G]=0\) quindi \(G\) è una quantità conservata: traslazioni → \(P\), rotazioni → \(L\), traslazioni nel tempo → energia.”
+<<<DIM 4 END>>>
+
+<<<DIM 5 START>>>
+# DIM 5 — Problemi 1D “a tratti”: libera, step, barriera, buca  
+**(soluzioni dell’Eq. di Schrödinger in regioni a \(V=\) costante + condizioni di raccordo + \(R/T\) via corrente + analogia ottica + parità + legati vs diffusione)**
+
+## Dove sta negli appunti (così la ripeti identica)
+- **Core (potenziali 1D, libera, buca, raccordi):** P1·8 → `img/67.jpg`–`img/83.jpg`  
+- **Step/barriera + analogia ottica:** P1·9 → `img/83.jpg`–`img/93.jpg`  
+- **Corrente di probabilità (serve per \(R,T\)):** P1·4 → `img/44.jpg`–`img/46.jpg`  
+- **Indizi boss:** `boss/solbf5_1.jpg`, `solbf5_2.jpg`, `solbf5_3.jpg`, `solbf5_5.jpg`
+
+---
+
+# 0) “Schema unico” che risolve TUTTO in 1D
+Si parte sempre dalla **TISE** (Hamiltoniano indipendente dal tempo):
+\[
+-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}+V(x)\psi = E\psi
+\]
+cioè
+\[
+\frac{d^2\psi}{dx^2}+\frac{2m}{\hbar^2}(E-V)\psi=0.
+\]
+
+### In una regione dove \(V(x)=V_0\) è costante:
+- Se \(E>V_0\):
+\[
+\psi(x)=A\,e^{ikx}+B\,e^{-ikx},
+\qquad
+k=\frac{\sqrt{2m(E-V_0)}}{\hbar}.
+\]
+- Se \(E<V_0\):
+\[
+\psi(x)=C\,e^{\kappa x}+D\,e^{-\kappa x},
+\qquad
+\kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar}.
+\]
+
+Quindi: **oscillante** se l’energia “supera” il potenziale, **esponenziale** se è “sotto”.
+
+---
+
+# 1) Condizioni di raccordo (questa parte è “boss”)
+Per potenziali **finiti** (anche a gradino), la funzione d’onda deve soddisfare:
+
+\[
+\boxed{\psi \text{ continua}}
+\qquad
+\boxed{\psi' \text{ continua}}
+\]
+
+### Perché \(\psi'\) è continua? (mini-dimostrazione)
+Integro la Schrödinger da \(-\varepsilon\) a \(+\varepsilon\) attorno al punto di discontinuità:
+\[
+\int_{-\varepsilon}^{+\varepsilon}\left(-\frac{\hbar^2}{2m}\psi'' +V\psi\right)dx=\int_{-\varepsilon}^{+\varepsilon}E\psi\,dx.
+\]
+Il primo termine dà:
+\[
+-\frac{\hbar^2}{2m}\big[\psi'(+\varepsilon)-\psi'(-\varepsilon)\big].
+\]
+I termini con \(\int V\psi\,dx\) e \(\int E\psi\,dx\) vanno a 0 quando \(\varepsilon\to 0\) se \(V\) è finito e \(\psi\) finita.
+Quindi:
+\[
+\psi'(+0)=\psi'(-0).
+\]
+
+> Eccezione utile da citare: se \(V\) ha una **delta** (\(V=\alpha\delta(x)\)), allora \(\psi'\) ha un salto. Ma per step/barriera/buca finita: è continua.
+
+### Caso parete infinita
+Se \(V=+\infty\) fuori da una regione, allora lì \(\psi=0\). Quindi al bordo:
+\[
+\boxed{\psi(\text{parete})=0.}
+\]
+
+---
+
+# 2) Corrente di probabilità e definizione di \(R\) e \(T\)
+In 1D la corrente è:
+\[
+\boxed{j=\frac{\hbar}{2mi}\left(\psi^*\frac{d\psi}{dx}-\psi\frac{d\psi^*}{dx}\right)}.
+\]
+
+Per un’onda piana \(A e^{ikx}\):
+\[
+j = \frac{\hbar k}{m}|A|^2.
+\]
+Per \(A e^{-ikx}\) (che va verso sinistra):
+\[
+j = -\frac{\hbar k}{m}|A|^2.
+\]
+
+**Definizioni operative:**
+- \(R = \dfrac{|j_{\text{riflessa}}|}{|j_{\text{incidente}}|}\)
+- \(T = \dfrac{|j_{\text{trasmessa}}|}{|j_{\text{incidente}}|}\)
+
+Se il problema è conservativo (stesso mezzo a sinistra e destra, potenziale reale):
+\[
+\boxed{R+T=1.}
+\]
+
+---
+
+# 3) Particella libera \(V=0\)
+Con \(V=0\):
+\[
+\psi'' + k^2\psi=0,\qquad k=\frac{\sqrt{2mE}}{\hbar}.
+\]
+Soluzione:
+\[
+\boxed{\psi(x)=A e^{ikx}+B e^{-ikx}.}
+\]
+
+Se prendi una sola onda piana \(e^{ikx}\):
+- È autostato di quantità di moto: \(\hat p=-i\hbar\frac{d}{dx}\Rightarrow \hat p\,e^{ikx}=\hbar k\,e^{ikx}\).
+- Energia \(E=\frac{p^2}{2m}=\frac{\hbar^2k^2}{2m}\).
+- Corrente \(j=\frac{\hbar k}{m}\) (se ampiezza 1).
+
+> Commento fisico: lo “stato fisico” realistico è un pacchetto d’onda, ma per scattering usi onde piane come base.
+
+---
+
+# 4) Potenziale a gradino (STEP)
+\[
+V(x)=\begin{cases}
+0 & x<0\\
+V_0 & x>0
+\end{cases}
+\]
+Considero un’onda **incidente da sinistra**.
+
+---
+
+## 4A) Caso \(E>V_0\) (trasmissione con rifrazione)
+Numeri d’onda:
+\[
+k_1=\frac{\sqrt{2mE}}{\hbar},\qquad k_2=\frac{\sqrt{2m(E-V_0)}}{\hbar}.
+\]
+
+Ansatz:
+- Regione I (\(x<0\)):
+\[
+\psi_I=e^{ik_1x}+r\,e^{-ik_1x}.
+\]
+- Regione II (\(x>0\)):
+\[
+\psi_{II}=t\,e^{ik_2x}.
+\]
+
+### Raccordo a \(x=0\)
+1) Continuità di \(\psi\):
+\[
+1+r=t.
+\]
+2) Continuità di \(\psi'\):
+\[
+ik_1(1-r)=ik_2 t \quad\Rightarrow\quad k_1(1-r)=k_2 t.
+\]
+
+Sostituisco \(t=1+r\):
+\[
+k_1(1-r)=k_2(1+r)
+\Rightarrow k_1-k_1r=k_2+k_2r
+\Rightarrow (k_1-k_2)=(k_1+k_2)r
+\]
+\[
+\boxed{r=\frac{k_1-k_2}{k_1+k_2}}
+\]
+e poi
+\[
+\boxed{t=1+r=\frac{2k_1}{k_1+k_2}}.
+\]
+
+### \(R\) e \(T\) via corrente
+- \(j_{\text{inc}}=\frac{\hbar k_1}{m}\)
+- \(j_{\text{rif}}=-\frac{\hbar k_1}{m}|r|^2\)
+- \(j_{\text{tras}}=\frac{\hbar k_2}{m}|t|^2\)
+
+Quindi:
+\[
+\boxed{R=|r|^2=\left(\frac{k_1-k_2}{k_1+k_2}\right)^2}
+\]
+\[
+\boxed{T=\frac{k_2}{k_1}|t|^2=\frac{k_2}{k_1}\left(\frac{2k_1}{k_1+k_2}\right)^2=\frac{4k_1k_2}{(k_1+k_2)^2}}
+\]
+e si verifica subito:
+\[
+R+T=\frac{(k_1-k_2)^2+4k_1k_2}{(k_1+k_2)^2}=\frac{(k_1+k_2)^2}{(k_1+k_2)^2}=1.
+\]
+
+---
+
+## 4B) Caso \(E<V_0\) (onda evanescente: penetrazione ma non trasmissione)
+Definisco:
+\[
+\kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar},\qquad k_2=i\kappa.
+\]
+Regione II:
+\[
+\psi_{II}=t\,e^{-\kappa x}
+\]
+(per evitare divergenza a \(+\infty\)).
+
+La corrente in regione II è **zero** (funzione reale a fattore costante ⇒ non trasporta flusso). Quindi:
+\[
+\boxed{T=0,\quad R=1}
+\]
+ma con **lunghezza di penetrazione** \(1/\kappa\).
+
+**Analogia ottica:** è come un’onda che entra in un mezzo dove diventa evanescente (tipo “total internal reflection”): non passa energia a infinito, ma penetra un po’.
+
+---
+
+# 5) Barriera rettangolare (TUNNELING)
+\[
+V(x)=\begin{cases}
+0 & x<0\\
+V_0 & 0<x<a\\
+0 & x>a
+\end{cases}
+\]
+Incidente da sinistra.
+
+Regione I (\(x<0\)):
+\[
+\psi_I=e^{ikx}+r e^{-ikx},\quad k=\frac{\sqrt{2mE}}{\hbar}.
+\]
+Regione III (\(x>a\)):
+\[
+\psi_{III}=t\,e^{ikx}.
+\]
+
+---
+
+## 5A) Caso \(E<V_0\) (tunneling)
+Dentro la barriera:
+\[
+\psi_{II}=A e^{\kappa x}+B e^{-\kappa x},
+\qquad \kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar}.
+\]
+
+### Raccordi (4 equazioni)
+A \(x=0\):
+\[
+\psi_I(0)=\psi_{II}(0)\Rightarrow 1+r=A+B
+\]
+\[
+\psi_I'(0)=\psi_{II}'(0)\Rightarrow ik(1-r)=\kappa(A-B)
+\]
+A \(x=a\):
+\[
+\psi_{II}(a)=\psi_{III}(a)\Rightarrow A e^{\kappa a}+B e^{-\kappa a}=t e^{ika}
+\]
+\[
+\psi_{II}'(a)=\psi_{III}'(a)\Rightarrow \kappa(A e^{\kappa a}-B e^{-\kappa a})=ik\,t e^{ika}.
+\]
+
+> Questo sistema lineare si risolve (moltiplicazioni e sostituzioni; negli appunti spesso lo fanno con “matrice di trasferimento”). Il risultato finale pulito per \(T\) è:
+
+\[
+\boxed{
+T=\frac{1}{1+\dfrac{V_0^2}{4E(V_0-E)}\sinh^2(\kappa a)}
+}
+\]
+
+**Limite barriera “spessa/alta”** (\(\kappa a\gg 1\)):
+\[
+\sinh^2(\kappa a)\approx \frac{1}{4}e^{2\kappa a}
+\Rightarrow
+T \approx 16\,\frac{E(V_0-E)}{V_0^2}\,e^{-2\kappa a}.
+\]
+Questa è la legge “da ricordare”: **decadimento esponenziale del tunneling**.
+
+---
+
+## 5B) Caso \(E>V_0\) (sopra barriera, ma con interferenza)
+Dentro:
+\[
+k_2=\frac{\sqrt{2m(E-V_0)}}{\hbar},\qquad
+\psi_{II}=A e^{ik_2x}+B e^{-ik_2x}.
+\]
+
+Risolvendo i raccordi (stesso schema), ottieni:
+\[
+\boxed{
+T=\frac{1}{1+\dfrac{V_0^2}{4E(E-V_0)}\sin^2(k_2 a)}
+}
+\]
+
+**Risonanze:** se \(k_2 a=n\pi\), \(\sin(k_2 a)=0\) ⇒
+\[
+T=1
+\]
+(trasmissione perfetta per interferenza costruttiva nella barriera).
+
+---
+
+# 6) Buca infinita (pozzo infinito)
+\[
+V(x)=\begin{cases}
+0 & 0<x<L\\
++\infty & \text{altrove}
+\end{cases}
+\]
+
+Dentro: \(\psi''+k^2\psi=0\), \(k=\sqrt{2mE}/\hbar\).
+\[
+\psi(x)=A\sin(kx)+B\cos(kx).
+\]
+
+Condizioni ai bordi (pareti infinite):
+\[
+\psi(0)=0 \Rightarrow B=0.
+\]
+\[
+\psi(L)=0 \Rightarrow \sin(kL)=0 \Rightarrow kL=n\pi.
+\]
+
+Quindi:
+\[
+\boxed{k_n=\frac{n\pi}{L}},\qquad
+\boxed{E_n=\frac{\hbar^2k_n^2}{2m}=\frac{n^2\pi^2\hbar^2}{2mL^2}},\quad n=1,2,\dots
+\]
+
+Normalizzazione:
+\[
+\boxed{\psi_n(x)=\sqrt{\frac{2}{L}}\sin\left(\frac{n\pi x}{L}\right)}.
+\]
+
+**Parità (se il pozzo è centrato in 0):** i livelli alternano stati pari/dispari (cos e sin).
+
+**Fisica:** stati legati discreti; corrente netta zero (stato stazionario reale a fase globale).
+
+---
+
+# 7) Buca finita (stati legati) + parità
+Caso standard simmetrico:
+\[
+V(x)=\begin{cases}
+-V_0 & |x|<a/2\\
+0 & |x|>a/2
+\end{cases}
+\]
+con \(V_0>0\). Gli stati legati hanno \(E<0\).
+
+Definisco:
+- Dentro (\(|x|<a/2\)):
+\[
+k=\frac{\sqrt{2m(E+V_0)}}{\hbar}\quad (\text{oscillatorio perché }E+V_0>0)
+\]
+- Fuori (\(|x|>a/2\)):
+\[
+\kappa=\frac{\sqrt{2m(0-E)}}{\hbar}=\frac{\sqrt{-2mE}}{\hbar}\quad (\text{decadente})
+\]
+
+Per simmetria uso **parità**:
+
+## 7A) Stati pari (even)
+Dentro:
+\[
+\psi_{in}(x)=A\cos(kx)
+\]
+Fuori (\(x>a/2\)):
+\[
+\psi_{out}(x)=B e^{-\kappa x}
+\]
+(analogamente a sinistra con \(e^{+\kappa x}\)).
+
+Raccordo in \(x=a/2\):
+\[
+A\cos(ka/2)=B e^{-\kappa a/2}
+\]
+\[
+-Ak\sin(ka/2)=-\kappa B e^{-\kappa a/2}
+\]
+
+Divido la seconda per la prima (elimino \(A,B\)):
+\[
+\boxed{k\tan\left(\frac{ka}{2}\right)=\kappa}
+\]
+Questa è la **condizione quantizzante** (trascendentale): da qui trovi \(E\).
+
+## 7B) Stati dispari (odd)
+Dentro:
+\[
+\psi_{in}(x)=A\sin(kx)
+\]
+Fuori (\(x>a/2\)):
+\[
+\psi_{out}(x)=B e^{-\kappa x}
+\]
+
+Raccordo in \(x=a/2\):
+\[
+A\sin(ka/2)=B e^{-\kappa a/2}
+\]
+\[
+Ak\cos(ka/2)=-\kappa B e^{-\kappa a/2}
+\]
+
+Divido:
+\[
+\boxed{-k\cot\left(\frac{ka}{2}\right)=\kappa}
+\]
+(oppure \(k\cot(ka/2)=-\kappa\)).
+
+**Fisica importantissima:** il numero di soluzioni (stati legati) è **finito** e cresce con profondità/larghezza del pozzo.
+
+---
+
+# 8) Legati vs diffusione (scattering)
+- **Stati legati:** energia sotto il livello esterno ⇒ \(\psi\) deve decadere a \(\pm\infty\) ⇒ livelli **discreti**, normalizzabili.
+- **Stati di diffusione (scattering):** \(E\) sopra asintotici ⇒ onde piane a \(\pm\infty\) ⇒ spettro **continuo**, normalizzazione a delta, e si parla di \(R,T\).
+
+---
+
+# 9) Analogia ottica (cosa dire in 2 frasi ma bene)
+Nei tratti a potenziale costante il problema è un’equazione d’onda con numero d’onda:
+\[
+k=\frac{\sqrt{2m(E-V)}}{\hbar}.
+\]
+Un salto di \(V\) cambia \(k\) come un salto di indice ottico cambia \(k\) della luce:  
+\[
+r=\frac{k_1-k_2}{k_1+k_2}
+\]
+è l’analogo dei coefficienti di Fresnel (riflessione per disadattamento di impedenza/numero d’onda).  
+Nel caso \(E<V\) l’onda diventa **evanescente** come in ottica oltre l’angolo critico.
+
+---
+
+# Dizionario simboli (da sapere uno per uno)
+- \(\psi(x)\): funzione d’onda stazionaria.
+- \(E\): energia totale.
+- \(V(x)\): potenziale.
+- \(m\): massa.
+- \(\hbar\): costante di Planck ridotta.
+- \(k=\sqrt{2m(E-V)}/\hbar\): numero d’onda in regione con \(E>V\).
+- \(\kappa=\sqrt{2m(V-E)}/\hbar\): coefficiente di decadimento in regione con \(E<V\).
+- \(A,B,C,D\): costanti dei tratti (ampiezze).
+- \(r\): ampiezza di riflessione (complessa).
+- \(t\): ampiezza di trasmissione (complessa).
+- \(j\): corrente di probabilità.
+- \(R,T\): coefficienti di riflessione/trasmissione (rapporti di correnti).
+- \(V_0\): altezza della barriera o profondità della buca (a seconda del contesto).
+- \(a\): larghezza barriera/buca; \(L\): larghezza pozzo infinito.
+- \(n\): numero quantico (pozzo infinito).
+
+---
+
+# Significato fisico (da dire al prof senza “solo conti”)
+- In 1D a tratti, Schrödinger diventa un problema di onde con cambi di “mezzo” (il mezzo è \(E-V\)).  
+- La **riflessione quantistica** appare anche senza dissipazione: nasce dai raccordi (interferenza).  
+- La **corrente** ti dà il modo fisicamente corretto di definire \(R,T\) e garantisce \(R+T=1\) per potenziali reali.  
+- Il **tunneling** (\(E<V_0\)) è un effetto puramente quantistico: trasmissione non nulla attraverso una regione classicamente proibita, con legge esponenziale \(e^{-2\kappa a}\).  
+- Le **buche** producono quantizzazione perché imponi condizioni al bordo e normalizzabilità: l’onda “deve stare dentro”.
+
+---
+
+# Copione orale “da macchinetta” (2–3 minuti, ordinato)
+1) Scrivo la TISE: \(-\hbar^2/(2m)\psi''+V\psi=E\psi\). In ogni regione a \(V\) costante ho onde \(e^{\pm ikx}\) se \(E>V\) o esponenziali \(e^{\pm\kappa x}\) se \(E<V\).  
+2) Ai bordi con potenziale finito impongo \(\psi\) e \(\psi'\) continue (derivo integrando Schr attorno al bordo).  
+3) Definisco la corrente \(j=\frac{\hbar}{2mi}(\psi^*\psi'-\psi\psi'^*)\); per un’onda piana \(A e^{ikx}\), \(j=\hbar k|A|^2/m\). Quindi \(R=|j_r|/|j_i|\), \(T=|j_t|/|j_i|\).  
+4) Step: per \(x<0\) \(\psi=e^{ik_1x}+r e^{-ik_1x}\), per \(x>0\) \(\psi=t e^{ik_2x}\). Dai raccordi ottengo \(r=(k_1-k_2)/(k_1+k_2)\), \(t=2k_1/(k_1+k_2)\). Con la corrente: \(R=|r|^2\), \(T=(k_2/k_1)|t|^2\) e \(R+T=1\). Se \(E<V_0\) il tratto è evanescente e \(T=0\), \(R=1\) con penetrazione \(1/\kappa\).  
+5) Barriera \(0<x<a\): imposto soluzioni in tre regioni e raccordo in \(0\) e \(a\). Risulta \(T=\big[1+\frac{V_0^2}{4E(V_0-E)}\sinh^2(\kappa a)\big]^{-1}\) per tunneling e \(T=\big[1+\frac{V_0^2}{4E(E-V_0)}\sin^2(k_2 a)\big]^{-1}\) sopra barriera con risonanze \(T=1\) se \(k_2a=n\pi\).  
+6) Pozzo infinito: \(\psi(0)=\psi(L)=0\) ⇒ \(k=n\pi/L\) ⇒ \(E_n=n^2\pi^2\hbar^2/(2mL^2)\).  
+7) Pozzo finito simmetrico: uso parità. Stati pari: \(k\tan(ka/2)=\kappa\); dispari: \(-k\cot(ka/2)=\kappa\). Queste condizioni quantizzano le energie e il numero di livelli è finito.
+<<<DIM 5 END>>>
+
+<<<DIM 6 START>>>
+# DIM 6 — Oscillatore armonico quantistico 1D (metodo operatoriale: \(a,a^\dagger\), \(N\), spettro \(E_n\), stati \(\psi_n\), significato fisico)
+
+## Dove sta negli appunti
+- **Formalismo operatoriale / commutatori / notazione:** **P1·12** (`img/126.jpg`–`img/132.jpg`)  
+- **Ponte QM vs CL / interpretazione:** **P1·11A** (`img/100.jpg`–`img/108.jpg`)  
+- (Se nelle tue note c’è un blocco dedicato all’oscillatore, di solito è nello stesso “cluster” di P1·12)
+
+---
+
+# 0) Obiettivo “boss”
+Dimostrare in modo completo che per l’oscillatore armonico quantistico 1D:
+1) Definendo opportunamente gli operatori di creazione/distruzione \(a^\dagger, a\), vale
+\[
+[a,a^\dagger]=1
+\]
+2) L’Hamiltoniana si scrive
+\[
+\boxed{\ \hat H=\hbar\omega\left(\hat N+\frac12\right)\ }
+\quad\text{con}\quad
+\hat N=a^\dagger a
+\]
+3) Gli autovalori di \(\hat N\) sono \(n=0,1,2,\dots\) e quindi
+\[
+\boxed{\ E_n=\hbar\omega\left(n+\frac12\right)\ ,\quad n=0,1,2,\dots\ }
+\]
+4) Lo stato fondamentale soddisfa \(a|0\rangle=0\) e in rappresentazione \(x\) è una gaussiana:
+\[
+\boxed{\ \psi_0(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right)\ }
+\]
+5) Gli stati eccitati si ottengono con
+\[
+|n\rangle=\frac{(a^\dagger)^n}{\sqrt{n!}}|0\rangle
+\]
+e in \(x\) compaiono i polinomi di Hermite \(H_n\).
+
+---
+
+# 1) Setup: Hamiltoniana e regola di quantizzazione
+Oscillatore armonico 1D:
+\[
+\boxed{\ \hat H=\frac{\hat p^2}{2m}+\frac12\,m\omega^2\hat x^2\ }
+\]
+con:
+- \(\hat x\) operatore posizione,
+- \(\hat p\) operatore quantità di moto,
+- \(\omega\) pulsazione,
+- \(m\) massa.
+
+**Comm. canonico:**
+\[
+\boxed{[\hat x,\hat p]=i\hbar}
+\]
+
+---
+
+# 2) Definizione dei ladder operators \(a\), \(a^\dagger\)
+Definisco:
+\[
+\boxed{
+a=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x+\frac{i}{m\omega}\hat p\right)
+}
+\]
+\[
+\boxed{
+a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x-\frac{i}{m\omega}\hat p\right)
+}
+\]
+
+### Perché questi coefficienti?
+- Voglio che \(a\) sia **adimensionale**.
+- Voglio che \(H\) diventi una cosa del tipo \(a^\dagger a + 1/2\).
+- La scala naturale di lunghezza è \(x_0=\sqrt{\hbar/(m\omega)}\) (ampiezza quantistica tipica).
+
+---
+
+# 3) DIMOSTRAZIONE: \([a,a^\dagger]=1\)
+Metto \(c=\sqrt{\frac{m\omega}{2\hbar}}\) e \(\alpha=\frac{1}{m\omega}\) per alleggerire:
+\[
+a=c(\hat x+i\alpha \hat p),\qquad a^\dagger=c(\hat x-i\alpha \hat p).
+\]
+
+Allora:
+\[
+[a,a^\dagger]=c^2[\hat x+i\alpha\hat p,\hat x-i\alpha\hat p].
+\]
+
+Espando usando bilinearità e che \([\hat x,\hat x]=[\hat p,\hat p]=0\):
+\[
+[\hat x+i\alpha\hat p,\hat x-i\alpha\hat p]
+=
+[\hat x,\hat x]-i\alpha[\hat x,\hat p]+i\alpha[\hat p,\hat x]+(i\alpha)(-i\alpha)[\hat p,\hat p].
+\]
+Resta:
+\[
+=-i\alpha[\hat x,\hat p]+i\alpha[\hat p,\hat x].
+\]
+Ma \([\hat p,\hat x]=-[\hat x,\hat p]= -i\hbar\). Quindi:
+\[
+-i\alpha(i\hbar)+i\alpha(-i\hbar)=\alpha\hbar+\alpha\hbar=2\alpha\hbar.
+\]
+
+Dunque:
+\[
+[a,a^\dagger]=c^2(2\alpha\hbar)=\left(\frac{m\omega}{2\hbar}\right)\cdot 2\cdot \frac{1}{m\omega}\cdot \hbar=1.
+\]
+
+\[
+\boxed{[a,a^\dagger]=1.}
+\]
+
+---
+
+# 4) Riscrivere \(\hat H\) in funzione di \(a^\dagger a\)
+Calcolo \(a^\dagger a\).
+
+Usando le definizioni:
+\[
+a^\dagger a=\frac{m\omega}{2\hbar}\left(\hat x-\frac{i}{m\omega}\hat p\right)\left(\hat x+\frac{i}{m\omega}\hat p\right).
+\]
+
+Moltiplico:
+\[
+(\hat x-\tfrac{i}{m\omega}\hat p)(\hat x+\tfrac{i}{m\omega}\hat p)
+=
+\hat x^2+\frac{i}{m\omega}\hat x\hat p-\frac{i}{m\omega}\hat p\hat x+\frac{1}{m^2\omega^2}\hat p^2.
+\]
+
+Il pezzo centrale è un commutatore:
+\[
+\hat x\hat p-\hat p\hat x=[\hat x,\hat p]=i\hbar.
+\]
+Quindi:
+\[
+\frac{i}{m\omega}(\hat x\hat p-\hat p\hat x)
+=
+\frac{i}{m\omega}(i\hbar)= -\frac{\hbar}{m\omega}.
+\]
+
+Allora:
+\[
+a^\dagger a=\frac{m\omega}{2\hbar}\left(\hat x^2+\frac{1}{m^2\omega^2}\hat p^2-\frac{\hbar}{m\omega}\right).
+\]
+
+Distribuisco:
+\[
+a^\dagger a
+=
+\frac{m\omega}{2\hbar}\hat x^2+\frac{1}{2\hbar m\omega}\hat p^2-\frac12.
+\]
+
+Riordino per riconoscere \(H\):
+\[
+\frac{1}{2\hbar m\omega}\hat p^2+\frac{m\omega}{2\hbar}\hat x^2
+=
+\frac{1}{\hbar\omega}\left(\frac{\hat p^2}{2m}+\frac12 m\omega^2\hat x^2\right)
+=\frac{\hat H}{\hbar\omega}.
+\]
+
+Quindi:
+\[
+a^\dagger a = \frac{\hat H}{\hbar\omega}-\frac12
+\quad\Rightarrow\quad
+\boxed{\hat H=\hbar\omega\left(a^\dagger a+\frac12\right)}.
+\]
+
+Definisco l’**operatore numero**:
+\[
+\boxed{\hat N\equiv a^\dagger a}
+\]
+e ottengo:
+\[
+\boxed{\hat H=\hbar\omega\left(\hat N+\frac12\right)}.
+\]
+
+---
+
+# 5) Proprietà di \(\hat N\) e dimostrazione dello spettro \(n=0,1,2,\dots\)
+
+## 5A) \(\hat N\) è positivo
+Per qualunque stato \(|\psi\rangle\):
+\[
+\langle\psi|\hat N|\psi\rangle
+=\langle\psi|a^\dagger a|\psi\rangle
+=\langle a\psi|a\psi\rangle
+=\|a|\psi\rangle\|^2 \ge 0.
+\]
+Quindi gli autovalori di \(\hat N\) sono \(\ge 0\).
+
+## 5B) Commutatori fondamentali: \(a\) abbassa, \(a^\dagger\) alza
+Dimostro:
+\[
+[\hat N,a]= -a,\qquad [\hat N,a^\dagger]=+a^\dagger.
+\]
+
+Esempio:
+\[
+[\hat N,a]=[a^\dagger a,a]=a^\dagger[a,a]+[a^\dagger,a]a=0+(-1)a=-a
+\]
+perché \([a^\dagger,a]=-[a,a^\dagger]=-1\).
+
+Analogamente viene \([\hat N,a^\dagger]=a^\dagger\).
+
+## 5C) Se \(\hat N|n\rangle=n|n\rangle\), allora \(a^\dagger|n\rangle\) ha autovalore \(n+1\)
+Calcolo:
+\[
+\hat N(a^\dagger|n\rangle)=(a^\dagger\hat N + [\hat N,a^\dagger])|n\rangle
+= a^\dagger(n|n\rangle)+a^\dagger|n\rangle
+=(n+1)(a^\dagger|n\rangle).
+\]
+Quindi \(a^\dagger\) **aumenta** il numero di 1.
+
+Analogamente:
+\[
+\hat N(a|n\rangle)=(n-1)(a|n\rangle)
+\]
+quindi \(a\) **diminuisce** il numero di 1 (se lo stato non va a zero).
+
+## 5D) Perché \(n\) deve essere un intero e c’è un minimo \(n=0\)
+Se esistesse un autovalore \(n\) non intero o negativo, applicando ripetutamente \(a\) scenderesti indefinitamente:
+\[
+n,\ n-1,\ n-2,\dots
+\]
+Ma \(\hat N\ge 0\) (positività), quindi la discesa deve **fermarsi**: esiste uno stato minimo \(|0\rangle\) tale che:
+\[
+\boxed{a|0\rangle=0.}
+\]
+Da questo, risalendo con \(a^\dagger\), ottieni una torre con:
+\[
+\boxed{n=0,1,2,\dots}
+\]
+
+---
+
+# 6) Spettro energetico
+Poiché:
+\[
+\hat H=\hbar\omega\left(\hat N+\frac12\right),
+\]
+se \(\hat N|n\rangle=n|n\rangle\), allora:
+\[
+\hat H|n\rangle=\hbar\omega\left(n+\frac12\right)|n\rangle.
+\]
+
+\[
+\boxed{E_n=\hbar\omega\left(n+\frac12\right),\quad n=0,1,2,\dots}
+\]
+
+**Risultati fisici immediati:**
+- livelli equispaziati di passo \(\hbar\omega\);
+- energia di punto zero \(E_0=\frac12\hbar\omega\) (non puoi avere \(E=0\) perché violerebbe Heisenberg).
+
+---
+
+# 7) Stati normalizzati e costruzione esplicita
+Dato lo stato fondamentale \(|0\rangle\) con \(a|0\rangle=0\), definisco:
+\[
+\boxed{|n\rangle=\frac{(a^\dagger)^n}{\sqrt{n!}}|0\rangle.}
+\]
+
+E vale:
+\[
+a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle,
+\qquad
+a|n\rangle=\sqrt{n}\,|n-1\rangle.
+\]
+
+---
+
+# 8) Funzioni d’onda in rappresentazione \(x\)
+
+## 8A) Stato fondamentale: da \(a|0\rangle=0\)
+In rappresentazione \(x\):
+\[
+\hat p=-i\hbar\frac{d}{dx}.
+\]
+Scrivo \(a\psi_0=0\):
+\[
+\sqrt{\frac{m\omega}{2\hbar}}\left(x+\frac{i}{m\omega}(-i\hbar\frac{d}{dx})\right)\psi_0(x)=0
+\]
+\[
+\Rightarrow \left(x+\frac{\hbar}{m\omega}\frac{d}{dx}\right)\psi_0(x)=0
+\]
+\[
+\frac{d\psi_0}{dx}=-\frac{m\omega}{\hbar}x\,\psi_0.
+\]
+Integro:
+\[
+\psi_0(x)=A\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right).
+\]
+Normalizzo imponendo \(\int |\psi_0|^2dx=1\), ottengo:
+\[
+\boxed{\psi_0(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right).}
+\]
+
+## 8B) Stati eccitati: Hermite
+Applicando \((a^\dagger)^n\) ottieni:
+\[
+\boxed{
+\psi_n(x)=\frac{1}{\sqrt{2^n n!}}
+\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}
+H_n\!\left(\sqrt{\frac{m\omega}{\hbar}}x\right)
+\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right)
+}
+\]
+dove \(H_n\) sono i polinomi di Hermite.
+
+**Parità:** \(\psi_n\) è pari per \(n\) pari, dispari per \(n\) dispari.
+
+---
+
+# 9) Collegamenti “fisici” che devi saper dire (brevissimi ma giusti)
+
+## 9A) Energia di punto zero
+Anche nel minimo \(n=0\):
+\[
+E_0=\frac12\hbar\omega\neq 0.
+\]
+Motivo: se \(E=0\) avresti \(x=0\) e \(p=0\) determinati → violazione di \(\Delta x\Delta p\ge \hbar/2\).
+
+## 9B) Minima indeterminazione nello stato fondamentale
+Per lo stato fondamentale:
+\[
+\Delta x=\sqrt{\frac{\hbar}{2m\omega}},\qquad
+\Delta p=\sqrt{\frac{\hbar m\omega}{2}}
+\]
+e quindi:
+\[
+\boxed{\Delta x\,\Delta p=\frac{\hbar}{2}}
+\]
+(satura Heisenberg: è una gaussiana, coerente con DIM 2).
+
+## 9C) Limite classico
+Per \(n\gg 1\):
+- energia grande,
+- livelli fitti (in confronto alle scale sperimentali) → appare “quasi continuo”,
+- l’oscillatore quantistico recupera il comportamento classico “in media” (Ehrenfest).
+
+---
+
+# Dizionario simboli e coefficienti (da sapere “uno per uno”)
+- \(m\): massa.
+- \(\omega\): pulsazione dell’oscillatore (rad/s).
+- \(\hbar\): costante di Planck ridotta.
+- \(\hat x\): operatore posizione.
+- \(\hat p\): operatore quantità di moto.
+- \([\hat x,\hat p]=i\hbar\): commutatore canonico.
+- \(\hat H=\frac{\hat p^2}{2m}+\frac12 m\omega^2\hat x^2\): Hamiltoniana.
+- \(a\): operatore di distruzione (abbassa l’energia/numero quantico).
+- \(a^\dagger\): operatore di creazione (alza l’energia/numero quantico).
+- \(\sqrt{\frac{m\omega}{2\hbar}}\): coefficiente scelto per rendere \(a\) adimensionale e ottenere \(H=\hbar\omega(N+1/2)\).
+- \([a,a^\dagger]=1\): algebra dell’oscillatore.
+- \(\hat N=a^\dagger a\): operatore numero (conta i quanti).
+- \(|n\rangle\): autostato di \(\hat N\) e \(\hat H\).
+- \(n\): numero quantico \(0,1,2,\dots\)
+- \(E_n=\hbar\omega(n+1/2)\): energie.
+- \(\psi_n(x)\): funzione d’onda in rappresentazione \(x\).
+- \(H_n(\cdot)\): polinomi di Hermite.
+- \(x_0=\sqrt{\hbar/(m\omega)}\): scala naturale di lunghezza dell’oscillatore.
+
+---
+
+# Copione orale “da macchinetta” (2 minuti, super lineare)
+“Prendo l’oscillatore armonico 1D con \(H=p^2/2m+\frac12 m\omega^2x^2\) e \([x,p]=i\hbar\). Definisco gli operatori \(a=\sqrt{\frac{m\omega}{2\hbar}}\left(x+\frac{i}{m\omega}p\right)\) e \(a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\left(x-\frac{i}{m\omega}p\right)\). Usando il commutatore canonico ricavo \([a,a^\dagger]=1\). Calcolo poi \(a^\dagger a=\frac{H}{\hbar\omega}-\frac12\), quindi \(H=\hbar\omega(N+\frac12)\) con \(N=a^\dagger a\). Mostro che \(N\) è positivo perché \(\langle N\rangle=\|a|\psi\rangle\|^2\ge0\). Inoltre \([N,a]=-a\) e \([N,a^\dagger]=a^\dagger\): quindi se \(N|n\rangle=n|n\rangle\), allora \(a^\dagger|n\rangle\) ha autovalore \(n+1\) e \(a|n\rangle\) ha autovalore \(n-1\). La discesa deve fermarsi per positività: esiste \(|0\rangle\) con \(a|0\rangle=0\), quindi gli autovalori sono \(n=0,1,2,\dots\). Ne segue lo spettro \(E_n=\hbar\omega(n+\frac12)\). In rappresentazione \(x\), dall’equazione \(a\psi_0=0\) ottengo \(\psi_0(x)\propto e^{-m\omega x^2/(2\hbar)}\) e normalizzando viene \(\psi_0=(m\omega/\pi\hbar)^{1/4}e^{-m\omega x^2/(2\hbar)}\). Gli eccitati sono \(|n\rangle=(a^\dagger)^n/\sqrt{n!}|0\rangle\) e in \(x\) compaiono i polinomi di Hermite. Fisicamente c’è energia di punto zero \(E_0=\hbar\omega/2\) e il fondamentale satura Heisenberg.”
+<<<DIM 6 END>>>

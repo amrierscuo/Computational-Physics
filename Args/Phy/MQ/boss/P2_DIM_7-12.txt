@@ -1,0 +1,2077 @@
+<<<DIM 7 START>>>
+# DIM 7 — Perturbazioni stazionarie: non degeneri + degeneri  
+**(sviluppo in \(\lambda\), correzioni \(E^{(1)}\), \(|\psi^{(1)}\rangle\), \(E^{(2)}\); caso degenere: diagonalizzazione di \(H'\) nel sottospazio e equazione secolare)**
+
+## Dove sta negli appunti
+- **Core (non degenere):** P2·25A `img/220.jpg`–`img/223.jpg`  
+- **Core (degenere):** P2·25B `img/224.jpg`–`img/227.jpg`  
+- **Indizi boss (stessa notazione):** `boss/solbf7_1.jpg`, `boss/solbf7_2.jpg`  
+- **Supporto (bra–ket / completezza):** P1·12 `img/126.jpg`–`img/132.jpg`
+
+---
+
+# 0) Obiettivo “boss” (cosa devi saper rifare senza esitazioni)
+1) Impostare:
+\[
+H = H_0 + \lambda H', \qquad \lambda\ll 1,
+\]
+e porre l’equazione agli autovalori stazionaria:
+\[
+H|\Psi_n\rangle = E_n|\Psi_n\rangle.
+\]
+
+2) **Caso non degenere**: ottenere (fino al II ordine)
+\[
+\boxed{E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle}
+\]
+\[
+\boxed{|\Psi_n^{(1)}\rangle=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle}
+\]
+\[
+\boxed{E_n^{(2)}=\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}}
+\]
+e dire la **condizione di validità**:
+\[
+|\lambda\,H'_{mn}|\ll |E_n^{(0)}-E_m^{(0)}|.
+\]
+
+3) **Caso degenere**: dire bene la procedura corretta:
+- se \(E_n^{(0)}\) è \(r_n\)-degenere, prima **diagonalizzi \(H'\)** nel sottospazio degenere \(S_n\);
+- risolvi l’**equazione secolare**:
+\[
+\boxed{\det\!\big(H'_{ij}-E^{(1)}\delta_{ij}\big)=0},
+\qquad
+H'_{ij}=\langle \phi_n^{(i)}|H'|\phi_n^{(j)}\rangle,
+\]
+ottenendo \(r_n\) correzioni \(E_{n,a}^{(1)}\) e le combinazioni “buone” \(|\phi_{n,a}^{(0)}\rangle\).
+
+4) Saper scrivere anche (dopo aver scelto gli autostati “buoni” nel sottospazio):
+\[
+\boxed{|\Psi_{n,a}^{(1)}\rangle=\sum_{m\notin S_n}\frac{\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle},
+\qquad
+\boxed{E_{n,a}^{(2)}=\sum_{m\notin S_n}\frac{|\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle|^2}{E_n^{(0)}-E_m^{(0)}}}.
+\]
+
+5) Esempio “a colpo sicuro” \(r_n=2\) (splitting):
+\[
+\det\begin{pmatrix}
+H'_{11}-E^{(1)} & H'_{12}\\
+H'_{21} & H'_{22}-E^{(1)}
+\end{pmatrix}=0
+\Rightarrow
+\boxed{E_\pm^{(1)}=\frac{H'_{11}+H'_{22}}{2}\pm\frac12\sqrt{(H'_{11}-H'_{22})^2+4|H'_{12}|^2}}.
+\]
+
+---
+
+# 1) Setup generale (sviluppo perturbativo)
+Assumo di conoscere autovalori e autostati di \(H_0\):
+\[
+H_0|\phi_n\rangle = E_n^{(0)}|\phi_n\rangle,
+\qquad
+\langle \phi_m|\phi_n\rangle=\delta_{mn}.
+\]
+
+Introduco una perturbazione *stazionaria* \(H'\) e un parametro “di conteggio” \(\lambda\):
+\[
+H = H_0+\lambda H',\qquad \lambda\ll 1.
+\]
+
+Cerco soluzione di:
+\[
+H|\Psi_n\rangle = E_n|\Psi_n\rangle,
+\]
+espandendo in serie:
+\[
+E_n = E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}+\dots
+\]
+\[
+|\Psi_n\rangle = |\phi_n\rangle+\lambda|\Psi_n^{(1)}\rangle+\lambda^2|\Psi_n^{(2)}\rangle+\dots
+\]
+
+**Normalizzazione intermedia (quella degli appunti):**
+\[
+\boxed{\langle \phi_n|\Psi_n\rangle=1}
+\quad\Rightarrow\quad
+\langle \phi_n|\Psi_n^{(1)}\rangle=0,\ \langle \phi_n|\Psi_n^{(2)}\rangle=0,\dots
+\]
+(serve per rendere uniche le correzioni e far “sparire” alcuni termini).
+
+---
+
+# 2) Caso NON degenere — dimostrazione di \(E_n^{(1)}\), \(|\Psi_n^{(1)}\rangle\), \(E_n^{(2)}\)
+
+## 2A) Ordine \(\lambda^0\)
+Sostituendo le espansioni in \(H|\Psi_n\rangle=E_n|\Psi_n\rangle\) e prendendo il termine a \(\lambda^0\):
+\[
+H_0|\phi_n\rangle = E_n^{(0)}|\phi_n\rangle
+\]
+(vero per definizione).
+
+## 2B) Ordine \(\lambda^1\)
+Il termine a \(\lambda^1\) dà:
+\[
+H_0|\Psi_n^{(1)}\rangle + H'|\phi_n\rangle
+=
+E_n^{(0)}|\Psi_n^{(1)}\rangle + E_n^{(1)}|\phi_n\rangle.
+\]
+Porto tutto a sinistra:
+\[
+\boxed{(H_0-E_n^{(0)})|\Psi_n^{(1)}\rangle + (H'-E_n^{(1)})|\phi_n\rangle=0.}
+\]
+
+### (i) Ricavo \(E_n^{(1)}\)
+Moltiplico a sinistra per \(\langle \phi_n|\). Il primo termine sparisce perché
+\(\langle\phi_n|(H_0-E_n^{(0)})=0\).
+Ottengo:
+\[
+\langle \phi_n|H'|\phi_n\rangle - E_n^{(1)}\langle \phi_n|\phi_n\rangle=0
+\Rightarrow
+\boxed{E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle.}
+\]
+
+### (ii) Ricavo \(|\Psi_n^{(1)}\rangle\)
+Espando \(|\Psi_n^{(1)}\rangle\) sulla base completa di \(H_0\):
+\[
+|\Psi_n^{(1)}\rangle=\sum_{m}c_{nm}^{(1)}|\phi_m\rangle.
+\]
+La normalizzazione intermedia impone \(c_{nn}^{(1)}=\langle\phi_n|\Psi_n^{(1)}\rangle=0\), quindi:
+\[
+|\Psi_n^{(1)}\rangle=\sum_{m\neq n}c_{nm}^{(1)}|\phi_m\rangle.
+\]
+
+Moltiplico l’equazione d’ordine 1 per \(\langle \phi_m|\) con \(m\neq n\):
+\[
+\langle \phi_m|(H_0-E_n^{(0)})|\Psi_n^{(1)}\rangle + \langle \phi_m|H'|\phi_n\rangle = 0
+\]
+perché \(\langle \phi_m|\phi_n\rangle=0\) quando \(m\neq n\).
+
+Ora:
+\[
+\langle \phi_m|H_0|\Psi_n^{(1)}\rangle
+=\sum_{k\neq n}c_{nk}^{(1)}\langle \phi_m|H_0|\phi_k\rangle
+=\sum_{k\neq n}c_{nk}^{(1)}E_k^{(0)}\delta_{mk}
+= c_{nm}^{(1)}E_m^{(0)}.
+\]
+Quindi:
+\[
+c_{nm}^{(1)}(E_m^{(0)}-E_n^{(0)}) + \langle \phi_m|H'|\phi_n\rangle=0
+\]
+\[
+\Rightarrow
+\boxed{c_{nm}^{(1)}=\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+Sostituisco:
+\[
+\boxed{
+|\Psi_n^{(1)}\rangle=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle.}
+\]
+
+## 2C) Ordine \(\lambda^2\) e \(E_n^{(2)}\)
+Il termine a \(\lambda^2\) dà:
+\[
+H_0|\Psi_n^{(2)}\rangle + H'|\Psi_n^{(1)}\rangle
+=
+E_n^{(0)}|\Psi_n^{(2)}\rangle + E_n^{(1)}|\Psi_n^{(1)}\rangle + E_n^{(2)}|\phi_n\rangle.
+\]
+Porto a sinistra:
+\[
+(H_0-E_n^{(0)})|\Psi_n^{(2)}\rangle + (H'-E_n^{(1)})|\Psi_n^{(1)}\rangle - E_n^{(2)}|\phi_n\rangle=0.
+\]
+
+Moltiplico a sinistra per \(\langle \phi_n|\). Il primo termine sparisce e, usando la normalizzazione intermedia (\(\langle \phi_n|\Psi_n^{(1)}\rangle=0\)), ottengo:
+\[
+\langle \phi_n|H'|\Psi_n^{(1)}\rangle - E_n^{(2)}=0
+\Rightarrow
+\boxed{E_n^{(2)}=\langle \phi_n|H'|\Psi_n^{(1)}\rangle.}
+\]
+
+Sostituisco \(|\Psi_n^{(1)}\rangle=\sum_{m\neq n}c_{nm}^{(1)}|\phi_m\rangle\):
+\[
+E_n^{(2)}=\sum_{m\neq n}c_{nm}^{(1)}\langle \phi_n|H'|\phi_m\rangle
+=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle\langle \phi_n|H'|\phi_m\rangle}{E_n^{(0)}-E_m^{(0)}}.
+\]
+Se \(H'\) è hermitiano, \(\langle \phi_n|H'|\phi_m\rangle = \langle \phi_m|H'|\phi_n\rangle^*\), quindi:
+\[
+\boxed{E_n^{(2)}=\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+**Riassunto energia fino al II ordine (poi si pone \(\lambda=1\)):**
+\[
+\boxed{
+E_n \simeq E_n^{(0)}+\lambda\langle \phi_n|H'|\phi_n\rangle
++\lambda^2\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+---
+
+# 3) Perché “non funziona” vicino alla degenerazione (condizione di validità)
+Nel coefficiente di mixing compare:
+\[
+c_{nm}^{(1)}=\frac{H'_{mn}}{E_n^{(0)}-E_m^{(0)}}.
+\]
+Se \(E_n^{(0)}\approx E_m^{(0)}\) il denominatore è piccolo ⇒ la correzione esplode.
+
+Quindi la condizione pratica è:
+\[
+\boxed{|\lambda H'_{mn}|\ll |E_n^{(0)}-E_m^{(0)}| \quad \forall\,m\neq n.}
+\]
+
+Se c’è degenerazione vera (\(E_n^{(0)}=E_m^{(0)}\)) il metodo non-degenere va sostituito dal metodo **degenere**.
+
+---
+
+# 4) Caso DEGENERE — equazione secolare e stati “buoni”
+Supponi che un livello \(E_n^{(0)}\) sia \(r_n\)-volte degenere. Esiste una base ortonormale del sottospazio degenere \(S_n\):
+\[
+H_0|\phi_n^{(i)}\rangle = E_n^{(0)}|\phi_n^{(i)}\rangle,
+\qquad
+i=1,\dots,r_n,
+\qquad
+\langle \phi_n^{(i)}|\phi_n^{(j)}\rangle=\delta_{ij}.
+\]
+
+## 4A) Idea chiave: la perturbazione “sceglie” combinazioni lineari
+Il vero autostato (a ordine 0 in \(\lambda\)) non è uno specifico \(|\phi_n^{(i)}\rangle\), ma una combinazione:
+\[
+|\phi_{n,a}^{(0)}\rangle=\sum_{i=1}^{r_n}\alpha_i^{(a)}|\phi_n^{(i)}\rangle,
+\qquad a=1,\dots,r_n.
+\]
+
+Espando:
+\[
+E_{n,a}=E_n^{(0)}+\lambda E_{n,a}^{(1)}+\lambda^2E_{n,a}^{(2)}+\dots
+\]
+\[
+|\Psi_{n,a}\rangle = |\phi_{n,a}^{(0)}\rangle+\lambda|\Psi_{n,a}^{(1)}\rangle+\dots
+\]
+
+## 4B) Ordine \(\lambda^1\): nasce il sistema omogeneo (secolare)
+Rifacendo lo stesso passaggio dell’ordine 1:
+\[
+(H_0-E_n^{(0)})|\Psi_{n,a}^{(1)}\rangle + (H'-E_{n,a}^{(1)})|\phi_{n,a}^{(0)}\rangle=0.
+\]
+
+Proietto su \(\langle \phi_n^{(j)}|\) (che sta nel sottospazio degenere): il primo termine dà zero, quindi:
+\[
+\langle \phi_n^{(j)}|H'|\phi_{n,a}^{(0)}\rangle
+- E_{n,a}^{(1)}\langle \phi_n^{(j)}|\phi_{n,a}^{(0)}\rangle =0.
+\]
+
+Ma
+\[
+\langle \phi_n^{(j)}|H'|\phi_{n,a}^{(0)}\rangle
+=\sum_{i=1}^{r_n}\alpha_i^{(a)}\langle \phi_n^{(j)}|H'|\phi_n^{(i)}\rangle
+=\sum_{i=1}^{r_n}H'_{ji}\alpha_i^{(a)},
+\]
+e
+\[
+\langle \phi_n^{(j)}|\phi_{n,a}^{(0)}\rangle=\alpha_j^{(a)}.
+\]
+
+Quindi ottengo il sistema:
+\[
+\boxed{
+\sum_{i=1}^{r_n}\big(H'_{ji}-E_{n,a}^{(1)}\delta_{ji}\big)\,\alpha_i^{(a)}=0,
+\qquad j=1,\dots,r_n.}
+\]
+
+Per avere soluzioni non banali \(\alpha^{(a)}\neq 0\) deve essere:
+\[
+\boxed{\det\!\big(H'_{ij}-E^{(1)}\delta_{ij}\big)=0.}
+\]
+Le \(r_n\) soluzioni \(E^{(1)}\) sono gli **autovalori** della matrice \(H'\) ristretta a \(S_n\); i corrispondenti autovettori danno i coefficienti \(\alpha_i^{(a)}\).
+
+*In pratica:* “nel sottospazio degenere, diagonalizzo \(H'\)”.
+
+## 4C) Correzioni fuori dal sottospazio (come nel caso non degenere)
+Scelti gli autostati “buoni” \(|\phi_{n,a}^{(0)}\rangle\), posso scrivere:
+\[
+\boxed{|\Psi_{n,a}^{(1)}\rangle=\sum_{m\notin S_n}\frac{\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle}
+\]
+e
+\[
+\boxed{E_{n,a}^{(2)}=\sum_{m\notin S_n}\frac{|\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+---
+
+# 5) Esempio \(r_n=2\): splitting e mixing
+Nel sottospazio degenere con base \(\{|\phi_n^{(1)}\rangle,|\phi_n^{(2)}\rangle\}\), la matrice è:
+\[
+H'^{(S_n)}=
+\begin{pmatrix}
+H'_{11} & H'_{12}\\
+H'_{21} & H'_{22}
+\end{pmatrix},
+\qquad H'_{21}=H_{12}^{\prime *}.
+\]
+
+Equazione secolare:
+\[
+\det\begin{pmatrix}
+H'_{11}-E^{(1)} & H'_{12}\\
+H'_{21} & H'_{22}-E^{(1)}
+\end{pmatrix}=0.
+\]
+
+Soluzione:
+\[
+\boxed{E_\pm^{(1)}=\frac{H'_{11}+H'_{22}}{2}\pm\frac12\sqrt{(H'_{11}-H'_{22})^2+4|H'_{12}|^2}}.
+\]
+Interpretazione: il livello si **scinde** in due livelli separati di un ammontare proporzionale alla radice.
+
+Se \(H'_{12}=0\) (nessun accoppiamento tra i due stati), allora:
+\[
+E_+^{(1)}=H'_{11},\qquad E_-^{(1)}=H'_{22},
+\]
+e gli autostati “buoni” coincidono con quelli scelti all’inizio (nessun mixing).
+
+---
+
+# Dizionario simboli (da sapere “uno per uno”)
+- \(H_0\): Hamiltoniana non perturbata (nota, risolvibile esattamente).
+- \(H'\): perturbazione stazionaria (operatore piccolo rispetto a \(H_0\)).
+- \(\lambda\): parametro adimensionale “di conteggio” (\(\lambda\ll 1\)); alla fine si pone \(\lambda=1\).
+- \(|\phi_n\rangle\): autostati di \(H_0\).
+- \(E_n^{(0)}\): energie non perturbate.
+- \(|\Psi_n\rangle\): autostati di \(H\) (perturbati).
+- \(E_n\): energie perturbate.
+- \(E_n^{(1)},E_n^{(2)}\): correzioni al I e II ordine.
+- \(H'_{mn}=\langle \phi_m|H'|\phi_n\rangle\): elementi di matrice della perturbazione nella base di \(H_0\).
+- \(c_{nm}^{(1)}\): coefficienti dell’espansione di \(|\Psi_n^{(1)}\rangle\) sulla base \(|\phi_m\rangle\).
+- \(r_n\): ordine della degenerazione del livello \(E_n^{(0)}\).
+- \(S_n\): sottospazio degenere associato a \(E_n^{(0)}\).
+- \(H'^{(S_n)}\): matrice di \(H'\) ristretta al sottospazio \(S_n\).
+- “equazione secolare”: \(\det(H'_{ij}-E^{(1)}\delta_{ij})=0\).
+
+---
+
+# Significato fisico (da dire bene)
+- La perturbazione “mescola” gli autostati di \(H_0\): gli stati esatti non coincidono più con quelli non perturbati, ma sono combinazioni lineari.
+- \(E_n^{(1)}=\langle H'\rangle\) è lo shift “medio” della perturbazione sullo stato non perturbato.
+- \(E_n^{(2)}\) descrive l’effetto del mixing con gli altri livelli: compare il denominatore \(E_n^{(0)}-E_m^{(0)}\).  
+  In particolare è legato alla **repulsione dei livelli**: livelli vicini tendono ad allontanarsi.
+- In presenza di degenerazione, la perturbazione elimina (in genere) la degenerazione: gli “stati buoni” sono quelli che diagonalizzano \(H'\) nel sottospazio.
+
+---
+
+# Copione orale (≈ 2 minuti, super ripetibile)
+“Imposto la teoria delle perturbazioni stazionarie: \(H=H_0+\lambda H'\), con \(\lambda\ll 1\). Conosco \(H_0|\phi_n\rangle=E_n^{(0)}|\phi_n\rangle\) e cerco \(H|\Psi_n\rangle=E_n|\Psi_n\rangle\) espandendo \(E_n=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}+\dots\) e \(|\Psi_n\rangle=|\phi_n\rangle+\lambda|\Psi_n^{(1)}\rangle+\dots\), usando la normalizzazione intermedia \(\langle \phi_n|\Psi_n\rangle=1\).  
+All’ordine \(\lambda\) ottengo \((H_0-E_n^{(0)})|\Psi_n^{(1)}\rangle+(H'-E_n^{(1)})|\phi_n\rangle=0\). Proiettando su \(\langle \phi_n|\) ricavo \(E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle\). Espandendo \(|\Psi_n^{(1)}\rangle=\sum_{m\neq n}c_{nm}^{(1)}|\phi_m\rangle\) e proiettando su \(\langle \phi_m|\) con \(m\neq n\) trovo \(c_{nm}^{(1)}=\langle \phi_m|H'|\phi_n\rangle/(E_n^{(0)}-E_m^{(0)})\).  
+All’ordine \(\lambda^2\), proiettando su \(\langle \phi_n|\) ottengo \(E_n^{(2)}=\sum_{m\neq n}|\langle \phi_m|H'|\phi_n\rangle|^2/(E_n^{(0)}-E_m^{(0)})\). La validità richiede \(|\lambda H'_{mn}|\ll|E_n^{(0)}-E_m^{(0)}|\).  
+Se c’è degenerazione, prima diagonalizzo \(H'\) nel sottospazio degenere: risolvo \(\det(H'_{ij}-E^{(1)}\delta_{ij})=0\), gli autovalori danno gli shift al primo ordine e gli autovettori danno le combinazioni di stati ‘buoni’ che eliminano la degenerazione.”
+
+---
+
+# Mini‑versione (≈ 60–75 sec)
+- \(H=H_0+\lambda H'\), \(H_0|\phi_n\rangle=E_n^{(0)}|\phi_n\rangle\).  
+- Espando: \(E_n=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}\), \(|\Psi_n\rangle=|\phi_n\rangle+\lambda|\Psi_n^{(1)}\rangle+\dots\).  
+- Non degenere:
+\[
+E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle,\quad
+|\Psi_n^{(1)}\rangle=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}|\phi_m\rangle,
+\]
+\[
+E_n^{(2)}=\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.
+\]
+- Degenerazione: diagonalizzo \(H'\) in \(S_n\): \(\det(H'_{ij}-E^{(1)}\delta_{ij})=0\). Le soluzioni sono gli shift e gli autovettori danno gli stati “buoni”.
+
+<<<DIM 7 END>>>
+
+
+<<<DIM 8 START>>>
+# DIM 8 — Composizione dei momenti angolari \( \vec J=\vec J_1+\vec J_2 \)  
+**(ICOC/CSCO, valori possibili di \(j\), costruzione con ladder, coefficienti di Clebsch–Gordan, esempio \( \tfrac12+\tfrac12 \))**
+
+## Dove sta negli appunti
+- **Core (somma momenti angolari, base accoppiata, CG):** P2·23A `img/208.jpg`–`img/214.jpg`  
+- **Esempio 2 fermioni / simmetrie (utile per tripletto/singletto):** P2·23B `img/214.jpg`–`img/215.jpg`  
+- **Supporto (algebra di \(L\), ladder, commutatori):** P1·17A/B `img/147.jpg`–`img/165.jpg`  
+- **Supporto spin 1/2 (Pauli/Stern–Gerlach):** P1·21B `img/188.jpg`–`img/199.jpg`
+
+---
+
+# 0) Obiettivo “boss” (cosa devi saper dimostrare e dire)
+1) Definire la somma:
+\[
+\vec J=\vec J_1+\vec J_2,\qquad J_z=J_{1z}+J_{2z},\qquad J_\pm=J_{1\pm}+J_{2\pm}.
+\]
+
+2) Dire qual è l’**ICOC/CSCO** naturale e perché:
+- base **non accoppiata** (uncoupled): \(|j_1 m_1\rangle|j_2 m_2\rangle\)
+- base **accoppiata** (coupled): \(|j_1 j_2; j m\rangle\)
+
+3) Dimostrare i **valori possibili del totale**:
+\[
+\boxed{j = j_1+j_2,\; j_1+j_2-1,\; \dots,\; |j_1-j_2|}
+\qquad\text{e}\qquad
+\boxed{m=-j,-j+1,\dots,j}
+\]
+(con degenerazione \(2j+1\)).
+
+4) Scrivere la trasformazione tra basi con i **Clebsch–Gordan**:
+\[
+\boxed{|j_1 j_2; j m\rangle=\sum_{m_1,m_2} C^{\,j m}_{j_1 m_1\, j_2 m_2}\,|j_1 m_1\rangle|j_2 m_2\rangle}
+\]
+con vincolo
+\[
+\boxed{m=m_1+m_2.}
+\]
+
+5) Fare l’esempio chiave:
+\[
+\boxed{\tfrac12\oplus\tfrac12 = 1 \oplus 0}
+\]
+con tripletto e singletto espliciti.
+
+---
+
+# 1) Algebra essenziale (la “cassetta degli attrezzi”)
+Ogni momento angolare \(\vec J\) soddisfa:
+\[
+[J_x,J_y]=i\hbar J_z\quad \text{(e cicliche)}.
+\]
+
+Definisco:
+\[
+J_\pm = J_x \pm iJ_y.
+\]
+
+Relazioni standard:
+\[
+[J_z,J_\pm]=\pm \hbar J_\pm,
+\qquad
+[J^2,J_z]=0,
+\qquad
+[J^2,J_\pm]=0.
+\]
+
+Autostati di \(J^2\) e \(J_z\):
+\[
+J^2|j m\rangle=\hbar^2 j(j+1)|j m\rangle,
+\qquad
+J_z|j m\rangle=\hbar m|j m\rangle.
+\]
+
+Azione dei ladder:
+\[
+J_\pm|j m\rangle=\hbar\sqrt{j(j+1)-m(m\pm1)}\,|j,m\pm1\rangle.
+\]
+
+---
+
+# 2) Due momenti angolari: cosa commuta con cosa
+Hai due sistemi indipendenti con \(\vec J_1,\vec J_2\). Le componenti di sistemi diversi **commutano**:
+\[
+[J_{1a},J_{2b}]=0\quad \forall a,b\in\{x,y,z\}.
+\]
+
+Definisco il totale:
+\[
+\vec J=\vec J_1+\vec J_2.
+\]
+
+Allora:
+\[
+J^2=(\vec J_1+\vec J_2)^2=J_1^2+J_2^2+2\,\vec J_1\cdot\vec J_2.
+\]
+
+**ICOC/CSCO tipici:**
+- **Base non accoppiata:** \(\{J_1^2,J_{1z},J_2^2,J_{2z}\}\)  
+  stati \(|j_1 m_1\rangle|j_2 m_2\rangle\)
+- **Base accoppiata:** \(\{J_1^2,J_2^2,J^2,J_z\}\)  
+  stati \(|j_1 j_2; j m\rangle\)
+
+Perché funziona? Perché:
+\[
+[J_1^2,J^2]=[J_2^2,J^2]=0,\qquad [J^2,J_z]=0
+\]
+e \(J_1^2, J_2^2\) fissano “che tipo” di momenti stai sommando.
+
+---
+
+# 3) Dimostrazione dei valori possibili di \(m\)
+Questa è la parte più facile e “a prova di boss”.
+
+In base non accoppiata:
+\[
+J_{1z}|j_1 m_1\rangle=\hbar m_1|j_1 m_1\rangle,\quad
+J_{2z}|j_2 m_2\rangle=\hbar m_2|j_2 m_2\rangle.
+\]
+
+Sul prodotto:
+\[
+J_z\,(|j_1 m_1\rangle|j_2 m_2\rangle)
+=(J_{1z}+J_{2z})|j_1 m_1\rangle|j_2 m_2\rangle
+=\hbar(m_1+m_2)|j_1 m_1\rangle|j_2 m_2\rangle.
+\]
+
+Quindi:
+\[
+\boxed{m=m_1+m_2.}
+\]
+
+E poiché:
+\[
+m_1\in[-j_1,j_1],\quad m_2\in[-j_2,j_2]
+\]
+segue che il massimo \(m\) ottenibile è:
+\[
+m_{\max}=j_1+j_2
+\]
+e il minimo:
+\[
+m_{\min}=-(j_1+j_2).
+\]
+
+---
+
+# 4) Dimostrazione dei valori possibili di \(j\)
+Qui la dimostrazione “standard” negli appunti usa: **stato di peso massimo + ladder + conteggio dimensioni**.
+
+## 4A) Esiste uno stato con \(m=j_1+j_2\)
+Prendi lo stato:
+\[
+|j_1,j_1\rangle|j_2,j_2\rangle.
+\]
+Ha:
+\[
+m=j_1+j_2.
+\]
+
+In qualunque rappresentazione di \(SU(2)\), uno stato con \(m\) massimo è annichilito da \(J_+\). Verifichiamo direttamente:
+\[
+J_+=J_{1+}+J_{2+}.
+\]
+Ma:
+\[
+J_{1+}|j_1,j_1\rangle=0,\qquad J_{2+}|j_2,j_2\rangle=0
+\]
+quindi:
+\[
+J_+|j_1,j_1\rangle|j_2,j_2\rangle=0.
+\]
+
+Dunque questo è un **candidato stato di “peso massimo”** per una qualche rappresentazione totale con \(j=m_{\max}\).  
+Quindi deve essere:
+\[
+\boxed{j_{\max}=j_1+j_2.}
+\]
+
+## 4B) Genero un multipletto completo con \(J_-\)
+Applicando \(J_- = J_{1-}+J_{2-}\) ripetutamente, genero stati con:
+\[
+m=j_1+j_2,\; j_1+j_2-1,\; \dots,\; -(j_1+j_2)
+\]
+e quindi un multipletto con:
+\[
+2(j_1+j_2)+1
+\]
+stati.
+
+Questi stati (normalizzati) formano il multipletto con:
+\[
+\boxed{j=j_1+j_2.}
+\]
+
+## 4C) E gli altri \(j\)? (idea: “togli” multipletto massimo e ripeti)
+Lo spazio totale ha dimensione:
+\[
+(2j_1+1)(2j_2+1).
+\]
+
+Tolto il multipletto \(j=j_1+j_2\) che ha \(2(j_1+j_2)+1\) stati, rimane uno spazio con dimensione:
+\[
+(2j_1+1)(2j_2+1)-\big(2(j_1+j_2)+1\big),
+\]
+che ancora si decompone in multiplette di \(SU(2)\). Il prossimo massimo \(m\) rimasto è \(j_1+j_2-1\), quindi il prossimo \(j\) è:
+\[
+j=j_1+j_2-1.
+\]
+
+Ripetendo, ottieni la catena:
+\[
+\boxed{j=j_1+j_2,\; j_1+j_2-1,\;\dots\;}
+\]
+
+Il processo si ferma quando raggiungi il minimo \(j\) possibile compatibile con la dimensione e con l’esistenza degli stati: il minimo è:
+\[
+\boxed{j_{\min}=|j_1-j_2|.}
+\]
+
+## 4D) Controllo “dimensionale” (super elegante, da dire se ti chiedono “perché proprio fino a \(|j_1-j_2|\)?”)
+Deve valere:
+\[
+\boxed{(2j_1+1)(2j_2+1)=\sum_{j=|j_1-j_2|}^{j_1+j_2}(2j+1)}
+\]
+che è vera (somma di multiplette che riempiono tutto lo spazio).  
+Questo chiude la dimostrazione di completezza e dei valori ammessi.
+
+---
+
+# 5) Coefficienti di Clebsch–Gordan (trasformazione tra basi)
+Hai due basi complete:
+
+### Base non accoppiata
+\[
+|j_1 m_1\rangle|j_2 m_2\rangle
+\quad\text{(diagonalizza }J_{1z},J_{2z}\text{)}
+\]
+
+### Base accoppiata
+\[
+|j_1 j_2; j m\rangle
+\quad\text{(diagonalizza }J^2,J_z\text{)}
+\]
+
+La trasformazione è un cambio di base unitario:
+\[
+\boxed{
+|j_1 j_2; j m\rangle=\sum_{m_1,m_2}
+C^{\,j m}_{j_1 m_1\, j_2 m_2}\;
+|j_1 m_1\rangle|j_2 m_2\rangle
+}
+\]
+
+**Regola di selezione obbligatoria:**
+\[
+\boxed{C^{jm}_{j_1m_1j_2m_2}\neq0 \ \Rightarrow\  m=m_1+m_2.}
+\]
+
+**Ortonormalità (utile se te lo chiedono):**
+\[
+\sum_{m_1,m_2} C^{jm}_{j_1m_1j_2m_2}\, C^{j'm'}_{j_1m_1j_2m_2}=\delta_{jj'}\delta_{mm'}.
+\]
+
+**Interpretazione fisica:** \(C\) sono ampiezze (numeri complessi, spesso reali in convenzioni standard) che dicono “quanto” uno stato a totale \(j,m\) è fatto da combinazioni dei due \(m_1,m_2\).
+
+---
+
+# 6) Esempio fondamentale: \(j_1=\tfrac12\), \(j_2=\tfrac12\)
+Questo è l’esempio che devi saper recitare perfetto.
+
+## 6A) Base non accoppiata (spin up/down)
+Identifico:
+\[
+\left|\tfrac12,+\tfrac12\right\rangle \equiv |\uparrow\rangle,\qquad
+\left|\tfrac12,-\tfrac12\right\rangle \equiv |\downarrow\rangle.
+\]
+
+I prodotti possibili sono 4:
+\[
+|\uparrow\uparrow\rangle,\quad
+|\uparrow\downarrow\rangle,\quad
+|\downarrow\uparrow\rangle,\quad
+|\downarrow\downarrow\rangle.
+\]
+
+Dimensione: \((2\cdot\tfrac12+1)^2=2^2=4\).
+
+## 6B) Valori possibili di \(j\)
+\[
+j = j_1+j_2=1,\quad \text{oppure}\quad j=|j_1-j_2|=0.
+\]
+Quindi:
+\[
+\boxed{\tfrac12\oplus\tfrac12 = 1\oplus 0}
+\]
+cioè un tripletto (\(j=1\), 3 stati) + un singoletto (\(j=0\), 1 stato).
+
+## 6C) Costruzione esplicita con ladder (metodo più “da dimostrazione”)
+### Stato di massimo \(m\)
+Massimo \(m=m_1+m_2=+\tfrac12+\tfrac12=+1\).
+L’unico prodotto che lo realizza è:
+\[
+\boxed{|1,1\rangle = |\uparrow\uparrow\rangle.}
+\]
+
+### Applico \(J_-\) per ottenere \(|1,0\rangle\)
+\[
+J_- = J_{1-}+J_{2-}.
+\]
+
+Agisco su \(|\uparrow\uparrow\rangle\):
+- \(J_{1-}|\uparrow\uparrow\rangle \propto |\downarrow\uparrow\rangle\)
+- \(J_{2-}|\uparrow\uparrow\rangle \propto |\uparrow\downarrow\rangle\)
+
+Quindi:
+\[
+J_-|\uparrow\uparrow\rangle \propto |\downarrow\uparrow\rangle+|\uparrow\downarrow\rangle.
+\]
+
+Normalizzo e definisco:
+\[
+\boxed{|1,0\rangle=\frac{1}{\sqrt2}\big(|\uparrow\downarrow\rangle+|\downarrow\uparrow\rangle\big).}
+\]
+
+### Applico di nuovo \(J_-\) per \(|1,-1\rangle\)
+Da simmetria:
+\[
+\boxed{|1,-1\rangle=|\downarrow\downarrow\rangle.}
+\]
+
+### Lo stato rimanente deve essere ortogonale: il singoletto \(|0,0\rangle\)
+Tra i due stati con \(m=0\), cioè \(|\uparrow\downarrow\rangle\) e \(|\downarrow\uparrow\rangle\), abbiamo già usato la combinazione simmetrica per \(|1,0\rangle\).  
+L’unica combinazione ortogonale è l’antisimmetrica:
+
+\[
+\boxed{|0,0\rangle=\frac{1}{\sqrt2}\big(|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle\big).}
+\]
+
+✅ Fine costruzione.
+
+## 6D) Clebsch–Gordan espliciti per \( \tfrac12+\tfrac12 \)
+In pratica:
+- \(C^{1,1}_{\frac12,\frac12;\frac12,\frac12}=1\)
+- \(C^{1,0}_{\frac12,\frac12;\frac12,-\frac12}=\frac{1}{\sqrt2}\), \(C^{1,0}_{\frac12,-\frac12;\frac12,\frac12}=\frac{1}{\sqrt2}\)
+- \(C^{1,-1}_{\frac12,-\frac12;\frac12,-\frac12}=1\)
+- \(C^{0,0}_{\frac12,\frac12;\frac12,-\frac12}=\frac{1}{\sqrt2}\), \(C^{0,0}_{\frac12,-\frac12;\frac12,\frac12}=-\frac{1}{\sqrt2}\)
+
+(Con la convenzione di fase standard: il “meno” sta nel singoletto.)
+
+---
+
+# 7) Simmetria di scambio (super importante, anche in vista di DIM 9)
+Scambio le due particelle \(1\leftrightarrow2\):
+
+- Tripletto (\(j=1\)) è **simmetrico**:
+  \[
+  |\uparrow\uparrow\rangle \to |\uparrow\uparrow\rangle,\quad
+  \frac{|\uparrow\downarrow\rangle+|\downarrow\uparrow\rangle}{\sqrt2}\to \text{uguale},\quad
+  |\downarrow\downarrow\rangle\to|\downarrow\downarrow\rangle
+  \]
+- Singoletto (\(j=0\)) è **antisimmetrico**:
+  \[
+  \frac{|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle}{\sqrt2}\to -\text{(se stesso)}
+  \]
+
+**Significato fisico:** per due spin \(1/2\), “spin totale 1” = stato di spin simmetrico, “spin totale 0” = antisimmetrico.  
+Questa frase torna identica quando fai particelle identiche e principio di Pauli.
+
+---
+
+# Dizionario simboli (da sapere uno per uno)
+- \(\vec J_1,\vec J_2\): momenti angolari dei due sottosistemi (orbitali o di spin).
+- \(\vec J\): momento angolare totale, \(\vec J=\vec J_1+\vec J_2\).
+- \(J^2=\vec J\cdot\vec J\): modulo quadro del totale.
+- \(J_z\): componente lungo \(z\).
+- \(J_\pm=J_x\pm iJ_y\): operatori di salita/discesa.
+- \(j_1,j_2\): numeri quantici dei moduli di \(J_1,J_2\).
+- \(m_1,m_2\): numeri quantici delle componenti \(J_{1z},J_{2z}\).
+- \(j,m\): numeri quantici del totale \(J^2,J_z\).
+- \(|j_1 m_1\rangle|j_2 m_2\rangle\): base non accoppiata (prodotti).
+- \(|j_1 j_2; j m\rangle\): base accoppiata (diagonalizza \(J^2,J_z\) oltre a \(J_1^2,J_2^2\)).
+- \(C^{jm}_{j_1m_1j_2m_2}\): coefficiente di Clebsch–Gordan (ampiezza di cambio di base).
+- \(\hbar\): costante di Planck ridotta.
+- “multipletto”: insieme di \(2j+1\) stati con lo stesso \(j\) e \(m\) che varia.
+
+---
+
+# Significato fisico (da dire bene)
+- La composizione serve ogni volta che hai due “fonti” di momento angolare: due spin, spin+orbitale, due particelle, ecc.
+- Il totale non è “somma classica”: in QM il modulo totale è quantizzato e può assumere solo certi \(j\).
+- I Clebsch–Gordan ti dicono come le misure “locali” (\(m_1,m_2\)) si riorganizzano in misure “globali” (\(j,m\)).
+- Per \(\tfrac12+\tfrac12\): nasce la distinzione fisica tra **tripletto** (spin totale 1) e **singoletto** (spin totale 0), cruciale per stati di due elettroni e per Pauli.
+
+---
+
+# Copione orale “da macchinetta” (2 minuti, ordinato)
+“Ho due momenti angolari \(J_1\) e \(J_2\) con algebra standard e \([J_{1a},J_{2b}]=0\). Definisco il totale \(J=J_1+J_2\), quindi \(J_z=J_{1z}+J_{2z}\) e \(J_\pm=J_{1\pm}+J_{2\pm}\). Le basi naturali sono: non accoppiata \(|j_1m_1\rangle|j_2m_2\rangle\) che diagonalizza \(J_{1z},J_{2z}\), e accoppiata \(|j_1j_2;jm\rangle\) che diagonalizza \(J^2,J_z\). Poiché \(J_z\) è somma, su un prodotto ho \(m=m_1+m_2\), quindi \(m\) va da \(-(j_1+j_2)\) a \(j_1+j_2\). Esiste lo stato con \(m_{\max}=j_1+j_2\), cioè \(|j_1,j_1\rangle|j_2,j_2\rangle\), e viene annichilito da \(J_+\), quindi corrisponde al multipletto con \(j=j_1+j_2\). Applicando \(J_-\) genero tutti i \(m\) fino a \(-j\). Togliendo questo multipletto e ripetendo ottengo \(j=j_1+j_2, j_1+j_2-1,\dots,|j_1-j_2|\), e la dimensione torna perché \((2j_1+1)(2j_2+1)=\sum_j(2j+1)\). Il cambio di base si scrive con i Clebsch–Gordan: \(|j_1j_2;jm\rangle=\sum_{m_1,m_2}C^{jm}_{j_1m_1j_2m_2}|j_1m_1\rangle|j_2m_2\rangle\) con vincolo \(m=m_1+m_2\). Esempio \(1/2+1/2\): ottengo \(j=1\) tripletto e \(j=0\) singoletto: \(|1,1\rangle=|\uparrow\uparrow\rangle\), \(|1,0\rangle=(|\uparrow\downarrow\rangle+|\downarrow\uparrow\rangle)/\sqrt2\), \(|1,-1\rangle=|\downarrow\downarrow\rangle\), \(|0,0\rangle=(|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle)/\sqrt2\). Il tripletto è simmetrico e il singoletto antisimmetrico per scambio.”
+<<<DIM 8 END>>>
+
+<<<DIM 9 START>>>
+# DIM 9 — Particelle identiche: operatore di scambio, simmetrizzazione/antisimmetrizzazione, \([P,H]=0\), Pauli/Slater, legame singoletto–tripletto ↔ \( \ell \) pari/dispari
+
+## Dove sta negli appunti
+- **Core:** P2·24 “Particelle identiche” → `img/215.jpg`–`img/220.jpg`  
+- **Supporto utile (tripletto/singoletto da composizione spin 1/2):** P2·23B `img/214.jpg`–`img/215.jpg` (la parte che si incastra con DIM 8)
+
+---
+
+# 0) Obiettivo “boss”
+Dimostrare e saper dire bene:
+
+1) Definire l’**operatore di scambio** \( \hat P_{12} \) e le sue proprietà:
+\[
+\hat P_{12}^2=\hat I,\qquad \hat P_{12}^\dagger=\hat P_{12},\qquad \text{autovalori } \pm 1.
+\]
+
+2) Per **particelle identiche**: l’Hamiltoniano è invariante per scambio ⇒
+\[
+\hat P_{12}\hat H\hat P_{12}=\hat H\quad\Longleftrightarrow\quad [\hat H,\hat P_{12}]=0.
+\]
+
+3) Se \([H,P]=0\), allora posso scegliere autostati comuni ⇒ gli stati fisici si separano in:
+- **simmetrici**: \( \hat P_{12}|\psi\rangle=+|\psi\rangle\) (bosoni)
+- **antisimmetrici**: \( \hat P_{12}|\psi\rangle=-|\psi\rangle\) (fermioni)
+
+4) Costruire stati sim/antisimm da prodotti \(|a\rangle|b\rangle\) e arrivare a:
+- **Principio di Pauli** (se \(a=b\) lo stato fermionico è nullo)
+- **Determinante di Slater**
+
+5) Collegare con spin 1/2 (DIM 8): tripletto/singoletto + simmetria della parte spaziale.  
+E dire la regola tipica:
+\[
+\text{singoletto} \Rightarrow \text{spaziale simmetrica} \Rightarrow \ell \ \text{pari}
+\]
+\[
+\text{tripletto} \Rightarrow \text{spaziale antisimmetrica} \Rightarrow \ell \ \text{dispari}
+\]
+(dove \(\ell\) è il momento angolare orbitale del moto relativo).
+
+---
+
+# 1) Definizione dell’operatore di scambio \( \hat P_{12} \)
+Considero due particelle e uno stato in rappresentazione “completa” (posizione+spin):
+\[
+x_1\equiv(\vec r_1,\sigma_1),\qquad x_2\equiv(\vec r_2,\sigma_2).
+\]
+La funzione d’onda a due corpi è:
+\[
+\psi(x_1,x_2)=\langle x_1,x_2|\psi\rangle.
+\]
+
+**Definisco** l’operatore di scambio \( \hat P_{12} \) come quello che scambia le etichette 1 e 2:
+\[
+(\hat P_{12}\psi)(x_1,x_2)=\psi(x_2,x_1).
+\]
+
+---
+
+# 2) Proprietà chiave di \( \hat P_{12} \)
+## 2A) \( \hat P_{12}^2=\hat I \)
+Scambio due volte:
+\[
+(\hat P_{12}^2\psi)(x_1,x_2)=\hat P_{12}\big(\psi(x_2,x_1)\big)=\psi(x_1,x_2).
+\]
+Quindi:
+\[
+\boxed{\hat P_{12}^2=\hat I.}
+\]
+
+## 2B) \( \hat P_{12}^\dagger=\hat P_{12} \) e unitarietà
+Dallo scambio non cambia la norma (è solo una permutazione di variabili):
+\[
+\int |(\hat P_{12}\psi)(x_1,x_2)|^2\,dx_1dx_2
+=\int |\psi(x_2,x_1)|^2\,dx_1dx_2
+=\int |\psi(x_1,x_2)|^2\,dx_1dx_2.
+\]
+Quindi \(P\) è **unitario**: \(P^\dagger P=I\).  
+In più, con \(P^2=I\) segue \(P^{-1}=P\). Ma per un unitario \(P^{-1}=P^\dagger\), dunque:
+\[
+\boxed{\hat P_{12}^\dagger=\hat P_{12}.}
+\]
+Quindi \(P\) è anche **hermitiano**.
+
+## 2C) Autovalori di \( \hat P_{12} \) sono \(\pm 1\)
+Se \(\hat P_{12}|\psi\rangle = \lambda |\psi\rangle\), applico \(P\) di nuovo:
+\[
+\hat P_{12}^2|\psi\rangle=\lambda^2|\psi\rangle.
+\]
+Ma \(P^2=I\), quindi:
+\[
+|\psi\rangle=\lambda^2|\psi\rangle \Rightarrow \lambda^2=1 \Rightarrow \boxed{\lambda=\pm 1.}
+\]
+
+➡️ Quindi gli stati si dividono in **simmetrici** (+) e **antisimmetrici** (−).
+
+---
+
+# 3) Per particelle identiche: perché \([H,P]=0\)
+Per due particelle identiche (stessa massa, stessa carica, ecc.) l’Hamiltoniano ha la stessa forma per 1 e 2. Un modello tipico è:
+\[
+\hat H=\underbrace{\frac{\hat p_1^2}{2m}+V(\hat r_1)}_{\hat h(1)}
++\underbrace{\frac{\hat p_2^2}{2m}+V(\hat r_2)}_{\hat h(2)}
++\underbrace{U(|\hat r_1-\hat r_2|)}_{\text{interazione simmetrica}}.
+\]
+
+Se scambio \(1\leftrightarrow 2\):
+- \(\hat p_1^2 \leftrightarrow \hat p_2^2\)
+- \(V(\hat r_1)\leftrightarrow V(\hat r_2)\)
+- \(U(|r_1-r_2|)\) resta uguale perché dipende solo dalla distanza.
+
+Quindi:
+\[
+\boxed{\hat P_{12}\hat H\hat P_{12}=\hat H.}
+\]
+Moltiplicando a destra per \(\hat P_{12}\) e usando \(\hat P_{12}^2=I\):
+\[
+\hat P_{12}\hat H=\hat H\hat P_{12}
+\quad\Rightarrow\quad
+\boxed{[\hat H,\hat P_{12}]=0.}
+\]
+
+**Interpretazione fisica:** se le particelle sono davvero identiche, “scambiarle” non può cambiare alcuna previsione misurabile ⇒ \(H\) deve rispettare questa simmetria.
+
+---
+
+# 4) Conseguenza: autostati comuni ⇒ simmetria della funzione d’onda
+Se \([H,P]=0\), allora \(H\) e \(P\) sono **compatibili** (DIM 3): posso scegliere una base di autostati comuni.
+
+Quindi posso prendere gli autostati dell’energia in modo che siano anche autostati di scambio:
+\[
+\hat H|\psi\rangle=E|\psi\rangle,\qquad \hat P_{12}|\psi\rangle=\pm|\psi\rangle.
+\]
+
+➡️ Perciò, per particelle identiche, gli stati energetici (e in generale quelli fisicamente ammessi) si possono scegliere **simmetrici** o **antisimmetrici**.
+
+---
+
+# 5) Postulato di simmetrizzazione (bosoni vs fermioni)
+A questo punto entra il “dato fisico” (spin-statistica):
+- **Bosoni (spin intero)**: lo stato totale deve essere **simmetrico**
+  \[
+  \boxed{\hat P_{12}|\psi\rangle=+|\psi\rangle}
+  \]
+- **Fermioni (spin semi-intero)**: lo stato totale deve essere **antisimmetrico**
+  \[
+  \boxed{\hat P_{12}|\psi\rangle=-|\psi\rangle}
+  \]
+
+(Nei corsi di MQ non relativistica spesso lo si assume come postulato; l’origine profonda è relativistica/QFT.)
+
+---
+
+# 6) Costruzione esplicita: simmetrizzatore e antisimmetrizzatore
+Definisco i proiettori:
+\[
+\boxed{\hat S=\frac{1+\hat P_{12}}{2}},\qquad
+\boxed{\hat A=\frac{1-\hat P_{12}}{2}}.
+\]
+Proprietà da ricordare:
+\[
+\hat S^2=\hat S,\quad \hat A^2=\hat A,\quad \hat S\hat A=0,\quad \hat S+\hat A=I.
+\]
+Quindi \(S\) proietta nello spazio simmetrico, \(A\) nello spazio antisimmetrico.
+
+---
+
+## 6A) Da prodotti di stati a stati sim/antisimm
+Prendo due stati a una particella \(|a\rangle\), \(|b\rangle\). Il prodotto è \(|a\rangle_1|b\rangle_2\).
+
+- Stato **simmetrico**:
+\[
+\boxed{|a,b\rangle_+ = \frac{1}{\sqrt2}\big(|a\rangle_1|b\rangle_2+|b\rangle_1|a\rangle_2\big)}
+\]
+- Stato **antisimmetrico**:
+\[
+\boxed{|a,b\rangle_- = \frac{1}{\sqrt2}\big(|a\rangle_1|b\rangle_2-|b\rangle_1|a\rangle_2\big)}
+\]
+
+(Questa forma è perfetta se \(|a\rangle\) e \(|b\rangle\) sono ortonormali; altrimenti la normalizzazione cambia leggermente, ma l’idea resta identica.)
+
+---
+
+# 7) Principio di Pauli e determinante di Slater
+## 7A) Pauli in una riga (dimostrazione secca)
+Se prendo due fermioni nello **stesso** stato \(|a\rangle\) (cioè \(a=b\)), allora:
+\[
+|a,a\rangle_-=\frac{1}{\sqrt2}(|a\rangle_1|a\rangle_2-|a\rangle_1|a\rangle_2)=0.
+\]
+Quindi uno stato fisico antisimmetrico **non esiste** se due fermioni occupano lo stesso stato a una particella.
+
+\[
+\boxed{\text{Due fermioni non possono occupare lo stesso stato quantico.}}
+\]
+
+## 7B) Slater (forma generale per \(N\) fermioni)
+Per \(N\) fermioni in orbitali \(\phi_1,\dots,\phi_N\), lo stato antisimmetrico è il **determinante di Slater**:
+\[
+\boxed{
+\Psi(x_1,\dots,x_N)=\frac{1}{\sqrt{N!}}
+\begin{vmatrix}
+\phi_1(x_1)&\phi_2(x_1)&\cdots&\phi_N(x_1)\\
+\phi_1(x_2)&\phi_2(x_2)&\cdots&\phi_N(x_2)\\
+\vdots&\vdots&\ddots&\vdots\\
+\phi_1(x_N)&\phi_2(x_N)&\cdots&\phi_N(x_N)
+\end{vmatrix}
+}
+\]
+Se due orbitali coincidono (due colonne uguali), il determinante è zero ⇒ Pauli.
+
+---
+
+# 8) Collegamento con DIM 8: due spin \(1/2\), singoletto/tripletto e simmetria totale
+Per due elettroni (fermioni, spin \(1/2\)) lo **stato totale** deve essere antisimmetrico:
+\[
+\boxed{\Psi_{\text{tot}}=\Psi_{\text{spaz}}(\vec r_1,\vec r_2)\,\chi_{\text{spin}}(\sigma_1,\sigma_2)}
+\]
+e deve valere:
+\[
+\hat P_{12}\Psi_{\text{tot}} = -\Psi_{\text{tot}}.
+\]
+
+Dalla DIM 8 sai:
+- **Tripletto** (\(S=1\)) è **simmetrico** nello spin:
+  \[
+  \chi_{S=1}\ \text{simmetrica}
+  \]
+- **Singoletto** (\(S=0\)) è **antisimmetrico** nello spin:
+  \[
+  \chi_{S=0}\ \text{antisimmetrica}
+  \]
+
+Quindi per avere totale antisimmetrico:
+
+### Caso 1: spin singoletto (antisimm spin)
+Serve spaziale **simmetrica**:
+\[
+(-)\times(+)=(-)
+\]
+\[
+\boxed{\chi_{S=0}\ \Rightarrow\ \Psi_{\text{spaz}} \ \text{simmetrica}}
+\]
+
+### Caso 2: spin tripletto (simm spin)
+Serve spaziale **antisimmetrica**:
+\[
+(+)\times(-)=(-)
+\]
+\[
+\boxed{\chi_{S=1}\ \Rightarrow\ \Psi_{\text{spaz}} \ \text{antisimmetrica}}
+\]
+
+---
+
+# 9) Regola \(\ell\) pari/dispari (significato: scambio ↔ \(\vec r \to -\vec r\) nel moto relativo)
+Per due particelle è utile passare a:
+- coordinata del centro di massa \(\vec R\)
+- coordinata relativa \(\vec r=\vec r_1-\vec r_2\)
+
+Lo scambio \(1\leftrightarrow 2\) lascia \(\vec R\) invariata ma manda:
+\[
+\vec r \to -\vec r.
+\]
+
+Se la parte angolare del moto relativo è \(Y_{\ell m}(\hat r)\), vale la proprietà:
+\[
+Y_{\ell m}(-\hat r)=(-1)^\ell\,Y_{\ell m}(\hat r).
+\]
+
+Quindi:
+- se \(\ell\) è **pari**, la parte spaziale è **simmetrica** sotto scambio
+- se \(\ell\) è **dispari**, la parte spaziale è **antisimmetrica** sotto scambio
+
+Combinando con il punto 8:
+
+\[
+\boxed{\text{singoletto }(S=0)\ \Rightarrow\ \Psi_{\text{spaz}} \text{ simmetrica } \Rightarrow\ \ell\ \text{pari}}
+\]
+\[
+\boxed{\text{tripletto }(S=1)\ \Rightarrow\ \Psi_{\text{spaz}} \text{ antisimmetrica } \Rightarrow\ \ell\ \text{dispari}}
+\]
+
+Questa è una frase “da esame” molto tipica.
+
+---
+
+# Dizionario simboli (da sapere uno per uno)
+- \(\hat P_{12}\): operatore di scambio (permuta le etichette 1↔2).
+- \(\psi(x_1,x_2)\): funzione d’onda a due particelle; \(x=(\vec r,\sigma)\) include posizione e spin.
+- \(\hat H\): Hamiltoniano del sistema a due (o più) particelle.
+- \([H,P]=HP-PH\): commutatore; se è 0 ⇒ operatori compatibili ⇒ autostati comuni.
+- “simmetrico”: \(P|\psi\rangle=+|\psi\rangle\).
+- “antisimmetrico”: \(P|\psi\rangle=-|\psi\rangle\).
+- Bosoni: stati totali simmetrici; Fermioni: stati totali antisimmetrici.
+- \(\hat S=(1+P)/2\): proiettore simmetrizzatore.
+- \(\hat A=(1-P)/2\): proiettore antisimmetrizzatore.
+- \(|a\rangle,|b\rangle\): stati a una particella (orbitali/spin-orbitali).
+- Determinante di Slater: costruzione generale antisimmetrica per \(N\) fermioni.
+- \(\chi_{\text{spin}}\): parte di spin; \(\Psi_{\text{spaz}}\): parte spaziale.
+- \(S\): spin totale (per due spin 1/2: \(S=0,1\)).
+- \(\ell\): momento angolare orbitale (tipicamente del moto relativo).
+
+---
+
+# Significato fisico (da dire bene)
+- “Particelle identiche” significa che **non esiste un’osservabile** che distingua “chi è la particella 1” e “chi è la 2”: scambiarle non può cambiare nulla di misurabile ⇒ \(H\) è invariante ⇒ \([H,P]=0\).
+- Questo forza la struttura degli stati: solo simmetrici o antisimmetrici sono fisici (bosoni/fermioni).
+- **Pauli** spiega:
+  - struttura a gusci degli atomi,
+  - stabilità della materia,
+  - perché gli elettroni “riempiono livelli” invece di collassare tutti nello stesso.
+- La correlazione singoletto/tripletto con la simmetria spaziale spiega regole di selezione e proprietà di stati a due elettroni (He, legami chimici, ecc.).
+
+---
+
+# Copione orale “da macchinetta” (2 minuti, molto lineare)
+“Definisco l’operatore di scambio \(P_{12}\) come quello che manda \(\psi(x_1,x_2)\) in \(\psi(x_2,x_1)\). Scambiando due volte torno allo stato iniziale, quindi \(P_{12}^2=I\). Ne segue che gli autovalori soddisfano \(\lambda^2=1\), dunque \(\lambda=\pm1\): stati simmetrici o antisimmetrici. Per particelle identiche l’Hamiltoniano è invariante per scambio, cioè \(P_{12}HP_{12}=H\), equivalente a \([H,P_{12}]=0\). Quindi posso scegliere autostati comuni di \(H\) e \(P_{12}\). Postulato di simmetrizzazione: bosoni hanno stati totali simmetrici, fermioni antisimmetrici. Da due stati a una particella costruisco le combinazioni \((|a\rangle_1|b\rangle_2\pm|b\rangle_1|a\rangle_2)/\sqrt2\). Per fermioni, se \(a=b\) la combinazione antisimm è zero: è il principio di Pauli; per molti fermioni la forma generale è il determinante di Slater. Infine, per due elettroni lo stato totale deve essere antisimm: lo spin tripletto è simmetrico e quindi richiede parte spaziale antisimmetrica; lo spin singoletto è antisimmetrico e richiede parte spaziale simmetrica. In coordinate relative lo scambio manda \(\vec r\to-\vec r\) e \(Y_{\ell m}(-\hat r)=(-1)^\ell Y_{\ell m}\), quindi singoletto ↔ \(\ell\) pari, tripletto ↔ \(\ell\) dispari.”
+<<<DIM 9 END>>>
+
+<<<DIM 10 START>>>
+# DIM 10 — Teorema di Hellmann–Feynman + notazione spettroscopica
+
+## Dove sta negli appunti
+- **Core (Hellmann–Feynman + notazione spettroscopica):** P2·27 → `img/236.jpg`–`img/237.jpg` (pagine 236–237)
+
+---
+
+# 0) Obiettivo “boss”
+Dimostrare che, se un Hamiltoniano dipende da un parametro \(\lambda\),
+\[
+\hat H(\lambda)\,|n(\lambda)\rangle = E_n(\lambda)\,|n(\lambda)\rangle,
+\]
+allora (per autostati normalizzati e caso non degenere):
+\[
+\boxed{\;\frac{dE_n}{d\lambda}=\left\langle n(\lambda)\left|\frac{\partial \hat H}{\partial \lambda}\right|n(\lambda)\right\rangle\;}
+\]
+e poi saper leggere/descrivere la **notazione spettroscopica** (tipo \(n\ell_j\) e/o \(^{2S+1}L_J\), parità, ecc.).
+
+---
+
+# 1) Dimostrazione completa del teorema di Hellmann–Feynman
+
+## 1A) Ipotesi
+- \(\hat H(\lambda)\) è **hermitiano** (osservabile energia).
+- \(E_n(\lambda)\) è un autovalore (non degenere, per la versione “pulita”).
+- \(|n(\lambda)\rangle\) è autostato **normalizzato**:
+  \[
+  \langle n(\lambda)|n(\lambda)\rangle=1.
+  \]
+
+## 1B) Parti dall’equazione agli autovalori e derivala
+\[
+\hat H(\lambda)|n(\lambda)\rangle = E_n(\lambda)|n(\lambda)\rangle.
+\]
+
+Derivo rispetto a \(\lambda\) (derivata totale):
+\[
+\frac{\partial \hat H}{\partial \lambda}|n\rangle + \hat H\,\frac{\partial |n\rangle}{\partial \lambda}
+=
+\frac{dE_n}{d\lambda}|n\rangle + E_n\,\frac{\partial |n\rangle}{\partial \lambda}.
+\]
+(qui ho abbreviato \(|n\rangle = |n(\lambda)\rangle\), \(E_n=E_n(\lambda)\)).
+
+## 1C) Moltiplica a sinistra per \(\langle n|\)
+\[
+\langle n|\frac{\partial \hat H}{\partial \lambda}|n\rangle
++
+\langle n|\hat H|n'\rangle
+=
+\frac{dE_n}{d\lambda}\langle n|n\rangle
++
+E_n\langle n|n'\rangle
+\]
+dove \(|n'\rangle \equiv \frac{\partial |n\rangle}{\partial \lambda}\).
+
+Ora uso due fatti:
+
+### (i) Normalizzazione
+\[
+\langle n|n\rangle=1.
+\]
+
+### (ii) Hermiticità + autovalore
+Da \(\hat H|n\rangle = E_n|n\rangle\) e \(\hat H=\hat H^\dagger\) segue anche:
+\[
+\langle n|\hat H = E_n \langle n|.
+\]
+Quindi:
+\[
+\langle n|\hat H|n'\rangle = E_n \langle n|n'\rangle.
+\]
+
+Sostituisco: i termini \(E_n\langle n|n'\rangle\) si cancellano tra LHS e RHS, e rimane:
+
+\[
+\boxed{\;\frac{dE_n}{d\lambda}=\langle n|\frac{\partial \hat H}{\partial \lambda}|n\rangle\;}
+\]
+
+✅ Dimostrazione finita.
+
+---
+
+# 2) Osservazioni importanti (che spesso chiedono)
+## 2A) La normalizzazione “non ti frega”
+Anche se non imponi \(\langle n|n'\rangle=0\), il teorema resta vero: la cancellazione avviene comunque.
+
+Derivando \(\langle n|n\rangle=1\):
+\[
+\frac{d}{d\lambda}\langle n|n\rangle=\langle n'|n\rangle+\langle n|n'\rangle=0
+\]
+⇒ \(\langle n|n'\rangle\) è puramente immaginario, ma non serve fissarlo: Hellmann–Feynman non dipende da questa scelta di fase.
+
+## 2B) Caso degenere (cosa dire senza impantanarti)
+Se \(E_n\) è degenere, dentro il sottospazio degenere l’autostato \(|n\rangle\) non è unico: puoi mescolare linearmente gli autostati.
+
+La frase corretta è:
+> Se c’è degenerazione, per applicare Hellmann–Feynman “per singolo livello” devi scegliere una base del sottospazio degenere che **diagonalizzi** la matrice \(\langle i|\partial_\lambda H|j\rangle\) dentro quel sottospazio.
+
+È lo stesso spirito della perturbazione degenere (DIM 7): prima diagonalizzi dentro la degenerazione, poi tutto torna “pulito”.
+
+---
+
+# 3) Significato fisico (il punto vero del teorema)
+Hellmann–Feynman dice:
+
+- Se \(\lambda\) è un parametro “fisico” del problema (campo esterno, distanza nucleare, carica nucleare \(Z\), ecc.), allora **la derivata dell’energia** rispetto a quel parametro si calcola come **valor medio della derivata dell’Hamiltoniano**.
+
+### Esempi tipici da dire
+1) Se \(\lambda = R\) è una coordinata nucleare (molecole, Born–Oppenheimer):
+\[
+F_R = -\frac{dE}{dR} = -\left\langle \frac{\partial \hat H}{\partial R}\right\rangle
+\]
+⇒ è la base per calcolare **forze** sugli atomi.
+
+2) Se \(\hat H(\lambda)=\hat H_0+\lambda \hat V\):
+\[
+\frac{dE_n}{d\lambda}=\langle \hat V\rangle
+\]
+e per \(\lambda\) piccolo ti riconduce subito alla perturbazione del primo ordine:
+\[
+E_n(\lambda)\approx E_n(0)+\lambda\langle n|\hat V|n\rangle
+\]
+(è DIM 7 vista “come derivata”).
+
+---
+
+# 4) Notazione spettroscopica (quella che devi saper leggere al volo)
+
+Qui ci sono **due livelli**:  
+1) **idrogenoide / singolo elettrone**: \(n\ell_j\)  
+2) **atomi multi-elettronici (LS coupling)**: \(^{2S+1}L_J\) + parità
+
+## 4A) Notazione \(n\ell_j\) (molto comune)
+- \(n\) = numero quantico principale.
+- \(\ell\) = momento angolare orbitale, scritto con lettere:
+  - \(\ell=0 \to s\)
+  - \(\ell=1 \to p\)
+  - \(\ell=2 \to d\)
+  - \(\ell=3 \to f\)
+  - \(\ell=4 \to g\), \(\ell=5 \to h\), …
+- \(j\) = momento angolare totale dell’elettrone (spin-orbita):
+\[
+j=\ell \pm \frac12.
+\]
+
+Esempi:
+- \(2p_{3/2}\): \(n=2\), \(\ell=1\), \(j=3/2\).
+- \(1s_{1/2}\): \(n=1\), \(\ell=0\), \(j=1/2\).
+
+## 4B) Simboli di termine \(^{2S+1}L_J\) (LS coupling, multi-elettrone)
+Qui:
+- \(S\) = spin totale degli elettroni,
+- \(2S+1\) = **molteplicità** (singletto, doppietto, tripletto, …),
+- \(L\) = momento angolare orbitale totale (somma dei \(\ell_i\)),
+- \(J\) = momento angolare totale \( \vec J=\vec L+\vec S\).
+
+### Lettere per \(L\)
+Attenzione: qui la lettera è **maiuscola** e significa \(L\) totale:
+- \(L=0 \to S\)
+- \(L=1 \to P\)
+- \(L=2 \to D\)
+- \(L=3 \to F\)
+- \(L=4 \to G\)
+- \(L=5 \to H\)
+- \(L=6 \to I\)
+(… continua)
+
+### Valori possibili di \(J\)
+\[
+J = L+S,\ L+S-1,\ \dots,\ |L-S|.
+\]
+
+### Parità
+Spesso trovi un simbolo tipo \(^{2S+1}L_J^{\circ}\) (o \(^{o}\)) per **parità dispari** (odd).  
+La parità della configurazione elettronica è:
+\[
+\Pi = (-1)^{\sum_i \ell_i}.
+\]
+- se \(\sum \ell_i\) è pari → parità **pari** (spesso non si scrive nulla)
+- se \(\sum \ell_i\) è dispari → parità **dispari** (si mette \(^{\circ}\) o \(o\))
+
+### Esempio di lettura rapida
+\(^{3}P_{2}\):
+- \(2S+1=3 \Rightarrow S=1\) (tripletto),
+- \(P \Rightarrow L=1\),
+- \(J=2\).
+
+---
+
+# 5) Dizionario simboli (da sapere “uno per uno”)
+- \(\lambda\): parametro reale da cui dipende l’Hamiltoniano (campo, distanza, carica, ecc.).
+- \(\hat H(\lambda)\): Hamiltoniano dipendente da \(\lambda\).
+- \(|n(\lambda)\rangle\): autostato di \(\hat H(\lambda)\).
+- \(E_n(\lambda)\): autovalore (energia) associato a \(|n(\lambda)\rangle\).
+- \(\frac{\partial \hat H}{\partial\lambda}\): derivata dell’operatore Hamiltoniano rispetto al parametro (operatore “forza generalizzata”).
+- \(\frac{dE_n}{d\lambda}\): derivata dell’energia (numero reale).
+- \(n,\ell,j\): numeri quantici (principale, orbitale, totale singolo elettrone).
+- \(S,L,J\): spin totale, orbitale totale, totale (multi-elettrone).
+- \(2S+1\): molteplicità (1 singletto, 2 doppietto, 3 tripletto, …).
+- \(^{\circ}\): parità dispari (odd).
+
+---
+
+# 6) Copione orale “da macchinetta” (90–120 sec)
+“Considero un Hamiltoniano \(H(\lambda)\) hermitiano con autostati normalizzati \(H(\lambda)|n(\lambda)\rangle=E_n(\lambda)|n(\lambda)\rangle\). Derivo rispetto a \(\lambda\): \((\partial_\lambda H)|n\rangle+H|n'\rangle=E_n'|n\rangle+E_n|n'\rangle\). Moltiplico a sinistra per \(\langle n|\): \(\langle n|\partial_\lambda H|n\rangle+\langle n|H|n'\rangle=E_n'\langle n|n\rangle+E_n\langle n|n'\rangle\). Ma \(\langle n|n\rangle=1\) e, usando \(H\) hermitiano, \(\langle n|H=E_n\langle n|\), quindi \(\langle n|H|n'\rangle=E_n\langle n|n'\rangle\) e i due termini si cancellano. Resta \(E_n'=\langle n|\partial_\lambda H|n\rangle\): questo è Hellmann–Feynman. Fisicamente significa che la variazione dell’energia rispetto a un parametro si calcola come valor medio della derivata dell’Hamiltoniano; ad esempio per un parametro geometrico \(R\) la forza è \(F=-dE/dR=-\langle\partial_R H\rangle\). Notazione spettroscopica: per un elettrone uso \(n\ell_j\) con \(\ell=s,p,d,f,\dots\) e \(j=\ell\pm1/2\); per molti elettroni uso \(^{2S+1}L_J\) dove \(2S+1\) è la molteplicità, \(L\) è \(S,P,D,F,\dots\) e \(J\) va da \(L+S\) a \(|L-S|\), con eventuale simbolo \(^{\circ}\) per parità dispari.”
+<<<DIM 10 END>>>
+
+<<<DIM 11 START>>>
+# DIM 11 — Struttura fine (idrogeno / idrogenoidi): \(H_{MV}\), \(H_{SO}\), Darwin \(H_D\) ⇒ livelli \(E_{n,j}\)
+
+## Dove sta negli appunti (questo è proprio il tuo blocco “struttura fine”)
+- **Struttura fine completa (scrivi \(H=H_0+H_{MV}+H_{SO}+H_D\) e fai i conti):** `img/228.jpg` → `img/235.jpg`
+- **(Richiamo notazione spettroscopica \(n\ell_j\) è anche in fondo a `img/235.jpg`)**
+- **Hellmann–Feynman/notazione:** `img/236.jpg`–`img/237.jpg` (già DIM 10)
+
+> Nota: nella cartella `boss/` non c’è un `solbf11_*.jpg`, quindi DIM 11 si fa direttamente dagli appunti (che sono ottimi: 228–235).
+
+---
+
+# 0) Cosa devi dimostrare (boss target)
+Per un atomo idrogenoide con potenziale coulombiano
+\[
+V(r)= -\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r},
+\]
+mostrare che la **correzione relativistica al primo ordine** (struttura fine) si ottiene trattando come perturbazione:
+\[
+\boxed{H' = H_{MV}+H_{SO}+H_D}
+\]
+dove
+\[
+\boxed{H_{MV}= -\frac{\hat p^4}{8m^3c^2}}
+\]
+\[
+\boxed{H_{SO}= \frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,\vec L\cdot \vec S}
+\]
+\[
+\boxed{H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V(r)}
+\]
+
+e concludere che la correzione totale dipende solo da \(n\) e \(j\):
+\[
+\boxed{
+\Delta E_{fs}(n,j)=
+\frac{mc^2(Z\alpha)^4}{2n^3}\left(\frac{3}{4n}-\frac{1}{j+\tfrac12}\right)
+}
+\]
+equivalentemente
+\[
+\boxed{
+E_{n,j} \simeq E_n^{(0)}+E_n^{(0)}(Z\alpha)^2\left[\frac{1}{n\left(j+\tfrac12\right)}-\frac{3}{4n^2}\right]
+}
+\]
+(dove \(E_n^{(0)}\) sono i livelli non relativistici).
+
+---
+
+# 1) Setup: Hamiltoniano non relativistico e degenerazioni
+Hamiltoniano di base (idrogenoide, non relativistico):
+\[
+\boxed{
+H_0=\frac{\hat p^2}{2m}+V(r)
+=
+\frac{\hat p^2}{2m}-\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r}
+}
+\]
+
+Autostati (senza spin-orbita) tipici:
+\[
+|n\ell m_\ell\rangle\otimes|m_s\rangle
+\]
+con energia:
+\[
+\boxed{E_n^{(0)}=-\frac{mc^2(Z\alpha)^2}{2n^2}}
+\]
+e degenerazione (senza spin): \(n^2\). Con spin \(1/2\): \(2n^2\).
+
+La struttura fine è un effetto di ordine \((v/c)^2\sim (Z\alpha)^2\), quindi le energie cambiano di ordine \((Z\alpha)^4mc^2\): piccolissime rispetto a \(E_n^{(0)}\).
+
+---
+
+# 2) Da dove vengono i tre termini \(H_{MV},H_{SO},H_D\)
+
+## 2A) Correzione massa–velocità \(H_{MV}\)
+Parto dall’energia relativistica libera:
+\[
+E = \sqrt{p^2c^2+m^2c^4}.
+\]
+Tolgo l’energia di riposo \(mc^2\) per ottenere l’energia cinetica relativistica:
+\[
+T_{rel}= \sqrt{p^2c^2+m^2c^4}-mc^2
+= mc^2\left(\sqrt{1+\frac{p^2}{m^2c^2}}-1\right).
+\]
+Sviluppo per \(\frac{p^2}{m^2c^2}\ll1\):
+\[
+\sqrt{1+x}\approx 1+\frac{x}{2}-\frac{x^2}{8}+\cdots
+\]
+con \(x=\frac{p^2}{m^2c^2}\). Quindi:
+\[
+T_{rel}\approx mc^2\left(\frac{1}{2}\frac{p^2}{m^2c^2}-\frac{1}{8}\frac{p^4}{m^4c^4}\right)
+=
+\frac{p^2}{2m}-\frac{p^4}{8m^3c^2}.
+\]
+Il primo termine è già in \(H_0\), quindi la perturbazione è:
+\[
+\boxed{H_{MV}=-\frac{\hat p^4}{8m^3c^2}.}
+\]
+
+---
+
+## 2B) Accoppiamento spin–orbita \(H_{SO}\) (con fattore di Thomas)
+Idea fisica (come nei tuoi appunti): nel sistema di riferimento dell’elettrone, il nucleo “in moto” genera un campo magnetico \(\vec B\) legato al campo elettrico \(\vec E=-\nabla V/e\). L’energia di interazione è:
+\[
+H_{int}=-\vec\mu_s\cdot\vec B,
+\qquad
+\vec\mu_s=-g\frac{e}{2m}\vec S \ (g\simeq2).
+\]
+Facendo il conto in un potenziale centrale e includendo la **precessione di Thomas** (che dimezza il risultato semiclassico), si ottiene:
+\[
+\boxed{H_{SO}= \frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,\vec L\cdot \vec S.}
+\]
+Per Coulomb:
+\[
+V(r)=-\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r}
+\Rightarrow
+\frac{1}{r}\frac{dV}{dr}=\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r^3},
+\]
+quindi
+\[
+\boxed{
+H_{SO}=
+\frac{Ze^2}{8\pi\varepsilon_0\,m^2c^2}\frac{1}{r^3}\,\vec L\cdot\vec S.
+}
+\]
+
+**Commento “da dire”:** \(H_{SO}\) NON conserva \(L_z\) e \(S_z\) separatamente, ma conserva \(J^2\) e \(J_z\). Quindi conviene lavorare in base \(|n\ell jm_j\rangle\).
+
+---
+
+## 2C) Termine di Darwin \(H_D\)
+Nei tuoi appunti (229–230) è spiegato come “non-località”/smearing su scala di Compton (zitterbewegung): l’elettrone non “sente” \(V(\vec r)\) puntualmente ma una media su una regione piccola \(\rho\sim \hbar/(mc)\). Espandendo:
+\[
+V(\vec r+\vec\rho)\approx V(\vec r)+\vec\rho\cdot\nabla V(\vec r)+\frac{1}{2}\sum_{i,j}\rho_i\rho_j\,\partial_i\partial_jV(\vec r)+\cdots
+\]
+Mediando su una distribuzione isotropa:
+- \(\langle \vec\rho\rangle=0\) ⇒ il termine lineare sparisce
+- \(\langle\rho_i\rho_j\rangle=\frac{\langle\rho^2\rangle}{3}\delta_{ij}\) ⇒ il termine quadratico diventa \(\propto \nabla^2V\)
+
+Il risultato (da Pauli/Foldy–Wouthuysen) è:
+\[
+\boxed{
+H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V(r).
+}
+\]
+Per Coulomb si usa:
+\[
+\nabla^2\left(\frac{1}{r}\right)=-4\pi\,\delta^{(3)}(\vec r)
+\]
+quindi
+\[
+\nabla^2V(r)= -\frac{Ze^2}{4\pi\varepsilon_0}\nabla^2\left(\frac{1}{r}\right)
+=
+\frac{Ze^2}{\varepsilon_0}\,\delta^{(3)}(\vec r)
+\]
+e quindi:
+\[
+\boxed{
+H_D=
+\frac{\hbar^2}{8m^2c^2}\frac{Ze^2}{\varepsilon_0}\,\delta^{(3)}(\vec r).
+}
+\]
+➡️ Conseguenza cruciale: contribuisce **solo** per stati con \(\ell=0\) (gli unici con \(|\psi(0)|\neq0\)).
+
+---
+
+# 3) Strategia perturbativa: correzione energetica al primo ordine
+Usi la perturbazione stazionaria (DIM 7) al primo ordine:
+\[
+\boxed{
+\Delta E^{(1)}=\langle n\ell jm_j|H'|n\ell jm_j\rangle
+=
+\langle H_{MV}\rangle+\langle H_{SO}\rangle+\langle H_D\rangle
+}
+\]
+(la correzione è indipendente da \(m_j\) perché il problema è isotropo: niente campo esterno).
+
+---
+
+# 4) Calcolo dei tre contributi
+
+## 4A) Contributo massa–velocità \(\langle H_{MV}\rangle\)
+\[
+\langle H_{MV}\rangle=-\frac{1}{8m^3c^2}\langle \hat p^4\rangle.
+\]
+
+Trucco chiave (nei tuoi appunti 230): da
+\[
+H_0=\frac{\hat p^2}{2m}+V
+\]
+e sull’autostato di \(H_0\): \(H_0|\psi\rangle=E_n^{(0)}|\psi\rangle\),
+segue
+\[
+\frac{\hat p^2}{2m}|\psi\rangle=(E_n^{(0)}-V)|\psi\rangle
+\Rightarrow
+\hat p^2|\psi\rangle=2m(E_n^{(0)}-V)|\psi\rangle.
+\]
+Allora
+\[
+\langle \hat p^4\rangle
+=
+\langle \hat p^2\psi|\hat p^2\psi\rangle
+=
+(2m)^2\langle (E_n^{(0)}-V)^2\rangle.
+\]
+Quindi:
+\[
+\langle \hat p^4\rangle=4m^2\left[(E_n^{(0)})^2-2E_n^{(0)}\langle V\rangle+\langle V^2\rangle\right].
+\]
+
+Per Coulomb vale il teorema del viriale:
+\[
+\boxed{\langle V\rangle=2E_n^{(0)}}
+\]
+e \(V^2=\left(\frac{Ze^2}{4\pi\varepsilon_0}\right)^2\frac{1}{r^2}\), dunque serve anche:
+\[
+\boxed{
+\left\langle \frac{1}{r^2}\right\rangle_{n\ell}
+=\frac{Z^2}{a_0^2}\frac{1}{n^3\left(\ell+\tfrac12\right)}
+}
+\]
+(con \(a_0=\frac{4\pi\varepsilon_0\hbar^2}{me^2}=\frac{\hbar}{mc\alpha}\)).
+
+Sostituendo (risultato standard, come in `img/231.jpg`):
+\[
+\boxed{
+\langle H_{MV}\rangle
+=
+mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3(\ell+\tfrac12)}\right].
+}
+\]
+
+---
+
+## 4B) Contributo spin–orbita \(\langle H_{SO}\rangle\)
+\[
+H_{SO}=\frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,\vec L\cdot\vec S
+\]
+e nel Coulomb:
+\[
+H_{SO}=\frac{Ze^2}{8\pi\varepsilon_0m^2c^2}\frac{1}{r^3}\,\vec L\cdot\vec S.
+\]
+
+### (i) Parte angolare: \(\langle \vec L\cdot\vec S\rangle\)
+Usi l’identità:
+\[
+\vec J=\vec L+\vec S
+\Rightarrow
+J^2=L^2+S^2+2\vec L\cdot\vec S
+\]
+quindi
+\[
+\boxed{
+\vec L\cdot\vec S=\frac{1}{2}\left(J^2-L^2-S^2\right).
+}
+\]
+Sugli autostati \(|n\ell jm_j\rangle\):
+\[
+J^2=\hbar^2 j(j+1),\quad L^2=\hbar^2\ell(\ell+1),\quad S^2=\hbar^2 s(s+1),\ s=\tfrac12\Rightarrow s(s+1)=\tfrac34
+\]
+quindi:
+\[
+\boxed{
+\langle \vec L\cdot\vec S\rangle
+=
+\frac{\hbar^2}{2}\left[j(j+1)-\ell(\ell+1)-\frac34\right].
+}
+\]
+
+### (ii) Parte radiale: \(\langle 1/r^3\rangle\)
+Per \(\ell\neq0\) (formula che hai in `img/233.jpg`):
+\[
+\boxed{
+\left\langle\frac{1}{r^3}\right\rangle_{n\ell}
+=
+\frac{Z^3}{a_0^3}\frac{1}{n^3\,\ell\left(\ell+\tfrac12\right)(\ell+1)}
+\qquad (\ell\ge 1).
+}
+\]
+(Per \(\ell=0\) divergerebbe, ma lì \(L=0\Rightarrow H_{SO}=0\), quindi non serve.)
+
+Moltiplicando tutto (l’\(\hbar^2\) si semplifica) ottieni:
+\[
+\boxed{
+\langle H_{SO}\rangle
+=
+\frac{mc^2(Z\alpha)^4}{4n^3}\;
+\frac{j(j+1)-\ell(\ell+1)-\tfrac34}{\ell\left(\ell+\tfrac12\right)(\ell+1)}
+\qquad (\ell\ge1).
+}
+\]
+
+---
+
+## 4C) Contributo di Darwin \(\langle H_D\rangle\)
+\[
+H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V
+=
+\frac{\hbar^2}{8m^2c^2}\frac{Ze^2}{\varepsilon_0}\delta^{(3)}(\vec r).
+\]
+Quindi:
+\[
+\langle H_D\rangle
+=
+\frac{\hbar^2}{8m^2c^2}\frac{Ze^2}{\varepsilon_0}\,|\psi_{n\ell m}(0)|^2.
+\]
+Ma \(|\psi(0)|\neq0\) **solo per \(\ell=0\)**. Per gli stati \(s\):
+\[
+|\psi_{n00}(0)|^2=\frac{1}{\pi}\left(\frac{Z}{a_0}\right)^3\frac{1}{n^3}.
+\]
+Risultato compatto:
+\[
+\boxed{
+\langle H_D\rangle
+=
+\frac{mc^2(Z\alpha)^4}{2n^3}\,\delta_{\ell 0}.
+}
+\]
+
+---
+
+# 5) Somma finale e “miracolo”: dipende solo da \(j\)
+Metti insieme:
+\[
+\Delta E_{fs}=\langle H_{MV}\rangle+\langle H_{SO}\rangle+\langle H_D\rangle.
+\]
+
+Nei tuoi appunti (`img/234`–`img/235`) si vede il punto chiave:
+
+- Per \(\ell\ge1\), combinando \(\langle H_{MV}\rangle+\langle H_{SO}\rangle\) e usando che \(j=\ell\pm \tfrac12\), si ottiene:
+\[
+\boxed{
+\langle H_{MV}\rangle+\langle H_{SO}\rangle
+=
+mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3\left(j+\tfrac12\right)}\right].
+}
+\]
+
+- Per \(\ell=0\) (quindi \(j=\tfrac12\)), lo spin–orbita è nullo ma Darwin “rimpiazza” il pezzo necessario e si ottiene **la stessa forma**.
+
+Quindi in generale:
+\[
+\boxed{
+\Delta E_{fs}(n,j)=
+mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3\left(j+\tfrac12\right)}\right]
+}
+\]
+che è equivalente a:
+\[
+\boxed{
+\Delta E_{fs}(n,j)=
+\frac{mc^2(Z\alpha)^4}{2n^3}\left(\frac{3}{4n}-\frac{1}{j+\tfrac12}\right).
+}
+\]
+
+E scritta “come negli appunti” (con \(E_n^{(0)}\) fattorizzata):
+\[
+\boxed{
+E_{n,j}\simeq E_n^{(0)}+E_n^{(0)}(Z\alpha)^2\left[\frac{1}{n\left(j+\tfrac12\right)}-\frac{3}{4n^2}\right].
+}
+\]
+
+---
+
+# 6) Conseguenze fisiche che devi saper dire
+1) **I livelli dipendono da \(n\) e \(j\)** (non da \(\ell\) separatamente): quindi
+   \[
+   2S_{1/2}\ \text{e}\ 2P_{1/2}\ \text{risultano degeneri (in Dirac/fine structure).}
+   \]
+   La rottura reale di questa degenerazione è il **Lamb shift** (QED), non incluso qui.
+
+2) **Lo splitting** tra \(j=\ell+\tfrac12\) e \(j=\ell-\tfrac12\) è dovuto soprattutto allo **spin–orbita**, ma per gli \(s\) entra anche Darwin.
+
+3) Ordine di grandezza (come in `img/235.jpg`): per H (\(Z=1\)),
+   \[
+   \alpha\simeq \frac{1}{137}\Rightarrow \alpha^2\sim 5\times 10^{-5}
+   \]
+   quindi la struttura fine è dell’ordine di
+   \[
+   \alpha^2\times 13.6\text{ eV}\sim 10^{-3}\text{ eV}.
+   \]
+
+---
+
+# Dizionario simboli (da ripetere “uno per uno”)
+- \(m\): massa dell’elettrone.
+- \(c\): velocità della luce.
+- \(\hbar\): costante di Planck ridotta.
+- \(e\): carica elementare.
+- \(\varepsilon_0\): permittività del vuoto.
+- \(Z\): numero atomico (idrogeno: \(Z=1\)).
+- \(\alpha=\dfrac{e^2}{4\pi\varepsilon_0\hbar c}\): costante di struttura fine.
+- \(a_0=\dfrac{4\pi\varepsilon_0\hbar^2}{me^2}=\dfrac{\hbar}{mc\alpha}\): raggio di Bohr.
+- \(\hat p\): operatore quantità di moto; \(\hat p^2\) e \(\hat p^4\) entrano in \(H_{MV}\).
+- \(V(r)\): potenziale centrale coulombiano.
+- \(\nabla^2\): Laplaciano; in Darwin compare \(\nabla^2V\).
+- \(\delta^{(3)}(\vec r)\): delta di Dirac 3D; seleziona il valore della funzione d’onda all’origine.
+- \(\vec L\): momento angolare orbitale.
+- \(\vec S\): spin dell’elettrone (\(s=\tfrac12\)).
+- \(\vec J=\vec L+\vec S\): momento angolare totale.
+- \(n\): numero quantico principale.
+- \(\ell\): numero quantico orbitale.
+- \(j\): numero quantico totale (\(j=\ell\pm\tfrac12\)).
+- \(m_j\): proiezione di \(J\) (la correzione non dipende da \(m_j\) in assenza di campi esterni).
+- \(E_n^{(0)}\): energie non relativistiche dell’idrogenoide.
+- \(\Delta E_{fs}\): correzione di struttura fine (ordine \((Z\alpha)^4 mc^2\)).
+
+---
+
+# Copione orale “da macchinetta” (2–3 minuti)
+“Per l’idrogenoide parto da \(H_0=p^2/(2m)+V(r)\) con \(V=-Ze^2/(4\pi\varepsilon_0r)\) e livelli \(E_n^{(0)}=-mc^2(Z\alpha)^2/(2n^2)\). La struttura fine viene dalle correzioni relativistiche d’ordine \(1/c^2\): massa–velocità \(H_{MV}=-p^4/(8m^3c^2)\), spin–orbita \(H_{SO}=\frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,L\cdot S\) con fattore di Thomas, e Darwin \(H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V\). Tratto \(H'=H_{MV}+H_{SO}+H_D\) come perturbazione e faccio la correzione al primo ordine: \(\Delta E=\langle H'\rangle\). Per \(H_{MV}\) uso che sull’autostato di \(H_0\) vale \(p^2|\psi\rangle=2m(E-V)|\psi\rangle\), quindi \(\langle p^4\rangle=4m^2\langle(E-V)^2\rangle\); con il viriale \(\langle V\rangle=2E\) e con \(\langle 1/r^2\rangle=\frac{Z^2}{a_0^2}\frac{1}{n^3(\ell+1/2)}\) ottengo \(\langle H_{MV}\rangle=mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3(\ell+1/2)}\right]\). Per \(H_{SO}\) passo alla base accoppiata \(|n\ell jm_j\rangle\) perché \(L\cdot S=\frac12(J^2-L^2-S^2)\) ed è diagonale: \(\langle L\cdot S\rangle=\frac{\hbar^2}{2}[j(j+1)-\ell(\ell+1)-3/4]\), e con \(\langle 1/r^3\rangle=\frac{Z^3}{a_0^3}\frac{1}{n^3\ell(\ell+1/2)(\ell+1)}\) ottengo \(\langle H_{SO}\rangle\). Darwin dà \(H_D\propto\delta^{(3)}(r)\), quindi contribuisce solo per \(\ell=0\) ed è \(\langle H_D\rangle=mc^2(Z\alpha)^4/(2n^3)\delta_{\ell0}\). Sommando i tre pezzi, il risultato finale dipende solo da \(n\) e \(j\): \(\Delta E_{fs}=mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3(j+1/2)}\right]=\frac{mc^2(Z\alpha)^4}{2n^3}(\frac{3}{4n}-\frac{1}{j+1/2})\). Quindi i livelli con stesso \(n\) e \(j\) sono degeneri, ad esempio \(2S_{1/2}\) e \(2P_{1/2}\) in questa approssimazione; la correzione è dell’ordine \(10^{-3}\) eV per l’idrogeno.”
+<<<DIM 11 END>>>
+
+<<<DIM 12 START>>>
+# DIM 12 — Teoria delle perturbazioni dipendenti dal tempo  
+**(variazione delle costanti → equazioni per \(c_n(t)\) → risonanza e pulsazione di Bohr → perturbazione costante/periodica → continuo → Regola d’oro di Fermi → vita media \(\tau\) e larghezza \(\Gamma\))**
+
+## Dove sta negli appunti
+- **Core (impostazione + variazione delle costanti):** P2·28A `img/237.jpg`–`img/240.jpg`  
+- **Costante/periodica + risonanza + pulsazione di Bohr:** P2·28B `img/240.jpg`–`img/243.jpg`  
+- **Continuo + conclusione (Fermi Golden Rule, \(\tau,\Gamma\)):** P2·28C `img/244.jpg`–`img/249.jpg`  
+- Supporto utile (quadri Schr/Int): P1·18 `img/165.jpg`–`img/169.jpg`
+
+---
+
+# 0) Obiettivo “boss”
+Partendo da:
+\[
+\hat H(t)=\hat H_0+\lambda \hat V(t), \qquad \lambda\ll 1
+\]
+dimostrare:
+
+1) **Equazione per i coefficienti \(c_n(t)\)** (variazione delle costanti):
+\[
+\boxed{\, i\hbar\,\dot c_n(t)=\lambda\sum_m V_{nm}(t)\,e^{i\omega_{nm}t}\,c_m(t)\,}
+\]
+con \(V_{nm}(t)=\langle n|\hat V(t)|m\rangle\) e \(\omega_{nm}=(E_n-E_m)/\hbar\).
+
+2) **Ampiezza di transizione al primo ordine** \(i\to f\):
+\[
+\boxed{\,c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}\int_0^t V_{fi}(t')\,e^{i\omega_{fi}t'}\,dt'\,}
+\]
+e probabilità \(P_{i\to f}(t)=|c_f^{(1)}(t)|^2\) (ordine \(\lambda^2\)).
+
+3) Per **perturbazione costante** (accesa a \(t=0\)):
+\[
+P_{i\to f}(t)=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\,\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}.
+\]
+
+4) Per **perturbazione periodica** ⇒ **risonanza** quando \(\omega\simeq\omega_{fi}\) (pulsazione di Bohr \(\omega_{fi}\)).
+
+5) Se gli stati finali formano un **continuo**, ottenere la **Regola d’oro di Fermi**:
+\[
+\boxed{\,W_{i\to f}=\frac{2\pi}{\hbar}\,|V_{fi}|^2\,\rho(E_f)\,}
+\]
+(con l’energia “conservata” nel senso del delta).
+
+6) Collegare \(W\), **vita media** \(\tau\) e **larghezza** \(\Gamma\):
+\[
+\boxed{\,\tau=\frac{1}{W}\,,\qquad \Gamma=\frac{\hbar}{\tau}=\hbar W\,}
+\]
+
+---
+
+# 1) Setup: sistema noto + perturbazione
+Supponi che \(\hat H_0\) sia risolubile:
+\[
+\hat H_0|n\rangle = E_n|n\rangle,
+\qquad
+\langle n|m\rangle=\delta_{nm}.
+\]
+
+Poi aggiungi una perturbazione dipendente dal tempo \(\hat V(t)\):
+\[
+\hat H(t)=\hat H_0+\lambda \hat V(t).
+\]
+
+L’equazione di Schrödinger dipendente dal tempo è:
+\[
+i\hbar \frac{\partial}{\partial t}|\psi(t)\rangle=\hat H(t)|\psi(t)\rangle.
+\]
+
+---
+
+# 2) Variazione delle costanti: ansatz con fasi “non perturbate”
+Se \(\lambda=0\), un autostato \(|n\rangle\) evolve come:
+\[
+|n,t\rangle = e^{-iE_n t/\hbar}|n\rangle.
+\]
+
+Con perturbazione, cerco la soluzione come combinazione di questi “modi” ma con coefficienti variabili:
+\[
+\boxed{\,|\psi(t)\rangle=\sum_n c_n(t)\,e^{-iE_n t/\hbar}\,|n\rangle\,}
+\]
+Questa è esattamente la **variazione delle costanti**: se \(\hat V=0\), allora \(c_n(t)\) sono costanti.
+
+---
+
+# 3) Derivazione dell’equazione per i coefficienti \(c_n(t)\)
+Derivo \(|\psi(t)\rangle\):
+\[
+\frac{\partial}{\partial t}|\psi\rangle
+=\sum_n \dot c_n(t)e^{-iE_n t/\hbar}|n\rangle
++\sum_n c_n(t)\left(-\frac{iE_n}{\hbar}\right)e^{-iE_n t/\hbar}|n\rangle.
+\]
+
+Moltiplico per \(i\hbar\):
+\[
+i\hbar\frac{\partial}{\partial t}|\psi\rangle
+=
+i\hbar\sum_n \dot c_n e^{-iE_n t/\hbar}|n\rangle
++\sum_n c_n E_n e^{-iE_n t/\hbar}|n\rangle.
+\]
+
+Ora il lato destro:
+\[
+\hat H(t)|\psi\rangle=(\hat H_0+\lambda \hat V)\sum_m c_m e^{-iE_m t/\hbar}|m\rangle
+=\sum_m c_m e^{-iE_m t/\hbar}\hat H_0|m\rangle+\lambda\sum_m c_m e^{-iE_m t/\hbar}\hat V|m\rangle.
+\]
+
+Ma \(\hat H_0|m\rangle=E_m|m\rangle\), quindi:
+\[
+\hat H(t)|\psi\rangle=\sum_m c_m E_m e^{-iE_m t/\hbar}|m\rangle + \lambda\sum_m c_m e^{-iE_m t/\hbar}\hat V|m\rangle.
+\]
+
+Confronto con il lato sinistro: i termini \(\sum c_n E_n e^{-iE_n t/\hbar}|n\rangle\) **si cancellano** (è il motivo per cui l’ansatz è intelligente). Rimane:
+
+\[
+i\hbar\sum_n \dot c_n e^{-iE_n t/\hbar}|n\rangle
+=
+\lambda\sum_m c_m e^{-iE_m t/\hbar}\hat V|m\rangle.
+\]
+
+Proietto su \(\langle n|\):
+\[
+i\hbar\,\dot c_n(t)\,e^{-iE_n t/\hbar}
+=
+\lambda\sum_m c_m(t)\,e^{-iE_m t/\hbar}\,\langle n|\hat V(t)|m\rangle.
+\]
+
+Moltiplico per \(e^{+iE_n t/\hbar}\) e definisco:
+\[
+V_{nm}(t)\equiv \langle n|\hat V(t)|m\rangle,
+\qquad
+\omega_{nm}\equiv \frac{E_n-E_m}{\hbar}.
+\]
+
+Ottengo:
+
+\[
+\boxed{\, i\hbar\,\dot c_n(t)=\lambda\sum_m V_{nm}(t)\,e^{i\omega_{nm}t}\,c_m(t)\,}
+\]
+
+✅ Questa è l’equazione fondamentale della TDPT (equazione “di interazione”, identica a quella del quadro di interazione).
+
+---
+
+# 4) Primo ordine: ampiezza di transizione \(i\to f\)
+Assumo stato iniziale:
+\[
+|\psi(0)\rangle=|i\rangle \quad\Rightarrow\quad c_i(0)=1,\; c_{n\neq i}(0)=0.
+\]
+
+Al **primo ordine** in \(\lambda\) approssimo nel membro destro:
+\[
+c_i(t)\approx 1,\qquad c_{m\neq i}(t)\approx 0.
+\]
+
+Allora per \(f\neq i\):
+\[
+i\hbar\,\dot c_f(t)=\lambda\,V_{fi}(t)\,e^{i\omega_{fi}t}.
+\]
+
+Quindi:
+\[
+\dot c_f(t)= -\frac{i\lambda}{\hbar}V_{fi}(t)\,e^{i\omega_{fi}t}
+\]
+
+Integro da 0 a \(t\):
+\[
+\boxed{\,c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}\int_0^t V_{fi}(t')\,e^{i\omega_{fi}t'}\,dt'\,}
+\]
+
+La probabilità (a ordine \(\lambda^2\)) è:
+\[
+\boxed{\,P_{i\to f}(t)\simeq |c_f^{(1)}(t)|^2\,}
+\]
+
+---
+
+# 5) Perturbazione costante “accesa” a \(t=0\)
+Caso: \(\hat V(t)=\hat V\) costante (o costante nel tratto \(0<t<T\)).
+
+Allora \(V_{fi}(t)=V_{fi}\) costante e:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}V_{fi}\int_0^t e^{i\omega_{fi}t'}dt'
+= -\frac{i\lambda}{\hbar}V_{fi}\,\frac{e^{i\omega_{fi}t}-1}{i\omega_{fi}}.
+\]
+
+Semplifico (\(-i/(i)=-1\)):
+\[
+c_f^{(1)}(t)= -\frac{\lambda V_{fi}}{\hbar}\,\frac{e^{i\omega_{fi}t}-1}{\omega_{fi}}.
+\]
+
+Uso \(e^{i\omega t}-1=2ie^{i\omega t/2}\sin(\omega t/2)\):
+\[
+c_f^{(1)}(t)= -\frac{2i\lambda V_{fi}}{\hbar}\,e^{i\omega_{fi}t/2}\,\frac{\sin(\omega_{fi}t/2)}{\omega_{fi}}.
+\]
+
+Probabilità:
+\[
+\boxed{\,P_{i\to f}(t)=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\,\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}\,}
+\]
+
+### Commento essenziale
+Questa è una “campana” tipo \(\text{sinc}^2\) centrata su \(\omega_{fi}=0\) (cioè \(E_f\simeq E_i\)).  
+Per tempi lunghi si restringe: più tempo osservi, più “selettiva” è in energia.
+
+---
+
+# 6) Perturbazione periodica: risonanza e pulsazione di Bohr
+Prendo un caso tipico (come negli appunti): perturbazione armonica
+\[
+\hat V(t)=\hat W\cos(\omega t)=\frac{\hat W}{2}\left(e^{i\omega t}+e^{-i\omega t}\right).
+\]
+Allora:
+\[
+V_{fi}(t)=\frac{W_{fi}}{2}\left(e^{i\omega t}+e^{-i\omega t}\right),
+\qquad W_{fi}=\langle f|\hat W|i\rangle.
+\]
+
+Inserisco nell’ampiezza:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}\int_0^t \frac{W_{fi}}{2}(e^{i\omega t'}+e^{-i\omega t'})e^{i\omega_{fi}t'}dt'.
+\]
+
+Ottengo due integrali:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda W_{fi}}{2\hbar}\left[
+\int_0^t e^{i(\omega_{fi}+\omega)t'}dt'
++
+\int_0^t e^{i(\omega_{fi}-\omega)t'}dt'
+\right].
+\]
+
+Quindi:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda W_{fi}}{2\hbar}\left[
+\frac{e^{i(\omega_{fi}+\omega)t}-1}{i(\omega_{fi}+\omega)}
++
+\frac{e^{i(\omega_{fi}-\omega)t}-1}{i(\omega_{fi}-\omega)}
+\right].
+\]
+
+Il contenuto fisico è qui:
+
+## Risonanza
+Il secondo termine “esplode” quando:
+\[
+\boxed{\omega \simeq \omega_{fi}}
+\]
+dove
+\[
+\boxed{\omega_{fi}=\frac{E_f-E_i}{\hbar}}
+\]
+è la **pulsazione di Bohr**.
+
+- \(\omega \approx \omega_{fi}\): **assorbimento** (il campo fornisce energia \(\hbar\omega\)).
+- \(\omega \approx -\omega_{fi}\): **emissione stimolata** (in pratica \(E_f<E_i\) e l’energia va al campo).
+
+In termini energetici:
+\[
+E_f \approx E_i \pm \hbar\omega.
+\]
+
+---
+
+# 7) Dal discreto al continuo: nasce la Regola d’oro di Fermi
+Se gli stati finali \(|f\rangle\) formano un **continuo** (o un quasi-continuo fitto), non guardo la singola probabilità verso un singolo \(f\), ma la **probabilità totale di transizione** sommando su tanti stati finali.
+
+La cosa chiave (nei limiti “tempi lunghi” e “continuo”) è che compare un delta di energia. Formalmente:
+\[
+\frac{\sin^2(\Delta\omega\,t/2)}{\Delta\omega^2}
+\ \xrightarrow[t\ \text{grande}]{}\ \frac{\pi t}{2}\,\delta(\Delta\omega)
+\]
+dove \(\Delta\omega\) è lo “scarto dalla risonanza” (es. \(\omega_{fi}-\omega\)).
+
+Passando da \(\delta(\Delta\omega)\) a \(\delta(\Delta E)\):
+\[
+\Delta\omega=\frac{\Delta E}{\hbar}\quad\Rightarrow\quad \delta(\Delta\omega)=\hbar\,\delta(\Delta E).
+\]
+
+## Forma finale (Golden Rule)
+Per una transizione verso un continuo con densità di stati \(\rho(E_f)\), ottieni un **tasso** (probabilità per unità di tempo):
+
+\[
+\boxed{\,W_{i\to f}=\frac{2\pi}{\hbar}\,|V_{fi}|^2\,\rho(E_f)\,}
+\]
+
+- Se la perturbazione è periodica (frequenza \(\omega\)), l’energia “conservata” è:
+  \[
+  E_f = E_i \pm \hbar\omega
+  \]
+  quindi \(\rho(E_f)\) va valutata in \(E_i\pm\hbar\omega\).
+
+**Traduzione fisica:** in un continuo, la probabilità non “oscilla e basta”, ma **cresce linearmente nel tempo**:
+\[
+P(t)\approx W\,t
+\]
+(finché \(P\ll 1\), cioè nel regime perturbativo).
+
+---
+
+# 8) Vita media \(\tau\) e larghezza \(\Gamma\)
+Se un livello iniziale \(|i\rangle\) può decadere in molti stati del continuo, la Golden Rule fornisce il tasso totale:
+\[
+W=\sum_f W_{i\to f}
+\quad\Rightarrow\quad
+\boxed{\tau=\frac{1}{W}}.
+\]
+
+La **larghezza energetica** associata (linewidth naturale) è:
+\[
+\boxed{\Gamma=\frac{\hbar}{\tau}=\hbar W.}
+\]
+
+### Perché è “fisica”?
+- Se lo stato vive poco (\(\tau\) piccolo), la sua energia è poco definita: la riga spettrale si allarga (\(\Gamma\) grande).
+- Collegamento concettuale con indeterminazione energia-tempo: \(\Delta E \sim \hbar/\tau\).
+
+---
+
+# Dizionario simboli (da sapere uno per uno)
+- \(\hat H(t)\): Hamiltoniano totale dipendente dal tempo.
+- \(\hat H_0\): Hamiltoniano non perturbato (stazionario, risolto).
+- \(\hat V(t)\): perturbazione (dipendente dal tempo).
+- \(\lambda\): parametro piccolo (conta gli ordini); spesso alla fine si pone \(\lambda=1\).
+- \(|n\rangle\): autostati di \(\hat H_0\).
+- \(E_n\): autovalori di \(\hat H_0\) (energie non perturbate).
+- \(|\psi(t)\rangle\): stato del sistema.
+- \(c_n(t)\): coefficienti “lenti” (ampiezze) nella base di \(\hat H_0\).
+- \(V_{nm}(t)=\langle n|\hat V(t)|m\rangle\): elementi di matrice della perturbazione.
+- \(\omega_{nm}=(E_n-E_m)/\hbar\): pulsazione associata al salto \(m\to n\).
+- \(\omega_{fi}\): **pulsazione di Bohr** (tra livelli \(i\) e \(f\)).
+- \(\hat W\): operatore che moltiplica la parte armonica, se \(\hat V(t)=\hat W\cos\omega t\).
+- \(W_{fi}=\langle f|\hat W|i\rangle\): elemento di matrice per la perturbazione armonica.
+- \(P_{i\to f}(t)\): probabilità di transizione \(i\to f\) a tempo \(t\).
+- \(\rho(E)\): densità di stati del continuo (stati per unità di energia).
+- \(W\): tasso di transizione (probabilità per unità di tempo).
+- \(\tau\): vita media (\(\tau=1/W\)).
+- \(\Gamma\): larghezza energetica (\(\Gamma=\hbar/\tau\)).
+- \(\delta(\cdot)\): delta di Dirac (selettore di energia “in risonanza”).
+
+---
+
+# Significato fisico (da dire bene, senza perdersi nei conti)
+- La perturbazione dipendente dal tempo **induce transizioni** tra autostati di \(\hat H_0\).
+- Le fasi \(e^{i\omega_{fi}t}\) fanno sì che l’integrale “si sommi” solo se sei vicino a risonanza: nasce la **pulsazione di Bohr**.
+- Per un continuo di stati finali, la probabilità non resta oscillante: mediando/sommando su tanti finali diventa un **tasso costante** → Golden Rule.
+- \(\tau\) e \(\Gamma\) sono la traduzione sperimentale: “quanto vive un livello” e “quanto è larga la riga spettrale”.
+
+---
+
+# Copione orale “da macchinetta” (2–3 minuti, super lineare)
+“Prendo \(H(t)=H_0+\lambda V(t)\) con \(H_0|n\rangle=E_n|n\rangle\). Scrivo la soluzione come variazione delle costanti: \(|\psi(t)\rangle=\sum_n c_n(t)e^{-iE_n t/\hbar}|n\rangle\). Inserisco in Schrödinger: i termini con \(H_0\) si cancellano e ottengo \(i\hbar \dot c_n=\lambda\sum_m \langle n|V(t)|m\rangle e^{i(E_n-E_m)t/\hbar}c_m\), cioè \(i\hbar\dot c_n=\lambda\sum_m V_{nm}(t)e^{i\omega_{nm}t}c_m\). Se all’inizio sono in \(|i\rangle\), al primo ordine metto \(c_i\simeq1\) e per \(f\neq i\) trovo \(c_f^{(1)}(t)=-(i\lambda/\hbar)\int_0^t V_{fi}(t')e^{i\omega_{fi}t'}dt'\), e \(P_{i\to f}=|c_f^{(1)}|^2\). Se \(V\) è costante, ottengo \(P=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}\). Se \(V(t)=W\cos\omega t\), nell’integrale compaiono termini con \(\omega_{fi}\pm\omega\) e la transizione è massima quando \(\omega\simeq\omega_{fi}=(E_f-E_i)/\hbar\), pulsazione di Bohr: cioè \(E_f=E_i\pm\hbar\omega\). Se i finali sono un continuo, per tempi lunghi il \(\text{sinc}^2\) dà un delta e la probabilità cresce linearmente: \(P\simeq Wt\) con \(W=\frac{2\pi}{\hbar}|V_{fi}|^2\rho(E_f)\), regola d’oro di Fermi. Da qui \(\tau=1/W\) e la larghezza \(\Gamma=\hbar/\tau\).”
+<<<DIM 12 END>>>

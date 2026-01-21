@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>FPS Day/Night + Lampade (2 varianti)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#000}
+#overlay{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.6);color:#fff;font:16px system-ui;cursor:pointer;z-index:10;
+}
+#hud{
+  position:fixed;left:12px;top:12px;z-index:11;
+  font:13px/1.35 system-ui;color:#eee;background:rgba(0,0,0,.35);
+  padding:10px 12px;border-radius:12px;backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.10);
+  max-width:360px;
+}
+#hud code{background:rgba(255,255,255,.12);padding:1px 6px;border-radius:8px}
+.small{opacity:.85}
+</style>
+</head>
+
+<body>
+<div id="overlay">CLICK TO PLAY</div>
+<div id="hud">
+  <b>FPS Day/Night</b><br>
+  WASD muovi · Mouse guarda · <code>ESC</code> libera<br>
+  <span class="small"><code>V</code> cambia lampade · <code>L</code> toggle luci</span><br>
+  <span class="small" id="modeText">Lampade: Cubi</span>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
+
+/* ---------------- Renderer ---------------- */
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+// Se il browser lo supporta, questo rende l'attenuazione delle luci più naturale
+renderer.physicallyCorrectLights = true;
+document.body.appendChild(renderer.domElement);
+
+/* ---------------- Scene / Camera ---------------- */
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 800);
+camera.position.set(0, 1.7, 5);
+
+/* ---------------- Controls (FPS) ---------------- */
+const controls = new PointerLockControls(camera, renderer.domElement);
+scene.add(controls.getObject());
+
+const overlay = document.getElementById("overlay");
+overlay.addEventListener("click", () => controls.lock());
+controls.addEventListener("lock", () => overlay.style.display = "none");
+controls.addEventListener("unlock", () => overlay.style.display = "flex");
+
+/* Movement */
+const keys = {};
+addEventListener("keydown", e => keys[e.code] = true);
+addEventListener("keyup", e => keys[e.code] = false);
+
+/* ---------------- Sky procedurale (leggero) ---------------- */
+const sky = new THREE.Mesh(
+  new THREE.SphereGeometry(350, 64, 32),
+  new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    uniforms: { sunY: { value: 1.0 } },
+    vertexShader: `
+      varying vec3 v;
+      void main(){
+        v = normalize(position);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 v;
+      uniform float sunY;
+
+      vec3 mix3(vec3 a, vec3 b, float t){ return a*(1.0-t)+b*t; }
+
+      void main(){
+        float h = clamp(v.y*0.5+0.5, 0.0, 1.0);
+
+        // Giorno
+        vec3 dayTop = vec3(0.25, 0.52, 0.95);
+        vec3 dayHzn = vec3(0.80, 0.88, 1.00);
+        vec3 day = mix3(dayHzn, dayTop, pow(h, 1.35));
+
+        // Notte
+        vec3 nightTop = vec3(0.01, 0.02, 0.06);
+        vec3 nightHzn = vec3(0.02, 0.03, 0.08);
+        vec3 night = mix3(nightHzn, nightTop, pow(h, 1.2));
+
+        float dayT = smoothstep(-0.15, 0.20, sunY);
+        vec3 col = mix3(night, day, dayT);
+
+        // Fascia tramonto vicino all'orizzonte
+        float dusk = 1.0 - smoothstep(0.10, 0.55, abs(sunY));
+        col += vec3(0.28, 0.13, 0.05) * dusk * (1.0 - h) * 0.75;
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `
+  })
+);
+scene.add(sky);
+
+/* ---------------- Luci principali ---------------- */
+const sunLight = new THREE.DirectionalLight(0xffffff, 1.1);
+sunLight.position.set(80, 80, 20);
+scene.add(sunLight);
+
+// Manteniamo sempre un minimo: scena mai troppo buia
+const ambient = new THREE.AmbientLight(0xffffff, 0.28);
+scene.add(ambient);
+
+/* ---------------- Suolo + pareti invisibili ---------------- */
+const groundMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 1.0, metalness: 0.0 });
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), groundMat);
+ground.rotation.x = -Math.PI/2;
+scene.add(ground);
+
+// Pareti invisibili (solo visive; per la collisione clampiamo la posizione)
+const wallMat = new THREE.MeshBasicMaterial({visible:false});
+const walls = new THREE.Group();
+scene.add(walls);
+const WALL_H = 12;
+const WALL_TH = 0.5;
+const BOUND = 95;
+[
+  {x:-BOUND, z:0, sx:WALL_TH, sz:BOUND*2},
+  {x: BOUND, z:0, sx:WALL_TH, sz:BOUND*2},
+  {x:0, z:-BOUND, sx:BOUND*2, sz:WALL_TH},
+  {x:0, z: BOUND, sx:BOUND*2, sz:WALL_TH},
+].forEach(w=>{
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w.sx, WALL_H, w.sz), wallMat);
+  m.position.set(w.x, WALL_H/2, w.z);
+  walls.add(m);
+});
+
+/* ---------------- "Glow" VISIVO economico (sprite) ---------------- */
+function makeGlowSprite(color=0x88aaff){
+  const size = 128;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const g = ctx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+  g.addColorStop(0.0, "rgba(255,255,255,1)");
+  g.addColorStop(0.2, "rgba(255,255,255,0.55)");
+  g.addColorStop(1.0, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,size,size);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+
+  const mat = new THREE.SpriteMaterial({
+    map: tex,
+    color: new THREE.Color(color),
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    opacity: 0.9
+  });
+  const s = new THREE.Sprite(mat);
+  s.scale.set(3.8, 3.8, 1);
+  return s;
+}
+
+/* ---------------- Lampade: 2 varianti ----------------
+   NOTA: l'EMISSIVE non illumina: per far luce aggiungiamo PointLight/SpotLight.
+   Intensità e distanza sono tarate per far vedere chiaramente l'effetto sul terreno. */
+
+const modeText = document.getElementById("modeText");
+let lightsEnabled = true;
+let lampMode = 0; // 0=cubi, 1=pilastri
+
+const lampGroups = [new THREE.Group(), new THREE.Group()];
+scene.add(lampGroups[0]);
+scene.add(lampGroups[1]);
+
+function makeLampCube(parent, pos, cfg){
+  const {
+    lightColor=0xffd37a,
+    emissiveColor=0xffd37a,
+    baseEmissive=0.25,
+    nightBoost=1.4,
+    baseLight=5.0,      // luce reale anche di giorno (ma bassa)
+    nightLight=55.0,    // luce reale di notte (alta)
+    distance=22,
+    spriteScale=4.0,
+    alwaysOn=false
+  } = cfg || {};
+
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1,1,1),
+    new THREE.MeshStandardMaterial({
+      color: 0x1f1f25,
+      roughness: 0.55,
+      metalness: 0.0,
+      emissive: new THREE.Color(emissiveColor),
+      emissiveIntensity: baseEmissive
+    })
+  );
+  mesh.position.copy(pos);
+
+  // Punto luce: illumina davvero l'ambiente
+  const light = new THREE.PointLight(lightColor, baseLight, distance, 2);
+  light.position.set(0, 0.8, 0);
+  mesh.add(light);
+
+  // Glow visivo (sprite)
+  const glow = makeGlowSprite(lightColor);
+  glow.scale.set(spriteScale, spriteScale, 1);
+  glow.position.set(0, 0.9, 0);
+  mesh.add(glow);
+
+  parent.add(mesh);
+
+  return { mesh, light, glow, baseEmissive, nightBoost, baseLight, nightLight, distance, alwaysOn };
+}
+
+function makeLampPillar(parent, pos, cfg){
+  const {
+    lightColor=0x66ccff,
+    emissiveColor=0x66ccff,
+    baseEmissive=0.35,
+    nightBoost=1.2,
+    baseLight=6.0,
+    nightLight=75.0,
+    distance=28,
+    spriteScale=5.0,
+    alwaysOn=false
+  } = cfg || {};
+
+  const group = new THREE.Group();
+  group.position.copy(pos);
+
+  // pilastro
+  const pole = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.12,0.16,2.0,24),
+    new THREE.MeshStandardMaterial({ color:0x14161b, roughness:0.9, metalness:0.1 })
+  );
+  pole.position.y = 1.0;
+  group.add(pole);
+
+  // "lampadina" emissiva
+  const bulb = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 24, 16),
+    new THREE.MeshStandardMaterial({
+      color: 0x222233,
+      roughness: 0.35,
+      metalness: 0.0,
+      emissive: new THREE.Color(emissiveColor),
+      emissiveIntensity: baseEmissive
+    })
+  );
+  bulb.position.y = 2.15;
+  group.add(bulb);
+
+  // luce reale: PointLight + un piccolo SpotLight verso il basso per un cono più evidente
+  const point = new THREE.PointLight(lightColor, baseLight, distance, 2);
+  point.position.set(0, 2.15, 0);
+  group.add(point);
+
+  const spot = new THREE.SpotLight(lightColor, baseLight*0.45, distance, Math.PI/5, 0.35, 1.5);
+  spot.position.set(0, 2.10, 0);
+  spot.target.position.set(0, 0, 0);
+  group.add(spot);
+  group.add(spot.target);
+
+  // Glow visivo
+  const glow = makeGlowSprite(lightColor);
+  glow.scale.set(spriteScale, spriteScale, 1);
+  glow.position.set(0, 2.15, 0);
+  group.add(glow);
+
+  parent.add(group);
+
+  return { mesh: bulb, point, spot, glow, baseEmissive, nightBoost, baseLight, nightLight, distance, alwaysOn };
+}
+
+// Costruiamo le lampade (2 set distinti)
+const lampsA = []; // cubi
+const lampsB = []; // pilastri
+
+// 2 "sempre accesi" (facili da vedere anche di giorno)
+lampsA.push(makeLampCube(lampGroups[0], new THREE.Vector3( 6,0.5, 0), { lightColor:0x66ccff, emissiveColor:0x66ccff, baseEmissive:0.85, nightBoost:0.55, baseLight:18, nightLight:35, distance:26, spriteScale:5.0, alwaysOn:true }));
+lampsA.push(makeLampCube(lampGroups[0], new THREE.Vector3(-6,0.5, 0), { lightColor:0xff77aa, emissiveColor:0xff77aa, baseEmissive:0.80, nightBoost:0.60, baseLight:16, nightLight:32, distance:26, spriteScale:5.0, alwaysOn:true }));
+
+for (let i=0;i<6;i++){
+  const a = (i/6)*Math.PI*2;
+  lampsA.push(
+    makeLampCube(
+      lampGroups[0],
+      new THREE.Vector3(Math.cos(a)*10, 0.5, Math.sin(a)*10),
+      { lightColor:0xffd37a, emissiveColor:0xffd37a, baseEmissive:0.22, nightBoost:1.6, baseLight:4, nightLight:70, distance:22, spriteScale:4.6 }
+    )
+  );
+}
+
+// Set B (pilastri): luce più “conica” e più ampia
+lampsB.push(makeLampPillar(lampGroups[1], new THREE.Vector3( 8,0, 2), { lightColor:0x66ccff, emissiveColor:0x66ccff, baseEmissive:0.75, nightBoost:0.65, baseLight:20, nightLight:40, distance:30, spriteScale:5.8, alwaysOn:true }));
+lampsB.push(makeLampPillar(lampGroups[1], new THREE.Vector3(-8,0, 2), { lightColor:0xff77aa, emissiveColor:0xff77aa, baseEmissive:0.72, nightBoost:0.70, baseLight:18, nightLight:38, distance:30, spriteScale:5.8, alwaysOn:true }));
+
+for (let i=0;i<6;i++){
+  const a = (i/6)*Math.PI*2;
+  lampsB.push(
+    makeLampPillar(
+      lampGroups[1],
+      new THREE.Vector3(Math.cos(a)*12, 0, Math.sin(a)*12),
+      { lightColor:0xffd37a, emissiveColor:0xffd37a, baseEmissive:0.20, nightBoost:1.8, baseLight:4, nightLight:85, distance:28, spriteScale:5.2 }
+    )
+  );
+}
+
+// Mostriamo inizialmente solo il set A
+lampGroups[0].visible = true;
+lampGroups[1].visible = false;
+
+/* Toggle */
+addEventListener("keydown", (e) => {
+  if (e.code === "KeyL") lightsEnabled = !lightsEnabled;
+
+  if (e.code === "KeyV") {
+    lampMode = 1 - lampMode;
+    lampGroups[0].visible = lampMode === 0;
+    lampGroups[1].visible = lampMode === 1;
+    modeText.textContent = "Lampade: " + (lampMode === 0 ? "Cubi" : "Pilastri");
+  }
+});
+
+/* ---------------- Loop giorno/notte ---------------- */
+const clock = new THREE.Clock();
+let sunAngle = 0;
+
+function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+function lerp(a,b,t){ return a*(1-t)+b*t; }
+
+function animate(){
+  const dt = clock.getDelta();
+
+  // movimento FPS
+  if (controls.isLocked) {
+    const speed = 6 * dt;
+    if (keys["KeyW"]) controls.moveForward(speed);
+    if (keys["KeyS"]) controls.moveForward(-speed);
+    if (keys["KeyA"]) controls.moveRight(-speed);
+    if (keys["KeyD"]) controls.moveRight(speed);
+
+    const p = controls.getObject().position;
+    p.y = 1.7;
+    p.x = THREE.MathUtils.clamp(p.x, -BOUND, BOUND);
+    p.z = THREE.MathUtils.clamp(p.z, -BOUND, BOUND);
+  }
+
+  // sole
+  sunAngle += dt * 0.05;
+  const sunY = Math.sin(sunAngle);
+  const sunX = Math.cos(sunAngle);
+
+  sunLight.position.set(sunX*120, sunY*120, 35);
+
+  // dayFactor (1=giorno, 0=notte)
+  const dayFactor = clamp01((sunY + 0.12) / 0.70);
+  const nightFactor = 1 - dayFactor;
+
+  // intensità sole + colore
+  sunLight.intensity = lerp(0.02, 1.35, dayFactor);
+  const warm = 1 - Math.abs(sunY);
+  sunLight.color.setHSL(lerp(0.60, 0.10, warm), lerp(0.12, 0.90, warm), lerp(0.45, 0.78, dayFactor));
+
+  // ambient: non scende mai troppo
+  ambient.intensity = lerp(0.22, 0.34, dayFactor);
+
+  // cielo
+  sky.material.uniforms.sunY.value = sunY;
+
+  // lampade A (cubi)
+  for (const L of lampsA) {
+    const t = L.alwaysOn ? lerp(0.65, 1.0, dayFactor) : nightFactor;
+
+    // "glow" visivo
+    L.mesh.material.emissiveIntensity = L.baseEmissive + (L.nightBoost * t);
+    L.glow.material.opacity = lerp(0.65, 0.95, clamp01(L.mesh.material.emissiveIntensity));
+
+    // luce reale
+    L.light.intensity = lightsEnabled ? lerp(L.baseLight, L.nightLight, t) : 0.0;
+    L.light.distance = L.distance; // costante
+  }
+
+  // lampade B (pilastri)
+  for (const L of lampsB) {
+    const t = L.alwaysOn ? lerp(0.65, 1.0, dayFactor) : nightFactor;
+
+    L.mesh.material.emissiveIntensity = L.baseEmissive + (L.nightBoost * t);
+    L.glow.material.opacity = lerp(0.65, 0.95, clamp01(L.mesh.material.emissiveIntensity));
+
+    const inten = lightsEnabled ? lerp(L.baseLight, L.nightLight, t) : 0.0;
+    L.point.intensity = inten;
+    L.point.distance = L.distance;
+
+    L.spot.intensity = inten * 0.55;
+    L.spot.distance = L.distance;
+  }
+
+  // esposizione: un filo più alta di notte per mantenere leggibilità
+  renderer.toneMappingExposure = lerp(1.28, 1.05, dayFactor);
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* Resize */
+addEventListener("resize", () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2263 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Soluzioni DIM - 3D</title>
+
+  <!-- Icona tab (favicon) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%2310151f'/%3E%3Ctext x='50' y='66' text-anchor='middle' font-size='64' fill='%23dbeafe'%3E%CF%88%C2%B2%3C/text%3E%3C/svg%3E">
+
+  <!-- KaTeX (LaTeX) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+  <style>
+    :root{
+      --bg:#070a12;
+      --panel: rgba(12, 16, 28, .88);
+      --panel2: rgba(12, 16, 28, .68);
+      --border: rgba(255,255,255,.12);
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --good:#39d98a;
+      --warn:#ffcc66;
+      --link:#2b7fff;
+      --radius: 16px;
+    }
+
+    html, body{
+      margin:0;
+      height:100%;
+      background:var(--bg);
+      overflow:hidden;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+    }
+
+    #c{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      display:block;
+      touch-action:none;
+    }
+
+    /* Top bar */
+    #topbar{
+      position:fixed;
+      left:10px;
+      right:10px;
+      top:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      z-index:30;
+      pointer-events:auto;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      background: var(--panel2);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--txt);
+      padding:10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .btn:hover{ background: rgba(255,255,255,.10); }
+
+    .btn.primary{
+      background: rgba(43,127,255,.18);
+      border-color: rgba(43,127,255,.38);
+    }
+    .btn.primary:hover{ background: rgba(43,127,255,.25); }
+
+    .btn.danger{
+      background: rgba(255,90,90,.12);
+      border-color: rgba(255,90,90,.35);
+    }
+    .btn.danger:hover{ background: rgba(255,90,90,.18); }
+
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      white-space: nowrap;
+    }
+
+    /* Crosshair */
+/* Orbital QM crosshair (min thickness, standard size, no glow) */
+#crosshair.cx-orbital{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 22px;              /* dim standard "poco" */
+  height: 22px;
+  pointer-events: none;
+  z-index: 15;
+  filter: none;             /* no glow */
+}
+
+/* 3 ellissi */
+#crosshair.cx-orbital .orb{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 70%;
+  transform: translate(-50%,-50%) rotate(0deg);
+  border: 1px solid rgba(255,255,255,.70);  /* spessore minimo */
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+#crosshair.cx-orbital .orb.o2{ transform: translate(-50%,-50%) rotate(60deg); }
+#crosshair.cx-orbital .orb.o3{ transform: translate(-50%,-50%) rotate(120deg); }
+
+/* puntino centrale */
+#crosshair.cx-orbital .dot{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+}
+
+/* Hint toast */
+    #hint{
+      position: fixed;
+      left:50%;
+      top:60px;
+      transform: translateX(-50%);
+      max-width: min(820px, 94vw);
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(10,14,24,.62);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: 13px;
+      color: var(--muted);
+      pointer-events:none;
+      z-index:22;
+      opacity:0;
+      transition: opacity .18s ease;
+    }
+    #hint.show{ opacity:1; }
+
+    /* Drawers (non modali) */
+    .drawer{
+      position:fixed;
+      top: 64px;
+      bottom: 12px;
+      width: min(420px, 92vw);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 18px 40px rgba(0,0,0,.45);
+      z-index:40;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      pointer-events:auto;
+      will-change: transform;
+      transition: transform .22s ease, opacity .22s ease;
+      opacity: 1;
+    }
+
+    /* Closed state: off-screen */
+    #drawerInv{ left:10px; transform: translateX(-120%); }
+    #drawerSol{ right:10px; transform: translateX(120%); width: min(840px, 96vw); }
+
+    /* Open state */
+    #drawerInv.open{ transform: translateX(0); }
+    #drawerSol.open{ transform: translateX(0); }
+
+    .dhead{
+      padding: 12px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+    }
+    .dhead strong{ font-size: 13px; letter-spacing:.02em; }
+    .dhead .right{ display:flex; gap:8px; align-items:center; }
+
+    .dbody{
+      padding: 10px 12px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      min-height:0;
+    }
+
+    .search{
+      width:100%;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--txt);
+      outline: none;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    /* Helper card (DIM 0 Helper) */
+.helper-card{
+  padding: 12px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.045);
+  margin: 4px 0 12px;
+}
+.helper-title{
+  font-weight: 1100;
+  letter-spacing: .02em;
+  font-size: 13px;
+}
+.helper-sub{
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+.helper-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.helper-col{
+  border:1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.14);
+  border-radius: 12px;
+  padding: 10px 10px;
+}
+.helper-h{
+  font-weight: 1100;
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: rgba(255,255,255,.88);
+}
+.helper-col ul{
+  margin: 0 0 0 16px;
+  padding: 0;
+  color: rgba(255,255,255,.80);
+  font-size: 12px;
+  line-height: 1.28;
+}
+.helper-col li{ margin: 4px 0; }
+.helper-note{
+  margin-top: 10px;
+  color: rgba(255,255,255,.76);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+@media (max-width: 520px){
+  .helper-grid{ grid-template-columns: 1fr; }
+}
+
+.dim-item{
+      display:grid;
+      grid-template-columns: 28px 1fr auto;
+      gap:10px;
+      padding:10px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      margin-bottom: 10px;
+      align-items:center;
+    }
+    .dim-num{
+      width:28px;
+      height:28px;
+      display:grid;
+      place-items:center;
+      border-radius: 10px;
+      background: rgba(255,255,255,.10);
+      font-weight: 1000;
+      font-size: 12px;
+    }
+    .dim-title{
+      font-weight: 1000;
+      font-size: 12.5px;
+      line-height:1.15;
+    }
+    .dim-sub{
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.25;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      font-weight: 1000;
+      font-size: 12px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .pill.ok{ border-color: rgba(57,217,138,.35); background: rgba(57,217,138,.10); }
+    .pill.miss{ border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.10); }
+
+    #solText{
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.45;
+      color: rgba(255,255,255,.92);
+    }
+
+    /* Inline helpers used by BOSS_DIMS html */
+    .br{ display:inline-block; }
+
+    /* Markdown-ish formatting inside soluzione */
+    #solText h1, #solText h2, #solText h3, #solText h4{
+      margin: 12px 0 8px;
+      line-height: 1.25;
+      letter-spacing: .2px;
+    }
+    #solText h1{ font-size: 18px; }
+    #solText h2{ font-size: 16.5px; }
+    #solText h3{ font-size: 15.5px; }
+    #solText h4{ font-size: 14.5px; }
+
+    #solText p{ margin: 6px 0; }
+    #solText ul, #solText ol{
+      margin: 6px 0 8px 18px;
+      padding: 0;
+    }
+    #solText li{ margin: 4px 0; }
+
+    /* Inventory title markup */
+    .dim-title b, .dim-title strong{ font-weight: 1000; }
+    .dim-title em{ color: rgba(255,255,255,.86); }
+
+    .sol-meta{
+      color: var(--muted);
+      font-size:12px;
+      font-weight:900;
+      margin-top:2px;
+    }
+
+    /* Mobile controls */
+    #mobileControls{
+      position: fixed;
+      inset: auto 0 0 0;
+      padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+      display:none;
+      justify-content: space-between;
+      gap: 10px;
+      pointer-events:auto;
+      z-index:35;
+    }
+
+    .pad{
+      display:grid;
+      grid-template-columns: 54px 54px 54px;
+      grid-template-rows: 54px 54px 54px;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(10,14,24,.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      user-select:none;
+      -webkit-user-select:none;
+    }
+    .pad button{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.07);
+      color: var(--txt);
+      border-radius: 14px;
+      font-weight: 1000;
+      font-size: 16px;
+      cursor:pointer;
+      touch-action:none;
+    }
+    .pad button:active{ transform: scale(.98); background: rgba(255,255,255,.10); }
+
+    @media (hover:none) and (pointer:coarse){
+      #mobileControls{ display:flex; }
+      #crosshair{ display:none; }
+    }
+
+    @media (max-width: 520px){
+      .drawer{ width: calc(100vw - 20px); }
+      /* Su schermi piccoli mettiamo entrambi i drawer sul lato sinistro (full width) */
+      #drawerSol{ left:10px; right:10px; }
+      #drawerSol{ transform: translateX(120%); }
+      #drawerSol.open{ transform: translateX(0); }
+    }
+  
+/* =========================
+   Loader overlay (Orbital + Wave)
+   ========================= */
+#loaderStage{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(1200px 900px at 70% 30%, rgba(255,255,255,.07), transparent 60%),
+    radial-gradient(800px 650px at 30% 80%, rgba(120,180,255,.06), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.0));
+  z-index: 120;
+  opacity: 1;
+  transition: opacity .28s ease;
+  pointer-events: auto;
+}
+#loaderStage.hide{
+  opacity: 0;
+  pointer-events: none;
+}
+
+#loaderHud{
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12.5px;
+  opacity: .92;
+  pointer-events: none;
+  z-index: 121;
+}
+
+    #loaderHud.hide{ opacity:0; transition: opacity .28s ease; }
+.loaderChip{
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255,255,255,.88);
+  font-weight: 800;
+  letter-spacing: .1px;
+}
+
+#loaderPanel{
+  width: min(640px, 92vw);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.42);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 16px 16px 14px;
+  box-shadow: 0 30px 70px rgba(0,0,0,.45);
+}
+#loaderHead{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+#loaderHead b{ font-weight: 900; letter-spacing:.2px; }
+#loaderHead .small{ font-size:12px; opacity:.84; color: rgba(255,255,255,.78); }
+#loaderSub{ margin-top:6px; font-size:12.5px; opacity:.86; color: rgba(255,255,255,.78); }
+
+/* Orbital icon */
+#loaderOrb{
+  width: 52px; height: 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+#loaderOrb .ring{
+  position:absolute; inset: 10px;
+  border-radius: 999px;
+  border: 2px solid rgba(130,190,255,.65);
+  filter: drop-shadow(0 0 10px rgba(130,190,255,.22));
+  animation: loaderPulse 1.35s ease-in-out infinite;
+}
+#loaderOrb .ring::after{
+  content:"";
+  position:absolute; left:50%; top:50%;
+  transform: translate(-50%,-50%);
+  width: 6px; height: 6px; border-radius:999px;
+  background: rgba(255,211,122,.90);
+  box-shadow: 0 0 16px rgba(255,211,122,.25);
+}
+@keyframes loaderPulse{
+  0%{ transform: scale(.92); opacity:.55; }
+  50%{ transform: scale(1.06); opacity:.95; }
+  100%{ transform: scale(.92); opacity:.55; }
+}
+
+#loaderRow{
+  margin-top: 14px;
+  display:flex;
+  align-items:center;
+  gap: 14px;
+}
+
+#loaderProg{
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  overflow:hidden;
+  flex: 1 1 auto;
+}
+#loaderFill{
+  position:absolute; left:0; top:0; bottom:0;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(130,190,255,.85), rgba(255,211,122,.78));
+  filter: drop-shadow(0 0 10px rgba(130,190,255,.20));
+}
+#loaderFill::after{
+  content:"";
+  position:absolute; inset:-40% -20%;
+  background:
+    radial-gradient(circle at 10% 50%, rgba(255,255,255,.65), transparent 35%),
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), transparent 40%),
+    radial-gradient(circle at 60% 60%, rgba(255,255,255,.45), transparent 42%),
+    radial-gradient(circle at 85% 40%, rgba(255,255,255,.30), transparent 45%);
+  opacity:.65;
+  animation: loaderWave 1.6s linear infinite;
+}
+@keyframes loaderWave{
+  from{ transform: translateX(-18%); }
+  to  { transform: translateX(18%); }
+}
+#loaderGloss{
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0));
+  pointer-events:none;
+}
+#loaderPct{
+  position:absolute; right:10px; top:50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: rgba(255,255,255,.9);
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
+  mix-blend-mode: screen;
+  pointer-events:none;
+  font-weight: 900;
+}
+
+@media (max-width: 520px){
+  #loaderRow{ gap: 10px; }
+  #loaderOrb{ width: 46px; height: 46px; }
+}
+
+</style>
+</head>
+
+<body>
+  <canvas id="c"></canvas>
+
+<!-- Loader overlay -->
+<div id="loaderHud">
+  <div class="loaderChip" id="loaderChip1">Loading textures…</div>
+  <div class="loaderChip" id="loaderChip2">∑ maps: —</div>
+  <div class="loaderChip">ψ(x,t)</div>
+</div>
+<div id="loaderStage" aria-label="loader">
+  <div id="loaderPanel" role="dialog" aria-label="Caricamento">
+    <div id="loaderHead">
+      <b>Caricamento</b>
+      <span class="small">Orbital + Wave</span>
+    </div>
+    <div id="loaderSub">Preparazione shader, caricamento mappe PBR, PMREM…</div>
+    <div id="loaderRow">
+      <div id="loaderOrb" aria-hidden="true"><div class="ring"></div></div>
+      <div id="loaderProg" aria-label="progress">
+        <div id="loaderFill"></div>
+        <div id="loaderGloss"></div>
+        <div id="loaderPct">0%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div id="topbar">
+    <div class="chip">
+      <button class="btn" id="btnBack" title="Torna indietro">Indietro</button>
+      <button class="btn primary" id="btnInv" title="Apri/chiudi help e problemi">Help e problemi</button>
+      <button class="btn" id="btnSol" title="Apri/chiudi ultima soluzione">Ultima soluzione</button>
+      <button class="btn" id="btnLights" title="Toggle luci (L)">L</button>
+      <button class="btn" id="btnMusic" title="Musica">♪</button>
+    </div>
+    <div class="chip">
+      <span class="mini" id="miniHelp">Desktop: clicca per mouse-look - WASD - E interagisci - ESC libera il mouse</span>
+    </div>
+  </div>
+
+  <div id="hint"></div>
+  <div id="crosshair" class="cx-orbital">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div id="mobileControls">
+    <div class="pad" aria-label="Controlli movimento">
+      <span></span><button id="mUp">↑</button><span></span>
+      <button id="mLeft">←</button><button id="mDown">↓</button><button id="mRight">→</button>
+      <span></span><span></span><span></span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;justify-content:flex-end;">
+      <button class="btn primary" id="mInteract">Interagisci</button>
+    </div>
+  </div>
+
+  <!-- Drawer: Inventory -->
+  <div class="drawer" id="drawerInv">
+    <div class="dhead">
+      <div>
+        <strong>Help e problemi</strong>
+        <div class="sol-meta" id="invMeta">-</div>
+      </div>
+      <div class="right">
+        <button class="btn danger" id="btnInvClose">Chiudi</button>
+      </div>
+    </div>
+    <div class="dbody">
+<div id="invHelper" class="helper-card">
+  <div class="helper-title">DIM 0 Helper</div>
+  <div class="helper-sub">Comandi + navigazione</div>
+
+  <div class="helper-grid">
+    <div class="helper-col">
+      <div class="helper-h">Desktop</div>
+      <ul>
+        <li><b>Click</b> nel canvas: attiva mouse-look (pointer lock)</li>
+        <li><b>W A S D</b>: movimento</li>
+        <li><b>E</b>: interagisci (apri la DIM che stai guardando)</li>
+        <li><b>I</b>: apri/chiudi <i>Help e problemi</i></li>
+        <li><b>O</b>: apri/chiudi <i>Ultima soluzione</i></li>
+        <li><b>L</b>: toggle luci</li>
+        <li><b>ESC</b>: chiude pannelli e libera il mouse</li>
+      </ul>
+    </div>
+
+    <div class="helper-col">
+      <div class="helper-h">Mobile</div>
+      <ul>
+        <li><b>Joystick</b>: movimento</li>
+        <li><b>Trascina</b> sullo schermo: guarda attorno</li>
+        <li><b>Interagisci</b>: apri la DIM guardata</li>
+        <li>Pulsanti in alto: <b>Help e problemi</b>, <b>Ultima soluzione</b>, <b>L</b> luci</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="helper-note">
+    Suggerimento: nella lista puoi fare <b>doppio click</b> su una DIM (1–18) per teletrasportarti vicino al blocco.
+  </div>
+</div>
+      <input class="search" id="invSearch" placeholder="Cerca DIM o parole..." />
+      <div id="invList"></div>
+    </div>
+  </div>
+
+  <!-- Drawer: Solution -->
+  <div class="drawer" id="drawerSol">
+    <div class="dhead">
+      <div>
+        <strong id="solTitle">Soluzione</strong>
+        <div class="sol-meta" id="solSub">-</div>
+      </div>
+      <div class="right">
+        <button class="btn" id="btnCopy">Copia</button>
+        <button class="btn danger" id="btnSolClose">Chiudi</button>
+      </div>
+    </div>
+    <div class="dbody">
+      <div id="solText"></div>
+    </div>
+  </div>
+
+  <!-- Three.js + KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+  <script>
+  (function(){
+    "use strict";
+
+    // Local assets (metti assets3d/ nella cartella boss/ assieme a questo file)
+    const ASSETS = {
+      sky: "assets3d/skybox_clouds_sun_4096x2048.jpg",
+
+      // High-definition PBR sets (see assets3d/ folder)
+      marble: {
+        color: "assets3d/Marble012_4K-JPG/Marble012_4K-JPG_Color.jpg",
+        roughness: "assets3d/Marble012_4K-JPG/Marble012_4K-JPG_Roughness.jpg",
+        normal: "assets3d/Marble012_4K-JPG/Marble012_4K-JPG_NormalGL.jpg",
+      },
+
+      // Part 1 blocks: gold (4K)
+metalP1: {
+  color: "assets3d/Metal048C_4K-JPG/Metal048C_4K-JPG_Color.jpg",
+  roughness: "assets3d/Metal048C_4K-JPG/Metal048C_4K-JPG_Roughness.jpg",
+  metalness: "assets3d/Metal048C_4K-JPG/Metal048C_4K-JPG_Metalness.jpg",
+  normal: "assets3d/Metal048C_4K-JPG/Metal048C_4K-JPG_NormalGL.jpg",
+},
+
+// Part 2 blocks: use the previous P3 steel/industrial
+metalP2: {
+  color: "assets3d/Metal034_4K-JPG/Metal034_4K-JPG_Color.jpg",
+  roughness: "assets3d/Metal034_4K-JPG/Metal034_4K-JPG_Roughness.jpg",
+  metalness: "assets3d/Metal034_4K-JPG/Metal034_4K-JPG_Metalness.jpg",
+  normal: "assets3d/Metal034_4K-JPG/Metal034_4K-JPG_NormalGL.jpg",
+},
+
+// Part 3 blocks + columns: use Metal048A (8K)
+metalP3: {
+  color: "assets3d/Metal048A_8K-JPG/Metal048A_8K-JPG_Color.jpg",
+  roughness: "assets3d/Metal048A_8K-JPG/Metal048A_8K-JPG_Roughness.jpg",
+  metalness: "assets3d/Metal048A_8K-JPG/Metal048A_8K-JPG_Metalness.jpg",
+  normal: "assets3d/Metal048A_8K-JPG/Metal048A_8K-JPG_NormalGL.jpg",
+},
+
+// Decorative metal (lamp poles + platforms): single texture (preview)
+metalDecorPng: "assets3d/Metal049A_8K-JPG/Metal049A.png",
+    }
+;
+
+    // TXT files: puoi metterli in boss/ oppure in root (un livello sopra)
+    const TXT_FILES = [
+      { paths: ["./P1_DIM_0-6.txt", "../P1_DIM_0-6.txt"] },
+      { paths: ["./P2_DIM_7-12.txt", "../P2_DIM_7-12.txt"] },
+      { paths: ["./P3_DIM_13-18.txt", "../P3_DIM_13-18.txt"] },
+    ];
+
+    // 18 blocchi 3D per DIM 1-18. DIM 0 vive nell'inventario.
+    const DIM_BLOCKS = Array.from({length: 18}, (_,i)=> i+1);
+
+    // Testi corretti (titoli/descrizioni) per inventario + hint (solo testi + formattazioni)
+    const BOSS_DIMS = [
+      {
+        id: 0,
+        part: 1,
+        title: 'DIM 0 (Base)',
+        plain: 'DIM 0 (Base): Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d\'Onda, 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un\'Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d\'Onda (Collasso della Funzione d\'Onda)',
+        html: String.raw`<b>DIM 0 (Base):</b> Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d&rsquo;Onda, 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un&rsquo;Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d&rsquo;Onda (Collasso della Funzione d&rsquo;Onda)`,
+      },
+      {
+        id: 1,
+        part: 1,
+        title: 'DIM 1',
+        plain: 'DIM 1: [Conservazione Globale e "Locale" della Probabilita] (Hermiticita di H + [Equazione di Continuita]) (fino a j⃗ e Gauss-Green)',
+        html: String.raw`<b>DIM 1:</b> <span class="br">[Conservazione Globale e &quot;Locale&quot; della Probabilita]</span> <em>(Hermiticita di \(H\) + <span class="br">[Equazione di Continuita]</span>) (fino a \(\vec{j}\) e Gauss-Green)</em>`,
+      },
+      {
+        id: 2,
+        part: 1,
+        title: 'DIM 2',
+        plain: 'DIM 2: [Indeterminazione di Heisenberg] (da commutatori): (ΔA)^2(ΔB)^2 >= 1/4 |<[A,B]>|^2, con A=x, B=p. Identificazione dell\'indeterminazione minima (uguaglianza) e commento sul pacchetto d\'onda gaussiano (stato a minima indeterminazione).',
+        html: String.raw`<b>DIM 2:</b> <span class="br">[Indeterminazione di Heisenberg]</span> <em>(da commutatori)</em>: \((\Delta A)^2(\Delta B)^2 \ge \frac{1}{4}\,|\langle [A,B]\rangle|^2\), con \(A=x\), \(B=p\). Identificazione dell&rsquo;indeterminazione minima <em>(uguaglianza)</em> e commento sul pacchetto d&rsquo;onda gaussiano (stato a minima indeterminazione).`,
+      },
+      {
+        id: 3,
+        part: 1,
+        title: 'DIM 3',
+        plain: 'DIM 3: [Compatibili] <=> [A,B] = 0 ([Commutano]) (Non-deg + Deg)',
+        html: String.raw`<b>DIM 3:</b> <span class="br">[Compatibili]</span> &lt;=&gt; \([A,B]=0\) (<span class="br">[Commutano]</span>) (Non-deg + Deg)`,
+      },
+      {
+        id: 4,
+        part: 1,
+        title: 'DIM 4',
+        plain: 'DIM 4: Valori di Aspettazione e [Th. di Ehrenfest] + d<x>/dt, d<p>/dt + Evoluzione temporale degli operatori (Schrodinger/Heisenberg/Interaction) + Simmetrie e conservazione (generatori di traslazioni/rotazioni)',
+        html: String.raw`<b>DIM 4:</b> Valori di Aspettazione e <span class="br">[Th. di Ehrenfest]</span> + \(\frac{d\langle x\rangle}{dt}\), \(\frac{d\langle p\rangle}{dt}\) + Evoluzione temporale degli operatori (Schrodinger/Heisenberg/Interaction) + Simmetrie e conservazione (generatori di traslazioni/rotazioni)`,
+      },
+      {
+        id: 5,
+        part: 1,
+        title: 'DIM 5',
+        plain: 'DIM 5: Considerazioni Fisiche (Energetiche e Potenziale) + Profilo Generico del Potenziale / [Particella Libera] (autofunzioni di p-hat) + Confronto QM/CL + Step/[Gradino] + [Barriera] + [Buca (finite/infinite)]: Forme ψ, Bordi, R, T via Corrente + Analogia Ottica + [Parita] + Stati legati vs diffusione',
+        html: String.raw`<b>DIM 5:</b> Considerazioni Fisiche <em>(Energetiche e Potenziale)</em> + Profilo Generico del Potenziale / <span class="br">[Particella Libera]</span> (autofunzioni di \(\hat p\)) + Confronto QM/CL + Step/<span class="br">[Gradino]</span> + <span class="br">[Barriera]</span> + <span class="br">[Buca (finite/infinite)]</span>: Forme \(\psi\), Bordi, \(R\), \(T\) via Corrente + Analogia Ottica + <span class="br">[Parita]</span> + Stati legati vs diffusione`,
+      },
+      {
+        id: 6,
+        part: 1,
+        title: 'DIM 6',
+        plain: 'DIM 6: Considerazioni Fisiche (Energetiche e Potenziale) + Confronto QM/CL + [OA Operationale]: a, a†, N, Spettro, Ladder',
+        html: String.raw`<b>DIM 6:</b> Considerazioni Fisiche <em>(Energetiche e Potenziale)</em> + Confronto QM/CL + <span class="br">[OA Operationale]</span>: \(a, a^\dagger, N\), Spettro, Ladder`,
+      },
+      {
+        id: 7,
+        part: 2,
+        title: 'DIM 7',
+        plain: 'DIM 7: Perturbazioni [Stazionarie] - [Non-deg] E^(1), |ψ^(1)>, E^(2) + [Deg] (Secolare + Diagonalizzazione in S_n)',
+        html: String.raw`<b>DIM 7:</b> Perturbazioni <span class="br">[Stazionarie]</span> - <span class="br">[Non-deg]</span> \(E^{(1)},\ |\psi^{(1)}\rangle,\ E^{(2)}\) + <span class="br">[Deg]</span> (Secolare + Diagonalizzazione in \(S_n\))`,
+      },
+      {
+        id: 8,
+        part: 2,
+        title: 'DIM 8',
+        plain: 'DIM 8: [Composizione Momenti Angolari (generici)] J = J1 + J2: ICOC, CG, Ladder + Esempio Fermioni 1/2 + 1/2: Tripletto/Singoloetto (costruzione con J_-)',
+        html: String.raw`<b>DIM 8:</b> <span class="br">[Composizione Momenti Angolari (generici)]</span> \(J = J_1 + J_2\): ICOC, CG, Ladder + Esempio Fermioni \(\tfrac12 + \tfrac12\): Tripletto/Singoloetto (costruzione con \(J_-\))`,
+      },
+      {
+        id: 9,
+        part: 2,
+        title: 'DIM 9',
+        plain: 'DIM 9: [Particelle Identiche] (N particelle interagenti): P_ij, Autovalori ±1, [P, H] = 0, Simmetrico/Antisimmetrico, Pauli/Slater + Regola Singoletto/Tripletto <-> ℓ Pari/Dispari (Scambio => (-1)^ℓ)',
+        html: String.raw`<b>DIM 9:</b> <span class="br">[Particelle Identiche]</span> <em>(N particelle interagenti)</em>: \(P_{ij}\), Autovalori \(\pm 1\), \([P,H]=0\), Simmetrico/Antisimmetrico, Pauli/Slater + Regola Singoletto/Tripletto &lt;-&gt; \(\ell\) Pari/Dispari (Scambio =&gt; \((-1)^{\ell}\))`,
+      },
+      {
+        id: 10,
+        part: 2,
+        title: 'DIM 10',
+        plain: 'DIM 10: [Th. di Hellmann-Feynman] + Notazione spettroscopica: dE_n/dλ = <n|∂H/∂λ|n>',
+        html: String.raw`<b>DIM 10:</b> <span class="br">[Th. di Hellmann-Feynman]</span> + Notazione spettroscopica: \(\frac{dE_n}{d\lambda} = \langle n\,|\,\frac{\partial H}{\partial \lambda}\,|\,n\rangle\)`,
+      },
+      {
+        id: 11,
+        part: 2,
+        title: 'DIM 11',
+        plain: 'DIM 11: Correzioni Relativistiche: H_MV, H_D, [Spin-Orbita] H_SO (completo) + struttura fine dell\'idrogeno',
+        html: String.raw`<b>DIM 11:</b> Correzioni Relativistiche: \(H_{MV}\), \(H_D\), <span class="br">[Spin-Orbita]</span> \(H_{SO}\) (completo) + struttura fine dell&rsquo;idrogeno`,
+      },
+      {
+        id: 12,
+        part: 2,
+        title: 'DIM 12',
+        plain: 'DIM 12: [TDPT] - Variazione delle Costanti -> c_n(t); Transizioni (Risonanza -> emissione e assorbimento risonante + identificazione della [Pulsazione di Bohr]) => Perturbazione Costante e [Periodica]; Passaggio al [Continuo] fino alla [Regola d\'Oro di Fermi]; τ e Γ',
+        html: `<b>DIM 12:</b> <span class="br">[TDPT]</span> - Variazione delle Costanti -&gt; \(c_n(t)\); <em>Transizioni (Risonanza -&gt; emissione e assorbimento risonante + identificazione della <span class="br">[Pulsazione di Bohr]</span>)</em> =&gt; Perturbazione Costante e <span class="br">[Periodica]</span>; Passaggio al <span class="br">[Continuo]</span> fino alla <span class="br">[Regola d&rsquo;Oro di Fermi]</span>; \(\tau\) e \(\Gamma\)`,
+      },
+      {
+        id: 13,
+        part: 3,
+        title: 'DIM 13',
+        plain: 'DIM 13: Spin: Zeeman (normale), Interazione con campo EM (campo B uniforme), Spin 1/2 (spinori di Pauli), Esperimento di Stern-Gerlach + Stark',
+        html: `<b>DIM 13:</b> Spin: Zeeman (normale), Interazione con campo EM (campo \(B\) uniforme), Spin \(\tfrac12\) (spinori di Pauli), Esperimento di Stern-Gerlach + Stark`,
+      },
+      {
+        id: 14,
+        part: 3,
+        title: 'DIM 14',
+        plain: 'DIM 14: Eq. di Schrodinger in 3D: separazione variabili + OA 3D + Particella Libera 3D',
+        html: `<b>DIM 14:</b> Eq. di Schrodinger in 3D: separazione variabili + OA 3D + Particella Libera 3D`,
+      },
+      {
+        id: 15,
+        part: 3,
+        title: 'DIM 15',
+        plain: 'DIM 15: Regressioni Matematiche fino a [->] Momenti Angolari: commutatori, coordinate sferiche, armoniche sferiche, rappresentazioni matriciali + generatori di rotazioni/traslazioni; passaggio fisico + matematico a [Spin]',
+        html: `<b>DIM 15:</b> Regressioni Matematiche fino a <span class="br">[->]</span> Momenti Angolari: commutatori, coordinate sferiche, armoniche sferiche, rappresentazioni matriciali + generatori di rotazioni/traslazioni; passaggio fisico + matematico a <span class="br">[Spin]</span>`,
+      },
+      {
+        id: 16,
+        part: 3,
+        title: 'DIM 16',
+        plain: 'DIM 16: Potenziali centrali; Atomo di idrogeno (Coulombiano): soluzione (radiale) con Kummer/Laplace',
+        html: `<b>DIM 16:</b> Potenziali centrali; Atomo di idrogeno (Coulombiano): soluzione (radiale) con Kummer/Laplace`,
+      },
+      {
+        id: 17,
+        part: 3,
+        title: 'DIM 17',
+        plain: 'DIM 17: Buche di Potenziale: pareti finite e infinite (richiami a stati legati/diffusione, parita)',
+        html: `<b>DIM 17:</b> Buche di Potenziale: pareti finite e infinite (richiami a stati legati/diffusione, parita)`,
+      },
+      {
+        id: 18,
+        part: 3,
+        title: 'DIM 18',
+        plain: 'DIM 18: Limiti della classica + Esperimenti: Corpo Nero (BB), Effetto Fotoelettrico, [Compton (metodo covariante)] (risoluzione completa + significato fisico), Atomo di Bohr, spettri atomici, Doppia Fenditura, esperimento con elettroni, analogia ottica-meccanica',
+        html: `<b>DIM 18:</b> Limiti della classica + Esperimenti: Corpo Nero (BB), Effetto Fotoelettrico, <span class="br">[Compton (metodo covariante)]</span> (risoluzione completa + significato fisico), Atomo di Bohr, spettri atomici, Doppia Fenditura, esperimento con elettroni, analogia ottica-meccanica`,
+      },
+    ];
+
+    const DIM_META = {};
+    for(const d of BOSS_DIMS) DIM_META[d.id] = d;
+
+    function stripLeadingDimBold(html){
+      // remove initial "<b>DIM ...</b>" if present (for compact subtitles)
+      return (html||"").replace(/^<b>[^<]*<\/b>\s*/i, "").trim();
+    }
+
+
+    // UI refs
+    const canvas = document.getElementById("c");
+    const hintEl = document.getElementById("hint");
+
+// Loader UI
+const loaderStage = document.getElementById("loaderStage");
+const loaderFill = document.getElementById("loaderFill");
+const loaderPct = document.getElementById("loaderPct");
+const loaderChip2 = document.getElementById("loaderChip2");
+const loaderChip1 = document.getElementById("loaderChip1");
+const loaderHud = document.getElementById("loaderHud");
+const loaderSub = document.getElementById("loaderSub");
+
+function setLoader(pct, text){
+  const p = clamp(Math.round(pct), 0, 100);
+  if(loaderFill) loaderFill.style.width = p + "%";
+  if(loaderPct) loaderPct.textContent = p + "%";
+  if(text && loaderChip1) loaderChip1.textContent = text;
+}
+
+function hideLoader(){
+  if(loaderStage) loaderStage.classList.add("hide");
+  if(loaderHud) loaderHud.classList.add("hide");
+  // remove from layout after fade
+  setTimeout(()=>{
+    if(loaderStage && loaderStage.parentNode) loaderStage.parentNode.removeChild(loaderStage);
+    if(loaderHud && loaderHud.parentNode) loaderHud.parentNode.removeChild(loaderHud);
+  }, 420);
+}
+
+
+    const drawerInv = document.getElementById("drawerInv");
+    const drawerSol = document.getElementById("drawerSol");
+
+    const invMeta = document.getElementById("invMeta");
+    const invSearch = document.getElementById("invSearch");
+    const invList = document.getElementById("invList");
+
+    const solTitle = document.getElementById("solTitle");
+    const solSub = document.getElementById("solSub");
+    const solText = document.getElementById("solText");
+
+    const btnBack = document.getElementById("btnBack");
+    const btnInv = document.getElementById("btnInv");
+    const btnSol = document.getElementById("btnSol");
+    const btnLights = document.getElementById("btnLights");
+    const btnMusic = document.getElementById("btnMusic");
+    const btnInvClose = document.getElementById("btnInvClose");
+    const btnSolClose = document.getElementById("btnSolClose");
+    const btnCopy = document.getElementById("btnCopy");
+
+    // mobile
+    const mUp = document.getElementById("mUp");
+    const mDown = document.getElementById("mDown");
+    const mLeft = document.getElementById("mLeft");
+    const mRight = document.getElementById("mRight");
+    const mInteract = document.getElementById("mInteract");
+
+    // State
+    const solutions = {};   // dim -> raw text
+    const titles = {};      // dim -> title string
+    const hasSol = {};      // dim -> bool
+
+    // Open solution (for Copy)
+    let currentOpenDim = null;
+    let currentOpenRaw = "";
+
+    let scene, camera, renderer, clock, raycaster, hemi, sun, fill;
+    let blocks = [];        // {dim, mesh, label}
+    let colliders = [];     // {minX,maxX,minZ,maxZ, minY?, maxY?, dim?}
+    let focused = null;
+    let lightsEnabled = true;
+    let sunAngle = 0;
+    const lamps = [];      // lamp posts
+    const pillarCubes = []; // {mesh, mat, emissiveBase, nightBoost}
+
+    // =========================
+    // Audio (walking loop + collision glitch slice + background music)
+    // =========================
+    // Files (relative):
+    // ./audio/walking-on-concrete-ver-2-268513.mp3
+    // ./audio/glitch-sound-effect-96251.mp3
+    // ./audio/music_3d.mp3
+    let audioCtx = null, walkingBuf = null, glitchBuf = null, musicBuf = null;
+    let walkSrc = null, walkGain = null;
+    let musicSrc = null, musicGain = null;
+    const SLICE_DUR = 0.250; // 250ms
+    let musicEnabled = false;
+    let audioState = { moving:false, wasColliding:false, hitCooldown:0 };
+
+    function rand(a,b){ return a + Math.random()*(b-a); }
+
+    async function loadBuf(url){
+      const r = await fetch(url);
+      const a = await r.arrayBuffer();
+      return await audioCtx.decodeAudioData(a);
+    }
+
+    async function initAudioOnce(){
+      if(audioCtx) return;
+      audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      try{ walkingBuf = await loadBuf("./audio/walking-on-concrete-ver-2-268513.mp3"); }catch(e){}
+      try{ glitchBuf  = await loadBuf("./audio/glitch-sound-effect-96251.mp3"); }catch(e){}
+      try{ musicBuf   = await loadBuf("./audio/music_3d.mp3"); }catch(e){}
+      try{ await audioCtx.resume(); }catch(e){}
+      // Se la musica era richiesta prima che i buffer fossero pronti, avviala ora
+      if(musicEnabled) startMusic();
+    }
+
+    function startWalking(){
+      if(!audioCtx || !walkingBuf || walkSrc) return;
+      walkGain = audioCtx.createGain();
+      walkGain.gain.value = 0.0;
+      walkSrc = audioCtx.createBufferSource();
+      walkSrc.buffer = walkingBuf;
+      walkSrc.loop = true;
+      walkSrc.playbackRate.value = rand(0.95, 1.03);
+      walkSrc.connect(walkGain).connect(audioCtx.destination);
+      walkSrc.start();
+      const t = audioCtx.currentTime;
+      walkGain.gain.cancelScheduledValues(t);
+      walkGain.gain.linearRampToValueAtTime(0.18, t + 0.08);
+    }
+    function stopWalking(){
+      if(!audioCtx || !walkSrc || !walkGain) return;
+      const t = audioCtx.currentTime;
+      walkGain.gain.cancelScheduledValues(t);
+      walkGain.gain.linearRampToValueAtTime(0.0, t + 0.12);
+      const src = walkSrc; walkSrc = null;
+      setTimeout(()=>{ try{src.stop()}catch(e){} }, 140);
+    }
+
+    function playGlitchSlice250ms(){
+      if(!audioCtx || !glitchBuf) return;
+      const maxOff = Math.max(0, glitchBuf.duration - SLICE_DUR);
+      const offset = rand(0, maxOff);
+      const src = audioCtx.createBufferSource();
+      src.buffer = glitchBuf;
+      src.playbackRate.value = rand(0.95, 1.10);
+      const g = audioCtx.createGain();
+      g.gain.value = 0.32;
+      src.connect(g).connect(audioCtx.destination);
+      src.start(0, offset, SLICE_DUR);
+    }
+
+    function startMusic(){
+      if(!audioCtx || !musicBuf || musicSrc) return;
+      musicGain = audioCtx.createGain();
+      musicGain.gain.value = 0.0;
+      musicSrc = audioCtx.createBufferSource();
+      musicSrc.buffer = musicBuf;
+      musicSrc.loop = true;
+      musicSrc.playbackRate.value = 1.0;
+      musicSrc.connect(musicGain).connect(audioCtx.destination);
+      musicSrc.start();
+      const t = audioCtx.currentTime;
+      musicGain.gain.cancelScheduledValues(t);
+      musicGain.gain.linearRampToValueAtTime(0.22, t + 0.18);
+    }
+    function stopMusic(){
+      if(!audioCtx || !musicSrc || !musicGain) return;
+      const t = audioCtx.currentTime;
+      musicGain.gain.cancelScheduledValues(t);
+      musicGain.gain.linearRampToValueAtTime(0.0, t + 0.22);
+      const src = musicSrc; musicSrc = null;
+      setTimeout(()=>{ try{src.stop()}catch(e){} }, 260);
+    }
+    function toggleMusic(){
+      musicEnabled = !musicEnabled;
+      if(musicEnabled){
+        // se non abbiamo ancora inizializzato audio, segniamo e partiamo dopo initAudioOnce()
+        if(audioCtx && musicBuf) startMusic();
+      }else{
+        stopMusic();
+      }
+      if(typeof btnMusic !== "undefined" && btnMusic){
+        btnMusic.classList.toggle("primary", musicEnabled);
+      }
+    }
+
+    // controls
+    let yaw = 0, pitch = 0;
+    let pointerLocked = false;
+
+    const keys = { forward:false, back:false, left:false, right:false };
+    const touchKeys = { forward:false, back:false, left:false, right:false };
+    let lookTouchActive = false;
+    let lastTouchX=0, lastTouchY=0;
+
+    const isTouch = (("ontouchstart" in window) || navigator.maxTouchPoints > 0);
+
+    function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
+    function safeDash(s){
+      return (s||"")
+        // normalize various unicode dashes/minus to ASCII "-"
+        .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
+    }
+
+    
+    
+    // --- ID label sprite (semplice, senza CSS2DRenderer) ---
+    function makeLabelSprite(text){
+      const W = 256, H = 128;
+      const canvas = document.createElement("canvas");
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext("2d");
+
+      // rounded rect
+      const r = 24;
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = "rgba(10,14,24,0.75)";
+      ctx.strokeStyle = "rgba(255,255,255,0.22)";
+      ctx.lineWidth = 6;
+
+      const x=10, y=10, w=W-20, h=H-20;
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y, x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x, y+h, r);
+      ctx.arcTo(x, y+h, x, y, r);
+      ctx.arcTo(x, y, x+w, y, r);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // text
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.font = "900 64px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(String(text), W/2, H/2 + 2);
+
+      const tex = new THREE.CanvasTexture(canvas);
+      // CanvasTexture is already linear-ish; we want it to behave like UI colors
+      if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+      tex.needsUpdate = true;
+
+      const mat = new THREE.SpriteMaterial({
+        map: tex,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false
+      });
+      const spr = new THREE.Sprite(mat);
+      spr.scale.set(1.55, 0.78, 1); // world units
+      spr.renderOrder = 999;
+      return spr;
+    }
+
+const MATH_RENDER_OPTS = {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\(", right: "\\)", display: false},
+      ],
+      throwOnError: false
+    };
+
+    function escapeHtml(str){
+      return (str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function renderMath(el){
+      try{
+        if(el && window.renderMathInElement){
+          window.renderMathInElement(el, MATH_RENDER_OPTS);
+        }
+      }catch(e){
+        // non blocchiamo mai la UI
+      }
+    }
+
+    // Hint: supporta HTML + KaTeX, evitando re-render pesanti quando il testo non cambia.
+    let _hintLastHtml = null;
+    let _hintTimer = null;
+
+    function showHintHtml(html, ms=1200){
+      const next = html || "";
+      if(next !== _hintLastHtml){
+        hintEl.innerHTML = next;
+        _hintLastHtml = next;
+        if(next) renderMath(hintEl);
+      }
+      hintEl.classList.toggle("show", !!next);
+
+      if(_hintTimer){ clearTimeout(_hintTimer); _hintTimer = null; }
+      if(next){
+        _hintTimer = setTimeout(()=> hintEl.classList.remove("show"), ms);
+      }
+    }
+
+    function showHint(text, ms=1200){
+      showHintHtml(escapeHtml(text || ""), ms);
+    }
+
+    // ---- Markdown (minimo) + protezione LaTeX ----
+    function _extractMathSegments(text){
+      const store = [];
+      let t = (text || "");
+
+      const patterns = [
+        /\$\$[\s\S]*?\$\$/g,
+        /\\\[[\s\S]*?\\\]/g,
+        /\\\([\s\S]*?\\\)/g,
+        /\$[^$\n]+?\$/g,
+      ];
+
+      for(const rx of patterns){
+        t = t.replace(rx, (m)=>{
+          const key = `@@M${store.length}@@`;
+          store.push(m);
+          return key;
+        });
+      }
+      return { text: t, store };
+    }
+
+    function _restoreMathSegments(html, store){
+      return (html || "").replace(/@@M(\d+)@@/g, (_, idx)=>{
+        const m = store[Number(idx)];
+        return escapeHtml(m == null ? "" : m);
+      });
+    }
+
+    function _inlineMd(s){
+      let x = s || "";
+
+      // ***testo*** -> strong
+      x = x.replace(/\*\*\*([\s\S]+?)\*\*\*/g, "<strong>$1</strong>");
+      // **testo** -> strong
+      x = x.replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>");
+      // *testo* -> em (evita di prendere ** o ***)
+      x = x.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, "$1<em>$2</em>");
+
+      // `code`
+      x = x.replace(/`([^`\n]+?)`/g, "<code>$1</code>");
+
+      return x;
+    }
+
+    function markdownToHtml(raw){
+      const src = safeDash(raw || "");
+      const { text, store } = _extractMathSegments(src);
+
+      const lines = text.split(/\r?\n/);
+      const out = [];
+
+      let inUl = false;
+      let inOl = false;
+
+      function closeLists(){
+        if(inUl){ out.push("</ul>"); inUl = false; }
+        if(inOl){ out.push("</ol>"); inOl = false; }
+      }
+
+      for(const line of lines){
+        // heading
+        const mh = /^\s*(#{1,6})\s+(.*)$/.exec(line);
+        if(mh){
+          closeLists();
+          const lvl = Math.min(6, mh[1].length);
+          let content = escapeHtml(mh[2].trim());
+          content = _inlineMd(content);
+          out.push(`<h${lvl}>${content}</h${lvl}>`);
+          continue;
+        }
+
+        // ordered list: "1. ..."
+        const mol = /^\s*\d+\.\s+(.*)$/.exec(line);
+        if(mol){
+          if(inUl){ out.push("</ul>"); inUl = false; }
+          if(!inOl){ out.push("<ol>"); inOl = true; }
+          let content = escapeHtml(mol[1]);
+          content = _inlineMd(content);
+          out.push(`<li>${content}</li>`);
+          continue;
+        }
+
+        // unordered list: "- ..." or "* ..."
+        const mul = /^\s*[-*]\s+(.*)$/.exec(line);
+        if(mul){
+          if(inOl){ out.push("</ol>"); inOl = false; }
+          if(!inUl){ out.push("<ul>"); inUl = true; }
+          let content = escapeHtml(mul[1]);
+          content = _inlineMd(content);
+          out.push(`<li>${content}</li>`);
+          continue;
+        }
+
+        // blank line
+        if(line.trim() === ""){
+          closeLists();
+          out.push(`<div style="height:6px"></div>`);
+          continue;
+        }
+
+        closeLists();
+        let content = escapeHtml(line);
+        content = _inlineMd(content);
+        out.push(`<p>${content}</p>`);
+      }
+
+      closeLists();
+
+      let html = out.join("\n");
+      html = _restoreMathSegments(html, store);
+      return html;
+    }
+
+
+    async function fetchFirst(paths){
+      let last=null;
+      for(const p of paths){
+        try{
+          const r = await fetch(p, { cache: "no-store" });
+          if(!r.ok) throw new Error("HTTP " + r.status);
+          return await r.text();
+        }catch(e){ last=e; }
+      }
+      throw last || new Error("Fetch fallita");
+    }
+
+    function parseDims(raw){
+      const out = {};
+      const rx = /<<<DIM\s+(\d+)\s+START>>>([\s\S]*?)<<<DIM\s+\1\s+END>>>/g;
+      let m;
+      while((m = rx.exec(raw)) !== null){
+        out[parseInt(m[1],10)] = (m[2]||"").trim();
+      }
+      return out;
+    }
+
+    function extractTitle(dim, content){
+      if(content){
+        const lines = content.split(/\r?\n/);
+        for(const ln of lines){
+          const t = ln.trim();
+          if(t.startsWith("#")){
+            const cleaned = t.replace(/^#+\s*/,"").trim();
+            if(cleaned.length >= 4) return safeDash(cleaned);
+          }
+        }
+      }
+      return "DIM " + dim;
+    }
+
+    async function loadSolutions(){
+      try{
+        const texts = await Promise.all(TXT_FILES.map(f=> fetchFirst(f.paths)));
+        const maps = texts.map(parseDims);
+
+        for(const mp of maps){
+          for(const k in mp){
+            solutions[parseInt(k,10)] = mp[k];
+          }
+        }
+
+        for(let d=0; d<=18; d++){
+          const c = (solutions[d]||"").trim();
+          hasSol[d] = c.length > 0;
+          const meta = DIM_META[d];
+          titles[d] = meta && meta.plain ? safeDash(meta.plain) : extractTitle(d, c);
+        }
+
+        rebuildInventory();
+        showHint("OK. Avvicinati a un blocco DIM e premi E (o Interagisci).", 1800);
+      }catch(e){
+        console.error(e);
+        rebuildInventory(); // mostra comunque la lista, anche se vuota
+        showHint("Errore caricamento txt: usa python -m http.server e metti i file txt in boss/ o in root.", 2600);
+      }
+    }
+
+    function rebuildInventory(){
+      const all = [0].concat(DIM_BLOCKS);
+      const ok = all.filter(d=> !!hasSol[d]).length;
+      invMeta.textContent = "Soluzioni pronte: " + ok + "/" + all.length;
+
+      const q = (invSearch.value||"").trim().toLowerCase();
+      invList.innerHTML = "";
+
+      for(const d of all){
+        const meta = DIM_META[d];
+        const titlePlain = safeDash((meta && meta.plain) ? meta.plain : (titles[d] || ("DIM " + d)));
+        const titleHtml = (meta && meta.html) ? meta.html : escapeHtml(titlePlain);
+        const raw = (solutions[d]||"");
+        const searchable = (titlePlain + "\n" + raw).toLowerCase();
+        if(q && !searchable.includes(q)) continue;
+
+        const item = document.createElement("div");
+        item.className = "dim-item";
+
+        const num = document.createElement("div");
+        num.className = "dim-num";
+        num.textContent = String(d);
+
+        const mid = document.createElement("div");
+        const t = document.createElement("div");
+        t.className = "dim-title";
+        t.innerHTML = titleHtml;
+
+        const sub = document.createElement("div");
+        sub.className = "dim-sub";
+        sub.textContent = hasSol[d] ? "Soluzione disponibile" : "Soluzione non disponibile";
+        mid.appendChild(t);
+        mid.appendChild(sub);
+
+        const btn = document.createElement("button");
+        btn.className = "pill " + (hasSol[d] ? "ok" : "miss");
+        btn.textContent = "Apri";
+        btn.addEventListener("click", ()=> openSolution(d));
+
+        item.appendChild(num);
+        item.appendChild(mid);
+        item.appendChild(btn);
+
+        // double click: teleporta vicino al blocco (solo 1-18)
+        item.addEventListener("dblclick", ()=>{
+          if(d>=1 && d<=18) teleportToDim(d);
+        });
+
+        invList.appendChild(item);
+      }
+
+      // KaTeX in inventario (titoli)
+      renderMath(invList);
+    }
+
+    function exitPointerLockIfNeeded(){
+      if(pointerLocked){
+        try{ document.exitPointerLock(); }catch(e){}
+      }
+    }
+
+    function openDrawer(el, yes){
+      // IMPORTANT: in pointer-lock non puoi cliccare i bottoni
+      // quindi quando apri un drawer, liberiamo il mouse.
+      if(yes) exitPointerLockIfNeeded();
+      el.classList.toggle("open", !!yes);
+    }
+
+    function toggleDrawer(el){
+      const willOpen = !el.classList.contains("open");
+      openDrawer(el, willOpen);
+    }
+
+    function openSolution(dim){
+      // Safety
+      if(!solText || !solTitle || !solSub){
+        console.warn("DOM missing for solution drawer");
+        return;
+      }
+
+      const meta = DIM_META[dim];
+      const titlePlain = safeDash(titles[dim] || ("DIM " + dim));
+      const titleHtml = (meta && meta.html) ? meta.html : escapeHtml(titlePlain);
+
+      // Titolo (con HTML + KaTeX)
+      solTitle.innerHTML = titleHtml;
+      renderMath(solTitle);
+
+      // Meta riga
+      solSub.textContent = "DIM " + dim + (hasSol[dim] ? " - contenuto caricato" : " - contenuto non disponibile");
+
+      const raw = (solutions[dim]||"").trim();
+      currentOpenDim = dim;
+      currentOpenRaw = raw;
+
+      // Corpo: markdown + KaTeX
+      if(raw){
+        solText.innerHTML = markdownToHtml(raw);
+      }else{
+        solText.innerHTML = "<em>Soluzione non disponibile (in aggiornamento).</em>";
+      }
+      renderMath(solText);
+
+      openDrawer(drawerSol, true);
+    }
+
+    async function copySolution(){
+      const txt = (currentOpenRaw != null && currentOpenRaw !== "")
+        ? currentOpenRaw
+        : (solText ? (solText.textContent || "") : "");
+      try{
+        await navigator.clipboard.writeText(txt);
+        showHint("Copiato.", 900);
+      }catch(e){
+        showHint("Copia non disponibile su questo browser.", 1400);
+      }
+    }
+    function toggleLights(force){
+      if(typeof force === "boolean") lightsEnabled = force;
+      else lightsEnabled = !lightsEnabled;
+      if(btnLights){
+        btnLights.classList.toggle("primary", lightsEnabled);
+      }
+    }
+
+
+
+    function teleportToDim(dim){
+      const b = blocks.find(x=>x.dim===dim);
+      if(!b) return;
+      camera.position.set(b.mesh.position.x, 1.7, b.mesh.position.z + 4.2);
+      yaw = 0; pitch = 0;
+    }
+
+    // 3D init
+    function init3D(){
+      scene = new THREE.Scene();
+      scene.fog = new THREE.Fog(0x070a12, 12, 70);
+
+      camera = new THREE.PerspectiveCamera(70, 1, 0.1, 200);
+      camera.position.set(0, 1.7, 14);
+
+      renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:"high-performance" });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.6));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // Color management + tone mapping (migliora resa PBR)
+      if(THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.physicallyCorrectLights = true;
+
+      // PMREM: environment prefiltrata per riflessi realistici
+      const pmremGen = new THREE.PMREMGenerator(renderer);
+      pmremGen.compileEquirectangularShader();
+
+      clock = new THREE.Clock();
+      raycaster = new THREE.Raycaster();
+
+      // Lights
+      hemi = new THREE.HemisphereLight(0xbad7ff, 0x0b1022, 0.95);
+      scene.add(hemi);
+
+      sun = new THREE.DirectionalLight(0xffffff, 1.1);
+      sun.position.set(12, 18, 8);
+      scene.add(sun);
+
+      fill = new THREE.PointLight(0x2b7fff, 0.35, 60);
+      fill.position.set(-10, 6, -10);
+      scene.add(fill);
+
+// Load textures and sky (with LoadingManager -> progress bar)
+const loaderManager = new THREE.LoadingManager();
+const tl = new THREE.TextureLoader(loaderManager);
+
+let pmremReady = false;
+let managerDone = false;
+
+// HUD hint (non vincolante): numero mappe attese
+const TOTAL_MAPS_HINT = 17;
+if(loaderChip2) loaderChip2.textContent = "∑ maps: " + TOTAL_MAPS_HINT;
+
+loaderManager.onStart = ()=>{
+  setLoader(0, "Loading textures…");
+  if(loaderSub) loaderSub.textContent = "Preparazione shader, caricamento mappe PBR, PMREM…";
+};
+loaderManager.onProgress = (url, loaded, total)=>{
+  const p = total ? (loaded / total) : 0;
+  // teniamo l'ultimo 5% per PMREM/environment
+  setLoader(p * 95, "Loading textures…");
+};
+loaderManager.onLoad = ()=>{
+  managerDone = true;
+  maybeFinishLoader();
+};
+
+function maybeFinishLoader(){
+  if(managerDone && pmremReady){
+    setLoader(100, "Pronto.");
+    setTimeout(hideLoader, 180);
+  }
+}
+
+
+      const marbleColor = tl.load(ASSETS.marble.color);
+      if(THREE.SRGBColorSpace) marbleColor.colorSpace = THREE.SRGBColorSpace;
+      marbleColor.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+      marbleColor.wrapS = marbleColor.wrapT = THREE.RepeatWrapping;
+      marbleColor.repeat.set(10, 10);
+
+      const marbleRough = tl.load(ASSETS.marble.roughness);
+      if(THREE.SRGBColorSpace) marbleRough.colorSpace = THREE.NoColorSpace;
+      marbleRough.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+      marbleRough.wrapS = marbleRough.wrapT = THREE.RepeatWrapping;
+      marbleRough.repeat.set(10, 10);
+
+      const marbleNormal = tl.load(ASSETS.marble.normal);
+      if(THREE.SRGBColorSpace) marbleNormal.colorSpace = THREE.NoColorSpace;
+      marbleNormal.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+      marbleNormal.wrapS = marbleNormal.wrapT = THREE.RepeatWrapping;
+      marbleNormal.repeat.set(10, 10);
+
+      const groundMat = new THREE.MeshStandardMaterial({
+        map: marbleColor,
+        roughnessMap: marbleRough,
+        normalMap: marbleNormal,
+        normalScale: new THREE.Vector2(0.9, 0.9),
+        roughness: 1.0,
+        metalness: 0.0,
+        envMapIntensity: 0.45
+      });
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(120,120), groundMat);
+      ground.rotation.x = -Math.PI/2;
+      scene.add(ground);
+
+
+// Decorative metal (Metal049A.png) for lamp poles + platforms
+const decorTex = tl.load(ASSETS.metalDecorPng);
+if(THREE.SRGBColorSpace) decorTex.colorSpace = THREE.SRGBColorSpace;
+decorTex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+decorTex.wrapS = decorTex.wrapT = THREE.RepeatWrapping;
+decorTex.repeat.set(1.0, 1.0);
+
+const decorMat = new THREE.MeshStandardMaterial({
+  map: decorTex,
+  roughness: 0.62,
+  metalness: 1.0,
+  envMapIntensity: 1.05,
+  color: 0xffffff
+});
+
+      // --- High-definition PBR metals (per-part) ---
+      function loadPBR(set, repeatX, repeatY){
+        const color = tl.load(set.color);
+        if(THREE.SRGBColorSpace) color.colorSpace = THREE.SRGBColorSpace;
+        color.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+        color.wrapS = color.wrapT = THREE.RepeatWrapping;
+        color.repeat.set(repeatX, repeatY);
+
+        const rough = tl.load(set.roughness);
+        if(THREE.SRGBColorSpace) rough.colorSpace = THREE.NoColorSpace;
+        rough.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+        rough.wrapS = rough.wrapT = THREE.RepeatWrapping;
+        rough.repeat.set(repeatX, repeatY);
+
+        const metal = tl.load(set.metalness);
+        if(THREE.SRGBColorSpace) metal.colorSpace = THREE.NoColorSpace;
+        metal.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+        metal.wrapS = metal.wrapT = THREE.RepeatWrapping;
+        metal.repeat.set(repeatX, repeatY);
+
+        const normal = tl.load(set.normal);
+        if(THREE.SRGBColorSpace) normal.colorSpace = THREE.NoColorSpace;
+        normal.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+        normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
+        normal.repeat.set(repeatX, repeatY);
+
+        return { color, rough, metal, normal };
+      }
+
+      const pbrP1 = loadPBR(ASSETS.metalP1, 1.2, 1.2);
+      const pbrP2 = loadPBR(ASSETS.metalP2, 1.2, 1.2);
+      const pbrP3 = loadPBR(ASSETS.metalP3, 1.0, 1.0);
+
+      const metalMatP1 = new THREE.MeshStandardMaterial({
+        map: pbrP1.color,
+        roughnessMap: pbrP1.rough,
+        metalnessMap: pbrP1.metal,
+        normalMap: pbrP1.normal,
+        normalScale: new THREE.Vector2(0.7, 0.7),
+        roughness: 0.55,
+        metalness: 1.0,
+        envMapIntensity: 1.35,
+        emissive: new THREE.Color(0x12264f),
+        emissiveIntensity: 0.22
+      });
+
+      const metalMatP2 = new THREE.MeshStandardMaterial({
+        map: pbrP2.color,
+        roughnessMap: pbrP2.rough,
+        metalnessMap: pbrP2.metal,
+        normalMap: pbrP2.normal,
+        normalScale: new THREE.Vector2(0.7, 0.7),
+        roughness: 0.52,
+        metalness: 1.0,
+        envMapIntensity: 1.35,
+        emissive: new THREE.Color(0x12264f),
+        emissiveIntensity: 0.22
+      });
+
+      const metalMatP3 = new THREE.MeshStandardMaterial({
+        map: pbrP3.color,
+        roughnessMap: pbrP3.rough,
+        metalnessMap: pbrP3.metal,
+        normalMap: pbrP3.normal,
+        normalScale: new THREE.Vector2(0.75, 0.75),
+        roughness: 0.60,
+        metalness: 1.0,
+        envMapIntensity: 1.10,
+        emissive: new THREE.Color(0x12264f),
+        emissiveIntensity: 0.18
+      });
+
+      // Simple temple ring (columns) - use Part 3 metal for coherence
+      const colMat = new THREE.MeshStandardMaterial({
+        map: pbrP3.color,
+        roughnessMap: pbrP3.rough,
+        metalnessMap: pbrP3.metal,
+        normalMap: pbrP3.normal,
+        normalScale: new THREE.Vector2(0.6, 0.6),
+        roughness: 0.78,
+        metalness: 0.85,
+        envMapIntensity: 0.95,
+        color: 0x9aa3b6
+      });
+
+
+      const LIGHT_COLORS = [0x66ccff, 0xff77aa, 0xffd37a, 0x7cff6b, 0x9b7bff, 0xff6b6b];
+
+      function makeGlowSprite3D(color=0x88aaff){
+        const size = 128;
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        const g = ctx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+        g.addColorStop(0.0, "rgba(255,255,255,1)");
+        g.addColorStop(0.2, "rgba(255,255,255,0.55)");
+        g.addColorStop(1.0, "rgba(255,255,255,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,size,size);
+
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.colorSpace = THREE.SRGBColorSpace;
+
+        const mat = new THREE.SpriteMaterial({
+          map: tex,
+          color: new THREE.Color(color),
+          transparent: true,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          opacity: 0.9
+        });
+        const s = new THREE.Sprite(mat);
+        s.scale.set(4.0, 4.0, 1);
+        return s;
+      }
+
+for(let i=0;i<16;i++){
+        const ang = (i/16) * Math.PI*2;
+        const r = 24;
+        const x = Math.cos(ang)*r;
+        const z = Math.sin(ang)*r;
+        const col = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.1, 6.2, 18), colMat);
+        col.position.set(x, 3.1, z);
+        scene.add(col);
+        // Cube sopra il pilastro (decorativo, glow)
+        const cubeColor = LIGHT_COLORS[i % LIGHT_COLORS.length];
+        const cubeMat = new THREE.MeshStandardMaterial({
+          map: pbrP3.color,
+          roughnessMap: pbrP3.rough,
+          metalnessMap: pbrP3.metal,
+          normalMap: pbrP3.normal,
+          normalScale: new THREE.Vector2(0.55, 0.55),
+          roughness: 0.52,
+          metalness: 0.96,
+          envMapIntensity: 1.05,
+          emissive: new THREE.Color(cubeColor),
+          emissiveIntensity: 0.15
+        });
+        const cube = new THREE.Mesh(new THREE.BoxGeometry(1.15, 1.15, 1.15), cubeMat);
+        cube.position.set(x, 6.2 + 0.75, z);
+        const cubeGlow = makeGlowSprite3D(cubeColor);
+        cubeGlow.scale.set(2.8, 2.8, 1);
+        cube.add(cubeGlow);
+        scene.add(cube);
+        pillarCubes.push({ mesh: cube, mat: cubeMat, emissiveBase: 0.15, nightBoost: 0.90, glow: cubeGlow });
+
+        // Collider 3D (non interferisce col player perchè è in alto)
+        colliders.push({ minX: x-0.70, maxX: x+0.70, minZ: z-0.70, maxZ: z+0.70, minY: 6.1, maxY: 8.6 });
+
+              // Collider AABB (XZ) for outer columns
+        const pr = 1.25;
+        colliders.push({ minX: x-pr, maxX: x+pr, minZ: z-pr, maxZ: z+pr, minY: 0.0, maxY: 7.2 });
+      }
+
+
+      // Lampioni (solo questa variante): ordinati in un anello interno
+      const lampGroup = new THREE.Group();
+      scene.add(lampGroup);
+
+      const lampPoleMat = decorMat.clone();
+      lampPoleMat.roughness = 0.78;
+      lampPoleMat.metalness = 1.0;
+      lampPoleMat.envMapIntensity = 0.95;
+
+      function addLampPost(x, z, color){
+        const g = new THREE.Group();
+        g.position.set(x, 0, z);
+
+        const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 2.8, 18), lampPoleMat);
+        pole.position.y = 1.4;
+        g.add(pole);
+
+        const bulbMat = new THREE.MeshStandardMaterial({
+          color: 0x1b1e26,
+          roughness: 0.35,
+          metalness: 0.0,
+          emissive: new THREE.Color(color),
+          emissiveIntensity: 0.25
+        });
+        const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.24, 18, 14), bulbMat);
+        bulb.position.y = 3.05;
+        g.add(bulb);
+
+        const light = new THREE.PointLight(color, 2.2, 24, 2);
+        light.position.set(0, 3.05, 0);
+        g.add(light);
+
+        const glow = makeGlowSprite3D(color);
+        glow.position.set(0, 3.05, 0);
+        glow.scale.set(5.0, 5.0, 1);
+        g.add(glow);
+
+        lampGroup.add(g);
+
+        lamps.push({
+          mesh: g,
+          light,
+          bulbMat,
+          glow,
+          emissiveBase: 0.25,
+          nightBoost: 1.00,
+          baseLight: 2.0,
+          nightLight: 55.0,
+          distance: 24
+        });
+
+        // Collider 3D (palo)
+        colliders.push({ minX: x-0.45, maxX: x+0.45, minZ: z-0.45, maxZ: z+0.45, minY: 0.0, maxY: 3.3 });
+      }
+
+      const lampR = 18.0;
+      for(let i=0;i<8;i++){
+        const ang = (i/8) * Math.PI*2 + Math.PI/16; // offset per non sovrapporsi ai pilastri
+        addLampPost(Math.cos(ang)*lampR, Math.sin(ang)*lampR, LIGHT_COLORS[i % LIGHT_COLORS.length]);
+      }
+
+      // Blocks (6x3)
+      const cols=6, rows=3, spacing=6.0;
+      const startX = -(cols-1)*spacing/2;
+      const startZ = -(rows-1)*spacing/2;
+
+      for(let i=0;i<DIM_BLOCKS.length;i++){
+        const dim = DIM_BLOCKS[i];
+        const col = i % cols;
+        const row = Math.floor(i/cols);
+
+        const x = startX + col*spacing;
+        const z = startZ + row*spacing;
+
+        const meta = DIM_META[dim];
+        const part = meta ? meta.part : 1;
+        const base = (part===1) ? metalMatP1 : (part===2) ? metalMatP2 : metalMatP3;
+        const mat = base.clone();
+        mat.emissiveIntensity = hasSol[dim] ? 0.25 : 0.12;
+
+        const mesh = new THREE.Mesh(new THREE.BoxGeometry(1.9, 2.7, 1.9), mat);
+        mesh.position.set(x, 1.35, z);
+        mesh.userData.dim = dim;
+        scene.add(mesh);
+
+        const ped = new THREE.Mesh(
+          new THREE.CylinderGeometry(1.55, 1.9, 0.48, 18),
+          decorMat.clone()
+        );
+        ped.position.set(x, 0.24, z);
+        ped.material.roughness = 0.88;
+        ped.material.envMapIntensity = 0.75;
+        scene.add(ped);
+
+        // Label sopra il blocco (ID)
+        const label = makeLabelSprite(dim);
+        label.position.set(x, 3.25, z);
+        scene.add(label);
+
+        // Collider semplice (AABB) per evitare di attraversare i blocchi
+        const half = 0.95; // ~1.9/2
+        colliders.push({ dim, minX: x-half, maxX: x+half, minZ: z-half, maxZ: z+half, minY: 0.0, maxY: 3.0 });
+
+        blocks.push({ dim, mesh, label });
+      }
+
+      // Skybox equirectangular
+      tl.load(ASSETS.sky, (tex)=>{
+        // Background: quello che vedi
+        if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background = tex;
+
+        // Environment: PMREM prefiltrata (riflessi realistici)
+        const envRT = pmremGen.fromEquirectangular(tex);
+        scene.environment = envRT.texture;
+
+        pmremReady = true;
+        maybeFinishLoader();
+
+        // Nota: non facciamo dispose di tex perché lo usiamo come background.
+        // envRT.texture verrà gestita dal renderer; se fai hot-reload conviene pulirla.
+      });
+
+      // Events
+      window.addEventListener("resize", onResize, { passive:true });
+
+      // Pointer lock desktop
+      canvas.addEventListener("click", ()=>{
+        if(isTouch) return;
+        initAudioOnce().catch(()=>{});
+        // se i drawer sono aperti, non rientriamo in pointer-lock
+        if(drawerInv.classList.contains("open") || drawerSol.classList.contains("open")) return;
+        canvas.requestPointerLock();
+      });
+
+      document.addEventListener("pointerlockchange", ()=>{
+        pointerLocked = (document.pointerLockElement === canvas);
+      });
+
+      document.addEventListener("mousemove", (e)=>{
+        if(!pointerLocked) return;
+        yaw   -= e.movementX * 0.0023;
+        pitch -= e.movementY * 0.0023;
+        pitch = clamp(pitch, -1.35, 1.35);
+      }, { passive:true });
+
+      // Touch look
+      if(isTouch){
+        document.getElementById("miniHelp").textContent = "Mobile: joystick - Interagisci - trascina per guardare";
+        canvas.addEventListener("touchstart", (e)=>{
+          if(e.touches.length !== 1) return;
+          initAudioOnce().catch(()=>{});
+          lookTouchActive = true;
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
+        }, { passive:true });
+
+        canvas.addEventListener("touchmove", (e)=>{
+          if(!lookTouchActive || e.touches.length !== 1) return;
+          const x = e.touches[0].clientX;
+          const y = e.touches[0].clientY;
+          const dx = x - lastTouchX;
+          const dy = y - lastTouchY;
+          lastTouchX = x; lastTouchY = y;
+          yaw   -= dx * 0.0040;
+          pitch -= dy * 0.0040;
+          pitch = clamp(pitch, -1.35, 1.35);
+        }, { passive:true });
+
+        canvas.addEventListener("touchend", ()=>{ lookTouchActive=false; }, { passive:true });
+      }
+
+      // Keyboard
+      document.addEventListener("keydown", (e)=>{
+        if(e.code==="KeyW") keys.forward=true;
+        if(e.code==="KeyS") keys.back=true;
+        if(e.code==="KeyA") keys.left=true;
+        if(e.code==="KeyD") keys.right=true;
+
+        if(e.code==="KeyI") toggleDrawer(drawerInv);
+        if(e.code==="KeyO") toggleDrawer(drawerSol);
+        if(e.code==="KeyL") toggleLights();
+
+        if(e.code==="Escape"){
+          openDrawer(drawerInv,false);
+          openDrawer(drawerSol,false);
+          if(pointerLocked) document.exitPointerLock();
+        }
+
+        if(e.code==="KeyE"){
+          if(focused) openSolution(focused.dim);
+        }
+      });
+
+      document.addEventListener("keyup", (e)=>{
+        if(e.code==="KeyW") keys.forward=false;
+        if(e.code==="KeyS") keys.back=false;
+        if(e.code==="KeyA") keys.left=false;
+        if(e.code==="KeyD") keys.right=false;
+      });
+
+      animate();
+    }
+
+    function onResize(){
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function updateCameraRot(){
+      camera.rotation.order = "YXZ";
+      camera.rotation.y = yaw;
+      camera.rotation.x = pitch;
+    }
+
+    function updateMovement(dt){
+      const speed = 4.2;
+      const f = (keys.forward || touchKeys.forward) ? 1 : 0;
+      const b = (keys.back || touchKeys.back) ? 1 : 0;
+      const l = (keys.left || touchKeys.left) ? 1 : 0;
+      const r = (keys.right || touchKeys.right) ? 1 : 0;
+
+      const forward = f - b;
+      const strafe  = r - l;
+
+      // ---- AUDIO: walking start/stop + collision glitch slice ----
+      audioState.hitCooldown = Math.max(0, audioState.hitCooldown - dt);
+      const isMoving = !!(forward || strafe);
+
+      if(isMoving && !audioState.moving) startWalking();
+      if(!isMoving && audioState.moving) stopWalking();
+      audioState.moving = isMoving;
+
+      if(!isMoving){
+        // manteniamo camera stabile anche da fermi
+        camera.position.y = 1.7;
+        return;
+      }
+
+      const dir = new THREE.Vector3();
+      camera.getWorldDirection(dir);
+      dir.y=0; dir.normalize();
+
+      const right = new THREE.Vector3();
+      right.crossVectors(dir, new THREE.Vector3(0,1,0)).normalize();
+      right.multiplyScalar(-1);
+
+      camera.position.addScaledVector(dir, forward*speed*dt);
+      camera.position.addScaledVector(right, strafe*speed*dt);
+
+      const intended = camera.position.clone();
+      resolveBlockCollisions(camera.position, 0.62);
+
+      const correction = intended.distanceTo(camera.position);
+      const collidingNow = correction > 0.002;
+
+      if(collidingNow && !audioState.wasColliding && audioState.hitCooldown<=0){
+        playGlitchSlice250ms();
+        audioState.hitCooldown = 0.12; // anti-spam
+      }
+      audioState.wasColliding = collidingNow;
+
+      camera.position.x = clamp(camera.position.x, -26, 26);
+      camera.position.z = clamp(camera.position.z, -26, 26);
+      camera.position.y = 1.7;
+    }
+
+    function resolveBlockCollisions(pos, radius){
+      // Collision 2D (XZ) contro AABB dei blocchi.
+      const r = radius || 0.60;
+
+      for(const c of colliders){
+        if(c.minY !== undefined && c.maxY !== undefined){
+          if(pos.y < c.minY || pos.y > c.maxY) continue;
+        }
+        const cx = clamp(pos.x, c.minX, c.maxX);
+        const cz = clamp(pos.z, c.minZ, c.maxZ);
+        let dx = pos.x - cx;
+        let dz = pos.z - cz;
+        const d2 = dx*dx + dz*dz;
+
+        if(d2 < r*r){
+          // se siamo esattamente al centro (rare), scegliamo una direzione stabile
+          if(d2 < 1e-8){
+            const left = Math.abs(pos.x - c.minX);
+            const right = Math.abs(c.maxX - pos.x);
+            const back = Math.abs(pos.z - c.minZ);
+            const front = Math.abs(c.maxZ - pos.z);
+            const minSide = Math.min(left, right, back, front);
+            if(minSide === left){ dx = -1; dz = 0; }
+            else if(minSide === right){ dx = 1; dz = 0; }
+            else if(minSide === back){ dx = 0; dz = -1; }
+            else { dx = 0; dz = 1; }
+          }
+          const d = Math.sqrt(Math.max(d2, 1e-8));
+          const push = (r - d) + 0.001;
+          pos.x += (dx / d) * push;
+          pos.z += (dz / d) * push;
+        }
+      }
+    }
+
+
+    function updateFocus(){
+      raycaster.setFromCamera({x:0,y:0}, camera);
+      const hits = raycaster.intersectObjects(blocks.map(b=>b.mesh), false);
+      let nf=null;
+      if(hits && hits.length && hits[0].distance < 7.0){
+        nf = { dim: hits[0].object.userData.dim, mesh: hits[0].object };
+      }
+
+      // reset emissive
+      for(const b of blocks){
+        const ok = !!hasSol[b.dim];
+        b.mesh.material.emissive.setHex(ok ? 0x12264f : 0x111111);
+        b.mesh.material.emissiveIntensity = ok ? 0.20 : 0.10;
+      }
+
+      if(nf){
+        nf.mesh.material.emissive.setHex(0x2b7fff);
+        nf.mesh.material.emissiveIntensity = 0.90;
+        focused = nf;
+
+        const meta = DIM_META[nf.dim];
+        const titlePlain = safeDash(titles[nf.dim] || ("DIM " + nf.dim));
+        const titleHtml = (meta && meta.html) ? meta.html : escapeHtml(titlePlain);
+        const statusHtml = hasSol[nf.dim]
+          ? '<span style="color:var(--good); font-weight:1000;">OK</span>'
+          : '<span style="color:var(--warn); font-weight:1000;">VUOTA</span>';
+        showHintHtml(statusHtml + " - " + titleHtml, 900);
+      }else{
+        focused = null;
+      }
+    }
+
+    function animate(){
+      const dt = Math.min(clock.getDelta(), 0.05);
+      updateCameraRot();
+
+      const blocked = drawerInv.classList.contains("open") || drawerSol.classList.contains("open");
+      if(!blocked){
+        updateMovement(dt);
+        updateFocus();
+      }else{
+        // se apri un pannello mentre cammini, fermiamo il loop del passo
+        if(audioState.moving){ stopWalking(); audioState.moving = false; }
+        audioState.wasColliding = false;
+      }
+
+
+      // Day/Night cycle + luci lampioni
+      sunAngle += dt * 0.05;
+      const sunY = Math.sin(sunAngle);
+      const sunX = Math.cos(sunAngle);
+
+      // dayFactor: 1=giorno, 0=notte
+      const dayFactor = clamp((sunY + 0.12) / 0.72, 0, 1);
+      const nightFactor = 1 - dayFactor;
+
+      // Sole + emisferica
+      sun.position.set(sunX*28, 10 + sunY*14, 8);
+      sun.intensity = 0.04 + 1.15 * dayFactor;
+      hemi.intensity = 0.20 + 0.75 * dayFactor;
+
+      // Fill leggero, più visibile di notte
+      fill.intensity = 0.12 + 0.30 * nightFactor;
+
+      // Esposizione: leggermente più alta di notte per leggibilità
+      renderer.toneMappingExposure = 1.05 + 0.25 * nightFactor;
+
+      // Lampioni: luce reale + emissive
+      for(const L of lamps){
+        const t = nightFactor;
+        const on = lightsEnabled ? 1 : 0;
+
+        L.light.intensity = on * (L.baseLight + (L.nightLight - L.baseLight) * t);
+        L.light.distance = L.distance;
+
+        L.bulbMat.emissiveIntensity = L.emissiveBase + (L.nightBoost * t * on);
+        if(L.glow && L.glow.material){
+          L.glow.material.opacity = 0.35 + 0.60 * t * on;
+        }
+      }
+
+      // Cubi sui pilastri: solo glow/emissive (ordinati e colorati)
+      for(const C of pillarCubes){
+        const t = nightFactor;
+        const on = lightsEnabled ? 1 : 0;
+        C.mat.emissiveIntensity = C.emissiveBase + (C.nightBoost * t * on);
+        if(C.glow && C.glow.material){
+          C.glow.material.opacity = 0.30 + 0.60 * t * on;
+        }
+      }
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    // Mobile controls
+    function bindHold(btn, keyName){
+      const on = (e)=>{ e.preventDefault(); initAudioOnce().catch(()=>{}); touchKeys[keyName]=true; };
+      const off = (e)=>{ e.preventDefault(); touchKeys[keyName]=false; };
+
+      btn.addEventListener("touchstart", on, { passive:false });
+      btn.addEventListener("touchend", off, { passive:false });
+      btn.addEventListener("touchcancel", off, { passive:false });
+
+      btn.addEventListener("mousedown", on);
+      btn.addEventListener("mouseup", off);
+      btn.addEventListener("mouseleave", off);
+    }
+
+    bindHold(mUp, "forward");
+    bindHold(mDown, "back");
+    bindHold(mLeft, "left");
+    bindHold(mRight, "right");
+
+    mInteract.addEventListener("click", ()=>{
+      initAudioOnce().catch(()=>{});
+      if(focused) openSolution(focused.dim);
+      else showHint("Avvicinati a un blocco DIM e guardalo.", 1200);
+    });
+
+    // UI events
+    btnBack.addEventListener("click", ()=>{
+      if(history.length > 1) history.back();
+      else window.location.href = "../index.html";
+    });
+
+    btnInv.addEventListener("click", ()=> toggleDrawer(drawerInv));
+    btnSol.addEventListener("click", ()=> toggleDrawer(drawerSol));
+    btnLights.addEventListener("click", ()=> toggleLights());
+    if(btnMusic){
+      btnMusic.addEventListener("click", ()=>{
+        initAudioOnce().catch(()=>{}).finally(()=> toggleMusic());
+      });
+      btnMusic.classList.toggle("primary", musicEnabled);
+    }
+    btnInvClose.addEventListener("click", ()=> openDrawer(drawerInv,false));
+    btnSolClose.addEventListener("click", ()=> openDrawer(drawerSol,false));
+    btnCopy.addEventListener("click", copySolution);
+    toggleLights(true);
+
+    invSearch.addEventListener("input", rebuildInventory);
+
+    // Boot
+    window.addEventListener("load", async ()=>{
+      await loadSolutions();
+      init3D();
+
+      // Start closed (IMPORTANT)
+      openDrawer(drawerInv, false);
+      openDrawer(drawerSol, false);
+    });
+
+  })();
+  </script>
+</body>
+</html>

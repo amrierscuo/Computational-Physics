@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Metal PBR Selector</title>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<style>
+html,body{margin:0;height:100%;background:#0b0d10;overflow:hidden}
+#app{position:fixed;inset:0}
+.ui{
+  position:fixed;top:12px;left:12px;
+  background:rgba(0,0,0,.4);
+  color:#eee;
+  font:13px system-ui;
+  padding:10px 12px;
+  border-radius:10px;
+  backdrop-filter:blur(6px)
+}
+select{margin-top:6px;width:220px}
+</style>
+</head>
+
+<body>
+<div id="app"></div>
+
+<div class="ui">
+  <b>Materiale</b><br>
+  <select id="matSelect">
+    <option value="Metal048C_4K-JPG">Metal048C – Oro scuro</option>
+    <option value="Metal048A_8K-JPG">Metal048A – Oro caldo</option>
+    <option value="Metal049A_8K-JPG">Metal049A – Alloy giallo</option>
+    <option value="Metal034_4K-JPG">Metal034 – Metallo chiaro</option>
+  </select>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+
+/* Renderer */
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.getElementById("app").appendChild(renderer.domElement);
+
+/* Scene */
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.05,200);
+camera.position.set(2.2,1.6,2.2);
+
+const controls = new OrbitControls(camera,renderer.domElement);
+controls.target.set(0,0.55,0);
+controls.enableDamping = true;
+
+/* Environment */
+const pmrem = new THREE.PMREMGenerator(renderer);
+const env = pmrem.fromScene(new RoomEnvironment(),0.04).texture;
+scene.environment = env;
+scene.background = env;
+
+scene.add(new THREE.AmbientLight(0xffffff,0.25));
+const key = new THREE.DirectionalLight(0xffffff,2.2);
+key.position.set(3,5,2);
+scene.add(key);
+
+/* Geometry */
+let cubeGeo = new THREE.BoxGeometry(1,1,1,140,140,140);
+cubeGeo = cubeGeo.toNonIndexed();
+cubeGeo = BufferGeometryUtils.mergeVertices(cubeGeo);
+cubeGeo.computeVertexNormals();
+
+const cube = new THREE.Mesh(cubeGeo,new THREE.MeshStandardMaterial());
+cube.position.y = 0.55;
+scene.add(cube);
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(10,10,300,300),
+  new THREE.MeshStandardMaterial()
+);
+floor.rotation.x = -Math.PI/2;
+scene.add(floor);
+
+/* Texture loader */
+const loader = new THREE.TextureLoader();
+function loadTex(path,srgb=false){
+  const t = loader.load(path);
+  t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = 16;
+  return t;
+}
+
+function applyMaterial(folder){
+  const base = `./${folder}/${folder}`;
+
+  const mat = new THREE.MeshStandardMaterial({
+    map: loadTex(`${base}_Color.jpg`,true),
+    roughnessMap: loadTex(`${base}_Roughness.jpg`),
+    metalnessMap: loadTex(`${base}_Metalness.jpg`),
+    normalMap: loadTex(`${base}_NormalGL.jpg`),
+    displacementMap: loadTex(`${base}_Displacement.jpg`),
+    metalness:1,
+    roughness:0.35,
+    displacementScale:0.015,
+    displacementBias:-0.007
+  });
+
+  cube.material.dispose();
+  floor.material.dispose();
+
+  cube.material = mat;
+  floor.material = mat.clone();
+}
+
+/* UI */
+const select = document.getElementById("matSelect");
+select.addEventListener("change",e=>{
+  applyMaterial(e.target.value);
+});
+
+/* Init */
+applyMaterial(select.value);
+
+/* Resize */
+addEventListener("resize",()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+
+/* Loop */
+const clock = new THREE.Clock();
+(function loop(){
+  cube.rotation.y = clock.getElapsedTime()*0.35;
+  controls.update();
+  renderer.render(scene,camera);
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

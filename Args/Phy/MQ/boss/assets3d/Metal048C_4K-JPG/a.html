@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Metal048C 4K – PBR Cube</title>
+
+  <!-- Import map: niente bundler -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <style>
+    html, body { height:100%; margin:0; background:#0b0d10; overflow:hidden; }
+    #app { position:fixed; inset:0; }
+    .hud {
+      position:fixed; left:12px; top:12px;
+      font:13px system-ui,Segoe UI,Roboto,Arial;
+      color:#eee;
+      background:rgba(0,0,0,.35);
+      padding:10px 12px;
+      border-radius:10px;
+      backdrop-filter:blur(6px);
+    }
+  </style>
+</head>
+
+<body>
+<div id="app"></div>
+<div class="hud">
+  <b>Metal048C 4K</b><br>
+  Mouse: orbita · Wheel: zoom · <code>R</code> reset
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+
+
+/* ------------------------------------------------------------------ */
+/* Renderer */
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.getElementById("app").appendChild(renderer.domElement);
+
+/* Scene & Camera */
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.05, 200);
+camera.position.set(2.2, 1.6, 2.2);
+
+/* Controls */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0.55, 0);
+controls.enableDamping = true;
+
+/* Environment (riflessi reali) */
+const pmrem = new THREE.PMREMGenerator(renderer);
+const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environment = env;
+scene.background = env;
+
+/* Luci */
+scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+const key = new THREE.DirectionalLight(0xffffff, 2.2);
+key.position.set(3,5,2);
+scene.add(key);
+
+/* ------------------------------------------------------------------ */
+/* Texture loader */
+const loader = new THREE.TextureLoader();
+function tex(name, srgb=false){
+  const t = loader.load(name);
+  t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = 16;
+  return t;
+}
+
+/* 4K maps */
+const mat = new THREE.MeshStandardMaterial({
+  map:           tex("Metal048C_4K-JPG_Color.jpg", true),
+  roughnessMap:  tex("Metal048C_4K-JPG_Roughness.jpg"),
+  metalnessMap:  tex("Metal048C_4K-JPG_Metalness.jpg"),
+  normalMap:     tex("Metal048C_4K-JPG_NormalGL.jpg"),
+  displacementMap: tex("Metal048C_4K-JPG_Displacement.jpg"),
+
+  metalness: 1.0,
+  roughness: 0.35,
+
+  /* 🔑 displacement fisico (no spaccature) */
+  displacementScale: 0.015,
+  displacementBias: -0.007
+});
+
+/* ------------------------------------------------------------------ */
+/* Pavimento */
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(10,10,300,300),
+  mat.clone()
+);
+floor.rotation.x = -Math.PI/2;
+scene.add(floor);
+
+/* ------------------------------------------------------------------ */
+/* Cubo – FIX DEFINITIVO DEI BORDI */
+let cubeGeo = new THREE.BoxGeometry(1,1,1,140,140,140);
+cubeGeo = cubeGeo.toNonIndexed();
+cubeGeo = BufferGeometryUtils.mergeVertices(cubeGeo);
+cubeGeo.computeVertexNormals();
+
+const cube = new THREE.Mesh(cubeGeo, mat);
+cube.position.y = 0.55;
+scene.add(cube);
+
+/* ------------------------------------------------------------------ */
+function resetView(){
+  camera.position.set(2.2,1.6,2.2);
+  controls.target.set(0,0.55,0);
+  controls.update();
+}
+
+addEventListener("keydown", e=>{
+  if(e.code==="KeyR") resetView();
+});
+
+addEventListener("resize", ()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+/* Render loop */
+const clock = new THREE.Clock();
+(function loop(){
+  cube.rotation.y = clock.getElapsedTime()*0.35;
+  controls.update();
+  renderer.render(scene,camera);
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
