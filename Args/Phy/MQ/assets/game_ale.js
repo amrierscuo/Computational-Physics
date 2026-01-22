@@ -323,7 +323,7 @@ const TOTAL_BLOCKS = TIMELINE.length;
     const vTitle = $('#vTitle');
     const vPath = $('#vPath');
     const vThumbList = $('#vThumbList');
-    const vImg = $('#vImg');
+    let vImg = $('#vImg');
     const vCap = $('#vCap');
     const vIdx = $('#vIdx');
     const vTot = $('#vTot');
@@ -336,8 +336,76 @@ const TOTAL_BLOCKS = TIMELINE.length;
     const vHint = $('#vHint');
 
     const zoomModal = $('#zoomModal');
-    const zImg = $('#zImg');
+    let zImg = $('#zImg');
     const zClose = $('#zClose');
+
+    // =========================
+    // Viewer safety (images mode)
+    // =========================
+    // In alcune versioni sperimentali il viewer poteva essere stato modificato (es: canvas/PDF).
+    // Qui preferiamo sempre le immagini in /img/page_X.jpg. Se l'elemento <img> manca, lo ricreiamo al volo.
+    function ensureViewerImgEls(){
+      // Main viewer image
+      if(!vImg){
+        vImg = document.getElementById('vImg');
+      }
+      if(!vImg){
+        const viewer =
+          document.getElementById('viewer') ||
+          (viewerModal ? viewerModal.querySelector('#viewer') : null) ||
+          (viewerModal ? viewerModal.querySelector('.viewer') : null);
+        if(viewer){
+          // Se esistono vecchi elementi (canvas/iframe/object) da tentativi PDF, li nascondiamo per evitare overlay.
+          const oldPdf = viewer.querySelector('canvas, iframe, object, embed');
+          if(oldPdf) oldPdf.style.display = 'none';
+          const cap =
+            document.getElementById('vCap') ||
+            viewer.querySelector('#vCap') ||
+            viewer.querySelector('.v-cap');
+          const img = document.createElement('img');
+          img.id = 'vImg';
+          img.alt = 'pagina';
+          img.decoding = 'async';
+          img.loading = 'eager';
+          if(cap && cap.parentElement === viewer){
+            viewer.insertBefore(img, cap);
+          } else {
+            viewer.appendChild(img);
+          }
+          vImg = img;
+        }
+      }
+
+      // Zoom image
+      if(!zImg){
+        zImg = document.getElementById('zImg');
+        if(!zImg && zoomModal){
+          const found = zoomModal.querySelector('#zImg');
+          if(found) zImg = found;
+        }
+      }
+      if(!zImg && zoomModal){
+        const img = document.createElement('img');
+        img.id = 'zImg';
+        img.alt = 'zoom';
+        img.decoding = 'async';
+        img.loading = 'eager';
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        img.style.borderRadius = '14px';
+        img.style.border = '1px solid rgba(255,255,255,.10)';
+        img.style.background = 'rgba(0,0,0,.22)';
+        const pad = zoomModal.querySelector('div[style*="padding"]');
+        if(pad){
+          pad.appendChild(img);
+        } else {
+          const dlg = zoomModal.querySelector('.dialog') || zoomModal;
+          dlg.appendChild(img);
+        }
+        zImg = img;
+      }
+    }
+
 
     const glossModal = $('#glossModal');
     const glossList = $('#glossList');
@@ -1120,6 +1188,8 @@ function humanLabel(file){
       const n = currentBlock.files.length;
       currentIndex = clamp(i, 0, n-1);
       const file = currentBlock.files[currentIndex];
+      ensureViewerImgEls();
+      if(!vImg){ console.warn('Viewer img (#vImg) mancante: impossibile mostrare la pagina.'); return; }
       vImg.src = imgUrlForPage(file);
       vCap.textContent = `${humanLabel(file)}  •  ${currentIndex+1}/${n}`;
       vIdx.textContent = String(currentIndex+1);
@@ -1866,6 +1936,8 @@ function stopAudio(){
       if(!currentBlock) return;
       const page = currentBlock.files[currentIndex];
       // Modal zoom: usa lo stesso viewer PDF del browser (toolbar interna)
+      ensureViewerImgEls();
+      if(!zImg){ console.warn('Zoom img (#zImg) mancante: impossibile aprire lo zoom.'); return; }
       zImg.src = imgUrlForPage(page);
       openModal(zoomModal);
     });

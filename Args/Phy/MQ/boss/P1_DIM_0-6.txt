@@ -1,217 +1,437 @@
 <<<DIM 0 START>>>
-# DIM 0 — Postulati + Eq. di Schrödinger + risoluzione TDSE/TISE
+# DIM 0 - Postulati + Eq. di Schrödinger + risoluzione TDSE/TISE
 **(versione “da ripetere a macchinetta” ma completa)**
 
-## Dove sta negli appunti
-- **Indizio boss:** `boss/solbf0_1.jpg`
-- **Postulati scritti bene:** `img/132.jpg` → `img/136.jpg`
-  - 132: postulati 1–2 + EqS
-  - 133: Born discreto/continuo
-  - 134: degenerazione + proiettori
-  - 135: valor medio
-  - 136: simmetrizzazione + riduzione pacchetto d’onda
+## Dove sta negli appunti:
+\[
+\boxed{
+\begin{array}{l}
+\textbf{Indizio boss:}\ \texttt{boss/solbf0\_1.jpg}\\[3pt]
+\textbf{Postulati scritti bene:}\ \texttt{img/132.jpg}\rightarrow\texttt{img/136.jpg}\\
+\hline\\[-7pt]
+132:\ \text{postulati 1--2 + EqS}\\
+133:\ \text{Born discreto/continuo}\\
+134:\ \text{degenerazione + proiettori}\\
+135:\ \text{valor medio}\\
+136:\ \text{simmetrizzazione + riduzione pacchetto d'onda}\\
+137:\ \text{caso degenere (proiettore) + ripetizione misura}
+\end{array}}
+\]
+
 
 ---
 
-# 1) Postulato 1 — Stato + Eq. di Schrödinger + sovrapposizione
-
-## 1A) Stato quantistico
-**Enunciato:** lo stato di un sistema è descritto da un vettore di stato
+## Intro (prima dei postulati, discorsiva ma compatta)
+Quindi, in generale: partendo dalle **\(\underline{\text{equazioni di Maxwell}}\)** ottengo l’**\(\underline{\text{equazione d’onda}}\)** e, imponendo un’**onda monocromatica**, la porto in forma di **\(\underline{\text{Helmholtz}}\)** \(\nabla^2\psi+k^2\psi=0\): separo **parte spaziale** e **fattore temporale** \(e^{-i\omega t}\), che nei conti si fattorizza e poi si elimina. A questo punto, nel limite di **ottica geometrica**, con \(\psi(\vec r)\sim A(\vec r)e^{i\Phi(\vec r)}\) ottengo l’**\(\underline{\text{equazione iconale}}\)** \(|\nabla\Phi|=k\), che è in analogia (storicamente messa in luce da Hamilton) con l’**\(\underline{\text{equazione di Hamilton–Jacobi}}\)**: non è che **\(L=W\)**, ma che *la fase è proporzionale all’azione*. Dopo gli esperimenti quantistici e l’intuizione di **\(\underline{\text{de Broglie}}\)** si fa il *passo chiave*: in ottica \(\underline{k_{\text{opt}}=\frac{n\omega}{c}}\), in QM \(\underline{k_{\text{QM}}=\frac{p}{\hbar}}\), quindi viene naturale l’analogia **“\(\underline{n\leftrightarrow p(V)}\)”** (a energia fissata). Infatti dalla meccanica classica \(E=\frac{p^2}{2m}+V(x)\) ricavo **\(\underline{p(x)=\sqrt{2m(E-V(x))}}\)**; in quantistico *“spunta \(i\)”* perché le grandezze diventano **operatori** e, operativamente sulle onde piane, identifico **\(\underline{E\to i\hbar\partial_t}\)** e **\(\underline{p\to -i\hbar\nabla}\)** (cioè \(\hat p=-i\hbar\nabla\)). Da qui ottengo la **\(\underline{\text{TDSE}}\)** \(i\hbar\,\partial_t\psi(\vec r,t)=\hat H(t)\psi(\vec r,t)\) con \(\hat H(t)=-\frac{\hbar^2}{2m}\nabla^2+V(\vec r,t)\). Se \(\hat H\) dipende dal tempo la soluzione si scrive con l’**\(\underline{\text{operatore di evoluzione}}\)** \(U(t,0)=\mathcal T\exp\!\left[-\frac{i}{\hbar}\int_0^t \hat H(t')dt'\right]\) e \(\psi(\vec r,t)=\langle \vec r|U(t,0)|\psi(0)\rangle\); se **\(\underline{[\hat H(t_1),\hat H(t_2)]=0}\)** *non serve* l’**ordinamento temporale** \(\mathcal T\). Se invece **\(\underline{\partial_t\hat H=0}\)**, allora risolvo prima la **\(\underline{\text{TISE}}\)** \(\hat H\psi_n(\vec r)=E_n\psi_n(\vec r)\): qui trovo una **base di autostati** \(\{\psi_n\}\) e un insieme di **energie** \(\{E_n\}\) (discreto o continuo). La parte temporale si gestisce così: ogni **componente energetica** evolve solo con una **fase**, quindi la soluzione a energia fissata è \(\psi_n(\vec r,t)=\psi_n(\vec r)e^{-iE_nt/\hbar}\) e *il modulo quadro resta costante*. Per uno stato generico invece espando lo stato iniziale nella **base energetica**, \( \psi(\vec r,0)=\sum_n c_n\psi_n(\vec r)\) (oppure \(\int dE\) nel continuo), e poi nel tempo diventa
 \[
-|\psi(t)\rangle \in \mathcal S
+\psi(\vec r,t)=\sum_n c_n\,\psi_n(\vec r)\,e^{-iE_nt/\hbar}\quad(\text{o }\int dE\,c(E)\psi_E(\vec r)e^{-iEt/\hbar}),
 \]
-dove \(\mathcal S\) è uno **spazio di Hilbert** (spazio vettoriale complesso con prodotto interno).
-
-### Normalizzazione
-Per uno stato fisico:
-\[
-\langle \psi(t) | \psi(t) \rangle = 1.
-\]
-
-## 1B) Evoluzione temporale: TDSE
-**Enunciato:** esiste un operatore Hamiltoniano \(\hat H\) tale che
-\[
-i\hbar \,\frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle.
-\]
-
-- È un’equazione **del primo ordine nel tempo**: dato \(|\psi(t_0)\rangle\), l’evoluzione è determinata (unitaria).
-- Ma la teoria **non è deterministica nelle misure**: predice probabilità, non l’esito singolo.
-
-### Caso tipico (particella non relativistica)
-\[
-\hat H=\frac{\hat p^2}{2m}+V(\hat x)\qquad (\text{in 3D: }V(\hat{\vec x})).
-\]
-
-## 1C) TDSE in rappresentazione delle coordinate (forma differenziale)
-Definisco la funzione d’onda:
-\[
-\psi(x,t)=\langle x|\psi(t)\rangle.
-\]
-
-Parto dalla TDSE astratta:
-\[
-i\hbar \frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle.
-\]
-Moltiplico a sinistra per \(\langle x|\):
-\[
-i\hbar \frac{\partial}{\partial t}\langle x|\psi(t)\rangle
-= \langle x|\hat H|\psi(t)\rangle
-\]
-cioè
-\[
-i\hbar \frac{\partial}{\partial t}\psi(x,t)=\langle x|\hat H|\psi(t)\rangle.
-\]
-
-Uso che in rappresentazione \(x\):
-- \(\hat x \to x\),
-- \(\hat p \to -i\hbar \frac{\partial}{\partial x}\) (in 3D: \(-i\hbar\nabla\)),
-- quindi \(\hat p^2\to -\hbar^2\frac{\partial^2}{\partial x^2}\) (in 3D: \(-\hbar^2\nabla^2\)).
-
-Ottengo la **TDSE in coordinate (1D)**:
-\[
-i\hbar \frac{\partial \psi(x,t)}{\partial t}
-=
-\left[
--\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}+V(x)
-\right]\psi(x,t).
-\]
-(3D: sostituisci \(\partial_x^2\) con \(\nabla^2\).)
-
-## 1D) Principio di sovrapposizione
-Se \(|\psi_1\rangle\) e \(|\psi_2\rangle\) sono stati possibili, allora anche
-\[
-|\psi\rangle=c_1|\psi_1\rangle+c_2|\psi_2\rangle
-\]
-è uno stato (per \(c_1,c_2\in\mathbb C\)), dopo eventuale normalizzazione.
-
-**Significato fisico:** radice dell’**interferenza** (si sommano ampiezze, poi si fa il modulo quadro).
+con coefficienti fissati da **\(\underline{c_n=\langle \psi_n|\psi(0)\rangle}\)**. Le **“fasi”** quindi non sono un dettaglio: sono proprio ciò che genera l’**\(\underline{\text{evoluzione unitaria}}\)** quando sommi più energie, perché nelle probabilità compaiono termini di **\(\underline{\text{interferenza}}\)** \(e^{-i(E_n-E_m)t/\hbar}\); se c’è una sola energia (o una sovrapposizione dentro uno stesso livello degenere) quei termini non cambiano **\(|\psi|^2\)**, altrimenti in generale la *densità di probabilità dipende dal tempo* anche se \(\hat H\) è costante.
 
 ---
 
-# 2) Postulato 2 — Misura: osservabili = operatori hermitiani
-Un’osservabile \(A\) è associata a un operatore \(\hat A\) **hermitiano**:
+
+## Blocchi (da  slide/appunti)
+
 \[
-\hat A^\dagger=\hat A.
+\boxed{
+\begin{gathered}
+\textbf{Nel vuoto: dalle Equazioni di Maxwell alla Helmholtz (onda monocromatica)} \\[4pt]
+\text{Equazioni di Maxwell in forma differenziale: }\ \left[\!\left[\ \vec\nabla\!\cdot\!\vec E=0,\ \vec\nabla\!\cdot\!\vec B=0,\ \vec\nabla\!\times\!\vec E=-\partial_t\vec B,\ \vec\nabla\!\times\!\vec B=\mu_0\varepsilon_0\,\partial_t\vec E\ \right]\!\right] \\[4pt]
+\left[\!\left[
+\begin{array}{l}
+\vec E:\ \vec\nabla\times(\vec\nabla\times\vec E)=\vec\nabla(\vec\nabla\cdot\vec E)-\nabla^2\vec E=-\nabla^2\vec E=\vec\nabla\times(-\partial_t\vec B)=-\partial_t(\vec\nabla\times\vec B)=-\mu_0\varepsilon_0\,\partial_t^2\vec E,\ \ \mu_0\varepsilon_0=\frac1{c^2}\\[3pt]
+\vec B:\ \vec\nabla\times(\vec\nabla\times\vec B)=\vec\nabla(\vec\nabla\cdot\vec B)-\nabla^2\vec B=-\nabla^2\vec B=\vec\nabla\times(\mu_0\varepsilon_0\,\partial_t\vec E)=\mu_0\varepsilon_0\,\partial_t(\vec\nabla\times\vec E)=-\mu_0\varepsilon_0\,\partial_t^2\vec B\ \ \boxed{\Rightarrow\
+\nabla^2\begin{matrix}\vec E\\ \vec B\end{matrix}-\frac1{c^2}\partial_t^2\begin{matrix}\vec E\\ \vec B\end{matrix}=0}
+\end{array}
+\right]\!\right] \\[6pt]
+\begin{matrix}\vec E(\vec r,t)\\ \vec B(\vec r,t)\end{matrix}
+=\Re\!\left\{
+\begin{matrix}\vec E_0(\vec r)\\ \vec B_0(\vec r)\end{matrix}
+e^{-i\omega t}
+\right\}
+\ \leadsto\
+\text{(una componente / ampiezza scalare)}\ \Psi(\vec r,t)=\psi(\vec r)e^{-i\omega t} \\[4pt]
+\left[\ \frac{\partial \Psi}{\partial t}
+=\frac{\partial}{\partial t}\big(\psi(\mathbf r)e^{-i\omega t}\big)
+=\psi(\mathbf r)(-i\omega)e^{-i\omega t}
+=-i\omega\,\Psi\ \right]\ ,\
+\left[\ \frac{\partial^2 \Psi}{\partial t^2}
+=\frac{\partial}{\partial t}(-i\omega\,\Psi)
+=-i\omega\,\frac{\partial\Psi}{\partial t}
+=(-i\omega)^2\Psi
+=-\omega^2\Psi\ \right] \\[6pt]
+\nabla^2\psi+\frac{\omega^2}{c^2}\psi=0\ \equiv\ \boxed{\nabla^2\psi(\mathbf r)+\underbrace{\frac{4\pi^2}{\lambda_0^2}}_{k_0^{\,2}}\,\psi(\mathbf r)=0},\quad
+\lambda_0=\frac{2\pi}{k_0},\ k_0=\frac{\omega}{c},\ \omega=2\pi\nu,\ \nu=\frac{c}{\lambda_0}
+\end{gathered}
+}
 \]
 
-**Possibili risultati della misura:** gli **autovalori** \(a_n\) (o \(a\) nel continuo) della relazione:
 \[
-\hat A|u_n\rangle=a_n|u_n\rangle.
+\boxed{
+\begin{gathered}
+\textbf{Nel mezzo: dalle Equazioni di Maxwell alla Helmholtz (onda monocromatica)} \\[4pt]
+\text{Equazioni di Maxwell in forma differenziale: }\ \left[\!\left[\ \vec\nabla\!\cdot\!\vec D=0,\ \vec\nabla\!\cdot\!\vec B=0,\ \vec\nabla\!\times\!\vec E=-\partial_t\vec B,\ \vec\nabla\!\times\!\vec H=\partial_t\vec D\ \right]\!\right],\
+\vec D=\varepsilon\vec E,\ \vec B=\mu\vec H \\[4pt]
+\left[\!\left[
+\begin{array}{l}
+\vec E:\ \vec\nabla\times(\vec\nabla\times\vec E)=\vec\nabla(\vec\nabla\cdot\vec E)-\nabla^2\vec E
+\ \overset{\substack{\vec\nabla\cdot\vec D=0\\ \varepsilon=\text{cost.}}}{\Longrightarrow}\
+-\nabla^2\vec E
+=\vec\nabla\times(-\partial_t\vec B)
+=-\partial_t(\vec\nabla\times\vec B)
+=-\mu\,\partial_t(\vec\nabla\times\vec H)
+=-\mu\,\partial_t^2\vec D
+=-\mu\varepsilon\,\partial_t^2\vec E\\[8pt]
+\vec B:\ \vec\nabla\times(\vec\nabla\times\vec B)=\vec\nabla(\vec\nabla\cdot\vec B)-\nabla^2\vec B
+\ \overset{\vec\nabla\cdot\vec B=0}{\Longrightarrow}\
+-\nabla^2\vec B
+=\vec\nabla\times\!\big(\mu\,\vec\nabla\times\vec H\big)
+=\mu\,\vec\nabla\times(\partial_t\vec D)
+=\mu\varepsilon\,\partial_t(\vec\nabla\times\vec E)
+=-\mu\varepsilon\,\partial_t^2\vec B,\\[4pt]
+c^2=\frac1{\mu_0\varepsilon_0},\ \mu=\mu_0\mu_r,\ \varepsilon=\varepsilon_0\varepsilon_r,\ (\mu_r\simeq1)\Rightarrow
+\mu\varepsilon=\mu_0\varepsilon_0\mu_r\varepsilon_r=\frac{\mu_r\varepsilon_r}{c^2}\simeq\frac{\varepsilon_r}{c^2}\ \overset{\text{non-magnetico}}{=}\ \frac{n^2}{c^2},\ \
+\boxed{\Rightarrow\ \nabla^2\begin{matrix}\vec E\\ \vec B\end{matrix}-\frac{n^2}{c^2}\partial_t^2\begin{matrix}\vec E\\ \vec B\end{matrix}=0}
+\end{array}
+\right]\!\right] \\[6pt]
+\begin{matrix}\vec E(\vec r,t)\\ \vec B(\vec r,t)\end{matrix}
+=\Re\!\left\{
+\begin{matrix}\vec E_0(\vec r)\\ \vec B_0(\vec r)\end{matrix}
+e^{-i\omega t}
+\right\}
+\ \leadsto\
+\text{(una componente / ampiezza scalare)}\ \Psi(\vec r,t)=\psi(\vec r)e^{-i\omega t} \\[4pt]
+\left[\ \frac{\partial \Psi}{\partial t}
+=\frac{\partial}{\partial t}\big(\psi(\mathbf r)e^{-i\omega t}\big)
+=\psi(\mathbf r)(-i\omega)e^{-i\omega t}
+=-i\omega\,\Psi\ \right]\ ,\
+\left[\ \frac{\partial^2 \Psi}{\partial t^2}
+=\frac{\partial}{\partial t}(-i\omega\,\Psi)
+=-i\omega\,\frac{\partial\Psi}{\partial t}
+=(-i\omega)^2\Psi
+=-\omega^2\Psi\ \right] \\[6pt]
+\nabla^2\psi+\mu\varepsilon\,\omega^2\psi=0\ \equiv\ \boxed{\nabla^2\psi(\mathbf r)+\underbrace{\frac{4\pi^2}{\lambda^2}}_{k^{2}}\,\psi(\mathbf r)=0},\quad
+\lambda=\frac{2\pi}{k},\ k=\frac{n\omega}{c},\ \omega=2\pi\nu,\ \nu=\frac{v_f}{\lambda},\ v_f=\frac{c}{n}
+\end{gathered}
+}
 \]
 
-**Perché hermitiano?** Autovalori reali (misure reali) e buona struttura di ortogonalità/completamento degli autostati.
+\[
+\boxed{
+\begin{gathered}
+\textbf{Ponte ottica–QM: }k_{\rm opt}\ \boldsymbol{\leftrightarrow}\ k_{\rm QM}\quad\Rightarrow\quad n\ \boldsymbol{\leftrightarrow}\ p(V) \\[6pt]
+\textbf{(A) Helmholtz in ottica:}\
+\underbrace{\text{vuoto: }\nabla^2\psi(\vec r)+k_0^2\psi(\vec r)=0,\ \ k_0=\frac{\omega}{c}}_{\text{onda monocromatica nel vuoto}}\qquad
+\underbrace{\text{mezzo: }\nabla^2\psi(\vec r)+k_{\rm opt}^2\psi(\vec r)=0,\ \ k_{\rm opt}=\frac{n\omega}{c}=n\,k_0}_{\text{onda monocromatica nel mezzo}} \\[10pt]
+\textbf{(B) Ottica geometrica (fase):}\ \psi(\vec r)\sim A(\vec r)e^{i\Phi(\vec r)} \ \Rightarrow\
+\underbrace{|\vec\nabla\Phi(\vec r)|=k_{\rm opt}(\vec r)}_{\text{equazione iconale}}\quad
+(\text{Hamilton, 1834: equivalenza HJ–iconale})\
+\text{Nota: }\text{non implica }L=W,\ \text{ma solo }\Phi\propto W\ \text{(fase ottica proporzionale all’azione)}. \\[10pt]
+\textbf{(C) QM: energia meccanica e de Broglie:}\
+E=\frac{p^2}{2m}+V(\vec r)=\text{cost.}\ \Rightarrow\
+p(\vec r)=\sqrt{2m\big(E-V(\vec r)\big)},\qquad
+\lambda_{dB}=\frac{h}{p},\quad k_{\rm QM}=\frac{p}{\hbar} \\[6pt]
+\textbf{Dov’è finito il fattore di fase (EM)?}\ \text{Non è sparito: è stato fattorizzato e poi cancellato.} \\[8pt]
+\boxed{\ -\frac{\hbar^2}{2m}\nabla^2\psi(\vec r)+V(\vec r)\psi(\vec r)=E\,\psi(\vec r)\ } \\[10pt]
+\textbf{(D) Come si risolve / che soluzioni dà:}\
+\begin{cases}
+\text{TISE = problema agli autovalori: }\hat H\psi_n=E_n\psi_n\ \text{con condizioni al contorno/normalizzazione}\\[4pt]
+\text{se spettro discreto: }E_n\ \text{quantizzati, }\{\psi_n\}\ \text{base ortonormale}\\[4pt]
+\text{se spettro continuo (scattering): }E\ \text{continuo, soluzioni tipo onde piane/combinate, }R,T\ \text{da raccordi/corrente}\\[4pt]
+\text{tempo: }\psi(\vec r,t)=\sum_n c_n\psi_n(\vec r)e^{-iE_nt/\hbar}\ \ (\text{o }\int dE),\ \ c_n=\langle \psi_n|\psi(0)\rangle
+\end{cases} \\[10pt]
+\textbf{(E) Mono-energia vs superposizione:}\
+\begin{cases}
+\text{se }E\ \text{fissata: }\psi(\vec r,t)=\psi(\vec r)e^{-iEt/\hbar}\ \Rightarrow\ |\psi(\vec r,t)|^2=|\psi(\vec r)|^2 \\[4pt]
+\text{se più energie: }\psi(\vec r,t)=\sum_n c_n\psi_n(\vec r)e^{-iE_nt/\hbar}\ (\text{o }\int dE)\ \Rightarrow\ |\psi(\vec r,t)|^2\ \text{dipende da }t\ \text{per termini }e^{-i(E_n-E_m)t/\hbar}
+\end{cases}\
+\text{Eccezione: }\ |\psi(\vec r,t)|^2\ \text{resta costante se c’è un solo }E\ \text{oppure una sovrapposizione solo dentro lo stesso livello degenere.}
+\end{gathered}
+}
+\]
+
+\[
+\boxed{
+\begin{gathered}
+\textbf{TDSE (}\hat H=\hat H(t)\textbf{)} \\[10pt]
+\text{Nota: è un’equazione di evoluzione sia con } \hat H(t)\ \text{sia con } \partial_t\hat H=0,\ \text{mentre la TISE è agli autovalori.} \\[6pt]
+\textbf{1) Da onde piane (\(\Rightarrow\)) identificazioni operative (\(\Rightarrow\)) TDSE:} \\[4pt]
+\psi(\vec r,t)=A\,e^{i(\vec k\cdot\vec r-\omega t)}\ \Rightarrow\
+\partial_t\psi=-i\omega\,\psi,\ \ \vec\nabla\psi=i\vec k\,\psi \\[4pt]
+E=\hbar\omega,\ \ \vec p=\hbar\vec k\ \Rightarrow\
+i\hbar\,\partial_t\psi=E\,\psi,\ \ -i\hbar\,\vec\nabla\psi=\vec p\,\psi \\[6pt]
+\textbf{Identificazioni operative (valide su onde piane):}\qquad
+E\,\psi\ \equiv\ (i\hbar\,\partial_t)\psi,\qquad
+\vec p\,\psi\ \equiv\ (-i\hbar\,\vec\nabla)\psi \\[6pt]
+\boxed{E\ \mapsto\ i\hbar\,\partial_t,\qquad \vec p\ \mapsto\ -i\hbar\,\vec\nabla} \\[6pt]
+\hat H(t)=\frac{\hat p^{\,2}}{2m}+V(\vec r,t),\qquad \hat p=-i\hbar\,\vec\nabla\ \Rightarrow\
+\hat H(t)=-\frac{\hbar^2}{2m}\nabla^2+V(\vec r,t) \\[6pt]
+\boxed{i\hbar\,\partial_t\psi(\vec r,t)=\hat H(t)\,\psi(\vec r,t)} \\[14pt]
+\textbf{2) Se \(\partial_t\hat H=0\): TISE (\(\Rightarrow\)) TDSE (stati a energia fissata):} \\[4pt]
+\hat H\,\psi_n(\vec r)=E_n\,\psi_n(\vec r),\qquad \psi_n(\vec r,t)=\psi_n(\vec r)\,e^{-iE_n t/\hbar} \\[4pt]
+i\hbar\,\partial_t\!\big(\psi_n e^{-iE_nt/\hbar}\big)=E_n\,\psi_n e^{-iE_nt/\hbar},\qquad
+\hat H\!\big(\psi_n e^{-iE_nt/\hbar}\big)=E_n\,\psi_n e^{-iE_nt/\hbar} \\[4pt]
+\text{(fase \(e^{-iE_nt/\hbar}\): valida solo per un singolo \(E_n\); in TISE è fattore comune e “si cancella”)} \\[4pt]
+\boxed{i\hbar\,\partial_t\psi_n(\vec r,t)=\hat H\,\psi_n(\vec r,t)\qquad(\partial_t\hat H=0)} \\[14pt]
+\textbf{3) Come si risolve (sempre TDSE):} \\[4pt]
+\hat H(t):\quad |\psi(t)\rangle=\hat U(t,t_0)\,|\psi(t_0)\rangle \\[4pt]
+\partial_t\hat H=0:\quad |\psi(t)\rangle=e^{-i\hat H(t-t_0)/\hbar}|\psi(t_0)\rangle
+=\sum_n c_n e^{-iE_n t/\hbar}|n\rangle\ \ (\text{o }\int dE),\qquad c_n=\langle n|\psi(0)\rangle
+\end{gathered}
+}
+\]
 
 ---
 
-# 3) Postulato 3 — Regola di Born (probabilità dell’esito)
+# 1) Postulato 1 - Eq. di Schrödinger e principio di sovrapposizione
 
-## 3A) Spettro discreto (non degenere)
-Espando lo stato nella base degli autostati di \(\hat A\):
+Definisco lo stato come
+\[
+|\psi(t)\rangle\in\mathcal S.
+\]
+
+**Evoluzione (TDSE):**
+\[
+i\hbar\,\frac{d}{dt}|\psi(t)\rangle=\hat H(t)\,|\psi(t)\rangle.
+\]
+Qui \(\hat H\) è l’Hamiltoniano del sistema (lo modello in base al problema: cinetica + potenziale, ecc.).  
+Nota: in generale \(|\psi(t)\rangle\) **non è** un autostato di \(\hat H\); lo diventa solo nel caso di **energia fissata** (stato stazionario):
+\[
+\hat H|n\rangle=E_n|n\rangle.
+\]
+
+Essendo un’equazione del primo ordine nel tempo, assegnato \(|\psi(t_0)\rangle\) la TDSE determina \(|\psi(t)\rangle\) per ogni \(t\).
+
+### Passaggio in rappresentazione delle coordinate
+
+Proietto sulla base \(\{|x\rangle\}\) (in 3D \(\{|\vec r\rangle\}\)):
+\[
+\langle x|\Big(i\hbar\,\frac{d}{dt}|\psi(t)\rangle\Big)=\langle x|\hat H|\psi(t)\rangle
+\ \Rightarrow\ 
+i\hbar\,\frac{\partial}{\partial t}\langle x|\psi(t)\rangle=\langle x|\hat H|\psi(t)\rangle.
+\]
+Definisco
+\[
+\psi(x,t)\equiv\langle x|\psi(t)\rangle.
+\]
+
+Per una particella non relativistica:
+\[
+\hat H=\frac{\hat p^2}{2m}+V(\hat x)\qquad(\text{in 3D }V(\hat{\vec r})).
+\]
+In rappresentazione \(x\):
+\[
+\hat x\to x,\qquad \hat p\to -i\hbar\,\partial_x \quad (\text{in 3D: }-i\hbar\nabla),
+\qquad \hat p^2\to -\hbar^2\,\partial_x^2 \quad (\text{in 3D: }-\hbar^2\nabla^2).
+\]
+Ottengo:
+\[
+\boxed{
+i\hbar\,\partial_t\psi(x,t)=\left[-\frac{\hbar^2}{2m}\partial_x^2+V(x,t)\right]\psi(x,t)
+}
+\qquad(\text{in 3D } \partial_x^2\to\nabla^2).
+\]
+
+### Principio di sovrapposizione
+
+Se \(|\psi_1(t)\rangle\) e \(|\psi_2(t)\rangle\) sono soluzioni, allora per \(c_1,c_2\in\mathbb C\):
+\[
+|\psi(t)\rangle=c_1|\psi_1(t)\rangle+c_2|\psi_2(t)\rangle
+\]
+è ancora soluzione, perché la TDSE è lineare:
+\[
+i\hbar\,\partial_t(c_1|\psi_1\rangle+c_2|\psi_2\rangle)
+=c_1\hat H|\psi_1\rangle+c_2\hat H|\psi_2\rangle
+=\hat H(c_1|\psi_1\rangle+c_2|\psi_2\rangle).
+\]
+
+---
+
+# 2) Postulato 2 - Misura: osservabili, autovalori, aggiornamento dello stato
+
+Le grandezze fisiche misurabili sono **osservabili** e a ciascuna \(A\) associo un operatore \(\hat A\) (hermitiano).  
+L’equazione agli autovalori dà i **possibili risultati**:
+
+- spettro discreto:
+\[
+\hat A|u_n\rangle=a_n|u_n\rangle
+\]
+- spettro continuo:
+\[
+\hat A|u_\alpha\rangle=a(\alpha)\,|u_\alpha\rangle.
+\]
+
+**Non collassa l’osservabile: collassa lo stato del sistema.**  
+Se espando lo stato nella base degli autostati:
 \[
 |\psi(t)\rangle=\sum_k c_k(t)\,|u_k\rangle,
-\qquad
-c_k(t)=\langle u_k|\psi(t)\rangle.
 \]
-
-**Born:**
-\[
-P(a_n)=|\langle u_n|\psi(t)\rangle|^2=|c_n(t)|^2.
-\]
-Se \(|\psi\rangle\) è normalizzato:
-\[
-\sum_k |c_k(t)|^2=1.
-\]
-
-## 3B) Spettro continuo
-\[
-|\psi(t)\rangle=\int c(a,t)\,|u_a\rangle\,da,
-\qquad
-dP(a)=|c(a,t)|^2\,da=|\langle u_a|\psi(t)\rangle|^2\,da.
-\]
-
-## 3C) Caso degenere: proiettori
-Se \(a_n\) è degenere: esistono \(r_n\) autostati diversi con lo stesso autovalore:
-\[
-\hat A|u_n^{(k)}\rangle=a_n|u_n^{(k)}\rangle,\qquad k=1,\dots,r_n.
-\]
-
-La probabilità di ottenere \(a_n\) è:
-\[
-P(a_n)=\sum_{k=1}^{r_n}\left|\langle u_n^{(k)}|\psi\rangle\right|^2.
-\]
-
-Definisco il **proiettore** sul sottospazio \(S_n\):
-\[
-\hat P_n=\sum_{k=1}^{r_n}|u_n^{(k)}\rangle\langle u_n^{(k)}|.
-\]
-Proprietà: \(\hat P_n^\dagger=\hat P_n\), \(\hat P_n^2=\hat P_n\).
-
-Born compatta:
-\[
-P(a_n)=\langle \psi|\hat P_n|\psi\rangle.
-\]
+e la misura restituisce \(a_n\), lo stato si aggiorna sull’autospazio associato a \(a_n\) (nel non degenere: \(|\psi\rangle\to|u_n\rangle\); nel degenere: proiezione sul sottospazio \(S_n\), vedi Post. 6).
 
 ---
 
-# 4) Postulato 4 — Valor medio (expectation value)
-Definizione operativa (media su molte misure identiche):
+# 3) Postulato 3 - Regola di Born: probabilità degli esiti (discreto/continuo + degenere)
+
+Dato \(|\psi\rangle\), se misuro \(\hat A\) posso ottenere uno qualunque dei suoi autovalori \(\{a_n\}\): la teoria è **probabilistica**.
+
+Scelgo l’osservabile:
+\[
+\hat A|u_n\rangle=a_n|u_n\rangle,\qquad \{|u_n\rangle\}\ \text{base}.
+\]
+Sviluppo:
+\[
+|\psi(t)\rangle=\sum_k c_k(t)\,|u_k\rangle,\qquad c_k(t)=\langle u_k|\psi(t)\rangle.
+\]
+Con ortonormalità:
+\[
+\langle u_k|u_n\rangle=\delta_{kn}.
+\]
+
+### Spettro discreto (non degenere)
+
+\[
+\boxed{P(a_n)=|\langle u_n|\psi(t)\rangle|^2=|c_n(t)|^2.}
+\]
+Se preparo lo stato \(|\psi\rangle=|u_k\rangle\):
+\[
+P(a_n)=|\langle u_n|u_k\rangle|^2=|\delta_{nk}|^2=\delta_{nk}.
+\]
+
+Normalizzazione:
+\[
+\langle\psi|\psi\rangle=1=\sum_k |c_k(t)|^2.
+\]
+Se non normalizzato:
+\[
+P(a_n)=\frac{|c_n(t)|^2}{\sum_k|c_k(t)|^2}.
+\]
+
+### Spettro continuo
+
+\[
+|\psi(t)\rangle=\int c(\alpha,t)\,|u_\alpha\rangle\,d\alpha,
+\qquad
+dP(\alpha,\alpha+d\alpha)=|c(\alpha,t)|^2\,d\alpha
+=\big|\langle u_\alpha|\psi(t)\rangle\big|^2\,d\alpha.
+\]
+
+### Caso degenere (autovalore \(a_n\) con degenerazione \(r_n\))
+
+\[
+\hat A|u_n^{(k)}\rangle=a_n|u_n^{(k)}\rangle,\qquad k=1,2,\dots,r_n,\qquad r_n=\dim S_n,
+\]
+\[
+\langle u_n^{(k)}|u_m^{(j)}\rangle=\delta_{nm}\delta_{kj}.
+\]
+Sviluppo:
+\[
+|\psi(t)\rangle=\sum_n\sum_{k=1}^{r_n} c_n^{(k)}(t)\,|u_n^{(k)}\rangle.
+\]
+Probabilità di ottenere l’autovalore \(a_n\):
+\[
+\boxed{
+P(a_n)=\sum_{k=1}^{r_n}\big|\langle u_n^{(k)}|\psi(t)\rangle\big|^2
+=\sum_{k=1}^{r_n}|c_n^{(k)}(t)|^2
+}.
+\]
+Se le alternative sono mutuamente esclusive (distinguibili), sommo i **moduli quadri**; se sono indistinguibili, si sommano prima le ampiezze e poi si fa il modulo quadro.
+
+**Proiettore sul sottospazio \(S_n\):**
+\[
+\hat P_n=\sum_{k=1}^{r_n}|u_n^{(k)}\rangle\langle u_n^{(k)}|
+\]
+\[
+\boxed{P(a_n)=\langle\psi(t)|\hat P_n|\psi(t)\rangle.}
+\]
+Proprietà:
+\[
+\hat P_n^2=\hat P_n,\qquad \hat P_n^\dagger=\hat P_n.
+\]
+Quindi:
+\[
+P(a_n)=\langle\psi|\hat P_n^\dagger\hat P_n|\psi\rangle=\|\hat P_n|\psi\rangle\|^2,
+\qquad
+|\psi_n\rangle\equiv \hat P_n|\psi\rangle\ \Rightarrow\ P(a_n)=\||\psi_n\rangle\|^2.
+\]
+Questa quantità è invariante per trasformazioni unitarie all’interno del sottospazio degenere (la scelta della base dentro \(S_n\) non cambia \(\hat P_n\)).
+
+---
+
+# 4) Postulato 4 - Valor medio (expectation value)
+
+Definizione:
 \[
 \langle A\rangle=\sum_n a_n\,P(a_n).
 \]
-
-Dimostro che coincide con \(\langle\psi|\hat A|\psi\rangle\):
+Con Born (spettro discreto non degenere):
 \[
-\langle A\rangle
-=\sum_n a_n\,|\langle u_n|\psi\rangle|^2
-=\sum_n a_n\,\langle\psi|u_n\rangle\langle u_n|\psi\rangle.
+\langle A\rangle=\sum_n a_n\,|\langle u_n|\psi(t)\rangle|^2
+=\sum_n a_n\,\langle\psi(t)|u_n\rangle\langle u_n|\psi(t)\rangle.
 \]
-Uso \(a_n|u_n\rangle=\hat A|u_n\rangle\) e l’identità \(\sum_n|u_n\rangle\langle u_n|=\hat I\):
+Uso \(\hat A|u_n\rangle=a_n|u_n\rangle\) e la chiusura \(\sum_n|u_n\rangle\langle u_n|=\mathbb I\):
 \[
-\langle A\rangle
-= \langle\psi|\hat A\left(\sum_n|u_n\rangle\langle u_n|\right)|\psi\rangle
-=\langle\psi|\hat A|\psi\rangle.
+\boxed{\langle A\rangle=\langle\psi(t)|\hat A|\psi(t)\rangle.}
 \]
 
-Esempio (posizione 1D):
+Caso degenere:
 \[
-\langle x\rangle=\langle\psi|\hat x|\psi\rangle=\int x\,|\psi(x,t)|^2\,dx.
+|\psi(t)\rangle=\sum_n\sum_{k=1}^{r_n} c_n^{(k)}\,|u_n^{(k)}\rangle
+\quad\Rightarrow\quad
+\boxed{\langle A\rangle=\sum_n a_n\sum_{k=1}^{r_n}|c_n^{(k)}|^2}.
+\]
+Quindi:
+\[
+P_n=\sum_{k=1}^{r_n}|c_n^{(k)}|^2,\qquad \langle A\rangle=\sum_n a_n\,P_n.
 \]
 
----
-
-# 5) Postulato 5 — Simmetrizzazione (operator ordering)
-In classico hai prodotti tipo \(xp\). In quantistico \(\hat x\hat p\neq \hat p\hat x\) (non commutano).
+Esempio (posizione):
 \[
-(\hat x\hat p)^\dagger=\hat p\hat x\neq \hat x\hat p.
-\]
-
-Per costruire un osservabile hermitiano dalla quantità classica \(xp\) uso la **simmetrizzazione**:
-\[
-xp \ \longrightarrow\ \frac{1}{2}(\hat x\hat p+\hat p\hat x).
+\langle x\rangle=\langle\psi(t)|\hat x|\psi(t)\rangle=\int d^3x\,x\,|\psi(x,t)|^2.
 \]
 
 ---
 
-# 6) Postulato 6 — Riduzione del pacchetto d’onda (collasso)
-Evoluzione unitaria fino a \(t_1\):
+# 5) Postulato 5 - Simmetrizzazione (prodotti di operatori non commutanti)
+
+In generale \(\hat x\hat p\neq \hat p\hat x\).  
+Per associare a un prodotto classico \(xp\) un osservabile (operatore hermitiano) uso la simmetrizzazione:
 \[
-|\psi(t_0)\rangle \xrightarrow{\text{TDSE}} |\psi(t_1)\rangle.
+xp\ \longrightarrow\ \boxed{\frac{1}{2}\big(\hat x\hat p+\hat p\hat x\big)}.
 \]
 
-Misuro \(\hat A\) e ottengo l’esito \(a_n\).
+---
 
-## Caso non degenere
+# 6) Postulato 6 - Riduzione del pacchetto d’onda (collasso)
+
+Tra due misure lo stato evolve unitariamente con la TDSE.  
+Se in \(t_1\) misuro \(\hat A\) e ottengo l’esito \(a_n\), lo stato collassa sull’autospazio associato a \(a_n\).
+
+### Caso non degenere
 \[
-|\psi(t_1^+)\rangle = \frac{|u_n\rangle\langle u_n|\psi(t_1)\rangle}{\sqrt{\langle\psi(t_1)|u_n\rangle\langle u_n|\psi(t_1)\rangle}}
-= \frac{|u_n\rangle\langle u_n|\psi(t_1)\rangle}{\sqrt{P(a_n)}}.
+\hat A|u_n\rangle=a_n|u_n\rangle
+\qquad\Rightarrow\qquad
+|\psi(t_1^-)\rangle\ \longrightarrow\ |\psi(t_1^+)\rangle=|u_n\rangle
+\ (\text{poi rinormalizzo}).
 \]
+Ripetendo subito la stessa misura ottengo lo stesso autovalore con probabilità 1.
 
-## Caso degenere
+### Caso degenere
 \[
-|\psi(t_1^+)\rangle = \frac{\hat P_n|\psi(t_1)\rangle}{\sqrt{\langle\psi(t_1)|\hat P_n|\psi(t_1)\rangle}}.
+\hat A|u_n^{(k)}\rangle=a_n|u_n^{(k)}\rangle,\qquad
+\hat P_n=\sum_k |u_n^{(k)}\rangle\langle u_n^{(k)}|
 \]
+\[
+|\psi(t_1^-)\rangle\ \longrightarrow\ |\psi_n(t_1^+)\rangle=\hat P_n|\psi(t_1^-)\rangle
+\ (\text{poi rinormalizzo}).
+\]
+Ripetendo la misura dopo un tempo molto piccolo (prima che l’evoluzione rimescoli), si ottiene ancora lo stesso autovalore \(a_n\).
 
-**Conseguenza:** se ripeti subito la stessa misura di \(\hat A\), ottieni lo stesso valore con probabilità 1 (sei nell’autospazio).
+Esempio (polarizzatore, legge di Malus):
+\[
+I=I_0\cos^2\theta.
+\]
+Il polarizzatore seleziona la componente parallela: un secondo polarizzatore allineato lascia passare tutto, uno ortogonale blocca (proiezione nulla).
 
 ---
 
@@ -283,7 +503,7 @@ c_n=\langle \varphi_n|\psi(0)\rangle.
 ---
 
 # Significato fisico “in una frase per pezzo”
-- **Stato \(|\psi\rangle\):** contiene tutta l’informazione disponibile sul sistema.
+- **Stato \(|\psi\rangle\):** contiene tutta l’informmazione disponibile sul sistema.
 - **Sovrapposizione:** sommo ampiezze → interferenza.
 - **Operatori hermitiani:** misure reali + autostati ortogonali.
 - **Born:** probabilità = modulo quadro dell’ampiezza.
@@ -297,11 +517,12 @@ c_n=\langle \varphi_n|\psi(0)\rangle.
 
 # Copione orale pronto (90–120 sec)
 “Lo stato quantistico è un vettore \(|\psi(t)\rangle\) in uno spazio di Hilbert e vale la sovrapposizione. L’evoluzione temporale è data da \(i\hbar\,\partial_t|\psi\rangle=\hat H|\psi\rangle\). In coordinate, con \(\hat H=\hat p^2/2m+V(\hat x)\) e \(\hat p=-i\hbar\partial_x\), ottengo \(i\hbar\,\partial_t\psi=[-\hbar^2/(2m)\partial_x^2+V(x)]\psi\). Un’osservabile corrisponde a un operatore hermitiano \(\hat A\), e i risultati possibili sono gli autovalori \(a_n\). La probabilità è \(P(a_n)=|\langle u_n|\psi\rangle|^2\); in caso degenere uso il proiettore \(\hat P_n\) e \(P(a_n)=\langle\psi|\hat P_n|\psi\rangle\). Il valor medio è \(\langle A\rangle=\sum_n a_nP(a_n)\) e si dimostra che è \(\langle\psi|\hat A|\psi\rangle\). Se ho prodotti non commutanti, per fare un osservabile simmetrizzo, ad esempio \(xp\to(\hat x\hat p+\hat p\hat x)/2\). Dopo una misura, lo stato collassa nella proiezione sull’autospazio misurato e poi riprende l’evoluzione con Schrödinger. Se \(\hat H\) non dipende da \(t\), separo \(\psi=\varphi T\), ottengo \(T=e^{-iEt/\hbar}\) e la TISE \([-\hbar^2/(2m)\partial_x^2+V]\varphi=E\varphi\).”
+
 <<<DIM 0 END>>>
 
 
 <<<DIM 1 START>>>
-# DIM 1 — Equazione di continuità + corrente di probabilità
+# DIM 1 - Equazione di continuità + corrente di probabilità
 **(conservazione della probabilità)**
 
 ## Dove sta negli appunti
@@ -488,7 +709,7 @@ e:
 
 
 <<<DIM 2 START>>>
-# DIM 2 — Principio di indeterminazione di Heisenberg
+# DIM 2 - Principio di indeterminazione di Heisenberg
 **(da commutatori + Cauchy–Schwarz, poi caso \(x\)–\(p\) e stato a minima indeterminazione = gaussiana)**
 
 ## Dove sta negli appunti
@@ -789,7 +1010,7 @@ Moltiplicando:
 <<<DIM 2 END>>>
 
 <<<DIM 3 START>>>
-# DIM 3 — Osservabili compatibili ⇔ \([\,\hat A,\hat B\,]=0\)  
+# DIM 3 - Osservabili compatibili ⇔ \([\,\hat A,\hat B\,]=0\)  
 **(caso non degenere + caso degenere con sottospazi invarianti / diagonalizzazione dentro la degenerazione)**
 
 ## Dove sta negli appunti
@@ -998,7 +1219,7 @@ Se \(\hat A\) e \(\hat B\) commutano ma rimane degenerazione (cioè \(\hat B\) n
 <<<DIM 3 END>>>
 
 <<<DIM 4 START>>>
-# DIM 4 — Valori medi, teorema di Ehrenfest, evoluzione temporale (U, Heisenberg) e simmetrie ⇒ quantità conservate
+# DIM 4 - Valori medi, teorema di Ehrenfest, evoluzione temporale (U, Heisenberg) e simmetrie ⇒ quantità conservate
 
 ## Dove sta negli appunti
 - **Valori medi / varianze (base):** `img/46.jpg` → `img/53.jpg` (P1·5 “Proprietà e valori medi”)  
@@ -1457,7 +1678,7 @@ Se \(\hat H\) non dipende esplicitamente dal tempo:
 <<<DIM 4 END>>>
 
 <<<DIM 5 START>>>
-# DIM 5 — Problemi 1D “a tratti”: libera, step, barriera, buca  
+# DIM 5 - Problemi 1D “a tratti”: libera, step, barriera, buca  
 **(soluzioni dell’Eq. di Schrödinger in regioni a \(V=\) costante + condizioni di raccordo + \(R/T\) via corrente + analogia ottica + parità + legati vs diffusione)**
 
 ## Dove sta negli appunti (così la ripeti identica)
@@ -1922,7 +2143,7 @@ Nel caso \(E<V\) l’onda diventa **evanescente** come in ottica oltre l’angol
 <<<DIM 5 END>>>
 
 <<<DIM 6 START>>>
-# DIM 6 — Oscillatore armonico quantistico 1D (metodo operatoriale: \(a,a^\dagger\), \(N\), spettro \(E_n\), stati \(\psi_n\), significato fisico)
+# DIM 6 - Oscillatore armonico quantistico 1D (metodo operatoriale: \(a,a^\dagger\), \(N\), spettro \(E_n\), stati \(\psi_n\), significato fisico)
 
 ## Dove sta negli appunti
 - **Formalismo operatoriale / commutatori / notazione:** **P1·12** (`img/126.jpg`–`img/132.jpg`)  

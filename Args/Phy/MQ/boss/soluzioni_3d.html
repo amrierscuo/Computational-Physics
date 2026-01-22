@@ -22,6 +22,7 @@
       --good:#39d98a;
       --warn:#ffcc66;
       --link:#2b7fff;
+      --link:#2b7fff;
       --radius: 16px;
     }
 
@@ -669,7 +670,8 @@
         <li><b>I</b>: apri/chiudi <i>Help e problemi</i></li>
         <li><b>O</b>: apri/chiudi <i>Ultima soluzione</i></li>
         <li><b>L</b>: toggle luci</li>
-        <li><b>ESC</b>: chiude pannelli e libera il mouse</li>
+                <li><b>M</b>: musica on/off</li>
+<li><b>ESC</b>: chiude pannelli e libera il mouse</li>
       </ul>
     </div>
 
@@ -679,7 +681,7 @@
         <li><b>Joystick</b>: movimento</li>
         <li><b>Trascina</b> sullo schermo: guarda attorno</li>
         <li><b>Interagisci</b>: apri la DIM guardata</li>
-        <li>Pulsanti in alto: <b>Help e problemi</b>, <b>Ultima soluzione</b>, <b>L</b> luci</li>
+        <li>Pulsanti in alto: <b>Help e problemi</b>, <b>Ultima soluzione</b>, <b>L</b> luci, <b>♪</b> musica</li>
       </ul>
     </div>
   </div>
@@ -1866,6 +1868,45 @@ for(let i=0;i<16;i++){
       const startX = -(cols-1)*spacing/2;
       const startZ = -(rows-1)*spacing/2;
 
+	 // DIM 0 (fisico) — con collider (solido)
+	 {
+	   const dim = 0;
+	   const x = 0.0, z = 27.5;
+	   const y = 1;
+
+	   const meta = DIM_META[dim];
+	   const part = meta ? meta.part : 1;
+	   const base = (part===1) ? metalMatP1 : (part===2) ? metalMatP2 : metalMatP3;
+	   const mat = base.clone();
+	   mat.emissiveIntensity = hasSol[dim] ? 0.25 : 0.12;
+
+	   const mesh = new THREE.Mesh(new THREE.BoxGeometry(1.9, 2.7, 1.9), mat);
+	   mesh.position.set(x, y, z);
+	   mesh.userData.dim = dim;
+	   scene.add(mesh);
+
+	   // Label sopra il blocco (ID)
+	   const label = makeLabelSprite(dim);
+	   label.position.set(x, y + 1.9, z);
+	   scene.add(label);
+
+	   // Collider per DIM 0 (solido) ✅ completo
+	   const half = 0.95;      // 1.9 / 2
+	   const hMin = y - 1.35;  // 2.7 / 2
+	   const hMax = y + 1.35;
+	   colliders.push({
+		 dim,
+		 minX: x - half, maxX: x + half,
+		 minZ: z - half, maxZ: z + half,
+		 minY: hMin,     maxY: hMax
+	   });
+
+	   blocks.push({ dim, mesh, label });
+	 }
+
+
+
+
       for(let i=0;i<DIM_BLOCKS.length;i++){
         const dim = DIM_BLOCKS[i];
         const col = i % cols;
@@ -1984,7 +2025,9 @@ for(let i=0;i<16;i++){
         if(e.code==="KeyO") toggleDrawer(drawerSol);
         if(e.code==="KeyL") toggleLights();
 
-        if(e.code==="Escape"){
+        
+        if(e.code==="KeyM") initAudioOnce().catch(()=>{}).finally(()=> toggleMusic());
+if(e.code==="Escape"){
           openDrawer(drawerInv,false);
           openDrawer(drawerSol,false);
           if(pointerLocked) document.exitPointerLock();
