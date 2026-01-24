@@ -117,8 +117,8 @@
         id: 0,
         part: 1,
         title: 'DIM 0 (Base)',
-        plain: 'DIM 0 (Base): Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d\'Onda, 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un\'Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d\'Onda (Collasso della Funzione d\'Onda)',
-        html: String.raw`<b>DIM 0 (Base):</b> Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d&rsquo;Onda, 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un&rsquo;Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d&rsquo;Onda (Collasso della Funzione d&rsquo;Onda)`,
+        plain: 'DIM 0 (Base): Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d\'Onda(In realtà: "possibili risultati di una misura" quindi Le Osservabili), 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un\'Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d\'Onda (Collasso della Funzione d\'Onda)',
+        html: String.raw`<b>DIM 0 (Base):</b> Postulati + Risoluzione TDSE/TISE: 1. Equazione di Schrodinger e Principio di Sovrapposizione, 2. Misura e Collasso della Funzione d&rsquo;Onda(In realtà: "possibili risultati di una misura" quindi Le Osservabili), 3. Probabilita del risultato di una misura (Regola di Born), 4. Valor Medio di un&rsquo;Osservabile, 5. Simmetrizzazione dei Prodotti, 6. Riduzione del Pacchetto d&rsquo;Onda (Collasso della Funzione d&rsquo;Onda)`,
       },
       {
         id: 1,

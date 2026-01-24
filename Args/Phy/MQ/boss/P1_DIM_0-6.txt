@@ -522,7 +522,7 @@ c_n=\langle \varphi_n|\psi(0)\rangle.
 
 
 <<<DIM 1 START>>>
-# DIM 1 - Equazione di continuità + corrente di probabilità
+# DIM 1 — Equazione di continuità + corrente di probabilità  
 **(conservazione della probabilità)**
 
 ## Dove sta negli appunti
@@ -531,692 +531,493 @@ c_n=\langle \varphi_n|\psi(0)\rangle.
 
 ---
 
-# 0) Obiettivo “boss”
-Partendo dalla TDSE e dalla sua complessa coniugata, dimostrare che la densità di probabilità
+In QM lo stato è \( |\psi\rangle \); in rappresentazione di posizione è \( \psi(x,t)=\langle x|\psi(t)\rangle \).
+
+A differenza della classica, \( \psi \) non dà una traiettoria \(x(t)\): dà ampiezze di probabilità (quindi informazione statistica sugli esiti).
+
+La densità \( |\psi(x,t)|^2 \) è la probabilità per unità di lunghezza di trovare la particella in \(x\) al tempo \(t\) (Born).
+
+**Conservazione globale (ipotesi):**
 \[
-\rho(\vec r,t)=|\psi(\vec r,t)|^2=\psi^*(\vec r,t)\psi(\vec r,t)
+\boxed{\frac{d}{dt}\int_{V}\rho(\vec r,t)\,d^3r=0},\qquad \boxed{\rho=|\psi|^2}.
 \]
-soddisfa l’equazione di continuità:
+Se il sistema è “in scatola”: \(V\) è proprio quella scatola. Se il sistema è libero in \(\mathbb R^3\): userò dopo \(V=V_R\) (sfera finita) e poi faccio \(R\to\infty\) come limite.
+
+**TDSE e coniugata** (con \(V(\vec r)\in\mathbb R\)):
 \[
-\boxed{\;\frac{\partial \rho}{\partial t}+\nabla\cdot \vec j=0\;}
+i\hbar\,\partial_t\psi=\left(-\frac{\hbar^2}{2m}\nabla^{2}+V\right)\psi,\qquad
+-i\hbar\,\partial_t\psi^*=\left(-\frac{\hbar^2}{2m}\nabla^{2}+V\right)\psi^*.
 \]
-dove la **corrente di probabilità** è
+Moltiplico la prima per \(\psi^*\), la seconda per \(\psi\) e sottraggo (i termini con \(V\) si cancellano):
 \[
-\boxed{\;\vec j(\vec r,t)=\frac{\hbar}{2mi}\Big(\psi^*\nabla\psi-\psi\nabla\psi^*\Big)\;}
+\partial_t(\psi^*\psi)=-\frac{\hbar}{2mi}\Big(\psi^*\nabla^{2}\psi-\psi\,\nabla^{2}\psi^*\Big).
 \]
-e dedurre la forma integrale:
+Uso l’identità:
 \[
-\boxed{\;\frac{d}{dt}\int_V \rho\,d^3r = -\oint_{\partial V}\vec j\cdot d\vec S\;}
+\psi^*\nabla^{2}\psi-\psi\,\nabla^{2}\psi^*=\vec\nabla\cdot(\psi^*\vec\nabla\psi-\psi\,\vec\nabla\psi^*).
 \]
 
----
-
-# 1) Setup: TDSE e complessa coniugata
-Per una particella non relativistica in 3D con potenziale reale \(V(\vec r)\in\mathbb R\),
+**Equazione di continuità (locale) e corrente:**
 \[
-\hat H=-\frac{\hbar^2}{2m}\nabla^2+V(\vec r),
-\]
-la TDSE è:
-\[
-\boxed{\;i\hbar\,\frac{\partial \psi}{\partial t}=\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi\;}
-\]
-e prendendo la complessa coniugata (usando \(V^*=V\)):
-\[
-\boxed{\;-i\hbar\,\frac{\partial \psi^*}{\partial t}=\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi^*\;}
+\boxed{\partial_t\rho+\vec\nabla\cdot\vec j=0},\qquad
+\boxed{\vec j=\frac{\hbar}{2mi}\big(\psi^*\vec\nabla\psi-\psi\,\vec\nabla\psi^*\big)}.
 \]
 
----
-
-# 2) Passo chiave: deriva \(\rho=|\psi|^2\)
-Definisco:
+Riscrivo Schrödinger come \(i\hbar\,\partial_t\psi=\hat H\psi\) e la coniugata \(-i\hbar\,\partial_t\psi^*=(\hat H\psi)^*\). Allora:
 \[
-\rho(\vec r,t)=\psi^*\psi.
+\frac{d}{dt}\int_V\rho\,d^3r
+=\frac{1}{i\hbar}\int_V\Big[\psi^*(\hat H\psi)-(\hat H\psi)^*\psi\Big]\,d^3r.
 \]
-Derivo rispetto al tempo:
+Questa derivata è zero se
 \[
-\frac{\partial \rho}{\partial t}
-=\left(\frac{\partial \psi^*}{\partial t}\right)\psi+\psi^*\left(\frac{\partial \psi}{\partial t}\right).
+\int_V \psi^*(\hat H\psi)\,d^3r=\int_V(\hat H\psi)^*\psi\,d^3r
+\quad\Longleftrightarrow\quad
+\boxed{\hat H=\hat H^\dagger}\ \text{(sul suo dominio)}.
 \]
-
-Ricavo \(\partial_t\psi\) e \(\partial_t\psi^*\) dalle due Schrödinger:
+Nel caso standard \(\hat H=-(\hbar^2/2m)\nabla^{2}+V(\vec r)\): basta **\(V(\vec r)\in\mathbb R\)** e **condizioni al contorno/dominio** tali che i termini di bordo non contribuiscano (equivalentemente, **flusso nullo**
 \[
-\frac{\partial \psi}{\partial t}
-=\frac{1}{i\hbar}\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi,
-\qquad
-\frac{\partial \psi^*}{\partial t}
-=-\frac{1}{i\hbar}\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi^*.
+\boxed{\displaystyle \oint_{S=\partial V}\vec j\cdot d\vec S=0},
 \]
-
-Sostituisco:
-\[
-\frac{\partial \rho}{\partial t}
-=
-\frac{1}{i\hbar}\left[
-\psi^*\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi
--\psi\left(-\frac{\hbar^2}{2m}\nabla^2+V\right)\psi^*
-\right].
-\]
-
-I termini col potenziale si cancellano perché \(V\) è reale:
-\[
-\psi^*(V\psi)-\psi(V\psi^*)=0.
-\]
-
-Resta:
-\[
-\frac{\partial \rho}{\partial t}
-=
--\frac{\hbar}{2mi}\left[\psi^*\nabla^2\psi-\psi\nabla^2\psi^*\right].
-\]
-
----
-
-# 3) Riscrittura come divergenza: nasce \(\vec j\)
-Uso l’identità vettoriale:
-\[
-\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)=
-\psi^*\nabla^2\psi-\psi\nabla^2\psi^*.
-\]
-
-Quindi:
-\[
-\frac{\partial \rho}{\partial t}
-=
--\frac{\hbar}{2mi}\,\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*).
-\]
-
-Definisco allora la corrente:
-\[
-\boxed{\;\vec j \equiv \frac{\hbar}{2mi}\Big(\psi^*\nabla\psi-\psi\nabla\psi^*\Big)\;}
-\]
-e ottengo:
-\[
-\boxed{\;\frac{\partial \rho}{\partial t}+\nabla\cdot\vec j=0\;}
-\]
-✅ Dimostrazione locale finita.
-
----
-
-# 4) Forma integrale e conservazione della probabilità totale
-Integro su un volume \(V\):
-\[
-\int_V \frac{\partial \rho}{\partial t}\,d^3r+\int_V \nabla\cdot\vec j\,d^3r=0.
-\]
-Porto fuori la derivata (volume fisso):
-\[
-\frac{d}{dt}\int_V \rho\,d^3r+\int_V \nabla\cdot\vec j\,d^3r=0.
-\]
-Uso il teorema della divergenza (Gauss–Green):
-\[
-\int_V \nabla\cdot\vec j\,d^3r=\oint_{\partial V}\vec j\cdot d\vec S.
-\]
-
-Quindi:
-\[
-\boxed{\;\frac{d}{dt}\int_V \rho\,d^3r = -\oint_{\partial V}\vec j\cdot d\vec S\;}
-\]
-
-Caso importante: se \(V\) è tutto lo spazio e \(\psi\) decade a infinito (o condizioni al contorno tali da annullare il flusso), allora
-\[
-\oint_{\infty}\vec j\cdot d\vec S=0
-\quad\Rightarrow\quad
-\boxed{\;\frac{d}{dt}\int_{\mathbb R^3}\rho\,d^3r=0\;}
-\]
-cioè la probabilità totale resta costante (se era 1, resta 1).
-
----
-
-# 5) Versione 1D (se ti serve per step/barriere)
-In 1D:
-\[
-\rho(x,t)=|\psi(x,t)|^2,
-\qquad
-\boxed{\;j(x,t)=\frac{\hbar}{2mi}\left(\psi^*\frac{\partial\psi}{\partial x}-\psi\frac{\partial\psi^*}{\partial x}\right)\;}
-\]
-e:
-\[
-\boxed{\;\frac{\partial \rho}{\partial t}+\frac{\partial j}{\partial x}=0\;}
-\]
+con \(d\vec S=\hat n\,dS\)).
 
 ---
 
 # Dizionario simboli (uno per uno)
-- \(\psi(\vec r,t)\): funzione d’onda in posizione.
-- \(\psi^*(\vec r,t)\): complessa coniugata.
-- \(\rho=|\psi|^2\): densità di probabilità.
-- \(\vec j\): corrente di probabilità.
-- \(\hbar\): costante di Planck ridotta.
-- \(i\): unità immaginaria.
-- \(m\): massa.
-- \(V(\vec r)\): potenziale (reale).
-- \(\nabla\): gradiente; \(\nabla^2\): Laplaciano.
-- \(V\) (volume): regione di integrazione; \(\partial V\): frontiera.
-- \(d\vec S\): elemento di superficie orientato.
+- \( |\psi\rangle \): stato quantistico (vettore/raggio nello spazio di Hilbert).
+- \( \psi(x,t)=\langle x|\psi(t)\rangle \): funzione d’onda in rappresentazione di posizione.
+- \( \vec r \): vettore posizione in \(\mathbb R^3\).
+- \( \rho(\vec r,t)=|\psi(\vec r,t)|^2 \): densità di probabilità.
+- \( V \): regione spaziale su cui integri (volume di controllo).
+- \( V_R \): volume finito (es. sfera di raggio \(R\)) usato prima del limite \(R\to\infty\).
+- \( S=\partial V \): superficie di bordo del volume \(V\).
+- \( d\vec S=\hat n\,dS \): elemento di superficie orientato (normale uscente \(\hat n\)).
+- \( \vec\nabla \), \( \nabla^2 \): gradiente e laplaciano.
+- \( \vec j \): corrente di probabilità.
+- \( \hat H \): Hamiltoniano (generatore dell’evoluzione).
+- \( \hat H^\dagger \): aggiunto (adjoint) di \(\hat H\).
+- \( m \): massa della particella.
+- \( \hbar \): costante di Planck ridotta.
+- \( V(\vec r)\in\mathbb R \): potenziale reale (condizione tipica per conservazione della probabilità).
 
----
+# Significato fisico
+- \(\partial_t\rho+\vec\nabla\cdot\vec j=0\): la probabilità non si crea né si distrugge localmente; può solo fluire.
+- \(\vec j\): flusso di probabilità attraverso le superfici.
+- Integrando su \(V\): la variazione della probabilità totale in \(V\) è legata al flusso su \(\partial V\). Se il flusso sul bordo è nullo, la probabilità totale in \(V\) resta costante.
+- \(\hat H=\hat H^\dagger\) (con dominio/condizioni al bordo corrette) ⇒ evoluzione unitaria ⇒ norma conservata ⇒ conservazione della probabilità.
 
-# Significato fisico (frase per frase)
-- \(\rho\) è la probabilità per unità di volume di trovare la particella.
-- \(\vec j\) è il flusso di probabilità attraverso una superficie.
-- \(\partial_t\rho+\nabla\cdot\vec j=0\) è una legge di conservazione locale: la probabilità non si crea né si distrugge, può solo scorrere.
-- La conservazione della probabilità totale è legata all’hermiticità di \(\hat H\).
-
----
+# Dim completa
+È esattamente il corpo sopra: TDSE + coniugata → sottrazione → identità di divergenza → continuità locale; poi integrazione su \(V\) + condizioni al bordo (o hermiticità di \(\hat H\)) → conservazione globale.
 
 # Copione orale “da macchinetta” (60–90 sec)
-“Definisco \(\rho=|\psi|^2=\psi^*\psi\). Parto da Schrödinger \(i\hbar\partial_t\psi=[-(\hbar^2/2m)\nabla^2+V]\psi\) e dalla coniugata \(-i\hbar\partial_t\psi^*=[-(\hbar^2/2m)\nabla^2+V]\psi^*\) con \(V\) reale. Calcolo \(\partial_t\rho=(\partial_t\psi^*)\psi+\psi^*(\partial_t\psi)\) e sostituisco: i termini con \(V\) si cancellano e ottengo \(\partial_t\rho=-(\hbar/2mi)(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*)\). Uso \(\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)=\psi^*\nabla^2\psi-\psi\nabla^2\psi^*\) e definisco la corrente \(\vec j=(\hbar/2mi)(\psi^*\nabla\psi-\psi\nabla\psi^*)\). Ne segue \(\partial_t\rho+\nabla\cdot\vec j=0\). Integrando su un volume e usando Gauss ottengo \(d/dt\int_V\rho\,d^3r=-\oint_{\partial V}\vec j\cdot d\vec S\): la probabilità nel volume cambia solo per flusso attraverso il bordo; su tutto lo spazio resta costante se il flusso a infinito è nullo.”
+“Lo stato è \(|\psi(t)\rangle\) e in posizione \(\psi(x,t)=\langle x|\psi(t)\rangle\). Per Born, \(\rho=|\psi|^2\) è densità di probabilità. Parto dalla Schrödinger e dalla sua coniugata: moltiplico per \(\psi^*\) e \(\psi\) e sottraggo; il potenziale si cancella se \(V\) è reale. Ottengo \(\partial_t(\psi^*\psi)\) uguale a un termine che riscrivo come divergenza \(\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)\). Da qui leggo la continuità \(\partial_t\rho+\nabla\cdot j=0\) con \(j=\frac{\hbar}{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)\). Integrando su un volume \(V\), la variazione della probabilità totale è il flusso di \(j\) sul bordo: se il flusso è nullo (equivalentemente \(\hat H\) è autoaggiunto sul dominio giusto), la norma si conserva e la probabilità totale resta 1.”
 <<<DIM 1 END>>>
 
 
 <<<DIM 2 START>>>
-# DIM 2 - Principio di indeterminazione di Heisenberg
+# DIM 2 — Principio di indeterminazione di Heisenberg
+
 **(da commutatori + Cauchy–Schwarz, poi caso \(x\)–\(p\) e stato a minima indeterminazione = gaussiana)**
 
 ## Dove sta negli appunti
+
 - **Core (indeterminazione):** `img/142.jpg` → `img/145.jpg` (P1·15, “Principio di Indeterminazione”)
 - **Core (commutatori utili):** `img/146.jpg` → `img/147.jpg` (P1·16, “conticini/commutatori”)
 - **Per la gaussiana a minima indeterminazione:** `img/27.jpg` → `img/43.jpg` (P1·3, pacchetti gaussiani)
 - **Indizio boss:** `boss/solbf2_1.jpg`
 
----
-
-# 0) Obiettivo “boss”
-Dimostrare (per osservabili hermitiane \(\hat A,\hat B\)):
+In MQ, **(postulato 1)** lo stato del sistema a tempo \(t\) è descritto da un vettore (raggio) \( |\psi(t)\rangle \) in uno spazio di Hilbert. **L’evoluzione temporale** è governata da
 \[
-\boxed{\;\Delta A\,\Delta B \ge \frac12\left|\langle[\hat A,\hat B]\rangle\right|\;}
+i\hbar\,\frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle
 \]
-e nel caso \(\hat x,\hat p\):
+(equazione di Schrödinger). **(postulato 2)** ad ogni osservabile reale \(A\) si associa un operatore **autoaggiunto/hermitiano** \(\hat A\) (analogamente \(B\mapsto \hat B\)). **(postulato 3)** la probabilità di ottenere un autovalore è data dalla regola di Born. **(postulato 4)** il valor medio dell’osservabile \(A\) è
 \[
-\boxed{\;\Delta x\,\Delta p \ge \frac{\hbar}{2}\;}
+\boxed{\langle A\rangle=\langle\psi|\hat A|\psi\rangle}
 \]
-e dire chi **satura** il limite (gaussiana).
+n.b.: \(A\) è l’osservabile (senza cappello), mentre \(\hat A\) è l’operatore associato (con cappello).
 
----
-
-# 1) Definizioni fondamentali (base della dimostrazione)
-Sia \(|\psi\rangle\) uno stato **normalizzato**:
 \[
-\langle\psi|\psi\rangle=1.
+\boxed{\int_{-\infty}^{+\infty}\!|\psi(x,t)|^{2}\,dx=1\ \ \Longrightarrow\ \ \langle\psi|\psi\rangle=1}
 \]
+Per avere senso in q.m. la probabilità totale deve essere \(1\), e l’equazione di continuità garantisce che se \(\psi\) è normalizzata a \(t=0\) resta normalizzata per ogni \(t\) (con le usuali condizioni al contorno).
 
-## 1A) Valor medio
 \[
-\langle A\rangle \equiv \langle\psi|\hat A|\psi\rangle,\qquad
-\langle B\rangle \equiv \langle\psi|\hat B|\psi\rangle.
+\boxed{
+\Bigg[\ \int_{-\infty}^{+\infty}\underbrace{|\psi(x,0)|^{2}}_{\psi\ \text{è normalizzata}}\,dx=1\ \Bigg]\ \xRightarrow{\ \text{eq. di continuità}\ }\ \int_{-\infty}^{+\infty}\underbrace{|\psi(x,t)|^{2}}_{\psi\ \text{è ancora normalizzata}}\,dx=1
+}
 \]
 
-## 1B) Operatori “centrati” e incertezze
-Definisco gli operatori centrati:
+**Operatori centrati:**, **Varianze / incertezze:**, **Vettori:**
 \[
-\hat A' \equiv \hat A-\langle A\rangle\,\hat I,\qquad
-\hat B' \equiv \hat B-\langle B\rangle\,\hat I.
+\boxed{
+\begin{array}{c}
+\hat A'=\hat A-\langle A\rangle\\
+\hat B'=\hat B-\langle B\rangle
+\end{array}}
+\qquad
+\boxed{
+\begin{array}{c}
+\Delta A^{2}=\langle(\hat A-\langle A\rangle)^{2}\rangle=\langle(\hat A')^{2}\rangle=\langle f|f\rangle\\
+\Delta B^{2}=\langle(\hat B-\langle B\rangle)^{2}\rangle=\langle(\hat B')^{2}\rangle=\langle g|g\rangle
+\end{array}}
+\qquad
+\boxed{
+\begin{array}{c}
+|f\rangle=\hat A'|\psi\rangle\\
+|g\rangle=\hat B'|\psi\rangle
+\end{array}}
 \]
-Varianze:
 \[
-(\Delta A)^2 \equiv \langle(\hat A')^2\rangle,\qquad
-(\Delta B)^2 \equiv \langle(\hat B')^2\rangle,
-\]
-e quindi:
-\[
-\Delta A=\sqrt{\langle(\hat A')^2\rangle},\qquad
-\Delta B=\sqrt{\langle(\hat B')^2\rangle}.
-\]
-
----
-
-# 2) Trucco chiave: Cauchy–Schwarz in spazio di Hilbert
-Costruisco due vettori:
-\[
-|\alpha\rangle \equiv \hat A'|\psi\rangle,\qquad
-|\beta\rangle \equiv \hat B'|\psi\rangle.
+\boxed{z=\langle f|g\rangle=\langle \hat A'\hat B'\rangle}
 \]
 
-Cauchy–Schwarz:
+**Cauchy–Schwarz:**
 \[
-\langle\alpha|\alpha\rangle\,\langle\beta|\beta\rangle \ge |\langle\alpha|\beta\rangle|^2.
+\boxed{\langle f|f\rangle\,\langle g|g\rangle\ge|\langle f|g\rangle|^{2}}
+\quad\Rightarrow\quad
+\boxed{\Delta A^{2}\Delta B^{2}\ge |z|^{2}}
 \]
 
-## 2A) LHS = prodotto delle varianze
-Se \(\hat A\) è hermitiano, lo è anche \(\hat A'\) e quindi \((\hat A')^\dagger=\hat A'\). Allora:
+**Commutatore + anticommutatore:**
 \[
-\langle\alpha|\alpha\rangle
-=\langle\psi|\hat A'^\dagger\hat A'|\psi\rangle
-=\langle(\hat A')^2\rangle
-=(\Delta A)^2.
+\boxed{[\hat A,\hat B]=\hat A\hat B-\hat B\hat A},\qquad
+\boxed{\{\hat A,\hat B\}=\hat A\hat B+\hat B\hat A}
 \]
-Analogamente:
 \[
-\langle\beta|\beta\rangle=(\Delta B)^2.
+\boxed{
+[\hat A',\hat B']+\{\hat A',\hat B'\}
+=(\hat A'\hat B'-\hat B'\hat A')+(\hat A'\hat B'+\hat B'\hat A')
+=2\hat A'\hat B'
+}
 \]
-Quindi:
 \[
-(\Delta A)^2(\Delta B)^2 \ge |\langle\alpha|\beta\rangle|^2.
-\]
-
-## 2B) RHS = \(|\langle \hat A'\hat B'\rangle|^2\)
-\[
-\langle\alpha|\beta\rangle
-=\langle\psi|\hat A'\hat B'|\psi\rangle
-\equiv \langle \hat A'\hat B'\rangle.
-\]
-Dunque:
-\[
-(\Delta A)^2(\Delta B)^2 \ge \left|\langle \hat A'\hat B'\rangle\right|^2.
+\hat A'\hat B'=\frac12[\hat A',\hat B']+\frac12\{\hat A',\hat B'\},
+\qquad
+z=\frac12\langle[\hat A',\hat B']\rangle+\frac12\langle\{\hat A',\hat B'\}\rangle
 \]
 
----
-
-# 3) Da \(\langle \hat A'\hat B'\rangle\) al commutatore
-Scrivo:
+**Parte immaginaria (con sostituzioni evidenziate):**
 \[
-\hat A'\hat B'=\frac12\{\hat A',\hat B'\}+\frac12[\hat A',\hat B'].
+|z|^{2}=\underbrace{(\Re z)^2}_{\ge 0}+\underbrace{(\Im z)^2}_{\text{ci serve}}\ \ge\ (\Im z)^2
 \]
-Prendo il valor medio:
 \[
-\langle \hat A'\hat B'\rangle
-=\frac12\langle\{\hat A',\hat B'\}\rangle+\frac12\langle[\hat A',\hat B']\rangle.
+\Im z=\Im\!\left(\underbrace{\tfrac12\langle\{\hat A',\hat B'\}\rangle}_{\in\mathbb R}\ +\ \underbrace{\tfrac12\langle[\hat A',\hat B']\rangle}_{\in i\mathbb R}\right)
+=\underbrace{\Im\!\left(\tfrac12\langle[\hat A',\hat B']\rangle\right)}_{\text{resta solo questa}}
+=\boxed{\underbrace{\frac{1}{2i}}_{\text{fattore}}\ \underbrace{\langle[\hat A',\hat B']\rangle}_{\text{commutatore}}}
 \]
-
-### Proprietà importante
-Se \(\hat A,\hat B\) (quindi anche \(\hat A',\hat B'\)) sono hermitiani:
-- \(\{\hat A',\hat B'\}\) è **hermitiano** \(\Rightarrow\ \langle\{\hat A',\hat B'\}\rangle\in\mathbb R\).
-- \([\hat A',\hat B']\) è **anti-hermitiano** \(\Rightarrow\ \langle[\hat A',\hat B']\rangle\) è **puramente immaginario** (o nullo).
-
-Chiamo:
 \[
-z\equiv \langle \hat A'\hat B'\rangle.
+\Rightarrow\quad
+|z|^{2}\ge(\Im z)^2
+=\left|\underbrace{\frac{1}{2i}\langle[\hat A',\hat B']\rangle}_{\Im z}\right|^{2}
+=\frac14\,|\langle[\hat A',\hat B']\rangle|^{2}
 \]
-Allora:
 \[
-\Im(z)=\frac{1}{2i}\langle[\hat A',\hat B']\rangle.
-\]
-Per un numero complesso:
-\[
-|z|^2=(\Re z)^2+(\Im z)^2 \ge (\Im z)^2.
-\]
-Quindi:
-\[
-\left|\langle \hat A'\hat B'\rangle\right|^2
-\ge
-\left(\frac{1}{2i}\langle[\hat A',\hat B']\rangle\right)^2
-=
-\frac14\left|\langle[\hat A',\hat B']\rangle\right|^2.
+[\hat A',\hat B']=[\hat A-\langle A\rangle,\hat B-\langle B\rangle]=[\hat A,\hat B]
 \]
 
-Inserisco nella disuguaglianza di C–S:
+**Risultato (Heisenberg):**
 \[
-(\Delta A)^2(\Delta B)^2 \ge \frac14\left|\langle[\hat A',\hat B']\rangle\right|^2.
+\boxed{\Delta A^{2}\Delta B^{2}\ge\frac14\,|\langle[\hat A,\hat B]\rangle|^{2}}
+\quad\Rightarrow\quad
+\boxed{\Delta A\,\Delta B\ge\frac12\,|\langle[\hat A,\hat B]\rangle|}
 \]
 
-Ora uso:
+**Caso \((x,p)\) (1D):**
 \[
-[\hat A',\hat B']=[\hat A-\langle A\rangle\hat I,\hat B-\langle B\rangle\hat I]=[\hat A,\hat B]
+\boxed{
+\begin{array}{c}
+\hat x\ \leftrightarrow\ x\\
+\hat p\ \leftrightarrow\ -i\hbar\,\partial_x
+\end{array}}
 \]
-perché \(\langle A\rangle,\langle B\rangle\) sono numeri e commutano con tutto.
+\[
+\boxed{
+\begin{aligned}
+[\hat x,\hat p]\psi
+&=x(-i\hbar\,\partial_x\psi)-(-i\hbar\,\partial_x)(x\psi)\\
+&=-i\hbar x\psi' + i\hbar(x\psi'+\psi)=i\hbar\,\psi
+\end{aligned}}
+\qquad\Rightarrow\qquad
+\boxed{[\hat x,\hat p]=i\hbar}
+\]
+\[
+\boxed{\Delta x\,\Delta p\ge\frac12\,|\langle i\hbar\rangle|=\frac{\hbar}{2}}
+\]
 
-Allora:
+**Minima indeterminazione (pacchetto gaussiano):** il prodotto \(\Delta x\,\Delta p\) non può scendere sotto \(\hbar/2\); il caso “minimo” è quando si satura:
 \[
-(\Delta A)^2(\Delta B)^2 \ge \frac14\left|\langle[\hat A,\hat B]\rangle\right|^2
+\boxed{\Delta x\,\Delta p=\frac{\hbar}{2}}
 \]
-e prendendo la radice:
+Un esempio di stato che realizza il minimo è un **pacchetto d’onda gaussiano**:
 \[
-\boxed{\;\Delta A\,\Delta B \ge \frac12\left|\langle[\hat A,\hat B]\rangle\right|\;}
+\boxed{
+\psi(x)=
+\underbrace{N}_{\text{normalizzazione}}\,
+\exp\!\Bigg(
+\underbrace{-\,\frac{\left(\overbrace{x-x_0}^{\text{scarto dal centro}}\right)^2}{\underbrace{4\sigma^{2}}_{\text{larghezza }(\Delta x=\sigma)}}}_{\text{termine reale: inviluppo gaussiano}}
+\;+\;
+\underbrace{i\,\overbrace{\frac{p_0}{\hbar}x}^{\text{fase }(\langle p\rangle=p_0)}}_{\text{termine immaginario: fattore di fase}}
+\Bigg)
+}
 \]
+da cui si legge il ruolo dei parametri:
+\[
+\boxed{\Delta x=\sigma}\quad\text{(larghezza del pacchetto)},\qquad
+\boxed{\langle p\rangle=p_0}\quad\text{(impulso medio dalla fase)},\qquad
+\boxed{\Delta p=\frac{\hbar}{2\sigma}}\quad\text{(dispersione in impulso)}
+\]
+e quindi \(\Delta x\,\Delta p=\hbar/2\).
 
-✅ Dimostrazione finita.
+*Nota (collegamento con il postulato 5): la decomposizione \(XY=\tfrac12[X,Y]+\tfrac12\{X,Y\}\) è una semplice identità algebrica. Tuttavia, nella quantizzazione (postulato 5, problema di ordinamento/simmetrizzazione) la parte simmetrica \(\tfrac12\{\hat x,\hat p\}\) compare come scelta naturale per associare un operatore hermitiano al prodotto classico \(xp\), \(xp\mapsto \tfrac12(\hat x\hat p+\hat p\hat x)\).*
 
-> Nota “da prof”: la forma più forte è Robertson–Schrödinger,
-\[
-(\Delta A)^2(\Delta B)^2 \ge \left(\frac12|\langle[\hat A,\hat B]\rangle|\right)^2
-+\left(\frac12\langle\{\hat A',\hat B'\}\rangle\right)^2,
-\]
-ma qui abbiamo ricavato la versione più usata (Heisenberg/Robertson “ridotta”).
+**Collegamento con il postulato 6 (misura/collasso):** una misura che riduce molto l’incertezza su \(x\) porta, dopo la proiezione, a uno stato più localizzato in \(x\); in accordo con \(\Delta x\,\Delta p\ge\hbar/2\), questo comporta necessariamente un aumento dell’incertezza su \(p\) (e viceversa). Il pacchetto gaussiano rappresenta il compromesso che realizza il minimo prodotto compatibile con il principio di indeterminazione.
 
 ---
 
-# 4) Caso fondamentale: posizione e quantità di moto
-Prendo:
-\[
-\hat A=\hat x,\qquad \hat B=\hat p,
-\]
-e uso il commutatore canonico:
-\[
-[\hat x,\hat p]=i\hbar.
-\]
-Quindi:
-\[
-\Delta x\,\Delta p \ge \frac12|\langle i\hbar\rangle|
-=\frac{\hbar}{2}.
-\]
-\[
-\boxed{\;\Delta x\,\Delta p \ge \frac{\hbar}{2}\;}
-\]
+# Dizionario simboli
 
----
+- \(|\psi(t)\rangle\): stato del sistema al tempo \(t\); \(\psi(x,t)=\langle x|\psi(t)\rangle\) rappresentazione in posizione
+- \(\hat A,\hat B\): operatori (osservabili) autoaggiunti; \(A,B\) = osservabili senza cappello
+- \(\langle A\rangle\): valor medio di \(A\) nello stato \(|\psi\rangle\)
+- \(\hat A',\hat B'\): operatori centrati (\(\hat A-\langle A\rangle\), \(\hat B-\langle B\rangle\))
+- \(\Delta A,\Delta B\): incertezze (deviazioni standard)
+- \([\cdot,\cdot]\), \(\{\cdot,\cdot\}\): commutatore e anticommutatore
+- \(\hat x,\hat p\): posizione e quantità di moto in 1D; \(p_0=\langle p\rangle\), \(x_0\) centro del pacchetto
+- \(\sigma\): larghezza del pacchetto (qui \(\Delta x=\sigma\))
+- \(N\): costante di normalizzazione
 
-# 5) Chi satura il limite? Stato a minima indeterminazione = gaussiana
-## 5A) Condizione di uguaglianza in Cauchy–Schwarz
-In Cauchy–Schwarz l’uguaglianza vale se e solo se i vettori sono proporzionali:
-\[
-|\alpha\rangle = c\,|\beta\rangle
-\quad\Longleftrightarrow\quad
-\hat A'|\psi\rangle=c\,\hat B'|\psi\rangle,
-\qquad c\in\mathbb C.
-\]
+# Significato fisico
 
-Per il caso \(x\)–\(p\) una forma standard è:
-\[
-(\hat x-\langle x\rangle + i\lambda(\hat p-\langle p\rangle))|\psi\rangle=0,
-\qquad \lambda\in\mathbb R^+.
-\]
-
-## 5B) Risolvo e ottengo una gaussiana
-In rappresentazione \(x\), \(\hat p=-i\hbar\,\frac{d}{dx}\). Pongo:
-\[
-x_0=\langle x\rangle,\qquad p_0=\langle p\rangle.
-\]
-L’equazione diventa:
-\[
-\left(x-x_0+i\lambda\left(-i\hbar\frac{d}{dx}-p_0\right)\right)\psi(x)=0
-\]
-cioè:
-\[
-\left(x-x_0+\lambda\hbar\frac{d}{dx}-i\lambda p_0\right)\psi(x)=0.
-\]
-Quindi:
-\[
-\lambda\hbar\,\frac{d\psi}{dx}=-(x-x_0)\psi+i\lambda p_0\,\psi
-\]
-\[
-\frac{d\psi}{dx}=-\frac{x-x_0}{\lambda\hbar}\psi+i\frac{p_0}{\hbar}\psi.
-\]
-Integro:
-\[
-\psi(x)=N\exp\!\left[-\frac{(x-x_0)^2}{2\lambda\hbar}+i\frac{p_0}{\hbar}x\right].
-\]
-È una **gaussiana** (modulo quadro gaussiano) con fase tipo onda piana.
-
-È comune riscriverla come:
-\[
-\psi(x)=\left(\frac{1}{2\pi\sigma^2}\right)^{1/4}
-\exp\!\left[-\frac{(x-x_0)^2}{4\sigma^2}+i\frac{p_0}{\hbar}x\right].
-\]
-
-## 5C) Calcolo di \(\Delta x\) e \(\Delta p\) per la gaussiana
-Per questa scelta:
-- \(|\psi|^2\) è gaussiana con varianza \(\sigma^2\), quindi:
-\[
-\Delta x=\sigma.
-\]
-
-Per il momento:
-\[
-\hat p\psi=-i\hbar\frac{d\psi}{dx}
-=\left(p_0+i\hbar\frac{x-x_0}{2\sigma^2}\right)\psi,
-\]
-quindi:
-\[
-(\hat p-p_0)\psi=i\hbar\frac{x-x_0}{2\sigma^2}\psi.
-\]
-Allora:
-\[
-(\Delta p)^2=\langle(\hat p-p_0)^2\rangle
-=\int |(\hat p-p_0)\psi|^2\,dx
-=\int \frac{\hbar^2(x-x_0)^2}{4\sigma^4}|\psi|^2\,dx
-=\frac{\hbar^2}{4\sigma^4}\,\sigma^2
-=\frac{\hbar^2}{4\sigma^2}.
-\]
-Quindi:
-\[
-\Delta p=\frac{\hbar}{2\sigma}.
-\]
-Moltiplicando:
-\[
-\boxed{\;\Delta x\,\Delta p=\sigma\cdot\frac{\hbar}{2\sigma}=\frac{\hbar}{2}\;}
-\]
-➡️ la gaussiana **satura** il limite.
-
----
-
-# Dizionario simboli (da sapere “uno per uno”)
-- \(|\psi\rangle\): stato (normalizzato).
-- \(\hat A,\hat B\): osservabili (operatori hermitiani).
-- \(\langle A\rangle=\langle\psi|\hat A|\psi\rangle\): valor medio.
-- \(\hat I\): identità.
-- \(\hat A'=\hat A-\langle A\rangle\hat I\): operatore centrato.
-- \((\Delta A)^2=\langle(\hat A')^2\rangle\): varianza; \(\Delta A\) incertezza.
-- \([\hat A,\hat B]=\hat A\hat B-\hat B\hat A\): commutatore.
-- \(\{\hat A,\hat B\}=\hat A\hat B+\hat B\hat A\): anticommutatore.
-- \(\hbar\): costante di Planck ridotta.
-- \(\hat x\): operatore posizione; \(\hat p\): operatore quantità di moto.
-- \(N\): costante di normalizzazione.
-- \(x_0=\langle x\rangle\), \(p_0=\langle p\rangle\): medie di posizione e momento.
-- \(\sigma\): larghezza della gaussiana, coincide con \(\Delta x\).
-- \(\lambda\): parametro equivalente che fissa la larghezza (legato a \(\sigma\)).
-
----
-
-# Significato fisico (come raccontarlo)
-- Non è un “errore dello strumento”: è un limite sulla **preparazione** dello stato.
-- Se due osservabili commutano, \([\hat A,\hat B]=0\), in principio puoi preparare stati con incertezze arbitrarie (compatibilità).
-- Se non commutano, la loro incompatibilità è quantificata dal commutatore e impone un bound sulle incertezze.
-- Per \(x\) e \(p\), la radice intuitiva è anche “di Fourier”: localizzare in \(x\) richiede una superposizione ampia di momenti \(\Rightarrow\) grande dispersione in \(p\).
-- La gaussiana è lo stato “più efficiente”: è il compromesso ottimo e satura il limite.
-
----
+- Se due osservabili **non commutano**, non esiste uno stato in cui entrambe abbiano dispersione arbitrariamente piccola: il commutatore fissa un **limite inferiore** al prodotto delle incertezze.
+- Per \(x\) e \(p\), il limite è \(\hbar/2\).
+- Il pacchetto gaussiano è lo stato che realizza il **minimo possibile** del prodotto \(\Delta x\,\Delta p\).
 
 # Copione orale (90–120 sec, super ripetibile)
-“Definisco l’incertezza come varianza: \((\Delta A)^2=\langle(\hat A-\langle A\rangle)^2\rangle\). Metto \(\hat A'=\hat A-\langle A\rangle\) e \(\hat B'=\hat B-\langle B\rangle\). Costruisco i vettori \(|\alpha\rangle=\hat A'|\psi\rangle\) e \(|\beta\rangle=\hat B'|\psi\rangle\). Per Cauchy–Schwarz ho \(\langle\alpha|\alpha\rangle\langle\beta|\beta\rangle\ge|\langle\alpha|\beta\rangle|^2\), cioè \((\Delta A)^2(\Delta B)^2\ge|\langle \hat A'\hat B'\rangle|^2\). Poi scrivo \(\hat A'\hat B'=\frac12\{\hat A',\hat B'\}+\frac12[\hat A',\hat B']\). Per operatori hermitiani il valor medio dell’anticommutatore è reale e quello del commutatore è immaginario; quindi \(|\langle \hat A'\hat B'\rangle|^2\ge\frac14|\langle[\hat A',\hat B']\rangle|^2\). Ma \([\hat A',\hat B']=[\hat A,\hat B]\), dunque \(\Delta A\Delta B\ge\frac12|\langle[A,B]\rangle|\). Applicando a \(\hat x,\hat p\) con \([x,p]=i\hbar\) ottengo \(\Delta x\Delta p\ge\hbar/2\). La gaussiana satura il limite: \(\Delta x=\sigma\) e \(\Delta p=\hbar/(2\sigma)\), quindi il prodotto vale \(\hbar/2\).”
+
+“Richiamo i postulati: lo stato è \(|\psi\rangle\); ad ogni osservabile \(A\) associo l’operatore autoaggiunto \(\hat A\); le probabilità sono date da Born e il valor medio è \(\langle A\rangle=\langle\psi|\hat A|\psi\rangle\). Assumo \(\langle\psi|\psi\rangle=1\) e la continuità mi garantisce che la normalizzazione resta 1 nel tempo.
+Definisco gli operatori centrati \(\hat A'=\hat A-\langle A\rangle\), \(\hat B'=\hat B-\langle B\rangle\), e i vettori \(|f\rangle=\hat A'|\psi\rangle\), \(|g\rangle=\hat B'|\psi\rangle\). Allora \(\Delta A^2=\langle f|f\rangle\), \(\Delta B^2=\langle g|g\rangle\) e per Cauchy–Schwarz ottengo \(\Delta A^2\Delta B^2\ge|\langle f|g\rangle|^2=|z|^2\).
+Scrivo \( \hat A'\hat B'=\frac12[\hat A',\hat B']+\frac12\{\hat A',\hat B'\}\): la parte simmetrica ha valor medio reale, mentre il commutatore dà la parte immaginaria. Da \(|z|^2\ge(\Im z)^2\) ricavo \(|z|^2\ge\frac14|\langle[\hat A',\hat B']\rangle|^2\). Poiché \([\hat A',\hat B']=[\hat A,\hat B]\), concludo \(\Delta A\,\Delta B\ge\frac12|\langle[\hat A,\hat B]\rangle|\).
+Nel caso \(x,p\), usando \(\hat x\leftrightarrow x\), \(\hat p\leftrightarrow -i\hbar\partial_x\), calcolo il commutatore e trovo \([\hat x,\hat p]=i\hbar\), quindi \(\Delta x\,\Delta p\ge\hbar/2\). Il minimo si ottiene saturando il bound: un esempio è il pacchetto gaussiano, con larghezza \(\Delta x=\sigma\) e \(\Delta p=\hbar/(2\sigma)\), che dà \(\Delta x\,\Delta p=\hbar/2\).”
 <<<DIM 2 END>>>
 
 <<<DIM 3 START>>>
-# DIM 3 - Osservabili compatibili ⇔ \([\,\hat A,\hat B\,]=0\)  
-**(caso non degenere + caso degenere con sottospazi invarianti / diagonalizzazione dentro la degenerazione)**
+# DIM 3 — Osservabili compatibili \(\Longleftrightarrow\) commutatore nullo
+
+**(misure in sequenza, caso non degenere + degenere, e “ICOC”; analogia ottica coi polarizzatori \(\Rightarrow\) ponte verso DIM 2)**
 
 ## Dove sta negli appunti
-- **Core:** `img/137.jpg` → `img/141.jpg` (P1·14A “Osservabili compatibili”)  
-- **Supporto (notazione bra-ket / operatori / completezza):** `img/126.jpg` → `img/132.jpg` (P1·12)  
-- **Supporto (commutatori):** `img/146.jpg` → `img/147.jpg` (P1·16)  
-- **Indizio boss:** `boss/solbf3_1.jpg`
 
----
+- **Compatibili \(\Rightarrow\) commutano:** `img/137_p1t02.jpg`
+- **Commutano \(\Rightarrow\) compatibili (non-deg / deg):** `img/138.jpg` → `img/139.jpg`
+- **Degenerazione residua + ICOC:** `img/140.jpg`
+- **Misure in sequenza + analogia ottica (polarizzatori):** `img/141.jpg` → `img/142_p1t01.jpg`
 
-# 0) Cosa devi dimostrare (obiettivo)
-Per due osservabili (operatori hermitiani) \(\hat A,\hat B\):
-
-1) **Se sono compatibili** (esiste una base di autostati comuni / misure simultanee ben definite), allora  
-\[
-\boxed{[\,\hat A,\hat B\,]=0.}
-\]
-
-2) **Viceversa**, se  
-\[
-\boxed{[\,\hat A,\hat B\,]=0,}
-\]
-allora puoi scegliere una base di stati che sono **autostati simultanei** di \(\hat A\) e \(\hat B\).  
-- Nel **caso non degenere** la dim è immediata.
-- Nel **caso degenere** devi spiegare che \(\hat B\) lascia invariati i sottospazi degeneri e che dentro ciascuno puoi diagonalizzare.
-
-> Nota “da prof”: in generale (spazi infiniti / operatori non limitati) ci sono dettagli di dominio; negli appunti d’esame di solito si ragiona nel caso “standard” (spettri discreti o comunque diagonalizzabili) e la dimostrazione qui è quella richiesta.
-
----
-
-# 1) Definizione fisica/matematica di “compatibili”
-Due osservabili \(\hat A,\hat B\) sono **compatibili** se esiste un insieme completo di stati \(\{|a,b\rangle\}\) tali che:
-\[
-\hat A|a,b\rangle = a\,|a,b\rangle,\qquad
-\hat B|a,b\rangle = b\,|a,b\rangle,
-\]
-e questi stati costituiscono una **base completa** (o base generalizzata).  
-
-**Significato fisico:** posso preparare il sistema in uno stato con valori certi **sia** di \(A\) **sia** di \(B\); misurare \(A\) non “rovina” l’esito certo di \(B\) (e viceversa).
-
----
-
-# 2) (⇒) Se esistono autostati comuni allora \([A,B]=0\)
-Prendo un autostato comune \(|a,b\rangle\). Calcolo:
+In MQ: **(postulato 2)** ad ogni osservabile reale \(A\) associo un operatore hermitiano \(\hat A\) (analogamente \(B\mapsto \hat B\)). **(postulato 6)** dopo una misura ideale lo stato collassa sull’autostato dell’operatore associato al valore misurato.
 
 \[
-\hat A\hat B|a,b\rangle=\hat A(b|a,b\rangle)=b\hat A|a,b\rangle=ba|a,b\rangle.
-\]
-
-Analogamente:
-\[
-\hat B\hat A|a,b\rangle=\hat B(a|a,b\rangle)=a\hat B|a,b\rangle=ab|a,b\rangle.
-\]
-
-Quindi:
-\[
-(\hat A\hat B-\hat B\hat A)|a,b\rangle = 0
-\quad\Rightarrow\quad
-[\,\hat A,\hat B\,]|a,b\rangle=0
-\]
-per ogni \(|a,b\rangle\) della base.
-
-Se gli \(|a,b\rangle\) sono **completi**, l’operatore che annulla tutti i vettori della base è l’operatore nullo:
-\[
-\boxed{[\,\hat A,\hat B\,]=0.}
-\]
-
-✅ Prima direzione fatta.
-
----
-
-# 3) (⇐) Se \([A,B]=0\) allora esistono autostati comuni
-Qui divido in due casi: **non degenere** e **degenere**.
-
----
-
-## 3A) Caso NON degenere (il più “a macchinetta”)
-Supponi che \(\hat A\) abbia autovalori discreti **non degeneri**:
-\[
-\hat A|a_n\rangle=a_n|a_n\rangle
-\]
-e ogni \(a_n\) ha uno spazio di autostati di dimensione 1.
-
-Assumo:
-\[
-[\,\hat A,\hat B\,]=0 \quad\Rightarrow\quad \hat A\hat B=\hat B\hat A.
-\]
-
-Agisco su \(|a_n\rangle\):
-\[
-\hat A(\hat B|a_n\rangle)=\hat B(\hat A|a_n\rangle)=\hat B(a_n|a_n\rangle)=a_n(\hat B|a_n\rangle).
-\]
-
-**Interpretazione matematica:** \(\hat B|a_n\rangle\) è un autovettore di \(\hat A\) con autovalore \(a_n\).
-
-Ma l’autovalore \(a_n\) è **non degenere**, quindi lo spazio associato è 1D: qualunque vettore con quel valore è proporzionale a \(|a_n\rangle\). Dunque:
-\[
-\hat B|a_n\rangle = b_n |a_n\rangle.
-\]
-
-Quindi \(|a_n\rangle\) è anche autostato di \(\hat B\).  
-Conclusione:
-\[
-\boxed{\text{se }[A,B]=0\text{ e }A\text{ è non degenere, allora gli }|a_n\rangle\text{ sono autostati comuni.}}
+\boxed{[\hat A,\hat B]=\hat A\hat B-\hat B\hat A}
 \]
 
 ---
 
-## 3B) Caso DEGENERE (qui devi dire la cosa “giusta” sulla degenerazione)
-Ora \(\hat A\) ha autovalori \(a_n\) **degeneri**: per un certo \(a_n\) esistono più stati indipendenti:
+## Definizione fisica (cosa vuol dire “compatibili”)
+
+Se misuro \(A\) e ottengo \(a_n\), lo stato collassa in un autostato di \(\hat A\).
+Le osservabili \(A\) e \(B\) sono dette **compatibili** se posso misurare \(A\) e poi \(B\) (o viceversa) **senza distruggere l’informazione** ottenuta dalla prima misura: la seconda misura non mi “sposta” in uno stato che renda incerto il primo risultato.
+
+Una formulazione standard (quella che usi negli appunti) è: **esiste una base comune di autostati** \(\{|u_n\rangle\}\) tale che
 \[
-\hat A|a_n,k\rangle = a_n |a_n,k\rangle,\qquad k=1,\dots,r_n.
+\boxed{
+\begin{array}{c}
+\hat A|u_n\rangle=a_n|u_n\rangle\\[2pt]
+\hat B|u_n\rangle=b_n|u_n\rangle
+\end{array}}
+\qquad\text{(base comune)}
 \]
 
-Rifaccio lo stesso passaggio:
+---
+
+## Compatibili \(\Rightarrow\) commutano
+
+Se \(\{|u_n\rangle\}\) è una **base comune**, allora su ogni \(|u_n\rangle\):
 \[
-\hat A(\hat B|a_n,k\rangle)=\hat B(\hat A|a_n,k\rangle)=a_n(\hat B|a_n,k\rangle).
+\hat A\hat B|u_n\rangle=\hat A\big(b_n|u_n\rangle\big)=b_n\hat A|u_n\rangle=b_na_n|u_n\rangle
+\]
+\[
+\hat B\hat A|u_n\rangle=\hat B\big(a_n|u_n\rangle\big)=a_n\hat B|u_n\rangle=a_nb_n|u_n\rangle
+\]
+quindi
+\[
+\boxed{[\hat A,\hat B]|u_n\rangle=0\qquad\forall n}
 \]
 
-Questo non mi dice che \(\hat B|a_n,k\rangle\) è proporzionale a \(|a_n,k\rangle\), perché lo spazio con autovalore \(a_n\) è **dimensione \(r_n>1\)**.
-
-Però dice una cosa potentissima:
-
-### Fatto chiave (invarianza del sottospazio degenere)
+Ma questo **da solo** non basta: devo mostrarlo su uno stato generico.
+Se \(\{|u_n\rangle\}\) è una base, allora \(|\psi\rangle=\sum_n c_n|u_n\rangle\) e
 \[
-\hat B|a_n,k\rangle \in S_n
+[\hat A,\hat B]|\psi\rangle
+=[\hat A,\hat B]\sum_n c_n|u_n\rangle
+=\sum_n c_n[\hat A,\hat B]|u_n\rangle
+=0
 \]
-dove \(S_n\) è il sottospazio generato dagli autostati di \(A\) con autovalore \(a_n\).
-
-Cioè: **\(\hat B\) non ti fa uscire dalla degenerazione di \(A\)**.  
-In altre parole, \(\hat B\) è “a blocchi” rispetto alla decomposizione in sottospazi di \(A\).
-
-### Come ottengo gli autostati comuni?
-Dentro ciascun sottospazio \(S_n\), considero l’operatore \(\hat B\) ristretto a \(S_n\).  
-Essendo \(\hat B\) hermitiano, la sua restrizione è ancora diagonalizzabile dentro \(S_n\). Quindi posso scegliere una base \(\{|a_n,\beta\rangle\}\) (con \(\beta=1,\dots,r_n\)) tale che:
-
+quindi
 \[
-\hat A|a_n,\beta\rangle=a_n|a_n,\beta\rangle,
+\boxed{[\hat A,\hat B]=0}
+\]
+
+---
+
+## Commutano \(\Rightarrow\) compatibili
+
+Assumo
+\[
+\boxed{[\hat A,\hat B]=0}
+\]
+
+### Caso \(A\) **non degenere**
+
+Sia \(\hat A|u_n\rangle=a_n|u_n\rangle\). Allora:
+\[
+\hat A(\hat B|u_n\rangle)=\hat A\hat B|u_n\rangle=\hat B\hat A|u_n\rangle
+=\hat B(a_n|u_n\rangle)=a_n(\hat B|u_n\rangle)
+\]
+cioè
+\[
+\boxed{\hat B|u_n\rangle\ \text{è ancora autovettore di }\hat A\text{ con autovalore }a_n}
+\]
+Se \(a_n\) è **non degenere**, l’autospazio relativo ad \(a_n\) è 1-dimensionale, quindi necessariamente
+\[
+\boxed{\hat B|u_n\rangle=b_n|u_n\rangle}
+\]
+e dunque \(|u_n\rangle\) è autostato **sia** di \(\hat A\) che di \(\hat B\): esiste base comune \(\Rightarrow\) compatibilità.
+
+---
+
+### Caso \(A\) **degenere**
+
+Sia \(a_n\) degenere di ordine \(r_n\):
+\[
+\boxed{\hat A|u_n^{(i)}\rangle=a_n|u_n^{(i)}\rangle,\qquad i=1,\dots,r_n}
+\]
+Definisco l’autospazio degenere:
+\[
+\boxed{S_n(a_n)=\mathrm{span}\Big\{|u_n^{(1)}\rangle,\dots,|u_n^{(r_n)}\rangle\Big\}}
+\]
+Dalla commutazione:
+\[
+\hat A(\hat B|u_n^{(i)}\rangle)=\hat A\hat B|u_n^{(i)}\rangle=\hat B\hat A|u_n^{(i)}\rangle
+=\hat B(a_n|u_n^{(i)}\rangle)=a_n(\hat B|u_n^{(i)}\rangle)
+\]
+quindi
+\[
+\boxed{\hat B|u_n^{(i)}\rangle\in S_n(a_n)}
+\]
+e posso sviluppare:
+\[
+\boxed{\hat B|u_n^{(i)}\rangle=\sum_{k=1}^{r_n}c_{ik}\,|u_n^{(k)}\rangle}
+\]
+
+Cerco ora combinazioni lineari dentro \(S_n(a_n)\) che siano autostati di \(\hat B\).
+Sia
+\[
+|v\rangle=\sum_{i=1}^{r_n}d_i\,|u_n^{(i)}\rangle
+\qquad\text{e imponiamo}\qquad
+\hat B|v\rangle=b_n|v\rangle
+\]
+Allora:
+\[
+\hat B\sum_{i=1}^{r_n}d_i|u_n^{(i)}\rangle
+=\sum_{i=1}^{r_n}d_i\hat B|u_n^{(i)}\rangle
+=\sum_{i=1}^{r_n}d_i\sum_{k=1}^{r_n}c_{ik}|u_n^{(k)}\rangle
+\]
+Confrontando i coefficienti sulla base \(\{|u_n^{(k)}\rangle\}\) (linearmente indipendente):
+\[
+\boxed{\sum_{i=1}^{r_n}d_i\,(c_{ik}-b_n\delta_{ik})=0,\qquad k=1,\dots,r_n}
+\]
+Sistema omogeneo con soluzioni non banali se e solo se:
+\[
+\boxed{\det(c_{ik}-b_n\delta_{ik})=0}
+\]
+Da qui ottengo (fino a \(r_n\)) autovalori \(b_n^{(k)}\) e autovettori \(\{d_i^{(k)}\}\), e definisco
+\[
+\boxed{|v_n^{(k)}\rangle=\sum_{i=1}^{r_n}d_i^{(k)}\,|u_n^{(i)}\rangle}
+\]
+tali che
+\[
+\boxed{
+\begin{array}{c}
+\hat A|v_n^{(k)}\rangle=a_n|v_n^{(k)}\rangle\\[2pt]
+\hat B|v_n^{(k)}\rangle=b_n^{(k)}|v_n^{(k)}\rangle
+\end{array}}
+\]
+Quindi, diagonalizzando \(\hat B\) **dentro** ogni sottospazio degenere di \(\hat A\), costruisco una base di autostati comuni \(\Rightarrow\) compatibilità.
+
+---
+
+## Degenerazione residua \(\Rightarrow\) ICOC (insieme completo di osservabili compatibili)
+
+Può succedere che, dentro \(S_n(a_n)\), gli autovalori \(b_n^{(k)}\) non siano tutti distinti (rimane degenerazione). Allora la coppia \((a_n,b_n)\) **non** individua ancora univocamente lo stato.
+
+Si introduce un ulteriore operatore \(\hat C\) che commuta con \(\hat A\) e \(\hat B\) (e si diagonalizza \(\hat C\) nel sottospazio ancora degenere), e si continua finché la lista di autovalori identifica uno stato in modo 1–1.
+Un insieme \(\{\hat A,\hat B,\hat C,\dots\}\) con questa proprietà è un **ICOC** (insieme completo di osservabili compatibili).
+
+---
+
+## Sequenza di misure (lettura “postulato 6”)
+
+Se \([\hat A,\hat B]=0\), allora misurare \(\hat A\) e poi \(\hat B\) non distrugge l’informazione su \(\hat A\): dopo la prima misura sei in un autospazio di \(\hat A\); la seconda misura (di \(\hat B\)) ti lascia nello stesso autospazio (non-deg: nello stesso autostato; deg: dentro lo stesso sottospazio).
+
+Se invece \([\hat A,\hat B]\neq 0\), le basi di autostati non coincidono: una misura di \(\hat B\) dopo \(\hat A\) in generale proietta lo stato su una direzione diversa e **perdi** l’informazione precedente su \(\hat A\). Questo è il ponte concettuale verso DIM 2 (indeterminazione).
+
+---
+
+## Analogia ottica (polarizzatori) — “riduzione dello stato” e probabilità
+
+Polarizzazione incidente \(\hat e_p\). Se il polarizzatore seleziona \(\hat e_x\):
+
+- Se \(\hat e_p=\hat e_x\): “sono già in un autostato” \(\Rightarrow\) passo con probabilità \(1\).
+- Se \(\hat e_p=\hat e_y\) (ortogonale): non passo (probabilità \(0\)).
+
+Se lo stato è generico, scompongo:
+\[
+\boxed{\hat e_p=\cos\theta\,\hat e_x+\sin\theta\,\hat e_y}
+\]
+Allora
+\[
+\boxed{P(\text{passo})=\big|\hat e_x\cdot \hat e_p\big|^2=\cos^2\theta},
 \qquad
-\hat B|a_n,\beta\rangle=b_{n\beta}|a_n,\beta\rangle.
+\boxed{P(\text{non passo})=\big|\hat e_y\cdot \hat e_p\big|^2=\sin^2\theta}
 \]
+(Classico: legge di Malus \(I'=I_0\cos^2\theta\). Con i fotoni: \(\cos^2\theta\) è una **probabilità**; dopo il passaggio, lo stato viene proiettato sulla polarizzazione selezionata.)
 
-✅ Questi sono **autostati simultanei**.
-
-### Frase da dire in modo pulito all’orale
-> “Se \([A,B]=0\), allora \(B\) lascia invariati gli autospazi degeneri di \(A\). Dentro ogni autospazio posso diagonalizzare \(B\), ottenendo una base di autostati comuni.”
+In particolare: dopo un primo polarizzatore lungo \(x\), lo stato che passa è “collassato” su \(\hat e_x\); se poi misuro con un altro polarizzatore non allineato introduco nuove probabilità e non ho più certezza di mantenere l’informazione precedente: è l’analogo intuitivo di misure non compatibili \([\hat A,\hat B]\neq 0\).
 
 ---
 
-## 3C) Collegamento elegante con i proiettori (se vuoi fare “bella figura”)
-Definisco il proiettore sull’autospazio di \(A\) con autovalore \(a_n\):
-\[
-\hat P_n=\sum_{k=1}^{r_n}|a_n,k\rangle\langle a_n,k|.
-\]
+# Dizionario simboli
 
-Se \([A,B]=0\) allora (risultato standard degli appunti):
-\[
-[\,\hat P_n,\hat B\,]=0.
-\]
+- \(A,B\): osservabili; \(\hat A,\hat B\): operatori autoaggiunti associati
+- \(|u_n\rangle\): autostato; \(a_n,b_n\): autovalori
+- \([\cdot,\cdot]\): commutatore; \(\{\hat A,\hat B,\hat C,\dots\}\): ICOC = insieme completo di osservabili compatibili
+- \(r_n\): grado di degenerazione di \(a_n\)
+- \(S_n(a_n)\): sottospazio degenere associato ad \(a_n\)
+- \(c_{ik}\): coefficienti della matrice di \(\hat B\) ristretta a \(S_n(a_n)\)
+- \(|v_n^{(k)}\rangle\): autostati comuni costruiti diagonalizzando \(\hat B\) nel sottospazio degenere
+- \(\hat e_x,\hat e_y,\hat e_p\): versori di polarizzazione; \(\theta\): angolo tra polarizzazioni
 
-Da qui segue:
-\[
-\hat B(\hat P_n|\psi\rangle)=\hat P_n(\hat B|\psi\rangle),
-\]
-cioè: “prima proietto in \(S_n\) e poi applico \(B\)” è uguale a “prima applico \(B\) e poi resto in \(S_n\)”: ancora una volta è la frase “\(B\) non mi fa uscire dal sottospazio”.
+# Significato fisico
 
----
+- **Compatibili** = misure “in sequenza” che non distruggono l’informazione l’una dell’altra: esiste base di autostati comuni.
+- **Commutazione** \([\hat A,\hat B]=0\) = condizione matematica che garantisce (e in pratica equivale a) la compatibilità.
+- **Degenerazione**: servono più osservabili compatibili (ICOC) per identificare uno stato in modo univoco tramite “numeri quantici”.
+- Se \([\hat A,\hat B]\neq 0\), l’ordine delle misure conta e nasce naturalmente il collegamento con l’indeterminazione (DIM 2).
 
-# 4) CSCO / ICOC (quando la degenerazione resta)
-Se \(\hat A\) e \(\hat B\) commutano ma rimane degenerazione (cioè \(\hat B\) non distingue tutti gli stati in \(S_n\)), allora si introduce un **insieme completo di osservabili compatibili** (ICOC / CSCO) \(\{\hat A,\hat B,\hat C,\dots\}\) tale che:
-- tutti commutano a due a due,
-- le etichette degli autovalori identificano **univocamente** lo stato.
+# Copione orale (90–120 sec, super ripetibile)
 
-**Significato fisico:** servono abbastanza “quantum numbers” per etichettare uno stato senza ambiguità.
+“Due osservabili \(A\) e \(B\) sono compatibili se posso misurarle una dopo l’altra senza perdere l’informazione della prima misura: in pratica devono avere una base comune di autostati. Se esiste una base \(|u_n\rangle\) tale che \(\hat A|u_n\rangle=a_n|u_n\rangle\) e \(\hat B|u_n\rangle=b_n|u_n\rangle\), allora \(AB|u_n\rangle=BA|u_n\rangle\) per ogni \(n\) e, siccome qualunque stato è combinazione degli \(|u_n\rangle\), segue \([\hat A,\hat B]=0\).
+Viceversa, se \([\hat A,\hat B]=0\), prendo un autostato di \(\hat A\): \(\hat A|u_n\rangle=a_n|u_n\rangle\). Dalla commutazione ottengo che \(\hat B|u_n\rangle\) è ancora autovettore di \(\hat A\) con lo stesso autovalore. Se \(a_n\) è non degenere, allora \(\hat B|u_n\rangle\) deve essere proporzionale a \(|u_n\rangle\), quindi \(|u_n\rangle\) è autostato anche di \(\hat B\). Se invece c’è degenerazione, \(\hat B\) agisce dentro il sottospazio degenere \(S_n(a_n)\); lo rappresento con una matrice \(c_{ik}\) e lo diagonalizzo lì: risolvendo \(\det(c_{ik}-b\,\delta_{ik})=0\) trovo combinazioni \(|v_n^{(k)}\rangle\) che sono autostati comuni di \(\hat A\) e \(\hat B\). Se rimane degenerazione aggiungo un terzo operatore \(\hat C\) che commuta con entrambi: così ottengo un ICOC che identifica uno stato in modo univoco.
+Se invece \([\hat A,\hat B]\neq 0\), la misura di uno cambia lo stato rispetto all’altro: l’analogia classica è il polarizzatore, dove la probabilità di passare è \(\cos^2\theta\) e dopo il passaggio lo stato viene proiettato sulla polarizzazione del filtro: questo prepara il terreno per l’indeterminazione di Heisenberg.”
 
----
-
-# Dizionario simboli (da sapere uno per uno)
-- \(\hat A,\hat B\): operatori (osservabili), **hermitiani**.
-- \([\,\hat A,\hat B\,]=\hat A\hat B-\hat B\hat A\): commutatore.
-- \(|a_n\rangle\): autostato di \(\hat A\) con autovalore \(a_n\).
-- \(a_n\): autovalore (risultato possibile della misura di \(A\)).
-- “non degenere”: per ogni \(a_n\) lo spazio di autostati ha dimensione 1.
-- “degenere”: per un certo \(a_n\) ci sono \(r_n>1\) stati indipendenti.
-- \(|a_n,k\rangle\): base qualunque del sottospazio degenere \(S_n\).
-- \(S_n\): sottospazio degli autostati di \(A\) con autovalore \(a_n\).
-- \(b_n\) o \(b_{n\beta}\): autovalori di \(B\) sugli autostati comuni.
-- \(\hat P_n\): proiettore sul sottospazio \(S_n\).
-- CSCO/ICOC: insieme completo di osservabili compatibili.
-
----
-
-# Significato fisico (come la spieghi senza sembrare “solo algebra”)
-- **Compatibili** = “posso sapere entrambe le grandezze con certezza nello stesso stato”, e l’ordine delle misure non cambia la fisica.
-- **\([A,B]=0\)** è la versione matematica di “le due misure non si disturbano” e “posso scegliere una base di stati che diagonalizza entrambe”.
-- **Non commutanti** ⇒ non esiste base comune ⇒ non posso preparare stati con valori certi simultaneamente ⇒ entra in gioco l’indeterminazione (DIM 2).
-
-**Esempi rapidi da citare:**
-- In un potenziale centrale: \([\,\hat H,\hat L^2\,]=0\) e \([\,\hat H,\hat L_z\,]=0\) ⇒ stati etichettati da \(n,\ell,m\).
-- \([\,\hat x,\hat p\,]=i\hbar\neq 0\) ⇒ non compatibili ⇒ \(\Delta x\Delta p\ge \hbar/2\).
-
----
-
-# Copione orale “da recitare” (90–120 sec)
-“Due osservabili sono compatibili se esiste una base di autostati comuni. Se \(|a,b\rangle\) è autostato simultaneo, allora \(AB|a,b\rangle=ab|a,b\rangle\) e \(BA|a,b\rangle=ab|a,b\rangle\), quindi \([A,B]|a,b\rangle=0\) su una base completa, perciò \([A,B]=0\). Viceversa, se \([A,B]=0\), prendo un autostato di \(A\): \(A|a_n\rangle=a_n|a_n\rangle\). Allora \(A(B|a_n\rangle)=B(A|a_n\rangle)=a_n(B|a_n\rangle)\), quindi \(B|a_n\rangle\) sta nello stesso autospazio di \(A\). Se \(A\) è non degenere, l’autospazio è 1D e dunque \(B|a_n\rangle=b_n|a_n\rangle\): sono autostati comuni. Se è degenere, \(B\) lascia invariato ciascun sottospazio degenere e dentro quel sottospazio posso diagonalizzare \(B\), ottenendo una base \(|a_n,\beta\rangle\) con \(A|a_n,\beta\rangle=a_n|a_n,\beta\rangle\) e \(B|a_n,\beta\rangle=b_{n\beta}|a_n,\beta\rangle\). Quindi \([A,B]=0\) equivale a compatibilità.”
 <<<DIM 3 END>>>
+s
 
 <<<DIM 4 START>>>
 # DIM 4 - Valori medi, teorema di Ehrenfest, evoluzione temporale (U, Heisenberg) e simmetrie ⇒ quantità conservate
