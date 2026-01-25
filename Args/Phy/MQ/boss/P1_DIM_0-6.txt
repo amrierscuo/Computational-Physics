@@ -1020,463 +1020,256 @@ Se invece \([\hat A,\hat B]\neq 0\), la misura di uno cambia lo stato rispetto a
 s
 
 <<<DIM 4 START>>>
-# DIM 4 - Valori medi, teorema di Ehrenfest, evoluzione temporale (U, Heisenberg) e simmetrie ⇒ quantità conservate
+# DIM 4 — Valori medi, teorema di Ehrenfest, evoluzione temporale e simmetrie \(\Rightarrow\) quantità conservate
 
 ## Dove sta negli appunti
-- **Valori medi / varianze (base):** `img/46.jpg` → `img/53.jpg` (P1·5 “Proprietà e valori medi”)  
-- **Ehrenfest:** `img/53.jpg` → `img/56.jpg` (P1·6 “Ehrenfest”)  
-- **Evoluzione temporale / quadri Schr–Heis–Int:** `img/165.jpg` → `img/169.jpg` (P1·18)  
-- **Simmetrie continue / generatori / quantità conservate:** `img/169.jpg` → `img/175.jpg` (P1·19)  
-- **Comm. utili:** `img/146.jpg` → `img/147.jpg` (P1·16)  
-- **Indizio boss:** `boss/solbf4_1.jpg`
+- **Ehrenfest / principio di corrispondenza:** `img/53_p1t02.jpg` → `img/54.jpg`
+- **Calcoli commutatori per \(\langle \hat x\rangle,\langle \hat p\rangle\):** `img/55.jpg` → `img/56.jpg`
 
 ---
 
-# 0) Obiettivo “boss” (cosa devi dimostrare)
-1) Formula generale:
-\[
-\boxed{\;\frac{d}{dt}\langle \hat A\rangle
-=\frac{i}{\hbar}\langle[\hat H,\hat A]\rangle+\left\langle\frac{\partial \hat A}{\partial t}\right\rangle\;}
-\]
-(Teorema di Ehrenfest “generale”, in quadro di Schrödinger)
+Per dimostrare il teorema di Ehrenfest, l’idea di base è che in meccanica quantistica non seguiamo la “traiettoria” di una particella, ma l’evoluzione dei valori medi delle osservabili, che in molti casi assumono una forma molto simile alle leggi classiche.
 
-2) Applicazione a \(\hat x,\hat p\) per ottenere le due equazioni di Ehrenfest:
+In pratica, il teorema di Ehrenfest afferma che la derivata temporale del valore medio di un’osservabile è data dal valore medio del commutatore tra quell’osservabile e l’Hamiltoniana, diviso per \(i\) e per \(\hbar\), più un eventuale termine aggiuntivo se l’osservabile dipende esplicitamente dal tempo.
+
+Per dimostrarlo si parte dall’equazione di Schrödinger e dalla sua coniugata, si prende la definizione di valore medio di un operatore, si deriva rispetto al tempo e poi si sostituiscono le derivate temporali usando Schrödinger. Riordinando i termini si riconosce naturalmente il commutatore con l’Hamiltoniana e si ottiene la formula finale:
 \[
-\boxed{\;\frac{d}{dt}\langle \hat x\rangle=\frac{1}{m}\langle \hat p\rangle\;}
+\boxed{\ \frac{d}{dt}\langle \hat A\rangle
+=\frac{1}{i\hbar}\,\langle[\hat A,\hat H(t)]\rangle
++\Big\langle\frac{\partial \hat A}{\partial t}\Big\rangle\ }
+\]
+(qui \(\hat H(t)\) indica il **caso generale**; se \(\hat H\) non dipende da \(t\), è il sottocaso \(\hat H(t)\equiv \hat H\).)
+
+---
+
+## Valore medio (richiamo)
+\[
+\boxed{\ \langle \hat A\rangle(t)=\int d^{3}\vec r\;\psi^{*}(\vec r,t)\,\hat A(\vec r,t)\,\psi(\vec r,t)\ }
+\]
+
+### TDSE: caso usato nella dimostrazione
+Useremo la **forma più generale** della TDSE, con Hamiltoniano eventualmente dipendente dal tempo:
+\[
+\boxed{\ i\hbar\,\frac{\partial}{\partial t}\psi(\vec r,t)=\hat H(t)\,\psi(\vec r,t)\ },\qquad
+\boxed{\ -i\hbar\,\frac{\partial}{\partial t}\psi^{*}(\vec r,t)=\big(\hat H(t)\psi(\vec r,t)\big)^{*}\ }.
+\]
+Il caso \(\hat H\) **indipendente** da \(t\) è un sottocaso: \(\hat H(t)\equiv \hat H\).
+
+In forma corretta (con \(\hat H(t)^\dagger=\hat H(t)\) e condizioni al contorno/dominio standard):
+\[
+\int d^3\vec r\,(\hat H(t)\psi)^*(\vec r,t)\,\phi(\vec r,t)
+=\int d^3\vec r\,\psi^*(\vec r,t)\,(\hat H(t)\phi)(\vec r,t).
+\]
+
+---
+
+## Teorema di Ehrenfest (derivazione, forma generale)
+
+### Step “Leibniz”: scambio derivata–integrale + derivata del prodotto
+Scrivo
+\[
+\langle \hat A\rangle(t)=\int d^3\vec r\;f(\vec r,t),
 \qquad
-\boxed{\;\frac{d}{dt}\langle \hat p\rangle=-\langle\nabla V(\hat x)\rangle\;}
+f(\vec r,t)=\psi^*(\vec r,t)\,\hat A(\vec r,t)\,\psi(\vec r,t).
 \]
-
-3) Costruire l’operatore di evoluzione \( \hat U(t,t_0)\), mostrare che è **unitario** se \(\hat H\) è hermitiano, e passare al quadro di Heisenberg:
-\[
-\hat A_H(t)=\hat U^\dagger(t)\,\hat A_S(t)\,\hat U(t)
-\]
-e dimostrare l’equazione di Heisenberg:
-\[
-\boxed{\;\frac{d\hat A_H}{dt}=\frac{i}{\hbar}[\hat H_H,\hat A_H]+\left(\frac{\partial \hat A_S}{\partial t}\right)_H\;}
-\]
-
-4) Simmetrie continue: se \( \hat U(\varepsilon)=e^{-i\varepsilon \hat G/\hbar}\) lascia invariato \(\hat H\), allora
-\[
-[\,\hat H,\hat G\,]=0 \ \Rightarrow\  \hat G \text{ è conservata (se } \partial_t \hat G=0\text{)}.
-\]
-
----
-
-# 1) Valore medio: definizione (richiamo corto ma serve)
-In uno stato normalizzato \(|\psi(t)\rangle\),
-\[
-\langle \hat A\rangle(t)=\langle\psi(t)|\hat A(t)|\psi(t)\rangle.
-\]
-Qui metto \(\hat A(t)\) perché **alcuni operatori possono dipendere esplicitamente dal tempo** (es. interazione con campi esterni).
-
----
-
-# 2) DIMOSTRAZIONE: derivata temporale di \(\langle \hat A\rangle\) (Ehrenfest generale)
-
-Parto da:
-\[
-\langle \hat A\rangle=\langle\psi|\hat A|\psi\rangle.
-\]
-
-Derivo nel tempo (regola di Leibniz):
+Poiché il dominio d’integrazione **non dipende da \(t\)** e assumendo regolarità sufficiente per scambiare derivata e integrale,
 \[
 \frac{d}{dt}\langle \hat A\rangle
-=\langle\dot\psi|\hat A|\psi\rangle+\langle\psi|\dot{\hat A}|\psi\rangle+\langle\psi|\hat A|\dot\psi\rangle.
+=\int d^3\vec r\,\frac{\partial}{\partial t}\big(\psi^*\hat A\psi\big).
 \]
-Dove \(\dot{\hat A}\equiv \frac{\partial \hat A}{\partial t}\) è la dipendenza **esplicita** di \(\hat A\) dal tempo.
-
-Ora uso la TDSE:
+Applicando la derivata del prodotto:
 \[
-i\hbar|\dot\psi\rangle=\hat H|\psi\rangle
-\quad\Rightarrow\quad
-|\dot\psi\rangle=\frac{1}{i\hbar}\hat H|\psi\rangle.
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+\frac{\partial\psi^{*}}{\partial t}\hat A\psi
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
++\psi^{*}\hat A\frac{\partial\psi}{\partial t}
+\right].
 \]
 
-E la coniugata (prendo il dagger):
+### Sostituzione con TDSE (caso generale \(\hat H(t)\))
+Dalle TDSE:
 \[
--i\hbar\langle\dot\psi|=\langle\psi|\hat H
-\quad\Rightarrow\quad
-\langle\dot\psi|=-\frac{1}{i\hbar}\langle\psi|\hat H,
+\frac{\partial\psi}{\partial t}=\frac{1}{i\hbar}\hat H(t)\psi,
+\qquad
+\frac{\partial\psi^{*}}{\partial t}=-\frac{1}{i\hbar}(\hat H(t)\psi)^{*}.
 \]
-dove ho usato \(\hat H^\dagger=\hat H\) (Hamiltoniano hermitiano).
-
 Sostituisco:
-
-### Primo termine
 \[
-\langle\dot\psi|\hat A|\psi\rangle
-=
--\frac{1}{i\hbar}\langle\psi|\hat H\hat A|\psi\rangle.
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+-\frac{1}{i\hbar}(\hat H(t)\psi)^{*}\hat A\psi
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
++\frac{1}{i\hbar}\psi^{*}\hat A\hat H(t)\psi
+\right].
+\]
+Raggruppo:
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+\frac{1}{i\hbar}\Big(\psi^{*}\hat A\hat H(t)\psi-(\hat H(t)\psi)^{*}\hat A\psi\Big)
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
+\right].
+\]
+Uso \(\hat H(t)^\dagger=\hat H(t)\) per “spostare” \(\hat H(t)\) nel secondo termine:
+\[
+\int d^3\vec r\,(\hat H(t)\psi)^*\,\hat A\psi=\int d^3\vec r\,\psi^*\,\hat H(t)(\hat A\psi),
+\]
+e ottengo:
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+\frac{1}{i\hbar}\psi^{*}\big(\hat A\hat H(t)-\hat H(t)\hat A\big)\psi
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
+\right].
+\]
+Conclusione:
+\[
+\boxed{\ \frac{d}{dt}\langle \hat A\rangle
+=\frac{1}{i\hbar}\,\langle[\hat A,\hat H(t)]\rangle
++\left\langle\frac{\partial \hat A}{\partial t}\right\rangle\ },
+\qquad
+[\hat A,\hat H(t)]=\hat A\hat H(t)-\hat H(t)\hat A.
 \]
 
-### Terzo termine
+### Richiamo classico (corrispondenza)
 \[
-\langle\psi|\hat A|\dot\psi\rangle
-=
-\frac{1}{i\hbar}\langle\psi|\hat A\hat H|\psi\rangle.
+\boxed{\ \frac{dA}{dt}=\{A,H\}+\frac{\partial A}{\partial t}\ },
+\qquad
+\boxed{\ \{\cdot,\cdot\}\ \longleftrightarrow\ \frac{1}{i\hbar}[\cdot,\cdot]\ }.
 \]
 
-Sommo primo + terzo:
-\[
--\frac{1}{i\hbar}\langle\hat H\hat A\rangle
-+\frac{1}{i\hbar}\langle\hat A\hat H\rangle
-=
-\frac{1}{i\hbar}\langle\hat A\hat H-\hat H\hat A\rangle
-=
-\frac{1}{i\hbar}\langle[\hat A,\hat H]\rangle.
-\]
+*Nota (attenzione alla notazione): in **meccanica classica** \(\{A,H\}\) indica la **parentesi di Poisson**, cioè \(\{A,H\}=\sum_i\Big(\frac{\partial A}{\partial q_i}\frac{\partial H}{\partial p_i}-\frac{\partial A}{\partial p_i}\frac{\partial H}{\partial q_i}\Big)\). In **meccanica quantistica**, invece, le parentesi graffe indicano l’**anticommutatore**: \(\{\hat A,\hat B\}=\hat A\hat B+\hat B\hat A\). Qui quindi \(\{\cdot,\cdot\}\) sono **classiche** (Poisson) e non vanno confuse con \(\{\hat A,\hat B\}\). Nella corrispondenza classico–quantistica stiamo usando l’analogo (a fattore) \(\{\,\cdot,\cdot\,\}\ \leftrightarrow\ \frac{1}{i\hbar}[\cdot,\cdot]\).*
 
-Uso \([\hat A,\hat H]=-[\hat H,\hat A]\) e \(1/i=-i\), ottengo la forma standard:
-\[
-\frac{1}{i\hbar}\langle[\hat A,\hat H]\rangle
-=
-\frac{i}{\hbar}\langle[\hat H,\hat A]\rangle.
-\]
+---
 
-Il termine centrale resta:
+## Commutatori canonici (3D)
 \[
-\langle\psi|\dot{\hat A}|\psi\rangle=\left\langle\frac{\partial \hat A}{\partial t}\right\rangle.
-\]
-
-✅ Conclusione:
-\[
-\boxed{\;\frac{d}{dt}\langle \hat A\rangle
-=\frac{i}{\hbar}\langle[\hat H,\hat A]\rangle+\left\langle\frac{\partial \hat A}{\partial t}\right\rangle\;}
+\boxed{\ [\hat x,\hat p_x]=[\hat y,\hat p_y]=[\hat z,\hat p_z]=i\hbar\ },\qquad
+\boxed{\ [\hat x_i,\hat p_j]=i\hbar\,\delta_{ij}\ }.
 \]
 
 ---
 
-# 3) Applicazione: Ehrenfest per \(\hat x\) e \(\hat p\)
+## Applicazione: \(\langle \hat{\vec x}\rangle\) e \(\langle \hat{\vec p}\rangle\)
 
-Prendo l’Hamiltoniano standard non relativistico (3D, ma in 1D è uguale con derivate normali):
+Qui assumo l’Hamiltoniano standard (tipicamente **tempo-indipendente** negli esercizi base):
 \[
-\hat H=\frac{\hat p^2}{2m}+V(\hat x),
-\qquad
-\text{con }V\text{ reale}.
+\boxed{\ \hat H=\frac{\hat{\vec p}^{\,2}}{2M}+V(\hat{\vec x})\ }.
 \]
+(Se invece \(V=V(\hat{\vec x},t)\), allora \(\hat H(t)\) e le formule restano valide, ma alcune quantità “conservate” possono non esserlo più.)
 
-## 3A) Prima equazione: \(d\langle x\rangle/dt\)
-Metto \(\hat A=\hat x\). Non dipende esplicitamente dal tempo ⇒ \(\partial_t \hat x=0\). Quindi:
+### Equazione per \(\langle \hat x\rangle\)
+Poiché \(\partial_t\hat x=0\):
 \[
-\frac{d}{dt}\langle \hat x\rangle=\frac{i}{\hbar}\langle[\hat H,\hat x]\rangle.
+\frac{d}{dt}\langle \hat x\rangle=\frac{1}{i\hbar}\langle[\hat x,\hat H]\rangle.
 \]
-
-Calcolo il commutatore:
+\([\hat x,V(\hat{\vec x})]=0\) e conta solo \(p_x^2\):
 \[
-[\hat H,\hat x]=\left[\frac{\hat p^2}{2m},\hat x\right]+[V(\hat x),\hat x].
+[\hat x,\hat H]=\left[\hat x,\frac{\hat p_x^{2}}{2M}\right].
 \]
-Ma \([V(\hat x),\hat x]=0\) (funzione di \(\hat x\) commuta con \(\hat x\)). Quindi:
+Uso \([X,Y^2]=Y[X,Y]+[X,Y]Y\):
 \[
-[\hat H,\hat x]=\frac{1}{2m}[\hat p^2,\hat x].
+\left[\hat x,\frac{\hat p_x^{2}}{2M}\right]
+=\frac{1}{2M}\Big(\hat p_x[\hat x,\hat p_x]+[\hat x,\hat p_x]\hat p_x\Big).
 \]
-
-Uso l’identità:
+Con \([\hat x,\hat p_x]=i\hbar\):
 \[
-[\hat p^2,\hat x]=\hat p[\hat p,\hat x]+[\hat p,\hat x]\hat p.
+\left[\hat x,\frac{\hat p_x^{2}}{2M}\right]
+=\frac{1}{2M}\Big(\hat p_x(i\hbar)+(i\hbar)\hat p_x\Big)
+=i\hbar\,\frac{\hat p_x}{M}.
 \]
-E \([\hat x,\hat p]=i\hbar \Rightarrow [\hat p,\hat x]=-i\hbar\). Quindi:
-\[
-[\hat p^2,\hat x]=\hat p(-i\hbar)+(-i\hbar)\hat p=-2i\hbar\,\hat p.
-\]
-
 Allora:
 \[
-[\hat H,\hat x]=\frac{1}{2m}(-2i\hbar\hat p)= -\frac{i\hbar}{m}\hat p.
+\boxed{\ \frac{d}{dt}\langle \hat x\rangle=\left\langle\frac{\hat p_x}{M}\right\rangle\ },\qquad
+\boxed{\ \frac{d}{dt}\langle \hat{\vec x}\rangle=\left\langle\frac{\hat{\vec p}}{M}\right\rangle\ }.
 \]
 
-Inserisco:
+### Equazione per \(\langle \hat{\vec p}\rangle\)
+Poiché \(\partial_t\hat{\vec p}=0\):
 \[
-\frac{d}{dt}\langle \hat x\rangle
-=\frac{i}{\hbar}\left\langle -\frac{i\hbar}{m}\hat p\right\rangle
-=\frac{1}{m}\langle \hat p\rangle.
-\]
-
-\[
-\boxed{\;\frac{d}{dt}\langle \hat x\rangle=\frac{1}{m}\langle \hat p\rangle\;}
-\]
-
----
-
-## 3B) Seconda equazione: \(d\langle p\rangle/dt\)
-Metto \(\hat A=\hat p\). Anche qui \(\partial_t\hat p=0\). Quindi:
-\[
-\frac{d}{dt}\langle \hat p\rangle=\frac{i}{\hbar}\langle[\hat H,\hat p]\rangle.
-\]
-
-Calcolo:
-\[
-[\hat H,\hat p]=\left[\frac{\hat p^2}{2m},\hat p\right]+[V(\hat x),\hat p].
-\]
-Il primo è zero perché \([\hat p^2,\hat p]=0\). Resta:
-\[
-[\hat H,\hat p]=[V(\hat x),\hat p].
-\]
-
-In 1D vale l’identità standard:
-\[
-[f(\hat x),\hat p]=i\hbar\,f'(\hat x).
+\frac{d}{dt}\langle \hat{\vec p}\rangle=\frac{1}{i\hbar}\langle[\hat{\vec p},\hat H]\rangle,
+\qquad
+[\hat{\vec p},\hat{\vec p}^{\,2}]=0.
 \]
 Quindi:
 \[
-[V(\hat x),\hat p]=i\hbar\,\frac{\partial V}{\partial x}(\hat x).
+[\hat{\vec p},\hat H]=[\hat{\vec p},V(\hat{\vec x})].
 \]
-
+In rappresentazione delle coordinate (\(\hat p_x=-i\hbar\,\partial_x\)):
+\[
+[\hat p_x,V(\hat{\vec x})]\psi
+=\hat p_x(V\psi)-V\hat p_x\psi
+=-i\hbar\,\partial_x(V\psi)+i\hbar\,V\,\partial_x\psi
+=-i\hbar\,(\partial_xV)\,\psi.
+\]
+Perciò:
+\[
+\boxed{\ [\hat p_x,V(\hat{\vec x})]=-i\hbar\,\frac{\partial V}{\partial x}(\hat{\vec x})\ },
+\qquad
+\boxed{\ [\hat{\vec p},V(\hat{\vec x})]=-i\hbar\,\vec\nabla V(\hat{\vec x})\ }.
+\]
 Allora:
 \[
-\frac{d}{dt}\langle \hat p\rangle
-=\frac{i}{\hbar}\left\langle i\hbar\,\frac{\partial V}{\partial x}(\hat x)\right\rangle
-= -\left\langle\frac{\partial V}{\partial x}(\hat x)\right\rangle.
+\boxed{\ \frac{d}{dt}\langle \hat{\vec p}\rangle=-\langle\vec\nabla V(\hat{\vec x})\rangle=\langle \hat{\vec F}(\hat{\vec x})\rangle\ }.
 \]
 
-In 3D diventa:
+### II legge di Newton per i valori medi
+Combinando con \(\langle \hat{\vec p}\rangle=M\,\frac{d}{dt}\langle \hat{\vec x}\rangle\):
 \[
-\boxed{\;\frac{d}{dt}\langle \hat{\vec p}\rangle=-\langle\nabla V(\hat{\vec x})\rangle\;}
+\boxed{\ M\,\frac{d^{2}}{dt^{2}}\langle \hat{\vec x}\rangle=-\langle\vec\nabla V(\hat{\vec x})\rangle\ }.
 \]
 
 ---
 
-## 3C) Commento “fisico” che piace
-Le equazioni di Ehrenfest assomigliano alle equazioni di Newton:
-\[
-m\frac{d^2}{dt^2}\langle x\rangle = -\left\langle \frac{\partial V}{\partial x}\right\rangle.
-\]
-Se il pacchetto è molto localizzato e \(V\) non varia troppo sul pacchetto,
-\[
-\left\langle \frac{\partial V}{\partial x}\right\rangle \approx \frac{\partial V}{\partial x}(\langle x\rangle),
-\]
-e allora \(\langle x\rangle\) segue (circa) la traiettoria classica.
-
----
-
-# 4) Operatore di evoluzione \(U(t,t_0)\) e unitarietà
-La TDSE in forma astratta:
-\[
-i\hbar\frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle.
-\]
-Definisco \( \hat U(t,t_0)\) tale che:
-\[
-|\psi(t)\rangle=\hat U(t,t_0)|\psi(t_0)\rangle.
-\]
-
-Allora \(U\) soddisfa:
-\[
-i\hbar\,\frac{d\hat U}{dt}=\hat H\,\hat U,
-\qquad
-\hat U(t_0,t_0)=\hat I.
-\]
-
-### Caso \(\hat H\) indipendente dal tempo
-La soluzione è:
-\[
-\boxed{\;\hat U(t,t_0)=e^{-\frac{i}{\hbar}\hat H (t-t_0)}\;}
-\]
-
-### Unitarietà (perché è cruciale)
-Se \(\hat H=\hat H^\dagger\), allora:
-\[
-\hat U^\dagger(t,t_0)\hat U(t,t_0)=\hat I
-\]
-⇒ preserva la norma:
-\[
-\langle\psi(t)|\psi(t)\rangle=\langle\psi(t_0)|\psi(t_0)\rangle.
-\]
-(È la versione “operatoriale” della conservazione di probabilità che hai fatto in DIM 1.)
-
----
-
-# 5) Quadri di Schrödinger e Heisenberg + equazione di Heisenberg
-
-## 5A) Quadro di Schrödinger (S)
-- Stati: evolvono \(|\psi_S(t)\rangle\)
-- Operatori: fissi \(\hat A_S\) (salvo dipendenza esplicita \(t\))
-
-## 5B) Quadro di Heisenberg (H)
-Scelgo lo stato fisso:
-\[
-|\psi_H\rangle = |\psi_S(t_0)\rangle
-\]
-e faccio evolvere gli operatori:
-\[
-\boxed{\;\hat A_H(t)=\hat U^\dagger(t,t_0)\,\hat A_S(t)\,\hat U(t,t_0)\;}
-\]
-
-### Derivazione dell’equazione di Heisenberg
-Derivo:
-\[
-\frac{d\hat A_H}{dt}
-=
-\frac{d\hat U^\dagger}{dt}\hat A_S\hat U+\hat U^\dagger\frac{\partial \hat A_S}{\partial t}\hat U+\hat U^\dagger\hat A_S\frac{d\hat U}{dt}.
-\]
-
-Uso:
-\[
-\frac{d\hat U}{dt}=-\frac{i}{\hbar}\hat H\,\hat U,
-\qquad
-\frac{d\hat U^\dagger}{dt}=+\frac{i}{\hbar}\hat U^\dagger \hat H
-\]
-(quest’ultima viene prendendo il dagger e usando hermiticità).
-
-Sostituisco:
-\[
-\frac{d\hat A_H}{dt}
-=
-\frac{i}{\hbar}\hat U^\dagger\hat H\hat A_S\hat U
-+\hat U^\dagger\frac{\partial \hat A_S}{\partial t}\hat U
--\frac{i}{\hbar}\hat U^\dagger\hat A_S\hat H\hat U.
-\]
-
-Raccolgo:
-\[
-\frac{d\hat A_H}{dt}
-=
-\frac{i}{\hbar}\hat U^\dagger[\hat H,\hat A_S]\hat U
-+\left(\frac{\partial \hat A_S}{\partial t}\right)_H.
-\]
-
-Ma \(\hat U^\dagger[\hat H,\hat A_S]\hat U = [\hat H_H,\hat A_H]\). Quindi:
+Dopo aver applicato Ehrenfest a \(\hat x\) e \(\hat p\) e aver ottenuto le equazioni “newtoniane” per i valori medi, l’ultimo passo serve a **mettere ordine nella dinamica**: introduciamo il passaggio di quadro (Schrödinger \(\leftrightarrow\) Heisenberg) e poi usiamo Ehrenfest come “ponte” per leggere immediatamente le **quantità conservate** generate da simmetrie. Il punto chiave è: la stessa struttura “commutatore con \(\hat H\)” che governa l’evoluzione dei valori medi è anche quella che, quando il commutatore è nullo, porta alla conservazione.
 
 \[
-\boxed{\;\frac{d\hat A_H}{dt}=\frac{i}{\hbar}[\hat H_H,\hat A_H]+\left(\frac{\partial \hat A_S}{\partial t}\right)_H\;}
+\boxed{
+\begin{array}{l}
+\textbf{Setup:}\ \ \hat H=\hat H(t)\ \text{(Hamiltoniana, eventualmente dipendente dal tempo)},\qquad
+\hat U(\varepsilon)=\exp\!\left(-\dfrac{i}{\hbar}\varepsilon\,\hat G\right)\ \ (\hat G^\dagger=\hat G,\ \text{generatore}).\\[6pt]
+
+\textbf{(1) Cambiare quadro \(\Rightarrow\) equazione di moto (Ehrenfest/Heisenberg):}\qquad
+\hat A_H(t)=\hat U^\dagger(t,t_0)\,\hat A_S(t)\,\hat U(t,t_0)
+\ \xRightarrow[\text{(S}\leftrightarrow\text{H)}]{\text{Ehrenfest / eq. di moto}}
+\ \dfrac{d}{dt}\langle \hat A_H\rangle
+=\dfrac{1}{i\hbar}\langle[\hat A_H,\hat H_H]\rangle
++\Big\langle\dfrac{\partial \hat A_H}{\partial t}\Big\rangle.\\[8pt]
+
+\textbf{(2) Simmetria \(\Rightarrow\) conservazione (via Ehrenfest):}\qquad
+[\hat H,\hat G]=0\ \&\ \partial_t\hat G=0
+\ \xRightarrow[\text{quantità conservata}]{\text{Ehrenfest}}
+\ \dfrac{d}{dt}\langle \hat G\rangle=0
+\ \Rightarrow\ \langle \hat G\rangle=\text{cost.}
+\end{array}
+}
 \]
 
 ---
 
-# 6) Quantità conservate (criterio “secco”)
-Se \(\hat A\) **non dipende esplicitamente** dal tempo e commuta con \(\hat H\):
-\[
-\frac{\partial \hat A}{\partial t}=0,
-\qquad
-[\hat H,\hat A]=0,
-\]
-allora:
-\[
-\boxed{\;\frac{d}{dt}\langle \hat A\rangle=0\;}
-\]
-cioè \(\langle \hat A\rangle\) è costante (quantità conservata).
-
-In quadro di Heisenberg è ancora più “forte”: se \([\hat H,\hat A]=0\) e \(\partial_t\hat A=0\), allora
-\[
-\frac{d\hat A_H}{dt}=0
-\]
-⇒ l’operatore è costante nel tempo.
+# Dizionario simboli
+- \(\psi(\vec r,t)\): funzione d’onda in rappresentazione di posizione.
+- \(\langle \hat A\rangle\): valore medio dell’osservabile \(\hat A\).
+- \([\hat A,\hat H]\): commutatore.
+- \(\hat H(t)\): Hamiltoniana (eventualmente dipendente dal tempo).
+- \(\hat{\vec F}(\hat{\vec x})=-\vec\nabla V(\hat{\vec x})\): forza come operatore.
+- \(\hat U(t,t_0)\): operatore di evoluzione / cambio di quadro.
+- \(\hat G\): generatore di una simmetria continua.
 
 ---
 
-# 7) Simmetrie continue ⇒ generatori ⇒ conservazione
-
-## 7A) Trasformazione continua unitaria
-Una simmetria continua si rappresenta con un operatore unitario vicino all’identità:
-\[
-\boxed{\;\hat U(\varepsilon)=e^{-\frac{i}{\hbar}\varepsilon \hat G}\;}
-\]
-dove:
-- \(\varepsilon\) è un parametro reale “piccolo”
-- \(\hat G=\hat G^\dagger\) è il **generatore** (hermitiano)
-
-Espansione al primo ordine:
-\[
-\hat U(\varepsilon)\approx \hat I-\frac{i}{\hbar}\varepsilon \hat G.
-\]
-
-## 7B) Invarianza dell’Hamiltoniana ⇒ commutatore nullo
-Dire che la simmetria lascia invariato il sistema significa:
-\[
-\hat U(\varepsilon)\,\hat H\,\hat U^\dagger(\varepsilon)=\hat H.
-\]
-
-Sviluppo al primo ordine:
-\[
-(\hat I-\tfrac{i}{\hbar}\varepsilon\hat G)\hat H(\hat I+\tfrac{i}{\hbar}\varepsilon\hat G)
-=
-\hat H+\tfrac{i}{\hbar}\varepsilon(\hat H\hat G-\hat G\hat H)
-=
-\hat H+\tfrac{i}{\hbar}\varepsilon[\hat H,\hat G].
-\]
-
-Perché sia uguale a \(\hat H\) per ogni \(\varepsilon\), deve essere:
-\[
-\boxed{\;[\hat H,\hat G]=0.\;}
-\]
-
-## 7C) Da \([\hat H,\hat G]=0\) a “\(\hat G\) conservata”
-Uso la formula di Ehrenfest (se \(\partial_t\hat G=0\)):
-\[
-\frac{d}{dt}\langle \hat G\rangle=\frac{i}{\hbar}\langle[\hat H,\hat G]\rangle=0.
-\]
-Quindi:
-\[
-\boxed{\;\langle \hat G\rangle=\text{costante nel tempo}\;}
-\]
+# Significato fisico
+- Ehrenfest: i valori medi \(\langle x\rangle,\langle p\rangle\) seguono equazioni “classiche” (Newton per i valori medi).
+- La struttura “commutatore con \(\hat H\)” è la stessa che governa: **equazioni di moto** e **conservazioni** (quando \([\hat H,\hat G]=0\)).
 
 ---
 
-## 7D) Esempi canonici da saper dire (molto richiesti)
+# Copione orale (90–120 s)
+“Uso la TDSE nel caso generale \(i\hbar\,\partial_t\psi=\hat H(t)\psi\). Parto da \(\langle \hat A\rangle=\int \psi^*\hat A\psi\): per Leibniz porto la derivata sotto l’integrale e derivo il prodotto \(\psi^*\hat A\psi\). Sostituisco \(\partial_t\psi\) e \(\partial_t\psi^*\) con Schrödinger e la coniugata e, usando \(\hat H(t)^\dagger=\hat H(t)\), riordino i termini fino a ottenere \(\frac{d}{dt}\langle \hat A\rangle=\frac{1}{i\hbar}\langle[\hat A,\hat H(t)]\rangle+\langle\partial_t\hat A\rangle\). Applicandolo a \(\hat x\) e \(\hat p\) con \(H=\frac{p^2}{2M}+V(x)\) ricavo \(d\langle x\rangle/dt=\langle p\rangle/M\) e \(d\langle p\rangle/dt=-\langle\nabla V\rangle\), quindi \(M\,d^2\langle x\rangle/dt^2=\langle F\rangle\). Infine, come ultimo step, introduco il cambio di quadro e le simmetrie: in Heisenberg l’equazione di moto ha la stessa struttura di Ehrenfest, e se una simmetria ha generatore \(G\) con \([H,G]=0\) e \(\partial_tG=0\), allora \(\langle G\rangle\) è conservata.”
 
-### (1) Traslazioni spaziali ⇒ quantità di moto conservata
-Traslazione di vettore \(\vec a\):
-\[
-\hat U(\vec a)=e^{-\frac{i}{\hbar}\vec a\cdot \hat{\vec P}}.
-\]
-Il generatore è \(\hat{\vec P}\) (momento totale).
-
-Se \(\hat H\) è invariato per traslazioni (potenziale costante o dipende solo da differenze di coordinate), allora:
-\[
-[\hat H,\hat{\vec P}]=0 \Rightarrow \langle \hat{\vec P}\rangle=\text{costante}.
-\]
-
-### (2) Rotazioni ⇒ momento angolare conservato
-Rotazione di angolo-vettore \(\vec\theta\):
-\[
-\hat U(\vec\theta)=e^{-\frac{i}{\hbar}\vec\theta\cdot \hat{\vec L}}.
-\]
-Se il potenziale è centrale \(V(\hat r)\), il sistema è isotropo ⇒
-\[
-[\hat H,\hat{\vec L}]=0 \quad\text{(o almeno }[\hat H,\hat L^2]=[\hat H,\hat L_z]=0\text{)}
-\]
-⇒ conservazione del momento angolare (quantum numbers \(\ell,m\)).
-
-### (3) Traslazioni temporali ⇒ energia conservata
-Se \(\hat H\) non dipende esplicitamente dal tempo:
-\[
-\frac{d}{dt}\langle \hat H\rangle
-=\left\langle\frac{\partial \hat H}{\partial t}\right\rangle=0
-\]
-⇒ energia costante (per sistema chiuso).
-
----
-
-# Dizionario simboli (da ripetere senza inciampi)
-- \(|\psi(t)\rangle\): stato al tempo \(t\).
-- \(\hat A(t)\): operatore osservabile (può avere dipendenza esplicita da \(t\)).
-- \(\langle \hat A\rangle=\langle\psi|\hat A|\psi\rangle\): valore medio.
-- \(\hat H\): Hamiltoniano (energia come operatore); hermitiano.
-- \(\hbar\): costante di Planck ridotta.
-- \( [\hat H,\hat A]=\hat H\hat A-\hat A\hat H\): commutatore.
-- \(\partial \hat A/\partial t\): variazione **esplicita** di \(\hat A\) col tempo (non dovuta alla dinamica dello stato).
-- \(\hat x,\hat p\): posizione e quantità di moto; \([\hat x,\hat p]=i\hbar\).
-- \(V(\hat x)\): potenziale (operatore funzione della posizione).
-- \(\nabla V\): gradiente del potenziale (forza classica = \(-\nabla V\)).
-- \(\hat U(t,t_0)\): operatore di evoluzione temporale.
-- “unitario”: \(\hat U^\dagger \hat U=\hat I\).
-- \(\hat A_S, \hat A_H\): operatore in quadro Schrödinger / Heisenberg.
-- \(\hat U(\varepsilon)=e^{-i\varepsilon \hat G/\hbar}\): simmetria continua.
-- \(\hat G\): generatore hermitiano della simmetria (candidato a quantità conservata).
-- \(\hat{\vec P}\): momento (generatore traslazioni); \(\hat{\vec L}\): momento angolare (generatore rotazioni).
-
----
-
-# Significato fisico (da dire “da 30 e lode”, ma breve)
-- La formula di Ehrenfest dice **come cambiano nel tempo i valori medi**: la dinamica quantistica “proietta” su grandezze misurabili.
-- Le equazioni di Ehrenfest per \(\langle x\rangle, \langle p\rangle\) mostrano che i valori medi obbediscono a una forma “newtoniana”; nel limite di pacchetto stretto recuperi quasi la classica.
-- L’unitarietà di \(U\) è ciò che garantisce conservazione della norma (quindi probabilità) e coerenza della teoria.
-- Le simmetrie continue sono collegate a conservazioni: “invarianza ⇒ commutatore nullo ⇒ quantità conservata” (versione QM del teorema di Noether).
-
----
-
-# Copione orale “da macchinetta” (circa 2 minuti)
-“Parto da \(\langle A\rangle=\langle\psi|A|\psi\rangle\). Derivo: \(\frac{d}{dt}\langle A\rangle=\langle\dot\psi|A|\psi\rangle+\langle\psi|\partial_t A|\psi\rangle+\langle\psi|A|\dot\psi\rangle\). Con Schrödinger \(i\hbar|\dot\psi\rangle=H|\psi\rangle\) e coniugata \(-i\hbar\langle\dot\psi|=\langle\psi|H\). Sostituendo ottengo \(\frac{d}{dt}\langle A\rangle=\frac{i}{\hbar}\langle[H,A]\rangle+\langle\partial_t A\rangle\). Applicando a \(x\) con \(H=p^2/2m+V(x)\): \([H,x]=[p^2/2m,x]=-(i\hbar/m)p\), quindi \(d\langle x\rangle/dt=\langle p\rangle/m\). Applicando a \(p\): \([H,p]=[V(x),p]=i\hbar\,\partial_x V\), quindi \(d\langle p\rangle/dt=-\langle\partial_x V\rangle\), e in 3D \(-\langle\nabla V\rangle\). Poi definisco l’evoluzione \(|\psi(t)\rangle=U(t,t_0)|\psi(t_0)\rangle\), con \(U=\exp[-iH(t-t_0)/\hbar]\) se \(H\) è costante; se \(H\) è hermitiano \(U\) è unitario. In Heisenberg gli operatori evolvono: \(A_H=U^\dagger A_S U\) e soddisfano \(dA_H/dt=(i/\hbar)[H_H,A_H]+(\partial_t A_S)_H\). Infine, se \(\partial_t A=0\) e \([H,A]=0\) allora \(d\langle A\rangle/dt=0\): è conservata. Per una simmetria continua \(U(\varepsilon)=e^{-i\varepsilon G/\hbar}\), l’invarianza di \(H\) implica \([H,G]=0\) quindi \(G\) è una quantità conservata: traslazioni → \(P\), rotazioni → \(L\), traslazioni nel tempo → energia.”
 <<<DIM 4 END>>>
+
 
 <<<DIM 5 START>>>
 # DIM 5 - Problemi 1D “a tratti”: libera, step, barriera, buca  
