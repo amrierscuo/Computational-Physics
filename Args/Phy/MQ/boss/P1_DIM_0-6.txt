@@ -1737,367 +1737,436 @@ Nel caso \(E<V\) l’onda diventa **evanescente** come in ottica oltre l’angol
 <<<DIM 5 END>>>
 
 <<<DIM 6 START>>>
-# DIM 6 - Oscillatore armonico quantistico 1D (metodo operatoriale: \(a,a^\dagger\), \(N\), spettro \(E_n\), stati \(\psi_n\), significato fisico)
+
+# DIM 6 — Oscillatore Armonico Quantistico 1D: Hermite → (ponte Dirac: \(\delta\)+chiusura) → **metodo operatoriale** → matrici → coordinate \((\xi=\alpha x)\) → confronto finale
 
 ## Dove sta negli appunti
-- **Formalismo operatoriale / commutatori / notazione:** **P1·12** (`img/126.jpg`–`img/132.jpg`)  
-- **Ponte QM vs CL / interpretazione:** **P1·11A** (`img/100.jpg`–`img/108.jpg`)  
-- (Se nelle tue note c’è un blocco dedicato all’oscillatore, di solito è nello stesso “cluster” di P1·12)
+
+* OA lineare (variabili adimensionali, Hermite, quantizzazione, confronto CL): `img/100.jpg` → `img/108.jpg`
+* OA operatoriale + notazione matriciale + coordinate: `img/126.jpg` → `img/132.jpg`
 
 ---
 
-# 0) Obiettivo “boss”
-Dimostrare in modo completo che per l’oscillatore armonico quantistico 1D:
-1) Definendo opportunamente gli operatori di creazione/distruzione \(a^\dagger, a\), vale
+## Intro (completa, prima del metodo operatoriale)
+
+Nel caso dell’**oscillatore armonico lineare** classicamente ho una forza elastica di tipo Hooke \((F=-kx)\) e quindi un potenziale parabolico \(\bigl(V(x)=\tfrac12kx^2\bigr)\) con minimo in \((x=0)\). È importante anche in QM perché **qualunque potenziale “ragionevole” vicino a un minimo** si comporta in prima approssimazione come armonico: se prendo un potenziale arbitrario \((W(x))\) e lo sviluppo intorno a un punto di equilibrio \((a)\) (minimo),
 \[
-[a,a^\dagger]=1
+W(x)=W(a)+(x-a)W'(a)+\frac12(x-a)^2W''(a)+\cdots,\qquad W'(a)=0,
 \]
-2) L’Hamiltoniana si scrive
+e (ponendo il riferimento \((W(a)=0)\)) ottengo
 \[
-\boxed{\ \hat H=\hbar\omega\left(\hat N+\frac12\right)\ }
-\quad\text{con}\quad
-\hat N=a^\dagger a
+W(x)\simeq \frac12\,W''(a)(x-a)^2\equiv \frac12k(x-a)^2.
 \]
-3) Gli autovalori di \(\hat N\) sono \(n=0,1,2,\dots\) e quindi
+Quindi, se mi muovo “abbastanza vicino” al minimo, i termini di ordine superiore sono trascurabili e lo **studio del potenziale quadratico** diventa la **prima approssimazione** di moltissimi potenziali più complessi (poi, se voglio migliorare, aggiungo i termini non quadratici come correzioni). In QM promuovo \((x,p)\) a operatori e, in rappresentazione delle coordinate, per un sistema 1D con Hamiltoniana tempo-indipendente devo risolvere l’equazione agli autovalori (TISE):
 \[
-\boxed{\ E_n=\hbar\omega\left(n+\frac12\right)\ ,\quad n=0,1,2,\dots\ }
+\hat H\psi(x)=E\psi(x),\qquad
+\hat H=\frac{\hat p^2}{2m}+\frac12kx^2
+\ \Rightarrow\
+\left[-\frac{\hbar^2}{2m}\frac{d^2}{dx^2}+\frac12kx^2\right]\psi(x)=E\psi(x).
 \]
-4) Lo stato fondamentale soddisfa \(a|0\rangle=0\) e in rappresentazione \(x\) è una gaussiana:
+Poiché \((V(x)\to+\infty)\) per \((|x|\to\infty)\), la condizione fisica è (\(\psi\to0\)) all’infinito: mi aspetto **stati legati** e quindi **energie quantizzate**. Per risolvere passo a variabili adimensionali:
 \[
-\boxed{\ \psi_0(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right)\ }
+\omega=\sqrt{\frac{k}{m}},\qquad \lambda=\frac{2E}{\hbar\omega},\qquad \xi=\alpha x,\ \ \alpha=\sqrt{\frac{m\omega}{\hbar}},\qquad \tilde\psi(\xi)=\psi(\xi/\alpha),
 \]
-5) Gli stati eccitati si ottengono con
+ottenendo
 \[
-|n\rangle=\frac{(a^\dagger)^n}{\sqrt{n!}}|0\rangle
+\frac{d^2\tilde\psi}{d\xi^2}+(\lambda-\xi^2)\tilde\psi=0.
 \]
-e in \(x\) compaiono i polinomi di Hermite \(H_n\).
+L’analisi asintotica mostra che per avere normalizzabilità devo prendere la parte che “smorza” e quindi porre
+\[
+\tilde\psi(\xi)=e^{-\xi^2/2}H(\xi)\ \Rightarrow\ H''-2\xi H'+(\lambda-1)H=0
+\]
+(equazione di Hermite). Poiché il potenziale è pari, separo in soluzioni **pari** e **dispari** con sviluppi in serie; ma la serie, se non tronca, porta a una crescita tipo \((e^{+\xi^2})\) e quindi a \((\tilde\psi\sim e^{+\xi^2/2})\) (non fisica). Impongo allora il **troncamento**: per le pari ottengo \((\lambda=4N+1)\), per le dispari \((\lambda=4N+3)\), e mettendo insieme:
+\[
+\lambda=2n+1,\qquad n=0,1,2,\dots
+\]
+cioè
+\[
+\boxed{E_n=\hbar\omega\left(n+\frac12\right)}.
+\]
+Quindi gli autovalori sono **discreti** (in 1D anche **non degeneri**) e i livelli sono **equispaziati**: \((\Delta E=E_{n+1}-E_n=\hbar\omega)\). Questa distanza è proprio il “quanto” \((h\nu)\) \((\omega=2\pi\nu)\): l’oscillatore armonico spiega perché l’energia scambiata per transizioni tra livelli viene in pacchetti, e infatti molti sistemi fisici (anche modi normali di cavità/campi) si possono ricondurre a insiemi di oscillatori. Un altro punto chiave è lo **stato fondamentale**: il minimo non è \((E=0)\) ma
+\[
+\underline{E_0=\frac12\hbar\omega\neq0},
+\]
+coerente con l’indeterminazione \((\Delta x,\Delta p\gtrsim \hbar/2)\): non posso avere simultaneamente \((x)\) e \((p)\) “perfettamente nulli”. Le autofunzioni \((\psi_n)\) sono ortogonali e formano un insieme completo (base): posso rappresentare stati generici come combinazioni. Infine confronto con il classico: per una data energia \((E)\) il moto avviene tra due punti di inversione \((\pm x_0)\), con \(\bigl(x_0=\sqrt{2E/(m\omega^2)}\bigr)\) e \(\bigl(v^2=\omega^2(x_0^2-x^2)\bigr)\); la densità di probabilità “classica” (tempo di permanenza) è
+\[
+\rho_{\rm cl}(x)=\frac{1}{\pi\sqrt{x_0^2-x^2}},
+\]
+massima vicino ai punti di inversione. In QM \((|\psi_n|^2)\) per \((n)\) piccolo è molto diverso, ma per (n) grande l’inviluppo delle oscillazioni tende al comportamento classico (principio di corrispondenza) e anche \((\Delta E/E\sim 1/n\to0)\) rende la discretizzazione sempre meno “visibile”.  
+A questo punto passiamo dal “metodo a ODE” al **metodo operatoriale**: lavoriamo con stati \(|\psi\rangle\), operatori e commutatori, e poi torniamo in coordinate per ritrovare Hermite. In particolare, passiamo alla **notazione di Dirac** come preparazione *intuitiva* ai postulati: **lo stato è un vettore** e le funzioni d’onda sono sue rappresentazioni.
 
 ---
 
-# 1) Setup: Hamiltoniana e regola di quantizzazione
-Oscillatore armonico 1D:
-\[
-\boxed{\ \hat H=\frac{\hat p^2}{2m}+\frac12\,m\omega^2\hat x^2\ }
-\]
-con:
-- \(\hat x\) operatore posizione,
-- \(\hat p\) operatore quantità di moto,
-- \(\omega\) pulsazione,
-- \(m\) massa.
+## Ponte minimo (Dirac): \(\delta\), chiusura e completezza
 
-**Comm. canonico:**
 \[
-\boxed{[\hat x,\hat p]=i\hbar}
+\langle x|x'\rangle=\delta(x-x'),\qquad \int_{-\infty}^{+\infty}|x\rangle\langle x|\,dx=\mathbb I,\qquad \psi(x)=\langle x|\psi\rangle.
+\]
+\[
+\langle E_m|E_n\rangle=\delta_{mn},\qquad \sum_{n=0}^{\infty}|E_n\rangle\langle E_n|=\mathbb I.
 \]
 
 ---
 
-# 2) Definizione dei ladder operators \(a\), \(a^\dagger\)
-Definisco:
+# Parte operatoriale
+
+## 1) Hamiltoniana e commutatore canonico
+
+\[
+\boxed{\ \hat H=\frac{\hat p^{2}}{2m}+\frac12m\omega^2\hat x^{2}\ },\qquad
+\boxed{[\hat x,\hat p]=i\hbar}.
+\]
+
+## 2) Definizione di \((a)\), \((a^\dagger)\)
+
 \[
 \boxed{
-a=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x+\frac{i}{m\omega}\hat p\right)
-}
-\]
-\[
+\hat a=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x+\frac{i}{m\omega}\hat p\right)},\qquad
 \boxed{
-a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x-\frac{i}{m\omega}\hat p\right)
-}
+\hat a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x-\frac{i}{m\omega}\hat p\right)}.
 \]
 
-### Perché questi coefficienti?
-- Voglio che \(a\) sia **adimensionale**.
-- Voglio che \(H\) diventi una cosa del tipo \(a^\dagger a + 1/2\).
-- La scala naturale di lunghezza è \(x_0=\sqrt{\hbar/(m\omega)}\) (ampiezza quantistica tipica).
+## 3) Inversione \((\hat x,\hat p)\) in funzione di \((a,a^\dagger)\)
+
+\[
+\boxed{\hat x=\sqrt{\frac{\hbar}{2m\omega}}(\hat a+\hat a^\dagger)},\qquad
+\boxed{\hat p=i\sqrt{\frac{\hbar m\omega}{2}}(\hat a^\dagger-\hat a)}.
+\]
+
+## 4) Dimostrazione di \(([\hat a,\hat a^\dagger]=1)\)
+
+Pongo \(\bigl(c=\sqrt{\tfrac{m\omega}{2\hbar}}\bigr)\), \(\bigl(\alpha=\tfrac{1}{m\omega}\bigr)\):
+\[
+\hat a=c(\hat x+i\alpha\hat p),\qquad \hat a^\dagger=c(\hat x-i\alpha\hat p).
+\]
+\[
+[\hat a,\hat a^\dagger]=c^2[\hat x+i\alpha\hat p,\hat x-i\alpha\hat p]
+=-2ic^2\alpha[\hat x,\hat p]
+=-2ic^2\alpha(i\hbar)=2c^2\alpha\hbar=1.
+\]
+\[
+\boxed{[\hat a,\hat a^\dagger]=1.}
+\]
+
+## 5) Riscrittura di \((\hat H)\) tramite \((a^\dagger a)\)
+
+\[
+\hat a^\dagger\hat a=\frac{m\omega}{2\hbar}\left(\hat x-\frac{i}{m\omega}\hat p\right)\left(\hat x+\frac{i}{m\omega}\hat p\right)
+=\frac{\hat H}{\hbar\omega}-\frac12.
+\]
+\[
+\boxed{\ \hat H=\hbar\omega\left(\hat a^\dagger\hat a+\frac12\right)\ }.
+\]
+Definisco
+\[
+\boxed{\hat N\equiv \hat a^\dagger\hat a},\qquad \boxed{\hat H=\hbar\omega\left(\hat N+\frac12\right)}.
+\]
+
+## 6) Commutatori con \((\hat N)\)
+
+\[
+[\hat N,\hat a]=[\hat a^\dagger\hat a,\hat a]=\hat a^\dagger[\hat a,\hat a]+[\hat a^\dagger,\hat a]\hat a=-\hat a,
+\]
+\[
+[\hat N,\hat a^\dagger]=[\hat a^\dagger\hat a,\hat a^\dagger]=\hat a^\dagger[\hat a,\hat a^\dagger]+[\hat a^\dagger,\hat a^\dagger]\hat a=\hat a^\dagger.
+\]
+\[
+\boxed{[\hat N,\hat a]=-\hat a},\qquad \boxed{[\hat N,\hat a^\dagger]=\hat a^\dagger}.
+\]
+Quindi
+\[
+[\hat H,\hat a]=-\hbar\omega\,\hat a,\qquad [\hat H,\hat a^\dagger]=+\hbar\omega\,\hat a^\dagger.
+\]
 
 ---
 
-# 3) DIMOSTRAZIONE: \([a,a^\dagger]=1\)
-Metto \(c=\sqrt{\frac{m\omega}{2\hbar}}\) e \(\alpha=\frac{1}{m\omega}\) per alleggerire:
-\[
-a=c(\hat x+i\alpha \hat p),\qquad a^\dagger=c(\hat x-i\alpha \hat p).
-\]
-
-Allora:
-\[
-[a,a^\dagger]=c^2[\hat x+i\alpha\hat p,\hat x-i\alpha\hat p].
-\]
-
-Espando usando bilinearità e che \([\hat x,\hat x]=[\hat p,\hat p]=0\):
-\[
-[\hat x+i\alpha\hat p,\hat x-i\alpha\hat p]
-=
-[\hat x,\hat x]-i\alpha[\hat x,\hat p]+i\alpha[\hat p,\hat x]+(i\alpha)(-i\alpha)[\hat p,\hat p].
-\]
-Resta:
-\[
-=-i\alpha[\hat x,\hat p]+i\alpha[\hat p,\hat x].
-\]
-Ma \([\hat p,\hat x]=-[\hat x,\hat p]= -i\hbar\). Quindi:
-\[
--i\alpha(i\hbar)+i\alpha(-i\hbar)=\alpha\hbar+\alpha\hbar=2\alpha\hbar.
-\]
-
-Dunque:
-\[
-[a,a^\dagger]=c^2(2\alpha\hbar)=\left(\frac{m\omega}{2\hbar}\right)\cdot 2\cdot \frac{1}{m\omega}\cdot \hbar=1.
-\]
+## 7) Riparto dalla TISE in Dirac e applico \((a,a^\dagger)\)
 
 \[
-\boxed{[a,a^\dagger]=1.}
+\boxed{\hat H|E\rangle=E|E\rangle}.
 \]
-
----
-
-# 4) Riscrivere \(\hat H\) in funzione di \(a^\dagger a\)
-Calcolo \(a^\dagger a\).
-
-Usando le definizioni:
+Uso \(\hat H\hat a^\dagger=\hat a^\dagger\hat H+[\hat H,\hat a^\dagger]\):
 \[
-a^\dagger a=\frac{m\omega}{2\hbar}\left(\hat x-\frac{i}{m\omega}\hat p\right)\left(\hat x+\frac{i}{m\omega}\hat p\right).
-\]
-
-Moltiplico:
-\[
-(\hat x-\tfrac{i}{m\omega}\hat p)(\hat x+\tfrac{i}{m\omega}\hat p)
-=
-\hat x^2+\frac{i}{m\omega}\hat x\hat p-\frac{i}{m\omega}\hat p\hat x+\frac{1}{m^2\omega^2}\hat p^2.
-\]
-
-Il pezzo centrale è un commutatore:
-\[
-\hat x\hat p-\hat p\hat x=[\hat x,\hat p]=i\hbar.
-\]
-Quindi:
-\[
-\frac{i}{m\omega}(\hat x\hat p-\hat p\hat x)
-=
-\frac{i}{m\omega}(i\hbar)= -\frac{\hbar}{m\omega}.
-\]
-
-Allora:
-\[
-a^\dagger a=\frac{m\omega}{2\hbar}\left(\hat x^2+\frac{1}{m^2\omega^2}\hat p^2-\frac{\hbar}{m\omega}\right).
-\]
-
-Distribuisco:
-\[
-a^\dagger a
-=
-\frac{m\omega}{2\hbar}\hat x^2+\frac{1}{2\hbar m\omega}\hat p^2-\frac12.
-\]
-
-Riordino per riconoscere \(H\):
-\[
-\frac{1}{2\hbar m\omega}\hat p^2+\frac{m\omega}{2\hbar}\hat x^2
-=
-\frac{1}{\hbar\omega}\left(\frac{\hat p^2}{2m}+\frac12 m\omega^2\hat x^2\right)
-=\frac{\hat H}{\hbar\omega}.
-\]
-
-Quindi:
-\[
-a^\dagger a = \frac{\hat H}{\hbar\omega}-\frac12
+\hat H(\hat a^\dagger|E\rangle)=(E+\hbar\omega)(\hat a^\dagger|E\rangle)
 \quad\Rightarrow\quad
-\boxed{\hat H=\hbar\omega\left(a^\dagger a+\frac12\right)}.
+\boxed{\hat H(\hat a^\dagger|E\rangle)=(E+\hbar\omega)(\hat a^\dagger|E\rangle)}.
 \]
-
-Definisco l’**operatore numero**:
-\[
-\boxed{\hat N\equiv a^\dagger a}
-\]
-e ottengo:
-\[
-\boxed{\hat H=\hbar\omega\left(\hat N+\frac12\right)}.
-\]
-
----
-
-# 5) Proprietà di \(\hat N\) e dimostrazione dello spettro \(n=0,1,2,\dots\)
-
-## 5A) \(\hat N\) è positivo
-Per qualunque stato \(|\psi\rangle\):
-\[
-\langle\psi|\hat N|\psi\rangle
-=\langle\psi|a^\dagger a|\psi\rangle
-=\langle a\psi|a\psi\rangle
-=\|a|\psi\rangle\|^2 \ge 0.
-\]
-Quindi gli autovalori di \(\hat N\) sono \(\ge 0\).
-
-## 5B) Commutatori fondamentali: \(a\) abbassa, \(a^\dagger\) alza
-Dimostro:
-\[
-[\hat N,a]= -a,\qquad [\hat N,a^\dagger]=+a^\dagger.
-\]
-
-Esempio:
-\[
-[\hat N,a]=[a^\dagger a,a]=a^\dagger[a,a]+[a^\dagger,a]a=0+(-1)a=-a
-\]
-perché \([a^\dagger,a]=-[a,a^\dagger]=-1\).
-
-Analogamente viene \([\hat N,a^\dagger]=a^\dagger\).
-
-## 5C) Se \(\hat N|n\rangle=n|n\rangle\), allora \(a^\dagger|n\rangle\) ha autovalore \(n+1\)
-Calcolo:
-\[
-\hat N(a^\dagger|n\rangle)=(a^\dagger\hat N + [\hat N,a^\dagger])|n\rangle
-= a^\dagger(n|n\rangle)+a^\dagger|n\rangle
-=(n+1)(a^\dagger|n\rangle).
-\]
-Quindi \(a^\dagger\) **aumenta** il numero di 1.
-
 Analogamente:
 \[
-\hat N(a|n\rangle)=(n-1)(a|n\rangle)
+\boxed{\hat H(\hat a|E\rangle)=(E-\hbar\omega)(\hat a|E\rangle)}.
 \]
-quindi \(a\) **diminuisce** il numero di 1 (se lo stato non va a zero).
 
-## 5D) Perché \(n\) deve essere un intero e c’è un minimo \(n=0\)
-Se esistesse un autovalore \(n\) non intero o negativo, applicando ripetutamente \(a\) scenderesti indefinitamente:
+## 8) Da \((\hat H\ge 0)\) arrivo al fondamentale \((E_0)\)
+
+Poiché \(\left(\hat H=\frac{\hat p^2}{2m}+\frac12m\omega^2\hat x^2\right)\) è positivo:
 \[
-n,\ n-1,\ n-2,\dots
+\langle E|\hat H|E\rangle=E\langle E|E\rangle\ge 0\Rightarrow E\ge 0.
 \]
-Ma \(\hat N\ge 0\) (positività), quindi la discesa deve **fermarsi**: esiste uno stato minimo \(|0\rangle\) tale che:
+Esiste un minimo \((E_0)\). Se \((\hat a|E_0\rangle\neq0)\), allora \((\hat a|E_0\rangle)\) avrebbe energia \((E_0-\hbar\omega)\), impossibile. Quindi:
 \[
-\boxed{a|0\rangle=0.}
+\boxed{\hat a|E_0\rangle=0}.
 \]
-Da questo, risalendo con \(a^\dagger\), ottieni una torre con:
+Da \(\bigl(\hat H=\hbar\omega(\hat N+\tfrac12)\bigr)\) e \((\hat N=\hat a^\dagger\hat a)\):
 \[
-\boxed{n=0,1,2,\dots}
+\hat a|E_0\rangle=0\Rightarrow \hat N|E_0\rangle=0 \Rightarrow \hat H|E_0\rangle=\frac12\hbar\omega|E_0\rangle
+\Rightarrow
+\boxed{E_0=\frac12\hbar\omega}.
+\]
+
+## 9) Normalizzazione (come esce \(1/\sqrt{n+1}\)) + esempio esplicito \(\sqrt{n!}\)
+
+Definisco lo stato successivo come
+\[
+|E_{n+1}\rangle=d_n\,\hat a^\dagger|E_n\rangle,\qquad \langle E_{n+1}|E_{n+1}\rangle=1,\qquad \langle E_n|E_n\rangle=1.
+\]
+Allora:
+\[
+1=\langle E_{n+1}|E_{n+1}\rangle
+=|d_n|^2\,\langle E_n|\hat a\,\hat a^\dagger|E_n\rangle.
+\]
+Uso
+\[
+\hat a\,\hat a^\dagger=\hat a^\dagger\hat a+1=\hat N+1,
+\]
+quindi
+\[
+1=|d_n|^2\,\langle E_n|(\hat N+1)|E_n\rangle
+=|d_n|^2\,(n+1).
+\]
+Da cui (a meno di fase):
+\[
+\boxed{d_n=\frac{1}{\sqrt{n+1}}}.
+\]
+Quindi le azioni di salita/discesa sono:
+\[
+\boxed{\hat a^\dagger|E_n\rangle=\sqrt{n+1}\,|E_{n+1}\rangle},\qquad
+\boxed{\hat a|E_n\rangle=\sqrt{n}\,|E_{n-1}\rangle}.
+\]
+
+**Esempio esplicito (perché compare \(\sqrt{n!}\))**: partendo da \(|E_0\rangle\),
+\[
+\hat a^\dagger|E_0\rangle=\sqrt1\,|E_1\rangle,
+\]
+\[
+(\hat a^\dagger)^2|E_0\rangle=\hat a^\dagger(\sqrt1\,|E_1\rangle)=\sqrt1\,\sqrt2\,|E_2\rangle,
+\]
+\[
+(\hat a^\dagger)^3|E_0\rangle=\sqrt1\,\sqrt2\,\sqrt3\,|E_3\rangle,
+\]
+e in generale
+\[
+(\hat a^\dagger)^n|E_0\rangle=\Bigl(\sqrt1\,\sqrt2\cdots\sqrt n\Bigr)\,|E_n\rangle
+=\sqrt{1\cdot2\cdots n}\,|E_n\rangle
+=\sqrt{n!}\,|E_n\rangle.
+\]
+Quindi:
+\[
+\boxed{|E_n\rangle=\frac{1}{\sqrt{n!}}(\hat a^\dagger)^n|E_0\rangle}.
+\]
+E lo spettro:
+\[
+\boxed{E_n=\hbar\omega\left(n+\frac12\right)},\qquad n=0,1,2,\dots,\qquad \Delta E=\hbar\omega=h\nu.
 \]
 
 ---
 
-# 6) Spettro energetico
-Poiché:
-\[
-\hat H=\hbar\omega\left(\hat N+\frac12\right),
-\]
-se \(\hat N|n\rangle=n|n\rangle\), allora:
-\[
-\hat H|n\rangle=\hbar\omega\left(n+\frac12\right)|n\rangle.
-\]
+## 10) Rappresentazioni matriciali nella base ON \((\{|E_n\rangle\})\)
 
 \[
-\boxed{E_n=\hbar\omega\left(n+\frac12\right),\quad n=0,1,2,\dots}
+\hat H=\hbar\omega
+\begin{pmatrix}
+\frac12&0&0&0&\cdots\\
+0&\frac32&0&0&\cdots\\
+0&0&\frac52&0&\cdots\\
+0&0&0&\frac72&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix},\qquad
+\hat N=
+\begin{pmatrix}
+0&0&0&0&\cdots\\
+0&1&0&0&\cdots\\
+0&0&2&0&\cdots\\
+0&0&0&3&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix}.
 \]
-
-**Risultati fisici immediati:**
-- livelli equispaziati di passo \(\hbar\omega\);
-- energia di punto zero \(E_0=\frac12\hbar\omega\) (non puoi avere \(E=0\) perché violerebbe Heisenberg).
+Elementi di matrice:
+\[
+(\hat a^\dagger)_{kn}=\sqrt{n+1}\,\delta_{k,n+1},\qquad (\hat a)_{kn}=\sqrt{n}\,\delta_{k,n-1},
+\]
+quindi:
+\[
+\hat a^\dagger=
+\begin{pmatrix}
+0&0&0&0&\cdots\\
+\sqrt1&0&0&0&\cdots\\
+0&\sqrt2&0&0&\cdots\\
+0&0&\sqrt3&0&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix},\qquad
+\hat a=
+\begin{pmatrix}
+0&\sqrt1&0&0&\cdots\\
+0&0&\sqrt2&0&\cdots\\
+0&0&0&\sqrt3&\cdots\\
+0&0&0&0&\ddots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix}.
+\]
 
 ---
 
-# 7) Stati normalizzati e costruzione esplicita
-Dato lo stato fondamentale \(|0\rangle\) con \(a|0\rangle=0\), definisco:
+# Rappresentazione in coordinate e ritorno a \((\xi=\alpha x)\)
+
+## 11) Passo a \((\xi=\alpha x)\) e scrivo \((a,a^\dagger)\) come operatori differenziali
+
 \[
-\boxed{|n\rangle=\frac{(a^\dagger)^n}{\sqrt{n!}}|0\rangle.}
+\xi=\alpha x,\qquad \alpha=\sqrt{\frac{m\omega}{\hbar}},\qquad
+\hat p=-i\hbar\frac{d}{dx}=-i\hbar\alpha\frac{d}{d\xi}.
+\]
+\[
+\boxed{\hat a=\frac{1}{\sqrt2}\left(\xi+\frac{d}{d\xi}\right)},\qquad
+\boxed{\hat a^\dagger=\frac{1}{\sqrt2}\left(\xi-\frac{d}{d\xi}\right)}.
 \]
 
-E vale:
+## 12) Da \((\langle \xi|\hat a|E_0\rangle=0)\) a \((\psi_0)\), normalizzazione e sostituzione esplicita
+
 \[
-a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle,
-\qquad
-a|n\rangle=\sqrt{n}\,|n-1\rangle.
+\hat a|E_0\rangle=0\Rightarrow \langle \xi|\hat a|E_0\rangle=0
+\Rightarrow \hat a\,\tilde\psi_0(\xi)=0.
+\]
+\[
+\left(\xi+\frac{d}{d\xi}\right)\tilde\psi_0(\xi)=0
+\Rightarrow \tilde\psi_0(\xi)=N_0e^{-\xi^2/2}.
+\]
+
+**Sostituzione \(\xi=\alpha x\)**:
+\[
+\psi_0(x)=\tilde\psi_0(\xi)\Big|_{\xi=\alpha x}
+=N_0e^{-(\alpha x)^2/2}
+=N_0e^{-\alpha^2x^2/2}.
+\]
+
+Normalizzazione:
+\[
+1=\int_{-\infty}^{+\infty}|\psi_0(x)|^2\,dx
+=|N_0|^2\int_{-\infty}^{+\infty}e^{-\alpha^2x^2}\,dx
+=|N_0|^2\frac{\sqrt\pi}{\alpha}
+\Rightarrow
+\boxed{N_0=\left(\frac{\alpha}{\sqrt\pi}\right)^{1/2}}.
+\]
+Con \(\alpha=\sqrt{\frac{m\omega}{\hbar}}\) ottengo
+\[
+N_0=\left(\frac{1}{\sqrt\pi}\sqrt{\frac{m\omega}{\hbar}}\right)^{1/2}
+=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}.
+\]
+Quindi:
+\[
+\boxed{\psi_0(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right)}.
+\]
+
+## 13) Stati eccitati: forma finale con Hermite (coincide col metodo lineare)
+
+\[
+\boxed{\psi_n(x)=\left(\frac{\alpha}{\sqrt\pi\,2^n n!}\right)^{1/2}e^{-\alpha^2x^2/2}\,H_n(\alpha x)}.
+\]
+Nel metodo lineare:
+\[
+\tilde\psi''+(\lambda-\xi^2)\tilde\psi=0,\qquad \lambda=\frac{2E}{\hbar\omega}.
+\]
+Dall’operatoriale:
+\[
+E_n=\hbar\omega\left(n+\frac12\right)\Rightarrow \lambda_n=2n+1,\qquad
+\tilde\psi_n(\xi)=e^{-\xi^2/2}H_n(\xi),
+\]
+quindi i due metodi coincidono.
+
+---
+
+# Confronto finale con il classico
+
+\[
+x(t)=x_0\sin\omega t,\quad v^2=\omega^2(x_0^2-x^2),\quad x_0=\sqrt{\frac{2E}{m\omega^2}}.
+\]
+Densità classica (tempo di permanenza):
+\[
+\boxed{\rho_{\rm cl}(x)=\frac{1}{\pi\sqrt{x_0^2-x^2}}}.
+\]
+Con \((\xi=\alpha x)\):
+\[
+\xi_0=\alpha x_0=\sqrt{\frac{2E}{\hbar\omega}}=\sqrt{\lambda},\qquad
+\boxed{\rho_{\rm cl}(\xi)=\frac{1}{\pi\sqrt{\xi_0^2-\xi^2}}}.
+\]
+Per \((n)\) grande: inviluppo \((|\psi_n|^2\to\rho_{\rm cl})\) (corrispondenza) e
+\[
+\frac{\Delta E}{E_n}=\frac{\hbar\omega}{\hbar\omega(n+\tfrac12)}\sim\frac1n\to0.
 \]
 
 ---
 
-# 8) Funzioni d’onda in rappresentazione \(x\)
+## Conclusione (da dire in chiusura)
 
-## 8A) Stato fondamentale: da \(a|0\rangle=0\)
-In rappresentazione \(x\):
-\[
-\hat p=-i\hbar\frac{d}{dx}.
-\]
-Scrivo \(a\psi_0=0\):
-\[
-\sqrt{\frac{m\omega}{2\hbar}}\left(x+\frac{i}{m\omega}(-i\hbar\frac{d}{dx})\right)\psi_0(x)=0
-\]
-\[
-\Rightarrow \left(x+\frac{\hbar}{m\omega}\frac{d}{dx}\right)\psi_0(x)=0
-\]
-\[
-\frac{d\psi_0}{dx}=-\frac{m\omega}{\hbar}x\,\psi_0.
-\]
-Integro:
-\[
-\psi_0(x)=A\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right).
-\]
-Normalizzo imponendo \(\int |\psi_0|^2dx=1\), ottengo:
-\[
-\boxed{\psi_0(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right).}
-\]
-
-## 8B) Stati eccitati: Hermite
-Applicando \((a^\dagger)^n\) ottieni:
-\[
-\boxed{
-\psi_n(x)=\frac{1}{\sqrt{2^n n!}}
-\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}
-H_n\!\left(\sqrt{\frac{m\omega}{\hbar}}x\right)
-\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right)
-}
-\]
-dove \(H_n\) sono i polinomi di Hermite.
-
-**Parità:** \(\psi_n\) è pari per \(n\) pari, dispari per \(n\) dispari.
+* **Metodo operatoriale:** \(([\hat a,\hat a^\dagger]=1)\), \((\hat H=\hbar\omega(\hat N+\tfrac12))\), \(\hat a^\dagger\) alza e \(\hat a\) abbassa.
+* **Spettro e stati:** \(\boxed{E_n=\hbar\omega(n+\tfrac12)}\), \(\boxed{|E_n\rangle=\frac{1}{\sqrt{n!}}(\hat a^\dagger)^n|E_0\rangle}\), \(\boxed{E_0=\hbar\omega/2\neq0}\).
+* **Coordinate:** tornando a \((\xi=\alpha x)\) ottengo \(\psi_0\) gaussiana e \(\psi_n\) gaussiane \(\times\) Hermite; nel limite \((n\gg1)\) recupero il comportamento classico in media.
 
 ---
 
-# 9) Collegamenti “fisici” che devi saper dire (brevissimi ma giusti)
+# Dizionario simboli (uno per uno)
 
-## 9A) Energia di punto zero
-Anche nel minimo \(n=0\):
-\[
-E_0=\frac12\hbar\omega\neq 0.
-\]
-Motivo: se \(E=0\) avresti \(x=0\) e \(p=0\) determinati → violazione di \(\Delta x\Delta p\ge \hbar/2\).
-
-## 9B) Minima indeterminazione nello stato fondamentale
-Per lo stato fondamentale:
-\[
-\Delta x=\sqrt{\frac{\hbar}{2m\omega}},\qquad
-\Delta p=\sqrt{\frac{\hbar m\omega}{2}}
-\]
-e quindi:
-\[
-\boxed{\Delta x\,\Delta p=\frac{\hbar}{2}}
-\]
-(satura Heisenberg: è una gaussiana, coerente con DIM 2).
-
-## 9C) Limite classico
-Per \(n\gg 1\):
-- energia grande,
-- livelli fitti (in confronto alle scale sperimentali) → appare “quasi continuo”,
-- l’oscillatore quantistico recupera il comportamento classico “in media” (Ehrenfest).
-
----
-
-# Dizionario simboli e coefficienti (da sapere “uno per uno”)
-- \(m\): massa.
-- \(\omega\): pulsazione dell’oscillatore (rad/s).
-- \(\hbar\): costante di Planck ridotta.
-- \(\hat x\): operatore posizione.
-- \(\hat p\): operatore quantità di moto.
-- \([\hat x,\hat p]=i\hbar\): commutatore canonico.
-- \(\hat H=\frac{\hat p^2}{2m}+\frac12 m\omega^2\hat x^2\): Hamiltoniana.
-- \(a\): operatore di distruzione (abbassa l’energia/numero quantico).
-- \(a^\dagger\): operatore di creazione (alza l’energia/numero quantico).
-- \(\sqrt{\frac{m\omega}{2\hbar}}\): coefficiente scelto per rendere \(a\) adimensionale e ottenere \(H=\hbar\omega(N+1/2)\).
-- \([a,a^\dagger]=1\): algebra dell’oscillatore.
-- \(\hat N=a^\dagger a\): operatore numero (conta i quanti).
-- \(|n\rangle\): autostato di \(\hat N\) e \(\hat H\).
-- \(n\): numero quantico \(0,1,2,\dots\)
-- \(E_n=\hbar\omega(n+1/2)\): energie.
-- \(\psi_n(x)\): funzione d’onda in rappresentazione \(x\).
-- \(H_n(\cdot)\): polinomi di Hermite.
-- \(x_0=\sqrt{\hbar/(m\omega)}\): scala naturale di lunghezza dell’oscillatore.
+* \(x\): coordinata spaziale (1D).  
+* \(\hat x\): operatore posizione.  
+* \(p\): quantità di moto classica.  
+* \(\hat p\): operatore quantità di moto (\(\hat p=-i\hbar\,\frac{d}{dx}\) in coordinate).  
+* \(m\): massa.  
+* \(k\): costante elastica (Hooke).  
+* \(\omega=\sqrt{k/m}\): pulsazione dell’oscillatore.  
+* \(\nu=\omega/2\pi\): frequenza.  
+* \(\hbar\): costante di Planck ridotta.  
+* \(V(x)=\tfrac12kx^2\): potenziale armonico.  
+* \(W(x)\): potenziale generico (sviluppo vicino a un minimo).  
+* \(\hat H\): Hamiltoniana quantistica.  
+* \(E\): autovalore di energia generico.  
+* \(E_n\): livelli energetici quantizzati.  
+* \(\Delta E\): spaziatura tra livelli (\(\hbar\omega\)).  
+* \(|\psi\rangle\): stato astratto (notazione di Dirac).  
+* \(\psi(x)=\langle x|\psi\rangle\): funzione d’onda (rappresentazione in coordinate).  
+* \(\psi_n(x)\): autofunzione del livello \(n\).  
+* \(|E_n\rangle\): autostato di energia (base discreta).  
+* \(\delta(x-x')\): delta di Dirac (\(\langle x|x'\rangle\)).  
+* \(\delta_{mn}\): delta di Kronecker (\(\langle E_m|E_n\rangle\)).  
+* \(\mathbb I\): operatore identità (chiusura/completezza).  
+* \(\xi=\alpha x\): coordinata adimensionale.  
+* \(\alpha=\sqrt{\frac{m\omega}{\hbar}}\): fattore di scala per rendere \(x\) adimensionale.  
+* \(\tilde\psi(\xi)\): funzione d’onda in variabile adimensionale.  
+* \(\lambda=\frac{2E}{\hbar\omega}\): parametro adimensionale nell’ODE.  
+* \(H_n(\xi)\): polinomi di Hermite.  
+* \(\hat a,\hat a^\dagger\): operatori di annichilazione/creazione.  
+* \(\hat N=\hat a^\dagger\hat a\): operatore numero.  
+* \(x_0\): ampiezza classica (punto di inversione).  
+* \(\xi_0=\alpha x_0\): ampiezza adimensionale.  
+* \(\rho_{\rm cl}(x)\): densità di probabilità classica (tempo di permanenza).
 
 ---
 
-# Copione orale “da macchinetta” (2 minuti, super lineare)
-“Prendo l’oscillatore armonico 1D con \(H=p^2/2m+\frac12 m\omega^2x^2\) e \([x,p]=i\hbar\). Definisco gli operatori \(a=\sqrt{\frac{m\omega}{2\hbar}}\left(x+\frac{i}{m\omega}p\right)\) e \(a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\left(x-\frac{i}{m\omega}p\right)\). Usando il commutatore canonico ricavo \([a,a^\dagger]=1\). Calcolo poi \(a^\dagger a=\frac{H}{\hbar\omega}-\frac12\), quindi \(H=\hbar\omega(N+\frac12)\) con \(N=a^\dagger a\). Mostro che \(N\) è positivo perché \(\langle N\rangle=\|a|\psi\rangle\|^2\ge0\). Inoltre \([N,a]=-a\) e \([N,a^\dagger]=a^\dagger\): quindi se \(N|n\rangle=n|n\rangle\), allora \(a^\dagger|n\rangle\) ha autovalore \(n+1\) e \(a|n\rangle\) ha autovalore \(n-1\). La discesa deve fermarsi per positività: esiste \(|0\rangle\) con \(a|0\rangle=0\), quindi gli autovalori sono \(n=0,1,2,\dots\). Ne segue lo spettro \(E_n=\hbar\omega(n+\frac12)\). In rappresentazione \(x\), dall’equazione \(a\psi_0=0\) ottengo \(\psi_0(x)\propto e^{-m\omega x^2/(2\hbar)}\) e normalizzando viene \(\psi_0=(m\omega/\pi\hbar)^{1/4}e^{-m\omega x^2/(2\hbar)}\). Gli eccitati sono \(|n\rangle=(a^\dagger)^n/\sqrt{n!}|0\rangle\) e in \(x\) compaiono i polinomi di Hermite. Fisicamente c’è energia di punto zero \(E_0=\hbar\omega/2\) e il fondamentale satura Heisenberg.”
+# Significato fisico (in poche righe)
+
+* **Approssimazione armonica:** vicino a un minimo, tanti potenziali diventano quadratici \(\Rightarrow\) l’oscillatore è un “modello universale”.  
+* **Quantizzazione:** la normalizzabilità forza \(\lambda=2n+1\Rightarrow E_n=\hbar\omega(n+\tfrac12)\): livelli discreti ed equispaziati.  
+* **Stato fondamentale (fisica del vuoto):** il livello più basso soddisfa \(\hat a|E_0\rangle=0\) e ha energia non nulla \(\underline{E_0=\hbar\omega/2}\) (*zero-point*), legata all’indeterminazione: non posso avere contemporaneamente \(x\) e \(p\) esatti.  
+* **Metodo operatoriale:** con \(\hat a,\hat a^\dagger\) ottengo spettro e stati senza risolvere ODE; poi in coordinate ritrovo gaussiana \(\times\) Hermite.  
+* **Limite classico:** per \(n\gg1\) l’inviluppo di \(|\psi_n|^2\) tende alla distribuzione classica e \(\Delta E/E_n\sim 1/n\to0\).
+
+---
+
+# DIM completa — Copione orale “da macchinetta” (60–90 s)
+
+Parto dall’oscillatore armonico: classicamente \(F=-kx\) e quindi \(V(x)=\tfrac12kx^2\). In quantistica è fondamentale perché qualunque potenziale vicino a un minimo si approssima con un termine quadratico. In coordinate risolvo la TISE
+\[
+\left[-\frac{\hbar^2}{2m}\frac{d^2}{dx^2}+\frac12kx^2\right]\psi=E\psi,
+\]
+passo a variabili adimensionali \(\xi=\alpha x\) con \(\alpha=\sqrt{m\omega/\hbar}\) e ottengo \(\tilde\psi''+(\lambda-\xi^2)\tilde\psi=0\), \(\lambda=2E/(\hbar\omega)\). Con l’ansatz \(\tilde\psi=e^{-\xi^2/2}H(\xi)\) la serie deve troncare per normalizzabilità: ne segue \(\lambda=2n+1\) e quindi \(E_n=\hbar\omega(n+\tfrac12)\), livelli equispaziati e *zero-point* \(E_0=\hbar\omega/2\).  
+Poi passo al **metodo operatoriale**: introduco la notazione di Dirac e gli operatori \(\hat a,\hat a^\dagger\), ottengo \([\hat a,\hat a^\dagger]=1\) e \(\hat H=\hbar\omega(\hat N+\tfrac12)\). Da qui \(\hat a^\dagger\) alza e \(\hat a\) abbassa i livelli, e costruisco \(|E_n\rangle=\frac{1}{\sqrt{n!}}(\hat a^\dagger)^n|E_0\rangle\). Tornando in coordinate ricavo \(\psi_0\) gaussiana e \(\psi_n\propto e^{-\alpha^2x^2/2}H_n(\alpha x)\), identico al metodo lineare. Infine, per \(n\) grande recupero il comportamento classico.
+
 <<<DIM 6 END>>>
+
