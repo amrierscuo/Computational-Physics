@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki-Map Struttura</title>
+    <!-- Font Awesome per icone (sole/luna) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f8f9f9;
+            --surface: #ffffff;
+            --surface-light: #f1f3f4;
+            --border: #e3e6e8;
+            --text: #2c3e50;
+            --text-soft: #3b4b5e;
+            --text-muted: #6a737c;
+            --accent: #0a6bff;
+            --accent-bg: #e2ecfe;
+            --header-bg: #f1f3f4;
+            --footer-bg: #f1f3f4;
+            --shadow: none;
+            --link: #0a6bff;
+            --link-visited: #551a8b;
+            --code-bg: #f1f3f4;
+            --icon-border: 2px solid #000;
+            --icon-bg: transparent;
+        }
+
+        body.dark {
+            --bg: #1e1e1e;
+            --surface: #2d2d2d;
+            --surface-light: #3c3c3c;
+            --border: #3c3c3c;
+            --text: #e0e0e0;
+            --text-soft: #cccccc;
+            --text-muted: #a0a0a0;
+            --accent: #5794ff;
+            --accent-bg: #2a2a2a;
+            --header-bg: #2d2d2d;
+            --footer-bg: #2d2d2d;
+            --link: #81a9ff;
+            --link-visited: #c58aff;
+            --code-bg: #3c3c3c;
+            --icon-border: 2px solid #fff;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            transition: background-color 0.2s, color 0.1s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            flex: 1 1 300px;
+            min-width: 260px;
+        }
+
+        .main-content {
+            flex: 3 1 600px;
+        }
+
+        /* Header */
+        .header-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .theme-btn {
+            background: var(--surface);
+            border: 2px solid #000;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            color: var(--text);
+            transition: 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--icon-bg);
+        }
+        .theme-btn i {
+            border: none;
+        }
+
+        /* Switch lingua */
+        .lang-switch {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--surface);
+            border: 2px solid #000;
+            border-radius: 30px;
+            padding: 0.3rem;
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text);
+            transition: 0.1s;
+        }
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* descrizione breve */
+        .descrizione {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: var(--text-soft);
+        }
+
+        /* barra di ricerca */
+        .search-wrapper {
+            margin-bottom: 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        #search {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface-light);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.1s;
+        }
+        #search:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-bg);
+        }
+
+        /* anteprima risultati */
+        .preview-results {
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--surface-light);
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+        }
+        .preview-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .preview-item:last-child {
+            border-bottom: none;
+        }
+        .preview-item:hover {
+            background: var(--accent-bg);
+        }
+        .preview-item a {
+            color: var(--link);
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+        }
+        .preview-item small {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* dropdown */
+        .dropdown {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface);
+        }
+        .dropdown summary {
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            list-style: none;
+            background: var(--surface-light);
+            border-bottom: 1px solid transparent;
+            transition: 0.1s;
+        }
+        .dropdown summary:hover {
+            background: var(--border);
+        }
+        .dropdown[open] summary {
+            border-bottom: 1px solid var(--border);
+        }
+        .dropdown-content {
+            padding: 1.5rem;
+            background: var(--surface);
+            overflow-x: auto;
+        }
+
+        pre {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            color: var(--text-soft);
+        }
+
+        .conteggi-lista {
+            background: var(--code-bg);
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            color: var(--text-soft);
+            font-size: 1rem;
+        }
+        .conteggi-lista p {
+            margin: 0.5rem 0;
+        }
+
+        /* sezione link (generata) */
+        .main-linked {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+        .main-linked h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.8rem;
+        }
+
+        .modulo-card {
+            margin-bottom: 2.5rem;
+        }
+        .modulo-titolo {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .modulo-titolo a {
+            font-size: 0.85rem;
+            font-weight: 400;
+            background: var(--accent-bg);
+            color: var(--accent);
+            padding: 0.2rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+        }
+        .modulo-titolo a:hover {
+            background: var(--border);
+            text-decoration: none;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        li::before {
+            content: "•";
+            position: absolute;
+            left: 0.2rem;
+            color: var(--text-muted);
+        }
+        .sottolista {
+            margin-top: 0.5rem;
+            margin-left: 1rem;
+            list-style-type: none;
+        }
+        .sottolista li {
+            padding-left: 1.5rem;
+        }
+        .sottolista li::before {
+            content: "◦";
+            color: var(--text-muted);
+        }
+        a {
+            color: var(--link);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--footer-bg);
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="header-bar" style="margin-top:0;">
+                <h1>Wiki-Map Struttura</h1>
+                <div style="display: flex; gap: 0.5rem;">
+                    <div class="lang-switch" id="langSwitch">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="it">IT</button>
+                    </div>
+                    <button class="theme-btn" id="themeToggle">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="descrizione">
+                <p>Ogni argomento del programma (atomica, molecolare, stato solido, statistica) è collegato alla corrispondente voce Wikipedia. Struttura ad albero dei concetti con link diretti. Versione 1.0 · rimappatura integrale.</p>
+            </div>
+
+            <!-- Ricerca con anteprima -->
+            <div class="search-wrapper">
+                <input type="text" id="search" placeholder="Cerca argomento..." autocomplete="off">
+                <div class="preview-results" id="previewResults"></div>
+            </div>
+
+            <!-- Dropdown programma originale -->
+            <details class="dropdown">
+                <summary>programma originale · formato txt</summary>
+                <div class="dropdown-content">
+                    <pre>Modulo 1 – 20h – FISICA ATOMICA
+- Richiami sui modelli pre-quantistici e sulla trattazione quantistica dell'atomo di idrogeno
+- Atomi idrogenoidi: momenti magnetici, spin, interazione spin-orbita, effetti relativistici, notazione spettroscopica, effetti di campo elettrico e magnetico
+- Interazione radiazione-materia: emissione e assorbimento, fenomenologia e teoria microscopica dei coefficienti di Einstein, regole di selezione, il LASER
+- Atomi a più elettroni: stati di singoletto e di tripletto, l’atomo di elio, approsimazione di campo centrale, effetti di spin, la tabella periodica degli elementi, metodi di Hartree e Hartree-Fock e “configuration interaction”, effetti di campo magnetico.
+
+Modulo 2 – 20h – FISICA MOLECOLARE
+- Inquadramento generale, approssimazione di Born-Oppenheimer, legame molecolare
+- Moti nucleari in molecole biatomiche: spettri rotazionali, vibrazionali e roto-vibrazionali
+- Diffusione Rayleigh e Raman
+- Moti nucleari in molecole poliatomiche: le coordinate collettive e modi normali
+- Struttura elettronica di molecole bi- e poli-atomiche
+- Transizioni elettroniche e principio di Franck-Condon
+
+Modulo 3 -20h – FISICA DELLO STATO SOLIDO
+- Lo stato solido: definizione, approssimazioni di base e descrizione cristallografica
+- Proprietà vibrazionali (fononi) e termiche (calori specifici e trasporto di calore)
+- Proprietà elettroniche: teoria del gas di elettroni, elettroni in potenziale periodico (teorema di Bloch e teorema di Kronig-Penney), modello a bande, classificazione metalli-isolanti, teoria elementare del trasporto di carica, i semiconduttori, assorbimento ottico.
+
+Modulo 4 - 12h - FISICA STATISTICA
+- Statistica di Boltzmann: il gas classico
+- Statistica di Bose-Einstein: il gas di fotoni e fononi
+- Statistica di Fermi-Dirac: il gas di elettroni</pre>
+                </div>
+            </details>
+
+            <!-- Dropdown conteggi -->
+            <details class="dropdown">
+                <summary>conteggi preliminari (prima dello studio)</summary>
+                <div class="dropdown-content">
+                    <div class="conteggi-lista">
+                        <p><strong>Modulo 1 – Fisica atomica</strong> · 4 argomenti (28 link)</p>
+                        <p><strong>Modulo 2 – Fisica molecolare</strong> · 6 argomenti (16 link)</p>
+                        <p><strong>Modulo 3 – Fisica dello stato solido</strong> · 3 argomenti (17 link)</p>
+                        <p><strong>Modulo 4 – Fisica statistica</strong> · 3 argomenti (8 link)</p>
+                        <p>──────</p>
+                        <p><strong>Totale complessivo:</strong> 16 argomenti · 69 collegamenti ipertestuali</p>
+                        <p style="font-size:0.9rem; margin-top:1rem;">*Ogni concetto elementare è linkato singolarmente. I titoli dei moduli hanno link di panoramica.</p>
+                    </div>
+                </div>
+            </details>
+        </aside>
+
+        <main class="main-content">
+            <!-- Sezione link generata dinamicamente -->
+            <div class="main-linked" id="linkedSection">
+                <h2>Mappa dei link Wikipedia (<span id="linkCount"></span> collegamenti)</h2>
+                <div id="moduliContainer"></div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>mappa tematica dei link · ultimo aggiornamento: marzo 2026 · tutti i collegamenti puntano a Wikipedia in inglese (versione IT in preparazione).</p>
+    </footer>
+
+    <script>
+        (function() {
+            // ---------- ARRAY DATI COMPLETO (bilingue) ----------
+            const data = [
+                {
+                    id: 1,
+                    titolo: "Modulo 1 – 20h – FISICA ATOMICA",
+                    link: {
+                        en: "https://en.wikipedia.org/wiki/Atomic_physics",
+                        it: "https://en.wikipedia.org/wiki/Atomic_physics" // provvisorio
+                    },
+                    argomenti: [
+                        {
+                            testo: "Richiami sui modelli pre-quantistici e sulla trattazione quantistica dell'atomo di idrogeno",
+                            sottovoci: [
+                                { nome: "modelli pre-quantistici", link: { en: "https://en.wikipedia.org/wiki/Old_quantum_theory", it: "https://en.wikipedia.org/wiki/Old_quantum_theory" } },
+                                { nome: "atomo di idrogeno", link: { en: "https://en.wikipedia.org/wiki/Hydrogen_atom", it: "https://en.wikipedia.org/wiki/Hydrogen_atom" } }
+                            ]
+                        },
+                        {
+                            testo: "Atomi idrogenoidi: momenti magnetici, spin, interazione spin-orbita, effetti relativistici, notazione spettroscopica, effetti di campo elettrico e magnetico",
+                            sottovoci: [
+                                { nome: "Atomi idrogenoidi", link: { en: "https://en.wikipedia.org/wiki/Hydrogen-like_atom", it: "https://en.wikipedia.org/wiki/Hydrogen-like_atom" } },
+                                { nome: "momenti magnetici", link: { en: "https://en.wikipedia.org/wiki/Magnetic_moment", it: "https://en.wikipedia.org/wiki/Magnetic_moment" } },
+                                { nome: "spin", link: { en: "https://en.wikipedia.org/wiki/Spin_(physics)", it: "https://en.wikipedia.org/wiki/Spin_(physics)" } },
+                                { nome: "interazione spin-orbita", link: { en: "https://en.wikipedia.org/wiki/Spin–orbit_interaction", it: "https://en.wikipedia.org/wiki/Spin–orbit_interaction" } },
+                                { nome: "effetti relativistici", link: { en: "https://en.wikipedia.org/wiki/Fine_structure", it: "https://en.wikipedia.org/wiki/Fine_structure" } },
+                                { nome: "notazione spettroscopica", link: { en: "https://en.wikipedia.org/wiki/Spectroscopic_notation", it: "https://en.wikipedia.org/wiki/Spectroscopic_notation" } },
+                                { nome: "campo elettrico", link: { en: "https://en.wikipedia.org/wiki/Stark_effect", it: "https://en.wikipedia.org/wiki/Stark_effect" } },
+                                { nome: "campo magnetico", link: { en: "https://en.wikipedia.org/wiki/Zeeman_effect", it: "https://en.wikipedia.org/wiki/Zeeman_effect" } }
+                            ]
+                        },
+                        {
+                            testo: "Interazione radiazione-materia: emissione e assorbimento, fenomenologia e teoria microscopica dei coefficienti di Einstein, regole di selezione, il LASER",
+                            sottovoci: [
+                                { nome: "Interazione radiazione-materia", link: { en: "https://en.wikipedia.org/wiki/Atom–photon_interactions", it: "https://en.wikipedia.org/wiki/Atom–photon_interactions" } },
+                                { nome: "emissione", link: { en: "https://en.wikipedia.org/wiki/Emission_(electromagnetic_radiation)", it: "https://en.wikipedia.org/wiki/Emission_(electromagnetic_radiation)" } },
+                                { nome: "assorbimento", link: { en: "https://en.wikipedia.org/wiki/Absorption_(electromagnetic_radiation)", it: "https://en.wikipedia.org/wiki/Absorption_(electromagnetic_radiation)" } },
+                                { nome: "coefficienti di Einstein", link: { en: "https://en.wikipedia.org/wiki/Einstein_coefficients", it: "https://en.wikipedia.org/wiki/Einstein_coefficients" } },
+                                { nome: "regole di selezione", link: { en: "https://en.wikipedia.org/wiki/Selection_rule", it: "https://en.wikipedia.org/wiki/Selection_rule" } },
+                                { nome: "LASER", link: { en: "https://en.wikipedia.org/wiki/Laser", it: "https://en.wikipedia.org/wiki/Laser" } }
+                            ]
+                        },
+                        {
+                            testo: "Atomi a più elettroni: stati di singoletto e di tripletto, l’atomo di elio, approsimazione di campo centrale, effetti di spin, la tabella periodica degli elementi, metodi di Hartree e Hartree-Fock e “configuration interaction”, effetti di campo magnetico.",
+                            sottovoci: [
+                                { nome: "Atomi a più elettroni", link: { en: "https://en.wikipedia.org/wiki/Atom", it: "https://en.wikipedia.org/wiki/Atom" } },
+                                { nome: "stati di singoletto", link: { en: "https://en.wikipedia.org/wiki/Singlet_state", it: "https://en.wikipedia.org/wiki/Singlet_state" } },
+                                { nome: "stati di tripletto", link: { en: "https://en.wikipedia.org/wiki/Triplet_state", it: "https://en.wikipedia.org/wiki/Triplet_state" } },
+                                { nome: "atomo di elio", link: { en: "https://en.wikipedia.org/wiki/Helium_atom", it: "https://en.wikipedia.org/wiki/Helium_atom" } },
+                                { nome: "approssimazione di campo centrale", link: { en: "https://en.wikipedia.org/wiki/Mean_field_theory", it: "https://en.wikipedia.org/wiki/Mean_field_theory" } },
+                                { nome: "effetti di spin", link: { en: "https://en.wikipedia.org/wiki/Spin_(physics)", it: "https://en.wikipedia.org/wiki/Spin_(physics)" } },
+                                { nome: "tabella periodica", link: { en: "https://en.wikipedia.org/wiki/Periodic_table", it: "https://en.wikipedia.org/wiki/Periodic_table" } },
+                                { nome: "metodo di Hartree", link: { en: "https://en.wikipedia.org/wiki/Hartree_equation", it: "https://en.wikipedia.org/wiki/Hartree_equation" } },
+                                { nome: "metodo di Hartree-Fock", link: { en: "https://en.wikipedia.org/wiki/Hartree–Fock_method", it: "https://en.wikipedia.org/wiki/Hartree–Fock_method" } },
+                                { nome: "configuration interaction", link: { en: "https://en.wikipedia.org/wiki/Configuration_interaction", it: "https://en.wikipedia.org/wiki/Configuration_interaction" } },
+                                { nome: "effetti di campo magnetico", link: { en: "https://en.wikipedia.org/wiki/Zeeman_effect", it: "https://en.wikipedia.org/wiki/Zeeman_effect" } }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    titolo: "Modulo 2 – 20h – FISICA MOLECOLARE",
+                    link: {
+                        en: "https://en.wikipedia.org/wiki/Molecular_physics",
+                        it: "https://en.wikipedia.org/wiki/Molecular_physics"
+                    },
+                    argomenti: [
+                        {
+                            testo: "Inquadramento generale, approssimazione di Born-Oppenheimer, legame molecolare",
+                            sottovoci: [
+                                { nome: "Inquadramento generale", link: { en: "https://en.wikipedia.org/wiki/Molecule", it: "https://en.wikipedia.org/wiki/Molecule" } },
+                                { nome: "approssimazione di Born-Oppenheimer", link: { en: "https://en.wikipedia.org/wiki/Born–Oppenheimer_approximation", it: "https://en.wikipedia.org/wiki/Born–Oppenheimer_approximation" } },
+                                { nome: "legame molecolare", link: { en: "https://en.wikipedia.org/wiki/Chemical_bond", it: "https://en.wikipedia.org/wiki/Chemical_bond" } }
+                            ]
+                        },
+                        {
+                            testo: "Moti nucleari in molecole biatomiche: spettri rotazionali, vibrazionali e roto-vibrazionali",
+                            sottovoci: [
+                                { nome: "Moti nucleari in molecole biatomiche", link: { en: "https://en.wikipedia.org/wiki/Diatomic_molecule", it: "https://en.wikipedia.org/wiki/Diatomic_molecule" } },
+                                { nome: "spettri rotazionali", link: { en: "https://en.wikipedia.org/wiki/Rotational_spectroscopy", it: "https://en.wikipedia.org/wiki/Rotational_spectroscopy" } },
+                                { nome: "spettri vibrazionali", link: { en: "https://en.wikipedia.org/wiki/Vibrational_spectroscopy", it: "https://en.wikipedia.org/wiki/Vibrational_spectroscopy" } },
+                                { nome: "spettri roto-vibrazionali", link: { en: "https://en.wikipedia.org/wiki/Rotational–vibrational_spectroscopy", it: "https://en.wikipedia.org/wiki/Rotational–vibrational_spectroscopy" } }
+                            ]
+                        },
+                        {
+                            testo: "Diffusione Rayleigh e Raman",
+                            sottovoci: [
+                                { nome: "Diffusione Rayleigh", link: { en: "https://en.wikipedia.org/wiki/Rayleigh_scattering", it: "https://en.wikipedia.org/wiki/Rayleigh_scattering" } },
+                                { nome: "Raman", link: { en: "https://en.wikipedia.org/wiki/Raman_scattering", it: "https://en.wikipedia.org/wiki/Raman_scattering" } }
+                            ]
+                        },
+                        {
+                            testo: "Moti nucleari in molecole poliatomiche: le coordinate collettive e modi normali",
+                            sottovoci: [
+                                { nome: "Moti nucleari in molecole poliatomiche", link: { en: "https://en.wikipedia.org/wiki/Polyatomic_molecule", it: "https://en.wikipedia.org/wiki/Polyatomic_molecule" } },
+                                { nome: "coordinate collettive", link: { en: "https://en.wikipedia.org/wiki/Collective_coordinate", it: "https://en.wikipedia.org/wiki/Collective_coordinate" } },
+                                { nome: "modi normali", link: { en: "https://en.wikipedia.org/wiki/Normal_mode", it: "https://en.wikipedia.org/wiki/Normal_mode" } }
+                            ]
+                        },
+                        {
+                            testo: "Struttura elettronica di molecole bi- e poli-atomiche",
+                            sottovoci: [
+                                { nome: "Struttura elettronica", link: { en: "https://en.wikipedia.org/wiki/Electronic_structure", it: "https://en.wikipedia.org/wiki/Electronic_structure" } }
+                            ]
+                        },
+                        {
+                            testo: "Transizioni elettroniche e principio di Franck-Condon",
+                            sottovoci: [
+                                { nome: "Transizioni elettroniche", link: { en: "https://en.wikipedia.org/wiki/Electronic_transition", it: "https://en.wikipedia.org/wiki/Electronic_transition" } },
+                                { nome: "principio di Franck-Condon", link: { en: "https://en.wikipedia.org/wiki/Franck–Condon_principle", it: "https://en.wikipedia.org/wiki/Franck–Condon_principle" } }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    titolo: "Modulo 3 – 20h – FISICA DELLO STATO SOLIDO",
+                    link: {
+                        en: "https://en.wikipedia.org/wiki/Solid-state_physics",
+                        it: "https://en.wikipedia.org/wiki/Solid-state_physics"
+                    },
+                    argomenti: [
+                        {
+                            testo: "Lo stato solido: definizione, approssimazioni di base e descrizione cristallografica",
+                            sottovoci: [
+                                { nome: "Lo stato solido", link: { en: "https://en.wikipedia.org/wiki/Solid", it: "https://en.wikipedia.org/wiki/Solid" } },
+                                { nome: "descrizione cristallografica", link: { en: "https://en.wikipedia.org/wiki/Crystallography", it: "https://en.wikipedia.org/wiki/Crystallography" } }
+                            ]
+                        },
+                        {
+                            testo: "Proprietà vibrazionali (fononi) e termiche (calori specifici e trasporto di calore)",
+                            sottovoci: [
+                                { nome: "Proprietà vibrazionali", link: { en: "https://en.wikipedia.org/wiki/Phonon", it: "https://en.wikipedia.org/wiki/Phonon" } },
+                                { nome: "fononi", link: { en: "https://en.wikipedia.org/wiki/Phonon", it: "https://en.wikipedia.org/wiki/Phonon" } },
+                                { nome: "calori specifici", link: { en: "https://en.wikipedia.org/wiki/Specific_heat_capacity", it: "https://en.wikipedia.org/wiki/Specific_heat_capacity" } },
+                                { nome: "trasporto di calore", link: { en: "https://en.wikipedia.org/wiki/Thermal_conduction", it: "https://en.wikipedia.org/wiki/Thermal_conduction" } }
+                            ]
+                        },
+                        {
+                            testo: "Proprietà elettroniche: teoria del gas di elettroni, elettroni in potenziale periodico (teorema di Bloch e teorema di Kronig-Penney), modello a bande, classificazione metalli-isolanti, teoria elementare del trasporto di carica, i semiconduttori, assorbimento ottico.",
+                            sottovoci: [
+                                { nome: "Proprietà elettroniche", link: { en: "https://en.wikipedia.org/wiki/Electronic_band_structure", it: "https://en.wikipedia.org/wiki/Electronic_band_structure" } },
+                                { nome: "teoria del gas di elettroni", link: { en: "https://en.wikipedia.org/wiki/Free_electron_model", it: "https://en.wikipedia.org/wiki/Free_electron_model" } },
+                                { nome: "elettroni in potenziale periodico", link: { en: "https://en.wikipedia.org/wiki/Bloch_wave", it: "https://en.wikipedia.org/wiki/Bloch_wave" } },
+                                { nome: "teorema di Bloch", link: { en: "https://en.wikipedia.org/wiki/Bloch%27s_theorem", it: "https://en.wikipedia.org/wiki/Bloch%27s_theorem" } },
+                                { nome: "teorema di Kronig-Penney", link: { en: "https://en.wikipedia.org/wiki/Kronig–Penney_model", it: "https://en.wikipedia.org/wiki/Kronig–Penney_model" } },
+                                { nome: "modello a bande", link: { en: "https://en.wikipedia.org/wiki/Electronic_band_structure", it: "https://en.wikipedia.org/wiki/Electronic_band_structure" } },
+                                { nome: "classificazione metalli-isolanti", link: { en: "https://en.wikipedia.org/wiki/Band_gap", it: "https://en.wikipedia.org/wiki/Band_gap" } },
+                                { nome: "teoria elementare del trasporto di carica", link: { en: "https://en.wikipedia.org/wiki/Drude_model", it: "https://en.wikipedia.org/wiki/Drude_model" } },
+                                { nome: "i semiconduttori", link: { en: "https://en.wikipedia.org/wiki/Semiconductor", it: "https://en.wikipedia.org/wiki/Semiconductor" } },
+                                { nome: "assorbimento ottico", link: { en: "https://en.wikipedia.org/wiki/Optical_properties_of_solids", it: "https://en.wikipedia.org/wiki/Optical_properties_of_solids" } }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 4,
+                    titolo: "Modulo 4 – 12h – FISICA STATISTICA",
+                    link: {
+                        en: "https://en.wikipedia.org/wiki/Statistical_physics",
+                        it: "https://en.wikipedia.org/wiki/Statistical_physics"
+                    },
+                    argomenti: [
+                        {
+                            testo: "Statistica di Boltzmann: il gas classico",
+                            sottovoci: [
+                                { nome: "Statistica di Boltzmann", link: { en: "https://en.wikipedia.org/wiki/Maxwell–Boltzmann_statistics", it: "https://en.wikipedia.org/wiki/Maxwell–Boltzmann_statistics" } },
+                                { nome: "gas classico", link: { en: "https://en.wikipedia.org/wiki/Ideal_gas", it: "https://en.wikipedia.org/wiki/Ideal_gas" } }
+                            ]
+                        },
+                        {
+                            testo: "Statistica di Bose-Einstein: il gas di fotoni e fononi",
+                            sottovoci: [
+                                { nome: "Statistica di Bose-Einstein", link: { en: "https://en.wikipedia.org/wiki/Bose–Einstein_statistics", it: "https://en.wikipedia.org/wiki/Bose–Einstein_statistics" } },
+                                { nome: "gas di fotoni", link: { en: "https://en.wikipedia.org/wiki/Photon_gas", it: "https://en.wikipedia.org/wiki/Photon_gas" } },
+                                { nome: "gas di fononi", link: { en: "https://en.wikipedia.org/wiki/Phonon", it: "https://en.wikipedia.org/wiki/Phonon" } }
+                            ]
+                        },
+                        {
+                            testo: "Statistica di Fermi-Dirac: il gas di elettroni",
+                            sottovoci: [
+                                { nome: "Statistica di Fermi-Dirac", link: { en: "https://en.wikipedia.org/wiki/Fermi–Dirac_statistics", it: "https://en.wikipedia.org/wiki/Fermi–Dirac_statistics" } },
+                                { nome: "gas di elettroni", link: { en: "https://en.wikipedia.org/wiki/Fermi_gas", it: "https://en.wikipedia.org/wiki/Fermi_gas" } }
+                            ]
+                        }
+                    ]
+                }
+            ];
+
+            // ---------- VARIABILI GLOBALI ----------
+            let currentLang = 'en'; // lingua corrente
+
+            // Elementi DOM
+            const themeBtn = document.getElementById('themeToggle');
+            const body = document.body;
+            const langBtns = document.querySelectorAll('.lang-btn');
+            const searchInput = document.getElementById('search');
+            const previewDiv = document.getElementById('previewResults');
+            const moduliContainer = document.getElementById('moduliContainer');
+            const linkCountSpan = document.getElementById('linkCount');
+
+            // ---------- FUNZIONE PER CONTARE TOTALE LINK ----------
+            function countLinks() {
+                let total = 0;
+                data.forEach(modulo => {
+                    modulo.argomenti.forEach(arg => {
+                        total += arg.sottovoci.length;
+                    });
+                });
+                return total;
+            }
+            linkCountSpan.textContent = countLinks();
+
+            // ---------- FUNZIONE PER GENERARE HTML DINAMICAMENTE ----------
+            function renderModuli() {
+                let html = '';
+                data.forEach(modulo => {
+                    html += `<div class="modulo-card" data-modulo="${modulo.id}">`;
+                    html += `<div class="modulo-titolo">`;
+                    html += `<span>${modulo.titolo}</span>`;
+                    html += `<a href="${modulo.link[currentLang]}" target="_blank" rel="noopener">modulo</a>`;
+                    html += `</div><ul>`;
+
+                    modulo.argomenti.forEach(arg => {
+                        html += `<li>${arg.testo}`;
+                        if (arg.sottovoci.length > 0) {
+                            html += `<ul class="sottolista">`;
+                            arg.sottovoci.forEach(sotto => {
+                                html += `<li><a href="${sotto.link[currentLang]}" target="_blank">${sotto.nome}</a></li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        html += `</li>`;
+                    });
+
+                    html += `</ul></div>`;
+                });
+                moduliContainer.innerHTML = html;
+            }
+
+            // ---------- FUNZIONE PER AGGIORNARE TUTTI I LINK (cambia lingua) ----------
+            function updateLanguage(lang) {
+                currentLang = lang;
+                // aggiorna tutti i link nel DOM (quelli già generati)
+                const links = document.querySelectorAll('#moduliContainer a');
+                // non è efficiente, ma per semplicità rigeneriamo tutto
+                renderModuli();
+                // aggiorna classe attiva dei bottoni
+                langBtns.forEach(btn => {
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                // riesegui la ricerca se presente
+                if (searchInput.value.trim() !== '') {
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            }
+
+            // ---------- RICERCA CON ANTEPRIMA ----------
+            function searchPreview(query) {
+                if (!query) {
+                    previewDiv.innerHTML = '';
+                    return;
+                }
+                query = query.toLowerCase();
+                const results = [];
+
+                data.forEach(modulo => {
+                    modulo.argomenti.forEach(arg => {
+                        // cerca nel testo dell'argomento principale
+                        if (arg.testo.toLowerCase().includes(query)) {
+                            results.push({
+                                nome: arg.testo.substring(0, 80) + (arg.testo.length > 80 ? '…' : ''),
+                                link: arg.sottovoci.length > 0 ? arg.sottovoci[0].link[currentLang] : modulo.link[currentLang],
+                                tipo: 'argomento'
+                            });
+                        }
+                        // cerca nelle sottovoci
+                        arg.sottovoci.forEach(sotto => {
+                            if (sotto.nome.toLowerCase().includes(query)) {
+                                results.push({
+                                    nome: sotto.nome,
+                                    link: sotto.link[currentLang],
+                                    tipo: 'sottovoce'
+                                });
+                            }
+                        });
+                    });
+                });
+
+                // rimuovi duplicati (stesso link) - semplice
+                const unique = [];
+                const seen = new Set();
+                results.forEach(r => {
+                    if (!seen.has(r.link)) {
+                        seen.add(r.link);
+                        unique.push(r);
+                    }
+                });
+
+                // mostriamo al massimo 10 risultati
+                const toShow = unique.slice(0, 10);
+                let previewHtml = '';
+                toShow.forEach(r => {
+                    previewHtml += `<div class="preview-item"><a href="${r.link}" target="_blank">${r.nome}</a><small> ${r.tipo}</small></div>`;
+                });
+                if (toShow.length === 0) {
+                    previewHtml = '<div class="preview-item">Nessun risultato</div>';
+                }
+                previewDiv.innerHTML = previewHtml;
+            }
+
+            // Event listener per la ricerca
+            searchInput.addEventListener('input', (e) => {
+                searchPreview(e.target.value);
+            });
+
+            // ---------- TEMA CHIARO/SCURO ----------
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && prefersDark)) {
+                body.classList.add('dark');
+                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            themeBtn.addEventListener('click', () => {
+                body.classList.toggle('dark');
+                if (body.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+
+            // ---------- SWITCH LINGUA ----------
+            langBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const lang = btn.dataset.lang;
+                    updateLanguage(lang);
+                });
+            });
+
+            // ---------- INIZIALIZZA ----------
+            renderModuli();
+
+            // Nota: i link IT sono per ora uguali a EN, ma la struttura è pronta per essere sostituita.
+        })();
+    </script>
+</body>
+</html>
