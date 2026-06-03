@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <title>Appunti di Mirco · Fondamenti di Struttura della Materia</title>
+  <style>
+    :root{
+      --bg:#050505;
+      --bg-2:#090909;
+      --panel:#0d0d10;
+      --panel-2:#111116;
+      --panel-3:#0a0a0d;
+
+      --text:#ff8de1;
+      --muted:#d85cbc;
+      --faint:#8e3a7a;
+
+      --line:#ff2bbf;
+      --line-soft:rgba(255,43,191,.35);
+      --accent:#ff2bbf;
+      --accent-soft:rgba(255,43,191,.14);
+
+      --glow:rgba(255,43,191,.22);
+      --glow-strong:rgba(255,43,191,.5);
+
+      --radius:18px;
+      --shadow:0 0 10px var(--glow), 0 0 24px rgba(255,43,191,.08);
+      --scan-opacity:.22;
+      --safe-bottom:env(safe-area-inset-bottom, 0px);
+    }
+
+    *{box-sizing:border-box}
+    html{min-height:100%; scroll-behavior:smooth}
+    body{
+      min-height:100%;
+      margin:0;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,43,191,.10), transparent 30%),
+        radial-gradient(circle at 100% 20%, rgba(255,43,191,.07), transparent 24%),
+        linear-gradient(180deg, var(--bg) 0%, #020202 100%);
+      color:var(--text);
+      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      letter-spacing:.15px;
+      overflow-x:hidden;
+    }
+
+    body.scanlines::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        rgba(255,255,255,var(--scan-opacity)) 3px,
+        transparent 4px
+      );
+      opacity:.35;
+      mix-blend-mode:screen;
+      z-index:999;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:radial-gradient(circle at center, transparent 60%, rgba(255,43,191,.04) 100%);
+      z-index:998;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .app{
+      width:min(1220px, 100%);
+      margin:0 auto;
+      padding:18px;
+      padding-bottom:calc(22px + var(--safe-bottom));
+      position:relative;
+      z-index:1;
+    }
+
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0)), var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), transparent 24%);
+      opacity:.22;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:14px;
+      margin-bottom:16px;
+    }
+
+    .brand{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brand-mark{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 18px var(--glow-strong);
+      flex:0 0 auto;
+    }
+
+    .brand-title{
+      font-size:13px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.11em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .controls{
+      position:relative;
+      z-index:1;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    button,.btn{
+      appearance:none;
+      background:var(--panel-2);
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:9px 12px;
+      font:inherit;
+      font-size:12px;
+      cursor:pointer;
+      box-shadow:inset 0 0 10px rgba(0,0,0,.45);
+      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+      touch-action:manipulation;
+    }
+
+    button:hover,.btn:hover{transform:translateY(-1px); box-shadow:0 0 12px var(--glow)}
+    button.active,.btn.primary{
+      background:var(--accent);
+      color:#050505;
+      border-color:var(--accent);
+      font-weight:800;
+      text-shadow:none;
+      box-shadow:0 0 18px var(--glow-strong);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap:16px;
+      align-items:stretch;
+      margin-bottom:16px;
+    }
+
+    .hero-copy{
+      padding:clamp(20px, 4vw, 42px);
+      min-height:460px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .kicker{
+      margin:0 0 18px;
+      color:var(--faint);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      position:relative;
+      z-index:1;
+    }
+
+    h1{
+      margin:0;
+      position:relative;
+      z-index:1;
+      font-size:clamp(34px, 7vw, 82px);
+      line-height:.92;
+      letter-spacing:-.06em;
+      text-transform:uppercase;
+      text-shadow:0 0 10px var(--glow-strong);
+    }
+
+    .subtitle{
+      margin:20px 0 0;
+      max-width:680px;
+      position:relative;
+      z-index:1;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:clamp(14px, 1.8vw, 16px);
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:28px;
+      position:relative;
+      z-index:1;
+    }
+
+    .cover-card{
+      padding:10px;
+      display:flex;
+      min-height:460px;
+    }
+
+    .cover-frame{
+      position:relative;
+      z-index:1;
+      width:100%;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid var(--line-soft);
+      background:#050505;
+    }
+
+    .cover-frame img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      filter:contrast(1.05) saturate(.95);
+    }
+
+    .cover-frame::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, transparent 45%, rgba(0,0,0,.58));
+      pointer-events:none;
+    }
+
+    .cover-label{
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:14px;
+      z-index:2;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:end;
+      color:#fff;
+      text-shadow:0 0 10px rgba(0,0,0,.9);
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    h2{
+      margin:0 0 10px;
+      font-size:18px;
+      line-height:1.15;
+      text-transform:uppercase;
+      text-shadow:0 0 8px var(--glow);
+    }
+
+    p{margin:0; color:var(--muted); line-height:1.65; font-size:13px}
+
+    .section{
+      padding:20px;
+      margin-bottom:16px;
+    }
+
+    .section > *{position:relative; z-index:1}
+
+    code{
+      color:var(--text);
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line-soft);
+      padding:1px 6px;
+      border-radius:999px;
+    }
+
+    .wikimap-card{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:16px;
+      align-items:center;
+      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+      isolation:isolate;
+      transform:translateZ(0);
+      animation:wikimapIdle 4.8s ease-in-out infinite;
+    }
+
+    .wikimap-card::after{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:inherit;
+      pointer-events:none;
+      z-index:0;
+      background:
+        linear-gradient(115deg, transparent 0%, transparent 38%, rgba(255,255,255,.14) 48%, transparent 58%, transparent 100%),
+        radial-gradient(circle at var(--wiki-x, 18%) var(--wiki-y, 50%), var(--accent-soft), transparent 34%);
+      background-size:250% 100%, 100% 100%;
+      opacity:.55;
+      mix-blend-mode:screen;
+      animation:wikimapSheen 5.2s linear infinite;
+    }
+
+    .wikimap-card:hover{
+      transform:translateY(-1px) scale(1.006);
+      box-shadow:0 0 18px var(--glow), 0 0 34px rgba(0,0,0,.22);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0)), var(--panel);
+      animation-play-state:paused;
+    }
+
+    .wikimap-card h2{
+      display:inline-block;
+      animation:wikimapTitle 3.6s ease-in-out infinite;
+    }
+
+    .wikimap-card p{
+      transition:filter .2s ease, opacity .2s ease;
+    }
+
+    .wikimap-card:hover p{
+      filter:brightness(1.12);
+    }
+
+    .wikimap-arrow{
+      width:54px;
+      height:54px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      background:var(--accent);
+      color:#050505;
+      font-size:28px;
+      font-weight:900;
+      box-shadow:0 0 18px var(--glow-strong);
+      position:relative;
+      z-index:1;
+      overflow:hidden;
+      transform-origin:center;
+      animation:wikimapArrow 2.45s cubic-bezier(.34,1.56,.64,1) infinite;
+    }
+
+    .wikimap-arrow::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:linear-gradient(120deg, transparent 30%, rgba(255,255,255,.52) 48%, transparent 66%);
+      transform:translateX(-80%) rotate(8deg);
+      animation:wikimapArrowShine 2.8s ease-in-out infinite;
+    }
+
+    .wikimap-arrow::after{
+      content:"";
+      position:absolute;
+      inset:7px;
+      border:1px solid rgba(5,5,5,.38);
+      border-radius:12px;
+      opacity:.72;
+    }
+
+    @keyframes wikimapIdle{
+      0%,100%{box-shadow:var(--shadow);filter:brightness(1)}
+      45%{box-shadow:0 0 18px var(--glow), 0 0 38px rgba(255,43,191,.13);filter:brightness(1.045)}
+      52%{transform:translateY(-1px)}
+    }
+
+    @keyframes wikimapSheen{
+      0%{background-position:220% 0, 0 0;opacity:.38}
+      45%{opacity:.68}
+      100%{background-position:-80% 0, 0 0;opacity:.38}
+    }
+
+    @keyframes wikimapArrow{
+      0%,100%{transform:translateX(0) translateY(0) rotate(0deg)}
+      48%{transform:translateX(2px) translateY(-2px) rotate(4deg)}
+      56%{transform:translateX(0) translateY(0) rotate(0deg)}
+    }
+
+    @keyframes wikimapArrowShine{
+      0%,42%{transform:translateX(-90%) rotate(8deg)}
+      64%,100%{transform:translateX(90%) rotate(8deg)}
+    }
+
+    @keyframes wikimapTitle{
+      0%,100%{text-shadow:0 0 8px var(--glow);filter:brightness(1)}
+      50%{text-shadow:0 0 12px var(--glow-strong),0 0 22px var(--glow);filter:brightness(1.16)}
+    }
+
+    .carousel-section{
+      padding:18px;
+    }
+
+    .carousel-head{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:end;
+      margin-bottom:14px;
+    }
+
+    .carousel-counter{
+      color:var(--faint);
+      border:1px solid var(--line-soft);
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      background:rgba(255,255,255,.02);
+      white-space:nowrap;
+    }
+
+    .carousel-window{
+      position:relative;
+      z-index:1;
+      overflow:hidden;
+      border:1px solid var(--line-soft);
+      border-radius:16px;
+      background:
+        radial-gradient(circle at 20% 0%, var(--accent-soft), transparent 34%),
+        rgba(255,255,255,.018);
+      padding:12px;
+    }
+
+    .carousel-track{
+      --page-w:clamp(170px, 22vw, 245px);
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      transform:translateX(0);
+      transition:transform .7s cubic-bezier(.22,.61,.36,1);
+      will-change:transform;
+    }
+
+    .page-card{
+      flex:0 0 var(--page-w);
+      border:1px solid var(--line-soft);
+      border-radius:14px;
+      background:#050505;
+      overflow:hidden;
+      box-shadow:0 0 14px rgba(0,0,0,.35);
+      position:relative;
+      aspect-ratio:3/4;
+    }
+
+    .page-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:contrast(1.04) saturate(.92);
+    }
+
+    .page-card::after{
+      content:attr(data-page);
+      position:absolute;
+      left:10px;
+      bottom:10px;
+      color:#fff;
+      background:rgba(0,0,0,.62);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:11px;
+      text-shadow:0 0 8px rgba(0,0,0,.8);
+    }
+
+    .section-title{
+      margin:0;
+      font-size:20px;
+      text-transform:uppercase;
+      letter-spacing:.03em;
+    }
+
+    .strip{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:center;
+      padding:16px 18px;
+    }
+
+    .status-line{
+      position:relative;
+      z-index:1;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .prompt{color:var(--text); text-shadow:0 0 8px var(--glow-strong)}
+
+
+    .footer-actions{
+      position:relative;
+      z-index:1;
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .footer-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+    }
+
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .hero-copy,.cover-card{min-height:auto}
+      .cover-card{height:min(76vh, 680px)}
+    }
+
+    @media (max-width: 640px){
+      .app{padding:10px; padding-bottom:calc(14px + var(--safe-bottom))}
+      .topbar{align-items:flex-start; flex-direction:column}
+      .controls{width:100%; justify-content:flex-start}
+      button,.btn{flex:1 1 auto; text-align:center; min-height:42px}
+      .hero{gap:10px; margin-bottom:10px}
+      .hero-copy{padding:22px 16px}
+      .cover-card{height:62vh; padding:8px}
+      .section{padding:16px; margin-bottom:10px}
+      .wikimap-card{grid-template-columns:1fr auto; gap:10px}
+      .wikimap-arrow{width:48px; height:48px; font-size:24px}
+      .carousel-head{align-items:flex-start; flex-direction:column}
+      .carousel-window{padding:10px}
+      .carousel-track{--page-w:72vw; gap:10px}
+      .strip{grid-template-columns:1fr; margin-bottom:0}
+
+      .footer-actions{
+        justify-content:flex-start;
+      }
+
+      .footer-actions .btn{
+        flex:1 1 auto;
+      }
+      h1{font-size:clamp(38px, 14vw, 64px)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{transition:none !important}
+    }
+
+
+    /* ===== WOW layer: motion, glow, CRT, interactions ===== */
+    :root{--mx:50vw;--my:30vh;--tilt-x:0deg;--tilt-y:0deg;--glare-x:50%}
+    #fxCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.44;mix-blend-mode:screen}
+    .cursor-glow{position:fixed;left:var(--mx);top:var(--my);width:430px;height:430px;transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:radial-gradient(circle,var(--accent-soft),transparent 64%);filter:blur(14px);opacity:.75;transition:opacity .25s ease}
+    body::before{content:"";position:fixed;inset:-18%;pointer-events:none;z-index:0;opacity:.18;background:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);background-size:56px 56px;transform:perspective(700px) rotateX(62deg) translateY(18%);transform-origin:center bottom;mask-image:linear-gradient(to top,rgba(0,0,0,.9),transparent 72%)}
+    .panel{isolation:isolate;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease,filter .22s ease}
+    .panel::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;padding:1px;background:linear-gradient(120deg,transparent,var(--accent),transparent 45%,var(--line-soft),transparent 75%);background-size:220% 220%;opacity:0;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:borderFlow 5.6s linear infinite}
+    .panel:hover::after{opacity:.55}@keyframes borderFlow{from{background-position:0% 50%}to{background-position:220% 50%}}
+    @keyframes pulseDot{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.55);filter:brightness(1.65)}}.brand-mark{animation:pulseDot 2.6s ease-in-out infinite}
+    button,.btn{position:relative;overflow:hidden;user-select:none;transform:translateZ(0)}
+    button::after,.btn::after{content:"";position:absolute;inset:0;opacity:0;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.22) 38%,transparent 60%);transform:translateX(-130%);transition:opacity .2s ease}
+    button:hover::after,.btn:hover::after{opacity:.8;animation:sheen .86s ease both}button:active,.btn:active{transform:translateY(1px) scale(.965)}@keyframes sheen{to{transform:translateX(135%)}}
+    .ripple{position:absolute;border-radius:999px;pointer-events:none;background:currentColor;opacity:.26;transform:translate(-50%,-50%) scale(0);animation:ripple .62s ease-out forwards;mix-blend-mode:screen}@keyframes ripple{to{transform:translate(-50%,-50%) scale(4.8);opacity:0}}
+    .hero-copy::after{content:"";position:absolute;inset:auto -8% -28% 8%;height:52%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,var(--glow-strong),transparent 64%);filter:blur(18px);opacity:.36;animation:breath 5.2s ease-in-out infinite}@keyframes breath{0%,100%{transform:scale(.96);opacity:.22}50%{transform:scale(1.06);opacity:.44}}
+    h1{transform:translateZ(0)}h1::before,h1::after{content:attr(data-glitch);position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen}h1::before{color:var(--accent);transform:translate(2px,0)}h1::after{color:#fff;transform:translate(-2px,0)}body.glitching h1::before{animation:glitchA .36s steps(2,end) both;opacity:.58}body.glitching h1::after{animation:glitchB .36s steps(2,end) both;opacity:.38}
+    @keyframes glitchA{0%{clip-path:inset(0 0 86% 0)}20%{clip-path:inset(24% 0 56% 0)}40%{clip-path:inset(62% 0 20% 0)}60%{clip-path:inset(12% 0 68% 0)}100%{clip-path:inset(94% 0 0 0)}}@keyframes glitchB{0%{clip-path:inset(90% 0 0 0)}20%{clip-path:inset(58% 0 28% 0)}40%{clip-path:inset(18% 0 64% 0)}60%{clip-path:inset(72% 0 10% 0)}100%{clip-path:inset(0 0 92% 0)}}
+    .cover-card{perspective:950px}.cover-frame{transform-style:preserve-3d;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;will-change:transform}.cover-frame.tilt-on{transform:rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.012);box-shadow:0 18px 42px rgba(0,0,0,.42),0 0 32px var(--glow)}.cover-frame::before{content:"";position:absolute;inset:-40%;z-index:3;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.22) 48%,transparent 58%);transform:translateX(calc(var(--glare-x) - 50%));opacity:0;transition:opacity .18s ease;mix-blend-mode:screen}.cover-frame.tilt-on::before{opacity:.42}.cover-frame img{transition:transform .5s ease,filter .5s ease}.cover-frame:hover img{transform:scale(1.035);filter:contrast(1.09) saturate(1.02)}
+    .carousel-window{position:relative;touch-action:pan-y}.carousel-progress{position:absolute;left:12px;right:12px;bottom:7px;height:2px;z-index:3;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}.carousel-progress span{display:block;height:100%;width:0%;background:var(--accent);box-shadow:0 0 12px var(--glow-strong);border-radius:inherit}.page-card{transition:transform .28s ease,opacity .28s ease,filter .28s ease,box-shadow .28s ease;cursor:zoom-in}.page-card:hover{transform:translateY(-4px) scale(1.025);box-shadow:0 12px 28px rgba(0,0,0,.42),0 0 22px var(--glow);filter:brightness(1.08)}.is-dragging .carousel-track{transition:none!important;cursor:grabbing}
+    .lightbox{position:fixed;inset:0;z-index:1200;display:none;place-items:center;padding:22px;background:rgba(0,0,0,.84);backdrop-filter:blur(10px)}.lightbox.open{display:grid;animation:fadeIn .18s ease both}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.lightbox img{max-width:min(96vw,1180px);max-height:90vh;object-fit:contain;border:1px solid var(--line);border-radius:16px;box-shadow:0 0 28px var(--glow-strong),0 24px 70px rgba(0,0,0,.72);background:#000}.lightbox button{position:fixed;z-index:1201;width:46px;height:46px;display:grid;place-items:center;padding:0;font-size:24px;line-height:1}.lightbox-close{top:18px;right:18px}.lightbox-prev{left:18px;top:50%;transform:translateY(-50%)}.lightbox-next{right:18px;top:50%;transform:translateY(-50%)}.lightbox-prev:active,.lightbox-next:active{transform:translateY(-50%) scale(.96)}
+    .status-line::after{content:"▌";margin-left:4px;color:var(--text);animation:cursorBlink 1s steps(1) infinite}@keyframes cursorBlink{50%{opacity:0}}.fx-pop{animation:fxPop .42s ease both}@keyframes fxPop{0%{filter:brightness(1)}38%{filter:brightness(1.65) drop-shadow(0 0 16px var(--accent))}100%{filter:brightness(1)}}
+    @media (prefers-reduced-motion:reduce){#fxCanvas,.cursor-glow{display:none}body::before{display:none}.brand-mark,.hero-copy::after,.panel::after,.status-line::after,.wikimap-card,.wikimap-card::after,.wikimap-card h2,.wikimap-arrow,.wikimap-arrow::before{animation:none!important}h1::before,h1::after{display:none}}
+
+  </style>
+</head>
+<body id="top" class="scanlines">
+  <canvas id="fxCanvas" aria-hidden="true"></canvas>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="app">
+    <header class="panel topbar" aria-label="Barra superiore">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-title">FDSDM / appunti di Mirco</span>
+      </div>
+      <nav class="controls" aria-label="Controlli interfaccia">
+        <button class="theme-btn active" data-theme="magenta">Magenta</button>
+        <button class="theme-btn" data-theme="green">Verde</button>
+        <button class="theme-btn" data-theme="cyan">Ciano</button>
+        <button id="scanBtn" type="button">Scanlines ON</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Copertina principale">
+        <article class="panel hero-copy">
+          <div>
+            <p class="kicker">[ appunti ] Mirco</p>
+            <h1>Fondamenti<br>di Struttura<br>della Materia</h1>
+            <p class="subtitle">
+              Appunti miei di Fondamenti di Struttura della Materia, raccolti in un unico PDF compresso.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="./appunti_unico_compresso.pdf" download>Scarica appunti</a>
+              <a class="btn" href="./Esercizi_Struttura_Libro.pdf" download>Scarica esercizi</a>
+            </div>
+          </div>
+        </article>
+
+        <aside class="panel cover-card">
+          <figure class="cover-frame">
+            <img src="cover-fondamenti.jpg" alt="Copertina fotografata degli appunti di Fondamenti di Struttura della Materia" loading="eager" />
+            <figcaption class="cover-label">
+              <span>[cover] appunti di Mirco</span>
+              <span>mobile / desktop ready</span>
+            </figcaption>
+          </figure>
+        </aside>
+      </section>
+
+      <a class="panel section wikimap-card" href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/Struttura/Struttura_WikiMap.html" target="_blank" rel="noopener noreferrer" aria-label="Apri WikiMap degli argomenti">
+        <div>
+          <h2>WikiMap</h2>
+          <p>Decorazione: meglio in Inglese(select ENG). Link Wikipedia selezionati manualmente, incompleti e non adatti allo studio.</p>
+        </div>
+        <span class="wikimap-arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <section class="panel section carousel-section" aria-label="Anteprima pagine appunti">
+        <div class="carousel-head">
+          <div>
+            <h2>Show-off appunti</h2>
+            <p>Anteprima automatica del <code>PDF</code>.</p>
+          </div>
+          <div class="carousel-counter" id="carouselCounter">1 / 120</div>
+        </div>
+
+        <div class="carousel-window" id="notesCarouselWindow" aria-live="off">
+          <div class="carousel-track" id="pageCarousel"></div>
+          <div class="carousel-progress" aria-hidden="true"><span id="carouselProgress"></span></div>
+        </div>
+      </section>
+
+      <section class="panel section carousel-section" aria-label="Anteprima esercizi svolti">
+        <div class="carousel-head">
+          <div>
+            <h2>Show-off esercizi</h2>
+            <p>Anteprima automatica del <code>PDF</code>.</p>
+          </div>
+          <div class="carousel-counter" id="exerciseCarouselCounter">1 / 51</div>
+        </div>
+
+        <div class="carousel-window" id="exerciseCarouselWindow" aria-live="off">
+          <div class="carousel-track" id="exerciseCarousel"></div>
+          <div class="carousel-progress" aria-hidden="true"><span id="exerciseCarouselProgress"></span></div>
+        </div>
+      </section>
+
+      <footer class="panel strip">
+        <div class="status-line" id="terminalLine"><span class="prompt">[ready]</span> palette=magenta · appunti=Mirco</div>
+
+        <div class="footer-actions">
+          <a class="btn footer-link" href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/Phy.html">Indice Principale</a>
+          <a class="btn footer-link" href="#top">Torna su</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Chiudi">×</button>
+    <button class="lightbox-prev" id="lightboxPrev" type="button" aria-label="Precedente">‹</button>
+    <img id="lightboxImg" alt="" />
+    <button class="lightbox-next" id="lightboxNext" type="button" aria-label="Successiva">›</button>
+  </div>
+
+  <script>
+
+    const themeMap = {
+      magenta:{text:'#ff8de1',muted:'#d85cbc',faint:'#8e3a7a',line:'#ff2bbf',lineSoft:'rgba(255,43,191,.35)',accent:'#ff2bbf',accentSoft:'rgba(255,43,191,.14)',glow:'rgba(255,43,191,.22)',glowStrong:'rgba(255,43,191,.5)'},
+      green:{text:'#8cff98',muted:'#4fd96c',faint:'#2c7b3f',line:'#28ff5a',lineSoft:'rgba(40,255,90,.35)',accent:'#28ff5a',accentSoft:'rgba(40,255,90,.14)',glow:'rgba(40,255,90,.22)',glowStrong:'rgba(40,255,90,.5)'},
+      cyan:{text:'#8df8ff',muted:'#56d6df',faint:'#317c82',line:'#1cefff',lineSoft:'rgba(28,239,255,.35)',accent:'#1cefff',accentSoft:'rgba(28,239,255,.14)',glow:'rgba(28,239,255,.22)',glowStrong:'rgba(28,239,255,.5)'}
+    };
+    const root=document.documentElement,terminalLine=document.getElementById('terminalLine'),scanBtn=document.getElementById('scanBtn');
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let currentTheme=localStorage.getItem('fdsdm-theme')||'magenta';
+    const audio=(()=>{let ctx;function ensure(){if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx}function tone(freq=520,dur=.045,type='sine',gain=.025){try{const c=ensure(),osc=c.createOscillator(),g=c.createGain();osc.type=type;osc.frequency.setValueAtTime(freq,c.currentTime);g.gain.setValueAtTime(0,c.currentTime);g.gain.linearRampToValueAtTime(gain,c.currentTime+.006);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+dur);osc.connect(g).connect(c.destination);osc.start();osc.stop(c.currentTime+dur+.01)}catch(e){}}return{click(){tone(520,.055,'triangle',.018);tone(910,.04,'sine',.012)},theme(){tone(420,.05,'triangle',.018);setTimeout(()=>tone(760,.06,'triangle',.015),45)},scan(){tone(90,.08,'sawtooth',.014);setTimeout(()=>tone(160,.05,'square',.01),35)},open(){tone(260,.05,'sine',.014);setTimeout(()=>tone(620,.07,'triangle',.014),50)}}})();
+    function flash(el){if(!el||reduceMotion)return;el.classList.remove('fx-pop');void el.offsetWidth;el.classList.add('fx-pop')}function setTerminal(html){terminalLine.innerHTML=html}
+    function applyTheme(name,sound=false){const t=themeMap[name];if(!t)return;root.style.setProperty('--text',t.text);root.style.setProperty('--muted',t.muted);root.style.setProperty('--faint',t.faint);root.style.setProperty('--line',t.line);root.style.setProperty('--line-soft',t.lineSoft);root.style.setProperty('--accent',t.accent);root.style.setProperty('--accent-soft',t.accentSoft);root.style.setProperty('--glow',t.glow);root.style.setProperty('--glow-strong',t.glowStrong);root.style.setProperty('--shadow',`0 0 10px ${t.glow}, 0 0 24px rgba(0,0,0,.12)`);document.querySelectorAll('.theme-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.theme===name));setTerminal(`<span class="prompt">[ready]</span> palette=${name} · appunti=Mirco`);localStorage.setItem('fdsdm-theme',name);currentTheme=name;if(sound)audio.theme();flash(document.querySelector('.topbar'))}
+    function addRipple(target,ev){const r=document.createElement('span'),rect=target.getBoundingClientRect(),size=Math.max(rect.width,rect.height);r.className='ripple';r.style.width=r.style.height=`${size}px`;r.style.left=`${(ev?.clientX??rect.left+rect.width/2)-rect.left}px`;r.style.top=`${(ev?.clientY??rect.top+rect.height/2)-rect.top}px`;target.appendChild(r);r.addEventListener('animationend',()=>r.remove(),{once:true})}
+    document.addEventListener('click',ev=>{const target=ev.target.closest('button,.btn');if(!target)return;addRipple(target,ev);audio.click()},{capture:true});
+    document.querySelectorAll('.theme-btn').forEach(btn=>btn.addEventListener('click',()=>applyTheme(btn.dataset.theme,true)));
+    scanBtn.addEventListener('click',()=>{const on=document.body.classList.toggle('scanlines');scanBtn.textContent=on?'Scanlines ON':'Scanlines OFF';setTerminal(`<span class="prompt">[ready]</span> scanlines=${on?'on':'off'} · palette=${currentTheme}`);audio.scan()});
+    document.querySelectorAll('h1').forEach(h=>h.dataset.glitch=h.innerText);if(!reduceMotion){window.setInterval(()=>{document.body.classList.add('glitching');window.setTimeout(()=>document.body.classList.remove('glitching'),380)},5200)}
+    window.addEventListener('pointermove',ev=>{root.style.setProperty('--mx',`${ev.clientX}px`);root.style.setProperty('--my',`${ev.clientY}px`)},{passive:true});
+    const coverFrame=document.querySelector('.cover-frame');if(coverFrame&&!reduceMotion){coverFrame.addEventListener('pointermove',ev=>{const rect=coverFrame.getBoundingClientRect(),px=(ev.clientX-rect.left)/rect.width,py=(ev.clientY-rect.top)/rect.height;root.style.setProperty('--tilt-y',`${(px-.5)*9}deg`);root.style.setProperty('--tilt-x',`${-(py-.5)*9}deg`);root.style.setProperty('--glare-x',`${px*100}%`);coverFrame.classList.add('tilt-on')},{passive:true});coverFrame.addEventListener('pointerleave',()=>{root.style.setProperty('--tilt-y','0deg');root.style.setProperty('--tilt-x','0deg');coverFrame.classList.remove('tilt-on')})}
+    function visibleCards(){if(window.matchMedia('(max-width: 640px)').matches)return 1;if(window.matchMedia('(max-width: 980px)').matches)return 2;return 4}
+    const carouselControllers=[];
+    function setupCarousel({trackId,windowId,counterId,progressId,total,folder,altPrefix}){
+      const track=document.getElementById(trackId),win=document.getElementById(windowId),counter=document.getElementById(counterId),progress=document.getElementById(progressId);
+      const state={index:0,timer:null,paused:false,drag:{active:false,startX:0,dx:0}};
+      function build(){if(!track||track.childElementCount)return;const frag=document.createDocumentFragment();for(let i=1;i<=total;i++){const card=document.createElement('figure');card.className='page-card';card.dataset.page=`pag. ${i}`;card.dataset.carousel=trackId;card.dataset.localIndex=i-1;const img=document.createElement('img');img.src=`${folder}/${i}.jpg`;img.alt=`${altPrefix} ${i}`;img.loading=i<=5?'eager':'lazy';img.decoding='async';img.onerror=()=>card.remove();card.appendChild(img);frag.appendChild(card)}track.appendChild(frag)}
+      function stepSize(){const first=track?.querySelector('.page-card');if(!first)return 0;const gap=parseFloat(getComputedStyle(track).gap||'0');return first.getBoundingClientRect().width+gap}
+      function maxIndex(){const cards=track?.querySelectorAll('.page-card')||[];return Math.max(0,cards.length-visibleCards())}
+      function render(extra=0){const cards=track?.querySelectorAll('.page-card')||[];if(!track||!cards.length)return;state.index=Math.max(0,Math.min(state.index,maxIndex()));const step=stepSize();track.style.transform=`translateX(${(-state.index*step)+extra}px)`;if(counter){const start=state.index+1,end=Math.min(cards.length,state.index+visibleCards());counter.textContent=`${start}-${end} / ${cards.length}`}}
+      function restartProgress(){if(!progress||reduceMotion)return;progress.style.transition='none';progress.style.width='0%';void progress.offsetWidth;progress.style.transition='width 2800ms linear';progress.style.width=state.paused?'0%':'100%'}
+      function next(){if(state.paused||state.drag.active)return;const m=maxIndex();state.index=state.index>=m?0:state.index+1;render();restartProgress()}
+      function pause(on){state.paused=on;if(progress)progress.style.transition='none';if(!on)restartProgress()}
+      win?.addEventListener('pointerenter',()=>pause(true));win?.addEventListener('pointerleave',()=>pause(false));
+      win?.addEventListener('pointerdown',ev=>{state.drag.active=true;state.drag.startX=ev.clientX;state.drag.dx=0;win.classList.add('is-dragging');pause(true);win.setPointerCapture?.(ev.pointerId)});
+      win?.addEventListener('pointermove',ev=>{if(!state.drag.active)return;state.drag.dx=ev.clientX-state.drag.startX;render(state.drag.dx)});
+      win?.addEventListener('pointerup',()=>{if(!state.drag.active)return;const threshold=Math.min(90,stepSize()*.28);if(state.drag.dx<-threshold)state.index+=1;if(state.drag.dx>threshold)state.index-=1;state.index=Math.max(0,Math.min(state.index,maxIndex()));state.drag.active=false;state.drag.dx=0;win.classList.remove('is-dragging');render();pause(false)});
+      win?.addEventListener('pointercancel',()=>{state.drag.active=false;win.classList.remove('is-dragging');render();pause(false)});
+      build();render();restartProgress();state.timer=window.setInterval(next,2800);const api={render,pause,drag:state.drag};carouselControllers.push(api);return api;
+    }
+    window.addEventListener('resize',()=>{window.clearTimeout(window.__carouselResize);window.__carouselResize=window.setTimeout(()=>carouselControllers.forEach(c=>c.render()),180)});
+    const notesController=setupCarousel({trackId:'pageCarousel',windowId:'notesCarouselWindow',counterId:'carouselCounter',progressId:'carouselProgress',total:120,folder:'./AppuntiLezioneMircoCompressed',altPrefix:'Pagina appunti'});
+    const exerciseController=setupCarousel({trackId:'exerciseCarousel',windowId:'exerciseCarouselWindow',counterId:'exerciseCarouselCounter',progressId:'exerciseCarouselProgress',total:51,folder:'./EserciziSvolti',altPrefix:'Pagina esercizi svolti'});
+    const lightbox=document.getElementById('lightbox'),lightboxImg=document.getElementById('lightboxImg'),lightboxClose=document.getElementById('lightboxClose'),lightboxPrev=document.getElementById('lightboxPrev'),lightboxNext=document.getElementById('lightboxNext');let lightboxIndex=0;function lightboxCards(){return[...document.querySelectorAll('.page-card img')]}function openLightboxFromImg(img){const imgs=lightboxCards();const index=imgs.indexOf(img);if(index<0)return;lightboxIndex=index;lightboxImg.src=img.src;lightboxImg.alt=img.alt;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';carouselControllers.forEach(c=>c.pause(true));audio.open()}function closeLightbox(){lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');document.body.style.overflow='';carouselControllers.forEach(c=>c.pause(false))}function moveLightbox(dir){const imgs=lightboxCards();lightboxIndex=(lightboxIndex+dir+imgs.length)%imgs.length;lightboxImg.src=imgs[lightboxIndex].src;lightboxImg.alt=imgs[lightboxIndex].alt;audio.click()}
+    document.addEventListener('click',ev=>{const card=ev.target.closest('.page-card');if(!card)return;const controller=card.dataset.carousel==='exerciseCarousel'?exerciseController:notesController;if(Math.abs(controller?.drag?.dx||0)>8)return;const img=card.querySelector('img');if(img)openLightboxFromImg(img)});lightboxClose?.addEventListener('click',closeLightbox);lightboxPrev?.addEventListener('click',()=>moveLightbox(-1));lightboxNext?.addEventListener('click',()=>moveLightbox(1));lightbox?.addEventListener('click',ev=>{if(ev.target===lightbox)closeLightbox()});window.addEventListener('keydown',ev=>{if(!lightbox?.classList.contains('open'))return;if(ev.key==='Escape')closeLightbox();if(ev.key==='ArrowLeft')moveLightbox(-1);if(ev.key==='ArrowRight')moveLightbox(1)});
+    function initParticles(){if(reduceMotion)return;const canvas=document.getElementById('fxCanvas');if(!canvas)return;const ctx=canvas.getContext('2d');let w=0,h=0,dpr=1,particles=[];const count=Math.min(88,Math.floor(window.innerWidth/18));function color(){return getComputedStyle(root).getPropertyValue('--accent').trim()||'#ff2bbf'}function resize(){dpr=Math.min(2,window.devicePixelRatio||1);w=canvas.width=Math.floor(innerWidth*dpr);h=canvas.height=Math.floor(innerHeight*dpr);canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';particles=Array.from({length:count},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.18*dpr,vy:(Math.random()-.5)*.18*dpr,r:(Math.random()*1.4+.4)*dpr,a:Math.random()*.45+.15}))}function draw(){ctx.clearRect(0,0,w,h);ctx.fillStyle=color();ctx.strokeStyle=color();for(const p of particles){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const a=particles[i],b=particles[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);if(dist<120*dpr){ctx.globalAlpha=(1-dist/(120*dpr))*.08;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}ctx.globalAlpha=1;requestAnimationFrame(draw)}resize();window.addEventListener('resize',resize);draw()}
+    const wikimapCard=document.querySelector('.wikimap-card');if(wikimapCard&&!reduceMotion){wikimapCard.addEventListener('pointermove',ev=>{const r=wikimapCard.getBoundingClientRect();wikimapCard.style.setProperty('--wiki-x',`${((ev.clientX-r.left)/r.width)*100}%`);wikimapCard.style.setProperty('--wiki-y',`${((ev.clientY-r.top)/r.height)*100}%`)},{passive:true});wikimapCard.addEventListener('pointerleave',()=>{wikimapCard.style.setProperty('--wiki-x','18%');wikimapCard.style.setProperty('--wiki-y','50%')})}
+    document.querySelectorAll('.hero-actions .btn').forEach(btn=>btn.addEventListener('click',()=>setTerminal(`<span class="prompt">[ready]</span> download=pdf · palette=${currentTheme}`)));wikimapCard?.addEventListener('click',()=>setTerminal(`<span class="prompt">[ready]</span> wikimap=open · palette=${currentTheme}`));
+    applyTheme(currentTheme,false);initParticles();
+
+  </script>
+</body>
+</html>
