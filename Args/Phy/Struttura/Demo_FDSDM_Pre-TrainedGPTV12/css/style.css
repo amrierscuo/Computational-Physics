@@ -271,3 +271,56 @@ body.beatHit .mapStage{box-shadow:var(--shadow),inset 0 0 0 1px rgba(255,255,255
 }
 @media(max-width:520px){
   .mobilePad{grid-template-columns:48px 48px 48px;grid-template-rows:48px 48px 48px;gap:7px}.mobileControlsLevel{bottom:66px}.mobileActionStack .small{min-width:94px;min-height:42px;font-size:11px}.levelRadar{display:none!important}.taskChecklist{width:calc(100vw - 20px)!important;max-height:28vh}.interactionHint{bottom:172px}.levelTitleBox h2{display:none}.levelHud{gap:6px}.exitNow{font-size:11px;padding:7px 9px}.timerBox{gap:6px}.timerBar{width:118px}}
+
+/* =========================
+   V12: preload, responsive map, mobile layout
+   ========================= */
+:root{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+.loader p{margin:8px 0 14px;color:var(--muted);font-weight:800}.loaderProgress{height:12px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);margin:10px 0 16px}.loaderProgress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--good));box-shadow:0 0 22px var(--accent);transition:width .18s ease}
+
+.mapStage{position:relative;overflow:auto;overscroll-behavior:contain;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;background:#030817;scrollbar-color:rgba(93,246,255,.35) rgba(255,255,255,.05);}
+.mapContent{position:relative;height:100%;min-height:420px;aspect-ratio:1916/821;min-width:100%;transform-origin:0 0;}
+.mapContent .mapImage{position:absolute;inset:0;width:100%;height:100%;object-fit:fill!important;display:block;transform:none!important;filter:none!important;}
+.mapContent .nodeLayer,.mapContent .portalWash{position:absolute;inset:0;width:100%;height:100%;}
+.mapLoadingMask{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,rgba(93,246,255,.18),rgba(0,0,0,.62));color:#e8f8ff;font-weight:1000;letter-spacing:.12em;text-transform:uppercase;transition:opacity .2s ease;pointer-events:none}.mapStage:not(.loading) .mapLoadingMask{opacity:0}.mapStage.loading .nodeLayer{opacity:0;pointer-events:none}.mapStage.loading .portalWash{opacity:0}.nodeLayer{transition:opacity .18s ease}.mapGlow,.mapRing,.mapLaser,.node{will-change:transform,opacity,filter}.node{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+
+@media(max-width:760px){
+  html,body{height:100dvh;overflow:hidden;}
+  .topbar{left:8px;right:8px;top:calc(6px + var(--safe-top));padding:7px 8px;border-radius:18px;gap:6px;align-items:center;}
+  .brand{gap:6px;min-width:96px}.brandOrb{width:22px;height:22px}.brandText{font-size:12px}.brandText span{font-size:8px;letter-spacing:.08em}
+  .worldTabs{order:0;width:auto;flex:1;min-width:0;gap:5px;overflow-x:auto;justify-content:center;scrollbar-width:none}.worldTabs::-webkit-scrollbar{display:none}
+  .controls{gap:5px;overflow-x:auto;max-width:48vw;justify-content:flex-end;scrollbar-width:none}.controls::-webkit-scrollbar{display:none}
+  .tab,.chip,.iconBtn{padding:8px 10px;font-size:12px;white-space:nowrap}.iconBtn{min-width:auto}.chip{min-width:42px}
+  .screen{padding:calc(88px + var(--safe-top)) 10px calc(34px + var(--safe-bottom));}
+  .mapScreen{grid-template-rows:auto minmax(0,1fr);gap:8px;}
+  .mapHud{border-radius:16px;padding:10px 12px;flex-direction:row;align-items:center}.mapHud h2{font-size:22px}.hudStats{gap:8px}.progress{width:120px;height:8px}.kicker{font-size:10px}
+  .mapStage{height:calc(100dvh - 170px - var(--safe-top) - var(--safe-bottom));min-height:360px;border-radius:18px;}
+  .mapContent{height:100%;min-height:100%;min-width:max(920px,100%);}
+  .sidePanel{top:calc(92px + var(--safe-top));right:10px;left:10px;width:auto;max-height:calc(100dvh - 128px);overflow:auto;border-radius:20px;padding:18px;}
+  .sidePanel.open{transform:translateX(0)}
+  .menuScreen{place-items:start center;overflow:auto}.hero{padding:24px;width:100%}.hero h1{font-size:42px}.hero p{font-size:14px}.worldCard{width:100%;height:112px}.menuCards{width:100%}
+}
+
+@media(max-width:520px){
+  .topbar{transform-origin:top center;gap:4px}.controls{max-width:44vw}.tab,.chip,.iconBtn{font-size:11px;padding:7px 8px}.brandText{max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.brandText span{display:block}
+  .mapStage{height:calc(100dvh - 160px - var(--safe-top) - var(--safe-bottom));min-height:330px;}
+  .mapContent{min-width:max(780px,100%)}
+  .node{width:34px;height:34px;margin:-17px 0 0 -17px;font-size:11px}.node:after{inset:-7px}.mapGlow{filter:blur(1px)}
+}
+
+/* V12 mobile level refinement: keep controls readable without hiding state */
+@media(pointer:coarse),(max-width:820px){
+  .levelHud{left:8px;right:8px;top:calc(6px + var(--safe-top));padding:7px 8px;border-radius:16px;align-items:center}.levelTitleBox{min-width:0;flex:1}.levelTitleBox h2{font-size:14px;max-width:42vw}.levelKicker,.levelTitleBox .kicker{font-size:9px}.timerBox{padding:3px 0}.timerBox #timerLabel{font-size:17px}.timerBar{width:108px;height:8px}.exitNow{font-size:10px;padding:6px 8px}
+  .safeClock{top:calc(64px + var(--safe-top))!important;right:8px!important;font-size:10px;padding:6px 8px;border-radius:12px}
+  .taskChecklist{top:calc(92px + var(--safe-top))!important;left:8px!important;width:min(240px,48vw)!important;max-height:32vh!important;padding:8px!important;border-radius:14px;opacity:.92;transform:scale(.92);transform-origin:top left;}
+  .taskChip{padding:6px 8px!important;font-size:10px!important;border-radius:10px!important}.taskChip b{font-size:10px!important}
+  .interactionHint{left:8px!important;right:8px!important;bottom:calc(146px + var(--safe-bottom))!important;font-size:10px!important;padding:7px 9px!important;border-radius:12px;opacity:.88;}
+  .mobileControlsLevel{left:8px;right:8px;bottom:calc(58px + var(--safe-bottom));}
+  .mobilePad{grid-template-columns:46px 46px 46px;grid-template-rows:46px 46px 46px;gap:6px;padding:7px;border-radius:18px;background:rgba(5,10,24,.42)}.mobilePad button{border-radius:14px;font-size:16px}.mobileActionStack{gap:8px}.mobileActionStack .small{min-width:92px;min-height:40px;font-size:10px;padding:7px 9px}
+  .levelFooter{left:8px;right:8px;bottom:calc(6px + var(--safe-bottom));font-size:10px;padding:6px 8px;border-radius:12px;opacity:.86;pointer-events:none}.levelFooter button{display:none}.levelFooter span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .taskPanel{left:10px;right:10px;top:calc(84px + var(--safe-top));width:auto;max-height:calc(100dvh - 112px - var(--safe-bottom));overflow:auto;padding:18px;border-radius:18px}.taskPanel.open{transform:translateX(0)}textarea{min-height:96px}
+  .lockCard{width:min(430px,88vw);padding:22px;border-radius:22px}.pointerOverlay{background:rgba(0,0,0,.24)}
+}
+
+@media(max-width:480px) and (orientation:portrait){
+  .levelHud{flex-wrap:wrap}.levelTitleBox h2{display:none}.timerBox{width:auto;margin-left:auto}.taskChecklist{width:min(210px,56vw)!important;max-height:26vh!important}.mobileControlsLevel{bottom:calc(72px + var(--safe-bottom));}.interactionHint{bottom:calc(166px + var(--safe-bottom))!important}.mobilePad{grid-template-columns:42px 42px 42px;grid-template-rows:42px 42px 42px}.mobileActionStack .small{min-width:82px;min-height:38px}.crosshair{opacity:.45}}

@@ -2,7 +2,7 @@ window.FDSDM_DATA = {
   i18n: {
     it: {
       "menu.title": "FDSDM Matter Game",
-      "menu.subtitle": "Tre mappe interattive, 36 livelli e stanze 3D FPS con timer da 10 minuti.",
+      "menu.subtitle": "Tre mappe interattive, 36 livelli e stanze 3D FPS con timer da 10 minuti, ottimizzate anche per mobile.",
       "menu.start": "Avvia da Atomic",
       "menu.continue": "Continua",
       "menu.export": "Esporta save",
@@ -21,7 +21,7 @@ window.FDSDM_DATA = {
     },
     en: {
       "menu.title": "FDSDM Matter Game",
-      "menu.subtitle": "Three interactive maps, 36 FPS-ready levels and a 10-minute timer.",
+      "menu.subtitle": "Three interactive maps, 36 FPS-ready levels and a 10-minute timer, mobile-ready.",
       "menu.start": "Start from Atomic",
       "menu.continue": "Continue",
       "menu.export": "Export save",
@@ -41,7 +41,7 @@ window.FDSDM_DATA = {
   },
 
   audio: {
-    music: { file: "assets/audio/qm_ambient_3d.mp3", meaning: "QM first-person chamber ambient loop" },
+    music: { file: "assets/audio/library/transition-pulse.mp3", meaning: "lightweight level chamber ambient loop; qm_ambient_3d stays archived but is not default on mobile" },
     glitch: { file: "assets/audio/glitch-transition.mp3", meaning: "glitch slice for portals, errors, collisions" },
     walk: { file: "assets/audio/walk-concrete.mp3", meaning: "movement-only walking loop for first-person rooms" },
     menu: { file: "assets/audio/library/menu-theme.mp3", meaning: "menu / world select candidate" },

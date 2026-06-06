@@ -23,11 +23,11 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
   const LEVEL_SECONDS = 10 * 60;
-  const SAVE_KEY = "fdsdm_pretrained_v11_save";
+  const SAVE_KEY = "fdsdm_pretrained_v12_save";
   const LEVEL_TASKS = ["core", "concepts", "links", "oral", "forge"];
   const TASK_LABELS = { core:"CORE", concepts:"CONCEPTS", links:"CONNECTIONS", oral:"ORAL", forge:"FORGE" };
   const TERMINAL_COUNT = LEVEL_TASKS.length;
-  const langStore = "fdsdm_pretrained_v11_lang";
+  const langStore = "fdsdm_pretrained_v12_lang";
 
   let lang = localStorage.getItem(langStore) || "it";
   let route = "menu";
@@ -66,7 +66,14 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     level: new Audio(audioPaths.music.file),
     boss: new Audio(audioPaths.boss?.file || audioPaths.music.file)
   };
-  Object.values(musicTracks).forEach(a => { a.loop = true; a.volume = 0; a.preload = "auto"; });
+  Object.values(musicTracks).forEach(a => {
+    a.loop = true;
+    a.volume = 0;
+    a.preload = "auto";
+    a.playsInline = true;
+    a.setAttribute("playsinline", "");
+    try{ a.load(); }catch{}
+  });
 
   const audioFX = {
     ctx: null,
@@ -126,6 +133,62 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
   function lessonById(id){ return DATA.lessons.find(l => l.id === Number(id)); }
   function worldLessons(world){ return DATA.lessons.filter(l => l.world === world); }
   function setTerminal(txt){ $("#terminalText").textContent = txt; }
+
+
+  function setLoaderProgress(title="Loading", sub="preparing assets...", pct=0){
+    const k = $("#loaderKicker"), tEl = $("#loaderTitle"), sEl = $("#loaderSub"), b = $("#loaderProgressBar");
+    if(k) k.textContent = "V12 PRELOAD";
+    if(tEl) tEl.textContent = title;
+    if(sEl) sEl.textContent = sub;
+    if(b) b.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+  }
+  function waitWithTimeout(promise, ms=2800){
+    return Promise.race([promise, new Promise(resolve => setTimeout(resolve, ms))]);
+  }
+  function preloadImage(src){
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src;
+      if(img.decode) img.decode().then(()=>resolve(true)).catch(()=>{});
+    });
+  }
+  function mediaReady(a){
+    return new Promise(resolve => {
+      if(!a) return resolve(false);
+      if(a.readyState >= 2) return resolve(true);
+      const done = () => { cleanup(); resolve(true); };
+      const fail = () => { cleanup(); resolve(false); };
+      const cleanup = () => { a.removeEventListener('canplay', done); a.removeEventListener('loadedmetadata', done); a.removeEventListener('error', fail); };
+      a.addEventListener('canplay', done, {once:true});
+      a.addEventListener('loadedmetadata', done, {once:true});
+      a.addEventListener('error', fail, {once:true});
+      try{ a.load(); }catch{}
+    });
+  }
+  async function primeMusicElements(){
+    const tracks = Object.entries(musicTracks);
+    let done = 0;
+    for(const [key,a] of tracks){
+      setLoaderProgress('Audio cache', `preparing ${key}...`, 45 + done / Math.max(1, tracks.length) * 35);
+      await waitWithTimeout(mediaReady(a), 1600);
+      done++;
+    }
+  }
+  async function preloadEssentialAssets(){
+    show('#loadingScreen');
+    setLoaderProgress('Loading maps', 'preloading map images...', 8);
+    const maps = Object.values(DATA.worlds).map(w => w.map);
+    for(let i=0;i<maps.length;i++){
+      setLoaderProgress('Loading maps', `map ${i+1}/${maps.length}`, 10 + i*10);
+      await preloadImage(maps[i]);
+    }
+    setLoaderProgress('Preparing audio', 'metadata + cache warmup...', 45);
+    await waitWithTimeout(primeMusicElements(), 5000);
+    setLoaderProgress('Ready', 'UI calibrated for mobile and desktop', 100);
+    await new Promise(r => setTimeout(r, 260));
+  }
 
   function playGlitchSlice(){
     if(!sfxEnabled) return;
@@ -190,13 +253,14 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     audioFX.activeMusicKey = key;
     if(!musicEnabled) return;
     const next = musicTracks[key] || musicTracks.menu;
-    if(audioFX.currentMusic === next) return;
+    if(audioFX.currentMusic === next && !next.paused) return;
     Object.values(musicTracks).forEach(a => {
-      if(a !== next){ try{ a.pause(); a.currentTime = 0; a.volume = 0; }catch{} }
+      if(a !== next){ try{ a.pause(); a.volume = 0; }catch{} }
     });
     audioFX.currentMusic = next;
+    try{ next.load(); }catch{}
     next.volume = volume;
-    next.play().catch(()=>{});
+    next.play().catch(()=>{ setTerminal("audio waiting for user gesture · tap MUSIC again if needed"); });
   }
 
   function updateRouteMusic(){
@@ -230,7 +294,7 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     document.documentElement.style.setProperty('--treble', musicSmooth.treble.toFixed(3));
     document.documentElement.style.setProperty('--beat', musicSmooth.beat.toFixed(3));
     document.documentElement.style.setProperty('--energy', musicSmooth.energy.toFixed(3));
-    // V11: la base della mappa resta perfettamente fissa.
+    // V12: la base della mappa resta perfettamente fissa.
     // Solo hotspot, glows, rings, laser e nodi reagiscono alla musica.
     if(route === 'map'){
       document.documentElement.style.setProperty('--mapDriftX', '0px');
@@ -245,7 +309,7 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
   }
 
   function loadSave(){
-    const base = { version: 5, currentWorld: "atomic", currentLesson: 1, unlocked: {1:true}, completed: {}, notes: {}, tasks: {}, debug: false };
+    const base = { version: 12, currentWorld: "atomic", currentLesson: 1, unlocked: {1:true}, completed: {}, notes: {}, tasks: {}, debug: false };
     try{ return Object.assign(base, JSON.parse(localStorage.getItem(SAVE_KEY) || "{}")); }catch{ return base; }
   }
   function persist(){ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }
@@ -275,9 +339,9 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
   function show(id){ ["#menuScreen", "#mapScreen", "#levelScreen", "#loadingScreen"].forEach(s => $(s).classList.add("hidden")); $(id).classList.remove("hidden"); }
   function loading(title, cb){
     route = "loading"; show("#loadingScreen");
-    $("#loaderTitle").textContent = title;
+    setLoaderProgress(title, "transition sync...", 35);
     playSfx("glitch");
-    setTimeout(cb, 420);
+    setTimeout(() => { setLoaderProgress(title, "ready", 100); cb(); }, 420);
   }
   function goMenu(){ route = "menu"; destroyLevel3D(); show("#menuScreen"); setTerminal("menu online · select map or continue"); updateRouteMusic(); }
   function openWorld(world){
@@ -292,23 +356,34 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     document.documentElement.style.setProperty("--accent2", w.accent);
     $("#worldIndex").textContent = w.index;
     $("#worldTitle").textContent = w.title;
-    $("#mapImage").src = w.map;
     $$('.tab').forEach(b => b.classList.toggle('active', b.dataset.routeWorld === world));
-    const layer = $("#nodeLayer"); layer.innerHTML = "";
-    renderMapFxLayer(layer, world);
-    for(const l of worldLessons(world)){
-      const b = document.createElement("button");
-      b.className = "node";
-      b.type = "button";
-      b.textContent = `L${String(l.id).padStart(2,"0")}`;
-      b.style.left = `${l.x}%`; b.style.top = `${l.y}%`;
-      if(!isUnlocked(l.id)) b.classList.add("locked");
-      if(isDone(l.id)) b.classList.add("done");
-      if(l.boss) b.classList.add("boss");
-      if(l.stat) b.classList.add("stat");
-      b.addEventListener("click", () => { playSfx(); showLessonPanel(l); });
-      layer.appendChild(b);
-    }
+    const stage = $("#mapStage");
+    const img = $("#mapImage");
+    const layer = $("#nodeLayer");
+    stage.classList.add("loading");
+    layer.innerHTML = "";
+    const buildNodes = () => {
+      layer.innerHTML = "";
+      renderMapFxLayer(layer, world);
+      for(const l of worldLessons(world)){
+        const b = document.createElement("button");
+        b.className = "node";
+        b.type = "button";
+        b.textContent = `L${String(l.id).padStart(2,"0")}`;
+        b.style.left = `${l.x}%`; b.style.top = `${l.y}%`;
+        if(!isUnlocked(l.id)) b.classList.add("locked");
+        if(isDone(l.id)) b.classList.add("done");
+        if(l.boss) b.classList.add("boss");
+        if(l.stat) b.classList.add("stat");
+        b.addEventListener("click", () => { playSfx(); showLessonPanel(l); });
+        layer.appendChild(b);
+      }
+      requestAnimationFrame(() => stage.classList.remove("loading"));
+    };
+    img.onload = buildNodes;
+    img.onerror = buildNodes;
+    if(!img.src.endsWith(w.map)) img.src = w.map;
+    else if(img.complete) buildNodes();
     updateProgress();
     $("#sidePanel").classList.remove("open");
     setTerminal(`${w.title} · ${t(`world.${world}.desc`)}`);
@@ -560,7 +635,7 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     renderer.setSize(canvas.width, canvas.height, false);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    // V11: top replay needs broadcast-style visibility, not the darker FPS ambience.
+    // V12: top replay needs broadcast-style visibility, not the darker FPS ambience.
     renderer.toneMappingExposure = 1.72;
     renderer.setClearColor(0x031225, 1);
 
@@ -574,11 +649,11 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     cam.lookAt(0, 0, 0);
 
     const group = new THREE.Group();
-    group.name = "V11_TopDownReplayOverlay";
+    group.name = "V12_TopDownReplayOverlay";
 
     // Replay-only light rig: visible only in the recap renderer.
     const replayLightRig = new THREE.Group();
-    replayLightRig.name = "V11_ReplayLightRig";
+    replayLightRig.name = "V12_ReplayLightRig";
     replayLightRig.add(new THREE.AmbientLight(0xffffff, 1.05));
     const topLight = new THREE.DirectionalLight(0xffffff, 2.35);
     topLight.position.set(0, 60, 0);
@@ -842,7 +917,7 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     floor.rotation.x = -Math.PI/2; scene.add(floor);
     const grid = new THREE.GridHelper(80, 40, new THREE.Color(world.color), 0x183050); grid.material.transparent=true; grid.material.opacity=.42; scene.add(grid);
 
-    // V11: invisible-wall bounds are also readable in monitor/replay as faint holographic borders.
+    // V12: invisible-wall bounds are also readable in monitor/replay as faint holographic borders.
     const wallFrameMat = new THREE.MeshBasicMaterial({ color:0xffb347, transparent:true, opacity:.075, side:THREE.DoubleSide });
     const wallLineMat = new THREE.LineBasicMaterial({ color:0xffb347, transparent:true, opacity:.72 });
     function addWallPlane(x,z,rotY,w=48){
@@ -1187,8 +1262,8 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     $("#replayAgainBtn").onclick = replaySameLevel;
     $("#closeTask").onclick = () => $("#taskPanel").classList.remove("open");
     $("#completeTaskBtn").onclick = completeTask;
-    $("#cameraToggleBtn").onclick = () => { cameraMode = cameraMode === "fps" ? "top" : "fps"; $("#cameraToggleBtn").textContent = `CAMERA: ${cameraMode.toUpperCase()}`; setTerminal("camera toggle placeholder · top-down monitor/replay online · mobile controls active in V11"); };
-    $("#exportBtn").onclick = () => { const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(save,null,2)],{type:"application/json"})); a.download="fdsdm-save-v11.json"; a.click(); };
+    $("#cameraToggleBtn").onclick = () => { cameraMode = cameraMode === "fps" ? "top" : "fps"; $("#cameraToggleBtn").textContent = `CAMERA: ${cameraMode.toUpperCase()}`; setTerminal("camera toggle placeholder · top-down monitor/replay online · mobile controls active in V12"); };
+    $("#exportBtn").onclick = () => { const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(save,null,2)],{type:"application/json"})); a.download="fdsdm-save-v12.json"; a.click(); };
     $("#importInput").onchange = async e => { const f=e.target.files[0]; if(!f) return; save = JSON.parse(await f.text()); persist(); updateProgress(); setTerminal("save imported"); };
     $("#debugBtn").onclick = () => $("#debugPanel").classList.toggle("hidden");
     addEventListener("keydown", e => { if(e.ctrlKey && e.code === "KeyD"){ e.preventDefault(); $("#debugPanel").classList.toggle("hidden"); } });
@@ -1199,8 +1274,20 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
     $("#cheatSkipTasks").onclick = () => { if(currentLesson){ const s=getTaskState(currentLesson.id); LEVEL_TASKS.forEach(k=>s[k]=true); persist(); updateLevelObjects(); setTerminal("cheat · 5 terminals completed · finish portal unlocked"); } };
     $("#cheatReset").onclick = () => { localStorage.removeItem(SAVE_KEY); save=loadSave(); renderMap(currentWorld); setTerminal("save reset"); };
     $("#sfxBtn").onclick = () => { sfxEnabled=!sfxEnabled; $("#sfxBtn").textContent=sfxEnabled?"SFX":"SFX OFF"; };
-    $("#musicBtn").onclick = () => { musicEnabled=!musicEnabled; ensureAudio(); if(musicEnabled){ updateRouteMusic(); $("#musicBtn").textContent="MUSIC ON"; } else { stopAllAudio(); $("#musicBtn").textContent="MUSIC"; } };
+    $("#musicBtn").onclick = async () => {
+      musicEnabled=!musicEnabled;
+      if(musicEnabled){
+        $("#musicBtn").textContent="MUSIC...";
+        await ensureAudio();
+        await waitWithTimeout(primeMusicElements(), 2500);
+        updateRouteMusic();
+        $("#musicBtn").textContent="MUSIC ON";
+      } else {
+        stopAllAudio();
+        $("#musicBtn").textContent="MUSIC";
+      }
+    };
   }
-  function boot(){ bind(); initFX(); applyLang(); goMenu(); }
+  async function boot(){ bind(); initFX(); applyLang(); await preloadEssentialAssets(); goMenu(); }
   boot();
 })();
