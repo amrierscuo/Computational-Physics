@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo FDSDM Pre-TrainedGPT V11</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="fxCanvas" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar glass">
+    <button class="brand" id="homeBtn" type="button">
+      <span class="brandOrb"></span>
+      <span class="brandText">FDSDM<span>Pre-TrainedGPTV11</span></span>
+    </button>
+    <nav class="worldTabs" aria-label="World maps">
+      <button class="tab" data-route-world="atomic" type="button">Atomic</button>
+      <button class="tab" data-route-world="molecular" type="button">Molecular</button>
+      <button class="tab" data-route-world="crystal" type="button">Crystal</button>
+    </nav>
+    <div class="controls">
+      <button class="chip active" data-lang="it" type="button">IT</button>
+      <button class="chip" data-lang="en" type="button">EN</button>
+      <button class="iconBtn" id="musicBtn" type="button">MUSIC</button>
+      <button class="iconBtn" id="sfxBtn" type="button">SFX</button>
+      <button class="iconBtn" id="debugBtn" type="button">DEBUG</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <section class="screen menuScreen" id="menuScreen">
+      <div class="hero glass">
+        <div class="kicker">V11 · mobile-ready · 5 terminals · static map overlays · enhanced top-camera x4 replay</div>
+        <h1 data-i18n="menu.title">FDSDM Matter Game</h1>
+        <p data-i18n="menu.subtitle">Menu, 3 mappe, portali, 36 livelli e stanze 3D in prima persona con timer da 10 minuti.</p>
+        <div class="heroActions">
+          <button class="primaryBtn" id="startBtn" type="button" data-i18n="menu.start">Avvia da Atomic</button>
+          <button class="ghostBtn" id="continueBtn" type="button" data-i18n="menu.continue">Continua</button>
+          <button class="ghostBtn" id="exportBtn" type="button" data-i18n="menu.export">Esporta save</button>
+          <label class="ghostBtn importLabel"><input id="importInput" type="file" accept="application/json" /> <span data-i18n="menu.import">Importa save</span></label>
+        </div>
+      </div>
+      <div class="menuCards">
+        <button class="worldCard atomic" data-open-world="atomic" type="button"><span>World 01</span><strong>Atomic</strong><em>L01–L13</em></button>
+        <button class="worldCard molecular" data-open-world="molecular" type="button"><span>World 02</span><strong>Molecular</strong><em>L14–L20</em></button>
+        <button class="worldCard crystal" data-open-world="crystal" type="button"><span>World 03</span><strong>Crystal</strong><em>L21–L36</em></button>
+      </div>
+    </section>
+
+    <section class="screen mapScreen hidden" id="mapScreen">
+      <div class="mapHud glass">
+        <div><div class="kicker" id="worldIndex">World 01</div><h2 id="worldTitle">Atomic Map</h2></div>
+        <div class="hudStats"><span id="progressText">0/36</span><div class="progress"><span id="progressBar"></span></div></div>
+      </div>
+      <div class="mapStage glass" id="mapStage">
+        <img id="mapImage" class="mapImage" src="assets/maps/atomic-map.png" alt="Atomic Map" />
+        <div class="nodeLayer" id="nodeLayer"></div>
+        <div class="portalWash" id="portalWash"></div>
+      </div>
+      <aside class="sidePanel glass" id="sidePanel">
+        <button class="closePanel" id="closePanel" type="button">×</button>
+        <div class="panelKicker" id="panelKicker">Atomic · L01</div>
+        <h3 id="panelTitle">Level</h3>
+        <p id="panelMeta">date · time</p>
+        <div class="panelTags" id="panelTags"></div>
+        <p id="panelDescription"></p>
+        <div class="panelActions">
+          <button class="primaryBtn small" id="enterLevelBtn" type="button" data-i18n="panel.enter">Entra nel portale</button>
+          <button class="ghostBtn small" id="markDoneBtn" type="button" data-i18n="panel.markDone">Completa rapido</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="screen levelScreen hidden" id="levelScreen">
+      <div id="threeMount"></div>
+      <div class="pointerOverlay" id="pointerOverlay">
+        <div class="glass lockCard">
+          <h2 id="lockTitle">3D Chamber Ready</h2>
+          <p id="lockText">Click to enter first-person mode · WASD move · mouse look · E interact · Q exit · ESC unlock</p>
+          <button class="primaryBtn" id="lockBtn" type="button">CLICK TO PLAY</button>
+        </div>
+      </div>
+      <div class="crosshair" aria-hidden="true"></div>
+
+      <div class="mobileControlsLevel" id="mobileControlsLevel" aria-label="mobile controls">
+        <div class="mobilePad">
+          <span></span><button id="mobileForward" type="button">▲</button><span></span>
+          <button id="mobileLeft" type="button">◀</button><span></span><button id="mobileRight" type="button">▶</button>
+          <span></span><button id="mobileBack" type="button">▼</button><span></span>
+        </div>
+        <div class="mobileActionStack">
+          <button id="mobileInteract" class="primaryBtn small" type="button">INTERACT</button>
+          <button id="mobileExit" class="ghostBtn small" type="button">EXIT</button>
+        </div>
+      </div>
+      <div class="levelHud glass">
+        <button class="ghostBtn small exitNow" id="exitLevelBtn" type="button" data-i18n="level.exit">Esci alla mappa</button>
+        <div class="levelTitleBox"><div class="kicker" id="levelKicker">L01 · Atomic</div><h2 id="levelTitle">Level title</h2></div>
+        <div class="timerBox" id="timerBox"><span id="timerLabel">10:00.000</span><div class="timerBar"><span id="timerBar"></span></div></div>
+      </div>
+      <div class="safeClock glass" id="safeClock">SAFE 10:00.000</div>
+      <div class="interactionHint glass" id="interactionHint">Avvicinati a un terminale · E interagisci · Q esci</div>
+      <div class="taskChecklist glass" id="taskChecklist" aria-label="Level objectives"></div>
+      <div class="hitFlash" id="hitFlash" aria-hidden="true"></div>
+      <div class="levelTransition" id="levelTransition" aria-hidden="true">
+        <div class="transitionOrb"><span></span><span></span><span></span></div>
+        <div class="transitionCard glass">
+          <div class="kicker" id="transitionPhase">PORTAL SYNC</div>
+          <h2 id="transitionTitle">Level transition</h2>
+          <p id="transitionSub">stabilizing chamber...</p>
+          <div class="transitionProgress"><span id="transitionBar"></span></div>
+        </div>
+      </div>
+      <div class="levelRadar glass" id="levelRadar" aria-label="monitor camera">
+        <div class="radarHead">MONITOR CAM</div>
+        <canvas id="radarCanvas" width="190" height="120"></canvas>
+      </div>
+      <div class="levelReplay hidden" id="levelReplay" aria-hidden="true">
+        <div class="replayCard glass">
+          <div class="kicker" id="replayKicker">LEVEL CLEAR</div>
+          <h2 id="replayTitle">Replay summary</h2>
+          <p id="replaySub">real top-camera x4 countdown replay</p>
+          <div class="replayGrid">
+            <canvas id="replayCanvas" width="640" height="360"></canvas>
+            <div class="replayStats">
+              <div class="scoreLine"><span>Time</span><b id="replayTime">--:--.---</b></div>
+              <div class="scoreLine"><span>Remaining</span><b id="replayRemaining">--:--.---</b></div>
+              <div class="scoreLine"><span>Rank</span><b id="replayRank">...</b></div>
+              <div class="scoreLine"><span>Score</span><b id="replayScore">000000</b></div>
+              <div class="rankBar"><span id="rankBar"></span></div>
+              <p id="replayNote">Compiling route replay...</p>
+              <div class="replayActions">
+                <button class="primaryBtn small" id="replayMapBtn" type="button">Torna alla mappa</button>
+                <button class="ghostBtn small" id="replayAgainBtn" type="button">Rigioca livello</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <aside class="taskPanel glass" id="taskPanel">
+        <button class="closePanel" id="closeTask" type="button">×</button>
+        <div class="panelKicker" id="taskKicker">Task</div>
+        <h3 id="taskTitle">Terminal</h3>
+        <p id="taskText">Interagisci con i terminali per completare il livello.</p>
+        <textarea id="taskNote" placeholder="Scrivi qui un appunto rapido / summary fragment..."></textarea>
+        <button class="primaryBtn small" id="completeTaskBtn" type="button" data-i18n="level.completeTask">Completa terminale</button>
+      </aside>
+      <div class="levelFooter glass">
+        <span id="levelStateLine">WASD · mouse look · E interact · timer online</span>
+        <button class="ghostBtn small" id="cameraToggleBtn" type="button">CAMERA: FPS</button>
+      </div>
+      <div class="threeFallback glass hidden" id="threeFallback">
+        Three.js non è stato caricato. Avvia con server locale IPv4 e connessione attiva, oppure useremo un fallback 2.5D in build successiva.
+      </div>
+    </section>
+
+    <section class="screen loadingScreen hidden" id="loadingScreen">
+      <div class="loader glass">
+        <div class="kicker" id="loaderKicker">Loading</div>
+        <h2 id="loaderTitle">Quantum transition</h2>
+        <div class="bars"><span></span><span></span><span></span><span></span></div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="debugPanel glass hidden" id="debugPanel">
+    <h3>Debug cheats</h3>
+    <button class="ghostBtn small" id="cheatUnlockAll" type="button">Unlock all levels</button>
+    <button class="ghostBtn small" id="cheatCompleteAll" type="button">Complete all levels</button>
+    <button class="ghostBtn small" id="cheatCompleteCurrent" type="button">Complete current level</button>
+    <button class="ghostBtn small" id="cheatAddTime" type="button">Add 10 minutes</button>
+    <button class="ghostBtn small" id="cheatSkipTasks" type="button">Unlock finish portal</button>
+    <button class="ghostBtn small danger" id="cheatReset" type="button">Reset save</button>
+    <small>CTRL+D apre/chiude il pannello. Isolato per postproduction.</small>
+  </aside>
+
+  <footer class="terminal glass"><span class="prompt">[ready]</span> <span id="terminalText">booting MatterGame V11...</span></footer>
+
+  <script src="js/data.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

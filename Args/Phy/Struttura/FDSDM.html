@@ -644,6 +644,19 @@
         <span class="wikimap-arrow" aria-hidden="true">↗</span>
       </a>
 
+
+
+      <section class="panel section" aria-label="Demo gioco FDSDM">
+        <div>
+          <h2>Demo gioco FDSDM</h2>
+          <p>Prototype web interattivo con tre mappe, livelli 3D, timer interno da 10 minuti e replay top-camera. Versione di test: <code>Pre-TrainedGPTV11</code>.</p>
+          <div class="hero-actions">
+            <button id="gameDemoBtn" type="button" class="btn primary">Apri demo V11</button>
+            <a class="btn" href="./Demo_FDSDM_Pre-TrainedGPTV11/" target="_blank" rel="noopener noreferrer">Apri senza audio</a>
+          </div>
+        </div>
+      </section>
+
       <section class="panel section carousel-section" aria-label="Anteprima pagine appunti">
         <div class="carousel-head">
           <div>
@@ -740,6 +753,24 @@
     const wikimapCard=document.querySelector('.wikimap-card');if(wikimapCard&&!reduceMotion){wikimapCard.addEventListener('pointermove',ev=>{const r=wikimapCard.getBoundingClientRect();wikimapCard.style.setProperty('--wiki-x',`${((ev.clientX-r.left)/r.width)*100}%`);wikimapCard.style.setProperty('--wiki-y',`${((ev.clientY-r.top)/r.height)*100}%`)},{passive:true});wikimapCard.addEventListener('pointerleave',()=>{wikimapCard.style.setProperty('--wiki-x','18%');wikimapCard.style.setProperty('--wiki-y','50%')})}
     document.querySelectorAll('.hero-actions .btn').forEach(btn=>btn.addEventListener('click',()=>setTerminal(`<span class="prompt">[ready]</span> download=pdf · palette=${currentTheme}`)));wikimapCard?.addEventListener('click',()=>setTerminal(`<span class="prompt">[ready]</span> wikimap=open · palette=${currentTheme}`));
     applyTheme(currentTheme,false);initParticles();
+    // Demo FDSDM V11 button: play first second of glitch-transition.mp3, then open the local prototype folder.
+    const gameDemoBtn=document.getElementById('gameDemoBtn');
+    if(gameDemoBtn){
+      gameDemoBtn.addEventListener('click',()=>{
+        setTerminal(`<span class="prompt">[ready]</span> demo=v11 · opening · palette=${currentTheme}`);
+        try{
+          const a=new Audio('./glitch-transition.mp3');
+          a.volume=.55;
+          a.currentTime=0;
+          a.play().catch(()=>{});
+          setTimeout(()=>{try{a.pause();a.currentTime=0;}catch(e){}},1000);
+          setTimeout(()=>{window.open('./Demo_FDSDM_Pre-TrainedGPTV11/','_blank','noopener,noreferrer');},230);
+        }catch(e){
+          window.open('./Demo_FDSDM_Pre-TrainedGPTV11/','_blank','noopener,noreferrer');
+        }
+      });
+    }
+
 
   </script>
 </body>
