@@ -1,0 +1,73 @@
+:root{
+  --bg:#050814;
+  --panel:rgba(10,16,34,.72);
+  --line:rgba(255,255,255,.14);
+  --text:#eef5ff;
+  --muted:#aab8d4;
+  --cyan:#56ccf2;
+  --pink:#ff5cc8;
+  --green:#4dffb1;
+  --warn:#ffd166;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif;color:var(--text)}
+#threeCanvas{position:fixed;inset:0;width:100%;height:100%;display:block;outline:none;background:#050814}
+.loader,.lockOverlay{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%, rgba(86,204,242,.20), transparent 28%),linear-gradient(180deg,rgba(5,8,20,.86),rgba(5,8,20,.96));transition:opacity .35s ease,visibility .35s ease}.loader.hidden,.lockOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none}.loaderCard,.lockCard{width:min(680px,92vw);border:1px solid var(--line);border-radius:28px;background:var(--panel);box-shadow:0 24px 80px rgba(0,0,0,.42),inset 0 0 40px rgba(86,204,242,.05);backdrop-filter:blur(16px);padding:30px;text-align:center}.loaderCard h1,.lockCard h2{margin:6px 0 8px;font-size:clamp(30px,6vw,54px);line-height:1}.loaderCard p,.lockCard p{margin:0 auto 18px;max-width:560px;color:var(--muted);font-weight:650}.kicker{text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:var(--cyan);font-weight:900}.bar{height:12px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden;border:1px solid var(--line)}.bar span{display:block;height:100%;width:12%;background:linear-gradient(90deg,var(--cyan),var(--pink),var(--green));box-shadow:0 0 20px var(--cyan);transition:width .25s ease}button{appearance:none;border:1px solid rgba(86,204,242,.45);border-radius:999px;background:linear-gradient(135deg,rgba(86,204,242,.22),rgba(255,92,200,.18));color:var(--text);padding:13px 22px;font-weight:950;letter-spacing:.04em;cursor:pointer;box-shadow:0 10px 30px rgba(86,204,242,.18)}button:hover{transform:translateY(-1px);filter:brightness(1.15)}.keys{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}.keys span{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.04)}.hud{position:fixed;left:16px;right:16px;top:14px;z-index:10;display:flex;justify-content:space-between;gap:14px;pointer-events:none}.hudBlock{min-width:220px;border:1px solid var(--line);background:rgba(8,13,28,.68);backdrop-filter:blur(12px);border-radius:18px;padding:10px 14px;display:grid;gap:2px;box-shadow:0 14px 40px rgba(0,0,0,.24)}.hudBlock b{color:var(--cyan);font-size:14px}.hudBlock span{color:#d9e6ff;font-size:12px;font-weight:750}.hudBlock.right{text-align:right;align-content:center}.crosshair{position:fixed;left:50%;top:50%;z-index:9;width:18px;height:18px;margin:-9px 0 0 -9px;pointer-events:none}.crosshair:before,.crosshair:after{content:"";position:absolute;background:rgba(255,255,255,.72);box-shadow:0 0 12px rgba(86,204,242,.45)}.crosshair:before{left:8px;top:1px;width:2px;height:16px}.crosshair:after{left:1px;top:8px;height:2px;width:16px}.note{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:10;max-width:min(820px,92vw);border:1px solid var(--line);background:rgba(8,13,28,.68);backdrop-filter:blur(12px);border-radius:999px;padding:10px 16px;color:#dce8ff;font-size:13px;font-weight:700;pointer-events:none;text-align:center}@media(max-width:720px){.hud{flex-direction:column}.hudBlock.right{text-align:left}.note{border-radius:18px}.loaderCard,.lockCard{padding:22px}}
+
+/* --------------------------------------------------------------------------
+   DEMOL v3/v5 additions: smoother menu transitions + sync feedback
+   -------------------------------------------------------------------------- */
+body.inShowroom .crosshair{opacity:1;transform:scale(1);transition:opacity .45s ease,transform .45s ease}
+body:not(.inShowroom) .crosshair{opacity:.28;transform:scale(.82)}
+.lockOverlay{transition:opacity .55s cubic-bezier(.2,.8,.2,1),visibility .55s ease,filter .55s ease}
+.lockOverlay.hidden{filter:blur(10px)}
+.lockOverlay.returning .lockCard{border-color:rgba(255,209,102,.28);box-shadow:0 24px 80px rgba(0,0,0,.42),0 0 80px rgba(255,209,102,.08),inset 0 0 40px rgba(86,204,242,.04)}
+.lockCard{transform:translateY(0) scale(1);transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .55s ease}
+.lockOverlay.hidden .lockCard{transform:translateY(20px) scale(.965);opacity:.0}
+.loaderCard{animation:cardFloat 3.8s ease-in-out infinite}
+@keyframes cardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.transitionOverlay{position:fixed;inset:0;z-index:18;display:grid;place-items:center;background:radial-gradient(circle at 50% 52%,rgba(86,204,242,.25),transparent 24%),rgba(5,8,20,.78);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .32s ease,visibility .32s ease;backdrop-filter:blur(2px)}
+.transitionOverlay.active{opacity:1;visibility:visible}
+.transitionCore{border:1px solid rgba(86,204,242,.30);background:rgba(8,13,28,.58);border-radius:24px;padding:24px 30px;display:grid;gap:8px;justify-items:center;box-shadow:0 22px 80px rgba(0,0,0,.35),0 0 65px rgba(86,204,242,.12)}
+.transitionCore b{font-size:16px;color:#fff;letter-spacing:.04em;text-transform:uppercase}.transitionCore span{font-size:12px;color:var(--muted);font-weight:800;text-align:center}.spinnerRing{width:58px;height:58px;border:3px solid rgba(255,255,255,.10);border-top-color:var(--cyan);border-right-color:var(--pink);border-radius:50%;animation:spinRing .9s linear infinite;box-shadow:0 0 28px rgba(86,204,242,.22)}
+@keyframes spinRing{to{transform:rotate(360deg)}}
+.syncToast{position:fixed;left:50%;top:96px;z-index:15;transform:translateX(-50%) translateY(0);border:1px solid rgba(86,204,242,.36);background:rgba(8,13,28,.78);backdrop-filter:blur(12px);border-radius:999px;padding:10px 16px;color:#eaf7ff;font-weight:900;font-size:13px;box-shadow:0 16px 50px rgba(0,0,0,.25),0 0 35px rgba(86,204,242,.12);transition:opacity .28s ease,transform .28s ease,visibility .28s ease;pointer-events:none}.syncToast.hidden{opacity:0;visibility:hidden;transform:translateX(-50%) translateY(-12px)}
+.pauseBanner{position:fixed;top:50%;left:50%;z-index:16;transform:translate(-50%,-50%);border:1px solid rgba(255,209,102,.42);background:rgba(8,13,28,.76);backdrop-filter:blur(16px);border-radius:24px;padding:18px 26px;font-size:22px;font-weight:1000;letter-spacing:.08em;color:#fff4c4;box-shadow:0 30px 100px rgba(0,0,0,.42),0 0 80px rgba(255,209,102,.12);transition:opacity .28s ease,visibility .28s ease,transform .28s ease;pointer-events:none}.pauseBanner.hidden{opacity:0;visibility:hidden;transform:translate(-50%,-46%)}
+.hudBlock{transition:transform .35s ease,border-color .35s ease,background .35s ease}.hudBlock:hover{transform:translateY(-1px)}
+
+
+/* --------------------------------------------------------------------------
+   DEMOL v5 additions: scientific tour and data-warning overlays
+   -------------------------------------------------------------------------- */
+.tourPanel{position:fixed;right:16px;bottom:72px;z-index:14;width:min(420px,92vw);border:1px solid rgba(178,120,255,.36);background:rgba(8,13,28,.76);backdrop-filter:blur(14px);border-radius:22px;padding:16px 18px;box-shadow:0 22px 80px rgba(0,0,0,.36),0 0 50px rgba(178,120,255,.10);display:grid;gap:7px;transition:opacity .28s ease,transform .28s ease,visibility .28s ease;pointer-events:none}.tourPanel.hidden{opacity:0;visibility:hidden;transform:translateY(16px)}.tourPanel b{color:#dec5ff;font-size:13px;letter-spacing:.12em;text-transform:uppercase}.tourPanel span{color:#f2f6ff;font-size:15px;font-weight:850;line-height:1.35}.tourPanel small{color:#aebddb;font-size:12px;font-weight:800}.modelDataWarning{position:fixed;left:50%;top:138px;z-index:17;transform:translateX(-50%);border:1px solid rgba(255,209,102,.46);background:rgba(34,20,8,.82);backdrop-filter:blur(12px);border-radius:999px;padding:10px 16px;color:#fff4c4;font-weight:950;font-size:13px;box-shadow:0 16px 50px rgba(0,0,0,.28),0 0 40px rgba(255,209,102,.10);pointer-events:none}.modelDataWarning.hidden{display:none}
+
+
+/* V7 polish: menu return and smoother overlay readability */
+.lockCard p{line-height:1.45}
+.transitionOverlay .transitionCore{min-width:min(520px,90vw)}
+.keys span{font-weight:800}
+
+
+/* --------------------------------------------------------------------------
+   DEMOL v15 additions: mobile fly controls + portal
+   -------------------------------------------------------------------------- */
+.mobileControls{display:none;position:fixed;inset:0;z-index:11;pointer-events:none}
+.mobileLookPad{position:absolute;inset:0;pointer-events:auto;touch-action:none}
+.mobileJoystick{position:absolute;left:22px;bottom:28px;width:132px;height:132px;border-radius:50%;border:1px solid rgba(86,204,242,.34);background:rgba(8,13,28,.38);box-shadow:0 18px 55px rgba(0,0,0,.32),inset 0 0 24px rgba(86,204,242,.08);pointer-events:auto;touch-action:none;backdrop-filter:blur(8px)}
+.mobileStick{position:absolute;left:50%;top:50%;width:58px;height:58px;border-radius:50%;background:rgba(86,204,242,.70);box-shadow:0 0 24px rgba(86,204,242,.32);transform:translate(-50%,-50%)}
+.mobileButtons{position:absolute;right:18px;bottom:26px;display:grid;gap:10px;pointer-events:auto}
+.mobileBtn{width:68px;height:54px;border-radius:18px;padding:0;font-size:20px;font-weight:1000;letter-spacing:.03em;touch-action:none;background:rgba(8,13,28,.62);border:1px solid rgba(255,255,255,.20)}
+.mobileBtn.flyBtn{font-size:15px;color:#d7f7ff;border-color:rgba(86,204,242,.44)}
+.mobileBtn.flyBtn.active{background:rgba(86,204,242,.26);color:#fff;border-color:rgba(86,204,242,.85);box-shadow:0 0 30px rgba(86,204,242,.22)}
+body.inShowroom .mobileControls.touchDevice{display:block}
+@media(pointer:coarse){
+  .mobileControls.touchDevice{display:block}
+  .hud{top:8px;left:8px;right:8px}
+  .hudBlock{padding:8px 10px;min-width:0}
+  .hudBlock span{font-size:11px}
+  .note{bottom:178px;font-size:12px;max-width:88vw}
+  .crosshair{transform:scale(.86)}
+}
+
+.mobileBtn.portalBtn{font-size:12px;color:#c9ffe7;border-color:rgba(77,255,177,.32);opacity:.55}
+.mobileBtn.portalBtn.active{opacity:1;background:rgba(77,255,177,.24);color:#fff;border-color:rgba(77,255,177,.85);box-shadow:0 0 30px rgba(77,255,177,.20)}
