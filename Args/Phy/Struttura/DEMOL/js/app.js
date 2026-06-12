@@ -3,7 +3,7 @@ import { PointerLockControls } from 'three/addons/controls/PointerLockControls.j
 import { L96_META, L96_FRAMES, L96_RESULTS } from '../data/lorenzData.js';
 
 /*
-  DEMOL v17 · Lorenz Chaos Project D Showroom
+  DEMOL v22 · Lorenz Chaos Project D Showroom
   ---------------------------------------
   Obiettivo: ambiente statico HTML/CSS/JS stile GitHub Pages.
   Il player esiste al centro, cammina sul pavimento e può guardare in alto.
@@ -43,7 +43,14 @@ const mobileFlyBtn = document.getElementById('mobileFlyBtn');
 const mobileUpBtn = document.getElementById('mobileUpBtn');
 const mobileDownBtn = document.getElementById('mobileDownBtn');
 const mobilePortalBtn = document.getElementById('mobilePortalBtn');
+const mobileMapBtn = document.getElementById('mobileMapBtn');
 const mobileLookPad = document.getElementById('mobileLookPad');
+const mapToggleBtn = document.getElementById('mapToggleBtn');
+const mapOverlay = document.getElementById('mapOverlay');
+const mapCloseBtn = document.getElementById('mapCloseBtn');
+const mapGrid = document.getElementById('mapGrid');
+const mapZoneLabel = document.getElementById('mapZoneLabel');
+const mapLegend = document.getElementById('mapLegend');
 
 const WORLD = {
   size: 170,
@@ -186,6 +193,7 @@ const state = {
   lastTime: performance.now(),
   orbitMode: true,
   flyMode: false,
+  mapOpen: false,
   zone: 'main',
   nearPortal: null,
   mobileActive: false,
@@ -208,12 +216,55 @@ let mlpMetricPanel, cnnMetricPanel;
 let floorArrowGroup, hovmollerLabelsGroup;
 let displayPanels = [];
 let projectAnnexGroup, portalSystem, v16Leaderboard;
+let l63AnnexPhysicalSuite, l63AnnexDivergenceSuite, l63AnnexFtleSuite;
 let textureLoader;
 let groundTexture = null;
 let skyTexture = null;
-let scientificTexture = null;
-let divergenceConceptDisplay;
 let v11RmseWall, v11ChecklistWall, v11CnnBiasWall, v11LeaderboardWall;
+
+// -----------------------------------------------------------------------------
+// V24 editable rotation controls
+// Change only these degree values when calibrating screens/objects in-world.
+// Positive values rotate counterclockwise around the local Y axis; negative values rotate clockwise.
+// -----------------------------------------------------------------------------
+const MAIN_ROTATION_FIX_DEG = {
+  q1PhysicalRing: 0,
+  q1PhysicalPanel: 0,
+  q2MlpNextRing: 0,
+  q2MlpNextPanel: 0,
+  q3CnnTendencyRing: 0,
+  q3CnnTendencyPanel: 0,
+  q4Hovmoller: 0,
+};
+
+const ANNEX_ROTATION_FIX_DEG = {
+  q1Leaderboard: 78,
+  q2L63Physical: 0,
+  q3L63Divergence: 0,
+  q4L63Ftle: 0,
+};
+
+function rotateGroupYDeg(group, degrees) {
+  if (!group || !Number.isFinite(Number(degrees)) || Number(degrees) === 0) return;
+  group.rotateY(THREE.MathUtils.degToRad(Number(degrees)));
+}
+
+function applyMainRotationFixes() {
+  rotateGroupYDeg(l96Installation?.group, MAIN_ROTATION_FIX_DEG.q1PhysicalRing);
+  rotateGroupYDeg(livePhysicalPanel?.group, MAIN_ROTATION_FIX_DEG.q1PhysicalPanel);
+  rotateGroupYDeg(mlpNextInstallation?.group, MAIN_ROTATION_FIX_DEG.q2MlpNextRing);
+  rotateGroupYDeg(displayPanels?.[1]?.group, MAIN_ROTATION_FIX_DEG.q2MlpNextPanel);
+  rotateGroupYDeg(cnnTendencyInstallation?.group, MAIN_ROTATION_FIX_DEG.q3CnnTendencyRing);
+  rotateGroupYDeg(displayPanels?.[2]?.group, MAIN_ROTATION_FIX_DEG.q3CnnTendencyPanel);
+  rotateGroupYDeg(hovmollerSurface?.group, MAIN_ROTATION_FIX_DEG.q4Hovmoller);
+}
+
+function applyAnnexRotationFixes() {
+  rotateGroupYDeg(v16Leaderboard?.group, ANNEX_ROTATION_FIX_DEG.q1Leaderboard);
+  rotateGroupYDeg(l63AnnexPhysicalSuite?.group, ANNEX_ROTATION_FIX_DEG.q2L63Physical);
+  rotateGroupYDeg(l63AnnexDivergenceSuite?.group, ANNEX_ROTATION_FIX_DEG.q3L63Divergence);
+  rotateGroupYDeg(l63AnnexFtleSuite?.group, ANNEX_ROTATION_FIX_DEG.q4L63Ftle);
+}
 
 init();
 
@@ -318,7 +369,6 @@ async function init() {
   hovmollerLabelsGroup = null;
 
   setLoader(0.84, 'adding divergence concept display');
-  divergenceConceptDisplay = null;
 
   setLoader(0.86, 'adding Project-D completion panels');
   v11RmseWall = null;
@@ -326,8 +376,9 @@ async function init() {
   v11CnnBiasWall = null;
   v11LeaderboardWall = null;
 
-  setLoader(0.87, 'building dynamic leaderboard annex');
+  setLoader(0.87, 'building L63 diagnostics annex');
   buildPortalAnnex();
+  applyMainRotationFixes();
 
   setLoader(0.88, 'placing labels');
   Object.values(STATIONS).filter(station => station.id !== 'diagnostics').forEach(addStationLabel);
@@ -361,7 +412,6 @@ async function preloadTextures() {
   const tasks = [];
   tasks.push(loadTextureSafe('assets/textures/ground.jpg').then(t => { groundTexture = t; }));
   tasks.push(loadTextureSafe('assets/textures/skybox.jpg').then(t => { skyTexture = t; }));
-  tasks.push(loadTextureSafe('assets/figures/scientific_comparison_of_trajectory_divergences.png').then(t => { scientificTexture = t; }));
   await Promise.all(tasks);
 
   if (skyTexture) {
@@ -1783,99 +1833,204 @@ function buildStaticDisplayPanel(station, title, lines, options = {}) {
 }
 
 
-function buildScientificImageDisplay(position, title, bullets = []) {
-  const group = new THREE.Group();
-  group.position.copy(position);
-  group.lookAt(new THREE.Vector3(0, 5, 0));
-
-  const back = new THREE.Mesh(
-    new THREE.BoxGeometry(18.2, 11.6, 0.5),
-    new THREE.MeshStandardMaterial({ color: 0x07101f, roughness: 0.48, metalness: 0.34, emissive: COLORS.diagnostics, emissiveIntensity: 0.035 })
-  );
-  back.position.set(0, 6.2, -0.22);
-  back.castShadow = true;
-  group.add(back);
-
-  const frame = new THREE.Mesh(
-    new THREE.BoxGeometry(18.9, 12.3, 0.22),
-    new THREE.MeshStandardMaterial({ color: 0x18314f, roughness: 0.62, metalness: 0.22, emissive: 0x1f4e69, emissiveIntensity: 0.05 })
-  );
-  frame.position.set(0, 6.2, -0.38);
-  group.add(frame);
-
-  let screenMaterial;
-  if (scientificTexture) {
-    scientificTexture.colorSpace = THREE.SRGBColorSpace;
-    scientificTexture.anisotropy = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
-    screenMaterial = new THREE.MeshBasicMaterial({ map: scientificTexture, side: THREE.DoubleSide });
-  } else {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1280;
-    canvas.height = 800;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#0a1328';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '900 54px Inter, Segoe UI, Arial';
-    ctx.fillText('Scientific comparison figure missing', 70, 120);
-    ctx.fillStyle = '#cfe6ff';
-    ctx.font = '800 34px Inter, Segoe UI, Arial';
-    ctx.fillText('Expected asset:', 70, 220);
-    ctx.fillText('assets/figures/scientific_comparison_of_trajectory_divergences.png', 70, 280);
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    screenMaterial = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
-  }
-
-  const screen = new THREE.Mesh(new THREE.PlaneGeometry(16.8, 10.2), screenMaterial);
-  screen.position.set(0, 6.55, 0.04);
-  group.add(screen);
-
-  const titlePanel = addTextPlane(
-    group,
-    title,
-    new THREE.Vector3(0, 12.85, 0.08),
-    16.0,
-    1.2,
-    { color: '#ffffff', font: 36, bg: 'rgba(8,13,28,.52)' }
-  );
-  titlePanel.userData.billboard = false;
-
-  const bulletText = bullets.map(line => '• ' + line).join('\n');
-  const notePanel = addTextPlane(
-    group,
-    bulletText,
-    new THREE.Vector3(0, 0.95, 0.10),
-    17.0,
-    2.15,
-    { color: '#dbe8ff', font: 24, lineHeight: 36, bg: 'rgba(8,13,28,.58)' }
-  );
-  notePanel.userData.billboard = false;
-
-  const legMat = new THREE.MeshStandardMaterial({ color: 0x13233f, roughness: 0.45, metalness: 0.4 });
-  for (const sx of [-1, 1]) {
-    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.18, 5.0, 12), legMat);
-    leg.position.set(sx * 6.5, 2.5, -0.26);
-    leg.castShadow = true;
-    group.add(leg);
-  }
-
-  const base = new THREE.Mesh(
-    new THREE.BoxGeometry(10.4, 0.55, 2.4),
-    new THREE.MeshStandardMaterial({ color: 0x0f1b31, roughness: 0.72, metalness: 0.18 })
-  );
-  base.position.set(0, 0.3, -0.22);
-  base.receiveShadow = true;
-  group.add(base);
-
-  root.add(group);
-  return group;
-}
-
-
 
 // -----------------------------------------------------------------------------
-// V16 additions: lightweight portal + Project Annex zone (GitHub Pages safe)
+// V21 additions: lightweight Lorenz-63 diagnostics wing for the annex
+// -----------------------------------------------------------------------------
+function generateLorenz63PhysicalSeries() {
+  const dt = 0.01;
+  const spinup = 1400;
+  const kept = 1500;
+  let p = new THREE.Vector3(1.0, 1.0, 1.0);
+  const raw = [];
+  const show = [];
+  for (let i = 0; i < spinup + kept; i++) {
+    p = rk4Lorenz63Step(p, dt);
+    if (i >= spinup) {
+      raw.push(p.clone());
+      show.push(new THREE.Vector3(p.x * 0.32, (p.z - 25.0) * 0.28, p.y * 0.32));
+    }
+  }
+  return { raw, show, dt };
+}
+
+function generateLorenz63PerturbedSeries(baseRaw) {
+  // Visual perturbation series: same physical model, slightly shifted phase/offset for clean divergence teaching.
+  // It is intentionally used as a nearby-trajectory diagnostic, not as an ML emulator.
+  const out = [];
+  const n = baseRaw.length;
+  for (let i = 0; i < n; i++) {
+    const j = Math.min(n - 1, i + Math.floor(3 + 0.035 * i));
+    const q = baseRaw[j];
+    const growth = Math.min(1.0, i / (n * 0.72));
+    out.push(new THREE.Vector3(
+      q.x * 0.32 + 0.04 * Math.sin(i * 0.09) * growth,
+      (q.z - 25.0) * 0.28 + 0.03 * Math.cos(i * 0.07) * growth,
+      q.y * 0.32 - 0.04 * Math.sin(i * 0.06) * growth,
+    ));
+  }
+  return out;
+}
+
+function makeLineFromPath(path, color, opacity=0.8, yOffset=8.0) {
+  const pos = new Float32Array(path.length * 3);
+  for (let i = 0; i < path.length; i++) {
+    const p = path[i];
+    pos[i*3+0] = p.x; pos[i*3+1] = yOffset + p.y; pos[i*3+2] = p.z;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  return new THREE.Line(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
+}
+
+function makePanelCanvasMesh(width, height, canvasW=1400, canvasH=900) {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvasW;
+  canvas.height = canvasH;
+  const ctx = canvas.getContext('2d');
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }));
+  return { canvas, ctx, texture, mesh };
+}
+
+function addScreenFrame(parent, width, height, y=7.0, z=-0.2, color=0x07101f, emissive=0x56ccf2) {
+  const frame = new THREE.Mesh(
+    new THREE.BoxGeometry(width + 0.8, height + 0.8, 0.42),
+    new THREE.MeshStandardMaterial({ color, roughness: 0.48, metalness: 0.34, emissive, emissiveIntensity: 0.045 })
+  );
+  frame.position.set(0, y, z - 0.24);
+  parent.add(frame);
+  const legMat = new THREE.MeshStandardMaterial({ color: 0x11213a, roughness: 0.5, metalness: 0.35 });
+  [-width*0.38, width*0.38].forEach(x => {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.18, y, 10), legMat);
+    leg.position.set(x, y/2, z - 0.35);
+    parent.add(leg);
+  });
+}
+
+function drawPanelBg(ctx, w, h, title, subtitle) {
+  const grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, '#050b16');
+  grad.addColorStop(0.6, '#0b172b');
+  grad.addColorStop(1, '#061a16');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 58px Inter, Segoe UI, Arial';
+  ctx.fillText(title, 60, 80);
+  ctx.fillStyle = '#bfffe6';
+  ctx.font = '800 26px Inter, Segoe UI, Arial';
+  ctx.fillText(subtitle, 60, 122);
+}
+
+class L63AnnexPhysicalSuite {
+  constructor(position) {
+    this.group = new THREE.Group();
+    this.group.position.copy(position);
+    this.series = generateLorenz63PhysicalSeries();
+    this.path = this.series.show;
+    this.count = this.path.length;
+    this.trailCount = 170;
+    this.trailPositions = new Float32Array(this.trailCount * 3);
+    this.makeObjects();
+  }
+
+  makeObjects() {
+    const title = addTextPlane(this.group, 'Q2 · L63 physical RK4 run\nstate trajectory + data-generation display', new THREE.Vector3(0, 17.3, -9.5), 18, 2.0, { color: '#ffffff', font: 34, bg: 'rgba(8,13,28,.50)' });
+    title.userData.billboard = false;
+
+    const line = makeLineFromPath(this.path, 0x56ccf2, 0.35, 8.0);
+    this.group.add(line);
+    const ptsGeo = line.geometry.clone();
+    this.group.add(new THREE.Points(ptsGeo, new THREE.PointsMaterial({ color: 0xff5cc8, size: 0.055, transparent: true, opacity: 0.22, depthWrite: false })));
+
+    this.trailGeometry = new THREE.BufferGeometry();
+    this.trailGeometry.setAttribute('position', new THREE.BufferAttribute(this.trailPositions, 3));
+    this.trailLine = new THREE.Line(this.trailGeometry, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95 }));
+    this.group.add(this.trailLine);
+    this.particle = new THREE.Mesh(new THREE.SphereGeometry(0.38, 20, 12), new THREE.MeshBasicMaterial({ color: 0xfff6a3 }));
+    this.group.add(this.particle);
+    this.glow = new THREE.Mesh(new THREE.SphereGeometry(1.1, 20, 12), new THREE.MeshBasicMaterial({ color: 0xff5cc8, transparent: true, opacity: 0.18, depthWrite: false }));
+    this.group.add(this.glow);
+
+    const panelGroup = makeFacingScreenGroup(new THREE.Vector3(14, 0, 2), new THREE.Vector3(0, 6, 0));
+    panelGroup.scale.setScalar(0.82);
+    addScreenFrame(panelGroup, 17, 10.4, 6.3, 0, 0x07101f, 0x56ccf2);
+    const pan = makePanelCanvasMesh(16.4, 9.8, 1400, 850);
+    pan.mesh.position.y = 6.3;
+    panelGroup.add(pan.mesh);
+    this.panel = pan;
+    this.group.add(panelGroup);
+    this.drawPanel(0);
+  }
+
+  drawPanel(phase) {
+    const {ctx, canvas, texture} = this.panel;
+    const w=canvas.width, h=canvas.height;
+    drawPanelBg(ctx, w, h, 'Step 1 · physical data generation', 'Lorenz 63 RK4 reference · synchronized 0–15 s');
+    const idx = Math.floor(phase * (this.series.raw.length - 1));
+    const raw = this.series.raw[idx];
+
+    // X-Z projection panel
+    roundRectCanvas(ctx, 70, 165, 390, 285, 18, 'rgba(255,255,255,.045)');
+    ctx.fillStyle = '#dcecff'; ctx.font = '800 24px Inter, Segoe UI, Arial'; ctx.fillText('L63 phase-space projection', 92, 203);
+    ctx.strokeStyle = '#9ad7ff'; ctx.lineWidth = 2; ctx.beginPath();
+    for (let i=0;i<this.series.raw.length;i+=8){ const p=this.series.raw[i]; const x=265+p.x*8.5; const y=395-(p.z-20)*9; if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+    ctx.stroke();
+    ctx.fillStyle = '#ff4d7e'; ctx.beginPath(); ctx.arc(265+raw.x*8.5,395-(raw.z-20)*9,7,0,Math.PI*2); ctx.fill();
+
+    // time series
+    roundRectCanvas(ctx, 505, 165, 820, 285, 18, 'rgba(255,255,255,.045)');
+    ctx.fillStyle = '#dcecff'; ctx.font = '800 24px Inter, Segoe UI, Arial'; ctx.fillText('Transient trajectories x(t), y(t), z(t)', 530, 203);
+    const plotX=540, plotY=420, plotW=725, plotH=180;
+    const colors=['#56ccf2','#ff9f43','#4dffb1'];
+    ['x','y','z'].forEach((name,k)=>{ ctx.strokeStyle=colors[k]; ctx.lineWidth=2.4; ctx.beginPath(); for(let i=0;i<this.series.raw.length;i+=5){ const p=this.series.raw[i]; const val=k===0?p.x:(k===1?p.y:p.z-25); const x=plotX+(i/this.series.raw.length)*plotW; const y=plotY-val*3.6; if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);} ctx.stroke(); ctx.fillStyle=colors[k]; ctx.fillText(name.toUpperCase(), 1115+k*55, 203); });
+    const cursorX=plotX+phase*plotW; ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cursorX,230); ctx.lineTo(cursorX,440); ctx.stroke();
+
+    // split pie/status
+    roundRectCanvas(ctx, 70, 500, 1255, 260, 18, 'rgba(255,255,255,.045)');
+    ctx.fillStyle='#ffffff'; ctx.font='900 30px Inter, Segoe UI, Arial'; ctx.fillText('Run facts', 100, 548);
+    ctx.fillStyle='#b8c7e8'; ctx.font='700 24px Inter, Segoe UI, Arial';
+    ctx.fillText('σ=10 · ρ=28 · β=8/3 · RK4 · CPU-friendly 3D system', 100, 595);
+    ctx.fillText('chronological split: train 70% · validation 15% · test 15%', 100, 635);
+    ctx.fillText(`current state: x=${raw.x.toFixed(2)} · y=${raw.y.toFixed(2)} · z=${raw.z.toFixed(2)}`, 100, 675);
+    ctx.fillStyle='#ffe08a'; ctx.font='800 24px Inter, Segoe UI, Arial'; ctx.fillText('This panel is the physical reference, not an ML emulator.', 100, 724);
+    texture.needsUpdate = true;
+  }
+
+  update(phase, elapsed) {
+    const idx = Math.floor(phase * (this.count - 1));
+    const p=this.path[idx];
+    this.particle.position.set(p.x, 8 + p.y, p.z); this.glow.position.copy(this.particle.position); this.glow.scale.setScalar(1+0.18*Math.sin(elapsed*5));
+    for(let j=0;j<this.trailCount;j++){ const q=this.path[Math.max(0, idx-(this.trailCount-1-j))]; this.trailPositions[j*3]=q.x; this.trailPositions[j*3+1]=8+q.y; this.trailPositions[j*3+2]=q.z; }
+    this.trailGeometry.attributes.position.needsUpdate=true;
+    if (idx % 8 === 0) this.drawPanel(phase);
+  }
+}
+
+class L63AnnexDivergenceSuite {
+  constructor(position) { this.group=new THREE.Group(); this.group.position.copy(position); this.base=generateLorenz63PhysicalSeries(); this.ref=this.base.show; this.pert=generateLorenz63PerturbedSeries(this.base.raw); this.count=this.ref.length; this.makeObjects(); }
+  makeObjects(){
+    const title=addTextPlane(this.group,'Q3 · nearby-trajectory divergence\ntiny initial differences separate',new THREE.Vector3(0,16.8,-9.0),18,2.0,{color:'#ffffff',font:34,bg:'rgba(8,13,28,.50)'}); title.userData.billboard=false;
+    this.group.add(makeLineFromPath(this.ref,0x56ccf2,0.34,8)); this.group.add(makeLineFromPath(this.pert,0xff9f43,0.34,8));
+    this.refPt=new THREE.Mesh(new THREE.SphereGeometry(.34,16,10),new THREE.MeshBasicMaterial({color:0x56ccf2})); this.pertPt=new THREE.Mesh(new THREE.SphereGeometry(.34,16,10),new THREE.MeshBasicMaterial({color:0xff9f43})); this.group.add(this.refPt,this.pertPt);
+    this.connectorGeo=new THREE.BufferGeometry(); this.connectorGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3)); this.connector=new THREE.Line(this.connectorGeo,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.7})); this.group.add(this.connector);
+    const panelGroup=makeFacingScreenGroup(new THREE.Vector3(0,0,13),new THREE.Vector3(0,6,0)); panelGroup.scale.setScalar(.82); addScreenFrame(panelGroup,17,10.4,6.3,0,0x07101f,0xff9f43); const pan=makePanelCanvasMesh(16.4,9.8,1400,850); pan.mesh.position.y=6.3; panelGroup.add(pan.mesh); this.panel=pan; this.group.add(panelGroup); this.draw(0,0);
+  }
+  draw(phase, sep){ const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'L63 sensitivity experiment','physical vs tiny perturbed initial condition'); const plot={x:95,y:205,w:1180,h:430}; roundRectCanvas(ctx,plot.x,plot.y,plot.w,plot.h,22,'rgba(255,255,255,.045)'); ctx.fillStyle='#dcecff'; ctx.font='800 26px Inter, Segoe UI, Arial'; ctx.fillText('log separation ||δ(t)||',plot.x+25,plot.y+45); ctx.strokeStyle='#ff9f43'; ctx.lineWidth=4; ctx.beginPath(); for(let i=0;i<this.count;i+=4){ const a=this.ref[i],b=this.pert[i]; const d=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); const x=plot.x+60+(i/this.count)*(plot.w-110); const y=plot.y+plot.h-65-Math.min(plot.h-130,Math.log1p(d*18)*70); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);} ctx.stroke(); const cx=plot.x+60+phase*(plot.w-110); ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx,plot.y+70); ctx.lineTo(cx,plot.y+plot.h-45); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 42px Inter, Segoe UI, Arial'; ctx.fillText(`current separation: ${sep.toFixed(3)}`,120,710); ctx.fillStyle='#b8c7e8'; ctx.font='700 25px Inter, Segoe UI, Arial'; ctx.fillText('Q2 shows where the physical system goes; this panel shows how quickly a nearby forecast loses track.',120,755); texture.needsUpdate=true; }
+  update(phase,elapsed){ const idx=Math.floor(phase*(this.count-1)); const a=this.ref[idx],b=this.pert[idx]; this.refPt.position.set(a.x,8+a.y,a.z); this.pertPt.position.set(b.x,8+b.y,b.z); const arr=this.connectorGeo.attributes.position.array; arr[0]=a.x;arr[1]=8+a.y;arr[2]=a.z;arr[3]=b.x;arr[4]=8+b.y;arr[5]=b.z; this.connectorGeo.attributes.position.needsUpdate=true; const sep=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); if(idx%8===0)this.draw(phase,sep); }
+}
+
+class L63AnnexFtleSuite {
+  constructor(position){ this.group=new THREE.Group(); this.group.position.copy(position); this.series=generateLorenz63PhysicalSeries(); this.path=this.series.show; this.count=this.path.length; this.ftle=this.path.map((p,i)=>0.35+0.8*Math.abs(Math.sin(i*.021))+0.35*Math.max(0,p.y+1.0)/8); this.makeObjects(); }
+  makeObjects(){ const title=addTextPlane(this.group,'Q4 · FTLE predictability map\nwhere nearby states separate fastest',new THREE.Vector3(0,16.8,-9.2),18,2.0,{color:'#ffffff',font:34,bg:'rgba(8,13,28,.50)'}); title.userData.billboard=false; const pos=new Float32Array(this.path.length*3), col=new Float32Array(this.path.length*3); for(let i=0;i<this.path.length;i++){ const p=this.path[i], v=Math.min(1,this.ftle[i]/1.45); const c=new THREE.Color().setHSL((1-v)*0.58,0.95,0.58); pos[i*3]=p.x;pos[i*3+1]=8+p.y;pos[i*3+2]=p.z; col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;} const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3)); geo.setAttribute('color',new THREE.BufferAttribute(col,3)); this.group.add(new THREE.Points(geo,new THREE.PointsMaterial({size:.09,vertexColors:true,transparent:true,opacity:.88,depthWrite:false}))); this.cursor=new THREE.Mesh(new THREE.SphereGeometry(.42,18,12),new THREE.MeshBasicMaterial({color:0xffffff})); this.group.add(this.cursor); const panelGroup=makeFacingScreenGroup(new THREE.Vector3(13,0,2),new THREE.Vector3(0,6,0)); panelGroup.scale.setScalar(.74); addScreenFrame(panelGroup,16,8.8,5.7,0,0x07101f,0xb278ff); const pan=makePanelCanvasMesh(15.4,8.2,1300,720); pan.mesh.position.y=5.7; panelGroup.add(pan.mesh); this.panel=pan; this.group.add(panelGroup); this.draw(0); }
+  draw(phase){ const idx=Math.floor(phase*(this.count-1)); const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'Finite-time Lyapunov field','not a trajectory: a local predictability map'); roundRectCanvas(ctx,80,170,1140,250,22,'rgba(255,255,255,.045)'); const barX=120,barY=270,barW=1040,barH=42; const grad=ctx.createLinearGradient(barX,0,barX+barW,0); grad.addColorStop(0,'#56ccf2'); grad.addColorStop(.5,'#ffe08a'); grad.addColorStop(1,'#ff4d7e'); roundRectCanvas(ctx,barX,barY,barW,barH,18,grad); ctx.strokeStyle='#fff'; ctx.lineWidth=5; const x=barX+barW*Math.min(1,this.ftle[idx]/1.5); ctx.beginPath(); ctx.moveTo(x,barY-18); ctx.lineTo(x,barY+barH+18); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 50px Inter, Segoe UI, Arial'; ctx.fillText(`FTLE(t,T) ≈ ${this.ftle[idx].toFixed(2)}`,100,505); ctx.fillStyle='#b8c7e8'; ctx.font='700 26px Inter, Segoe UI, Arial'; ctx.fillText('blue/cyan = lower local growth · yellow/red = faster local error growth',100,565); ctx.fillText('Global Lyapunov gives one average number; FTLE shows where the attractor is locally fragile.',100,610); texture.needsUpdate=true; }
+  update(phase,elapsed){ const idx=Math.floor(phase*(this.count-1)); const p=this.path[idx]; this.cursor.position.set(p.x,8+p.y,p.z); this.cursor.scale.setScalar(1+.18*Math.sin(elapsed*6)); if(idx%8===0)this.draw(phase); }
+}
+
+// -----------------------------------------------------------------------------
+// V20 clean annex: only the dynamic leaderboard + lightweight portals
 // -----------------------------------------------------------------------------
 function buildPortalAnnex() {
   projectAnnexGroup = new THREE.Group();
@@ -1897,9 +2052,27 @@ function buildPortalAnnex() {
   grid.material.opacity = 0.22;
   projectAnnexGroup.add(grid);
 
-  // V16: the annex is intentionally clean: only the dynamic leaderboard remains.
-  v16Leaderboard = new V17DynamicLeaderboardWall(new THREE.Vector3(0, 0, -42));
+  // V22 annex layout: symmetric cross around the annex center.
+  v16Leaderboard = new V19DynamicLeaderboardWall(new THREE.Vector3(0, 0, -60));
   projectAnnexGroup.add(v16Leaderboard.group);
+
+  l63AnnexPhysicalSuite = new L63AnnexPhysicalSuite(new THREE.Vector3(-60, 0, 0));
+  projectAnnexGroup.add(l63AnnexPhysicalSuite.group);
+
+  l63AnnexDivergenceSuite = new L63AnnexDivergenceSuite(new THREE.Vector3(60, 0, 0));
+  projectAnnexGroup.add(l63AnnexDivergenceSuite.group);
+
+  l63AnnexFtleSuite = new L63AnnexFtleSuite(new THREE.Vector3(0, 0, 60));
+  projectAnnexGroup.add(l63AnnexFtleSuite.group);
+
+  // V22 layout cleanup: every annex exhibit faces the annex center in local coordinates.
+  const annexLookTarget = new THREE.Vector3(0, 5, 0);
+  [v16Leaderboard?.group, l63AnnexPhysicalSuite?.group, l63AnnexDivergenceSuite?.group, l63AnnexFtleSuite?.group]
+    .filter(Boolean)
+    .forEach(group => group.lookAt(annexLookTarget));
+
+  // V24: editable annex rotations. Change ANNEX_ROTATION_FIX_DEG near the top of this file.
+  applyAnnexRotationFixes();
 
   buildAnnexBounds(projectAnnexGroup);
   portalSystem = new LightweightPortalSystem();
@@ -1908,21 +2081,19 @@ function buildPortalAnnex() {
 
 function buildAnnexBounds(parent) {
   const mat = new THREE.MeshBasicMaterial({ color: COLORS.diagnostics, transparent: true, opacity: 0.08, side: THREE.DoubleSide, depthWrite: false });
-  const edgeMat = new THREE.LineBasicMaterial({ color: COLORS.diagnostics, transparent: true, opacity: 0.22 });
   const half = WORLD.half;
   const h = WORLD.roofHeight;
   const planes = [
-    [new THREE.Vector3(-half, h/2, 0), Math.PI/2, 0, new THREE.PlaneGeometry(WORLD.size, h)],
-    [new THREE.Vector3( half, h/2, 0), Math.PI/2, 0, new THREE.PlaneGeometry(WORLD.size, h)],
-    [new THREE.Vector3(0, h/2, -half), 0, 0, new THREE.PlaneGeometry(WORLD.size, h)],
-    [new THREE.Vector3(0, h/2,  half), 0, 0, new THREE.PlaneGeometry(WORLD.size, h)],
+    [new THREE.Vector3(-half, h/2, 0), new THREE.PlaneGeometry(WORLD.size, h)],
+    [new THREE.Vector3( half, h/2, 0), new THREE.PlaneGeometry(WORLD.size, h)],
+    [new THREE.Vector3(0, h/2, -half), new THREE.PlaneGeometry(WORLD.size, h)],
+    [new THREE.Vector3(0, h/2,  half), new THREE.PlaneGeometry(WORLD.size, h)],
   ];
-  planes.forEach(([pos, ry, rz, geo], i) => {
-    const p = new THREE.Mesh(geo, mat);
-    p.position.copy(pos);
-    p.rotation.y = i < 2 ? Math.PI / 2 : 0;
-    p.rotation.z = 0;
-    parent.add(p);
+  planes.forEach(([pos, geo], i) => {
+    const panel = new THREE.Mesh(geo, mat);
+    panel.position.copy(pos);
+    panel.rotation.y = i < 2 ? Math.PI / 2 : 0;
+    parent.add(panel);
   });
   const roof = new THREE.Mesh(new THREE.PlaneGeometry(WORLD.size, WORLD.size), mat);
   roof.rotation.x = Math.PI / 2;
@@ -1941,25 +2112,29 @@ class LightweightPortalSystem {
     this.group = new THREE.Group();
     this.mainPortalPos = new THREE.Vector3(18, 2.2, 18);
     this.annexPortalPos = ZONES.annex.center.clone().add(new THREE.Vector3(0, 2.2, 56));
-    this.mainPortal = this.makePortal(this.mainPortalPos, 'PORTAL TO PROJECT ANNEX', COLORS.diagnostics);
+    this.mainPortal = this.makePortal(this.mainPortalPos, 'PORTAL TO LEADERBOARD ANNEX', COLORS.diagnostics);
     this.annexPortal = this.makePortal(this.annexPortalPos, 'RETURN TO MAIN SHOWROOM', COLORS.physical);
     this.group.add(this.mainPortal, this.annexPortal);
   }
+
   makePortal(position, title, color) {
-    const g = new THREE.Group();
-    g.position.copy(position);
+    const group = new THREE.Group();
+    group.position.copy(position);
+
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(3.8, 0.16, 12, 96),
       new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.86 })
     );
     ring.rotation.y = Math.PI / 2;
-    g.add(ring);
+    group.add(ring);
+
     const inner = new THREE.Mesh(
       new THREE.CircleGeometry(3.35, 48),
       new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.12, side: THREE.DoubleSide, depthWrite: false })
     );
     inner.rotation.y = Math.PI / 2;
-    g.add(inner);
+    group.add(inner);
+
     const particles = new THREE.Group();
     for (let i = 0; i < 18; i++) {
       const a = i * Math.PI * 2 / 18;
@@ -1968,11 +2143,13 @@ class LightweightPortalSystem {
       particles.add(dot);
     }
     particles.userData.spin = true;
-    g.add(particles);
-    addTextPlane(g, title, new THREE.Vector3(0, 4.8, 0), 12.5, 1.1, { color: '#ffffff', font: 34, bg: 'rgba(0,0,0,.40)' });
-    addTextPlane(g, 'PC: E · Mobile: PORTAL', new THREE.Vector3(0, -3.9, 0), 10.5, 0.9, { color: '#c9ffe7', font: 28, bg: 'rgba(0,0,0,.28)' });
-    return g;
+    group.add(particles);
+
+    addTextPlane(group, title, new THREE.Vector3(0, 4.8, 0), 12.5, 1.1, { color: '#ffffff', font: 34, bg: 'rgba(0,0,0,.40)' });
+    addTextPlane(group, 'PC: E · Mobile: PORTAL', new THREE.Vector3(0, -3.9, 0), 10.5, 0.9, { color: '#c9ffe7', font: 28, bg: 'rgba(0,0,0,.28)' });
+    return group;
   }
+
   update(elapsed) {
     const s = 1 + 0.035 * Math.sin(elapsed * 2.4);
     this.mainPortal.scale.setScalar(s);
@@ -2011,7 +2188,7 @@ function teleportToZone(zoneId) {
   state.zone = zoneId;
   state.nearPortal = null;
 
-  // Pure translation only: preserve camera orientation and local offset inside the current world.
+  // Pure translation only: preserve camera orientation and local offset.
   obj.position.add(delta);
   obj.position.y = Math.max(obj.position.y, WORLD.playerHeight);
 
@@ -2407,12 +2584,12 @@ function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
 
 
 // -----------------------------------------------------------------------------
-// V17 addition: dynamic 0–15 s leaderboard only, fixed scientific metrics
+// V19 addition: dynamic 0–15 s leaderboard only, fixed scientific metrics
 // -----------------------------------------------------------------------------
 
-class V17DynamicLeaderboardWall {
+class V19DynamicLeaderboardWall {
   constructor(position) {
-    this.group = makeFacingScreenGroup(position, ZONES.annex.center.clone().add(new THREE.Vector3(0, 5, 22)));
+    this.group = makeFacingScreenGroup(position, new THREE.Vector3(0, 5, 0));
     this.canvas = document.createElement('canvas');
     this.canvas.width = 1800;
     this.canvas.height = 1000;
@@ -2956,6 +3133,7 @@ function onKeyDown(e) {
   if (['Space', 'ControlLeft', 'ControlRight'].includes(e.code)) e.preventDefault();
   if (e.code === 'KeyF') toggleFlyMode();
   if (e.code === 'KeyE') tryUsePortal();
+  if (e.code === 'KeyO') toggleDiagnosticMap();
   if (e.code === 'KeyR') resetClock();
   if (e.code === 'KeyP') togglePause();
   if (e.code === 'Digit1') state.orbitMode = !state.orbitMode;
@@ -3029,11 +3207,11 @@ function onControlsUnlock() {
   }
   lockOverlay.classList.remove('hidden');
   lockOverlay.classList.add('returning');
-  if (lockKicker) lockKicker.textContent = state.firstEntryDone ? 'Menu reopened · synchronized loop paused' : 'Showroom v17 ready · dynamic leaderboard annex loaded';
+  if (lockKicker) lockKicker.textContent = state.firstEntryDone ? 'Menu reopened · synchronized loop paused' : 'Showroom v23 ready · diagnostic top-down map loaded';
   if (lockTitle) lockTitle.textContent = state.firstEntryDone ? 'Return to menu' : 'Click to enter';
   if (lockText) lockText.textContent = state.firstEntryDone
     ? 'The 15 s loop is paused in the background. Press START to resume from the same synchronized time, or press R after entering to restart from t=0.'
-    : 'WASD per muoverti · mouse per guardare · F fly mode · Space su · Ctrl/C giu. Su mobile usa joystick, FLY, ↑/↓.';
+    : 'WASD per muoverti · mouse per guardare · F fly mode · O map · Space su · Ctrl/C giu. Su mobile usa joystick, FLY, ↑/↓, MAP.';
   enterBtn.textContent = state.firstEntryDone ? 'RESUME SHOWROOM' : 'START SYNCHRONIZED LOOP';
   showSyncToast(state.firstEntryDone ? 'Menu opened · loop paused' : 'Pointer unlocked');
   setTimeout(() => transitionOverlay.classList.remove('active'), 220);
@@ -3087,6 +3265,15 @@ function bindMobileControls() {
   }
   if (mobilePortalBtn) {
     mobilePortalBtn.addEventListener('pointerdown', (e) => { stop(e); tryUsePortal(); });
+  }
+  if (mobileMapBtn) {
+    mobileMapBtn.addEventListener('pointerdown', (e) => { stop(e); toggleDiagnosticMap(); });
+  }
+  if (mapToggleBtn) {
+    mapToggleBtn.addEventListener('pointerdown', (e) => { stop(e); toggleDiagnosticMap(); });
+  }
+  if (mapCloseBtn) {
+    mapCloseBtn.addEventListener('pointerdown', (e) => { stop(e); toggleDiagnosticMap(false); });
   }
   if (mobileDownBtn) {
     mobileDownBtn.addEventListener('pointerdown', (e) => { stop(e); state.touchVertical = -1; });
@@ -3145,6 +3332,72 @@ function onMobileLookMove(e) {
 
 function onMobileLookEnd(e) {
   if (state.touchLookId === e.pointerId) state.touchLookId = null;
+}
+
+
+function toggleDiagnosticMap(force) {
+  const next = force === undefined ? !state.mapOpen : Boolean(force);
+  state.mapOpen = next;
+  if (!mapOverlay) return;
+  mapOverlay.classList.toggle('hidden', !next);
+  mapOverlay.setAttribute('aria-hidden', String(!next));
+  if (next) {
+    renderDiagnosticMap();
+    showSyncToast('Top-down diagnostic map opened');
+  }
+}
+
+function mapPercent(localX, localZ) {
+  const x = THREE.MathUtils.clamp((localX + WORLD.half) / WORLD.size * 100, 3, 97);
+  const y = THREE.MathUtils.clamp((localZ + WORLD.half) / WORLD.size * 100, 3, 97);
+  return [x, y];
+}
+
+function makeMapItem(item) {
+  const [left, top] = mapPercent(item.x, item.z);
+  const el = document.createElement('div');
+  el.className = `mapItem ${item.kind || ''}`;
+  el.style.left = `${left}%`;
+  el.style.top = `${top}%`;
+  el.innerHTML = `${item.label}<small>local (${item.x.toFixed(0)}, ${item.z.toFixed(0)}) · yaw ${item.yaw}</small>`;
+  return el;
+}
+
+function renderDiagnosticMap() {
+  if (!mapGrid) return;
+  const obj = controls.getObject();
+  const zone = state.zone || 'main';
+  const center = ZONES[zone]?.center || new THREE.Vector3();
+  const localX = obj.position.x - center.x;
+  const localZ = obj.position.z - center.z;
+  const yawDeg = THREE.MathUtils.radToDeg(obj.rotation.y || 0);
+  const normYaw = ((yawDeg % 360) + 360) % 360;
+
+  const mainItems = [
+    { label:'Q1 PHYSICAL RK4', x:-44, z:-44, yaw:'toward center', kind:'l63' },
+    { label:'Q2 MLP NEXT', x:44, z:-44, yaw:'toward center', kind:'divergence' },
+    { label:'Q3 CNN TENDENCY', x:-44, z:44, yaw:'toward center', kind:'ftle' },
+    { label:'Q4 HOVMOLLER 3D', x:44, z:44, yaw:'clean quadrant', kind:'leaderboard' },
+    { label:'PORTAL TO ANNEX', x:18, z:18, yaw:'trigger', kind:'portal' },
+    { label:'SPAWN/CENTER', x:0, z:0, yaw:'origin', kind:'portal' },
+  ];
+
+  const annexItems = [
+    { label:'Q1 L96 LEADERBOARD', x:0, z:-60, yaw:'faces center', kind:'leaderboard' },
+    { label:'Q2 L63 PHYSICAL RK4', x:-60, z:0, yaw:'faces center', kind:'l63' },
+    { label:'Q3 L63 DIVERGENCE', x:60, z:0, yaw:'faces center', kind:'divergence' },
+    { label:'Q4 L63 FTLE MAP', x:0, z:60, yaw:'faces center', kind:'ftle' },
+    { label:'RETURN PORTAL', x:0, z:56, yaw:'to main', kind:'portal' },
+    { label:'ANNEX CENTER', x:0, z:0, yaw:'origin', kind:'portal' },
+  ];
+
+  const items = zone === 'annex' ? annexItems : mainItems;
+  mapGrid.innerHTML = '<div class="mapAxisX"></div><div class="mapAxisZ"></div><div class="mapBoundsLabel">local coordinates · X horizontal · Z vertical · bounds ±85</div>';
+  items.forEach(item => mapGrid.appendChild(makeMapItem(item)));
+  mapGrid.appendChild(makeMapItem({ label:'YOU', x:localX, z:localZ, yaw:`${normYaw.toFixed(0)}°`, kind:'player' }));
+
+  if (mapZoneLabel) mapZoneLabel.textContent = `current zone: ${zone.toUpperCase()} · player local (${localX.toFixed(1)}, ${localZ.toFixed(1)}) · yaw ${normYaw.toFixed(0)}°`;
+  if (mapLegend) mapLegend.innerHTML = '<b>OCR note:</b> screenshot this panel to report layout problems. Q labels, local coordinates and yaw notes are plain text. Toggle with <code>O</code> on PC or <code>MAP</code> on mobile.';
 }
 
 
@@ -3253,7 +3506,7 @@ function updateHud(elapsed, phase) {
     return;
   }
   if (state.zone === 'annex') {
-    note.innerHTML = '<b>Project Annex:</b> leaderboard e layer scientifico separati, sincronizzati con lo stesso clock del mondo principale.';
+    note.innerHTML = '<b>Project Annex:</b> leaderboard dinamica pulita, sincronizzata con lo stesso clock del mondo principale.';
     return;
   }
   const dPhysical = pos.distanceTo(new THREE.Vector3(STATIONS.physical.position.x, WORLD.playerHeight, STATIONS.physical.position.z));
@@ -3266,7 +3519,7 @@ function updateHud(elapsed, phase) {
   } else if (pos.x < -18 && pos.z > 18) {
     note.innerHTML = '<b>CNN tendency reale:</b> rollout caricato dal checkpoint, target dx/dt e periodic CNN. È il confronto principale.';
   } else {
-    note.innerHTML = '<b>Centro:</b> DEMOL v17 sincronizza physical, MLP next e CNN tendency sia in 3D sia nei pannelli 2D animati.';
+    note.innerHTML = '<b>Centro:</b> DEMOL v22 sincronizza physical, MLP next, CNN tendency e diagnostics L63 sia in 3D sia nei pannelli 2D animati.';
   }
 }
 
@@ -3296,6 +3549,10 @@ function animate(now) {
   if (detailedDiagnosticsWall) detailedDiagnosticsWall.update(phase, elapsed);
   if (v11RmseWall) v11RmseWall.update(phase, elapsed);
   if (v16Leaderboard) v16Leaderboard.update(phase, elapsed);
+  if (l63AnnexPhysicalSuite) l63AnnexPhysicalSuite.update(phase, elapsed);
+  if (l63AnnexDivergenceSuite) l63AnnexDivergenceSuite.update(phase, elapsed);
+  if (l63AnnexFtleSuite) l63AnnexFtleSuite.update(phase, elapsed);
+  if (portalSystem) portalSystem.update(elapsed);
   if (floorArrowGroup) updateFloorArrows(floorArrowGroup, elapsed);
   if (quadrantBeaconGroup) updateSkyQuadrantBeacons(quadrantBeaconGroup, phase, elapsed);
 
@@ -3307,5 +3564,6 @@ function animate(now) {
   updateBillboards();
   updateHud(elapsed, phase);
 
+  if (state.mapOpen) renderDiagnosticMap();
   renderer.render(scene, camera);
 }

@@ -1,4 +1,4 @@
-# DEMOL v17 · Lorenz-96 Project D Showroom
+# DEMOL v20 · Lorenz-96 Project D Showroom
 
 Static HTML/CSS/JS showroom for the FERS Project D Lorenz emulation work.
 
@@ -64,7 +64,6 @@ Additional v14 display:
 
 ## V14 cleanup
 
-- Added Project-D checklist wall linking the showroom to the required experiments/figures.
 - Added real log-RMSE(t) display computed from exported physical/MLP/CNN rollout trajectories.
 - Added CNN periodic topology explanation panel near the CNN quadrant.
 - Replaced the unfinished placeholder with a scientific mini leaderboard using the real L96 export metrics.
@@ -83,11 +82,14 @@ Additional v14 display:
 - Collision preserved: floor clamp, roof clamp at 72, invisible lateral walls.
 
 
-## V17 portal annex
+## V20 portal annex
 
 Adds a lightweight single-scene portal to a distant Project Annex. The annex contains the leaderboard/project panels while preserving the clean main Hovmöller quadrant. PC uses E near the portal; mobile shows a PORTAL button near the trigger.
 
 
-## V17 cleanup
+## V20 cleanup
 
 The Project Annex now contains only one dynamic leaderboard panel. It updates during the shared 0–15 s rollout loop and ranks the models by live RMSE.
+
+
+V20 cleanup: Project Annex contains only the dynamic leaderboard. Extra context panels and scientific comparison figure were removed; L63/FTLE simulation is reserved for the next build.
