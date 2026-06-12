@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+﻿import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { L96_META, L96_FRAMES, L96_RESULTS } from '../data/lorenzData.js';
 
@@ -107,7 +107,7 @@ const STATIONS = {
   mlpNext: {
     id: 'mlpNext',
     title: 'Q2 - MLP NEXT',
-    subtitle: 'Real rollout loaded - x(t) â†’ x(t+dt) - weak online stability',
+    subtitle: 'Real rollout loaded - x(t) Ã¢â€ â€™ x(t+dt) - weak online stability',
     position: new THREE.Vector3(44, 0, -44),
     color: COLORS.mlpNext,
     active: true,
@@ -135,7 +135,7 @@ const MODEL_CATALOG = {
     key: 'mlp_next',
     label: 'MLP next',
     color: COLORS.mlpNext,
-    summary: 'Learns x(t) â†’ x(t+dt). Failure case in long autoregressive rollout.',
+    summary: 'Learns x(t) Ã¢â€ â€™ x(t+dt). Failure case in long autoregressive rollout.',
   },
   mlp_tendency: {
     key: 'mlp_tendency',
@@ -977,7 +977,7 @@ function buildDiagnosticsWall(station) {
 
   addTextPlane(group, 'L96 clean run diagnostics', new THREE.Vector3(0, 12.4, -0.35), 5.6, 1.0, { color: '#eaf2ff', bg: 'rgba(0,0,0,0)' });
   addTextPlane(group, 'Prediction horizon: MLP next 0.12 - CNN tendency 2.33', new THREE.Vector3(0, 10.9, -0.36), 7.6, 0.85, { color: '#bdeeff', bg: 'rgba(0,0,0,0)' });
-  addTextPlane(group, 'Î»1 reference 1.68 - CNN next 1.81 - tendency â‰ˆ1.51', new THREE.Vector3(0, 9.7, -0.36), 7.6, 0.85, { color: '#d9ffc9', bg: 'rgba(0,0,0,0)' });
+  addTextPlane(group, 'ÃŽÂ»1 reference 1.68 - CNN next 1.81 - tendency Ã¢â€°Ë†1.51', new THREE.Vector3(0, 9.7, -0.36), 7.6, 0.85, { color: '#d9ffc9', bg: 'rgba(0,0,0,0)' });
 
   buildMiniBars(group, new THREE.Vector3(-7.4, 3.0, -0.45));
   return group;
@@ -1128,7 +1128,7 @@ class L63SkyHero {
   makeObjects() {
     const title = addTextPlane(
       this.group,
-      'Lorenz-63 classic chaotic attractor\nÏƒ=10 - Ï=28 - Î²=8/3 - loop synced',
+      'Lorenz-63 classic chaotic attractor\nÃÆ’=10 - ÃÂ=28 - ÃŽÂ²=8/3 - loop synced',
       new THREE.Vector3(0, this.baseHeight + 13.2, -15.5),
       18.0,
       2.2,
@@ -1762,7 +1762,7 @@ class SyncedRolloutDashboardPanel {
     ctx.fillText(`t = ${(phase * LOOP_SECONDS).toFixed(2)} / ${LOOP_SECONDS.toFixed(0)} s - frame ${revealIdx + 1}/${this.totalFrames}`, 44, 124);
     if (this.compareKey) {
       ctx.fillStyle = '#f7e4c4';
-      ctx.fillText(`live RMSE vs physical = ${fmtMetric(liveRmse)} - 15 s final RMSE â‰ˆ ${fmtMetric(MODEL_META.rmse_15s_export_window?.[this.compareKey]?.final)}`, 44, 152);
+      ctx.fillText(`live RMSE vs physical = ${fmtMetric(liveRmse)} - 15 s final RMSE Ã¢â€°Ë† ${fmtMetric(MODEL_META.rmse_15s_export_window?.[this.compareKey]?.final)}`, 44, 152);
     } else {
       ctx.fillStyle = '#d7f7ff';
       ctx.fillText('Physical truth reference - no learned approximation', 44, 152);
@@ -1992,7 +1992,7 @@ class L63AnnexPhysicalSuite {
     roundRectCanvas(ctx, 70, 500, 1255, 260, 18, 'rgba(255,255,255,.045)');
     ctx.fillStyle='#ffffff'; ctx.font='900 30px Inter, Segoe UI, Arial'; ctx.fillText('Run facts', 100, 548);
     ctx.fillStyle='#b8c7e8'; ctx.font='700 24px Inter, Segoe UI, Arial';
-    ctx.fillText('Ïƒ=10 - Ï=28 - Î²=8/3 - RK4 - CPU-friendly 3D system', 100, 595);
+    ctx.fillText('ÃÆ’=10 - ÃÂ=28 - ÃŽÂ²=8/3 - RK4 - CPU-friendly 3D system', 100, 595);
     ctx.fillText('chronological split: train 70% - validation 15% - test 15%', 100, 635);
     ctx.fillText(`current state: x=${raw.x.toFixed(2)} - y=${raw.y.toFixed(2)} - z=${raw.z.toFixed(2)}`, 100, 675);
     ctx.fillStyle='#ffe08a'; ctx.font='800 24px Inter, Segoe UI, Arial'; ctx.fillText('This panel is the physical reference, not an ML emulator.', 100, 724);
@@ -2018,14 +2018,14 @@ class L63AnnexDivergenceSuite {
     this.connectorGeo=new THREE.BufferGeometry(); this.connectorGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3)); this.connector=new THREE.Line(this.connectorGeo,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.7})); this.group.add(this.connector);
     const panelGroup=makeFacingScreenGroup(new THREE.Vector3(0,0,13),new THREE.Vector3(0,6,0)); panelGroup.scale.setScalar(.82); addScreenFrame(panelGroup,17,10.4,6.3,0,0x07101f,0xff9f43); const pan=makePanelCanvasMesh(16.4,9.8,1400,850); pan.mesh.position.y=6.3; panelGroup.add(pan.mesh); this.panel=pan; this.group.add(panelGroup); this.draw(0,0);
   }
-  draw(phase, sep){ const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'L63 sensitivity experiment','physical vs tiny perturbed initial condition'); const plot={x:95,y:205,w:1180,h:430}; roundRectCanvas(ctx,plot.x,plot.y,plot.w,plot.h,22,'rgba(255,255,255,.045)'); ctx.fillStyle='#dcecff'; ctx.font='800 26px Inter, Segoe UI, Arial'; ctx.fillText('log separation ||Î´(t)||',plot.x+25,plot.y+45); ctx.strokeStyle='#ff9f43'; ctx.lineWidth=4; ctx.beginPath(); for(let i=0;i<this.count;i+=4){ const a=this.ref[i],b=this.pert[i]; const d=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); const x=plot.x+60+(i/this.count)*(plot.w-110); const y=plot.y+plot.h-65-Math.min(plot.h-130,Math.log1p(d*18)*70); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);} ctx.stroke(); const cx=plot.x+60+phase*(plot.w-110); ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx,plot.y+70); ctx.lineTo(cx,plot.y+plot.h-45); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 42px Inter, Segoe UI, Arial'; ctx.fillText(`current separation: ${sep.toFixed(3)}`,120,710); ctx.fillStyle='#b8c7e8'; ctx.font='700 25px Inter, Segoe UI, Arial'; ctx.fillText('Q2 shows where the physical system goes; this panel shows how quickly a nearby forecast loses track.',120,755); texture.needsUpdate=true; }
+  draw(phase, sep){ const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'L63 sensitivity experiment','physical vs tiny perturbed initial condition'); const plot={x:95,y:205,w:1180,h:430}; roundRectCanvas(ctx,plot.x,plot.y,plot.w,plot.h,22,'rgba(255,255,255,.045)'); ctx.fillStyle='#dcecff'; ctx.font='800 26px Inter, Segoe UI, Arial'; ctx.fillText('log separation ||ÃŽÂ´(t)||',plot.x+25,plot.y+45); ctx.strokeStyle='#ff9f43'; ctx.lineWidth=4; ctx.beginPath(); for(let i=0;i<this.count;i+=4){ const a=this.ref[i],b=this.pert[i]; const d=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); const x=plot.x+60+(i/this.count)*(plot.w-110); const y=plot.y+plot.h-65-Math.min(plot.h-130,Math.log1p(d*18)*70); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);} ctx.stroke(); const cx=plot.x+60+phase*(plot.w-110); ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx,plot.y+70); ctx.lineTo(cx,plot.y+plot.h-45); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 42px Inter, Segoe UI, Arial'; ctx.fillText(`current separation: ${sep.toFixed(3)}`,120,710); ctx.fillStyle='#b8c7e8'; ctx.font='700 25px Inter, Segoe UI, Arial'; ctx.fillText('Q2 shows where the physical system goes; this panel shows how quickly a nearby forecast loses track.',120,755); texture.needsUpdate=true; }
   update(phase,elapsed){ const idx=Math.floor(phase*(this.count-1)); const a=this.ref[idx],b=this.pert[idx]; this.refPt.position.set(a.x,8+a.y,a.z); this.pertPt.position.set(b.x,8+b.y,b.z); const arr=this.connectorGeo.attributes.position.array; arr[0]=a.x;arr[1]=8+a.y;arr[2]=a.z;arr[3]=b.x;arr[4]=8+b.y;arr[5]=b.z; this.connectorGeo.attributes.position.needsUpdate=true; const sep=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); if(idx%8===0)this.draw(phase,sep); }
 }
 
 class L63AnnexFtleSuite {
   constructor(position){ this.group=new THREE.Group(); this.group.position.copy(position); this.series=generateLorenz63PhysicalSeries(); this.path=this.series.show; this.count=this.path.length; this.ftle=this.path.map((p,i)=>0.35+0.8*Math.abs(Math.sin(i*.021))+0.35*Math.max(0,p.y+1.0)/8); this.makeObjects(); }
   makeObjects(){ const title=addTextPlane(this.group,'Q4 - FTLE predictability map\nwhere nearby states separate fastest',new THREE.Vector3(0,16.8,-9.2),18,2.0,{color:'#ffffff',font:34,bg:'rgba(8,13,28,.50)'}); title.userData.billboard=false; const pos=new Float32Array(this.path.length*3), col=new Float32Array(this.path.length*3); for(let i=0;i<this.path.length;i++){ const p=this.path[i], v=Math.min(1,this.ftle[i]/1.45); const c=new THREE.Color().setHSL((1-v)*0.58,0.95,0.58); pos[i*3]=p.x;pos[i*3+1]=8+p.y;pos[i*3+2]=p.z; col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;} const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3)); geo.setAttribute('color',new THREE.BufferAttribute(col,3)); this.group.add(new THREE.Points(geo,new THREE.PointsMaterial({size:.09,vertexColors:true,transparent:true,opacity:.88,depthWrite:false}))); this.cursor=new THREE.Mesh(new THREE.SphereGeometry(.42,18,12),new THREE.MeshBasicMaterial({color:0xffffff})); this.group.add(this.cursor); const panelGroup=makeFacingScreenGroup(new THREE.Vector3(13,0,2),new THREE.Vector3(0,6,0)); panelGroup.scale.setScalar(.74); addScreenFrame(panelGroup,16,8.8,5.7,0,0x07101f,0xb278ff); const pan=makePanelCanvasMesh(15.4,8.2,1300,720); pan.mesh.position.y=5.7; panelGroup.add(pan.mesh); this.panel=pan; this.group.add(panelGroup); this.draw(0); }
-  draw(phase){ const idx=Math.floor(phase*(this.count-1)); const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'Finite-time Lyapunov field','not a trajectory: a local predictability map'); roundRectCanvas(ctx,80,170,1140,250,22,'rgba(255,255,255,.045)'); const barX=120,barY=270,barW=1040,barH=42; const grad=ctx.createLinearGradient(barX,0,barX+barW,0); grad.addColorStop(0,'#56ccf2'); grad.addColorStop(.5,'#ffe08a'); grad.addColorStop(1,'#ff4d7e'); roundRectCanvas(ctx,barX,barY,barW,barH,18,grad); ctx.strokeStyle='#fff'; ctx.lineWidth=5; const x=barX+barW*Math.min(1,this.ftle[idx]/1.5); ctx.beginPath(); ctx.moveTo(x,barY-18); ctx.lineTo(x,barY+barH+18); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 50px Inter, Segoe UI, Arial'; ctx.fillText(`FTLE(t,T) â‰ˆ ${this.ftle[idx].toFixed(2)}`,100,505); ctx.fillStyle='#b8c7e8'; ctx.font='700 26px Inter, Segoe UI, Arial'; ctx.fillText('blue/cyan = lower local growth - yellow/red = faster local error growth',100,565); ctx.fillText('Global Lyapunov gives one average number; FTLE shows where the attractor is locally fragile.',100,610); texture.needsUpdate=true; }
+  draw(phase){ const idx=Math.floor(phase*(this.count-1)); const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'Finite-time Lyapunov field','not a trajectory: a local predictability map'); roundRectCanvas(ctx,80,170,1140,250,22,'rgba(255,255,255,.045)'); const barX=120,barY=270,barW=1040,barH=42; const grad=ctx.createLinearGradient(barX,0,barX+barW,0); grad.addColorStop(0,'#56ccf2'); grad.addColorStop(.5,'#ffe08a'); grad.addColorStop(1,'#ff4d7e'); roundRectCanvas(ctx,barX,barY,barW,barH,18,grad); ctx.strokeStyle='#fff'; ctx.lineWidth=5; const x=barX+barW*Math.min(1,this.ftle[idx]/1.5); ctx.beginPath(); ctx.moveTo(x,barY-18); ctx.lineTo(x,barY+barH+18); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 50px Inter, Segoe UI, Arial'; ctx.fillText(`FTLE(t,T) Ã¢â€°Ë† ${this.ftle[idx].toFixed(2)}`,100,505); ctx.fillStyle='#b8c7e8'; ctx.font='700 26px Inter, Segoe UI, Arial'; ctx.fillText('blue/cyan = lower local growth - yellow/red = faster local error growth',100,565); ctx.fillText('Global Lyapunov gives one average number; FTLE shows where the attractor is locally fragile.',100,610); texture.needsUpdate=true; }
   update(phase,elapsed){ const idx=Math.floor(phase*(this.count-1)); const p=this.path[idx]; this.cursor.position.set(p.x,8+p.y,p.z); this.cursor.scale.setScalar(1+.18*Math.sin(elapsed*6)); if(idx%8===0)this.draw(phase); }
 }
 
@@ -2413,7 +2413,7 @@ class ModelMetricPanel {
     ctx.fillStyle = '#e3ecff';
     ctx.font = '800 29px Inter, Segoe UI, Arial';
     ctx.fillText(`MAE ${fmtMetric(mae)} - max |error| ${fmtMetric(maxErr)}`, 70, 290);
-    ctx.fillText(`15s final RMSE ${fmtMetric(finalRmse)} - horizon ${fmtMetric(horizon)} t.u. - Î»â‚ ${fmtMetric(lambda)}`, 70, 332);
+    ctx.fillText(`15s final RMSE ${fmtMetric(finalRmse)} - horizon ${fmtMetric(horizon)} t.u. - ÃŽÂ»Ã¢â€šÂ ${fmtMetric(lambda)}`, 70, 332);
 
     ctx.fillStyle = '#a8b8d8';
     ctx.font = '700 23px Inter, Segoe UI, Arial';
@@ -2528,7 +2528,7 @@ class DetailedDiagnosticsWall {
       ['CNN tend.', 'cnn_tendency', '#b278ff'],
     ];
     this.drawBarGroup(ctx, 85, 230, 430, 260, 'Prediction horizon', 'time units', models, k => MODEL_META.horizon?.[k] ?? L96_RESULTS[k]?.horizon, 2.5);
-    this.drawBarGroup(ctx, 585, 230, 430, 260, 'Lyapunov Î»â‚', 'reference physical = 1.68', models, k => MODEL_META.lambda1?.[k], 2.0);
+    this.drawBarGroup(ctx, 585, 230, 430, 260, 'Lyapunov ÃŽÂ»Ã¢â€šÂ', 'reference physical = 1.68', models, k => MODEL_META.lambda1?.[k], 2.0);
     this.drawBarGroup(ctx, 1085, 230, 430, 260, '15s final RMSE', 'export window', models, k => MODEL_META.rmse_15s_export_window?.[k]?.final, 300);
 
     ctx.fillStyle = '#ffffff';
@@ -2666,7 +2666,7 @@ class V19DynamicLeaderboardWall {
 
     ctx.fillStyle = '#bfffe6';
     ctx.font = '800 34px Inter, Segoe UI, Arial';
-    ctx.fillText('ranking updates by live RMSE - fixed Î»â‚/final metrics', 90, 162);
+    ctx.fillText('ranking updates by live RMSE - fixed ÃŽÂ»Ã¢â€šÂ/final metrics', 90, 162);
 
     ctx.fillStyle = 'rgba(255,255,255,.08)';
     roundRectCanvas(ctx, 90, 204, 1620, 70, 24, 'rgba(255,255,255,.08)');
@@ -2692,7 +2692,7 @@ class V19DynamicLeaderboardWall {
     ctx.fillText('MODEL', 250, headerY);
     ctx.fillText('LIVE RMSE', 760, headerY);
     ctx.fillText('HORIZON', 1060, headerY);
-    ctx.fillText('Î»â‚', 1285, headerY);
+    ctx.fillText('ÃŽÂ»Ã¢â€šÂ', 1285, headerY);
     ctx.fillText('FINAL RMSE', 1415, headerY);
 
     rows.forEach((r, i) => {
@@ -2734,7 +2734,7 @@ class V19DynamicLeaderboardWall {
 
     ctx.fillStyle = '#91a8ca';
     ctx.font = '700 24px Inter, Segoe UI, Arial';
-    ctx.fillText('Ranking updates by live RMSE; horizon, Î»â‚ and final RMSE stay fixed. Main showroom stays clean.', 90, 970);
+    ctx.fillText('Ranking updates by live RMSE; horizon, ÃŽÂ»Ã¢â€šÂ and final RMSE stay fixed. Main showroom stays clean.', 90, 970);
 
     this.texture.needsUpdate = true;
   }
@@ -2901,13 +2901,13 @@ class V11ProjectDChecklistWall {
       ['ML emulators', 'MLP and periodic 1-D CNN, next-state and tendency targets'],
       ['Autoregressive rollout', 'real exported L96 rollouts are shown in the 3D rings and 2D panels'],
       ['RMSE(t) log scale', 'RMSE wall shows online divergence against RK4 reference'],
-      ['Lyapunov comparison', 'Î»1 summary retained in diagnostics wall'],
+      ['Lyapunov comparison', 'ÃŽÂ»1 summary retained in diagnostics wall'],
       ['Scientific ranking', 'leaderboard condenses the main results into a quick showroom takeaway'],
       ['Attractor diagnostics', 'power spectrum / attractor geometry display reserved for final polish'],
     ];
     let y = 200;
     items.forEach((it, i) => {
-      ctx.fillStyle = '#4dffb1'; ctx.font = '900 34px Inter, Segoe UI, Arial'; ctx.fillText('âœ“', 78, y + 10);
+      ctx.fillStyle = '#4dffb1'; ctx.font = '900 34px Inter, Segoe UI, Arial'; ctx.fillText('Ã¢Å“â€œ', 78, y + 10);
       ctx.fillStyle = '#ffffff'; ctx.font = '900 30px Inter, Segoe UI, Arial'; ctx.fillText(it[0], 124, y);
       ctx.fillStyle = '#b8c8e6'; ctx.font = '700 22px Inter, Segoe UI, Arial'; wrapCanvasText(ctx, it[1], 124, y + 34, 1120, 30);
       y += 92;
@@ -2996,7 +2996,7 @@ class V11ScientificLeaderboardWall {
 
     const cards = [
       ['Longest prediction horizon', `${bestHorizon.short} - ${fmtMetric(bestHorizon.horizon)} UM`, bestHorizon.color, 'Best long-rollout stability in our run.'],
-      ['Closest to physical Î»â‚ = ' + fmtMetric(physicalLambda), `${bestLambda.short} - |Î”Î»â‚| = ${fmtMetric(bestLambda.lambdaErr)}`, bestLambda.color, 'Best chaos-metric agreement among the learned models.'],
+      ['Closest to physical ÃŽÂ»Ã¢â€šÂ = ' + fmtMetric(physicalLambda), `${bestLambda.short} - |ÃŽâ€ÃŽÂ»Ã¢â€šÂ| = ${fmtMetric(bestLambda.lambdaErr)}`, bestLambda.color, 'Best chaos-metric agreement among the learned models.'],
       ['Lowest final 15 s RMSE', `${bestFinal.short} - RMSE = ${fmtMetric(bestFinal.final)}`, bestFinal.color, 'Best endpoint error on the exported comparison window.'],
     ];
     let cx = 60;
@@ -3013,7 +3013,7 @@ class V11ScientificLeaderboardWall {
     ctx.fillStyle = '#ffffff'; ctx.font = '900 30px Inter, Segoe UI, Arial'; ctx.fillText('All compared models - real numbers from the showroom export', 86, 426);
 
     const headers = [
-      ['Model', 90], ['Horizon (UM)', 390], ['Î»â‚', 620], ['|Î”Î»â‚| vs phys', 760], ['Final RMSE', 970]
+      ['Model', 90], ['Horizon (UM)', 390], ['ÃŽÂ»Ã¢â€šÂ', 620], ['|ÃŽâ€ÃŽÂ»Ã¢â€šÂ| vs phys', 760], ['Final RMSE', 970]
     ];
     ctx.fillStyle = '#9fb0d0'; ctx.font = '800 20px Inter, Segoe UI, Arial';
     headers.forEach(([txt, x]) => ctx.fillText(txt, x, 462));
@@ -3400,7 +3400,7 @@ function renderDiagnosticMap() {
   ];
 
   const items = zone === 'annex' ? annexItems : mainItems;
-  mapGrid.innerHTML = '<div class="mapAxisX"></div><div class="mapAxisZ"></div><div class="mapBoundsLabel">local coordinates - X horizontal - Z vertical - bounds ±85</div>';
+  mapGrid.innerHTML = '<div class="mapAxisX"></div><div class="mapAxisZ"></div><div class="mapBoundsLabel">local coordinates - X horizontal - Z vertical - bounds Â±85</div>';
   items.forEach(item => mapGrid.appendChild(makeMapItem(item)));
   mapGrid.appendChild(makeMapItem({ label:'YOU', x:localX, z:localZ, yaw:`${normYaw.toFixed(0)} deg`, kind:'player' }));
 
@@ -3523,7 +3523,7 @@ function updateHud(elapsed, phase) {
   } else if (pos.x > 18 && pos.z > 18) {
     note.innerHTML = '<b>Q4 pulito:</b> Hovmoller 3D terrain only, senza diagnostics wall o cartelli verdi.';
   } else if (pos.x > 18 && pos.z < -18) {
-    note.innerHTML = '<b>MLP next reale:</b> rollout caricato dal checkpoint. Guarda l'anello arancio contro il ghost fisico blu.';
+    note.innerHTML = '<b>MLP next reale:</b> rollout caricato dal checkpoint. Guarda l''anello arancio contro il ghost fisico blu.';
   } else if (pos.x < -18 && pos.z > 18) {
     note.innerHTML = '<b>CNN tendency reale:</b> rollout caricato dal checkpoint, target dx/dt e periodic CNN. E il confronto principale.';
   } else {
@@ -3575,4 +3575,5 @@ function animate(now) {
   if (state.mapOpen) renderDiagnosticMap();
   renderer.render(scene, camera);
 }
+
 
