@@ -1,20 +1,20 @@
-﻿import * as THREE from 'three';
+import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { L96_META, L96_FRAMES, L96_RESULTS } from '../data/lorenzData.js';
 
 /*
-  DEMOL v22 Â· Lorenz Chaos Project D Showroom
+  DEMOL v22  -  Lorenz Chaos Project D Showroom
   ---------------------------------------
-  Obiettivo: ambiente statico HTML/CSS/JS stile GitHub Pages.
-  Il player esiste al centro, cammina sul pavimento e puÃ² guardare in alto.
-  Nel quadrante Q1 c'Ã¨ il loop fisico Lorenz-96 RK4, generato dai dati clean.
+  Goal: static HTML/CSS/JS environment for GitHub Pages.
+  The player starts at the center, walks on the floor, and can look upward.
+  In quadrant Q1 there is the physical Lorenz-96 RK4 loop generated from clean data.
 
-  Questa v5 conserva v4 e aggiunge un layer scientifico: live RMSE, timeline sync, dashboard metriche, tour mode e leggibilitÃ  migliorata.
-  PerÃ² contiene giÃ  la logica che servirÃ  dopo:
-  - master clock sincronizzato da 15 secondi
-  - quattro quadranti
-  - stazioni future per MLP/CNN/diagnostiche
-  - animazione L96 nativa in Three.js, non GIF piatta
+  This version preserves the previous scene and adds the scientific layer: live RMSE, synchronized timeline, metric dashboards, tour mode, and improved readability.
+  It already contains the logic used by the final showroom:
+  - 15 second synchronized master clock
+  - four quadrants
+  - stations for MLP/CNN/diagnostics
+  - native L96 animation in Three.js, not a flat GIF
 */
 
 const canvas = document.getElementById('threeCanvas');
@@ -98,32 +98,32 @@ const COLORS = {
 const STATIONS = {
   physical: {
     id: 'physical',
-    title: 'Q1 Â· PHYSICAL RK4 TRUTH',
-    subtitle: 'Equations known Â· no training Â· reference L96 dynamics',
+    title: 'Q1  -  PHYSICAL RK4 TRUTH',
+    subtitle: 'Equations known  -  no training  -  reference L96 dynamics',
     position: new THREE.Vector3(-44, 0, -44),
     color: COLORS.physical,
     active: true,
   },
   mlpNext: {
     id: 'mlpNext',
-    title: 'Q2 Â· MLP NEXT',
-    subtitle: 'Real rollout loaded Â· x(t) â†’ x(t+dt) Â· weak online stability',
+    title: 'Q2  -  MLP NEXT',
+    subtitle: 'Real rollout loaded  -  x(t) -> x(t+dt)  -  weak online stability',
     position: new THREE.Vector3(44, 0, -44),
     color: COLORS.mlpNext,
     active: true,
   },
   cnnTendency: {
     id: 'cnnTendency',
-    title: 'Q3 Â· CNN TENDENCY',
-    subtitle: 'Real rollout loaded Â· periodic CNN + dx/dt target Â· best L96 horizon',
+    title: 'Q3  -  CNN TENDENCY',
+    subtitle: 'Real rollout loaded  -  periodic CNN + dx/dt target  -  best L96 horizon',
     position: new THREE.Vector3(-44, 0, 44),
     color: COLORS.cnnTendency,
     active: true,
   },
   diagnostics: {
     id: 'diagnostics',
-    title: 'Q4 Â· DIAGNOSTICS WALL',
-    subtitle: 'RMSE horizon Â· Lyapunov Â· spectra Â· scientific ranking',
+    title: 'Q4  -  DIAGNOSTICS WALL',
+    subtitle: 'RMSE horizon  -  Lyapunov  -  spectra  -  scientific ranking',
     position: new THREE.Vector3(44, 0, 44),
     color: COLORS.diagnostics,
     active: false,
@@ -135,7 +135,7 @@ const MODEL_CATALOG = {
     key: 'mlp_next',
     label: 'MLP next',
     color: COLORS.mlpNext,
-    summary: 'Learns x(t) â†’ x(t+dt). Failure case in long autoregressive rollout.',
+    summary: 'Learns x(t) -> x(t+dt). Failure case in long autoregressive rollout.',
   },
   mlp_tendency: {
     key: 'mlp_tendency',
@@ -162,7 +162,7 @@ const TOUR_STEPS = [
   'Q1: Physical RK4 is the mathematical truth, no training.',
   'Q2: MLP next shows how one-step learning can fail in rollout.',
   'Q3: CNN tendency uses periodic spatial bias and a physical target.',
-  'Q4: Clean HovmÃ¶ller-only quadrant: no diagnostic walls, just the 3D terrain.',
+  'Q4: clean Hovmoller-only quadrant, no diagnostic walls, only the 3D terrain.',
 ];
 
 
@@ -223,7 +223,7 @@ let skyTexture = null;
 let v11RmseWall, v11ChecklistWall, v11CnnBiasWall, v11LeaderboardWall;
 
 // -----------------------------------------------------------------------------
-// V24 editable rotation controls
+// V25 editable rotation controls
 // Change only these degree values when calibrating screens/objects in-world.
 // Positive values rotate counterclockwise around the local Y axis; negative values rotate clockwise.
 // -----------------------------------------------------------------------------
@@ -320,8 +320,8 @@ async function init() {
 
   livePhysicalPanel = new SyncedRolloutDashboardPanel({
     station: STATIONS.physical,
-    title: 'Step 1 Animation B Â· Lorenz 96 Physical RK4',
-    subtitle: 'Reference dynamics Â· physical truth Â· no learning',
+    title: 'Step 1 Animation B  -  Lorenz 96 Physical RK4',
+    subtitle: 'Reference dynamics  -  physical truth  -  no learning',
     trajectoryFrames: L96_FRAMES,
     color: COLORS.physical,
     compareKey: null,
@@ -332,8 +332,8 @@ async function init() {
 
   const mlpAnimatedPanel = new SyncedRolloutDashboardPanel({
     station: STATIONS.mlpNext,
-    title: 'Step 1 Animation B Â· Lorenz 96 Â· MLP next',
-    subtitle: 'Real exported rollout Â· solid model, dashed physical reference',
+    title: 'Step 1 Animation B  -  Lorenz 96  -  MLP next',
+    subtitle: 'Real exported rollout  -  solid model, dashed physical reference',
     trajectoryFrames: getTrajectoryFrames('mlp_next', L96_FRAMES),
     color: COLORS.mlpNext,
     compareKey: 'mlp_next',
@@ -344,8 +344,8 @@ async function init() {
 
   const cnnAnimatedPanel = new SyncedRolloutDashboardPanel({
     station: STATIONS.cnnTendency,
-    title: 'Step 1 Animation B Â· Lorenz 96 Â· CNN tendency',
-    subtitle: 'Real exported rollout Â· periodic CNN + tendency target',
+    title: 'Step 1 Animation B  -  Lorenz 96  -  CNN tendency',
+    subtitle: 'Real exported rollout  -  periodic CNN + tendency target',
     trajectoryFrames: getTrajectoryFrames('cnn_tendency', L96_FRAMES),
     color: COLORS.cnnTendency,
     compareKey: 'cnn_tendency',
@@ -354,7 +354,7 @@ async function init() {
   root.add(cnnAnimatedPanel.group);
   displayPanels.push(cnnAnimatedPanel);
 
-  // v10 cleanup: remove the freestanding diagnostics signboard from the HovmÃ¶ller quadrant.
+  // v10 cleanup: remove the freestanding diagnostics signboard from the Hovmoller quadrant.
 
   setLoader(0.78, 'adding scientific comparison layer');
   mlpMetricPanel = new ModelMetricPanel(STATIONS.mlpNext, mlpNextInstallation, 'mlp_next');
@@ -365,7 +365,7 @@ async function init() {
   timelineRail = new TimelineSyncRail();
   root.add(timelineRail.group);
   floorArrowGroup = buildFloorArrows();
-  // v10 cleanup: keep the 3D HovmÃ¶ller surface itself, but remove the extra label signboards around it.
+  // v10 cleanup: keep the 3D Hovmoller surface itself, but remove the extra label signboards around it.
   hovmollerLabelsGroup = null;
 
   setLoader(0.84, 'adding divergence concept display');
@@ -813,7 +813,7 @@ class ModelComparisonRingInstallation {
     this.glow = glow;
 
     const finalRmse = MODEL_META.rmse_15s_export_window?.[this.trajectoryKey]?.final;
-    const labelText = `REAL ROLLOUT COMPARISON\nmodel color vs blue physical ghost Â· live RMSE panel below`;
+    const labelText = `REAL ROLLOUT COMPARISON\nmodel color vs blue physical ghost  -  live RMSE panel below`;
     addTextPlane(this.group, labelText, new THREE.Vector3(0, 29.0, -11.5), 15.0, 1.8, {
       color: '#ffffff',
       font: 34,
@@ -976,8 +976,8 @@ function buildDiagnosticsWall(station) {
   group.add(wall);
 
   addTextPlane(group, 'L96 clean run diagnostics', new THREE.Vector3(0, 12.4, -0.35), 5.6, 1.0, { color: '#eaf2ff', bg: 'rgba(0,0,0,0)' });
-  addTextPlane(group, 'Prediction horizon: MLP next 0.12 Â· CNN tendency 2.33', new THREE.Vector3(0, 10.9, -0.36), 7.6, 0.85, { color: '#bdeeff', bg: 'rgba(0,0,0,0)' });
-  addTextPlane(group, 'Î»1 reference 1.68 Â· CNN next 1.81 Â· tendency â‰ˆ1.51', new THREE.Vector3(0, 9.7, -0.36), 7.6, 0.85, { color: '#d9ffc9', bg: 'rgba(0,0,0,0)' });
+  addTextPlane(group, 'Prediction horizon: MLP next 0.12  -  CNN tendency 2.33', new THREE.Vector3(0, 10.9, -0.36), 7.6, 0.85, { color: '#bdeeff', bg: 'rgba(0,0,0,0)' });
+  addTextPlane(group, 'lambda1 reference 1.68  -  CNN next 1.81  -  tendency ~1.51', new THREE.Vector3(0, 9.7, -0.36), 7.6, 0.85, { color: '#d9ffc9', bg: 'rgba(0,0,0,0)' });
 
   buildMiniBars(group, new THREE.Vector3(-7.4, 3.0, -0.45));
   return group;
@@ -1008,8 +1008,8 @@ function addStationLabel(station) {
 }
 
 function addCentralInstructionLabels() {
-  addTextPlane(root, 'Spawn center Â· guarda in alto verso Q1', new THREE.Vector3(0, 4.2, -9), 11.0, 1.1, { color: '#eaf2ff', bg: 'rgba(0,0,0,.25)' });
-  addTextPlane(root, 'Loop unico 15s: in futuro sincronizzerÃ  GIF/grafici e modelli ML', new THREE.Vector3(0, 3.0, -9), 13.0, 0.9, { color: '#aeeeff', font: 30, bg: 'rgba(0,0,0,.16)' });
+  addTextPlane(root, 'Spawn center - look upward toward Q1', new THREE.Vector3(0, 4.2, -9), 11.0, 1.1, { color: '#eaf2ff', bg: 'rgba(0,0,0,.25)' });
+  addTextPlane(root, 'Single 15 s loop: synchronizes plots, models, and ML diagnostics', new THREE.Vector3(0, 3.0, -9), 13.0, 0.9, { color: '#aeeeff', font: 30, bg: 'rgba(0,0,0,.16)' });
 }
 
 function addTextPlane(parent, text, position, width = 6, height = 1, opts = {}) {
@@ -1053,7 +1053,7 @@ function roundRect(ctx, x, y, w, h, r, fill) {
 
 
 // -----------------------------------------------------------------------------
-// V2 scientific additions: Lorenz-63 hero, HovmÃ¶ller 3D, and 2D display panels
+// V2 scientific additions: Lorenz-63 hero, Hovmoller 3D, and 2D display panels
 // -----------------------------------------------------------------------------
 
 function l96ColorFromValue(value) {
@@ -1128,7 +1128,7 @@ class L63SkyHero {
   makeObjects() {
     const title = addTextPlane(
       this.group,
-      'Lorenz-63 classic chaotic attractor\nÏƒ=10 Â· Ï=28 Â· Î²=8/3 Â· loop synced',
+      'Lorenz-63 classic chaotic attractor\nsigma=10  -  rho=28  -  beta=8/3  -  loop synced',
       new THREE.Vector3(0, this.baseHeight + 13.2, -15.5),
       18.0,
       2.2,
@@ -1297,7 +1297,7 @@ class Hovmoller3DSurface {
 
     addTextPlane(
       this.group,
-      'L96 HovmÃ¶ller 3D terrain\nlocation Ã— time Ã— state amplitude',
+      'L96 Hovmoller 3D terrain\nlocation x time x state amplitude',
       new THREE.Vector3(0, 13.8, -this.depth / 2 - 2.8),
       14.5,
       2.0,
@@ -1438,10 +1438,10 @@ class LiveL96DisplayPanel {
 
     ctx.fillStyle = '#56ccf2';
     ctx.font = '900 42px Inter, Segoe UI, Arial';
-    ctx.fillText('Q1 Â· L96 physical RK4 live 2D display', 50, 70);
+    ctx.fillText('Q1  -  L96 physical RK4 live 2D display', 50, 70);
     ctx.fillStyle = '#dbe8ff';
     ctx.font = '700 26px Inter, Segoe UI, Arial';
-    ctx.fillText(`N=40, F=8, dt=0.01 Â· synced t=${(phase * LOOP_SECONDS).toFixed(2)} / 15s`, 50, 110);
+    ctx.fillText(`N=40, F=8, dt=0.01  -  synced t=${(phase * LOOP_SECONDS).toFixed(2)} / 15s`, 50, 110);
 
     const left = 70, top = 165, width = 1120, height = 410;
     ctx.strokeStyle = 'rgba(255,255,255,.18)';
@@ -1596,7 +1596,7 @@ class SyncedRolloutDashboardPanel {
   }
 
   drawHovmoller(ctx, x, y, w, h, revealIdx) {
-    this.drawPanelFrame(ctx, x, y, w, h, 'Progressive HovmÃ¶ller reveal');
+    this.drawPanelFrame(ctx, x, y, w, h, 'Progressive Hovmoller reveal');
     const frames = this.trajectoryFrames;
     const rows = this.totalFrames;
     const cols = N;
@@ -1759,13 +1759,13 @@ class SyncedRolloutDashboardPanel {
     ctx.fillText(this.subtitle, 44, 94);
     ctx.fillStyle = '#a9b8d4';
     ctx.font = '800 22px Inter, Segoe UI, Arial';
-    ctx.fillText(`t = ${(phase * LOOP_SECONDS).toFixed(2)} / ${LOOP_SECONDS.toFixed(0)} s Â· frame ${revealIdx + 1}/${this.totalFrames}`, 44, 124);
+    ctx.fillText(`t = ${(phase * LOOP_SECONDS).toFixed(2)} / ${LOOP_SECONDS.toFixed(0)} s  -  frame ${revealIdx + 1}/${this.totalFrames}`, 44, 124);
     if (this.compareKey) {
       ctx.fillStyle = '#f7e4c4';
-      ctx.fillText(`live RMSE vs physical = ${fmtMetric(liveRmse)} Â· 15 s final RMSE â‰ˆ ${fmtMetric(MODEL_META.rmse_15s_export_window?.[this.compareKey]?.final)}`, 44, 152);
+      ctx.fillText(`live RMSE vs physical = ${fmtMetric(liveRmse)}  -  15 s final RMSE ~ ${fmtMetric(MODEL_META.rmse_15s_export_window?.[this.compareKey]?.final)}`, 44, 152);
     } else {
       ctx.fillStyle = '#d7f7ff';
-      ctx.fillText('Physical truth reference Â· no learned approximation', 44, 152);
+      ctx.fillText('Physical truth reference  -  no learned approximation', 44, 152);
     }
 
     this.drawHovmoller(ctx, 48, 186, 520, 450, revealIdx);
@@ -1773,10 +1773,10 @@ class SyncedRolloutDashboardPanel {
 
     ctx.fillStyle = '#cddaf1';
     ctx.font = '700 18px Inter, Segoe UI, Arial';
-    const phaseNote = this.compareKey ? 'solid model = current station Â· dashed lines = physical truth' : '2D scientific display synchronized with the 3D loop in this quadrant';
+    const phaseNote = this.compareKey ? 'solid model = current station  -  dashed lines = physical truth' : '2D scientific display synchronized with the 3D loop in this quadrant';
     ctx.fillText(phaseNote, 48, 678);
     ctx.textAlign = 'right';
-    ctx.fillText(`mean=${mean(frame).toFixed(2)} Â· std=${std(frame).toFixed(2)} Â· min=${Math.min(...frame).toFixed(2)} Â· max=${Math.max(...frame).toFixed(2)}`, 1234, 678);
+    ctx.fillText(`mean=${mean(frame).toFixed(2)}  -  std=${std(frame).toFixed(2)}  -  min=${Math.min(...frame).toFixed(2)}  -  max=${Math.max(...frame).toFixed(2)}`, 1234, 678);
     ctx.textAlign = 'left';
 
     this.texture.needsUpdate = true;
@@ -1800,7 +1800,7 @@ function buildStaticDisplayPanel(station, title, lines, options = {}) {
   ctx.fillRect(52, 115, 470, 8);
   ctx.fillStyle = '#dce8ff';
   ctx.font = '800 32px Inter, Segoe UI, Arial';
-  lines.forEach((line, i) => ctx.fillText('â€¢ ' + line, 70, 185 + i * 72));
+  lines.forEach((line, i) => ctx.fillText('- ' + line, 70, 185 + i * 72));
   ctx.strokeStyle = 'rgba(255,255,255,.16)';
   ctx.lineWidth = 3;
   ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
@@ -1937,7 +1937,7 @@ class L63AnnexPhysicalSuite {
   }
 
   makeObjects() {
-    const title = addTextPlane(this.group, 'Q2 Â· L63 physical RK4 run\nstate trajectory + data-generation display', new THREE.Vector3(0, 17.3, -9.5), 18, 2.0, { color: '#ffffff', font: 34, bg: 'rgba(8,13,28,.50)' });
+    const title = addTextPlane(this.group, 'Q2  -  L63 physical RK4 run\nstate trajectory + data-generation display', new THREE.Vector3(0, 17.3, -9.5), 18, 2.0, { color: '#ffffff', font: 34, bg: 'rgba(8,13,28,.50)' });
     title.userData.billboard = false;
 
     const line = makeLineFromPath(this.path, 0x56ccf2, 0.35, 8.0);
@@ -1968,7 +1968,7 @@ class L63AnnexPhysicalSuite {
   drawPanel(phase) {
     const {ctx, canvas, texture} = this.panel;
     const w=canvas.width, h=canvas.height;
-    drawPanelBg(ctx, w, h, 'Step 1 Â· physical data generation', 'Lorenz 63 RK4 reference Â· synchronized 0â€“15 s');
+    drawPanelBg(ctx, w, h, 'Step 1  -  physical data generation', 'Lorenz 63 RK4 reference  -  synchronized 0-15 s');
     const idx = Math.floor(phase * (this.series.raw.length - 1));
     const raw = this.series.raw[idx];
 
@@ -1992,9 +1992,9 @@ class L63AnnexPhysicalSuite {
     roundRectCanvas(ctx, 70, 500, 1255, 260, 18, 'rgba(255,255,255,.045)');
     ctx.fillStyle='#ffffff'; ctx.font='900 30px Inter, Segoe UI, Arial'; ctx.fillText('Run facts', 100, 548);
     ctx.fillStyle='#b8c7e8'; ctx.font='700 24px Inter, Segoe UI, Arial';
-    ctx.fillText('Ïƒ=10 Â· Ï=28 Â· Î²=8/3 Â· RK4 Â· CPU-friendly 3D system', 100, 595);
-    ctx.fillText('chronological split: train 70% Â· validation 15% Â· test 15%', 100, 635);
-    ctx.fillText(`current state: x=${raw.x.toFixed(2)} Â· y=${raw.y.toFixed(2)} Â· z=${raw.z.toFixed(2)}`, 100, 675);
+    ctx.fillText('sigma=10  -  rho=28  -  beta=8/3  -  RK4  -  CPU-friendly 3D system', 100, 595);
+    ctx.fillText('chronological split: train 70%  -  validation 15%  -  test 15%', 100, 635);
+    ctx.fillText(`current state: x=${raw.x.toFixed(2)}  -  y=${raw.y.toFixed(2)}  -  z=${raw.z.toFixed(2)}`, 100, 675);
     ctx.fillStyle='#ffe08a'; ctx.font='800 24px Inter, Segoe UI, Arial'; ctx.fillText('This panel is the physical reference, not an ML emulator.', 100, 724);
     texture.needsUpdate = true;
   }
@@ -2012,20 +2012,20 @@ class L63AnnexPhysicalSuite {
 class L63AnnexDivergenceSuite {
   constructor(position) { this.group=new THREE.Group(); this.group.position.copy(position); this.base=generateLorenz63PhysicalSeries(); this.ref=this.base.show; this.pert=generateLorenz63PerturbedSeries(this.base.raw); this.count=this.ref.length; this.makeObjects(); }
   makeObjects(){
-    const title=addTextPlane(this.group,'Q3 Â· nearby-trajectory divergence\ntiny initial differences separate',new THREE.Vector3(0,16.8,-9.0),18,2.0,{color:'#ffffff',font:34,bg:'rgba(8,13,28,.50)'}); title.userData.billboard=false;
+    const title=addTextPlane(this.group,'Q3  -  nearby-trajectory divergence\ntiny initial differences separate',new THREE.Vector3(0,16.8,-9.0),18,2.0,{color:'#ffffff',font:34,bg:'rgba(8,13,28,.50)'}); title.userData.billboard=false;
     this.group.add(makeLineFromPath(this.ref,0x56ccf2,0.34,8)); this.group.add(makeLineFromPath(this.pert,0xff9f43,0.34,8));
     this.refPt=new THREE.Mesh(new THREE.SphereGeometry(.34,16,10),new THREE.MeshBasicMaterial({color:0x56ccf2})); this.pertPt=new THREE.Mesh(new THREE.SphereGeometry(.34,16,10),new THREE.MeshBasicMaterial({color:0xff9f43})); this.group.add(this.refPt,this.pertPt);
     this.connectorGeo=new THREE.BufferGeometry(); this.connectorGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3)); this.connector=new THREE.Line(this.connectorGeo,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.7})); this.group.add(this.connector);
     const panelGroup=makeFacingScreenGroup(new THREE.Vector3(0,0,13),new THREE.Vector3(0,6,0)); panelGroup.scale.setScalar(.82); addScreenFrame(panelGroup,17,10.4,6.3,0,0x07101f,0xff9f43); const pan=makePanelCanvasMesh(16.4,9.8,1400,850); pan.mesh.position.y=6.3; panelGroup.add(pan.mesh); this.panel=pan; this.group.add(panelGroup); this.draw(0,0);
   }
-  draw(phase, sep){ const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'L63 sensitivity experiment','physical vs tiny perturbed initial condition'); const plot={x:95,y:205,w:1180,h:430}; roundRectCanvas(ctx,plot.x,plot.y,plot.w,plot.h,22,'rgba(255,255,255,.045)'); ctx.fillStyle='#dcecff'; ctx.font='800 26px Inter, Segoe UI, Arial'; ctx.fillText('log separation ||Î´(t)||',plot.x+25,plot.y+45); ctx.strokeStyle='#ff9f43'; ctx.lineWidth=4; ctx.beginPath(); for(let i=0;i<this.count;i+=4){ const a=this.ref[i],b=this.pert[i]; const d=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); const x=plot.x+60+(i/this.count)*(plot.w-110); const y=plot.y+plot.h-65-Math.min(plot.h-130,Math.log1p(d*18)*70); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);} ctx.stroke(); const cx=plot.x+60+phase*(plot.w-110); ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx,plot.y+70); ctx.lineTo(cx,plot.y+plot.h-45); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 42px Inter, Segoe UI, Arial'; ctx.fillText(`current separation: ${sep.toFixed(3)}`,120,710); ctx.fillStyle='#b8c7e8'; ctx.font='700 25px Inter, Segoe UI, Arial'; ctx.fillText('Q2 shows where the physical system goes; this panel shows how quickly a nearby forecast loses track.',120,755); texture.needsUpdate=true; }
+  draw(phase, sep){ const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'L63 sensitivity experiment','physical vs tiny perturbed initial condition'); const plot={x:95,y:205,w:1180,h:430}; roundRectCanvas(ctx,plot.x,plot.y,plot.w,plot.h,22,'rgba(255,255,255,.045)'); ctx.fillStyle='#dcecff'; ctx.font='800 26px Inter, Segoe UI, Arial'; ctx.fillText('log separation ||delta(t)||',plot.x+25,plot.y+45); ctx.strokeStyle='#ff9f43'; ctx.lineWidth=4; ctx.beginPath(); for(let i=0;i<this.count;i+=4){ const a=this.ref[i],b=this.pert[i]; const d=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); const x=plot.x+60+(i/this.count)*(plot.w-110); const y=plot.y+plot.h-65-Math.min(plot.h-130,Math.log1p(d*18)*70); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);} ctx.stroke(); const cx=plot.x+60+phase*(plot.w-110); ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx,plot.y+70); ctx.lineTo(cx,plot.y+plot.h-45); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 42px Inter, Segoe UI, Arial'; ctx.fillText(`current separation: ${sep.toFixed(3)}`,120,710); ctx.fillStyle='#b8c7e8'; ctx.font='700 25px Inter, Segoe UI, Arial'; ctx.fillText('Q2 shows where the physical system goes; this panel shows how quickly a nearby forecast loses track.',120,755); texture.needsUpdate=true; }
   update(phase,elapsed){ const idx=Math.floor(phase*(this.count-1)); const a=this.ref[idx],b=this.pert[idx]; this.refPt.position.set(a.x,8+a.y,a.z); this.pertPt.position.set(b.x,8+b.y,b.z); const arr=this.connectorGeo.attributes.position.array; arr[0]=a.x;arr[1]=8+a.y;arr[2]=a.z;arr[3]=b.x;arr[4]=8+b.y;arr[5]=b.z; this.connectorGeo.attributes.position.needsUpdate=true; const sep=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z); if(idx%8===0)this.draw(phase,sep); }
 }
 
 class L63AnnexFtleSuite {
   constructor(position){ this.group=new THREE.Group(); this.group.position.copy(position); this.series=generateLorenz63PhysicalSeries(); this.path=this.series.show; this.count=this.path.length; this.ftle=this.path.map((p,i)=>0.35+0.8*Math.abs(Math.sin(i*.021))+0.35*Math.max(0,p.y+1.0)/8); this.makeObjects(); }
-  makeObjects(){ const title=addTextPlane(this.group,'Q4 Â· FTLE predictability map\nwhere nearby states separate fastest',new THREE.Vector3(0,16.8,-9.2),18,2.0,{color:'#ffffff',font:34,bg:'rgba(8,13,28,.50)'}); title.userData.billboard=false; const pos=new Float32Array(this.path.length*3), col=new Float32Array(this.path.length*3); for(let i=0;i<this.path.length;i++){ const p=this.path[i], v=Math.min(1,this.ftle[i]/1.45); const c=new THREE.Color().setHSL((1-v)*0.58,0.95,0.58); pos[i*3]=p.x;pos[i*3+1]=8+p.y;pos[i*3+2]=p.z; col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;} const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3)); geo.setAttribute('color',new THREE.BufferAttribute(col,3)); this.group.add(new THREE.Points(geo,new THREE.PointsMaterial({size:.09,vertexColors:true,transparent:true,opacity:.88,depthWrite:false}))); this.cursor=new THREE.Mesh(new THREE.SphereGeometry(.42,18,12),new THREE.MeshBasicMaterial({color:0xffffff})); this.group.add(this.cursor); const panelGroup=makeFacingScreenGroup(new THREE.Vector3(13,0,2),new THREE.Vector3(0,6,0)); panelGroup.scale.setScalar(.74); addScreenFrame(panelGroup,16,8.8,5.7,0,0x07101f,0xb278ff); const pan=makePanelCanvasMesh(15.4,8.2,1300,720); pan.mesh.position.y=5.7; panelGroup.add(pan.mesh); this.panel=pan; this.group.add(panelGroup); this.draw(0); }
-  draw(phase){ const idx=Math.floor(phase*(this.count-1)); const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'Finite-time Lyapunov field','not a trajectory: a local predictability map'); roundRectCanvas(ctx,80,170,1140,250,22,'rgba(255,255,255,.045)'); const barX=120,barY=270,barW=1040,barH=42; const grad=ctx.createLinearGradient(barX,0,barX+barW,0); grad.addColorStop(0,'#56ccf2'); grad.addColorStop(.5,'#ffe08a'); grad.addColorStop(1,'#ff4d7e'); roundRectCanvas(ctx,barX,barY,barW,barH,18,grad); ctx.strokeStyle='#fff'; ctx.lineWidth=5; const x=barX+barW*Math.min(1,this.ftle[idx]/1.5); ctx.beginPath(); ctx.moveTo(x,barY-18); ctx.lineTo(x,barY+barH+18); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 50px Inter, Segoe UI, Arial'; ctx.fillText(`FTLE(t,T) â‰ˆ ${this.ftle[idx].toFixed(2)}`,100,505); ctx.fillStyle='#b8c7e8'; ctx.font='700 26px Inter, Segoe UI, Arial'; ctx.fillText('blue/cyan = lower local growth Â· yellow/red = faster local error growth',100,565); ctx.fillText('Global Lyapunov gives one average number; FTLE shows where the attractor is locally fragile.',100,610); texture.needsUpdate=true; }
+  makeObjects(){ const title=addTextPlane(this.group,'Q4  -  FTLE predictability map\nwhere nearby states separate fastest',new THREE.Vector3(0,16.8,-9.2),18,2.0,{color:'#ffffff',font:34,bg:'rgba(8,13,28,.50)'}); title.userData.billboard=false; const pos=new Float32Array(this.path.length*3), col=new Float32Array(this.path.length*3); for(let i=0;i<this.path.length;i++){ const p=this.path[i], v=Math.min(1,this.ftle[i]/1.45); const c=new THREE.Color().setHSL((1-v)*0.58,0.95,0.58); pos[i*3]=p.x;pos[i*3+1]=8+p.y;pos[i*3+2]=p.z; col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;} const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3)); geo.setAttribute('color',new THREE.BufferAttribute(col,3)); this.group.add(new THREE.Points(geo,new THREE.PointsMaterial({size:.09,vertexColors:true,transparent:true,opacity:.88,depthWrite:false}))); this.cursor=new THREE.Mesh(new THREE.SphereGeometry(.42,18,12),new THREE.MeshBasicMaterial({color:0xffffff})); this.group.add(this.cursor); const panelGroup=makeFacingScreenGroup(new THREE.Vector3(13,0,2),new THREE.Vector3(0,6,0)); panelGroup.scale.setScalar(.74); addScreenFrame(panelGroup,16,8.8,5.7,0,0x07101f,0xb278ff); const pan=makePanelCanvasMesh(15.4,8.2,1300,720); pan.mesh.position.y=5.7; panelGroup.add(pan.mesh); this.panel=pan; this.group.add(panelGroup); this.draw(0); }
+  draw(phase){ const idx=Math.floor(phase*(this.count-1)); const {ctx,canvas,texture}=this.panel,w=canvas.width,h=canvas.height; drawPanelBg(ctx,w,h,'Finite-time Lyapunov field','not a trajectory: a local predictability map'); roundRectCanvas(ctx,80,170,1140,250,22,'rgba(255,255,255,.045)'); const barX=120,barY=270,barW=1040,barH=42; const grad=ctx.createLinearGradient(barX,0,barX+barW,0); grad.addColorStop(0,'#56ccf2'); grad.addColorStop(.5,'#ffe08a'); grad.addColorStop(1,'#ff4d7e'); roundRectCanvas(ctx,barX,barY,barW,barH,18,grad); ctx.strokeStyle='#fff'; ctx.lineWidth=5; const x=barX+barW*Math.min(1,this.ftle[idx]/1.5); ctx.beginPath(); ctx.moveTo(x,barY-18); ctx.lineTo(x,barY+barH+18); ctx.stroke(); ctx.fillStyle='#ffffff'; ctx.font='900 50px Inter, Segoe UI, Arial'; ctx.fillText(`FTLE(t,T) ~ ${this.ftle[idx].toFixed(2)}`,100,505); ctx.fillStyle='#b8c7e8'; ctx.font='700 26px Inter, Segoe UI, Arial'; ctx.fillText('blue/cyan = lower local growth  -  yellow/red = faster local error growth',100,565); ctx.fillText('Global Lyapunov gives one average number; FTLE shows where the attractor is locally fragile.',100,610); texture.needsUpdate=true; }
   update(phase,elapsed){ const idx=Math.floor(phase*(this.count-1)); const p=this.path[idx]; this.cursor.position.set(p.x,8+p.y,p.z); this.cursor.scale.setScalar(1+.18*Math.sin(elapsed*6)); if(idx%8===0)this.draw(phase); }
 }
 
@@ -2071,7 +2071,7 @@ function buildPortalAnnex() {
     .filter(Boolean)
     .forEach(group => group.lookAt(annexLookTarget));
 
-  // V24: editable annex rotations. Change ANNEX_ROTATION_FIX_DEG near the top of this file.
+  // V25: editable annex rotations. Change ANNEX_ROTATION_FIX_DEG near the top of this file.
   applyAnnexRotationFixes();
 
   buildAnnexBounds(projectAnnexGroup);
@@ -2146,7 +2146,7 @@ class LightweightPortalSystem {
     group.add(particles);
 
     addTextPlane(group, title, new THREE.Vector3(0, 4.8, 0), 12.5, 1.1, { color: '#ffffff', font: 34, bg: 'rgba(0,0,0,.40)' });
-    addTextPlane(group, 'PC: E Â· Mobile: PORTAL', new THREE.Vector3(0, -3.9, 0), 10.5, 0.9, { color: '#c9ffe7', font: 28, bg: 'rgba(0,0,0,.28)' });
+    addTextPlane(group, 'PC: E  -  Mobile: PORTAL', new THREE.Vector3(0, -3.9, 0), 10.5, 0.9, { color: '#c9ffe7', font: 28, bg: 'rgba(0,0,0,.28)' });
     return group;
   }
 
@@ -2172,7 +2172,7 @@ function tryUsePortal() {
   if (!obj) return;
   updatePortalProximity(obj.position);
   if (!state.nearPortal) {
-    showSyncToast('Avvicinati al portale per teletrasportarti');
+    showSyncToast('Move closer to the portal to teleport');
     return;
   }
   if (state.nearPortal === 'mainToAnnex') teleportToZone('annex');
@@ -2192,8 +2192,8 @@ function teleportToZone(zoneId) {
   obj.position.add(delta);
   obj.position.y = Math.max(obj.position.y, WORLD.playerHeight);
 
-  if (zoneId === 'annex') showSyncToast('Leaderboard Annex Â· same synchronized clock');
-  else showSyncToast('Main showroom Â· sync preserved');
+  if (zoneId === 'annex') showSyncToast('Leaderboard Annex  -  same synchronized clock');
+  else showSyncToast('Main showroom  -  sync preserved');
 
   clampPlayerToCurrentZone(obj);
 }
@@ -2393,11 +2393,11 @@ class ModelMetricPanel {
     ctx.fillRect(36, 36, 12, h - 72);
     ctx.fillStyle = '#f2f6ff';
     ctx.font = '900 48px Inter, Segoe UI, Arial';
-    ctx.fillText(`${this.catalog.label.toUpperCase()} Â· LIVE ERROR`, 70, 82);
+    ctx.fillText(`${this.catalog.label.toUpperCase()}  -  LIVE ERROR`, 70, 82);
 
     ctx.fillStyle = '#b9c8e8';
     ctx.font = '800 24px Inter, Segoe UI, Arial';
-    ctx.fillText('model ring vs blue physical ghost Â· same synchronized test initial state', 70, 118);
+    ctx.fillText('model ring vs blue physical ghost  -  same synchronized test initial state', 70, 118);
 
     const barX = 70, barY = 180, barW = 820, barH = 54;
     ctx.fillStyle = 'rgba(255,255,255,.10)';
@@ -2412,8 +2412,8 @@ class ModelMetricPanel {
 
     ctx.fillStyle = '#e3ecff';
     ctx.font = '800 29px Inter, Segoe UI, Arial';
-    ctx.fillText(`MAE ${fmtMetric(mae)} Â· max |error| ${fmtMetric(maxErr)}`, 70, 290);
-    ctx.fillText(`15s final RMSE ${fmtMetric(finalRmse)} Â· horizon ${fmtMetric(horizon)} t.u. Â· Î»â‚ ${fmtMetric(lambda)}`, 70, 332);
+    ctx.fillText(`MAE ${fmtMetric(mae)}  -  max |error| ${fmtMetric(maxErr)}`, 70, 290);
+    ctx.fillText(`15s final RMSE ${fmtMetric(finalRmse)}  -  horizon ${fmtMetric(horizon)} t.u.  -  lambda1 ${fmtMetric(lambda)}`, 70, 332);
 
     ctx.fillStyle = '#a8b8d8';
     ctx.font = '700 23px Inter, Segoe UI, Arial';
@@ -2467,7 +2467,7 @@ class TimelineSyncRail {
     this.glow.position.copy(this.bead.position);
     this.group.add(this.glow);
 
-    addTextPlane(this.group, 'MASTER SYNC TIMELINE Â· all installations read the same 15s clock', new THREE.Vector3(0, 2.0, 1.2), 18, 0.8, { color: '#ffffff', font: 30, bg: 'rgba(0,0,0,.30)' });
+    addTextPlane(this.group, 'MASTER SYNC TIMELINE  -  all installations read the same 15s clock', new THREE.Vector3(0, 2.0, 1.2), 18, 0.8, { color: '#ffffff', font: 30, bg: 'rgba(0,0,0,.30)' });
   }
 
   update(phase, elapsed) {
@@ -2516,7 +2516,7 @@ class DetailedDiagnosticsWall {
     ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = '#4dffb1';
     ctx.font = '900 62px Inter, Segoe UI, Arial';
-    ctx.fillText('Q4 Â· SCIENTIFIC DIAGNOSTICS WALL', 70, 92);
+    ctx.fillText('Q4  -  SCIENTIFIC DIAGNOSTICS WALL', 70, 92);
     ctx.fillStyle = '#dce8ff';
     ctx.font = '800 31px Inter, Segoe UI, Arial';
     ctx.fillText('Real exported 15s rollout window + Project-D summary metrics', 70, 136);
@@ -2528,7 +2528,7 @@ class DetailedDiagnosticsWall {
       ['CNN tend.', 'cnn_tendency', '#b278ff'],
     ];
     this.drawBarGroup(ctx, 85, 230, 430, 260, 'Prediction horizon', 'time units', models, k => MODEL_META.horizon?.[k] ?? L96_RESULTS[k]?.horizon, 2.5);
-    this.drawBarGroup(ctx, 585, 230, 430, 260, 'Lyapunov Î»â‚', 'reference physical = 1.68', models, k => MODEL_META.lambda1?.[k], 2.0);
+    this.drawBarGroup(ctx, 585, 230, 430, 260, 'Lyapunov lambda1', 'reference physical = 1.68', models, k => MODEL_META.lambda1?.[k], 2.0);
     this.drawBarGroup(ctx, 1085, 230, 430, 260, '15s final RMSE', 'export window', models, k => MODEL_META.rmse_15s_export_window?.[k]?.final, 300);
 
     ctx.fillStyle = '#ffffff';
@@ -2584,7 +2584,7 @@ function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
 
 
 // -----------------------------------------------------------------------------
-// V19 addition: dynamic 0â€“15 s leaderboard only, fixed scientific metrics
+// V19 addition: dynamic 0-15 s leaderboard only, fixed scientific metrics
 // -----------------------------------------------------------------------------
 
 class V19DynamicLeaderboardWall {
@@ -2666,7 +2666,7 @@ class V19DynamicLeaderboardWall {
 
     ctx.fillStyle = '#bfffe6';
     ctx.font = '800 34px Inter, Segoe UI, Arial';
-    ctx.fillText('ranking updates by live RMSE Â· fixed Î»â‚/final metrics', 90, 162);
+    ctx.fillText('ranking updates by live RMSE  -  fixed lambda1/final metrics', 90, 162);
 
     ctx.fillStyle = 'rgba(255,255,255,.08)';
     roundRectCanvas(ctx, 90, 204, 1620, 70, 24, 'rgba(255,255,255,.08)');
@@ -2692,7 +2692,7 @@ class V19DynamicLeaderboardWall {
     ctx.fillText('MODEL', 250, headerY);
     ctx.fillText('LIVE RMSE', 760, headerY);
     ctx.fillText('HORIZON', 1060, headerY);
-    ctx.fillText('Î»â‚', 1285, headerY);
+    ctx.fillText('lambda1', 1285, headerY);
     ctx.fillText('FINAL RMSE', 1415, headerY);
 
     rows.forEach((r, i) => {
@@ -2730,11 +2730,11 @@ class V19DynamicLeaderboardWall {
     const winner = rows[0];
     ctx.fillStyle = '#ffd166';
     ctx.font = '900 32px Inter, Segoe UI, Arial';
-    ctx.fillText(`current leader: ${winner.label} Â· lowest live RMSE at this instant`, 90, 930);
+    ctx.fillText(`current leader: ${winner.label}  -  lowest live RMSE at this instant`, 90, 930);
 
     ctx.fillStyle = '#91a8ca';
     ctx.font = '700 24px Inter, Segoe UI, Arial';
-    ctx.fillText('Ranking updates by live RMSE; horizon, Î»â‚ and final RMSE stay fixed. Main showroom stays clean.', 90, 970);
+    ctx.fillText('Ranking updates by live RMSE; horizon, lambda1 and final RMSE stay fixed. Main showroom stays clean.', 90, 970);
 
     this.texture.needsUpdate = true;
   }
@@ -2814,9 +2814,9 @@ class V11LogRmseWall {
     ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
 
     ctx.fillStyle = '#ffffff'; ctx.font = '900 58px Inter, Segoe UI, Arial';
-    ctx.fillText('V11 Â· Real autoregressive rollout error', 70, 90);
+    ctx.fillText('V11  -  Real autoregressive rollout error', 70, 90);
     ctx.fillStyle = '#cfe0ff'; ctx.font = '800 30px Inter, Segoe UI, Arial';
-    ctx.fillText('log RMSE(t) vs physical RK4 Â· 15 UM showroom export window', 70, 132);
+    ctx.fillText('log RMSE(t) vs physical RK4  -  15 UM showroom export window', 70, 132);
 
     const plot = { x: 120, y: 205, w: 1180, h: 500 };
     roundRectCanvas(ctx, plot.x - 28, plot.y - 44, plot.w + 84, plot.h + 118, 24, 'rgba(255,255,255,.045)');
@@ -2901,13 +2901,13 @@ class V11ProjectDChecklistWall {
       ['ML emulators', 'MLP and periodic 1-D CNN, next-state and tendency targets'],
       ['Autoregressive rollout', 'real exported L96 rollouts are shown in the 3D rings and 2D panels'],
       ['RMSE(t) log scale', 'RMSE wall shows online divergence against RK4 reference'],
-      ['Lyapunov comparison', 'Î»1 summary retained in diagnostics wall'],
+      ['Lyapunov comparison', 'lambda1 summary retained in diagnostics wall'],
       ['Scientific ranking', 'leaderboard condenses the main results into a quick showroom takeaway'],
       ['Attractor diagnostics', 'power spectrum / attractor geometry display reserved for final polish'],
     ];
     let y = 200;
     items.forEach((it, i) => {
-      ctx.fillStyle = '#4dffb1'; ctx.font = '900 34px Inter, Segoe UI, Arial'; ctx.fillText('âœ“', 78, y + 10);
+      ctx.fillStyle = '#4dffb1'; ctx.font = '900 34px Inter, Segoe UI, Arial'; ctx.fillText('OK', 78, y + 10);
       ctx.fillStyle = '#ffffff'; ctx.font = '900 30px Inter, Segoe UI, Arial'; ctx.fillText(it[0], 124, y);
       ctx.fillStyle = '#b8c8e6'; ctx.font = '700 22px Inter, Segoe UI, Arial'; wrapCanvasText(ctx, it[1], 124, y + 34, 1120, 30);
       y += 92;
@@ -2947,7 +2947,7 @@ class V11CnnBiasWall {
     }
     ctx.fillStyle = '#ffffff'; ctx.font = '900 30px Inter, Segoe UI, Arial';
     ctx.fillText('x40', cx - 230, cy - 150); ctx.fillText('x1', cx - 14, cy - 205); ctx.fillText('x2', cx + 195, cy - 150);
-    ctx.fillStyle = '#ffd166'; ctx.font = '900 28px Inter, Segoe UI, Arial'; ctx.fillText('Periodic padding: x40 â€” x1 â€” x2', 385, 640);
+    ctx.fillStyle = '#ffd166'; ctx.font = '900 28px Inter, Segoe UI, Arial'; ctx.fillText('Periodic padding: x40 - x1 - x2', 385, 640);
     ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 4; ctx.strokeRect(38, 38, w - 76, h - 76);
     this.texture.needsUpdate = true;
   }
@@ -2995,9 +2995,9 @@ class V11ScientificLeaderboardWall {
     wrapCanvasText(ctx, 'Fast takeaway from our real L96 showroom data. Units: horizon in UM, lambda as leading Lyapunov exponent, RMSE over the synchronized 15 s export window.', 60, 128, 1080, 32);
 
     const cards = [
-      ['Longest prediction horizon', `${bestHorizon.short} Â· ${fmtMetric(bestHorizon.horizon)} UM`, bestHorizon.color, 'Best long-rollout stability in our run.'],
-      ['Closest to physical Î»â‚ = ' + fmtMetric(physicalLambda), `${bestLambda.short} Â· |Î”Î»â‚| = ${fmtMetric(bestLambda.lambdaErr)}`, bestLambda.color, 'Best chaos-metric agreement among the learned models.'],
-      ['Lowest final 15 s RMSE', `${bestFinal.short} Â· RMSE = ${fmtMetric(bestFinal.final)}`, bestFinal.color, 'Best endpoint error on the exported comparison window.'],
+      ['Longest prediction horizon', `${bestHorizon.short}  -  ${fmtMetric(bestHorizon.horizon)} UM`, bestHorizon.color, 'Best long-rollout stability in our run.'],
+      ['Closest to physical lambda1 = ' + fmtMetric(physicalLambda), `${bestLambda.short}  -  |Deltalambda1| = ${fmtMetric(bestLambda.lambdaErr)}`, bestLambda.color, 'Best chaos-metric agreement among the learned models.'],
+      ['Lowest final 15 s RMSE', `${bestFinal.short}  -  RMSE = ${fmtMetric(bestFinal.final)}`, bestFinal.color, 'Best endpoint error on the exported comparison window.'],
     ];
     let cx = 60;
     cards.forEach((card, idx) => {
@@ -3010,10 +3010,10 @@ class V11ScientificLeaderboardWall {
     });
 
     roundRectCanvas(ctx, 60, 384, 1080, 240, 24, 'rgba(255,255,255,.045)');
-    ctx.fillStyle = '#ffffff'; ctx.font = '900 30px Inter, Segoe UI, Arial'; ctx.fillText('All compared models Â· real numbers from the showroom export', 86, 426);
+    ctx.fillStyle = '#ffffff'; ctx.font = '900 30px Inter, Segoe UI, Arial'; ctx.fillText('All compared models  -  real numbers from the showroom export', 86, 426);
 
     const headers = [
-      ['Model', 90], ['Horizon (UM)', 390], ['Î»â‚', 620], ['|Î”Î»â‚| vs phys', 760], ['Final RMSE', 970]
+      ['Model', 90], ['Horizon (UM)', 390], ['lambda1', 620], ['|Deltalambda1| vs phys', 760], ['Final RMSE', 970]
     ];
     ctx.fillStyle = '#9fb0d0'; ctx.font = '800 20px Inter, Segoe UI, Arial';
     headers.forEach(([txt, x]) => ctx.fillText(txt, x, 462));
@@ -3075,7 +3075,7 @@ function addHovmollerAxisLabels(hov) {
   const group = new THREE.Group();
   if (!hov) return group;
   hov.group.add(group);
-  addTextPlane(group, 'space index k = 0â€¦39', new THREE.Vector3(0, 4.2, hov.depth / 2 + 2.0), 8.5, 0.8, { color: '#eafff7', font: 30, bg: 'rgba(0,0,0,.22)' });
+  addTextPlane(group, 'space index k = 0...39', new THREE.Vector3(0, 4.2, hov.depth / 2 + 2.0), 8.5, 0.8, { color: '#eafff7', font: 30, bg: 'rgba(0,0,0,.22)' });
   addTextPlane(group, 'time within 15s loop', new THREE.Vector3(hov.width / 2 + 3.0, 4.2, 0), 7.4, 0.75, { color: '#eafff7', font: 28, bg: 'rgba(0,0,0,.22)' });
   addTextPlane(group, 'height/color = L96 state amplitude', new THREE.Vector3(0, 11.7, hov.depth / 2 + 2.2), 10.8, 0.75, { color: '#ffffff', font: 28, bg: 'rgba(0,0,0,.20)' });
   return group;
@@ -3086,7 +3086,7 @@ function toggleTourMode() {
   if (state.tourMode) {
     state.tourIndex = 0;
     tourPanel?.classList.remove('hidden');
-    showSyncToast('Tour mode enabled Â· press N for next step');
+    showSyncToast('Tour mode enabled  -  press N for next step');
     updateTourPanel();
   } else {
     tourPanel?.classList.add('hidden');
@@ -3103,7 +3103,7 @@ function nextTourStep() {
 function updateTourPanel() {
   if (!tourPanel) return;
   const step = TOUR_STEPS[state.tourIndex];
-  tourPanel.innerHTML = `<b>TOUR ${state.tourIndex + 1}/${TOUR_STEPS.length}</b><span>${step}</span><small>T: close Â· N: next Â· WASD/mouse remain active</small>`;
+  tourPanel.innerHTML = `<b>TOUR ${state.tourIndex + 1}/${TOUR_STEPS.length}</b><span>${step}</span><small>T: close  -  N: next  -  WASD/mouse remain active</small>`;
 }
 
 function bindEvents() {
@@ -3140,8 +3140,8 @@ function onKeyDown(e) {
   if (e.code === 'KeyM') requestReturnToMenu();
   if (e.code === 'KeyT') toggleTourMode();
   if (e.code === 'KeyN') nextTourStep();
-  if (e.code === 'BracketLeft') { state.speed = Math.max(0.1, state.speed - 0.1); showSyncToast(`Speed ${state.speed.toFixed(1)}Ã—`); }
-  if (e.code === 'BracketRight') { state.speed = Math.min(3.0, state.speed + 0.1); showSyncToast(`Speed ${state.speed.toFixed(1)}Ã—`); }
+  if (e.code === 'BracketLeft') { state.speed = Math.max(0.1, state.speed - 0.1); showSyncToast(`Speed ${state.speed.toFixed(1)}x`); }
+  if (e.code === 'BracketRight') { state.speed = Math.min(3.0, state.speed + 0.1); showSyncToast(`Speed ${state.speed.toFixed(1)}x`); }
 }
 
 function onKeyUp(e) {
@@ -3149,7 +3149,7 @@ function onKeyUp(e) {
 }
 
 function requestEnterShowroom() {
-  setTransitionMessage('Synchronizing 15 s loop', 'Entering showroom Â· physical, MLP and CNN dashboards align at the same clock');
+  setTransitionMessage('Synchronizing 15 s loop', 'Entering showroom  -  physical, MLP and CNN dashboards align at the same clock');
   transitionOverlay.classList.add('active');
   if (IS_TOUCH_DEVICE) {
     state.mobileActive = true;
@@ -3161,7 +3161,7 @@ function requestEnterShowroom() {
 
 function requestReturnToMenu() {
   if (!controls.isLocked && !state.mobileActive) return;
-  setTransitionMessage('Returning to menu', 'Pointer released Â· loop paused while the menu overlay comes back');
+  setTransitionMessage('Returning to menu', 'Pointer released  -  loop paused while the menu overlay comes back');
   transitionOverlay.classList.add('active');
   if (state.mobileActive) {
     state.mobileActive = false;
@@ -3190,7 +3190,7 @@ function onControlsLock() {
     resetClock({ silent: true });
     showSyncToast('Master clock started at t=0');
   } else {
-    showSyncToast('Re-entered Â· sync preserved');
+    showSyncToast('Re-entered  -  sync preserved');
   }
 
   setTimeout(() => transitionOverlay.classList.remove('active'), 420);
@@ -3207,13 +3207,13 @@ function onControlsUnlock() {
   }
   lockOverlay.classList.remove('hidden');
   lockOverlay.classList.add('returning');
-  if (lockKicker) lockKicker.textContent = state.firstEntryDone ? 'Menu reopened Â· synchronized loop paused' : 'Showroom v24.2 ready - Android touch-look fix loaded';
+  if (lockKicker) lockKicker.textContent = state.firstEntryDone ? 'Menu reopened  -  synchronized loop paused' : 'Showroom v25 ready - English UI and Android touch look loaded';
   if (lockTitle) lockTitle.textContent = state.firstEntryDone ? 'Return to menu' : 'Click to enter';
   if (lockText) lockText.textContent = state.firstEntryDone
     ? 'The 15 s loop is paused in the background. Press START to resume from the same synchronized time, or press R after entering to restart from t=0.'
-    : 'WASD per muoverti Â· mouse per guardare Â· F fly mode Â· O map Â· Space su Â· Ctrl/C giu. Su mobile usa joystick, FLY, â†‘/â†“, MAP.';
+    : 'WASD to move - mouse to look - F fly mode - O map - Space up - Ctrl/C down. On mobile use joystick, FLY, UP/DOWN, MAP.';
   enterBtn.textContent = state.firstEntryDone ? 'RESUME SHOWROOM' : 'START SYNCHRONIZED LOOP';
-  showSyncToast(state.firstEntryDone ? 'Menu opened Â· loop paused' : 'Pointer unlocked');
+  showSyncToast(state.firstEntryDone ? 'Menu opened  -  loop paused' : 'Pointer unlocked');
   setTimeout(() => transitionOverlay.classList.remove('active'), 220);
 }
 
@@ -3227,7 +3227,7 @@ function toggleFlyMode() {
   }
   document.body.classList.toggle('flyMode', state.flyMode);
   if (mobileFlyBtn) mobileFlyBtn.classList.toggle('active', state.flyMode);
-  showSyncToast(state.flyMode ? `Fly mode ON Â· roof ${WORLD.roofHeight.toFixed(0)}` : 'Fly mode OFF Â· floor collision active');
+  showSyncToast(state.flyMode ? `Fly mode ON  -  roof ${WORLD.roofHeight.toFixed(0)}` : 'Fly mode OFF  -  floor collision active');
 }
 
 function bindMobileControls() {
@@ -3310,7 +3310,7 @@ function updateMobileJoystick(e) {
 function onMobileLookStart(e) {
   if (!IS_TOUCH_DEVICE || !state.mobileActive) return;
 
-  // v24.2 Android fix:
+  // v25 Android fix:
   // mobileLookPad is itself inside mobileControls. The old guard returned
   // immediately for every touch on the look pad, so left/right camera drag
   // never started on Android. Keep blocking joystick/buttons, but allow the
@@ -3370,7 +3370,7 @@ function makeMapItem(item) {
   el.className = `mapItem ${item.kind || ''}`;
   el.style.left = `${left}%`;
   el.style.top = `${top}%`;
-  el.innerHTML = `${item.label}<small>local (${item.x.toFixed(0)}, ${item.z.toFixed(0)}) Â· yaw ${item.yaw}</small>`;
+  el.innerHTML = `${item.label}<small>local (${item.x.toFixed(0)}, ${item.z.toFixed(0)})  -  yaw ${item.yaw}</small>`;
   return el;
 }
 
@@ -3403,11 +3403,11 @@ function renderDiagnosticMap() {
   ];
 
   const items = zone === 'annex' ? annexItems : mainItems;
-  mapGrid.innerHTML = '<div class="mapAxisX"></div><div class="mapAxisZ"></div><div class="mapBoundsLabel">local coordinates Â· X horizontal Â· Z vertical Â· bounds Â±85</div>';
+  mapGrid.innerHTML = '<div class="mapAxisX"></div><div class="mapAxisZ"></div><div class="mapBoundsLabel">local coordinates  -  X horizontal  -  Z vertical  -  bounds +/-85</div>';
   items.forEach(item => mapGrid.appendChild(makeMapItem(item)));
-  mapGrid.appendChild(makeMapItem({ label:'YOU', x:localX, z:localZ, yaw:`${normYaw.toFixed(0)}Â°`, kind:'player' }));
+  mapGrid.appendChild(makeMapItem({ label:'YOU', x:localX, z:localZ, yaw:`${normYaw.toFixed(0)} deg`, kind:'player' }));
 
-  if (mapZoneLabel) mapZoneLabel.textContent = `current zone: ${zone.toUpperCase()} Â· player local (${localX.toFixed(1)}, ${localZ.toFixed(1)}) Â· yaw ${normYaw.toFixed(0)}Â°`;
+  if (mapZoneLabel) mapZoneLabel.textContent = `current zone: ${zone.toUpperCase()}  -  player local (${localX.toFixed(1)}, ${localZ.toFixed(1)})  -  yaw ${normYaw.toFixed(0)} deg`;
   if (mapLegend) mapLegend.innerHTML = '<b>OCR note:</b> screenshot this panel to report layout problems. Q labels, local coordinates and yaw notes are plain text. Toggle with <code>O</code> on PC or <code>MAP</code> on mobile.';
 }
 
@@ -3430,12 +3430,12 @@ function togglePause() {
     state.pauseAt = performance.now();
     state.elapsedBeforePause = getMasterElapsed();
     pauseBanner.classList.remove('hidden');
-    showSyncToast('Paused Â· all loops frozen');
+    showSyncToast('Paused  -  all loops frozen');
   } else {
     state.paused = false;
     state.startMs = performance.now() - state.elapsedBeforePause * 1000 / state.speed;
     pauseBanner.classList.add('hidden');
-    showSyncToast('Resumed Â· sync preserved');
+    showSyncToast('Resumed  -  sync preserved');
   }
 }
 
@@ -3507,30 +3507,30 @@ function updateBillboards() {
 function updateHud(elapsed, phase) {
   if (state.tourMode) updateTourPanel();
   clockText.textContent = `t = ${(phase * LOOP_SECONDS).toFixed(2)} / ${LOOP_SECONDS.toFixed(0)} s`;
-  speedText.textContent = `${state.paused ? 'paused Â· ' : ''}speed ${state.speed.toFixed(1)}Ã— Â· fly ${state.flyMode ? 'ON' : 'OFF'}${state.flyMode ? ` Â· alt ${controls.getObject().position.y.toFixed(1)}` : ''}`;
+  speedText.textContent = `${state.paused ? 'paused  -  ' : ''}speed ${state.speed.toFixed(1)}x  -  fly ${state.flyMode ? 'ON' : 'OFF'}${state.flyMode ? `  -  alt ${controls.getObject().position.y.toFixed(1)}` : ''}`;
 
   const pos = controls.getObject().position;
   updatePortalProximity(pos);
   if (state.nearPortal) {
     const target = state.nearPortal === 'mainToAnnex' ? 'Project Annex' : 'Main Showroom';
-    note.innerHTML = `<b>Portal ready:</b> premi E su PC o PORTAL su mobile per entrare in ${target}.`;
+    note.innerHTML = `<b>Portal ready:</b> press E on PC or PORTAL on mobile to enter in ${target}.`;
     return;
   }
   if (state.zone === 'annex') {
-    note.innerHTML = '<b>Project Annex:</b> leaderboard dinamica pulita, sincronizzata con lo stesso clock del mondo principale.';
+    note.innerHTML = '<b>Project Annex:</b> clean dynamic leaderboard synchronized with the same clock as the main world.';
     return;
   }
   const dPhysical = pos.distanceTo(new THREE.Vector3(STATIONS.physical.position.x, WORLD.playerHeight, STATIONS.physical.position.z));
   if (dPhysical < 26) {
-    note.innerHTML = '<b>Physical RK4:</b> veritÃ  di riferimento. Q2/Q3 usano rollout reali esportati dai checkpoint 100k.';
+    note.innerHTML = '<b>Physical RK4:</b> reference truth. Q2/Q3 use real rollouts exported from the 100k checkpoints.';
   } else if (pos.x > 18 && pos.z > 18) {
-    note.innerHTML = '<b>Q4 pulito:</b> HovmÃ¶ller 3D terrain only, senza diagnostics wall o cartelli verdi.';
+    note.innerHTML = '<b>Clean Q4:</b> Hovmoller 3D terrain only, without diagnostic walls or green signboards.';
   } else if (pos.x > 18 && pos.z < -18) {
-    note.innerHTML = '<b>MLP next reale:</b> rollout caricato dal checkpoint. Guarda lâ€™anello arancio contro il ghost fisico blu.';
+    note.innerHTML = '<b>Real MLP next:</b> checkpoint rollout loaded. Compare the orange ring with the blue physical ghost.';
   } else if (pos.x < -18 && pos.z > 18) {
-    note.innerHTML = '<b>CNN tendency reale:</b> rollout caricato dal checkpoint, target dx/dt e periodic CNN. Ãˆ il confronto principale.';
+    note.innerHTML = '<b>Real CNN tendency:</b> checkpoint rollout loaded, dx/dt target, and periodic CNN. This is the main comparison.';
   } else {
-    note.innerHTML = '<b>Centro:</b> DEMOL v22 sincronizza physical, MLP next, CNN tendency e diagnostics L63 sia in 3D sia nei pannelli 2D animati.';
+    note.innerHTML = '<b>Center:</b> DEMOL v25 synchronizes physical RK4, MLP next, CNN tendency, and L63 diagnostics in both 3D and animated 2D panels.';
   }
 }
 
