@@ -1,5 +1,5 @@
-param(
-    [string]$ZipPath = "$env:USERPROFILE\Downloads\DEMOL_v24_1_android_encoding_fix.zip",
+﻿param(
+    [string]$ZipPath = "$env:USERPROFILE\Downloads\DEMOL_v24_2_android_touch_only.zip",
     [string]$Repo = "C:\Users\Gysgh\Desktop\Fers\testLLL\reference_projects\Computational-Physics"
 )
 
@@ -52,12 +52,12 @@ Remove-Item (Join-Path $Repo "Args\Phy\Struttura\DEMOL_current_data_js.zip") -Fo
 
 Set-Location $Repo
 
-git add --sparse -A --force Args/Phy/Struttura/DEMOL Args/Phy/Struttura/DEMOL_current_data_js.zip Args/Phy/Struttura/Computational-Physics.lnk
+git add --sparse -A --force Args/Phy/Struttura/DEMOL
 
 Write-Host ""
 Write-Host "=== git status --short ==="
 git status --short
 Write-Host ""
 Write-Host "Se vedi modifiche corrette, esegui:"
-Write-Host "git commit -m \"Replace DEMOL with v24.1 Android fixed version\""
+Write-Host "git commit -m `"Replace DEMOL with v24.2 Android touch fix`""
 Write-Host "git push"

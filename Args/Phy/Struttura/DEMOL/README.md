@@ -1,4 +1,4 @@
-# DEMOL v20 - Lorenz-96 Project D Showroom
+# DEMOL v24.2 - Lorenz-96 Project D Showroom
 
 Static HTML/CSS/JS showroom for the FERS Project D Lorenz emulation work.
 
@@ -52,7 +52,7 @@ Visible v14 stations:
 - Q1: physical RK4 truth
 - Q2: MLP next real rollout against physical ghost
 - Q3: CNN tendency real rollout against physical ghost
-- Q4: diagnostics dashboard and Hovmoller 3D terrain
+- Q4: diagnostics dashboard and HovmÃ¶ller 3D terrain
 
 The other trajectories are already available for future toggles.
 
@@ -70,26 +70,26 @@ Additional v14 display:
 - Kept V8 menu, sync and 2D dashboards intact.
 
 
-- The green diagnostic signboards in the Hovmoller 3D quadrant were removed.
+- The green diagnostic signboards in the HovmÃ¶ller 3D quadrant were removed.
 
 
-- V14 removes the remaining diagnostics wall/bar chart in Q4, leaving the Hovmoller 3D quadrant clean.
+- V14 removes the remaining diagnostics wall/bar chart in Q4, leaving the HovmÃ¶ller 3D quadrant clean.
 
 
 ## V14 additions
 - Fly mode: PC uses F toggle, Space up, Ctrl/C down, Shift for speed.
-- Mobile controls: joystick movement, right-side camera look, FLY toggle, UP/DOWN altitude.
+- Mobile controls: joystick movement, right-side camera look, FLY toggle, â†‘/â†“ altitude.
 - Collision preserved: floor clamp, roof clamp at 72, invisible lateral walls.
 
 
 ## V20 portal annex
 
-Adds a lightweight single-scene portal to a distant Project Annex. The annex contains the leaderboard/project panels while preserving the clean main Hovmoller quadrant. PC uses E near the portal; mobile shows a PORTAL button near the trigger.
+Adds a lightweight single-scene portal to a distant Project Annex. The annex contains the leaderboard/project panels while preserving the clean main HovmÃ¶ller quadrant. PC uses E near the portal; mobile shows a PORTAL button near the trigger.
 
 
 ## V20 cleanup
 
-The Project Annex now contains only one dynamic leaderboard panel. It updates during the shared 0-15 s rollout loop and ranks the models by live RMSE.
+The Project Annex now contains only one dynamic leaderboard panel. It updates during the shared 0â€“15 s rollout loop and ranks the models by live RMSE.
 
 
 V20 cleanup: Project Annex contains only the dynamic leaderboard. Extra context panels and scientific comparison figure were removed; L63/FTLE simulation is reserved for the next build.

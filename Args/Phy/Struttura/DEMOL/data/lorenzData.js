@@ -1,4 +1,4 @@
-// Auto-generated physical Lorenz-96 loop data for DEMOL v1.
+﻿// Auto-generated physical Lorenz-96 loop data for DEMOL v1.
 export const L96_META = {
   "project": "FERS Project D \u00b7 ML Emulation of Chaotic Dynamical Systems",
   "source": "JUNO clean rerun compatible RK4 generation",
