@@ -1,4 +1,4 @@
-# Project D � ML Emulation of Chaotic Dynamical Systems
+﻿# Project D · ML Emulation of Chaotic Dynamical Systems
 
 This folder contains the reproducible material for Project D: machine-learning emulation of Lorenz-63 and Lorenz-96 chaotic dynamical systems.
 
@@ -19,3 +19,4 @@ This folder contains the reproducible material for Project D: machine-learning e
 Run scripts in numerical order from scripts/.
 
 The notebook notebooks/project_d_lorenz_ml_emulation.ipynb is the report-style interface.
+
