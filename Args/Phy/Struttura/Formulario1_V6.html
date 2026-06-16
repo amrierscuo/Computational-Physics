@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Formulario 1 V6 - Struttura della Materia</title>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --bg:#0e1117; --panel:#161b22; --text:#e6edf3; --muted:#9aa4b2;
+  --atomica:#2f6fdb; --atomica-bg:rgba(47,111,219,.16);
+  --molecolare:#8a63d2; --molecolare-bg:rgba(138,99,210,.16);
+  --solidi:#2ea043; --solidi-bg:rgba(46,160,67,.16);
+  --operativo:#d29922; --operativo-bg:rgba(210,153,34,.16);
+  --border:#30363d;
+}
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+a { color:#79c0ff; text-decoration:none; } a:hover { text-decoration:underline; }
+header { padding:28px 22px; border-bottom:1px solid var(--border); background:linear-gradient(135deg,#111827,#0e1117 60%); }
+header h1 { margin:0 0 8px; font-size:clamp(26px,4vw,44px); }
+header p { margin:6px 0; color:var(--muted); max-width:980px; }
+nav.toplinks { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+nav.toplinks a, nav.toplinks button { padding:9px 13px; border:1px solid var(--border); border-radius:10px; background:var(--panel); color:var(--text); font:inherit; cursor:pointer; }
+nav.toplinks button:hover { background:#21262d; }
+.legend { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.legend span { padding:6px 10px; border-radius:999px; border:1px solid var(--border); font-size:14px; }
+main { display:grid; grid-template-columns:minmax(260px,330px) 1fr; gap:20px; padding:20px; }
+.toc { position:sticky; top:12px; align-self:start; max-height:calc(100vh - 24px); overflow:auto; background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:14px; }
+.toc h2 { margin:4px 0 12px; font-size:18px; }
+.toc a { display:block; padding:8px 9px; border-radius:8px; color:var(--text); font-size:14px; }
+.toc a:hover { background:#21262d; text-decoration:none; }
+.toc small { color:var(--muted); display:block; }
+.content { min-width:0; }
+.card { background:var(--panel); border:1px solid var(--border); border-left:8px solid var(--border); border-radius:16px; padding:20px; margin:0 0 18px; box-shadow:0 10px 25px rgba(0,0,0,.16); overflow-x:auto; }
+.card h2 { margin:10px 0 12px; font-size:24px; }
+.card-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; color:var(--muted); }
+.badge,.lesson { padding:5px 10px; border-radius:999px; border:1px solid var(--border); font-size:13px; }
+.atomica { border-left-color:var(--atomica); background:linear-gradient(90deg,var(--atomica-bg),transparent 45%),var(--panel); }
+.molecolare { border-left-color:var(--molecolare); background:linear-gradient(90deg,var(--molecolare-bg),transparent 45%),var(--panel); }
+.solidi { border-left-color:var(--solidi); background:linear-gradient(90deg,var(--solidi-bg),transparent 45%),var(--panel); }
+.operativo { border-left-color:var(--operativo); background:linear-gradient(90deg,var(--operativo-bg),transparent 45%),var(--panel); }
+.toc-atomica { border-left:4px solid var(--atomica); } .toc-molecolare { border-left:4px solid var(--molecolare); } .toc-solidi { border-left:4px solid var(--solidi); } .toc-operativo { border-left:4px solid var(--operativo); }
+.katex-display { overflow-x:auto; overflow-y:hidden; padding:6px 0; }
+.grid.formulas { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:4px 14px; }
+.floatnav { position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:8px; z-index:20; }
+.floatnav button { width:44px; height:44px; display:grid; place-items:center; border-radius:50%; background:#21262d; border:1px solid var(--border); color:var(--text); font-size:22px; box-shadow:0 8px 20px rgba(0,0,0,.3); cursor:pointer; }
+.floatnav button:hover { filter:brightness(1.15); }
+footer { padding:24px; color:var(--muted); border-top:1px solid var(--border); }
+
+.layout-btn {
+  padding:9px 13px; border:1px solid var(--border); border-radius:10px;
+  background:var(--panel); color:var(--text); cursor:pointer; font:inherit;
+}
+.layout-btn:hover { background:#21262d; }
+@media (min-width:1200px) {
+  .content.multi {
+    column-count:2;
+    column-gap:18px;
+  }
+  .content.multi .card {
+    display:inline-block;
+    width:100%;
+    box-sizing:border-box;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .content.multi .katex-display { font-size:.94em; }
+}
+
+@media (max-width:900px) { main { grid-template-columns:1fr; } .toc { position:relative; max-height:none; } }
+@media print { body { background:white; color:black; } .toc,.floatnav,nav.toplinks { display:none; } main { display:block; padding:0; } .card { break-inside:avoid; box-shadow:none; border-color:#ddd; } }
+
+.tool-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;}
+.tool-table th,.tool-table td{border:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top;}
+.tool-table th{background:#21262d;color:var(--text);}
+.tool-table tr:nth-child(even) td{background:rgba(255,255,255,.025);}
+.card h3{margin:18px 0 8px;font-size:1.08rem;}
+</style>
+</head>
+<body id="top">
+<header>
+<h1>Formulario 1 V6 - Struttura della Materia</h1>
+<p>Base teorica per orale e scritto: approssimazioni, significato fisico, formule con legenda e lezioni di riferimento. <strong>V6:</strong> base V5 completata con costanti universali, ordini di grandezza, algebra rapida e analisi dimensionale.</p>
+<nav class="toplinks">
+<a href="Formulario2_V6.html">Vai al Formulario 2 V6 - equazioni operative</a>
+<button data-scroll-target="toc" type="button">Indice</button>
+<button data-scroll-target="bottom" type="button">Vai giù ↓</button>
+<button class="layout-btn" id="layoutToggle" type="button">Vista due colonne</button>
+</nav>
+<div class="legend">
+<span style="background:var(--atomica-bg);border-color:var(--atomica)">Atomica</span>
+<span style="background:var(--molecolare-bg);border-color:var(--molecolare)">Molecolare</span>
+<span style="background:var(--solidi-bg);border-color:var(--solidi)">Solidi</span>
+<span style="background:var(--operativo-bg);border-color:var(--operativo)">Pattern scritto</span>
+</div>
+</header>
+<main>
+<aside class="toc" id="toc">
+<h2>Indice</h2><a class="toc-operativo" href="#costanti">V6. Costanti universali <small>trasversale</small></a><a class="toc-operativo" href="#v6-ordini">V6. Ordini di grandezza <small>controllo fisico</small></a><a class="toc-operativo" href="#v6-algebra">V6. Algebra rapida <small>passaggi utili</small></a><a class="toc-operativo" href="#v6-dimensioni">V6. Analisi dimensionale <small>verifica unità</small></a>
+<a class="toc-atomica" href="#p1">1. Atomo idrogenoide non relativistico <small>L1–L3</small></a><a class="toc-atomica" href="#p2">2. Separazione radiale-angolare <small>L1–L2</small></a><a class="toc-atomica" href="#p3">3. Momento magnetico orbitale <small>L3–L4</small></a><a class="toc-atomica" href="#p4">4. Spin elettronico <small>L4</small></a><a class="toc-atomica" href="#p5">5. Accoppiamento spin-orbita <small>L4–L5</small></a><a class="toc-atomica" href="#p6">6. Struttura fine <small>L5</small></a><a class="toc-atomica" href="#p7">7. Zeeman anomalo in campo debole <small>L5</small></a><a class="toc-atomica" href="#p8">8. Paschen-Back <small>L5</small></a><a class="toc-atomica" href="#p9">9. Effetto Stark perturbativo <small>L5</small></a><a class="toc-atomica" href="#p10">10. Approssimazione di dipolo elettrico <small>L6–L8</small></a><a class="toc-atomica" href="#p11">11. Coefficienti di Einstein <small>L6–L7</small></a><a class="toc-atomica" href="#p12">12. Larghezza di riga <small>L8</small></a><a class="toc-atomica" href="#p13">13. Laser <small>L8</small></a><a class="toc-atomica" href="#p14">14. Campo centrale <small>L11–L12</small></a><a class="toc-atomica" href="#p15">15. Hartree, Hartree-Fock, Slater <small>L11–L13</small></a><a class="toc-atomica" href="#p16">16. Singoletto, tripletto, scambio <small>L9–L10</small></a><a class="toc-atomica" href="#p17">17. Accoppiamento LS <small>L13</small></a><a class="toc-atomica" href="#p18">18. Accoppiamento jj <small>L13</small></a><a class="toc-molecolare" href="#p19">19. Born-Oppenheimer <small>L14</small></a><a class="toc-molecolare" href="#p20">20. Rotatore rigido <small>L15</small></a><a class="toc-molecolare" href="#p21">21. Vibratore armonico molecolare <small>L16</small></a><a class="toc-molecolare" href="#p22">22. Spettro roto-vibrazionale <small>L16</small></a><a class="toc-molecolare" href="#p23">23. Rayleigh e Raman <small>L16</small></a><a class="toc-molecolare" href="#p24">24. LCAO molecolare <small>L17–L19</small></a><a class="toc-molecolare" href="#p25">25. Equazioni secolari <small>L19–L20</small></a><a class="toc-molecolare" href="#p26">26. Ibridazione <small>L20</small></a><a class="toc-solidi" href="#p27">27. Cristallo = reticolo + base <small>L21–L22</small></a><a class="toc-solidi" href="#p28">28. Reticolo reciproco <small>L22–L25</small></a><a class="toc-solidi" href="#p29">29. Prima zona di Brillouin <small>L22, L24–L25, L29</small></a><a class="toc-solidi" href="#p30">30. Approssimazione armonica reticolare <small>L23–L26</small></a><a class="toc-solidi" href="#p31">31. Catena monoatomica <small>L23–L24</small></a><a class="toc-solidi" href="#p32">32. Catena biatomica <small>L24</small></a><a class="toc-solidi" href="#p33">33. Fononi quantizzati <small>L27–L28</small></a><a class="toc-solidi" href="#p34">34. Modello di Einstein <small>L28</small></a><a class="toc-solidi" href="#p35">35. Modello di Debye <small>L28</small></a><a class="toc-solidi" href="#p36">36. Trasporto termico fononico <small>L28</small></a><a class="toc-solidi" href="#p37">37. Drude <small>L30–L32</small></a><a class="toc-solidi" href="#p38">38. Sommerfeld <small>L30–L33</small></a><a class="toc-solidi" href="#p39">39. Densità degli stati elettronica 3D <small>L31–L33</small></a><a class="toc-solidi" href="#p40">40. Teorema di Bloch <small>L29, L34</small></a><a class="toc-solidi" href="#p41">41. Elettrone quasi-libero e gap <small>L29, L34–L35</small></a><a class="toc-solidi" href="#p42">42. Tight-binding <small>L34</small></a><a class="toc-solidi" href="#p43">43. Velocità di gruppo <small>L32, L34–L35</small></a><a class="toc-solidi" href="#p44">44. Massa efficace <small>L32, L34–L35</small></a><a class="toc-solidi" href="#p45">45. Semiconduttore intrinseco <small>L35–L36</small></a><a class="toc-solidi" href="#p46">46. Drogaggio n <small>L36</small></a><a class="toc-solidi" href="#p47">47. Drogaggio p <small>L36</small></a><a class="toc-solidi" href="#p48">48. Assorbimento ottico diretto e indiretto <small>L35–L36</small></a>
+<a class="toc-atomica" href="#p49">49. Stern-Gerlach <small>L4–L5, pattern scritto</small></a>
+<a class="toc-atomica" href="#p50">50. Difetto quantico negli alcalini <small>L10, L13</small></a>
+<a class="toc-atomica" href="#p51">51. Doppietti spin-orbita <small>L13</small></a>
+<a class="toc-atomica" href="#p52">52. Polarizzabilità dell’idrogeno 1s <small>L5</small></a>
+<a class="toc-atomica" href="#p53">53. Flusso di fotoni e corpo nero <small>L6–L7</small></a>
+<a class="toc-molecolare" href="#p54">54. Potenziale di Morse <small>L16</small></a>
+<a class="toc-molecolare" href="#p55">55. Molecole omonucleari e dipolo <small>L15–L16</small></a>
+<a class="toc-solidi" href="#p56">56. Diffrazione e regole FCC/BCC <small>L22–L25</small></a>
+<a class="toc-solidi" href="#p57">57. Frequenza di plasma <small>L30–L32</small></a>
+<a class="toc-solidi" href="#p58">58. Dinamica semiclassica <small>L32–L35</small></a>
+<a class="toc-solidi" href="#p59">59. Momento di Fermi <small>L31–L33</small></a>
+<a class="toc-solidi" href="#p60">60. Grafici e punti notevoli <small>trasversale</small></a>
+<a class="toc-operativo" href="#p73">73. Maxwell e velocità caratteristiche <small>Tutorato 2025</small></a><a class="toc-operativo" href="#p74">74. Due livelli e Schottky <small>Tutorato 2025</small></a><a class="toc-atomica" href="#p75">75. Einstein e momento di dipolo <small>L6–L8</small></a><a class="toc-solidi" href="#p76">76. Potenziale chimico 2D <small>statistica elettronica</small></a><a class="toc-solidi" href="#p77">77. Bloch e derivazione tight-binding <small>L29, L34</small></a><a class="toc-operativo" href="#novita-v3">Novità V3 <small>tutorati 2026 e libro esercizi</small></a>
+<a class="toc-atomica" href="#p61">61. Corpo nero, Wien e fotoelettrico <small>propedeutica, L6–L7</small></a>
+<a class="toc-atomica" href="#p62">62. Conteggio Zeeman e multipoli <small>L5–L8</small></a>
+<a class="toc-atomica" href="#p63">63. Termini spettroscopici e Hund <small>L9–L13</small></a>
+<a class="toc-atomica" href="#p64">64. Schermaggio e carica efficace <small>L10–L13</small></a>
+<a class="toc-molecolare" href="#p65">65. Rotazioni: pesi nucleari e traslazione <small>L15–L16</small></a>
+<a class="toc-molecolare" href="#p66">66. Morse anarmonico <small>L16</small></a>
+<a class="toc-molecolare" href="#p67">67. Metodo di Hückel <small>L20</small></a>
+<a class="toc-solidi" href="#p68">68. Cristallografia esplicita e diamante <small>L21–L25</small></a>
+<a class="toc-solidi" href="#p69">69. Fononi: Debye e vDOS normalizzata <small>L24–L28</small></a>
+<a class="toc-solidi" href="#p70">70. Metalli: DOS dimensionali e plasmone <small>L30–L33</small></a>
+<a class="toc-solidi" href="#p71">71. Due bande tight-binding e buche <small>L34–L36</small></a>
+<a class="toc-operativo" href="#p72">72. Statistiche quantistiche operative <small>trasversale</small></a>
+<a class="toc-atomica" href="#p78">78. Modello schermato degli alcalini e difetto quantico</a><a class="toc-atomica" href="#p79">79. Raffinamenti spettroscopici ad alta resa</a><a class="toc-atomica" href="#p80">80. Allargamento delle righe e potere risolutivo</a><a class="toc-molecolare" href="#p81">81. LCAO eteronucleare, densità e dipolo</a><a class="toc-molecolare" href="#p82">82. Simmetria cilindrica e ordine di legame</a><a class="toc-molecolare" href="#p83">83. Viriale molecolare, ampiezza e problemi inversi</a><a class="toc-solidi" href="#p84">84. Geometria cristallina, dilatazione e primi vicini</a><a class="toc-solidi" href="#p85">85. Catena biatomica quantitativa</a><a class="toc-solidi" href="#p86">86. Wiedemann-Franz e potenziale chimico 3D</a><a class="toc-operativo" href="#opA">A. Lennard-Jones operativo <small>collegato a L14–L16, pattern scritto</small></a><a class="toc-operativo" href="#opB">B. Popolazione rotazionale massima <small>L15–L16, pattern scritto</small></a><a class="toc-operativo" href="#opC">C. vDOS fononica 1D <small>L24–L25, pattern scritto</small></a><a class="toc-operativo" href="#opD">D. Densità, cella FCC e Fermi <small>L22, L31–L33, pattern scritto</small></a>
+</aside>
+<div class="content" id="content">
+<section class="card operativo" id="costanti">
+<div class="card-head"><span class="badge">Costanti universali</span><span class="lesson">Trasversale - V6</span></div>
+<h2>Costanti universali e conversioni ad alta resa</h2>
+<p>Valori sufficientemente precisi per lo scritto. Mantieni le costanti coerenti nello stesso sistema di unità: <strong>SI</strong> oppure combinazioni pratiche <strong>eV–nm–Å–u</strong>.</p>
+<h3>Costanti fondamentali</h3>
+<div class="grid formulas">
+$$e=1.602176634\times10^{-19}\,\mathrm C$$
+$$k_B=1.380649\times10^{-23}\,\mathrm{J\,K^{-1}}=8.617333\times10^{-5}\,\mathrm{eV\,K^{-1}}$$
+$$h=6.62607015\times10^{-34}\,\mathrm{J\,s}=4.135668\times10^{-15}\,\mathrm{eV\,s}$$
+$$\hbar=1.054572\times10^{-34}\,\mathrm{J\,s}=6.582120\times10^{-16}\,\mathrm{eV\,s}$$
+$$c=2.99792458\times10^8\,\mathrm{m\,s^{-1}}$$
+$$\varepsilon_0=8.854188\times10^{-12}\,\mathrm{F\,m^{-1}},\qquad \mu_0\simeq1.256637\times10^{-6}\,\mathrm{H\,m^{-1}}$$
+$$k_e=\frac1{4\pi\varepsilon_0}=8.987552\times10^9\,\mathrm{N\,m^2\,C^{-2}}$$
+$$N_A=6.02214076\times10^{23}\,\mathrm{mol^{-1}},\qquad R=N_Ak_B=8.314463\,\mathrm{J\,mol^{-1}K^{-1}}$$
+$$F=N_Ae=96485.33\,\mathrm{C\,mol^{-1}}$$
+$$\sigma_{SB}=5.670374\times10^{-8}\,\mathrm{W\,m^{-2}K^{-4}}$$
+$$b_{W}=2.897772\times10^{-3}\,\mathrm{m\,K}$$
+</div>
+<h3>Masse e scale atomiche</h3>
+<div class="grid formulas">
+$$m_e=9.109384\times10^{-31}\,\mathrm{kg}$$
+$$m_p=1.672622\times10^{-27}\,\mathrm{kg},\qquad m_n=1.674927\times10^{-27}\,\mathrm{kg}$$
+$$1\,\mathrm u=1.660539\times10^{-27}\,\mathrm{kg}$$
+$$a_0=5.291772\times10^{-11}\,\mathrm m=0.529177\,\mathrm{\AA}$$
+$$\alpha=7.297353\times10^{-3}\simeq\frac1{137.036}$$
+$$R_y=13.6057\,\mathrm{eV},\qquad E_h=2R_y=27.2114\,\mathrm{eV}$$
+$$g_s\simeq2.002319,\qquad \mu_B=9.274010\times10^{-24}\,\mathrm{J/T}=5.788382\times10^{-5}\,\mathrm{eV/T}$$
+$$\mu_N=5.050784\times10^{-27}\,\mathrm{J/T}=3.152451\times10^{-8}\,\mathrm{eV/T}$$
+$$\frac{e^2}{4\pi\varepsilon_0}=1.439965\,\mathrm{eV\,nm}=14.39965\,\mathrm{eV\,\AA}$$
+</div>
+<h3>Conversioni che evitano passaggi SI inutili</h3>
+<div class="grid formulas">
+$$1\,\mathrm{eV}=1.602176634\times10^{-19}\,\mathrm J=96.485\,\mathrm{kJ\,mol^{-1}}$$
+$$1\,\mathrm{eV}=11604.5\,\mathrm K,\qquad k_BT=0.0861733\,T[\mathrm K]\,\mathrm{meV}$$
+$$hc=1239.842\,\mathrm{eV\,nm},\qquad \hbar c=197.327\,\mathrm{eV\,nm}$$
+$$E[\mathrm{eV}]=\frac{1239.842}{\lambda[\mathrm{nm}]}$$
+$$E[\mathrm{meV}]=4.135668\,\nu[\mathrm{THz}],\qquad \hbar\omega[\mathrm{meV}]=0.658212\,\omega[10^{12}\,\mathrm{s^{-1}}]$$
+$$1\,\mathrm{THz}=4.135668\,\mathrm{meV}=33.3564\,\mathrm{cm^{-1}}$$
+$$1\,\mathrm{cm^{-1}}=0.123984\,\mathrm{meV}=29.9792\,\mathrm{GHz}$$
+$$1\,\mathrm{\AA}=10^{-10}\,\mathrm m,\quad1\,\mathrm{nm}=10\,\mathrm{\AA},\quad1\,\mathrm{pm}=10^{-2}\,\mathrm{\AA}$$
+$$1\,\mathrm{\AA^{-1}}=10^{10}\,\mathrm{m^{-1}},\quad1\,\mathrm{\AA^2}=10^{-20}\,\mathrm{m^2},\quad1\,\mathrm{\AA^3}=10^{-30}\,\mathrm{m^3}$$
+$$1\,\mathrm D=3.33564\times10^{-30}\,\mathrm{C\,m},\qquad1\,e\mathrm{\AA}=4.80320\,\mathrm D$$
+$$1\,\mathrm{eV/\AA}=1.60218\times10^{-9}\,\mathrm N,\qquad1\,\mathrm{eV/\AA^2}=16.0218\,\mathrm{N/m}$$
+$$1\,\mathrm{g/cm^3}=10^3\,\mathrm{kg/m^3},\qquad (1\,\mu\Omega\,\mathrm m)^{-1}=10^6\,\mathrm{S/m}$$
+</div>
+<ul>
+<li><strong>Regola pratica:</strong> atomica e bande in eV–Å; molecole in u–Å–meV; solo alla fine passa al SI quando servono N, V/m, S/m o W.</li>
+<li><strong>Non mescolare:</strong> \(h\nu\) con \(\hbar\omega\), e ricorda sempre \(\omega=2\pi\nu\).</li>
+</ul>
+</section><section class="card operativo" id="v6-ordini">
+<div class="card-head"><span class="badge">V6 - controllo fisico</span><span class="lesson">Prima e dopo la calcolatrice</span></div>
+<h2>Ordini di grandezza e segnali d'allarme</h2>
+<p>Un numero formalmente calcolato non è ancora un risultato fisico. Confrontalo con almeno una scala nota.</p>
+<table class="tool-table">
+<thead><tr><th>Quantità</th><th>Scala tipica</th><th>Controllo rapido</th></tr></thead>
+<tbody>
+<tr><td>Lunghezze atomiche e legami</td><td>\(0.5\!-\!3\,\mathrm{\AA}\)</td><td>Un passo cristallino è spesso \(2\!-\!6\,\mathrm{\AA}\), non metri o millimetri.</td></tr>
+<tr><td>Vettori reciproci</td><td>\(0.1\!-\!10\,\mathrm{\AA^{-1}}\)</td><td>\(qa\), \(ka\) e \(kr\) devono essere adimensionali.</td></tr>
+<tr><td>Rotazioni molecolari</td><td>\(10^{-2}\!-\!10\,\mathrm{meV}\)</td><td>Microonde/far-IR; molto sotto le vibrazioni.</td></tr>
+<tr><td>Vibrazioni e fononi</td><td>\(1\!-\!500\,\mathrm{meV}\)</td><td>IR; \(\hbar\omega\) non deve essere scambiata con \(h\omega\).</td></tr>
+<tr><td>Transizioni elettroniche e legami</td><td>\(1\!-\!10\,\mathrm{eV}\)</td><td>Visibile/UV; ionizzazioni idrogenoidi possono arrivare a decine di eV.</td></tr>
+<tr><td>Energia termica</td><td>\(k_BT=25.85\,\mathrm{meV}\) a 300 K</td><td>Se \(\Delta E\gg k_BT\), il livello superiore è esponenzialmente vuoto.</td></tr>
+<tr><td>Zeeman</td><td>\(\mu_BB=57.9\,\mu\mathrm{eV}\) per tesla</td><td>In campi da laboratorio lo splitting è molto minore di 1 eV.</td></tr>
+<tr><td>Campi</td><td>\(B\sim0.1\!-\!10\,\mathrm T\), \(E_{\rm lab}\sim10^3\!-\!10^7\,\mathrm{V/m}\)</td><td>Il campo atomico è enorme: \(E_{\rm at}\simeq5.14\times10^{11}\,\mathrm{V/m}\).</td></tr>
+<tr><td>Suono nei solidi</td><td>\(10^3\!-\!10^4\,\mathrm{m/s}\)</td><td>Una velocità fononica vicina a \(10^6\,\mathrm{m/s}\) è sospetta.</td></tr>
+<tr><td>Elettroni metallici</td><td>\(n_e\sim10^{28}\!-\!10^{29}\,\mathrm{m^{-3}}\), \(E_F\sim1\!-\!10\,\mathrm{eV}\)</td><td>\(v_F\sim10^5\!-\!10^6\,\mathrm{m/s}\), mentre \(v_d\ll v_F\).</td></tr>
+<tr><td>Trasporto metallico</td><td>\(\tau\sim1\!-\!100\,\mathrm{fs}\), \(\ell\sim1\!-\!100\,\mathrm{nm}\)</td><td>Usa \(\ell=v_F\tau\), non la velocità di deriva.</td></tr>
+<tr><td>Plasma</td><td>\(\omega_p\sim10^{15}\!-\!10^{16}\,\mathrm{s^{-1}}\)</td><td>La soglia ottica cade spesso nell'UV.</td></tr>
+</tbody></table>
+<h3>Controlli che devono sempre riuscire</h3>
+<ul>
+<li>\(0\le p_i\le1\), \(\sum_i p_i=1\); per occupazioni, \(\sum_i n_i=N\).</li>
+<li>La massa ridotta soddisfa \(\mu&lt;\min(m_1,m_2)\); per molecola omonucleare \(\mu=m/2\).</li>
+<li>Per bosoni: \(\mu_{\rm chim}&lt;E_0\). Per fermioni degeneri: \(\mu_{\rm chim}\simeq E_F\) a bassa temperatura.</li>
+<li>In diffrazione deve risultare \(|\sin\theta|\le1\). Se non accade, quella riflessione non è accessibile.</li>
+<li>Un minimo stabile richiede \(V'(r_0)=0\) e \(V''(r_0)&gt;0\).</li>
+<li>La DOS è non negativa; se \(v_g\to0\), in 1D la vDOS tende a divergere, non a zero.</li>
+<li>Una massa efficace elettronica può essere negativa in cima a una banda; la massa della buca associata è positiva.</li>
+<li>Un tempo di vita totale è più corto di ogni tempo di vita parziale: \(\tau_i^{-1}=\sum_fA_{if}\).</li>
+</ul>
+</section><section class="card operativo" id="v6-algebra">
+<div class="card-head"><span class="badge">V6 - calcolo rapido</span><span class="lesson">Algebra ad alta resa</span></div>
+<h2>Passaggi algebrici utili per velocizzare i conti</h2>
+<h3>Numeri da ricordare</h3>
+<div class="grid formulas">
+$$\pi\simeq3.1416,\quad2\pi\simeq6.2832,\quad\sqrt2\simeq1.4142,\quad\sqrt3\simeq1.7321$$
+$$2^{1/3}\simeq1.2599,\quad2^{1/6}\simeq1.1225,\quad\ln2\simeq0.6931,\quad\ln10\simeq2.3026$$
+$$\sin30^\circ=\frac12,\quad\sin45^\circ=\frac1{\sqrt2},\quad\sin60^\circ=\frac{\sqrt3}{2}$$
+</div>
+<h3>Sviluppi e limiti</h3>
+<div class="grid formulas">
+$$e^x\simeq1+x+\frac{x^2}{2},\qquad e^x-1\simeq x\quad(|x|\ll1)$$
+$$e^x-1\simeq e^x\quad(x\gg1),\qquad \ln(1+x)\simeq x$$
+$$\sin x\simeq x,\qquad \cos x\simeq1-\frac{x^2}{2}$$
+$$(1+x)^p\simeq1+px,\qquad \frac1{1+x}\simeq1-x$$
+$$\frac{\Delta\lambda}{\lambda}\simeq-\frac{\Delta E}{E},\qquad \frac{\Delta\nu}{\nu}\simeq\frac{\Delta E}{E}$$
+</div>
+<h3>Inversioni frequenti</h3>
+<div class="grid formulas">
+$$\frac{N_2}{N_1}=\frac{g_2}{g_1}e^{-\Delta E/(k_BT)}\Rightarrow T=\frac{\Delta E}{k_B\ln\!\left(\frac{g_2N_1}{g_1N_2}\right)}$$
+$$E_\gamma[\mathrm{eV}]=\frac{1239.842}{\lambda[\mathrm{nm}]},\qquad \lambda[\mathrm{nm}]=\frac{1239.842}{E_\gamma[\mathrm{eV}]}$$
+$$\omega=\frac{\Delta E}{\hbar},\qquad k_{\rm elast}=\mu\omega^2$$
+$$I=\frac{\hbar^2(r+1)}{\Delta E_{r\to r+1}},\qquad R_e=\sqrt{\frac I\mu}$$
+$$a=\left(\frac{N_{\rm cell}m_{\rm at}}{\rho}\right)^{1/3},\qquad \frac{\Delta a}{a}\simeq-\frac13\frac{\Delta\rho}{\rho},\qquad \frac{\sigma_a}{a}\simeq\frac13\frac{\sigma_\rho}{\rho}$$
+$$\gamma=M\left(\frac{v_s}{a}\right)^2,\qquad M=\gamma\left(\frac a{v_s}\right)^2$$
+$$k_F=(3\pi^2n_e)^{1/3},\qquad E_F=\frac{\hbar^2k_F^2}{2m_e},\qquad v_F=\frac{\hbar k_F}{m_e}$$
+$$\tau=\frac{m_e\sigma}{n_ee^2},\qquad \ell=v_F\tau$$
+$$a_{\rm cubico}=\frac{\lambda\sqrt{h^2+k^2+l^2}}{2\sin\theta}$$
+</div>
+<h3>Potenziale di potenze: risultato generale</h3>
+<p>Per \(V(r)=Ar^{-m}-Br^{-n}\), con \(m&gt;n&gt;0\):</p>
+<div class="grid formulas">
+$$r_0=\left(\frac{mA}{nB}\right)^{\!1/(m-n)}$$
+$$V(r_0)=-\frac{m-n}{m}\frac{B}{r_0^n}=-\frac{m-n}{n}\frac{A}{r_0^m}$$
+$$V''(r_0)=\frac{n(m-n)B}{r_0^{n+2}}=\frac{m(m-n)A}{r_0^{m+2}}$$
+$$\omega=\sqrt{\frac{V''(r_0)}{\mu}}$$
+</div>
+<h3>Derivate e somme ricorrenti</h3>
+<div class="grid formulas">
+$$\frac{d}{dr}r^{-n}=-nr^{-n-1},\qquad \frac{d^2}{dr^2}r^{-n}=n(n+1)r^{-n-2}$$
+$$E(k)=E_0-2\delta\cos(ka)\Rightarrow v=\frac{2\delta a}{\hbar}\sin(ka),\quad m^*=\frac{\hbar^2}{2\delta a^2\cos(ka)}$$
+$$\sum_{n=1}^{N}n=\frac{N(N+1)}2,\qquad \sum_{n=1}^{N}n^2=\frac{N(N+1)(2N+1)}6$$
+</div>
+<ul>
+<li><strong>Prima semplifica, poi inserisci i numeri:</strong> usa rapporti e cancella i prefattori comuni.</li>
+<li><strong>Notazione scientifica:</strong> separa mantissa ed esponente; per radici rendi l'esponente multiplo di 2 o 3.</li>
+<li><strong>Stabilità numerica:</strong> per \(x\gg1\), usa \(\ln(e^x-1)=x+\ln(1-e^{-x})\), non calcolare direttamente \(e^x\).</li>
+</ul>
+</section><section class="card operativo" id="v6-dimensioni">
+<div class="card-head"><span class="badge">V6 - verifica</span><span class="lesson">Analisi dimensionale</span></div>
+<h2>Analisi dimensionale: ricostruire e controllare le formule</h2>
+<h3>Argomenti che devono essere adimensionali</h3>
+<div class="grid formulas">
+$$\frac{E}{k_BT},\quad\frac{h\nu}{k_BT},\quad\frac{\hbar\omega}{k_BT},\quad qa,\quad kr,\quad ka,\quad \ln\!\left(\frac{N_2}{N_1}\right)$$
+</div>
+<h3>Controlli fondamentali</h3>
+<table class="tool-table">
+<thead><tr><th>Formula</th><th>Verifica dimensionale</th></tr></thead>
+<tbody>
+<tr><td>\(\hbar^2/(mL^2)\)</td><td>\((\mathrm{J\,s})^2/(\mathrm{kg\,m^2})=\mathrm J\)</td></tr>
+<tr><td>\(\mu_BB\)</td><td>\((\mathrm{J/T})\,\mathrm T=\mathrm J\)</td></tr>
+<tr><td>\(eER\)</td><td>\(\mathrm C\,(V/m)\,m=\mathrm{C\,V}=\mathrm J\)</td></tr>
+<tr><td>\(\hbar^2/I\)</td><td>\((\mathrm{J\,s})^2/(\mathrm{kg\,m^2})=\mathrm J\)</td></tr>
+<tr><td>\(\omega=\sqrt{k/\mu}\)</td><td>\(\sqrt{(\mathrm{N/m})/\mathrm{kg}}=\mathrm{s^{-1}}\)</td></tr>
+<tr><td>\(v_s=a\sqrt{\gamma/M}\)</td><td>\(\mathrm m\sqrt{(\mathrm{kg\,s^{-2}})/\mathrm{kg}}=\mathrm{m/s}\)</td></tr>
+<tr><td>\(\rho=Nm/V\)</td><td>\(\mathrm{kg/m^3}\); in 2D \(\sigma_{2D}=Nm/A\) ha unità \(\mathrm{kg/m^2}\)</td></tr>
+<tr><td>\(\omega_p^2=n_ee^2/(m_e\varepsilon_0)\)</td><td>\(\mathrm{s^{-2}}\)</td></tr>
+<tr><td>\(\sigma=n_ee^2\tau/m_e\)</td><td>\(\mathrm{S/m}\)</td></tr>
+<tr><td>\(\alpha_pE^2\)</td><td>Da \(d=\alpha_pE\): \([\alpha_p]=\mathrm{C\,m^2/V}\), quindi \(\alpha_pE^2=\mathrm J\)</td></tr>
+<tr><td>\(A_{21}\)</td><td>\(\mathrm{s^{-1}}\); anche \(B_{21}u\) deve risultare \(\mathrm{s^{-1}}\)</td></tr>
+<tr><td>\(G(E)dE\)</td><td>Numero di stati: \([G(E)]=\mathrm{energia^{-1}}\), oppure \(\mathrm{energia^{-1}volume^{-1}}\)</td></tr>
+<tr><td>\(\kappa/(\sigma T)\)</td><td>\(\mathrm{W\,\Omega\,K^{-2}}\), unità del numero di Lorenz</td></tr>
+</tbody></table>
+<h3>Ricostruzioni immediate dalle dimensioni</h3>
+<div class="grid formulas">
+$$\text{dipolo}=\text{carica}\times\text{lunghezza}\Rightarrow d\sim qR$$
+$$\text{curvatura del potenziale}=\frac{\text{energia}}{\text{lunghezza}^2}\Rightarrow k\sim\frac{E}{R^2}$$
+$$\text{frequenza armonica}=\sqrt{\frac{\text{curvatura}}{\text{massa}}}$$
+$$\text{vettore reciproco}\sim\frac1{\text{lunghezza}},\qquad \text{zona di Brillouin}\sim\frac\pi a$$
+$$\text{velocità di banda}=\frac1\hbar\frac{dE}{dk},\qquad \frac1{m^*}=\frac1{\hbar^2}\frac{d^2E}{dk^2}$$
+</div>
+<ul>
+<li>Un fattore numerico errato può superare il controllo dimensionale: dopo le unità serve comunque il controllo dell'ordine di grandezza.</li>
+<li>Le dimensioni del coefficiente di Einstein \(B\) dipendono dalla convenzione spettrale \(u_\nu\) o \(u_\omega\): confronta sempre \(B\,u\), non il solo \(B\).</li>
+<li>Il radiante è adimensionale, ma scrivere \(\omega\) in \(\mathrm{s^{-1}}\) evita di confonderlo con \(\nu\) in Hz.</li>
+</ul>
+</section>
+<section class="card atomica" id="p1">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L1–L3</span></div>
+<h2>1. Atomo idrogenoide non relativistico</h2>
+<p>Siamo nell’approssimazione di atomo idrogenoide non relativistico: un solo elettrone, nucleo puntiforme, potenziale coulombiano centrale, niente campi esterni, niente spin inizialmente, regime non relativistico.</p>
+$$H_0=\underbrace{-\frac{\hbar^2}{2\mu}\nabla^2}_{\text{energia cinetica}}-\underbrace{\frac{Ze^2}{4\pi\varepsilon_0r}}_{\text{attrazione coulombiana}}$$
+$$\mu=\underbrace{\frac{m_eM}{m_e+M}}_{\text{massa ridotta elettrone-nucleo}}$$
+$$E_n^{(h)}=-\underbrace{\frac{\mu}{m_e}}_{\text{correzione massa ridotta}}\underbrace{\frac{Z^2}{n^2}}_{\text{idrogenoide}}\underbrace{13.6\,\mathrm{eV}}_{\text{Rydberg}}$$
+$$E_n^{(H)}=-\frac{\underbrace{13.6\,\mathrm{eV}}_{\text{energia fondamentale H}}}{\underbrace{n^2}_{\text{livello}}}$$
+$$E_{\mathrm{ion}}=\underbrace{|E_n|}_{\text{energia necessaria per portare l'elettrone a }0}$$
+
+</section><section class="card atomica" id="p2">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L1–L2</span></div>
+<h2>2. Separazione radiale-angolare</h2>
+<p>Vale perché il potenziale è centrale: dipende solo da \(r\).</p>
+$$V(r)=-\frac{\underbrace{Ze^2}_{\text{cariche}}}{\underbrace{4\pi\varepsilon_0r}_{\text{fattore coulombiano}}}$$
+$$\psi_{nlm_l}(r,\theta,\phi)=\underbrace{R_{nl}(r)}_{\text{parte radiale}}\underbrace{Y_l^{m_l}(\theta,\phi)}_{\text{parte angolare}}$$
+$$n=1,2,\dots \qquad l=0,1,\dots,n-1 \qquad m_l=-l,\dots,+l$$
+$$L^2Y_l^{m_l}=\underbrace{l(l+1)\hbar^2}_{\text{modulo quadro}}Y_l^{m_l}$$
+$$L_zY_l^{m_l}=\underbrace{m_l\hbar}_{\text{proiezione lungo }z}Y_l^{m_l}$$
+$$\sum_{l=0}^{n-1}\underbrace{(2l+1)}_{\text{valori di }m_l}=\underbrace{n^2}_{\text{degenerazione orbitale}}$$
+$$g_n=\underbrace{2}_{\text{spin}}\underbrace{n^2}_{\text{orbitali}}$$
+
+</section><section class="card atomica" id="p3">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L3–L4</span></div>
+<h2>3. Momento magnetico orbitale</h2>
+  
+$$\vec\mu_L=-\underbrace{\frac{\mu_B}{\hbar}}_{\text{rapporto giromagnetico orbitale}}\underbrace{\vec L}_{\text{momento angolare orbitale}}$$
+$$\mu_B=\underbrace{\frac{e\hbar}{2m_e}}_{\text{magnetone di Bohr}}$$
+$$\mu_{L,z}=-\underbrace{\mu_B}_{\text{scala magnetica}}\underbrace{m_l}_{\text{proiezione orbitale}}$$
+$$\Delta E=-\underbrace{\vec\mu_L}_{\text{momento magnetico}}\cdot\underbrace{\vec B}_{\text{campo esterno}}$$
+$$\Delta E=\underbrace{\mu_B}_{\text{magnetone di Bohr}}\underbrace{m_l}_{\text{proiezione orbitale}}\underbrace{B}_{\text{campo magnetico}}$$
+
+</section><section class="card atomica" id="p4">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L4</span></div>
+<h2>4. Spin elettronico</h2>
+  
+$$s=\frac12 \qquad m_s=\pm\frac12$$
+$$S^2=\underbrace{s(s+1)\hbar^2}_{\text{modulo quadro dello spin}}$$
+$$S_z=\underbrace{m_s\hbar}_{\text{proiezione dello spin}}$$
+$$\vec\mu_S=-\underbrace{g_S}_{\simeq2}\underbrace{\frac{\mu_B}{\hbar}}_{\text{scala magnetica}}\underbrace{\vec S}_{\text{spin}}$$
+$$\Delta E_S=\underbrace{g_S}_{\text{fattore di spin}}\underbrace{\mu_B}_{\text{magnetone}}\underbrace{m_s}_{\text{proiezione}}\underbrace{B}_{\text{campo}}$$
+
+</section><section class="card atomica" id="p5">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L4–L5</span></div>
+<h2>5. Accoppiamento spin-orbita</h2>
+  
+$$H_{SO}=\underbrace{\xi(r)}_{\text{coefficiente radiale}}\underbrace{\vec L\cdot\vec S}_{\text{accoppiamento orbitale-spin}}$$
+$$\xi(r)=\underbrace{\frac{1}{2m_e^2c^2}}_{\text{fattore relativistico}}\underbrace{\frac{1}{r}\frac{dV}{dr}}_{\text{gradiente del potenziale}}$$
+$$\vec J=\underbrace{\vec L}_{\text{orbitale}}+\underbrace{\vec S}_{\text{spin}}$$
+$$\vec L\cdot\vec S=\frac12\left(\underbrace{J^2}_{\text{totale}}-\underbrace{L^2}_{\text{orbitale}}-\underbrace{S^2}_{\text{spin}}\right)$$
+$$\vec L\cdot\vec S=\frac{\hbar^2}{2}\left[\underbrace{j(j+1)}_{\text{totale}}-\underbrace{l(l+1)}_{\text{orbitale}}-\underbrace{s(s+1)}_{\text{spin}}\right]$$
+<p>Operativamente nello scritto:</p>
+$$j=l\pm\frac12 \quad (l\neq0), \qquad j=\frac12 \quad (l=0)$$
+$$\underbrace{2j+1}_{\text{sottolivelli }m_J}$$
+
+</section><section class="card atomica" id="p6">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L5</span></div>
+<h2>6. Struttura fine</h2>
+<p>Include correzione cinetica relativistica, spin-orbita e Darwin.</p>
+$$E_{n,j}\simeq\underbrace{E_n}_{\text{energia non relativistica}}\left[1+\underbrace{\frac{(Z\alpha)^2}{n}}_{\text{piccolo parametro relativistico}}\left(\underbrace{\frac{1}{j+1/2}}_{\text{dipendenza da }j}-\underbrace{\frac{3}{4n}}_{\text{correzione media}}\right)\right]$$
+$$\Delta E_{\mathrm{fine}}\sim\underbrace{\alpha^2}_{\text{piccolo parametro relativistico}}\underbrace{E_n}_{\text{scala atomica}}$$
+$$\Delta E_{\mathrm{fine}}\propto\underbrace{Z^4}_{\text{crescita forte con }Z}$$
+
+</section><section class="card atomica" id="p7">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L5</span></div>
+<h2>7. Zeeman anomalo in campo debole</h2>
+  
+$$\underbrace{H_B}_{\text{campo magnetico}}\ll\underbrace{H_{SO}}_{\text{spin-orbita}}$$
+<p>Quindi \(J,m_J\) sono buoni numeri quantici.</p>
+$$g_J=1+\frac{\underbrace{j(j+1)}_{\text{totale}}+\underbrace{s(s+1)}_{\text{spin}}-\underbrace{l(l+1)}_{\text{orbitale}}}{\underbrace{2j(j+1)}_{\text{normalizzazione}}}$$
+$$\Delta E=\underbrace{\mu_B}_{\text{magnetone}}\underbrace{g_J}_{\text{Landé}}\underbrace{m_J}_{\text{proiezione}}\underbrace{B}_{\text{campo}}$$
+$$m_J=-j,-j+1,\dots,+j$$
+$$\Delta E_{\mathrm{adj}}=\underbrace{\mu_B}_{\text{magnetone}}\underbrace{g_J}_{\text{Landé}}\underbrace{B}_{\text{campo}}$$
+$$\Delta E_{\mathrm{tot}}=\underbrace{(2j)}_{\text{numero di intervalli tra }-j\text{ e }+j}\underbrace{\mu_Bg_JB}_{\text{separazione adiacente}}$$
+
+</section><section class="card atomica" id="p8">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L5</span></div>
+<h2>8. Paschen-Back</h2>
+  
+$$\underbrace{H_B}_{\text{campo magnetico}}\gg\underbrace{H_{SO}}_{\text{spin-orbita}}$$
+<p>Allora \(L\) e \(S\) si disaccoppiano.</p>
+$$\Delta E=\underbrace{\mu_B}_{\text{magnetone}}\underbrace{B}_{\text{campo}}\left(\underbrace{m_l}_{\text{orbitale}}+\underbrace{g_Sm_s}_{\text{spin}}\right)$$
+$$m_l,\quad m_s$$
+
+</section><section class="card atomica" id="p9">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L5</span></div>
+<h2>9. Effetto Stark perturbativo</h2>
+  
+$$H'=-\underbrace{\vec d}_{\text{dipolo}}\cdot\underbrace{\vec E}_{\text{campo elettrico}}$$
+$$\vec d=-e\vec r$$
+$$H'=\underbrace{e}_{\text{carica}}\underbrace{E}_{\text{campo}}\underbrace{z}_{\text{coordinata lungo il campo}}$$
+$$\Delta E^{(1)}=\langle nlm|\underbrace{H'}_{\text{perturbazione}}|nlm\rangle$$
+$$\Delta E^{(1)}=0 \quad \text{spesso per parità}$$
+$$\Delta E^{(2)}\propto-\underbrace{\alpha_p}_{\text{polarizzabilità}}\underbrace{E^2}_{\text{campo al quadrato}}$$
+
+</section><section class="card atomica" id="p10">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L6–L8</span></div>
+<h2>10. Approssimazione di dipolo elettrico</h2>
+  
+$$\lambda\gg a_0$$
+$$\underbrace{k}_{\text{numero d'onda}}\underbrace{r}_{\text{dimensione atomica}}\ll1$$
+$$e^{i\vec k\cdot\vec r}\simeq1$$
+$$H'=-\underbrace{\vec d}_{\text{dipolo elettrico}}\cdot\underbrace{\vec E}_{\text{campo elettrico}}$$
+$$\Delta l=\pm1 \qquad \Delta m=0,\pm1$$
+$$\text{cambio di parità}$$
+
+</section><section class="card atomica" id="p11">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L6–L7</span></div>
+<h2>11. Coefficienti di Einstein</h2>
+<p>Assorbimento \(1\to2\), emissione stimolata \(2\to1\), emissione spontanea \(2\to1\).</p>
+$$\underbrace{g_1}_{\text{degenerazione livello 1}}\underbrace{B_{12}}_{\text{assorbimento}}=\underbrace{g_2}_{\text{degenerazione livello 2}}\underbrace{B_{21}}_{\text{emissione stimolata}}$$
+$$\frac{\underbrace{A_{21}}_{\text{spontanea}}}{\underbrace{B_{21}}_{\text{stimolata}}}=\frac{\underbrace{8\pi h\nu^3}_{\text{densità modi EM}}}{\underbrace{c^3}_{\text{scala radiativa}}}$$
+
+</section><section class="card atomica" id="p12">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L8</span></div>
+<h2>12. Larghezza di riga</h2>
+  
+$$\underbrace{\Delta E}_{\text{larghezza energetica}}\underbrace{\tau}_{\text{tempo di vita}}\sim\underbrace{\hbar}_{\text{quanto d'azione}}$$
+$$\Delta\nu\sim\frac{1}{\underbrace{2\pi\tau}_{\text{tempo di decadimento}}}$$
+$$I(\omega)\propto\frac{1}{\underbrace{(\omega-\omega_0)^2}_{\text{distanza dalla risonanza}}+\underbrace{(\Gamma/2)^2}_{\text{larghezza}}}$$
+
+</section><section class="card atomica" id="p13">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L8</span></div>
+<h2>13. Laser</h2>
+<p>Serve mezzo attivo, pompaggio, inversione di popolazione e cavità.</p>
+$$\frac{\underbrace{N_2}_{\text{popolazione alta}}}{\underbrace{N_1}_{\text{popolazione bassa}}}=\frac{\underbrace{g_2}_{\text{degenerazione alta}}}{\underbrace{g_1}_{\text{degenerazione bassa}}}e^{-\underbrace{\beta}_{1/(k_BT)}\underbrace{(E_2-E_1)}_{\text{gap energetico}}}$$
+$$N_2&gt;N_1 \quad \text{inversione, non equilibrio}$$
+
+</section><section class="card atomica" id="p14">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L11–L12</span></div>
+<h2>14. Campo centrale</h2>
+  
+$$H=\sum_i\left[\underbrace{-\frac{\hbar^2}{2m_e}\nabla_i^2}_{\text{cinetica elettrone }i}-\underbrace{\frac{Ze^2}{4\pi\varepsilon_0r_i}}_{\text{attrazione nucleo-elettrone}}\right]+\sum_{i<j}\underbrace{\frac{e^2}{4\pi\varepsilon_0r_{ij}}}_{\text{repulsione $$h\simeq\sum_i="" $$h_i="\underbrace{-\frac{\hbar^2}{2m_e}\nabla_i^2}_{\text{cinetica" <p="" centrale}}$$="" elettrone-elettrone}}$$="" h_i$$="" medio="" monoelettronica}}+\underbrace{v_{\mathrm{cf}}(r_i)}_{\text{potenziale="">Trascuriamo correlazioni istantanee e parte non centrale.
+</j}\underbrace{\frac{e^2}{4\pi\varepsilon_0r_{ij}}}_{\text{repulsione></section><section class="card atomica" id="p15">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L11–L13</span></div>
+<h2>15. Hartree, Hartree-Fock, Slater</h2>
+  
+$$\Psi(1,\dots,N)=\underbrace{\psi_1(1)}_{\text{orbitale 1}}\underbrace{\psi_2(2)}_{\text{orbitale 2}}\cdots\underbrace{\psi_N(N)}_{\text{orbitale N}}$$
+$$\Psi=\underbrace{\frac{1}{\sqrt{N!}}}_{\text{normalizzazione}}\begin{vmatrix}\psi_1(1)&amp;\psi_2(1)&amp;\cdots&amp;\psi_N(1)\\\psi_1(2)&amp;\psi_2(2)&amp;\cdots&amp;\psi_N(2)\\\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\\psi_1(N)&amp;\psi_2(N)&amp;\cdots&amp;\psi_N(N)\end{vmatrix}$$
+<p>Include Pauli e scambio. Non include completamente la correlazione dinamica.</p>
+</section><section class="card atomica" id="p16">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L9–L10</span></div>
+<h2>16. Singoletto, tripletto, scambio</h2>
+  
+$$\Psi_{\mathrm{tot}}=\underbrace{\Psi_{\mathrm{spaziale}}}_{\text{parte orbitale}}\underbrace{\chi_{\mathrm{spin}}}_{\text{parte spin}}$$
+$$S=0 \quad \text{singoletto} \qquad S=1 \quad \text{tripletto}$$
+$$\text{spin antisimmetrico}\Rightarrow\text{spazio simmetrico}$$
+$$\text{spin simmetrico}\Rightarrow\text{spazio antisimmetrico}$$
+$$\underbrace{K}_{\text{integrale di scambio}}$$
+
+</section><section class="card atomica" id="p17">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L13</span></div>
+<h2>17. Accoppiamento LS</h2>
+  
+$$\underbrace{H_{\mathrm{ee,res}}}_{\text{interazione elettrostatica residua}}\gg\underbrace{H_{SO}}_{\text{spin-orbita}}$$
+$$\vec L=\sum_i\underbrace{\vec l_i}_{\text{orbitale elettrone }i}$$
+$$\vec S=\sum_i\underbrace{\vec s_i}_{\text{spin elettrone }i}$$
+$$\vec J=\underbrace{\vec L}_{\text{orbitale totale}}+\underbrace{\vec S}_{\text{spin totale}}$$
+<p>Notazione spettroscopica:</p>
+$${}^{2S+1}L_J$$
+$$\underbrace{2S+1}_{\text{molteplicità di spin}} \qquad \underbrace{L}_{\text{lettera spettroscopica: }S,P,D,F,\dots} \qquad \underbrace{J}_{\text{momento angolare totale}}$$
+
+</section><section class="card atomica" id="p18">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L13</span></div>
+<h2>18. Accoppiamento jj</h2>
+  
+$$\underbrace{H_{SO}}_{\text{spin-orbita}}\gg\underbrace{H_{\mathrm{ee,res}}}_{\text{elettrostatica residua}}$$
+$$\vec j_i=\underbrace{\vec l_i}_{\text{orbitale}}+\underbrace{\vec s_i}_{\text{spin}}$$
+$$\vec J=\sum_i\underbrace{\vec j_i}_{\text{momento totale singolo elettrone}}$$
+<p>Tipico di atomi pesanti.</p>
+</section><section class="card molecolare" id="p19">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L14</span></div>
+<h2>19. Born-Oppenheimer</h2>
+  
+$$m_e\ll M_{\mathrm{nuclei}}$$
+$$\underbrace{H_e(\vec r;\vec R)}_{\text{Hamiltoniana elettronica parametrica}}\underbrace{\psi_e(\vec r;\vec R)}_{\text{stato elettronico}}=\underbrace{E_e(\vec R)}_{\text{energia potenziale per i nuclei}}\underbrace{\psi_e(\vec r;\vec R)}_{\text{stato elettronico}}$$
+$$\Psi(\vec r,\vec R)\simeq\underbrace{\psi_e(\vec r;\vec R)}_{\text{parte elettronica}}\underbrace{\chi(\vec R)}_{\text{parte nucleare}}$$
+
+</section><section class="card molecolare" id="p20">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L15</span></div>
+<h2>20. Rotatore rigido</h2>
+  
+$$R=R_e$$
+$$I=\underbrace{\mu}_{\text{massa ridotta nucleare}}\underbrace{R_e^2}_{\text{distanza internucleare al quadrato}}$$
+$$E_r=\underbrace{\frac{\hbar^2}{2I}}_{\text{costante rotazionale in energia}}\underbrace{r(r+1)}_{\text{autovalore rotazionale}}$$
+$$\Delta E_{r\to r+1}=E_{r+1}-E_r=\underbrace{\frac{\hbar^2}{I}}_{\text{scala rotazionale}}\underbrace{(r+1)}_{\text{dipendenza dal livello}}$$
+$$\Delta r=\pm1$$
+
+</section><section class="card molecolare" id="p21">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L16</span></div>
+<h2>21. Vibratore armonico molecolare</h2>
+  
+$$V(R)\simeq\underbrace{V(R_e)}_{\text{energia al minimo}}+\underbrace{\frac12 k(R-R_e)^2}_{\text{termine armonico}}$$
+$$E_v=\underbrace{\hbar\omega}_{\text{quanto vibrazionale}}\left(\underbrace{v}_{\text{numero quantico vibrazionale}}+\frac12\right)$$
+$$\omega=\sqrt{\frac{\underbrace{k}_{\text{costante elastica}}}{\underbrace{\mu}_{\text{massa ridotta}}}}$$
+$$\Delta E_{\mathrm{vib}}=\underbrace{\hbar\omega}_{\text{separazione tra livelli armonici}}$$
+$$k=\underbrace{\mu}_{\text{massa ridotta}}\underbrace{\omega^2}_{\text{frequenza angolare al quadrato}}$$
+
+</section><section class="card molecolare" id="p22">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L16</span></div>
+<h2>22. Spettro roto-vibrazionale</h2>
+  
+$$E(v,r)=\underbrace{\hbar\omega\left(v+\frac12\right)}_{\text{vibrazione}}+\underbrace{Br(r+1)}_{\text{rotazione}}$$
+$$\Delta v=\pm1 \qquad \Delta r=\pm1$$
+$$\Delta r=-1 \quad \text{ramo P} \qquad \Delta r=+1 \quad \text{ramo R}$$
+$$\underbrace{\Delta E}_{\text{energia transizione}}=\underbrace{h\nu}_{\text{energia fotone}}=\frac{\underbrace{hc}_{\text{costante fotonica}}}{\underbrace{\lambda}_{\text{lunghezza d'onda}}}$$
+
+</section><section class="card molecolare" id="p23">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L16</span></div>
+<h2>23. Rayleigh e Raman</h2>
+  
+$$\underbrace{h\nu_{\mathrm{out}}}_{\text{fotone uscente}}=\underbrace{h\nu_{\mathrm{in}}}_{\text{fotone incidente}} \quad \text{Rayleigh}$$
+$$h\nu_{\mathrm{out}}=\underbrace{h\nu_{\mathrm{in}}}_{\text{incidente}}-\underbrace{\Delta E}_{\text{energia ceduta alla molecola}} \quad \text{Stokes}$$
+$$h\nu_{\mathrm{out}}=\underbrace{h\nu_{\mathrm{in}}}_{\text{incidente}}+\underbrace{\Delta E}_{\text{energia presa dalla molecola}} \quad \text{anti-Stokes}$$
+$$\frac{\underbrace{N_1}_{\text{popolazione eccitata}}}{\underbrace{N_0}_{\text{popolazione fondamentale}}}=e^{-\underbrace{\beta}_{1/(k_BT)}\underbrace{(E_1-E_0)}_{\text{gap}}}$$
+
+</section><section class="card molecolare" id="p24">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L17–L19</span></div>
+<h2>24. LCAO molecolare</h2>
+  
+$$\psi=\underbrace{c_A}_{\text{peso su A}}\underbrace{\phi_A}_{\text{orbitale atomico A}}+\underbrace{c_B}_{\text{peso su B}}\underbrace{\phi_B}_{\text{orbitale atomico B}}$$
+$$\psi_+=\frac{\underbrace{\phi_A+\phi_B}_{\text{combinazione simmetrica}}}{\underbrace{\sqrt{2(1+S)}}_{\text{normalizzazione}}}$$
+$$\psi_-=\frac{\underbrace{\phi_A-\phi_B}_{\text{combinazione antisimmetrica}}}{\underbrace{\sqrt{2(1-S)}}_{\text{normalizzazione}}}$$
+$$S=\underbrace{\langle\phi_A|\phi_B\rangle}_{\text{overlap}}$$
+$$\psi_+\rightarrow\text{legante} \qquad \psi_-\rightarrow\text{antilegante}$$
+
+</section><section class="card molecolare" id="p25">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L19–L20</span></div>
+<h2>25. Equazioni secolari</h2>
+  
+$$\sum_j\left(\underbrace{H_{ij}}_{\text{Hamiltoniana}}-\underbrace{ES_{ij}}_{\text{energia per overlap}}\right)\underbrace{c_j}_{\text{coefficiente}}=0$$
+$$\det\left(\underbrace{H_{ij}}_{\text{matrice Hamiltoniana}}-\underbrace{ES_{ij}}_{\text{overlap pesato}}\right)=0$$
+
+</section><section class="card molecolare" id="p26">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L20</span></div>
+<h2>26. Ibridazione</h2>
+  
+$$\underbrace{1s}_{\text{orbitale s}}+\underbrace{3p}_{\text{tre orbitali p}}\rightarrow\underbrace{4sp^3}_{\text{tetraedrico}} \qquad sp^3\rightarrow109.5^\circ$$
+$$\underbrace{1s}_{\text{s}}+\underbrace{2p}_{\text{due p}}\rightarrow\underbrace{3sp^2}_{\text{planare trigonale}} \qquad sp^2\rightarrow120^\circ$$
+$$\underbrace{1s}_{\text{s}}+\underbrace{1p}_{\text{un p}}\rightarrow\underbrace{2sp}_{\text{lineare}} \qquad sp\rightarrow180^\circ$$
+$$\underbrace{p_z}_{\text{orbitali non ibridati}}\rightarrow\underbrace{\pi\ \text{delocalizzato}}_{\text{sistema aromatico}}$$
+
+</section><section class="card solidi" id="p27">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L21–L22</span></div>
+<h2>27. Cristallo = reticolo + base</h2>
+  
+$$\vec R=\underbrace{n_1\vec a_1+n_2\vec a_2+n_3\vec a_3}_{\text{combinazione intera dei primitivi}}$$
+$$\underbrace{\text{cristallo}}_{\text{struttura fisica}}=\underbrace{\text{reticolo}}_{\text{periodicità}}+\underbrace{\text{base}}_{\text{atomi nella cella}}$$
+$$\underbrace{N_{\mathrm{SC}}}_{\text{cubico semplice}}=1 \qquad \underbrace{N_{\mathrm{BCC}}}_{\text{cubico corpo centrato}}=2 \qquad \underbrace{N_{\mathrm{FCC}}}_{\text{cubico facce centrate}}=4$$
+
+</section><section class="card solidi" id="p28">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L22–L25</span></div>
+<h2>28. Reticolo reciproco</h2>
+  
+$$\underbrace{\vec a_i}_{\text{diretto}}\cdot\underbrace{\vec b_j}_{\text{reciproco}}=\underbrace{2\pi\delta_{ij}}_{\text{dualità}}$$
+$$\vec G=\underbrace{h\vec b_1+k\vec b_2+l\vec b_3}_{\text{vettore reciproco}}$$
+$$\underbrace{\Delta\vec k}_{\text{variazione vettore d'onda}}=\underbrace{\vec G}_{\text{vettore reciproco}}$$
+
+</section><section class="card solidi" id="p29">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L22, L24–L25, L29</span></div>
+<h2>29. Prima zona di Brillouin</h2>
+<p>È la cella di Wigner-Seitz del reticolo reciproco. I \(k\) indipendenti si scelgono nella prima BZ.</p>
+$$q_{\mathrm{BZ}}=\underbrace{\frac{\pi}{a}}_{\text{bordo della prima zona in 1D}}$$
+
+</section><section class="card solidi" id="p30">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L23–L26</span></div>
+<h2>30. Approssimazione armonica reticolare</h2>
+  
+$$\vec R_l+\vec u_l=\underbrace{\vec R_l}_{\text{equilibrio}}+\underbrace{\vec u_l}_{\text{piccolo spostamento}}$$
+$$U=\underbrace{U_0}_{\text{equilibrio}}+\underbrace{U^{(1)}}_{\text{lineare}}+\underbrace{U^{(2)}}_{\text{armonico}}+\underbrace{U^{(3)}}_{\text{anarmonico}}+\cdots$$
+$$U^{(1)}=0$$
+$$U\simeq\underbrace{U_0}_{\text{equilibrio}}+\underbrace{U^{(2)}}_{\text{termine quadratico}}$$
+
+</section><section class="card solidi" id="p31">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L23–L24</span></div>
+<h2>31. Catena monoatomica</h2>
+  
+$$\omega(q)=2\underbrace{\sqrt{\frac{\gamma}{M}}}_{\text{frequenza caratteristica}}\left|\sin\left(\underbrace{\frac{qa}{2}}_{\text{fase tra vicini}}\right)\right|$$
+$$\omega(q)\simeq\underbrace{a\sqrt{\frac{\gamma}{M}}}_{\text{velocità del suono}}\underbrace{|q|}_{\text{numero d'onda}}$$
+$$v_s=\left.\underbrace{\frac{d\omega}{dq}}_{\text{velocità di gruppo}}\right|_{q\to0}=\underbrace{a\sqrt{\frac{\gamma}{M}}}_{\text{suono longitudinale}}$$
+$$v_g(q)=\frac{d\omega}{dq}=\underbrace{a\sqrt{\frac{\gamma}{M}}}_{\text{scala velocità}}\underbrace{\cos\left(\frac{qa}{2}\right)}_{\text{dipendenza da }q}$$
+$$q=\underbrace{\frac{\pi}{a}}_{\text{bordo zona}}$$
+
+</section><section class="card solidi" id="p32">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L24</span></div>
+<h2>32. Catena biatomica</h2>
+  
+$$\text{2 atomi/cella}\Rightarrow\text{2 branche}$$
+$$\omega_{\mathrm{ac}}(q\to0)\to0 \qquad \omega_{\mathrm{op}}(q\to0)\neq0$$
+$$\text{acustica}\rightarrow\text{atomi in fase}$$
+$$\text{ottica}\rightarrow\text{atomi in opposizione di fase}$$
+
+</section><section class="card solidi" id="p33">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L27–L28</span></div>
+<h2>33. Fononi quantizzati</h2>
+  
+$$E_n=\underbrace{\hbar\omega}_{\text{energia del fonone}}\left(\underbrace{n}_{\text{numero fononi}}+\frac12\right)$$
+$$\langle n\rangle=\frac{1}{e^{\underbrace{\beta}_{1/(k_BT)}\underbrace{\hbar\omega}_{\text{energia fonone}}}-1}$$
+$$\mu=0$$
+$$\langle E\rangle=\underbrace{\hbar\omega}_{\text{quanto}}\left[\frac12+\frac{1}{e^{\beta\hbar\omega}-1}\right]$$
+
+</section><section class="card solidi" id="p34">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L28</span></div>
+<h2>34. Modello di Einstein</h2>
+  
+$$U=\underbrace{3N}_{\text{oscillatori}}\underbrace{\hbar\omega_E}_{\text{quanto Einstein}}\left[\frac12+\frac{1}{e^{\underbrace{\beta\hbar\omega_E}_{\text{energia/termico}}}-1}\right]$$
+$$C_V\to\underbrace{3N}_{\text{modi}}\underbrace{k_B}_{\text{Boltzmann}}$$
+<p>A bassa temperatura: decrescita esponenziale, non \(T^3\).</p>
+</section><section class="card solidi" id="p35">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L28</span></div>
+<h2>35. Modello di Debye</h2>
+  
+$$\omega=\underbrace{v_s}_{\text{velocità del suono}}\underbrace{k}_{\text{numero d'onda}}$$
+$$\underbrace{3N}_{\text{numero totale modi}}$$
+$$C_V\propto\underbrace{T^3}_{\text{legge di Debye 3D}}$$
+$$C_V\to3Nk_B$$
+
+</section><section class="card solidi" id="p36">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L28</span></div>
+<h2>36. Trasporto termico fononico</h2>
+  
+$$\kappa\simeq\frac13\underbrace{C_V}_{\text{calore specifico per volume}}\underbrace{v_s}_{\text{velocità fononi}}\underbrace{l}_{\text{cammino libero medio}}$$
+<p>Serve scattering/anarmonicità per resistenza termica.</p>
+</section><section class="card solidi" id="p37">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L30–L32</span></div>
+<h2>37. Drude</h2>
+  
+$$m\frac{d\vec v}{dt}=-\underbrace{e\vec E}_{\text{forza elettrica}}-\underbrace{\frac{m\vec v}{\tau}}_{\text{rilassamento}}$$
+$$\vec v_d=-\underbrace{\frac{e\tau}{m}}_{\text{mobilità classica}}\underbrace{\vec E}_{\text{campo}}$$
+$$\vec J=-\underbrace{n}_{\text{densità elettronica}}\underbrace{e}_{\text{carica}}\underbrace{\vec v_d}_{\text{deriva}}$$
+$$\sigma=\underbrace{\frac{ne^2\tau}{m}}_{\text{conducibilità Drude}}$$
+
+</section><section class="card solidi" id="p38">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L30–L33</span></div>
+<h2>38. Sommerfeld</h2>
+  
+$$f(E)=\frac{1}{e^{\underbrace{\beta}_{1/(k_BT)}\underbrace{(E-\mu)}_{\text{energia rispetto al potenziale chimico}}}+1}$$
+$$f(E)=1\quad E<e_f \qquad="" e="" f(e)="0\quad">E_F$$
+$$\underbrace{k_BT}_{\text{finestra termica}}$$
+$$C_V^{el}\propto T$$
+
+</e_f></section><section class="card solidi" id="p39">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L31–L33</span></div>
+<h2>39. Densità degli stati elettronica 3D</h2>
+  
+$$E=\frac{\underbrace{\hbar^2k^2}_{\text{energia cinetica in }k}}{\underbrace{2m}_{\text{massa}}}$$
+$$g(E)\propto\underbrace{\sqrt E}_{\text{DOS 3D}}$$
+$$E_F=\underbrace{\frac{\hbar^2}{2m}}_{\text{fattore cinetico}}\left(\underbrace{3\pi^2n_e}_{\text{densità elettronica}}\right)^{2/3}$$
+$$n_e=\underbrace{Z_V}_{\text{elettroni di valenza}}\underbrace{N_A}_{\text{Avogadro}}\frac{\underbrace{\rho}_{\text{densità di massa}}}{\underbrace{M}_{\text{massa molare}}}$$
+$$n_e=\underbrace{Z_V}_{\text{valenza}}\frac{\underbrace{N_{\mathrm{at/cella}}}_{\text{atomi nella cella}}}{\underbrace{a^3}_{\text{volume cella}}}$$
+
+</section><section class="card solidi" id="p40">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L29, L34</span></div>
+<h2>40. Teorema di Bloch</h2>
+  
+$$V(\vec r+\vec R)=V(\vec r)$$
+$$\psi_{n\vec k}(\vec r)=\underbrace{e^{i\vec k\cdot\vec r}}_{\text{onda piana}}\underbrace{u_{n\vec k}(\vec r)}_{\text{parte periodica}}$$
+$$u_{n\vec k}(\vec r+\vec R)=u_{n\vec k}(\vec r)$$
+<p>Non è approssimazione: deriva dalla periodicità.</p>
+</section><section class="card solidi" id="p41">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L29, L34–L35</span></div>
+<h2>41. Elettrone quasi-libero e gap</h2>
+  
+$$E(k)\simeq\frac{\underbrace{\hbar^2k^2}_{\text{energia libera}}}{\underbrace{2m}_{\text{massa elettronica}}}$$
+$$\Delta E\sim\underbrace{2|V_G|}_{\text{gap aperto dal potenziale periodico}}$$
+
+</section><section class="card solidi" id="p42">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L34</span></div>
+<h2>42. Tight-binding</h2>
+  
+$$E(k)=\underbrace{E_0}_{\text{livello atomico}}-\underbrace{2\delta}_{\text{hopping primi vicini}}\underbrace{\cos(ka)}_{\text{periodicità}}$$
+$$W=\underbrace{4|\delta|}_{\text{larghezza banda}}$$
+$$m^*=\frac{\underbrace{\hbar^2}_{\text{quanto}}}{\underbrace{2\delta a^2}_{\text{curvatura tight-binding}}}$$
+
+</section><section class="card solidi" id="p43">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L32, L34–L35</span></div>
+<h2>43. Velocità di gruppo</h2>
+  
+$$\vec v_g=\underbrace{\frac{1}{\hbar}}_{\text{fattore quantistico}}\underbrace{\nabla_{\vec k}E_n(\vec k)}_{\text{pendenza banda}}$$
+$$v_g=\frac{1}{\hbar}\underbrace{\frac{dE}{dk}}_{\text{pendenza}}$$
+$$v_g\simeq0 \quad \text{per banda piatta}$$
+
+</section><section class="card solidi" id="p44">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L32, L34–L35</span></div>
+<h2>44. Massa efficace</h2>
+  
+$$E(k)\simeq\underbrace{E_0}_{\text{estremo banda}}+\frac{\underbrace{\hbar^2k^2}_{\text{termine parabolico}}}{\underbrace{2m^*}_{\text{massa efficace}}}$$
+$$\frac{1}{m^*}=\underbrace{\frac{1}{\hbar^2}}_{\text{fattore quantistico}}\underbrace{\frac{d^2E}{dk^2}}_{\text{curvatura}}$$
+$$m^*&gt;0 \quad \text{curvatura positiva} \qquad m^*&lt;0 \quad \text{curvatura negativa}$$
+$$\text{massa negativa elettronica}\rightarrow\text{buca positiva efficace}$$
+
+</section><section class="card solidi" id="p45">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L35–L36</span></div>
+<h2>45. Semiconduttore intrinseco</h2>
+<p>A \(T=0\): valenza piena, conduzione vuota.</p>
+$$E_g$$
+<p>A \(T&gt;0\): elettrone + buca.</p>
+$$\underbrace{n}_{\text{elettroni}}=\underbrace{p}_{\text{buche}}$$
+
+</section><section class="card solidi" id="p46">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L36</span></div>
+<h2>46. Drogaggio n</h2>
+  
+$$\underbrace{E_C}_{\text{banda conduzione}}-\underbrace{E_D}_{\text{livello donore}}\ll\underbrace{E_g}_{\text{gap}}$$
+$$\underbrace{n}_{\text{elettroni}}\gg\underbrace{p}_{\text{buche}}$$
+<p>Tipo \(n\).</p>
+</section><section class="card solidi" id="p47">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L36</span></div>
+<h2>47. Drogaggio p</h2>
+  
+$$\underbrace{E_A}_{\text{livello accettore}}-\underbrace{E_V}_{\text{banda valenza}}\ll\underbrace{E_g}_{\text{gap}}$$
+$$\underbrace{p}_{\text{buche}}\gg\underbrace{n}_{\text{elettroni}}$$
+<p>Tipo \(p\).</p>
+</section><section class="card solidi" id="p48">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L35–L36</span></div>
+<h2>48. Assorbimento ottico diretto e indiretto</h2>
+  
+$$\Delta\vec k\simeq0$$
+<p>Gap diretto: VBM e CBM allo stesso \(k\), transizione verticale.</p>
+$$\underbrace{\Delta\vec k}_{\text{variazione quasi-momento}}=\underbrace{\vec q_{\mathrm{fonone}}}_{\text{momento del fonone}}$$
+<p>Nel gap indiretto serve un fonone.</p>
+</section>
+<section class="card operativo" id="novita-v2">
+<div class="card-head"><span class="badge">Novità V2</span><span class="lesson">Da appelli storici</span></div>
+<h2>Integrazioni mirate emerse dagli scritti</h2>
+<p>Questi punti completano i 48 blocchi di base senza cambiare la struttura del corso.</p>
+</section>
+<section class="card atomica" id="p49">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L4–L5, pattern scritto</span></div>
+<h2>49. Stern-Gerlach</h2>
+<p>Un dipolo magnetico in un campo non uniforme subisce una forza. Il punto chiave è distinguere lo splitting energetico da una deflessione spaziale.</p>
+  $$\vec F=\underbrace{\vec\nabla}_{\text{gradiente spaziale}}\left(\underbrace{\vec\mu}_{\text{momento magnetico}}\cdot\underbrace{\vec B}_{\text{campo non uniforme}}\right)$$
+  $$F_z=\underbrace{\mu_z}_{\text{proiezione magnetica}}\underbrace{\frac{\partial B_z}{\partial z}}_{\text{gradiente del campo}}$$
+  $$t_f=\frac{\underbrace{L_x}_{\text{lunghezza apparato}}}{\underbrace{v_x}_{\text{velocità longitudinale}}},\qquad z=\frac12\frac{F_z}{m}t_f^2$$
+  <p>Per due componenti simmetriche, la separazione sullo schermo è \(\delta=2|z|\).</p>
+</section>
+<section class="card atomica" id="p50">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L10, L13</span></div>
+<h2>50. Difetto quantico negli alcalini</h2>
+<p>Negli alcalini l’elettrone esterno non vede un puro potenziale coulombiano a causa di schermaggio e penetrazione.</p>
+  $$\underbrace{n^*}_{\text{numero quantico efficace}}=\underbrace{n}_{\text{numero principale}}-\underbrace{\delta_l}_{\text{difetto quantico}}$$
+  $$E_{nl}=-\frac{\underbrace{R_y}_{\text{scala di Rydberg}}}{\underbrace{(n-\delta_l)^2}_{\text{livello efficace}}}$$
+  <p>Il difetto è maggiore per orbitali più penetranti, tipicamente \(s&gt;p&gt;d\).</p>
+</section>
+<section class="card atomica" id="p51">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L13</span></div>
+<h2>51. Doppietti spin-orbita: ordine normale e invertito</h2>
+  $$E_{SO}=\frac{\underbrace{\xi_{LS}}_{\text{costante spin-orbita}}}{2}\left[\underbrace{J(J+1)}_{\text{totale}}-\underbrace{L(L+1)}_{\text{orbitale}}-\underbrace{S(S+1)}_{\text{spin}}\right]$$
+  <p>Da due righe spettroscopiche si passa prima alle energie \(E=hc/\lambda\), poi si ricava \(\xi_{LS}\).</p>
+  $$\xi_{LS}&gt;0\Rightarrow\text{ordine normale},\qquad \xi_{LS}&lt;0\Rightarrow\text{ordine invertito}$$
+</section>
+<section class="card atomica" id="p52">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L5</span></div>
+<h2>52. Polarizzabilità dell’idrogeno fondamentale</h2>
+<p>Per lo stato \(1s\), il termine Stark lineare si annulla per parità; la risposta è quadratica in energia e lineare nel dipolo indotto.</p>
+  $$\vec d_{\mathrm{ind}}=\underbrace{\alpha_{\mathrm{pol}}}_{\text{polarizzabilità}}\vec E$$
+  $$\alpha_{\mathrm{pol}}^{(1s)}=\underbrace{\frac92}_{\text{fattore idrogeno}}\underbrace{4\pi\varepsilon_0a_0^3}_{\text{scala atomica}}$$
+  $$\Delta E^{(2)}=-\frac12\alpha_{\mathrm{pol}}E^2$$
+</section>
+<section class="card atomica" id="p53">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L6–L7</span></div>
+<h2>53. Flusso di fotoni e corpo nero</h2>
+  $$E_\gamma=\underbrace{h\nu}_{\text{energia del fotone}}=\frac{hc}{\lambda}$$
+  $$\dot N_{\mathrm{tot}}=\frac{\underbrace{P}_{\text{potenza}}}{\underbrace{E_\gamma}_{\text{energia per fotone}}}$$
+  $$I(R)=\frac{\underbrace{P}_{\text{potenza isotropa}}}{\underbrace{4\pi R^2}_{\text{superficie sferica}}}$$
+  $$\rho(\nu,T)=\frac{8\pi h\nu^3}{c^3}\frac{1}{e^{h\nu/(k_BT)}-1}$$
+  $$R_{1\to2}^{\mathrm{stim}}=\underbrace{B_{12}}_{\text{Einstein}}\underbrace{\rho(\nu,T)}_{\text{densità spettrale}}$$
+</section>
+<section class="card molecolare" id="p54">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L16</span></div>
+<h2>54. Potenziale di Morse</h2>
+  $$V(r)=\underbrace{D_e}_{\text{profondità}}\left[1-e^{-\underbrace{a}_{\text{larghezza}}(\underbrace{r-r_0}_{\text{spostamento}})}\right]^2-D_e$$
+  <p>Vicino al minimo torna il vibratore armonico.</p>
+  $$V(r)\simeq-D_e+\frac12k(r-r_0)^2$$
+  $$\omega=a\sqrt{\frac{2D_e}{\mu}},\qquad a=\omega\sqrt{\frac{\mu}{2D_e}}$$
+  <p>I livelli reali si addensano verso la dissociazione: l’anarmonicità riduce progressivamente la spaziatura.</p>
+</section>
+<section class="card molecolare" id="p55">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L15–L16</span></div>
+<h2>55. Molecole omonucleari e spettro rotazionale IR</h2>
+  $$\vec d_{\mathrm{permanente}}=0$$
+  $$\langle f|\vec d|i\rangle=0$$
+  <p>Una biatomica omonucleare ideale non mostra transizioni rotazionali elettrico-dipolari pure, perché non possiede dipolo permanente. Può però essere osservata tramite Raman.</p>
+</section>
+<section class="card solidi" id="p56">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L22–L25</span></div>
+<h2>56. Diffrazione e regole di selezione FCC/BCC</h2>
+  $$2\underbrace{d_{hkl}}_{\text{distanza tra piani}}\sin\theta=\underbrace{n\lambda}_{\text{ordine di Bragg}}$$
+  $$d_{hkl}=\frac{\underbrace{a}_{\text{passo cubico}}}{\sqrt{\underbrace{h^2+k^2+l^2}_{\text{indici di Miller}}}}$$
+  $$2k\sin\theta=G,\qquad k=\frac{2\pi}{\lambda}$$
+  <p><strong>BCC:</strong> riflessioni ammesse se \(h+k+l\) è pari.</p>
+<p><strong>FCC:</strong> \(h,k,l\) tutti pari oppure tutti dispari.</p>
+</section>
+<section class="card solidi" id="p57">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L30–L32</span></div>
+<h2>57. Frequenza di plasma e risposta ottica dei metalli</h2>
+  $$\omega_p=\sqrt{\frac{\underbrace{n_e e^2}_{\text{densità e carica}}}{\underbrace{\varepsilon_0m_e}_{\text{risposta inerziale}}}}$$
+  $$\nu_p=\frac{\omega_p}{2\pi},\qquad \lambda_p=\frac{2\pi c}{\omega_p}$$
+  <p>Nel modello ideale: per \(\omega&lt;\omega_p\) il metallo riflette; per \(\omega&gt;\omega_p\) può propagare la radiazione.</p>
+</section>
+<section class="card solidi" id="p58">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L32–L35</span></div>
+<h2>58. Dinamica semiclassica in banda</h2>
+  $$\hbar\dot{\vec k}=\underbrace{\vec F}_{q\vec E}$$
+  $$\vec v_g=\frac{1}{\hbar}\nabla_{\vec k}E_n(\vec k)$$
+  $$\vec a=\frac{q\vec E}{m^*}$$
+  <p>Per l’elettrone \(q=-e\); per la buca efficace \(q_h=+e\). Il segno va controllato insieme alla curvatura della banda.</p>
+</section>
+<section class="card solidi" id="p59">
+<div class="card-head"><span class="badge">Solidi</span><span class="lesson">L31–L33</span></div>
+<h2>59. Momento e vettore di Fermi</h2>
+  $$\underbrace{p_F}_{\text{momento di Fermi}}=\underbrace{\hbar k_F}_{\text{relazione quantistica}}$$
+  $$E_F=\frac{p_F^2}{2m_e}$$
+  $$n_e=\frac{k_F^3}{3\pi^2}=\frac{1}{3\pi^2}\left(\frac{p_F}{\hbar}\right)^3$$
+  $$\rho=\frac{n_eM}{Z_VN_A}$$
+</section>
+<section class="card operativo" id="p60">
+<div class="card-head"><span class="badge">Grafici</span><span class="lesson">Trasversale</span></div>
+<h2>60. Grafici e punti notevoli da saper ricostruire</h2>
+<ul>
+<li><strong>Zeeman:</strong> livelli degeneri a \(B=0\), rette lineari in \(B\) con pendenza \(\mu_Bg_Jm_J\).</li>
+<li><strong>Catena monoatomica:</strong> \(\omega(0)=0\), massimo e \(v_g=0\) al bordo zona.</li>
+<li><strong>Tight-binding:</strong> estremi e punti di flesso da \(dE/dk=0\) e \(d^2E/dk^2=0\).</li>
+<li><strong>Fermi-Dirac:</strong> gradino a \(T=0\), smussamento in una finestra circa \(k_BT\).</li>
+<li><strong>Einstein/Debye:</strong> entrambi tendono a \(3Nk_B\), ma solo Debye dà \(T^3\) a bassa temperatura.</li>
+<li><strong>Morse:</strong> minimo asimmetrico e dissociazione a energia finita.</li>
+</ul>
+</section>
+<section class="card operativo" id="novita-v3">
+<div class="card-head"><span class="badge">Novità V3</span><span class="lesson">Libro esercizi + Tutorati 2026</span></div>
+<h2>Integrazioni finali per evitare sorprese</h2>
+<p>Questi blocchi completano la base V2 con gli argomenti effettivamente comparsi nei dodici tutorati 2026 e nei problemi più plausibili del manuale.</p>
+</section>
+<section class="card atomica" id="p61">
+<div class="card-head"><span class="badge">Atomica e radiazione</span><span class="lesson">Propedeutica, L6–L7</span></div>
+<h2>61. Corpo nero, Wien ed effetto fotoelettrico</h2>
+<p>Il corpo nero fornisce il collegamento tra temperatura, potenza emessa e distribuzione spettrale.</p>
+  $$\underbrace{\lambda_{\max}T}_{\text{legge di Wien}}=\underbrace{b}_{\simeq 2.898\times10^{-3}\,\mathrm{m\,K}}$$
+  $$\underbrace{P}_{\text{potenza radiata}}=\underbrace{\varepsilon}_{\text{emissività}}\underbrace{\sigma}_{\text{Stefan-Boltzmann}}\underbrace{A}_{\text{area}}\underbrace{T^4}_{\text{dipendenza termica}}$$
+  $$I(R)=\frac{P}{4\pi R^2}$$
+  <p>Nell’effetto fotoelettrico un fotone trasferisce energia a un elettrone, che deve superare il lavoro di estrazione.</p>
+  $$\underbrace{K_{\max}}_{\text{energia cinetica massima}}=\underbrace{h\nu}_{\text{energia fotone}}-\underbrace{\Phi}_{\text{lavoro di estrazione}}$$
+  $$eV_s=K_{\max},\qquad v_{\max}=\sqrt{\frac{2K_{\max}}{m_e}}$$
+</section>
+<section class="card atomica" id="p62">
+<div class="card-head"><span class="badge">Atomica</span><span class="lesson">L5–L8</span></div>
+<h2>62. Conteggio delle righe Zeeman e transizioni multipolari</h2>
+<p>Il numero di sottolivelli non coincide automaticamente con il numero di righe. Si devono applicare le regole di selezione e poi unire le transizioni con la stessa energia.</p>
+  $$\Delta J=0,\pm1,\qquad \Delta m_J=0,\pm1,\qquad J=0\not\leftrightarrow J=0$$
+  <p>Per una transizione, lo shift della frequenza dipende dalla differenza degli shift dei due livelli:</p>
+  $$\Delta E_{\gamma}=\mu_BB\left(g_i m_i-g_fm_f\right)$$
+  <p>Gerarchia multipolare:</p>
+  $$\text{E1}:\quad \Delta l=\pm1,\quad \text{cambio di parità}$$
+  $$\text{M1}:\quad \Delta l=0,\quad \text{stessa parità}$$
+  $$\text{E2}:\quad \Delta l=0,\pm2,\quad \text{stessa parità}$$
+  <p>In generale E1 è dominante; M1 ed E2 sono più deboli.</p>
+</section>
+<section class="card atomica" id="p63">
+<div class="card-head"><span class="badge">Atomi multielettronici</span><span class="lesson">L9–L13</span></div>
+<h2>63. Termini spettroscopici e regole di Hund</h2>
+<p>Per elettroni non equivalenti si combinano tutti i valori compatibili di momento orbitale e spin:</p>
+  $$L=|l_1-l_2|,\ldots,l_1+l_2,\qquad S=0,1$$
+  $$J=|L-S|,\ldots,L+S$$
+  <p>Per il termine fondamentale si usano le regole di Hund:</p>
+<ol>
+<li>massimizzare <span class="math-inline">\(S\)</span>;</li>
+<li>a parità di <span class="math-inline">\(S\)</span>, massimizzare <span class="math-inline">\(L\)</span>;</li>
+<li>sottoguscio meno che semipieno: <span class="math-inline">\(J=|L-S|\)</span>; più che semipieno: <span class="math-inline">\(J=L+S\)</span>.</li>
+</ol>
+<p>Un sottoguscio quasi pieno può essere descritto mediante buche. La notazione resta:</p>
+  $${}^{2S+1}L_J$$
+</section>
+<section class="card atomica" id="p64">
+<div class="card-head"><span class="badge">Atomi multielettronici</span><span class="lesson">L10–L13</span></div>
+<h2>64. Schermaggio, carica efficace e difetto quantico</h2>
+  $$\underbrace{Z_{\mathrm{eff}}}_{\text{carica efficace}}=\underbrace{Z}_{\text{carica nucleare}}-\underbrace{\sigma}_{\text{costante di schermaggio}}$$
+  $$E_n\simeq-13.6\,\mathrm{eV}\,\frac{Z_{\mathrm{eff}}^2}{n^2}$$
+  <p>Confrontando questa forma con quella a difetto quantico:</p>
+  $$E_{nl}=-\frac{13.6\,\mathrm{eV}}{(n-\delta_l)^2}$$
+  <p>si ottiene l’equivalenza energetica:</p>
+  $$\boxed{Z_{\mathrm{eff}}=\frac{n}{n-\delta_l}}$$
+  <p>Questa relazione è un modello energetico: non descrive completamente il potenziale di schermaggio.</p>
+</section>
+<section class="card molecolare" id="p65">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L15–L16</span></div>
+<h2>65. Rotazioni: pesi nucleari ed energia traslazionale</h2>
+<p>La popolazione rotazionale può includere un peso statistico di spin nucleare:</p>
+  $$N_r\propto \underbrace{g_{\mathrm{ns}}(r)}_{\text{peso nucleare}}\underbrace{(2r+1)}_{\text{degenerazione rotazionale}}e^{-E_r/(k_BT)}$$
+  <p>Per <span class="math-inline">\(H_2\)</span>:</p>
+  $$r\ \text{pari}:\ g_{\mathrm{ns}}=1\ \text{(para)},\qquad r\ \text{dispari}:\ g_{\mathrm{ns}}=3\ \text{(orto)}$$
+  <p>Per una molecola libera in tre dimensioni:</p>
+  $$\langle K_{\mathrm{trasl}}\rangle=\frac32k_BT$$
+  <p>Questa relazione può essere eguagliata a un gap rotazionale o vibrazionale per determinare una temperatura caratteristica.</p>
+</section>
+<section class="card molecolare" id="p66">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L16</span></div>
+<h2>66. Morse anarmonico</h2>
+<p>Nel potenziale di Morse i livelli non sono equidistanti e si addensano verso la dissociazione.</p>
+  $$E_v=\hbar\omega\left(v+\frac12\right)-\frac{(\hbar\omega)^2}{4D_e}\left(v+\frac12\right)^2$$
+  $$\Delta E_{v\to v-1}=\hbar\omega-\frac{(\hbar\omega)^2}{2D_e}v$$
+  <p>Il numero massimo approssimato di livelli legati è dell’ordine di:</p>
+  $$v_{\max}\simeq \frac{2D_e}{\hbar\omega}-\frac12$$
+</section>
+<section class="card molecolare" id="p67">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">L20</span></div>
+<h2>67. Metodo di Hückel e benzene</h2>
+<p>Nel metodo di Hückel per sistemi <span class="math-inline">\(\pi\)</span>:</p>
+  $$H_{ii}=\alpha,\qquad H_{ij}=\beta\ \text{per primi vicini},\qquad S_{ij}=\delta_{ij}$$
+  <p>Per un anello di <span class="math-inline">\(N\)</span> siti:</p>
+  $$E_m=\alpha+2\beta\cos\left(\frac{2\pi m}{N}\right)$$
+  <p>Per il benzene:</p>
+  $$E=\alpha+2\beta,\quad \alpha+\beta\ (\text{doppio}),\quad \alpha-\beta\ (\text{doppio}),\quad \alpha-2\beta$$
+  $$E_{\pi}=6\alpha+8\beta$$
+  <p>Rispetto a tre doppi legami localizzati, la stabilizzazione per delocalizzazione vale <span class="math-inline">\(2|\beta|\)</span>.</p>
+</section>
+<section class="card solidi" id="p68">
+<div class="card-head"><span class="badge">Cristallografia</span><span class="lesson">L21–L25</span></div>
+<h2>68. Vettori primitivi, reciproci e struttura diamante</h2>
+<p>Il reciproco si costruisce da:</p>
+  $$\vec b_1=2\pi\frac{\vec a_2\times\vec a_3}{\vec a_1\cdot(\vec a_2\times\vec a_3)}$$
+  <p>con permutazioni cicliche. FCC e BCC sono reciproci l’uno dell’altro.</p>
+<p>La struttura diamante è FCC con base:</p>
+  $$\vec\tau_1=(0,0,0),\qquad \vec\tau_2=\frac a4(1,1,1)$$
+  <p>La cella convenzionale contiene otto atomi e ogni atomo ha coordinazione tetraedrica:</p>
+  $$N_{\mathrm{diamante}}=8,\qquad z_1=4$$
+  <p>Per un sistema bidimensionale:</p>
+  $$\sigma_{2D}=\frac{N_{\mathrm{at/cella}}m_{\mathrm{at}}}{A_{\mathrm{cella}}}$$
+</section>
+<section class="card solidi" id="p69">
+<div class="card-head"><span class="badge">Fononi</span><span class="lesson">L24–L28</span></div>
+<h2>69. Velocità media di Debye e vDOS normalizzata</h2>
+  $$\frac1{v_D^3}=\frac13\left(\frac1{v_L^3}+\frac2{v_T^3}\right)$$
+  <p>Per la catena monoatomica:</p>
+  $$v_g(\omega)=v_s\sqrt{1-\left(\frac{\omega}{\omega_{\max}}\right)^2}$$
+  <p>Contando gli stati <span class="math-inline">\(\pm q\)</span>:</p>
+  $$\frac{G(\omega)}{L}=\frac{1}{\pi v_s\sqrt{1-(\omega/\omega_{\max})^2}}$$
+  <p>Se si conta solo <span class="math-inline">\(q&gt;0\)</span>, compare un ulteriore fattore <span class="math-inline">\(1/2\)</span>. La convenzione va dichiarata.</p>
+</section>
+<section class="card solidi" id="p70">
+<div class="card-head"><span class="badge">Metalli</span><span class="lesson">L30–L33</span></div>
+<h2>70. DOS dimensionali, libero cammino e plasmone</h2>
+<p>Per particelle libere paraboliche:</p>
+  $$g_{1D}(E)\propto E^{-1/2},\qquad g_{2D}(E)=\text{costante},\qquad g_{3D}(E)\propto E^{1/2}$$
+  $$\frac{g_{2D}(E)}{A}=\frac{m_e}{\pi\hbar^2}$$
+  <p>Nel modello di Sommerfeld il cammino libero medio è:</p>
+  $$\ell=v_F\tau$$
+  <p>La frequenza di plasma deriva da un’oscillazione collettiva:</p>
+  $$\ddot x+\omega_p^2x=0,\qquad \omega_p=\sqrt{\frac{n_ee^2}{m_e\varepsilon_0}}$$
+  <p>Il quanto dell’oscillazione collettiva è il plasmone, con energia <span class="math-inline">\(\hbar\omega_p\)</span>.</p>
+</section>
+<section class="card solidi" id="p71">
+<div class="card-head"><span class="badge">Bande e semiconduttori</span><span class="lesson">L34–L36</span></div>
+<h2>71. Due bande tight-binding e descrizione delle buche</h2>
+  $$E_{\mathrm{VB}}(k)=E_a'+2\gamma\cos(ka)$$
+  $$E_{\mathrm{CB}}(k)=E_a''-2\delta\cos(ka)$$
+  $$E_g=E_a''-E_a'-2(\delta+\gamma)$$
+  $$W_{\mathrm{VB}}=4\gamma,\qquad W_{\mathrm{CB}}=4\delta$$
+  $$m_e^*=\frac{\hbar^2}{2\delta a^2},\qquad m_h^*=\frac{\hbar^2}{2\gamma a^2}$$
+  <p>La massa negativa dell’elettrone vicino al massimo della valenza viene riformulata come una buca con carica positiva e massa positiva.</p>
+</section>
+<section class="card operativo" id="p72">
+<div class="card-head"><span class="badge">Statistica</span><span class="lesson">Trasversale</span></div>
+<h2>72. Statistiche quantistiche operative</h2>
+  $$f_{\mathrm{FD}}(E)=\frac{1}{e^{(E-\mu)/(k_BT)}+1}$$
+  $$n_{\mathrm{BE}}(E)=\frac{1}{e^{(E-\mu)/(k_BT)}-1}$$
+  $$n_{\mathrm{MB}}(E)\propto e^{-(E-\mu)/(k_BT)}$$
+  <p>Il limite classico vale quando:</p>
+  $$e^{(E-\mu)/(k_BT)}\gg1$$
+  <p>Per fononi e fotoni il numero non è conservato e il potenziale chimico è nullo:</p>
+  $$\mu=0$$
+</section>
+<section class="card operativo" id="p73">
+<div class="card-head"><span class="badge">Statistica classica</span><span class="lesson">Tutorato 2025</span></div>
+<h2>73. Distribuzione di Maxwell e velocità caratteristiche</h2>
+<p>Per un gas ideale monoatomico in equilibrio termico:</p>
+$$f(v)=4\pi\left(\frac{m}{2\pi k_BT}\right)^{3/2}v^2e^{-mv^2/(2k_BT)},\qquad \int_0^\infty f(v)\,dv=1$$
+$$v_{\mathrm{mp}}=\sqrt{\frac{2k_BT}{m}},\qquad \langle v\rangle=\sqrt{\frac{8k_BT}{\pi m}},\qquad v_{\mathrm{rms}}=\sqrt{\frac{3k_BT}{m}}$$
+$$v_{\mathrm{mp}}\lt\langle v\rangle\lt v_{\mathrm{rms}}$$
+<p>Distribuzione dell'energia cinetica:</p>
+$$f_E(E)=\frac{2}{\sqrt\pi}\frac{\sqrt E}{(k_BT)^{3/2}}e^{-E/(k_BT)},\qquad E_{\mathrm{mp}}=\frac12k_BT,\qquad \langle E\rangle=\frac32k_BT$$
+<p>Per <em>N</em> particelle: \(U=\frac32Nk_BT\); per una mole: \(U=\frac32RT\).</p>
+$$C_V=\frac32Nk_B,\qquad C_P=\frac52Nk_B,\qquad C_P-C_V=Nk_B,\qquad \gamma_{\mathrm{ad}}=\frac53$$
+</section><section class="card operativo" id="p74">
+<div class="card-head"><span class="badge">Statistica</span><span class="lesson">Tutorato 2025</span></div>
+<h2>74. Sistema a due livelli e anomalia di Schottky</h2>
+<p>Per livelli non degeneri $E_1=0$ ed $E_2=\varepsilon$:</p>
+$$Z_1=1+e^{-\beta\varepsilon}$$
+$$\langle E\rangle=\frac{\varepsilon}{e^{\beta\varepsilon}+1},\qquad U=N\langle E\rangle$$
+$$C_V=Nk_B\left(\frac{\varepsilon}{k_BT}\right)^2\frac{e^{\varepsilon/(k_BT)}}{\left[1+e^{\varepsilon/(k_BT)}\right]^2}$$
+<p>La capacità termica tende a zero sia per $T\to0$ sia per $T\to\infty$ e presenta un massimo intermedio: anomalia di Schottky.</p>
+<p>Con degenerazioni $g_1,g_2$: $Z_1=g_1+g_2e^{-\beta\varepsilon}$.</p>
+</section><section class="card atomica" id="p75">
+<div class="card-head"><span class="badge">Radiazione</span><span class="lesson">Tutorato 2025</span></div>
+<h2>75. Coefficiente di Einstein e momento di dipolo</h2>
+<p>Per una transizione di dipolo elettrico:</p>
+$$A_{21}=\frac{\omega_{21}^3}{3\pi\varepsilon_0\hbar c^3}\left|\vec d_{21}\right|^2$$
+$$\left|\vec d_{21}\right|=\sqrt{\frac{3\pi\varepsilon_0\hbar c^3A_{21}}{\omega_{21}^3}},\qquad \omega_{21}=2\pi\nu_{21}=\frac{2\pi c}{\lambda_{21}}$$
+<p>Controllo dimensionale: il risultato deve essere in C m. Per confronto atomico è utile l'unità $ea_0$.</p>
+</section><section class="card solidi" id="p76">
+<div class="card-head"><span class="badge">Elettroni nei solidi</span><span class="lesson">Tutorato 2025</span></div>
+<h2>76. Potenziale chimico del gas elettronico 2D</h2>
+<p>In due dimensioni la DOS per unità di area è costante:</p>
+$$D_{2D}=\frac{m}{\pi\hbar^2}$$
+$$n=D_{2D}k_BT\ln\!\left(1+e^{\mu/(k_BT)}\right),\qquad E_F=\frac{n}{D_{2D}}$$
+$$\mu_{2D}(T)=k_BT\ln\!\left(e^{E_F/(k_BT)}-1\right)$$
+$$\mu_{2D}(T)=E_F+k_BT\ln\!\left(1-e^{-E_F/(k_BT)}\right)$$
+<p>Per $T\ll T_F$, la correzione è esponenzialmente piccola, diversamente dal caso 3D dove è dell'ordine di $(T/T_F)^2$.</p>
+</section><section class="card solidi" id="p77">
+<div class="card-head"><span class="badge">Bloch e bande</span><span class="lesson">Tutorato 2025</span></div>
+<h2>77. Periodicità di Bloch e derivazione tight-binding</h2>
+<p>Nel teorema di Bloch: $\psi_k(x)=e^{ikx}u_k(x)$ con $u_k(x+a)=u_k(x)$.</p>
+<p>Se $u(x)=A\cos(\xi x)$, la periodicità richiede:</p>
+$$\xi a=2\pi n,\qquad \xi=\frac{2\pi n}{a}$$
+<p>Normalizzazione su una cella:</p>
+$$A=\sqrt{\frac2a}\quad(n\neq0),\qquad A=\frac1{\sqrt a}\quad(n=0)$$
+<p>Combinazione LCAO per una catena:</p>
+$$\psi_k(x)=\frac1{\sqrt N}\sum_n e^{ikna}\phi(x-na)$$
+<p>Trascurando overlap e integrali oltre i primi vicini:</p>
+$$E(k)=E_0+2H_{01}\cos(ka)$$
+<p>Con $H_{01}=-\delta$:</p>
+$$E(k)=E_0-2\delta\cos(ka),\qquad W=4|\delta|$$
+</section><section class="card atomica" id="p78">
+<div class="card-head"><span class="badge">Atomi multielettronici</span><span class="lesson">Libro 2.3</span></div>
+<h2>78. Modello schermato degli alcalini e difetto quantico</h2>
+<p>Un modello operativo per l'elettrone ottico usa una carica locale dipendente dalla distanza:</p>
+$$\boxed{Z^*(r)=1+\frac{b}{r}}$$
+$$V(r)=-\frac{e^2}{4\pi\varepsilon_0r}-\frac{e^2b}{4\pi\varepsilon_0r^2}$$
+<p>Il termine in \(r^{-2}\) modifica il momento orbitale efficace:</p>
+$$l^*(l^*+1)=l(l+1)-\frac{m_ee^2b}{2\pi\varepsilon_0\hbar^2}=l(l+1)-\frac{2b}{a_0}$$
+<p>Con \(l^*=l-\delta_l\) e piccolo difetto quantico:</p>
+$$\boxed{\delta_l\simeq\frac{2b}{a_0(2l+1)}}$$
+$$\boxed{b\simeq\frac{a_0}{2}(2l+1)\delta_l}$$
+$$E_{nl}=-\frac{13.6\,\mathrm{eV}}{(n-\delta_l)^2}$$
+<p><strong>Non confondere:</strong> \(Z_{\mathrm{eff}}=n/(n-\delta_l)\) è un'equivalenza energetica; \(Z^*(r)=1+b/r\) è una carica locale del modello di potenziale.</p>
+</section><section class="card atomica" id="p79">
+<div class="card-head"><span class="badge">Atomica e radiazione</span><span class="lesson">Libro 2.1–2.3</span></div>
+<h2>79. Raffinamenti spettroscopici ad alta resa</h2>
+<h3>Stark lineare del livello \(n=2\)</h3>
+$$\boxed{\Delta E=0,\qquad \Delta E=\pm3e\frac{a_0}{Z}E}$$
+<h3>Regola dell'intervallo di Landé</h3>
+$$\boxed{E_{J+1}-E_J=\xi_{LS}(J+1)}$$
+<h3>Precessione di Larmor del momento totale</h3>
+$$\boxed{\Omega_L=g_J\frac{\mu_BB}{\hbar}}$$
+<h3>Decadimento con più canali</h3>
+$$\boxed{\frac1{\tau_i}=\sum_f A_{if}},\qquad \boxed{b_{if}=\frac{A_{if}}{\sum_{f'}A_{if'}}}$$
+<h3>Convenzioni di Einstein</h3>
+$$u_\omega\,d\omega=u_\nu\,d\nu,\qquad u_\omega=\frac{u_\nu}{2\pi},\qquad \boxed{B^{(\omega)}=2\pi B^{(\nu)}}$$
+<p>Usare sempre coefficienti e densità spettrali appartenenti alla stessa convenzione.</p>
+</section><section class="card atomica" id="p80">
+<div class="card-head"><span class="badge">Spettroscopia</span><span class="lesson">Libro 2.1</span></div>
+<h2>80. Allargamento delle righe e potere risolutivo</h2>
+<h3>Naturale</h3>
+$$\Delta\nu_{\mathrm N}\sim\frac{1}{2\pi\tau},\qquad \Delta E\sim\frac{\hbar}{\tau}$$
+<h3>Collisionale</h3>
+$$\tau_c^{-1}=n\sigma\langle v\rangle,\qquad \Delta\nu_c\sim\frac{1}{2\pi\tau_c}$$
+<h3>Doppler, FWHM</h3>
+$$\boxed{\frac{\Delta\nu_D}{\nu_0}=\sqrt{\frac{8k_BT\ln2}{Mc^2}}}$$
+<p>Naturale e collisionale producono profili lorentziani; Doppler produce un profilo gaussiano. La convoluzione è un profilo di Voigt.</p>
+<h3>Reticolo di diffrazione</h3>
+$$d\sin\theta_m=m\lambda,\qquad \boxed{\mathcal R=\frac{\lambda}{\Delta\lambda}=mN}$$
+<p>Una struttura è risolta solo se la separazione fisica supera sia la larghezza intrinseca sia la risoluzione strumentale.</p>
+</section><section class="card molecolare" id="p81">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">Libro 3.2</span></div>
+<h2>81. LCAO eteronucleare, densità e dipolo</h2>
+$$\psi=N(\phi_A+\eta\phi_B),\qquad \boxed{N=\frac1{\sqrt{1+\eta^2+2\eta S}}},\qquad S=\langle A|B\rangle$$
+<p>Per due elettroni nell'orbitale molecolare:</p>
+$$\rho_N(\vec r)=\frac{2\left(|\phi_A|^2+\eta^2|\phi_B|^2+2\eta\operatorname{Re}(\phi_A^*\phi_B)\right)}{1+\eta^2+2\eta S}$$
+<p>Con asse da \(A\) a \(B\), nuclei efficaci \(+e\), orbitali equivalenti traslati e \(\langle A|z|B\rangle=RS/2\):</p>
+$$\boxed{\mu_z=eR\frac{1-\eta^2}{1+\eta^2+2\eta S}}$$
+<ul>
+<li>\(\eta=1\Rightarrow\mu_z=0\): caso simmetrico omonucleare.</li>
+<li>\(\eta\gt0\): interferenza costruttiva e densità internucleare legante.</li>
+<li>\(\eta\lt0\): interferenza distruttiva e orbitale antilegante.</li>
+</ul>
+<p>Integrali: \(S_{ij}\) è adimensionale; \(H_{ii}\) è coulombiano/locale; \(H_{ij}\) è di risonanza e ha dimensioni di energia.</p>
+</section><section class="card molecolare" id="p82">
+<div class="card-head"><span class="badge">Molecolare</span><span class="lesson">Libro 3.2</span></div>
+<h2>82. Simmetria cilindrica e ordine di legame</h2>
+<p>Nella molecola biatomica l'asse internucleare è privilegiato:</p>
+$$[H,L_z]=0,\qquad [H,L^2]\neq0$$
+$$L_z\psi=\Lambda\hbar\psi$$
+$$|\Lambda|=0,1,2,3,\ldots\quad\Longrightarrow\quad \Sigma,\Pi,\Delta,\Phi,\ldots$$
+<p>Per \(\Lambda\neq0\), gli stati \(+\Lambda\) e \(-\Lambda\) sono degeneri in assenza di campi.</p>
+<h3>Ordine di legame</h3>
+$$\boxed{\mathrm{BO}=\frac{N_{\mathrm{leganti}}-N_{\mathrm{antileganti}}}{2}}$$
+<ul>
+<li>\(\mathrm{BO}\gt0\): legame netto.</li>
+<li>\(\mathrm{BO}=0\): nessun normale legame covalente stabile nel modello MO.</li>
+</ul>
+<p>Nelle omonucleari il dipolo permanente è nullo per simmetria, pur restando possibile la polarizzabilità e l'interazione di van der Waals.</p>
+</section><section class="card molecolare" id="p83">
+<div class="card-head"><span class="badge">Molecolare avanzata</span><span class="lesson">Libro 3.1</span></div>
+<h2>83. Viriale molecolare, ampiezza e problemi inversi</h2>
+<h3>Teorema del viriale di Slater</h3>
+$$\boxed{\langle T\rangle=-E-R\frac{dE}{dR}},\qquad \boxed{\langle V\rangle=2E+R\frac{dE}{dR}}$$
+<p>All'equilibrio, \(dE/dR=0\): \(\langle T\rangle=-E\), \(\langle V\rangle=2E\).</p>
+<h3>Ampiezza classica equivalente del livello vibrazionale</h3>
+$$\boxed{A_v=\sqrt{\frac{(2v+1)\hbar}{\mu\omega}}}$$
+<h3>Punto zero</h3>
+$$E_0=\frac12\hbar\omega,\qquad \nu_{\mathrm{mecc}}=\frac{\omega}{2\pi},\qquad \frac{E_0}{h}=\frac{\nu_{\mathrm{mecc}}}{2}$$
+<h3>Controllo di determinazione</h3>
+<p>Un potenziale con \(p\) parametri richiede almeno \(p\) condizioni indipendenti. Prima di calcolare, contare dati e incognite.</p>
+</section><section class="card solidi" id="p84">
+<div class="card-head"><span class="badge">Cristallografia</span><span class="lesson">Libro 4.1</span></div>
+<h2>84. Geometria cristallina, dilatazione e primi vicini</h2>
+$$\boxed{V_{\mathrm{cell}}=\left|\vec a_1\cdot(\vec a_2\times\vec a_3)\right|},\qquad \boxed{A_{2D}=|\vec a_1\times\vec a_2|}$$
+<h3>Dilatazione isotropa</h3>
+$$a(T)=a_0(1+\alpha\Delta T)$$
+$$V(T)\simeq V_0(1+3\alpha\Delta T),\qquad \boxed{\rho(T)\simeq\frac{\rho_0}{1+3\alpha\Delta T}}$$
+<h3>Ricerca dei primi vicini</h3>
+$$\vec R=n_1\vec a_1+n_2\vec a_2+n_3\vec a_3$$
+<p>Enumerare piccoli interi \(n_i\), eliminare \(\vec R=0\), ordinare i moduli e contare quanti vettori realizzano il minimo.</p>
+<h3>Neutroni termici</h3>
+$$\boxed{\lambda_n=\frac{h}{\sqrt{3m_nk_BT}}}$$
+<p>Per lo stesso \(G\), la condizione \(2k\sin\theta=G\) implica angoli maggiori per lunghezze d'onda maggiori.</p>
+</section><section class="card solidi" id="p85">
+<div class="card-head"><span class="badge">Fononi</span><span class="lesson">Libro 4.2</span></div>
+<h2>85. Catena biatomica quantitativa</h2>
+<p>Per masse alternate \(m_1,m_2\) e due costanti elastiche alternate \(\gamma,\zeta\):</p>
+$$\boxed{\omega_\pm^2(q)=\frac{(\gamma+\zeta)(m_1+m_2)}{2m_1m_2}\pm\frac12\sqrt{\left[\frac{(\gamma+\zeta)(m_1+m_2)}{m_1m_2}\right]^2-\frac{16\gamma\zeta}{m_1m_2}\sin^2\frac{qa}{2}}}$$
+<p>Il segno meno è la branca acustica; il segno più è la branca ottica.</p>
+$$\omega_{\mathrm{ac}}(0)=0,\qquad \omega_{\mathrm{op}}(0)=\sqrt{(\gamma+\zeta)\left(\frac1{m_1}+\frac1{m_2}\right)}$$
+<p>Per \(qa\ll1\):</p>
+$$\boxed{v_s=a\sqrt{\frac{\gamma\zeta}{(\gamma+\zeta)(m_1+m_2)}}}$$
+<p>Controllo monoatomico, con passo fra atomi adiacenti:</p>
+$$\boxed{v_s=a\sqrt{\frac{\gamma}{M}}}$$
+</section><section class="card solidi" id="p86">
+<div class="card-head"><span class="badge">Elettroni nei solidi</span><span class="lesson">Libro 4.3</span></div>
+<h2>86. Wiedemann-Franz e potenziale chimico 3D</h2>
+<h3>Wiedemann-Franz</h3>
+$$\boxed{\frac{\kappa}{\sigma T}=L_0},\qquad \boxed{L_0=\frac{\pi^2}{3}\left(\frac{k_B}{e}\right)^2\simeq2.44\times10^{-8}\,\mathrm{W\,\Omega\,K^{-2}}}$$
+$$\boxed{\kappa=L_0\sigma T}$$
+<h3>Potenziale chimico di Sommerfeld in 3D</h3>
+$$\boxed{\mu_{3D}(T)\simeq E_F\left[1-\frac{\pi^2}{12}\left(\frac{k_BT}{E_F}\right)^2\right]}$$
+$$\mu_{3D}(T)\simeq E_F\left[1-\frac{\pi^2}{12}\left(\frac{T}{T_F}\right)^2\right]$$
+<p>In 2D, con DOS costante, la correzione a bassa temperatura è invece esponenzialmente piccola.</p>
+</section><section class="card operativo" id="operativi"><h2>Pezzi operativi aggiunti dagli scritti recenti</h2><p>Questi non sostituiscono la teoria: sono pattern da riconoscere in scritto.</p></section>
+<section class="card operativo molecolare" id="opA">
+<div class="card-head"><span class="badge">Operativo scritto</span><span class="lesson">collegato a L14–L16, pattern scritto</span></div>
+<h2>A. Lennard-Jones operativo</h2>
+  
+$$V(r)=\underbrace{Ar^{-12}}_{\text{repulsione a corto raggio}}-\underbrace{Br^{-6}}_{\text{attrazione di van der Waals}}$$
+$$\frac{dV}{dr}=0$$
+$$-12Ar^{-13}+6Br^{-7}=0$$
+$$r_0=\left(\frac{\underbrace{2A}_{\text{repulsione}}}{\underbrace{B}_{\text{attrazione}}}\right)^{1/6}$$
+$$k=\left.\underbrace{\frac{d^2V}{dr^2}}_{\text{curvatura del potenziale}}\right|_{r=r_0}$$
+$$E_D\simeq\underbrace{|V(r_0)|}_{\text{profondità del minimo}}$$
+
+</section><section class="card operativo molecolare" id="opB">
+<div class="card-head"><span class="badge">Operativo scritto</span><span class="lesson">L15–L16, pattern scritto</span></div>
+<h2>B. Popolazione rotazionale massima</h2>
+  
+$$N_r\propto\underbrace{(2r+1)}_{\text{degenerazione rotazionale}}e^{-\underbrace{\beta}_{1/(k_BT)}\underbrace{E_r}_{\text{energia rotazionale}}}$$
+$$E_r=\underbrace{\frac{\hbar^2}{2I}}_{\text{scala rotazionale}}\underbrace{r(r+1)}_{\text{livello rotazionale}}$$
+$$r_{\max}\simeq\frac12\left[\sqrt{\frac{\underbrace{4Ik_BT}_{\text{inerzia e temperatura}}}{\underbrace{\hbar^2}_{\text{scala quantistica}}}}-1\right]$$
+
+</section><section class="card operativo solidi" id="opC">
+<div class="card-head"><span class="badge">Operativo scritto</span><span class="lesson">L24–L25, pattern scritto</span></div>
+<h2>C. vDOS fononica 1D</h2>
+  
+$$G(\omega)d\omega=\underbrace{\frac{L}{2\pi}}_{\text{densità di stati in }q}dq$$
+$$G(\omega)=\underbrace{\frac{L}{2\pi}}_{\text{fattore 1D}}\left|\underbrace{\frac{d\omega}{dq}}_{\text{velocità di gruppo}}\right|^{-1}$$
+$$G(\omega)=\frac{L}{2\pi}\left|\underbrace{a\sqrt{\frac{\gamma}{M}}\cos\left(\frac{qa}{2}\right)}_{v_g(q)}\right|^{-1}$$
+$$v_g=0\Rightarrow G(\omega)\to\infty$$
+<p>Singolarità di van Hove, non zero della DOS.</p>
+</section><section class="card operativo solidi" id="opD">
+<div class="card-head"><span class="badge">Operativo scritto</span><span class="lesson">L22, L31–L33, pattern scritto</span></div>
+<h2>D. Densità, cella FCC e Fermi</h2>
+  
+$$\rho=\frac{\underbrace{N_{\mathrm{at/cella}}}_{\text{atomi per cella}}\underbrace{m_{\mathrm{at}}}_{\text{massa atomica}}}{\underbrace{a^3}_{\text{volume cella}}}$$
+$$a=\left(\frac{\underbrace{N_{\mathrm{at/cella}}m_{\mathrm{at}}}_{\text{massa della cella}}}{\underbrace{\rho}_{\text{densità}}}\right)^{1/3}$$
+$$N_{\mathrm{at/cella}}=4 \quad \text{per FCC}$$
+$$n_e=\underbrace{Z_V}_{\text{elettroni di valenza per atomo}}\frac{\underbrace{4}_{\text{atomi FCC}}}{\underbrace{a^3}_{\text{volume cella}}}$$
+$$E_F=\underbrace{\frac{\hbar^2}{2m_e}}_{\text{fattore cinetico}}\left(\underbrace{3\pi^2n_e}_{\text{densità elettronica}}\right)^{2/3}$$
+
+</section>
+<section class="card operativo" id="orale">
+<h2>Frase standard orale</h2>
+<div class="oral-template">
+<p><strong>Siamo nell’approssimazione di</strong> <span class="math-inline">\(X\)</span>.</p>
+<p><strong>Assumiamo</strong> <span class="math-inline">\(A,B,C\)</span>.</p>
+<p><strong>Trascuriamo</strong> <span class="math-inline">\(D\)</span>.</p>
+<p><strong>Otteniamo</strong> <span class="math-inline">\(E\)</span>.</p>
+<p><strong>L’approssimazione vale finché</strong> <span class="math-inline">\(F\)</span>.</p>
+</div>
+<p><strong>Esempio:</strong></p>
+<p>
+  Siamo nell’approssimazione di dipolo elettrico: assumiamo che la lunghezza d’onda della radiazione sia molto maggiore della dimensione atomica, cioè
+  <span class="math-inline">\(\lambda \gg a_0\)</span>.
+</p>
+<p>
+  Equivalentemente,
+  <span class="math-inline">\(k r \ll 1\)</span>,
+  quindi
+  <span class="math-inline">\(e^{i\vec{k}\cdot\vec{r}} \simeq 1\)</span>.
+</p>
+<p>
+  Trascuriamo i multipoli superiori. La conseguenza è che l’interazione dominante è
+  <span class="math-inline">\(-\vec{d}\cdot\vec{E}\)</span>
+  e otteniamo le regole di selezione al dipolo.
+</p>
+</section>
+</div>
+</main>
+<div class="floatnav">
+<button data-scroll-target="top" title="Torna su" type="button">↑</button>
+<button data-scroll-target="bottom" title="Vai giù" type="button">↓</button>
+</div>
+<footer id="bottom"><p>Formulario 1 V6. Collegamento: <a href="Formulario2_V6.html">Formulario 2 V6 - equazioni operative</a>.</p></footer>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const content = document.getElementById("content");
+  const toggle = document.getElementById("layoutToggle");
+  const savedLayout = localStorage.getItem("formulario1-layout");
+
+  function setLayout(mode) {
+    if (!content || !toggle) return;
+    const multi = mode === "multi";
+    content.classList.toggle("multi", multi);
+    toggle.textContent = multi ? "Vista singola colonna" : "Vista due colonne";
+    localStorage.setItem("formulario1-layout", multi ? "multi" : "single");
+  }
+
+  if (toggle) {
+    setLayout(savedLayout === "multi" ? "multi" : "single");
+    toggle.addEventListener("click", function() {
+      setLayout(content.classList.contains("multi") ? "single" : "multi");
+    });
+  }
+
+  document.querySelectorAll("[data-scroll-target]").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      const targetId = btn.getAttribute("data-scroll-target");
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({behavior:"smooth", block: targetId === "bottom" ? "end" : "start"});
+      } else if (targetId === "top") {
+        window.scrollTo({top:0, behavior:"smooth"});
+      }
+    });
+  });
+
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$", right: "$", display: false}
+    ],
+    throwOnError: false
+  });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+    link.addEventListener("click", function(event) {
+      event.preventDefault();
+      const id = link.getAttribute("href").slice(1);
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({behavior:"smooth", block:id==="bottom" ? "end" : "start"});
+    });
+  });
+});
+</script>
+</body>
+</html>

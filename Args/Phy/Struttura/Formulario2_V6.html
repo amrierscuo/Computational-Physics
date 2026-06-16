@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Formulario 2 V6 - Equazioni operative | Struttura della Materia</title>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+    :root{
+      --bg:#0f172a; --paper:#f8fafc; --ink:#111827; --muted:#64748b;
+      --atom:#dbeafe; --atom-b:#2563eb;
+      --mol:#dcfce7; --mol-b:#16a34a;
+      --solid:#fef3c7; --solid-b:#d97706;
+      --stat:#f3e8ff; --stat-b:#9333ea;
+      --pattern:#fee2e2; --pattern-b:#dc2626;
+      --const:#e0f2fe; --const-b:#0284c7;
+    }
+    html{scroll-behavior:smooth;}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:linear-gradient(135deg,#0f172a,#1e293b); color:var(--ink); line-height:1.55;}
+    header{color:white; padding:34px 22px 18px; max-width:1180px; margin:auto;}
+    header h1{margin:0 0 8px; font-size:clamp(1.8rem,4vw,3.1rem);}
+    header p{margin:6px 0; color:#cbd5e1; max-width:900px;}
+    .topbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+    .btn{display:inline-block; text-decoration:none; padding:10px 14px; border-radius:999px; font-weight:700; background:white; color:#0f172a; border:1px solid rgba(255,255,255,.2);}
+    .btn.dark{background:#1e293b;color:white;border-color:#475569;}
+    .layout{max-width:1180px; margin:0 auto 60px; padding:0 18px; display:grid; grid-template-columns:285px 1fr; gap:18px; align-items:start;}
+    nav{position:sticky; top:14px; background:rgba(248,250,252,.96); border-radius:18px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.18); max-height:calc(100vh - 34px); overflow:auto;}
+    nav h2{font-size:1rem; margin:0 0 10px;}
+    nav a{display:block; color:#334155; text-decoration:none; padding:7px 8px; border-radius:10px; font-size:.93rem;}
+    nav a:hover{background:#e2e8f0; color:#0f172a;}
+    main{background:var(--paper); border-radius:22px; padding:18px; box-shadow:0 14px 40px rgba(0,0,0,.25);}
+    section{border-radius:18px; padding:16px 18px; margin:0 0 16px; border-left:8px solid #94a3b8; background:white; box-shadow:0 3px 14px rgba(15,23,42,.06);}
+    section h2{margin:0 0 6px; font-size:1.45rem;}
+    section h3{margin:18px 0 6px; font-size:1.08rem; color:#0f172a;}
+    .meta{font-weight:800; font-size:.88rem; color:#475569; margin-bottom:10px;}
+    .atom{background:linear-gradient(90deg,var(--atom),#fff); border-color:var(--atom-b);} .atom h2{color:#1d4ed8;}
+    .mol{background:linear-gradient(90deg,var(--mol),#fff); border-color:var(--mol-b);} .mol h2{color:#15803d;}
+    .solid{background:linear-gradient(90deg,var(--solid),#fff); border-color:var(--solid-b);} .solid h2{color:#b45309;}
+    .stat{background:linear-gradient(90deg,var(--stat),#fff); border-color:var(--stat-b);} .stat h2{color:#7e22ce;}
+    .pattern{background:linear-gradient(90deg,var(--pattern),#fff); border-color:var(--pattern-b);} .pattern h2{color:#b91c1c;}
+    .const{background:linear-gradient(90deg,var(--const),#fff); border-color:var(--const-b);} .const h2{color:#0369a1;}
+    .formula{background:rgba(255,255,255,.78); border:1px solid #e2e8f0; border-radius:14px; padding:10px 12px; margin:9px 0; overflow-x:auto;}
+    ul{margin-top:6px;} li{margin:4px 0;}
+    .pill{display:inline-block; padding:2px 8px; border-radius:999px; background:#e2e8f0; color:#334155; font-size:.78rem; font-weight:800; margin-left:6px;}
+    .float{position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:9px; z-index:10;}
+    .float a,.float button{width:44px;height:44px;border-radius:999px;background:#0f172a;color:white;display:grid;place-items:center;text-decoration:none;font-weight:900;border:0;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25);}
+    footer{color:#cbd5e1; text-align:center; padding:28px;}
+
+    .layout-toggle{border:0;cursor:pointer}
+    @media(min-width:1200px){
+      main.multi{column-count:2;column-gap:16px;}
+      main.multi section{display:inline-block;width:100%;box-sizing:border-box;break-inside:avoid;}
+      main.multi .katex-display{font-size:.94em;}
+    }
+
+    @media(max-width:900px){.layout{grid-template-columns:1fr;} nav{position:relative; top:auto; max-height:none;} main{padding:12px;} section{padding:14px;} }
+    @media print{body{background:white;} header,nav,.float,.topbar,footer{display:none;} .layout{display:block; max-width:none; padding:0;} main{box-shadow:none; padding:0;} section{break-inside:avoid; box-shadow:none;} }
+  
+    .warning{background:#fff7ed;border:1px solid #fdba74;border-left:5px solid #ea580c;border-radius:12px;padding:10px 12px;margin:10px 0;color:#7c2d12;}
+    .quick-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.92rem;}
+    .quick-table th,.quick-table td{border:1px solid #cbd5e1;padding:8px;text-align:left;vertical-align:top;}
+</style>
+</head>
+<body id="top">
+<header>
+<h1>Formulario 2 V6 - Equazioni operative</h1>
+<p>Formulario pratico per scritto e ripasso rapido. Formule, pattern, unità e trappole. <strong>V6:</strong> base V5 con strumenti trasversali per conti veloci e controlli fisici.</p>
+<div class="topbar">
+<a class="btn" href="Formulario1_V6.html">← Vai al Formulario 1 V6</a>
+<button class="btn dark layout-toggle" data-scroll-target="bottom" type="button">Vai giù ↓</button>
+<button class="btn dark layout-toggle" id="layoutToggle2" type="button">Vista due colonne</button>
+</div>
+</header>
+<div class="layout">
+<nav>
+<h2>Indice</h2>
+<a href="#costanti">Costanti universali e conversioni</a><a href="#v6-ordini">V6 - ordini di grandezza</a><a href="#v6-algebra">V6 - algebra rapida</a><a href="#v6-dimensioni">V6 - analisi dimensionale</a>
+<a href="#atomica">Atomica</a>
+<a href="#radiazione">Radiazione e campi</a>
+<a href="#molecolare">Molecolare</a>
+<a href="#solidi-cristalli">Cristallografia</a>
+<a href="#fononi">Fononi e termica</a>
+<a href="#elettroni">Elettroni nei solidi</a>
+<a href="#semiconduttori">Semiconduttori</a>
+<a href="#v2-atomica">Novità V2 - atomica</a>
+<a href="#v2-molecolare">Novità V2 - molecolare</a>
+<a href="#v2-solidi">Novità V2 - solidi</a>
+<a href="#v2-grafici">Grafici e procedure</a>
+<a href="#v3-atomica">Novità V3 - atomica</a>
+<a href="#v3-molecolare">Novità V3 - molecolare</a>
+<a href="#v3-cristalli">Novità V3 - cristalli</a>
+<a href="#v3-fononi">Novità V3 - fononi</a>
+<a href="#v3-metalli">Novità V3 - metalli</a>
+<a href="#v3-bande">Novità V3 - bande</a>
+<a href="#v4-statistica">Novità V4 - statistica</a><a href="#v4-einstein">Novità V4 - Einstein</a><a href="#v4-bloch">Novità V4 - Bloch e bande</a><a href="#v5-atomica">Novità V5 - atomica</a><a href="#v5-molecolare">Novità V5 - molecolare</a><a href="#v5-cristalli">Novità V5 - cristalli</a><a href="#v5-fononi">Novità V5 - fononi</a><a href="#v5-metalli">Novità V5 - metalli</a><a href="#pattern">Pattern scritto</a>
+<a href="#check">Checklist anti-errori</a>
+</nav>
+<main>
+<section class="const" id="costanti">
+<h2>Costanti universali e conversioni rapide</h2>
+<div class="meta">V6 - valori per calcolo immediato</div>
+<h3>Fondamentali</h3>
+<div class="formula">\[ e=1.602176634\times10^{-19}\,\mathrm C \]</div>
+<div class="formula">\[ k_B=1.380649\times10^{-23}\,\mathrm{J/K}=8.617333\times10^{-5}\,\mathrm{eV/K} \]</div>
+<div class="formula">\[ h=6.62607015\times10^{-34}\,\mathrm{J\,s}=4.135668\times10^{-15}\,\mathrm{eV\,s} \]</div>
+<div class="formula">\[ \hbar=1.054572\times10^{-34}\,\mathrm{J\,s}=6.582120\times10^{-16}\,\mathrm{eV\,s} \]</div>
+<div class="formula">\[ c=2.99792458\times10^8\,\mathrm{m/s},\quad \varepsilon_0=8.854188\times10^{-12}\,\mathrm{F/m} \]</div>
+<div class="formula">\[ \mu_0\simeq1.256637\times10^{-6}\,\mathrm{H/m},\quad \frac1{4\pi\varepsilon_0}=8.987552\times10^9\,\mathrm{N\,m^2/C^2} \]</div>
+<div class="formula">\[ N_A=6.02214076\times10^{23}\,\mathrm{mol^{-1}},\quad R=8.314463\,\mathrm{J\,mol^{-1}K^{-1}},\quad F=N_Ae=96485.33\,\mathrm{C/mol} \]</div>
+<div class="formula">\[ \sigma_{SB}=5.670374\times10^{-8}\,\mathrm{W\,m^{-2}K^{-4}},\quad b_W=2.897772\times10^{-3}\,\mathrm{m\,K} \]</div>
+<h3>Atomiche</h3>
+<div class="formula">\[ m_e=9.109384\times10^{-31}\,\mathrm{kg},\quad m_p=1.672622\times10^{-27}\,\mathrm{kg},\quad m_n=1.674927\times10^{-27}\,\mathrm{kg} \]</div>
+<div class="formula">\[ 1\,\mathrm u=1.660539\times10^{-27}\,\mathrm{kg},\quad a_0=0.529177\,\mathrm{\AA} \]</div>
+<div class="formula">\[ \alpha\simeq1/137.036,\quad R_y=13.6057\,\mathrm{eV},\quad E_h=27.2114\,\mathrm{eV} \]</div>
+<div class="formula">\[ g_s\simeq2.002319,\quad \mu_B=5.788382\times10^{-5}\,\mathrm{eV/T},\quad \mu_N=3.152451\times10^{-8}\,\mathrm{eV/T} \]</div>
+<div class="formula">\[ \frac{e^2}{4\pi\varepsilon_0}=1.439965\,\mathrm{eV\,nm}=14.39965\,\mathrm{eV\,\AA} \]</div>
+<h3>Conversioni</h3>
+<div class="formula">\[ 1\,\mathrm{eV}=1.602176634\times10^{-19}\,\mathrm J=96.485\,\mathrm{kJ/mol}=11604.5\,\mathrm K \]</div>
+<div class="formula">\[ hc=1239.842\,\mathrm{eV\,nm},\quad \hbar c=197.327\,\mathrm{eV\,nm} \]</div>
+<div class="formula">\[ E[\mathrm{eV}]=\frac{1239.842}{\lambda[\mathrm{nm}]},\quad E[\mathrm{meV}]=4.135668\,\nu[\mathrm{THz}] \]</div>
+<div class="formula">\[ 1\,\mathrm{THz}=4.135668\,\mathrm{meV}=33.3564\,\mathrm{cm^{-1}},\quad1\,\mathrm{cm^{-1}}=0.123984\,\mathrm{meV} \]</div>
+<div class="formula">\[ 1\,\mathrm D=3.33564\times10^{-30}\,\mathrm{C\,m},\quad1\,e\mathrm{\AA}=4.80320\,\mathrm D \]</div>
+<div class="formula">\[ 1\,\mathrm{eV/\AA^2}=16.0218\,\mathrm{N/m},\quad1\,\mathrm{g/cm^3}=10^3\,\mathrm{kg/m^3} \]</div>
+<div class="warning"><strong>Attenzione:</strong> usa \(h\nu\) oppure \(\hbar\omega\), con \(\omega=2\pi\nu\). Non usare \(h\omega\) senza il fattore \(2\pi\).</div>
+</section><section class="pattern" id="v6-ordini">
+<h2>V6 - ordini di grandezza e controlli lampo</h2>
+<div class="meta">Fermati prima di accettare il numero</div>
+<div class="formula">\[ r_{\rm at},R_e\sim0.5\!-\!3\,\mathrm{\AA},\qquad a_{\rm reticolo}\sim2\!-\!6\,\mathrm{\AA},\qquad k,G\sim1\,\mathrm{\AA^{-1}} \]</div>
+<div class="formula">\[ E_{\rm rot}\sim10^{-2}\!-\!10\,\mathrm{meV},\quad E_{\rm vib/phonon}\sim1\!-\!500\,\mathrm{meV},\quad E_{\rm elettronica}\sim1\!-\!10\,\mathrm{eV} \]</div>
+<div class="formula">\[ k_BT=25.85\,\mathrm{meV}\ (300\,\mathrm K),\qquad \mu_BB=57.9\,\mu\mathrm{eV}\times B[\mathrm T] \]</div>
+<div class="formula">\[ v_s\sim10^3\!-\!10^4\,\mathrm{m/s},\quad v_F\sim10^5\!-\!10^6\,\mathrm{m/s},\quad v_d\ll v_F \]</div>
+<div class="formula">\[ n_e\sim10^{28}\!-\!10^{29}\,\mathrm{m^{-3}},\quad E_F\sim1\!-\!10\,\mathrm{eV},\quad \tau\sim1\!-\!100\,\mathrm{fs} \]</div>
+<ul>
+<li>\(\mu&lt;\min(m_1,m_2)\); omonucleare: \(\mu=m/2\).</li>
+<li>\(0\le p_i\le1\), \(\sum p_i=1\), \(\sum n_i=N\).</li>
+<li>Bosoni: \(\mu_{\rm chim}&lt;E_0\). Fermioni degeneri: \(\mu_{\rm chim}\simeq E_F\).</li>
+<li>Diffrazione: \(|\sin\theta|\le1\). Minimo: \(V'=0\), \(V''&gt;0\).</li>
+<li>Se \(v_g\to0\), la vDOS 1D diverge. Se \(\ell\) è metallica, usa \(v_F\tau\).</li>
+<li>Zeeman da laboratorio: µeV–meV, non eV. Passi e legami: Å, non nm interi o metri.</li>
+</ul>
+</section><section class="pattern" id="v6-algebra">
+<h2>V6 - algebra e catene di calcolo rapide</h2>
+<div class="meta">Semplifica simbolicamente prima della calcolatrice</div>
+<h3>Approssimazioni</h3>
+<div class="formula">\[ e^x-1\simeq x\ (|x|\ll1),\quad e^x-1\simeq e^x\ (x\gg1),\quad \ln(1+x)\simeq x \]</div>
+<div class="formula">\[ \sin x\simeq x,\quad \cos x\simeq1-\frac{x^2}{2},\quad(1+x)^p\simeq1+px \]</div>
+<div class="formula">\[ \sqrt2=1.4142,\quad\sqrt3=1.7321,\quad2^{1/6}=1.1225,\quad\ln2=0.6931,\quad\ln10=2.3026 \]</div>
+<h3>Inversioni</h3>
+<div class="formula">\[ T=\frac{\Delta E}{k_B\ln\!\left(\frac{g_2N_1}{g_1N_2}\right)} \]</div>
+<div class="formula">\[ \omega=\frac{\Delta E}{\hbar},\quad k_{\rm elast}=\mu\omega^2,\quad I=\frac{\hbar^2(r+1)}{\Delta E_{r\to r+1}},\quad R_e=\sqrt{I/\mu} \]</div>
+<div class="formula">\[ a=\left(\frac{N_{\rm cell}m_{\rm at}}{\rho}\right)^{1/3},\quad \gamma=M(v_s/a)^2,\quad \tau=\frac{m_e\sigma}{n_ee^2},\quad \ell=v_F\tau \]</div>
+<div class="formula">\[ a_{\rm cubico}=\frac{\lambda\sqrt{h^2+k^2+l^2}}{2\sin\theta},\quad \frac{\Delta\lambda}{\lambda}\simeq-\frac{\Delta E}{E} \]</div>
+<h3>Potenziale \(Ar^{-m}-Br^{-n}\)</h3>
+<div class="formula">\[ r_0=\left(\frac{mA}{nB}\right)^{1/(m-n)} \]</div>
+<div class="formula">\[ V(r_0)=-\frac{m-n}{m}\frac{B}{r_0^n},\qquad V''(r_0)=\frac{n(m-n)B}{r_0^{n+2}} \]</div>
+<h3>Tight-binding e somme</h3>
+<div class="formula">\[ E=E_0-2\delta\cos ka\Rightarrow v=\frac{2\delta a}{\hbar}\sin ka,\quad m^*=\frac{\hbar^2}{2\delta a^2\cos ka} \]</div>
+<div class="formula">\[ \sum_{n=1}^Nn=\frac{N(N+1)}2,\qquad \sum_{n=1}^Nn^2=\frac{N(N+1)(2N+1)}6 \]</div>
+<div class="warning"><strong>Stabilità numerica:</strong> per \(x\gg1\), usa \(\ln(e^x-1)=x+\ln(1-e^{-x})\). Evita di calcolare direttamente esponenziali enormi.</div>
+</section><section class="pattern" id="v6-dimensioni">
+<h2>V6 - analisi dimensionale e unità finali</h2>
+<div class="meta">Una formula passa il primo test solo se le unità tornano</div>
+<div class="formula">\[ \frac{E}{k_BT},\ \frac{h\nu}{k_BT},\ qa,\ kr,\ ka,\ \ln(N_2/N_1)\quad\text{devono essere adimensionali} \]</div>
+<div class="formula">\[ \frac{\hbar^2}{mL^2},\ \mu_BB,\ eER,\ \frac{\hbar^2}{I},\ \alpha_pE^2\quad\longrightarrow\quad\mathrm J \]</div>
+<div class="formula">\[ [k_{\rm elast}]=[\gamma]=\mathrm{N/m}=\mathrm{kg/s^2},\qquad \sqrt{k/\mu}\to\mathrm{s^{-1}} \]</div>
+<div class="formula">\[ a\sqrt{\gamma/M}\to\mathrm{m/s},\qquad \frac1\hbar\frac{dE}{dk}\to\mathrm{m/s},\qquad \frac1{\hbar^2}\frac{d^2E}{dk^2}\to\mathrm{kg^{-1}} \]</div>
+<div class="formula">\[ \rho=Nm/V\to\mathrm{kg/m^3},\quad \sigma_{2D}=Nm/A\to\mathrm{kg/m^2},\quad G\to\mathrm{m^{-1}} \]</div>
+<div class="formula">\[ \sigma_{\rm el}=n_ee^2\tau/m_e\to\mathrm{S/m},\qquad \omega_p^2=n_ee^2/(m_e\varepsilon_0)\to\mathrm{s^{-2}} \]</div>
+<div class="formula">\[ A_{21}\to\mathrm{s^{-1}},\quad B_{21}u\to\mathrm{s^{-1}},\quad G(E)dE\to\text{numero di stati} \]</div>
+<ul>
+<li>\(\omega\) è una pulsazione in \(\mathrm{s^{-1}}\); \(\nu\) è una frequenza in Hz.</li>
+<li>Un controllo dimensionale non scopre un fattore 2 o \(2\pi\): fai anche il controllo dell'ordine di grandezza.</li>
+<li>Le unità di \(B_{21}\) cambiano fra densità spettrale in \(\nu\) e in \(\omega\); verifica il prodotto \(Bu\).</li>
+</ul>
+</section>
+<section class="atom" id="atomica">
+<h2>Atomica - idrogenoidi, spin, struttura fine</h2>
+<div class="meta">Lezioni L1–L5</div>
+<h3>Atomo idrogenoide</h3>
+<div class="formula">\[ H_0=-\frac{\hbar^2}{2\mu}\nabla^2-\frac{Ze^2}{4\pi\varepsilon_0 r} \]</div>
+<div class="formula">\[ \mu=\frac{m_eM}{m_e+M} \]</div>
+<div class="formula">\[ E_n^{(h)}=-\frac{\mu}{m_e}\frac{Z^2}{n^2}13.6\,\mathrm{eV} \]</div>
+<div class="formula">\[ E_n^{(H)}=-\frac{13.6\,\mathrm{eV}}{n^2} \]</div>
+<div class="formula">\[ E_{\mathrm{ion}}=|E_n| \]</div>
+<div class="formula">\[ h\nu=\Delta E=|E_f-E_i|,\qquad \lambda=\frac{hc}{\Delta E} \]</div>
+<h3>Numeri quantici e degenerazione</h3>
+<div class="formula">\[ \psi_{nlm_l}=R_{nl}(r)Y_l^{m_l}(\theta,\phi) \]</div>
+<div class="formula">\[ n=1,2,\dots,\quad l=0,1,\dots,n-1,\quad m_l=-l,\dots,+l \]</div>
+<div class="formula">\[ L^2=l(l+1)\hbar^2,\qquad L_z=m_l\hbar \]</div>
+<div class="formula">\[ g_n=n^2\quad\text{senza spin},\qquad g_n=2n^2\quad\text{con spin} \]</div>
+<h3>Momenti magnetici</h3>
+<div class="formula">\[ \vec\mu_L=-\frac{\mu_B}{\hbar}\vec L,\qquad \mu_{L,z}=-\mu_Bm_l \]</div>
+<div class="formula">\[ \vec\mu_S=-g_S\frac{\mu_B}{\hbar}\vec S,\qquad g_S\simeq 2 \]</div>
+<div class="formula">\[ \Delta E=-\vec\mu\cdot\vec B \]</div>
+<h3>Spin-orbita e struttura fine</h3>
+<div class="formula">\[ H_{SO}=\xi(r)\vec L\cdot\vec S \]</div>
+<div class="formula">\[ \xi(r)=\frac{1}{2m_e^2c^2}\frac{1}{r}\frac{dV}{dr} \]</div>
+<div class="formula">\[ \vec J=\vec L+\vec S \]</div>
+<div class="formula">\[ \vec L\cdot\vec S=\frac12(J^2-L^2-S^2) \]</div>
+<div class="formula">\[ \vec L\cdot\vec S=\frac{\hbar^2}{2}\left[j(j+1)-l(l+1)-s(s+1)\right] \]</div>
+<div class="formula">\[ j=l\pm\frac12,\qquad 2j+1\text{ sottolivelli }m_J \]</div>
+<div class="formula">\[ \Delta E_{\mathrm{fine}}\sim \alpha^2E_n,\qquad \Delta E_{\mathrm{fine}}\propto Z^4 \]</div>
+</section>
+<section class="atom" id="radiazione">
+<h2>Campi esterni e radiazione-materia</h2>
+<div class="meta">Lezioni L5–L8</div>
+<h3>Zeeman anomalo - campo debole</h3>
+<div class="formula">\[ H_B\ll H_{SO} \]</div>
+<div class="formula">\[ g_J=1+\frac{j(j+1)+s(s+1)-l(l+1)}{2j(j+1)} \]</div>
+<div class="formula">\[ \Delta E=\mu_Bg_Jm_JB \]</div>
+<div class="formula">\[ \Delta E_{\mathrm{adj}}=\mu_Bg_JB \]</div>
+<div class="formula">\[ \Delta E_{\mathrm{tot}}=(2j)\mu_Bg_JB \]</div>
+<h3>Paschen-Back - campo forte</h3>
+<div class="formula">\[ H_B\gg H_{SO} \]</div>
+<div class="formula">\[ \Delta E=\mu_BB(m_l+g_Sm_s) \]</div>
+<h3>Stark perturbativo</h3>
+<div class="formula">\[ H'=-\vec d\cdot\vec E,\qquad \vec d=-e\vec r \]</div>
+<div class="formula">\[ H'=eEz \]</div>
+<div class="formula">\[ \Delta E^{(1)}=\langle nlm|H'|nlm\rangle \]</div>
+<div class="formula">\[ \Delta E^{(2)}\propto -\alpha_pE^2 \]</div>
+<h3>Dipolo elettrico e selezione</h3>
+<div class="formula">\[ \lambda\gg a_0,\qquad kr\ll1,\qquad e^{i\vec k\cdot\vec r}\simeq1 \]</div>
+<div class="formula">\[ H'=-\vec d\cdot\vec E \]</div>
+<div class="formula">\[ \Delta l=\pm1,\qquad \Delta m=0,\pm1,\qquad \text{cambio di parità} \]</div>
+<h3>Einstein, larghezza, laser</h3>
+<div class="formula">\[ g_1B_{12}=g_2B_{21} \]</div>
+<div class="formula">\[ \frac{A_{21}}{B_{21}}=\frac{8\pi h\nu^3}{c^3} \]</div>
+<div class="formula">\[ \Delta E\,\tau\sim\hbar,\qquad \Delta\nu\sim\frac{1}{2\pi\tau} \]</div>
+<div class="formula">\[ I(\omega)\propto\frac{1}{(\omega-\omega_0)^2+(\Gamma/2)^2} \]</div>
+<div class="formula">\[ \frac{N_2}{N_1}=\frac{g_2}{g_1}e^{-\beta(E_2-E_1)},\qquad \text{laser: }N_2&gt;N_1 \]</div>
+</section>
+<section class="mol" id="molecolare">
+<h2>Molecolare - BO, rotazioni, vibrazioni, LCAO</h2>
+<div class="meta">Lezioni L14–L20</div>
+<h3>Born-Oppenheimer</h3>
+<div class="formula">\[ m_e\ll M_{\mathrm{nuclei}} \]</div>
+<div class="formula">\[ H_e(\vec r;\vec R)\psi_e(\vec r;\vec R)=E_e(\vec R)\psi_e(\vec r;\vec R) \]</div>
+<div class="formula">\[ \Psi(\vec r,\vec R)\simeq \psi_e(\vec r;\vec R)\chi(\vec R) \]</div>
+<h3>Rotatore rigido</h3>
+<div class="formula">\[ I=\mu R_e^2 \]</div>
+<div class="formula">\[ E_r=\frac{\hbar^2}{2I}r(r+1) \]</div>
+<div class="formula">\[ \Delta E_{r\to r+1}=\frac{\hbar^2}{I}(r+1) \]</div>
+<div class="formula">\[ \Delta r=\pm1 \]</div>
+<h3>Vibratore armonico</h3>
+<div class="formula">\[ V(R)\simeq V(R_e)+\frac12k(R-R_e)^2 \]</div>
+<div class="formula">\[ E_v=\hbar\omega\left(v+\frac12\right) \]</div>
+<div class="formula">\[ \omega=\sqrt{\frac{k}{\mu}},\qquad k=\mu\omega^2 \]</div>
+<div class="formula">\[ \Delta E_{\mathrm{vib}}=\hbar\omega \]</div>
+<h3>Roto-vibrazionale e Raman</h3>
+<div class="formula">\[ E(v,r)=\hbar\omega\left(v+\frac12\right)+Br(r+1) \]</div>
+<div class="formula">\[ \Delta v=\pm1,\qquad \Delta r=\pm1 \]</div>
+<div class="formula">\[ \Delta r=-1\Rightarrow P,\qquad \Delta r=+1\Rightarrow R \]</div>
+<div class="formula">\[ \Delta E=h\nu=\frac{hc}{\lambda} \]</div>
+<div class="formula">\[ \text{Rayleigh: }h\nu_{out}=h\nu_{in} \]</div>
+<div class="formula">\[ \text{Stokes: }h\nu_{out}=h\nu_{in}-\Delta E \]</div>
+<div class="formula">\[ \text{anti-Stokes: }h\nu_{out}=h\nu_{in}+\Delta E \]</div>
+<h3>LCAO, secolare, ibridazione</h3>
+<div class="formula">\[ \psi=c_A\phi_A+c_B\phi_B \]</div>
+<div class="formula">\[ \psi_+=\frac{\phi_A+\phi_B}{\sqrt{2(1+S)}},\qquad \psi_-=\frac{\phi_A-\phi_B}{\sqrt{2(1-S)}} \]</div>
+<div class="formula">\[ S=\langle\phi_A|\phi_B\rangle \]</div>
+<div class="formula">\[ \sum_j(H_{ij}-ES_{ij})c_j=0,\qquad \det(H_{ij}-ES_{ij})=0 \]</div>
+<div class="formula">\[ sp^3\to109.5^\circ,\qquad sp^2\to120^\circ,\qquad sp\to180^\circ \]</div>
+</section>
+<section class="solid" id="solidi-cristalli">
+<h2>Solidi - cristallografia</h2>
+<div class="meta">Lezioni L21–L25</div>
+<div class="formula">\[ \vec R=n_1\vec a_1+n_2\vec a_2+n_3\vec a_3 \]</div>
+<div class="formula">\[ \text{cristallo}=\text{reticolo}+\text{base} \]</div>
+<div class="formula">\[ N_{SC}=1,\qquad N_{BCC}=2,\qquad N_{FCC}=4 \]</div>
+<div class="formula">\[ \vec a_i\cdot\vec b_j=2\pi\delta_{ij} \]</div>
+<div class="formula">\[ \vec G=h\vec b_1+k\vec b_2+l\vec b_3 \]</div>
+<div class="formula">\[ \Delta\vec k=\vec G \]</div>
+<div class="formula">\[ q_{BZ}=\frac{\pi}{a}\quad\text{in 1D} \]</div>
+<div class="formula">\[ \rho=\frac{N_{\mathrm{at/cella}}m_{\mathrm{at}}}{a^3},\qquad a=\left(\frac{N_{\mathrm{at/cella}}m_{\mathrm{at}}}{\rho}\right)^{1/3} \]</div>
+</section>
+<section class="solid" id="fononi">
+<h2>Fononi, Debye, trasporto</h2>
+<div class="meta">Lezioni L23–L28</div>
+<h3>Armonica reticolare</h3>
+<div class="formula">\[ U=U_0+U^{(1)}+U^{(2)}+U^{(3)}+\cdots \]</div>
+<div class="formula">\[ U^{(1)}=0,\qquad U\simeq U_0+U^{(2)} \]</div>
+<h3>Catena monoatomica</h3>
+<div class="formula">\[ \omega(q)=2\sqrt{\frac{\gamma}{M}}\left|\sin\left(\frac{qa}{2}\right)\right| \]</div>
+<div class="formula">\[ \omega(q)\simeq a\sqrt{\frac{\gamma}{M}}|q|\quad(q\to0) \]</div>
+<div class="formula">\[ v_s=a\sqrt{\frac{\gamma}{M}} \]</div>
+<div class="formula">\[ v_g(q)=\frac{d\omega}{dq}=a\sqrt{\frac{\gamma}{M}}\cos\left(\frac{qa}{2}\right) \]</div>
+<div class="formula">\[ v_g=0\Rightarrow q=\frac{\pi}{a} \]</div>
+<h3>Catena biatomica</h3>
+<div class="formula">\[ \omega_{ac}(q\to0)\to0,\qquad \omega_{op}(q\to0)\neq0 \]</div>
+<p>Acustica: atomi circa in fase. Ottica: atomi circa in opposizione di fase.</p>
+<h3>Fononi quantizzati</h3>
+<div class="formula">\[ E_n=\hbar\omega\left(n+\frac12\right) \]</div>
+<div class="formula">\[ \langle n\rangle=\frac{1}{e^{\beta\hbar\omega}-1},\qquad \mu=0 \]</div>
+<div class="formula">\[ \langle E\rangle=\hbar\omega\left[\frac12+\frac{1}{e^{\beta\hbar\omega}-1}\right] \]</div>
+<h3>Einstein, Debye, trasporto</h3>
+<div class="formula">\[ U_E=3N\hbar\omega_E\left[\frac12+\frac{1}{e^{\beta\hbar\omega_E}-1}\right] \]</div>
+<div class="formula">\[ C_V\to3Nk_B\quad\text{alta }T \]</div>
+<div class="formula">\[ \omega=v_sk\quad\text{Debye} \]</div>
+<div class="formula">\[ C_V\propto T^3\quad\text{bassa }T \]</div>
+<div class="formula">\[ \kappa\simeq\frac13C_Vv_sl \]</div>
+</section>
+<section class="solid" id="elettroni">
+<h2>Elettroni nei solidi - Drude, Sommerfeld, bande</h2>
+<div class="meta">Lezioni L29–L34</div>
+<h3>Drude</h3>
+<div class="formula">\[ m\frac{d\vec v}{dt}=-e\vec E-\frac{m\vec v}{\tau} \]</div>
+<div class="formula">\[ \vec v_d=-\frac{e\tau}{m}\vec E \]</div>
+<div class="formula">\[ \vec J=-ne\vec v_d \]</div>
+<div class="formula">\[ \sigma=\frac{ne^2\tau}{m} \]</div>
+<h3>Sommerfeld e DOS</h3>
+<div class="formula">\[ f(E)=\frac{1}{e^{\beta(E-\mu)}+1} \]</div>
+<div class="formula">\[ E=\frac{\hbar^2k^2}{2m},\qquad g(E)\propto\sqrt E\quad(3D) \]</div>
+<div class="formula">\[ E_F=\frac{\hbar^2}{2m}(3\pi^2n_e)^{2/3} \]</div>
+<div class="formula">\[ C_V^{el}\propto T \]</div>
+<div class="formula">\[ n_e=Z_VN_A\frac{\rho}{M}=Z_V\frac{N_{\mathrm{at/cella}}}{a^3} \]</div>
+<h3>Bloch, quasi-libero, tight-binding</h3>
+<div class="formula">\[ V(\vec r+\vec R)=V(\vec r) \]</div>
+<div class="formula">\[ \psi_{n\vec k}(\vec r)=e^{i\vec k\cdot\vec r}u_{n\vec k}(\vec r) \]</div>
+<div class="formula">\[ E(k)\simeq\frac{\hbar^2k^2}{2m}\quad\text{quasi-libero} \]</div>
+<div class="formula">\[ \Delta E\sim2|V_G|\quad\text{gap al bordo zona} \]</div>
+<div class="formula">\[ E(k)=E_0-2\delta\cos(ka)\quad\text{tight-binding 1D} \]</div>
+<div class="formula">\[ W=4|\delta| \]</div>
+<div class="formula">\[ \vec v_g=\frac{1}{\hbar}\nabla_{\vec k}E_n(\vec k) \]</div>
+<div class="formula">\[ \frac1{m^*}=\frac1{\hbar^2}\frac{d^2E}{dk^2} \]</div>
+<div class="formula">\[ E(k)\simeq E_0+\frac{\hbar^2k^2}{2m^*} \]</div>
+</section>
+<section class="solid" id="semiconduttori">
+<h2>Semiconduttori e ottica</h2>
+<div class="meta">Lezioni L35–L36</div>
+<div class="formula">\[ T=0:\quad \text{valenza piena, conduzione vuota} \]</div>
+<div class="formula">\[ n=p\quad\text{intrinseco} \]</div>
+<div class="formula">\[ E_C-E_D\ll E_g\quad\text{donore} \]</div>
+<div class="formula">\[ n\gg p\quad\text{tipo }n \]</div>
+<div class="formula">\[ E_A-E_V\ll E_g\quad\text{accettore} \]</div>
+<div class="formula">\[ p\gg n\quad\text{tipo }p \]</div>
+<div class="formula">\[ \Delta\vec k\simeq0\quad\text{transizione ottica diretta} \]</div>
+<div class="formula">\[ \Delta\vec k=\vec q_{\mathrm{fonone}}\quad\text{gap indiretto} \]</div>
+</section>
+<section class="const" id="v4-statistica">
+<h2>Novità V4 - statistica classica e quantistica</h2>
+<div class="meta">Tutorati 7, 8 e 11 del 2025</div>
+<h3>Maxwell</h3>
+<div class="formula">\[ f(v)=4\pi\left(\frac{m}{2\pi k_BT}\right)^{3/2}v^2e^{-mv^2/(2k_BT)} \]</div>
+<div class="formula">\[ v_{\mathrm{mp}}=\sqrt{\frac{2k_BT}{m}},\quad \langle v\rangle=\sqrt{\frac{8k_BT}{\pi m}},\quad v_{\mathrm{rms}}=\sqrt{\frac{3k_BT}{m}} \]</div>
+<div class="formula">\[ f_E(E)=\frac{2}{\sqrt\pi}\frac{\sqrt E}{(k_BT)^{3/2}}e^{-E/(k_BT)},\quad E_{\mathrm{mp}}=\frac12k_BT,\quad \langle E\rangle=\frac32k_BT \]</div>
+<h3>Gas ideale monoatomico</h3>
+<div class="formula">\[ U=\frac32Nk_BT,\quad C_V=\frac32Nk_B,\quad C_P=\frac52Nk_B,\quad C_P-C_V=Nk_B \]</div>
+<h3>Due livelli</h3>
+<div class="formula">\[ Z_1=1+e^{-\beta\varepsilon},\qquad C_V=Nk_B\left(\frac{\varepsilon}{k_BT}\right)^2\frac{e^{\varepsilon/(k_BT)}}{[1+e^{\varepsilon/(k_BT)}]^2} \]</div>
+<h3>Potenziale chimico 2D</h3>
+<div class="formula">\[ \mu_{2D}(T)=k_BT\ln\left(e^{E_F/(k_BT)}-1\right) \]</div>
+<div class="warning"><strong>Trappola:</strong> nei rapporti FD o BE il potenziale chimico non si cancella in generale. Determinalo imponendo \(\sum_i n_i=N\).</div>
+</section><section class="atom" id="v4-einstein">
+<h2>Novità V4 - Einstein e dipolo di transizione</h2>
+<div class="meta">Tutorato 3 del 2025</div>
+<div class="formula">\[ A_{21}=\frac{\omega_{21}^3|\vec d_{21}|^2}{3\pi\varepsilon_0\hbar c^3} \]</div>
+<div class="formula">\[ |\vec d_{21}|=\sqrt{\frac{3\pi\varepsilon_0\hbar c^3A_{21}}{\omega_{21}^3}},\qquad \omega_{21}=\frac{2\pi c}{\lambda_{21}} \]</div>
+<div class="warning">Il risultato deve avere unità C m. Per un confronto atomico usa \(ea_0\).</div>
+</section><section class="solid" id="v4-bloch">
+<h2>Novità V4 - Bloch e derivazione tight-binding</h2>
+<div class="meta">Tutorato 12 del 2025</div>
+<div class="formula">\[ \psi_k(x)=e^{ikx}u_k(x),\qquad u_k(x+a)=u_k(x) \]</div>
+<div class="formula">\[ u(x)=A\cos(\xi x):\quad \xi=\frac{2\pi n}{a},\quad A=\sqrt{\frac2a}\;(n\neq0) \]</div>
+<div class="formula">\[ \psi_k(x)=\frac1{\sqrt N}\sum_n e^{ikna}\phi(x-na) \]</div>
+<div class="formula">\[ E(k)=E_0+2H_{01}\cos(ka)=E_0-2\delta\cos(ka),\qquad W=4|\delta| \]</div>
+<div class="warning">Il potenziale schermato del litio con parametro \(b\) resta escluso finché non viene recuperata la formula esatta adottata nel corso.</div>
+</section><section class="atom" id="v5-atomica"><h2>Novità V5 - atomica e spettroscopia</h2>
+<div class="meta">Schermaggio, righe e decadimenti</div>
+<h3>Modello schermato degli alcalini</h3>
+<div class="formula">\[ Z^*(r)=1+\frac br,\qquad V(r)=-\frac{e^2}{4\pi\varepsilon_0r}-\frac{e^2b}{4\pi\varepsilon_0r^2} \]</div>
+<div class="formula">\[ \delta_l\simeq\frac{2b}{a_0(2l+1)},\qquad b\simeq\frac{a_0}{2}(2l+1)\delta_l \]</div>
+<h3>Stark, Landé e Larmor</h3>
+<div class="formula">\[ n=2:\quad \Delta E=0,\ \pm3e\frac{a_0}{Z}E \]</div>
+<div class="formula">\[ E_{J+1}-E_J=\xi_{LS}(J+1),\qquad \Omega_L=g_J\frac{\mu_BB}{\hbar} \]</div>
+<h3>Decadimenti e larghezze</h3>
+<div class="formula">\[ \tau_i^{-1}=\sum_fA_{if},\qquad b_{if}=\frac{A_{if}}{\sum_{f'}A_{if'}} \]</div>
+<div class="formula">\[ \Delta\nu_N\sim\frac1{2\pi\tau},\qquad \tau_c^{-1}=n\sigma\langle v\rangle \]</div>
+<div class="formula">\[ \frac{\Delta\nu_D}{\nu_0}=\sqrt{\frac{8k_BT\ln2}{Mc^2}} \]</div>
+<div class="formula">\[ \mathcal R=\frac{\lambda}{\Delta\lambda}=mN,\qquad d\sin\theta_m=m\lambda \]</div>
+</section><section class="mol" id="v5-molecolare"><h2>Novità V5 - molecolare</h2>
+<div class="meta">LCAO eteronucleare, simmetria e viriale</div>
+<div class="formula">\[ \psi=\frac{\phi_A+\eta\phi_B}{\sqrt{1+\eta^2+2\eta S}} \]</div>
+<div class="formula">\[ \mu_z=eR\frac{1-\eta^2}{1+\eta^2+2\eta S} \]</div>
+<div class="formula">\[ [H,L_z]=0,\qquad [H,L^2]\neq0,\qquad |\Lambda|=0,1,2,3\to\Sigma,\Pi,\Delta,\Phi \]</div>
+<div class="formula">\[ \mathrm{BO}=\frac{N_b-N_a}{2} \]</div>
+<div class="formula">\[ \langle T\rangle=-E-R\frac{dE}{dR},\qquad \langle V\rangle=2E+R\frac{dE}{dR} \]</div>
+<div class="formula">\[ A_v=\sqrt{\frac{(2v+1)\hbar}{\mu\omega}} \]</div>
+</section><section class="solid" id="v5-cristalli"><h2>Novità V5 - cristallografia</h2>
+<div class="meta">Geometria, dilatazione e vicini</div>
+<div class="formula">\[ V_{\mathrm{cell}}=\left|\vec a_1\cdot(\vec a_2\times\vec a_3)\right|,\qquad A_{2D}=|\vec a_1\times\vec a_2| \]</div>
+<div class="formula">\[ a(T)=a_0(1+\alpha\Delta T),\qquad V(T)\simeq V_0(1+3\alpha\Delta T) \]</div>
+<div class="formula">\[ \rho(T)\simeq\frac{\rho_0}{1+3\alpha\Delta T} \]</div>
+<p>Primi vicini: enumera \(\vec R=n_1\vec a_1+n_2\vec a_2+n_3\vec a_3\), ordina i moduli non nulli e conta la molteplicità del minimo.</p>
+<div class="formula">\[ \lambda_n=\frac{h}{\sqrt{3m_nk_BT}} \]</div>
+</section><section class="solid" id="v5-fononi"><h2>Novità V5 - catena biatomica</h2>
+<div class="meta">Branche acustica e ottica</div>
+<div class="formula">\[ \omega_\pm^2=\frac{(\gamma+\zeta)(m_1+m_2)}{2m_1m_2}\pm\frac12\sqrt{\left[\frac{(\gamma+\zeta)(m_1+m_2)}{m_1m_2}\right]^2-\frac{16\gamma\zeta}{m_1m_2}\sin^2\frac{qa}{2}} \]</div>
+<div class="formula">\[ \omega_{\mathrm{ac}}(0)=0,\qquad \omega_{\mathrm{op}}(0)=\sqrt{(\gamma+\zeta)\left(\frac1{m_1}+\frac1{m_2}\right)} \]</div>
+<div class="formula">\[ v_s=a\sqrt{\frac{\gamma\zeta}{(\gamma+\zeta)(m_1+m_2)}} \]</div>
+<p>Controllo monoatomico: \(v_s=a\sqrt{\gamma/M}\), con \(a\) passo fra atomi adiacenti.</p>
+</section><section class="solid" id="v5-metalli"><h2>Novità V5 - metalli</h2>
+<div class="meta">Trasporto termico e potenziale chimico</div>
+<div class="formula">\[ \frac{\kappa}{\sigma T}=L_0,\qquad L_0=\frac{\pi^2}{3}\left(\frac{k_B}{e}\right)^2\simeq2.44\times10^{-8}\,\mathrm{W\,\Omega\,K^{-2}} \]</div>
+<div class="formula">\[ \kappa=L_0\sigma T \]</div>
+<div class="formula">\[ \mu_{3D}(T)\simeq E_F\left[1-\frac{\pi^2}{12}\left(\frac{k_BT}{E_F}\right)^2\right] \]</div>
+<p>In 2D la correzione a bassa temperatura è esponenziale; in 3D è quadratica in \(T/T_F\).</p>
+</section><section class="pattern" id="pattern">
+<h2>Pattern scritto aggiunti dagli esami</h2>
+<div class="meta">Da usare quando vedi un esercizio simile</div>
+<h3>Lennard-Jones operativo</h3>
+<div class="formula">\[ V(r)=Ar^{-12}-Br^{-6} \]</div>
+<div class="formula">\[ \frac{dV}{dr}=0\Rightarrow -12Ar^{-13}+6Br^{-7}=0 \]</div>
+<div class="formula">\[ r_0=\left(\frac{2A}{B}\right)^{1/6} \]</div>
+<div class="formula">\[ k=\left.\frac{d^2V}{dr^2}\right|_{r=r_0},\qquad E_D\simeq |V(r_0)| \]</div>
+<h3>Popolazione rotazionale massima</h3>
+<div class="formula">\[ N_r\propto(2r+1)e^{-\beta E_r} \]</div>
+<div class="formula">\[ E_r=\frac{\hbar^2}{2I}r(r+1) \]</div>
+<div class="formula">\[ r_{\max}\simeq\frac12\left[\sqrt{\frac{4Ik_BT}{\hbar^2}}-1\right] \]</div>
+<h3>vDOS fononica 1D</h3>
+<div class="formula">\[ G(\omega)d\omega=\frac{L}{2\pi}dq \]</div>
+<div class="formula">\[ G(\omega)=\frac{L}{2\pi}\left|\frac{d\omega}{dq}\right|^{-1} \]</div>
+<div class="formula">\[ G(\omega)=\frac{L}{2\pi}\left|a\sqrt{\frac{\gamma}{M}}\cos\left(\frac{qa}{2}\right)\right|^{-1} \]</div>
+<div class="formula">\[ v_g=0\Rightarrow G(\omega)\to\infty\quad\text{singolarità di van Hove} \]</div>
+<h3>FCC + Fermi</h3>
+<div class="formula">\[ a=\left(\frac{N_{\mathrm{at/cella}}m_{\mathrm{at}}}{\rho}\right)^{1/3},\qquad N_{FCC}=4 \]</div>
+<div class="formula">\[ n_e=Z_V\frac{4}{a^3} \]</div>
+<div class="formula">\[ E_F=\frac{\hbar^2}{2m_e}(3\pi^2n_e)^{2/3} \]</div>
+</section>
+<section class="atom" id="v2-atomica">
+<h2>Novità V2 - atomica e radiazione</h2>
+<div class="meta">Pattern emersi dagli appelli storici</div>
+<h3>Stern-Gerlach</h3>
+<div class="formula">\[ \vec F=\vec\nabla(\vec\mu\cdot\vec B) \]</div>
+<div class="formula">\[ F_z=\mu_z\frac{\partial B_z}{\partial z} \]</div>
+<div class="formula">\[ t_f=\frac{L_x}{v_x},\qquad z=\frac12\frac{F_z}{m}t_f^2,\qquad \delta=2|z| \]</div>
+<h3>Difetto quantico negli alcalini</h3>
+<div class="formula">\[ n^*=n-\delta_l,\qquad E_{nl}=-\frac{R_y}{(n-\delta_l)^2} \]</div>
+<h3>Doppietto spin-orbita</h3>
+<div class="formula">\[ E_{SO}(J)=\frac{\xi_{LS}}2\left[J(J+1)-L(L+1)-S(S+1)\right] \]</div>
+<div class="formula">\[ E_i=\frac{hc}{\lambda_i},\qquad \Delta E=|E_2-E_1| \]</div>
+<div class="formula">\[ \xi_{LS}&gt;0:\ \text{normale},\qquad \xi_{LS}&lt;0:\ \text{invertito} \]</div>
+<h3>Polarizzabilità dell’idrogeno 1s</h3>
+<div class="formula">\[ \vec d_{\mathrm{ind}}=\alpha_{\mathrm{pol}}\vec E \]</div>
+<div class="formula">\[ \alpha_{\mathrm{pol}}^{(1s)}=\frac92\,4\pi\varepsilon_0a_0^3 \]</div>
+<div class="formula">\[ \Delta E^{(2)}=-\frac12\alpha_{\mathrm{pol}}E^2 \]</div>
+<h3>Flusso di fotoni e corpo nero</h3>
+<div class="formula">\[ E_\gamma=h\nu=\frac{hc}{\lambda},\qquad \dot N_{\mathrm{tot}}=\frac{P}{E_\gamma} \]</div>
+<div class="formula">\[ I(R)=\frac{P}{4\pi R^2},\qquad \dot N_A=\frac{PA}{4\pi R^2E_\gamma} \]</div>
+<div class="formula">\[ \rho(\nu,T)=\frac{8\pi h\nu^3}{c^3}\frac{1}{e^{h\nu/(k_BT)}-1} \]</div>
+<div class="formula">\[ R_{1\to2}^{\mathrm{stim}}=B_{12}\rho(\nu,T) \]</div>
+</section>
+<section class="mol" id="v2-molecolare">
+<h2>Novità V2 - molecolare</h2>
+<div class="meta">Anarmonicità, selezione e bilanci energetici</div>
+<h3>Potenziale di Morse</h3>
+<div class="formula">\[ V(r)=D_e\left[1-e^{-a(r-r_0)}\right]^2-D_e \]</div>
+<div class="formula">\[ V(r)\simeq-D_e+\frac12k(r-r_0)^2 \]</div>
+<div class="formula">\[ \omega=a\sqrt{\frac{2D_e}{\mu}},\qquad a=\omega\sqrt{\frac{\mu}{2D_e}} \]</div>
+<h3>Punto zero e fattori \(2\pi\)</h3>
+<div class="formula">\[ E_0=\frac12\hbar\omega=\frac12h\nu,\qquad \omega=2\pi\nu \]</div>
+<h3>Molecole omonucleari</h3>
+<div class="formula">\[ \vec d_{\mathrm{permanente}}=0,\qquad \langle f|\vec d|i\rangle=0 \]</div>
+<p>Niente spettro rotazionale IR elettrico-dipolare puro; possibile osservazione Raman.</p>
+<h3>Bilancio energetico negli urti</h3>
+<div class="formula">\[ K_i-K_f=\sum_j\Delta E_{\mathrm{int},j} \]</div>
+<div class="formula">\[ \Delta E_{\mathrm{int}}=\Delta E_{\mathrm{vib}}+\Delta E_{\mathrm{rot}}+\Delta E_{\mathrm{el}} \]</div>
+<p>Contare esplicitamente numero di molecole, degenerazioni e fattori \(1/2\).</p>
+</section>
+<section class="solid" id="v2-solidi">
+<h2>Novità V2 - solidi</h2>
+<div class="meta">Diffrazione, plasma, Fermi e moto in banda</div>
+<h3>Diffrazione di raggi X</h3>
+<div class="formula">\[ 2d_{hkl}\sin\theta=n\lambda \]</div>
+<div class="formula">\[ d_{hkl}=\frac{a}{\sqrt{h^2+k^2+l^2}},\qquad \lambda=\frac{hc}{E_\gamma} \]</div>
+<div class="formula">\[ 2k\sin\theta=G,\qquad k=\frac{2\pi}{\lambda} \]</div>
+<ul>
+<li><strong>BCC:</strong> \(h+k+l\) pari.</li>
+<li><strong>FCC:</strong> \(h,k,l\) tutti pari oppure tutti dispari.</li>
+</ul>
+<h3>Frequenza di plasma</h3>
+<div class="formula">\[ \omega_p=\sqrt{\frac{n_ee^2}{\varepsilon_0m_e}} \]</div>
+<div class="formula">\[ \nu_p=\frac{\omega_p}{2\pi},\qquad \lambda_p=\frac{2\pi c}{\omega_p} \]</div>
+<p>\(\omega&lt;\omega_p\): riflessione; \(\omega&gt;\omega_p\): propagazione nel modello ideale.</p>
+<h3>Momento di Fermi</h3>
+<div class="formula">\[ p_F=\hbar k_F,\qquad E_F=\frac{p_F^2}{2m_e} \]</div>
+<div class="formula">\[ n_e=\frac{k_F^3}{3\pi^2}=\frac1{3\pi^2}\left(\frac{p_F}{\hbar}\right)^3 \]</div>
+<div class="formula">\[ \rho=\frac{n_eM}{Z_VN_A} \]</div>
+<h3>Dinamica semiclassica</h3>
+<div class="formula">\[ \hbar\dot{\vec k}=q\vec E \]</div>
+<div class="formula">\[ \vec v_g=\frac1\hbar\nabla_{\vec k}E,\qquad \vec a=\frac{q\vec E}{m^*} \]</div>
+<div class="formula">\[ x=\frac12at^2\Rightarrow a=\frac{2x}{t^2},\qquad m^*=\frac{|q|E}{a} \]</div>
+<p>Elettrone: \(q=-e\). Buca efficace: \(q_h=+e\).</p>
+<h3>Dispersione non standard</h3>
+<div class="formula">\[ \frac{dE}{dk}=0\Rightarrow k_{\min/\max},\qquad \frac{d^2E}{dk^2}\Rightarrow m^* \]</div>
+<div class="formula">\[ f(E)=\frac{1}{1+e^{(E-E_F)/(k_BT)}} \]</div>
+</section>
+<section class="atom" id="v3-atomica">
+<h2>Novità V3 - atomica, radiazione e multielettronici</h2>
+<div class="meta">Tutorati 1–5 e problemi selezionati del libro</div>
+<h3>Wien, Stefan-Boltzmann e fotoelettrico</h3>
+<div class="formula">\[ \lambda_{\max}T=b \]</div>
+<div class="formula">\[ P=\varepsilon\sigma AT^4,\qquad I(R)=\frac{P}{4\pi R^2} \]</div>
+<div class="formula">\[ K_{\max}=h\nu-\Phi,\qquad V_s=\frac{K_{\max}}{e},\qquad v_{\max}=\sqrt{\frac{2K_{\max}}{m_e}} \]</div>
+<div class="formula">\[ \dot N_\gamma=\frac{P_A}{E_\gamma},\qquad I_{\mathrm{foto}}=e\dot N_e \]</div>
+<h3>Campo di solenoide e Stark</h3>
+<div class="formula">\[ B=\mu_0nI \]</div>
+<div class="formula">\[ \Delta E_{\mathrm{Stark}}=-\frac12\alpha_{\mathrm{pol}}E^2 \]</div>
+<div class="formula">\[ \vec E_{\mathrm{cariche}}=\sum_i\frac{1}{4\pi\varepsilon_0}\frac{q_i}{r_i^2}\hat r_i \]</div>
+<h3>Algoritmo per componenti Zeeman</h3>
+<ol>
+<li>Elenca tutti gli stati iniziali e finali con i rispettivi valori di <span class="math-inline">\(m\)</span>.</li>
+<li>Applica <span class="math-inline">\(\Delta J=0,\pm1\)</span> e <span class="math-inline">\(\Delta m=0,\pm1\)</span>.</li>
+<li>Calcola per ogni transizione <span class="math-inline">\(\Delta E_\gamma=\mu_BB(g_im_i-g_fm_f)\)</span>.</li>
+<li>Unisci i casi con la stessa energia fotonica.</li>
+</ol>
+<h3>Regole multipolari</h3>
+<div class="formula">\[ \mathrm{E1}:\ \Delta l=\pm1,\ \text{cambio di parità} \]</div>
+<div class="formula">\[ \mathrm{M1}:\ \Delta l=0,\ \text{stessa parità} \]</div>
+<div class="formula">\[ \mathrm{E2}:\ \Delta l=0,\pm2,\ \text{stessa parità} \]</div>
+<h3>Einstein operativo</h3>
+<div class="formula">\[ \rho(\nu,T)=\frac{8\pi h\nu^3}{c^3}\frac{1}{e^{h\nu/(k_BT)}-1} \]</div>
+<div class="formula">\[ R_{12}=B_{12}\rho,\qquad R_{21}^{\mathrm{stim}}=B_{21}\rho,\qquad R_{21}^{\mathrm{sp}}=A_{21} \]</div>
+<div class="formula">\[ \tau=\frac1{A_{21}} \]</div>
+<h3>Schermaggio e termini spettroscopici</h3>
+<div class="formula">\[ Z_{\mathrm{eff}}=Z-\sigma,\qquad E_n\simeq-13.6\,\mathrm{eV}\frac{Z_{\mathrm{eff}}^2}{n^2} \]</div>
+<div class="formula">\[ Z_{\mathrm{eff}}=\frac{n}{n-\delta_l}\quad\text{equivalenza energetica} \]</div>
+<div class="formula">\[ L=|l_1-l_2|,\ldots,l_1+l_2,\qquad S=0,1,\qquad J=|L-S|,\ldots,L+S \]</div>
+<ul>
+<li>Hund 1: massimo <span class="math-inline">\(S\)</span>.</li>
+<li>Hund 2: massimo <span class="math-inline">\(L\)</span>.</li>
+<li>Hund 3: meno che semipieno <span class="math-inline">\(J=|L-S|\)</span>; più che semipieno <span class="math-inline">\(J=L+S\)</span>.</li>
+</ul>
+</section>
+<section class="mol" id="v3-molecolare">
+<h2>Novità V3 - molecolare</h2>
+<div class="meta">Tutorati 6–8</div>
+<h3>Pesi statistici nucleari</h3>
+<div class="formula">\[ N_r\propto g_{\mathrm{ns}}(r)(2r+1)e^{-E_r/(k_BT)} \]</div>
+<div class="formula">\[ H_2:\quad r\ \text{pari}\Rightarrow g_{\mathrm{ns}}=1,\qquad r\ \text{dispari}\Rightarrow g_{\mathrm{ns}}=3 \]</div>
+<h3>Energia traslazionale media</h3>
+<div class="formula">\[ \langle K_{\mathrm{trasl}}\rangle=\frac32k_BT \]</div>
+<h3>Lennard-Jones standard</h3>
+<div class="formula">\[ R_0=2^{1/6}\sigma,\qquad V(R_0)=-\varepsilon,\qquad E_D=\varepsilon \]</div>
+<div class="formula">\[ k=\frac{72\varepsilon}{R_0^2} \]</div>
+<h3>Morse anarmonico</h3>
+<div class="formula">\[ E_v=\hbar\omega\left(v+\frac12\right)-\frac{(\hbar\omega)^2}{4D_e}\left(v+\frac12\right)^2 \]</div>
+<div class="formula">\[ \Delta E_{v\to v-1}=\hbar\omega-\frac{(\hbar\omega)^2}{2D_e}v \]</div>
+<h3>Bilanci energetici negli urti</h3>
+<div class="formula">\[ K_i-K_f=N_{\mathrm{mol}}\left(\Delta E_{\mathrm{vib}}+\Delta E_{\mathrm{rot}}+\Delta E_{\mathrm{el}}\right) \]</div>
+<h3>Metodo di Hückel</h3>
+<div class="formula">\[ H_{ii}=\alpha,\qquad H_{ij}=\beta\ \text{per primi vicini},\qquad S_{ij}=\delta_{ij} \]</div>
+<div class="formula">\[ E_m=\alpha+2\beta\cos\left(\frac{2\pi m}{N}\right) \]</div>
+<div class="formula">\[ E_\pi(\text{benzene})=6\alpha+8\beta,\qquad \Delta E_{\mathrm{deloc}}=2|\beta| \]</div>
+</section>
+<section class="solid" id="v3-cristalli">
+<h2>Novità V3 - cristallografia esplicita</h2>
+<div class="meta">Tutorato 9</div>
+<div class="formula">\[ \vec b_1=2\pi\frac{\vec a_2\times\vec a_3}{\vec a_1\cdot(\vec a_2\times\vec a_3)} \]</div>
+<div class="formula">\[ V_{\mathrm{prim}}=\vec a_1\cdot(\vec a_2\times\vec a_3) \]</div>
+<p>FCC e BCC sono reticoli reciproci.</p>
+<div class="formula">\[ \sigma_{2D}=\frac{N_{\mathrm{at/cella}}m_{\mathrm{at}}}{A_{\mathrm{cella}}} \]</div>
+<h3>Diamante</h3>
+<div class="formula">\[ \vec\tau_1=(0,0,0),\qquad \vec\tau_2=\frac a4(1,1,1) \]</div>
+<div class="formula">\[ N_{\mathrm{conv}}=8,\qquad \rho=\frac{8m}{a^3},\qquad z_1=4 \]</div>
+<ul>
+<li>Diamante: <span class="math-inline">\(sp^3\)</span>, coordinazione 4.</li>
+<li>Grafene e grafite: <span class="math-inline">\(sp^2\)</span>, coordinazione 3 nel piano.</li>
+</ul>
+</section>
+<section class="solid" id="v3-fononi">
+<h2>Novità V3 - fononi e vDOS</h2>
+<div class="meta">Tutorato 10</div>
+<div class="formula">\[ v_g(\omega)=v_s\sqrt{1-\left(\frac{\omega}{\omega_{\max}}\right)^2} \]</div>
+<div class="formula">\[ qa=2\arccos\left(\frac{v_g}{v_s}\right) \]</div>
+<div class="formula">\[ \frac1{v_D^3}=\frac13\left(\frac1{v_L^3}+\frac2{v_T^3}\right) \]</div>
+<div class="formula">\[ \frac{G(\omega)}{L}=\frac{1}{\pi v_s\sqrt{1-(\omega/\omega_{\max})^2}} \]</div>
+<p>La formula precedente conta entrambi gli stati <span class="math-inline">\(\pm q\)</span>. Se si conta solo <span class="math-inline">\(q&gt;0\)</span>, dividere per due.</p>
+</section>
+<section class="solid" id="v3-metalli">
+<h2>Novità V3 - metalli e gas elettronico</h2>
+<div class="meta">Tutorato 11</div>
+<div class="formula">\[ \tau=\frac{m_e\sigma}{n_ee^2},\qquad v_d=\frac{eE\tau}{m_e},\qquad \ell=v_F\tau \]</div>
+<div class="formula">\[ k_F=(3\pi^2n_e)^{1/3},\quad p_F=\hbar k_F,\quad E_F=\frac{\hbar^2k_F^2}{2m_e},\quad v_F=\frac{\hbar k_F}{m_e},\quad T_F=\frac{E_F}{k_B} \]</div>
+<h3>DOS in diverse dimensionalità</h3>
+<div class="formula">\[ g_{1D}(E)\propto E^{-1/2},\qquad \frac{g_{2D}(E)}{A}=\frac{m_e}{\pi\hbar^2},\qquad g_{3D}(E)\propto E^{1/2} \]</div>
+<h3>Plasma e plasmone</h3>
+<div class="formula">\[ \ddot x+\omega_p^2x=0,\qquad \omega_p=\sqrt{\frac{n_ee^2}{m_e\varepsilon_0}} \]</div>
+<div class="formula">\[ \varepsilon_r(\omega)=1-\frac{\omega_p^2}{\omega^2+i\omega/\tau} \]</div>
+<div class="formula">\[ E_{\mathrm{plasmone}}=\hbar\omega_p \]</div>
+</section>
+<section class="solid" id="v3-bande">
+<h2>Novità V3 - bande e semiconduttori</h2>
+<div class="meta">Tutorato 12</div>
+<div class="formula">\[ E_{\mathrm{VB}}(k)=E_a'+2\gamma\cos(ka),\qquad E_{\mathrm{CB}}(k)=E_a''-2\delta\cos(ka) \]</div>
+<div class="formula">\[ E_g=E_a''-E_a'-2(\delta+\gamma) \]</div>
+<div class="formula">\[ W_{\mathrm{VB}}=4\gamma,\qquad W_{\mathrm{CB}}=4\delta \]</div>
+<div class="formula">\[ m_e^*=\frac{\hbar^2}{2\delta a^2},\qquad m_h^*=\frac{\hbar^2}{2\gamma a^2} \]</div>
+<h3>Semiconduttore parabolico</h3>
+<div class="formula">\[ E_{\mathrm{CB}}(k)=\frac{\hbar^2k^2}{2m_e^*},\qquad E_{\mathrm{VB}}(k)=-E_g-\frac{\hbar^2k^2}{2m_h^*} \]</div>
+<div class="formula">\[ m^*=\frac{eEt^2}{2x},\qquad v=\frac{2x}{t} \]</div>
+<p>La cinematica con massa costante è locale. La descrizione generale resta <span class="math-inline">\(\hbar\dot k=qE\)</span> e <span class="math-inline">\(v=(1/\hbar)dE/dk\)</span>.</p>
+</section>
+<section class="pattern" id="v2-grafici">
+<h2>Grafici e procedura universale</h2>
+<div class="meta">Da usare quando compare una funzione mai vista</div>
+<ol>
+<li>Definisci il dominio fisico, per esempio la prima zona di Brillouin.</li>
+<li>Calcola valori ai bordi e nei punti simmetrici.</li>
+<li>Trova estremi con \(dE/dk=0\).</li>
+<li>Trova flessi con \(d^2E/dk^2=0\).</li>
+<li>Interpreta pendenza come velocità e curvatura come massa efficace.</li>
+</ol>
+<div class="formula">\[ v_g=\frac1\hbar\frac{dE}{dk},\qquad \frac1{m^*}=\frac1{\hbar^2}\frac{d^2E}{dk^2} \]</div>
+<ul>
+<li><strong>Zeeman:</strong> rette in \(B\) con pendenza \(\mu_Bg_Jm_J\).</li>
+<li><strong>Fononi:</strong> \(v_g=0\) al bordo zona e vDOS divergente.</li>
+<li><strong>Fermi-Dirac:</strong> gradino a \(T=0\), smussato a \(T&gt;0\).</li>
+<li><strong>Morse:</strong> minimo asimmetrico, livelli che si addensano.</li>
+</ul>
+</section>
+<section class="const" id="check">
+<h2>Checklist anti-errori</h2>
+<ul>
+<li>Controlla sempre se il testo chiede <strong>separazione adiacente</strong> o <strong>apertura totale</strong> nello Zeeman.</li>
+<li>Controlla se devi usare <strong>hν</strong> o <strong>ℏω</strong>: \(\omega=2\pi\nu\).</li>
+<li>In molecolare, per omonucleare: \(\mu=m/2\).</li>
+<li>In cristallografia, non confondere reticolo e cristallo: cristallo = reticolo + base.</li>
+<li>Converti sempre: Å → m, u → kg, eV → J quando usi formule SI.</li>
+<li>Per DOS: se \(d\omega/dq=0\), la DOS diverge, non si annulla.</li>
+<li>Per tight-binding, vicino al minimo usa l’espansione del coseno.</li>
+<li>Se una soluzione ufficiale sembra incoerente, controlla unità, Z, degenerazioni e ordine di grandezza.</li>
+<li>Nel conteggio Zeeman applica le regole di selezione e poi unisci le righe energeticamente coincidenti.</li>
+<li>Per la vDOS 1D dichiara se stai contando entrambi gli stati \(\pm q\) oppure solo \(q&gt;0\).</li>
+<li>Il libero cammino medio usa \(v_F\), non la velocità di deriva.</li>
+<li>Per elettroni di valenza e buche specifica sempre l’origine dell’energia.</li>
+<li>Nelle molecole omonucleari verifica se servono i pesi statistici nucleari orto/para.</li>
+<li>Per Maxwell non confondere la velocità più probabile con il massimo della distribuzione in energia.</li><li>Nei sistemi discreti FD/BE determina il potenziale chimico imponendo il numero totale di particelle.</li><li>In 2D la DOS elettronica è costante e il potenziale chimico ha una dipendenza esponenziale a bassa temperatura.</li><li>Per ricavare il dipolo da A21 usa la frequenza angolare, non la frequenza ordinaria.</li><li>Per una catena biatomica controlla che la formula abbia dimensioni di frequenza e che la branca acustica soddisfi ω(0)=0.</li><li>Per le righe spettrali separa larghezza naturale, collisionale, Doppler e risoluzione strumentale.</li><li>Non confondere Z_eff energetico con la carica locale Z*(r)=1+b/r.</li><li>Per il potenziale chimico: in 2D correzione esponenziale, in 3D correzione quadratica in T/T_F.</li><li>Per LCAO eteronucleare specifica orientazione dell’asse e segno del dipolo.</li></ul>
+</section>
+</main>
+</div>
+<div class="float">
+<button data-scroll-target="top" title="Torna su" type="button">↑</button>
+<button data-scroll-target="bottom" title="Vai giù" type="button">↓</button>
+</div>
+<footer id="bottom"><p>Formulario 2 V6 - V5 ampliata con costanti, ordini di grandezza, algebra rapida e analisi dimensionale. <a class="btn" href="Formulario1_V6.html">← Torna al Formulario 1 V6</a></p></footer>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener("click", function(event) {
+        event.preventDefault();
+        const id=link.getAttribute("href").slice(1);
+        const target=document.getElementById(id);
+        if(target) target.scrollIntoView({behavior:"smooth",block:id==="bottom"?"end":"start"});
+      });
+    });
+
+    document.querySelectorAll("[data-scroll-target]").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        const id=btn.getAttribute("data-scroll-target");
+        if(id==="top"){ window.scrollTo({top:0,behavior:"smooth"}); return; }
+        const target=document.getElementById(id);
+        if(target) target.scrollIntoView({behavior:"smooth",block:id==="bottom"?"end":"start"});
+      });
+    });
+
+    const main=document.querySelector("main");
+    const toggle=document.getElementById("layoutToggle2");
+    const saved=localStorage.getItem("formulario2-layout");
+    function setLayout(mode){
+      const multi=mode==="multi";
+      main.classList.toggle("multi",multi);
+      toggle.textContent=multi?"Vista singola colonna":"Vista due colonne";
+      localStorage.setItem("formulario2-layout",multi?"multi":"single");
+    }
+    if(toggle){
+      setLayout(saved==="multi"?"multi":"single");
+      toggle.addEventListener("click",function(){setLayout(main.classList.contains("multi")?"single":"multi");});
+    }
+  });
+  </script>
+</body>
+</html>
