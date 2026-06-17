@@ -243,12 +243,69 @@
       background:#050505;
     }
 
+    .cover-track{
+      display:flex;
+      width:100%;
+      height:100%;
+      transform:translateX(0);
+      transition:transform .78s cubic-bezier(.22,.61,.36,1);
+      will-change:transform;
+    }
+
+    .cover-slide{
+      flex:0 0 100%;
+      width:100%;
+      height:100%;
+      margin:0;
+    }
+
     .cover-frame img{
       width:100%;
       height:100%;
       display:block;
       object-fit:cover;
       filter:contrast(1.05) saturate(.95);
+    }
+
+    .cover-pager{
+      position:absolute;
+      top:12px;
+      right:12px;
+      z-index:5;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 9px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      background:rgba(0,0,0,.52);
+      color:#fff;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      text-shadow:0 0 8px rgba(0,0,0,.9);
+      backdrop-filter:blur(6px);
+      pointer-events:none;
+    }
+
+    .cover-dots{
+      display:flex;
+      gap:5px;
+    }
+
+    .cover-dot{
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.34);
+      box-shadow:0 0 0 transparent;
+      transition:background .25s ease,box-shadow .25s ease,transform .25s ease;
+    }
+
+    .cover-dot.active{
+      background:var(--accent);
+      box-shadow:0 0 10px var(--glow-strong);
+      transform:scale(1.18);
     }
 
     .cover-frame::after{
@@ -706,8 +763,22 @@
         </article>
 
         <aside class="panel cover-card">
-          <figure class="cover-frame">
-            <img src="cover-fondamenti.jpg" alt="Copertina fotografata degli appunti di Fondamenti di Struttura della Materia" loading="eager" />
+          <figure class="cover-frame" id="coverCarousel" role="button" tabindex="0" aria-pressed="false" aria-label="Copertine degli appunti. Clicca per mettere in pausa o riprendere lo scorrimento automatico.">
+            <div class="cover-track" id="coverTrack">
+              <div class="cover-slide">
+                <img src="cover-fondamenti.jpg" alt="Prima copertina fotografata degli appunti di Fondamenti di Struttura della Materia" loading="eager" />
+              </div>
+              <div class="cover-slide">
+                <img src="cover-fondamenti2.jpg" alt="Seconda copertina fotografata degli appunti di Fondamenti di Struttura della Materia" loading="eager" />
+              </div>
+            </div>
+            <div class="cover-pager" aria-hidden="true">
+              <span id="coverPlaybackState">auto</span>
+              <span class="cover-dots">
+                <span class="cover-dot active" data-cover-dot="0"></span>
+                <span class="cover-dot" data-cover-dot="1"></span>
+              </span>
+            </div>
             <figcaption class="cover-label">
               <span>[cover] appunti di Mirco</span>
               <span>mobile / desktop ready</span>
@@ -866,6 +937,54 @@
     document.querySelectorAll('h1').forEach(h=>h.dataset.glitch=h.innerText);if(!reduceMotion){window.setInterval(()=>{document.body.classList.add('glitching');window.setTimeout(()=>document.body.classList.remove('glitching'),380)},5200)}
     window.addEventListener('pointermove',ev=>{root.style.setProperty('--mx',`${ev.clientX}px`);root.style.setProperty('--my',`${ev.clientY}px`)},{passive:true});
     const coverFrame=document.querySelector('.cover-frame');if(coverFrame&&!reduceMotion){coverFrame.addEventListener('pointermove',ev=>{const rect=coverFrame.getBoundingClientRect(),px=(ev.clientX-rect.left)/rect.width,py=(ev.clientY-rect.top)/rect.height;root.style.setProperty('--tilt-y',`${(px-.5)*9}deg`);root.style.setProperty('--tilt-x',`${-(py-.5)*9}deg`);root.style.setProperty('--glare-x',`${px*100}%`);coverFrame.classList.add('tilt-on')},{passive:true});coverFrame.addEventListener('pointerleave',()=>{root.style.setProperty('--tilt-y','0deg');root.style.setProperty('--tilt-x','0deg');coverFrame.classList.remove('tilt-on')})}
+
+    const coverTrack=document.getElementById('coverTrack');
+    const coverPlaybackState=document.getElementById('coverPlaybackState');
+    const coverDots=[...document.querySelectorAll('[data-cover-dot]')];
+    let coverIndex=0;
+    let coverPaused=false;
+    let coverTimer=null;
+    const coverInterval=5600;
+
+    function renderCover(){
+      if(!coverTrack)return;
+      coverTrack.style.transform=`translateX(-${coverIndex*100}%)`;
+      coverDots.forEach((dot,i)=>dot.classList.toggle('active',i===coverIndex));
+    }
+
+    function setCoverPaused(paused){
+      coverPaused=paused;
+      coverFrame?.setAttribute('aria-pressed',String(paused));
+      if(coverPlaybackState)coverPlaybackState.textContent=paused?'pausa':'auto';
+      setTerminal(`<span class="prompt">[ready]</span> cover=${paused?'paused':'auto'} · palette=${currentTheme}`);
+    }
+
+    function advanceCover(){
+      if(coverPaused||document.hidden)return;
+      coverIndex=(coverIndex+1)%2;
+      renderCover();
+    }
+
+    function toggleCoverPlayback(){
+      setCoverPaused(!coverPaused);
+      audio.click();
+      flash(coverFrame);
+    }
+
+    if(coverFrame&&coverTrack){
+      renderCover();
+      coverTimer=window.setInterval(advanceCover,coverInterval);
+      coverFrame.addEventListener('click',toggleCoverPlayback);
+      coverFrame.addEventListener('keydown',ev=>{
+        if(ev.key==='Enter'||ev.key===' '){
+          ev.preventDefault();
+          toggleCoverPlayback();
+        }
+      });
+      document.addEventListener('visibilitychange',()=>{
+        if(!document.hidden&&!coverPaused)renderCover();
+      });
+    }
     function visibleCards(){if(window.matchMedia('(max-width: 640px)').matches)return 1;if(window.matchMedia('(max-width: 980px)').matches)return 2;return 4}
     const carouselControllers=[];
     function setupCarousel({trackId,windowId,counterId,progressId,total,folder,altPrefix}){
