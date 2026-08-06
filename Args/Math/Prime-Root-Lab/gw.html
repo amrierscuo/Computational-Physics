@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description" content="2D teaching simulation: prime-class deviations, interferometer and GW time-frequency analysis.">
+  <title>Prime Root Lab - 2D GW Analogy</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.0/dist/katex.min.css" integrity="sha384-KfwFj/Q/jGrY4ijtfzWyW5NXzT5irvfnTq6aRnH2xPvLzLdi1XyVr7w4l2uwTq0V" crossorigin="anonymous">
+  <link rel="stylesheet" href="gw.css?v=3">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.0/dist/katex.min.js" integrity="sha384-OE4SMRr5gMJQzKSD08J46vKsKgY8NxVtO1LW+/q3NJ0WHsGsdN4oebgEjwwWuyvG" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.0/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="loadingScreen" class="loading-screen" aria-live="polite">
+    <div class="loading-card">
+      <div class="loading-head"><span>2D GW ANALOGY</span><strong id="loadingPercent">0%</strong></div>
+      <div id="loadingProgress" class="loading-track" role="progressbar" aria-label="Loading dataset" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="loadingBar"></span></div>
+      <p id="loadingText">Reading prime-roots.txt...</p>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div>
+      <p class="brand">PRIME ROOT LAB</p>
+      <p class="subtitle">PAGE 3 | INTERFEROMETER | SPECTROGRAM</p>
+    </div>
+    <nav class="page-nav" aria-label="Main navigation">
+      <a href="index.html">Formula archive</a>
+      <a href="geometry.html">Charts and geometry</a>
+      <a href="gw.html" aria-current="page">2D GW analogy</a>
+      <a href="search.html">GW Search Lab</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">2D TEACHING MODEL</p>
+        <h1>From A-D deviations to a virtual interferometer</h1>
+        <p>The simulation maps A+C to the x axis and B+D to the y axis. Deviations from the expected value modulate a synthetic signal with inspiral, merger and ringdown phases.</p>
+      </div>
+      <div class="warning"><strong>Analogy, not detection.</strong> The prime dataset contains no gravitational measurements. The time scale, strain calibration and CBC carrier are imposed to study the representation.</div>
+    </section>
+
+    <section class="control-panel" aria-label="Simulation controls">
+      <button id="playButton" type="button">Pause</button>
+      <button id="audioButton" type="button" aria-pressed="false">Audio OFF</button>
+      <label>Sample rate
+        <select id="sampleRateSelect">
+          <option value="2048">2048 Hz</option>
+          <option value="4096" selected>4096 Hz</option>
+          <option value="16384">16384 Hz</option>
+        </select>
+      </label>
+      <label>FFT
+        <select id="fftSelect">
+          <option value="256">256 campioni</option>
+          <option value="512" selected>512 campioni</option>
+          <option value="1024">1024 campioni</option>
+        </select>
+      </label>
+      <label>Primes per window
+        <select id="binSelect">
+          <option value="128">128</option>
+          <option value="256" selected>256</option>
+          <option value="512">512</option>
+          <option value="1024">1024</option>
+        </select>
+      </label>
+      <label>Signal
+        <select id="signalModeSelect">
+          <option value="prime" selected>Prime-modulated chirp</option>
+          <option value="cbc">Synthetic CBC without primes</option>
+        </select>
+      </label>
+      <label>Data scenario
+        <select id="noiseModeSelect">
+          <option value="ideal" selected>Ideal</option>
+          <option value="noise">Gaussian noise</option>
+          <option value="glitch">Noise + glitch</option>
+        </select>
+      </label>
+      <button id="whitenButton" type="button" aria-pressed="false">Whitening OFF</button>
+      <label class="duration-control">Simulated duration <output id="durationOutput">12.0 s</output>
+        <input id="durationRange" type="range" min="6" max="60" step="0.1" value="12">
+      </label>
+      <button id="syncVideoButton" type="button">Sync video at 54.167 s</button>
+    </section>
+
+    <section class="readouts" aria-label="Current values">
+      <article><span>SIMULATED TIME</span><strong id="timeValue">0.000 s</strong></article>
+      <article><span>AC-BD DEVIATION</span><strong id="deltaValue">0.0000</strong><small>dimensionless</small></article>
+      <article><span>SIMULATED STRAIN</span><strong id="strainValue">0.00e+0</strong><small>dimensionless</small></article>
+      <article><span>CHIRP FREQUENCY</span><strong id="frequencyValue">30.0 Hz</strong><small id="audioStatus">audio off</small></article>
+      <article><span>CBC PHASE</span><strong id="cbcPhaseValue">INSPIRAL</strong><small id="videoSyncStatus">video not synchronized</small></article>
+    </section>
+
+    <section class="lab-grid">
+      <article class="visual-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">2D SPATIAL SURFACE</p><h2>Virtual x-y interferometer</h2></div>
+          <span id="phaseValue">Delta Phi = 0 rad</span>
+        </div>
+        <canvas id="interferometerCanvas" role="img" aria-label="Deformed two-dimensional grid and interferometer with perpendicular arms"></canvas>
+        <p class="axis-note">x,y - coordinates on the 2D spatial section | time is the animation parameter | visual deformation is amplified</p>
+      </article>
+
+      <article class="visual-panel spectrogram-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">TIME - FREQUENCY</p><h2>Spectrogram of the synthetic signal</h2></div>
+          <span id="samplingSummary">fs=4096 Hz | Nyquist=2048 Hz | Delta f=8 Hz</span>
+        </div>
+        <canvas id="spectrogramCanvas" role="img" aria-label="Synthetic spectrogram with time in seconds and frequency in hertz"></canvas>
+        <p class="axis-note">x axis - simulated time (s) | y axis - imposed absolute frequency (Hz) | color - relative STFT power (dB)</p>
+      </article>
+    </section>
+
+    <section id="referenceVideoPanel" class="visual-panel reference-video" hidden>
+      <div class="panel-head">
+        <div><p class="eyebrow">SYNCHRONIZED NUMERICAL REFERENCE</p><h2>GW250114: inspiral, merger and ringdown</h2></div>
+        <span id="videoTimeValue">0.000 / 54.167 s</span>
+      </div>
+      <video id="referenceVideo" muted playsinline preload="metadata" aria-label="Numerical animation of the GW250114 binary merger">
+        <source src="media/Animation_GW250114-1080p.mp4" type="video/mp4">
+      </video>
+      <div class="phase-track" aria-label="Fasi sincronizzate della fusione">
+        <span class="phase-inspiral">INSPIRAL 0-38%</span><span class="phase-merger">MERGER 38-52%</span><span class="phase-ringdown">RINGDOWN 52-100%</span>
+      </div>
+      <p class="axis-note">The video appears only at a simulated duration of 54.167 s. Its time is driven by the same cursor coordinate. The phases follow the visual narrative: this is cinematic duration, not the physical merger time. Other durations restore the standard profile and hide the video.</p>
+      <p class="credit">Source: <a href="https://www.ligo.caltech.edu/WA/video/ligo20250910v3">LIGO Lab - GW250114 Black Hole Merger Animation</a>. SXS numerical simulation, visualized by H. Pfeiffer, A. Buonanno and K. Mitman.</p>
+    </section>
+
+    <section class="visual-panel deviation-panel">
+      <div class="panel-head">
+        <div><p class="eyebrow">MODEL INPUT</p><h2>Window deviation across the full dataset</h2></div>
+        <span id="mappingSummary">-</span>
+      </div>
+      <canvas id="deviationCanvas" role="img" aria-label="Simulated time evolution of the AC-BD frequency difference"></canvas>
+      <div class="class-strip" aria-label="Current class percentages">
+        <span>A <strong id="classAValue">25.00%</strong></span>
+        <span>B <strong id="classBValue">25.00%</strong></span>
+        <span>C <strong id="classCValue">25.00%</strong></span>
+        <span>D <strong id="classDValue">25.00%</strong></span>
+      </div>
+      <p class="axis-note math-note">\(q_j(t)=\frac{N_j(t)}{N_{\mathrm{window}}}-0.25\) <span>|</span> \(\delta_p(t)=[q_A(t)+q_C(t)]-[q_B(t)+q_D(t)]\) <span>| expected value = 0</span></p>
+    </section>
+
+    <section class="lab-grid analysis-grid">
+      <article class="visual-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">SPECTRAL DENSITY</p><h2>Relative PSD and ASD, Welch estimate</h2></div>
+          <span id="psdSummary">Hann | overlap 50%</span>
+        </div>
+        <canvas id="psdCanvas" role="img" aria-label="Relative signal power spectral density"></canvas>
+        <p class="axis-note">x axis - frequency (Hz) | y axis - relative PSD (dB/Hz) | ASD = square root of PSD. Without instrument calibration, this is not a physical ASD in strain/sqrt(Hz).</p>
+      </article>
+      <article class="visual-panel method-panel">
+        <p class="eyebrow">ODW ANALYSIS CHAIN</p>
+        <h2>From photodiode to time-frequency map</h2>
+        <ol class="pipeline">
+          <li><strong>Optical response</strong><span>Photodiode and control signals are calibrated into strain.</span></li>
+          <li><strong>Data quality</strong><span>Nonstationary noise and glitches require checks and vetoes.</span></li>
+          <li><strong>PSD and whitening</strong><span>Welch estimates the floor; whitening compensates the expected spectral scale.</span></li>
+          <li><strong>Band-pass</strong><span>The useful band excludes uninformative frequencies. This view remains at 0-500 Hz.</span></li>
+          <li><strong>STFT or Q-transform</strong><span>The STFT has fixed resolution. The Q-transform uses variable windows and is often clearer for chirps and transients.</span></li>
+        </ol>
+        <div id="qualityStatus" class="quality-status">IDEAL - no added noise</div>
+      </article>
+    </section>
+
+    <section class="formula-grid" aria-label="Formulas and assumptions">
+      <article>
+        <p class="eyebrow">1 | PRIME MAPPING</p>
+        <h2>From percentage to simulated strain</h2>
+        <p class="formula">\[q_j(t)=\frac{N_j(t)}{N}-0.25\]</p>
+        <p class="formula">\[\delta_p(t)=[q_A(t)+q_C(t)]-[q_B(t)+q_D(t)]\]</p>
+        <p class="formula">\[h_{\mathrm{sim}}(t)=10^{-21}\frac{\delta_p(t)}{\max |\delta_p|}\]</p>
+        <p>Both quantities are dimensionless. The 10^-21 factor is a chosen teaching calibration, not a dataset result.</p>
+      </article>
+      <article>
+        <p class="eyebrow">2 | 2D SPATIAL SECTION</p>
+        <h2>Linearized metric, plus polarization</h2>
+        <p class="formula">\[ds^2=-c^2dt^2+[1+h_+(t)]dx^2+[1-h_+(t)]dy^2\]</p>
+        <p class="formula">\[h_{\mathrm{det}}=\frac{1}{2}h_{ij}(u^iu^j-v^iv^j)=F_+h_+ + F_\times h_\times\]</p>
+        <p class="formula">\[\frac{\Delta L_x}{L}=\frac{h_+}{2},\qquad \frac{\Delta L_y}{L}=-\frac{h_+}{2}\]</p>
+        <p>The drawing shows only the x-y plane crossed by the wave. It does not reduce general relativity to two dimensions.</p>
+      </article>
+      <article>
+        <p class="eyebrow">3 | OPTICAL READOUT</p>
+        <h2>Path-length and phase difference</h2>
+        <p class="formula">\[h=\frac{\Delta L_x-\Delta L_y}{L}\]</p>
+        <p class="formula">\[\Delta\Phi\simeq\frac{4\pi L}{\lambda}h\]</p>
+        <p>The page uses L=4000 m and lambda=1064 nm in a simple low-frequency, normal-incidence approximation. Real detectors reconstruct strain from photodiode and control signals.</p>
+      </article>
+      <article>
+        <p class="eyebrow">4 | SPECTROGRAM</p>
+        <h2>STFT and sampled frequencies</h2>
+        <p class="formula">\[S(m,k)=\left|\sum_n h[n]w[n-mR]e^{-i2\pi kn/N_{\mathrm{FFT}}}\right|^2\]</p>
+        <p class="formula">\[f_k=\frac{k f_s}{N_{\mathrm{FFT}}},\qquad f_{\mathrm{Nyquist}}=\frac{f_s}{2},\qquad \Delta f=\frac{f_s}{N_{\mathrm{FFT}}}\]</p>
+        <p>Color indicates relative power. File timestamps indicate when records were generated and do not form a uniform physical sampling clock.</p>
+      </article>
+      <article>
+        <p class="eyebrow">5 | INSPIRAL, MERGER, RINGDOWN</p>
+        <h2>Teaching CBC carrier</h2>
+        <p class="formula">\[f(t)\propto (t_c-t)^{-3/8}\]</p>
+        <p class="formula">\[h_{\mathrm{ring}}(t)=A_0e^{-(t-t_m)/\tau}\sin(2\pi f_{\mathrm{ring}}t+\phi)\]</p>
+        <p>The inspiral law is regularized and joined to merger and ringdown. It is not a numerical-relativity template and cannot estimate mass or distance.</p>
+      </article>
+      <article>
+        <p class="eyebrow">6 | PSD, ASD AND WHITENING</p>
+        <h2>Units and normalization</h2>
+        <p class="formula">\[\mathrm{ASD}(f)=\sqrt{\mathrm{PSD}(f)},\qquad \tilde h_w(f)=\frac{\tilde h(f)}{\sqrt{S_n(f)}}\]</p>
+        <p>For calibrated data, PSD has units of strain²/Hz and ASD has units of strain/sqrt(Hz). Curves remain relative here because real instrument noise is not included.</p>
+      </article>
+    </section>
+
+    <section class="sources">
+      <p class="eyebrow">PHYSICS SOURCES AND REFERENCE DATA</p>
+      <p><a href="https://ligo.org/gravitational-wave-science/">LIGO - how the interferometer works</a> | <a href="https://ligo.org/science-summaries/DataAnalysisGuide/">LIGO - strain and signal analysis</a> | <a href="https://gwosc.org/s/events/GW150914/GW150914_tutorial.html">GWOSC - spectrogram and sampling</a> | <a href="https://arxiv.org/abs/0810.4529">Michelson response to a GW</a> | GWOSC Open Data Workshop 2026 teaching material studied locally from et.zip.</p>
+    </section>
+  </main>
+
+  <script src="gw.js?v=3" defer></script>
+  <script src="math.js?v=3" defer></script>
+</body>
+</html>

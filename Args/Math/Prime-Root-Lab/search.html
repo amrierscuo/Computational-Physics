@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#03050a">
+  <meta name="description" content="Interactive matched-filtering, PSD, χ² and detector-coincidence laboratory.">
+  <title>Prime Root Lab - GW Search Lab</title>
+  <link rel="stylesheet" href="search.css?v=2">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="brand">PRIME ROOT LAB</p>
+      <p class="subtitle">PAGINA 4 | GW SEARCH PIPELINE</p>
+    </div>
+    <nav class="page-nav" aria-label="Main navigation">
+      <a href="index.html">Formula archive</a>
+      <a href="geometry.html">Charts and geometry</a>
+      <a href="gw.html">2D GW analogy</a>
+      <a href="search.html" aria-current="page">GW Search Lab</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">OPEN DATA WORKSHOP 2026 | METHODS REBUILT IN JAVASCRIPT</p>
+        <h1>From noise to candidate: a coherent three-detector search</h1>
+        <p class="lead">Generate a synthetic CBC signal, estimate the noise, apply whitening and matched filtering, test template consistency, and compare H1, L1 and V1.</p>
+      </div>
+      <aside class="boundary"><strong>Scientific boundary</strong><span>This page reproduces the logic of the PyCBC notebooks but uses synthetic data and a compact browser template. It does not replace PyCBC, LALSuite, an LVK search, or an astrophysical significance measurement.</span></aside>
+    </section>
+
+    <section class="controls" aria-label="Search parameters">
+      <label>Teaching preset
+        <select id="presetSelect">
+          <option value="gw150914">GW150914-style | single event</option>
+          <option value="gw170814" selected>GW170814-style | H1-L1-V1 network</option>
+          <option value="glitch">Stress test | strong glitch</option>
+        </select>
+      </label>
+      <label>Injected mass <output id="injectionMassOutput">36 Msol</output>
+        <input id="injectionMass" type="range" min="18" max="70" step="1" value="36">
+      </label>
+      <label>Template mass <output id="templateMassOutput">36 Msol</output>
+        <input id="templateMass" type="range" min="18" max="70" step="1" value="36">
+      </label>
+      <label>Signal amplitude <output id="amplitudeOutput">1.00</output>
+        <input id="amplitude" type="range" min="0.35" max="1.8" step="0.05" value="1">
+      </label>
+      <label>Noise level <output id="noiseOutput">1.00</output>
+        <input id="noise" type="range" min="0.45" max="1.8" step="0.05" value="1">
+      </label>
+      <label>χ² bands
+        <select id="chiBins">
+          <option value="8" selected>8 browser bands</option>
+          <option value="16">16 detailed bands</option>
+          <option value="26">26 as in notebook 4.3</option>
+        </select>
+      </label>
+      <label class="check-label"><input id="glitchToggle" type="checkbox"> Add glitch</label>
+      <button id="runButton" type="button">Run analysis</button>
+    </section>
+
+    <section class="status-line" aria-live="polite">
+      <div class="progress-track"><span id="progressBar"></span></div>
+      <p id="statusText">Ready.</p>
+    </section>
+
+    <section class="metrics" aria-label="Risultati principali">
+      <article><span>PEAK NETWORK SNR</span><strong id="networkSnr">-</strong><small>H1-L1-V1 quadrature</small></article>
+      <article><span>REDUCED χ²</span><strong id="reducedChi">-</strong><small>frequency consistency</small></article>
+      <article><span>REWEIGHTED SNR</span><strong id="reweightedSnr">-</strong><small>penalizes mismatch and glitches</small></article>
+      <article><span>CANDIDATE TIME</span><strong id="candidateTime">-</strong><small>seconds into the segment</small></article>
+      <article><span>EMPIRICAL BACKGROUND</span><strong id="backgroundRank">-</strong><small>demo, not an LVK false alarm rate</small></article>
+    </section>
+
+    <section class="pipeline" aria-label="Search pipeline">
+      <article data-step="1"><strong>CONDITION</strong><span>conceptual high-pass, Welch PSD, edge cropping</span></article>
+      <article data-step="2"><strong>WHITEN</strong><span>divide by the square root of the PSD in frequency space</span></article>
+      <article data-step="3"><strong>CORRELATE</strong><span>complex matched filter and phase maximization</span></article>
+      <article data-step="4"><strong>TEST</strong><span>banded χ², reweighted SNR, coincidence</span></article>
+      <article data-step="5"><strong>COMPARE</strong><span>off-source background and candidate ranking</span></article>
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel span-2">
+        <div class="panel-head"><div><p class="eyebrow">TIME</p><h2>Whitened data and aligned template</h2></div><span id="timeSummary">fs=1024 Hz | 20-450 Hz band</span></div>
+        <canvas id="strainCanvas" role="img" aria-label="Synthetic whitened data and aligned template in time"></canvas>
+        <p class="axis-note">Window around the candidate. The template is scaled and aligned to the matched-filter maximum.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><p class="eyebrow">NOISE</p><h2>Welch PSD by detector</h2></div><span>2 s segments | 50% overlap</span></div>
+        <canvas id="psdNetworkCanvas" role="img" aria-label="Relative PSD for the three detectors"></canvas>
+        <p class="axis-note">Relative curves. H1, L1 and V1 have different synthetic noise floors.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><p class="eyebrow">MATCHED FILTER</p><h2>Complex SNR, maximized over phase</h2></div><span id="snrSummary">|rho(t)|</span></div>
+        <canvas id="snrCanvas" role="img" aria-label="SNR time series for the three detectors"></canvas>
+        <p class="axis-note">The magnitude combines template quadratures separated by 90 degrees.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><p class="eyebrow">SIGNAL CONSISTENCY</p><h2>Reduced χ² and reweighted SNR</h2></div><span id="chiSummary">p=8 bands</span></div>
+        <canvas id="chiCanvas" role="img" aria-label="Reduced χ² and reweighted SNR near the candidate"></canvas>
+        <p class="axis-note">The test divides the template into bands of equal expected power. A glitch tends to produce a larger χ².</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><p class="eyebrow">COINCIDENCE</p><h2>H1-L1-V1 arrival times</h2></div><span id="coincidenceSummary">simulated light-travel windows</span></div>
+        <canvas id="coincidenceCanvas" role="img" aria-label="Detector peaks and coincidence windows"></canvas>
+        <p class="axis-note">Injected offsets: H1 0 ms, L1 +7 ms, V1 +19 ms. They are plausible for an exercise but do not reconstruct a sky position.</p>
+      </article>
+
+      <article class="panel span-2">
+        <div class="panel-head"><div><p class="eyebrow">BACKGROUND</p><h2>Off-source distribution</h2></div><span id="backgroundSummary">maxima in independent windows</span></div>
+        <canvas id="backgroundCanvas" role="img" aria-label="Histogram of background maxima and the candidate value"></canvas>
+        <p class="axis-note">The empirical count avoids calling a short simulation a significance measurement. A real search uses far more background, time slides and data-quality checks.</p>
+      </article>
+    </section>
+
+    <section class="detector-table panel">
+        <div class="panel-head"><div><p class="eyebrow">NETWORK</p><h2>Results by detector</h2></div><span>consistent colors across all charts</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>IFO</th><th>Injected arrival</th><th>Detected peak</th><th>SNR</th><th>Reduced χ²</th><th>Reweighted SNR</th><th>Coherent</th></tr></thead>
+          <tbody id="detectorRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="code-grid">
+      <article class="panel">
+        <p class="eyebrow">NOTEBOOK 4.2 | PYTHON/PYCBC</p>
+        <h2>Matched filtering in action</h2>
+        <pre><code>strain = highpass(strain, 15.0)
+strain = resample_to_delta_t(strain, 1.0/2048)
+psd = conditioned.psd(4)
+psd = interpolate(psd, conditioned.delta_f)
+snr = matched_filter(template, conditioned,
+    psd=psd, low_frequency_cutoff=20)</code></pre>
+        <p>The page implements the numerical analogue in JavaScript with a local FFT, Welch PSD and noise weighting.</p>
+      </article>
+      <article class="panel">
+        <p class="eyebrow">NOTEBOOK 4.3 | CONSISTENCY</p>
+        <h2>χ² and ranking</h2>
+        <pre><code>chisq = power_chisq(hp, data, nbins, psd,
+    low_frequency_cutoff=20.0)
+dof = nbins * 2 - 2
+chisq /= dof
+ranking = newsnr(abs(snr), chisq)</code></pre>
+        <p>In the lab, bands are built from the whitened template power and the ranking uses the same newSNR penalty form.</p>
+      </article>
+      <article class="panel">
+        <p class="eyebrow">NOTEBOOK 4.3 | NETWORK</p>
+        <h2>Timing consistency</h2>
+        <pre><code>tof = detector.light_travel_time_to_detector(other)
+window = [peak - tof, peak + tof]
+onsource = reweighted_snr[window].max()</code></pre>
+        <p>Offsets are declared and controlled only by presets. No sky triangulation is performed.</p>
+      </article>
+    </section>
+
+    <section class="provenance panel">
+      <p class="eyebrow">LOCAL PROVENANCE</p>
+      <h2>Material used from et.zip</h2>
+      <p><code>Tuto_4.1_Matched_filtering_introduction.ipynb</code> for colored noise, Welch PSD, whitening and correlation; <code>Tuto_4.2_Matched_Filtering_in_Action.ipynb</code> for GW150914, conditioning, templates and matched filtering; <code>Tuto_4.3_Signal_consistency_and_significance.ipynb</code> for the H1-L1-V1 network, χ², newSNR, light-travel times and background.</p>
+      <p>The archive also contains GWF frames for PyCBC exercises. The page remains fully static and GitHub Pages compatible; the real-frame extraction status is reported separately from the browser simulation.</p>
+    </section>
+  </main>
+
+  <script src="search.js?v=2" defer></script>
+</body>
+</html>

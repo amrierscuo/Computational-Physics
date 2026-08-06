@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#06110f">
+  <meta name="description" content="Visual archive of prime square-root approximations.">
+  <title>Prime Root Lab</title>
+  <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+  <div id="loadingScreen" class="loading-screen" aria-live="polite">
+    <div class="loading-card">
+      <div class="loading-head">
+        <span>PRIME ROOT LAB</span>
+        <strong id="loadingPercent">0%</strong>
+      </div>
+      <div id="loadingProgress" class="loading-track" role="progressbar" aria-label="Loading archive" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span id="loadingBar"></span>
+      </div>
+      <p id="loadingText">Preparing TXT archive...</p>
+    </div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-row">
+        <span class="brand">PRIME ROOT LAB</span>
+        <span class="live-dot" aria-hidden="true"></span>
+      </div>
+      <nav class="page-nav" aria-label="Main navigation">
+        <a href="index.html" aria-current="page">Formula archive</a>
+        <a href="geometry.html">Charts and geometry</a>
+        <a href="gw.html">2D GW analogy</a>
+        <a href="search.html">GW Search Lab</a>
+      </nav>
+
+      <section class="brief" aria-label="Project rules">
+        <p><span>METHOD</span> Prime roots through scaled integer squares.</p>
+        <p><span>BLOCKS</span> Only 10, 5, 2 and 1 at different scales.</p>
+        <p><span>STOP</span> At least 3 decimals; continue while the next digit is &gt;= 5.</p>
+      </section>
+
+      <div class="archive-head">
+        <span>TXT ARCHIVE</span>
+        <strong id="recordCount">0 records</strong>
+      </div>
+      <div class="jump-row">
+        <input id="recordJump" type="search" inputmode="search" placeholder="p=11 or v=2" aria-label="Go to prime number or version">
+        <button id="jumpButton" type="button">Go</button>
+      </div>
+      <p id="listWindow" class="list-window">no records</p>
+      <nav id="versionList" class="version-list" aria-label="Archived formulas"></nav>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="versionLabel">NO DATA</p>
+          <p class="source-status" id="sourceStatus" role="status">Loading archive...</p>
+        </div>
+        <div class="file-actions">
+          <label class="button secondary" for="fileInput">Load TXT archive</label>
+          <input id="fileInput" type="file" accept=".txt,text/plain" hidden>
+          <a class="button secondary" href="data/timestamp-groups.txt" download>Timestamp groups TXT</a>
+          <button class="button secondary" id="exportButton" type="button">Export TXT archive</button>
+        </div>
+      </header>
+
+      <section class="result-card" aria-live="polite">
+        <div class="result-main">
+          <span class="root-mark">sqrt(<b id="primeValue">-</b>)</span>
+          <span class="equals">=</span>
+          <strong id="approximationValue">-</strong>
+        </div>
+        <div class="result-meta">
+          <span id="statusChip" class="chip">waiting</span>
+          <div class="timestamp-meta">
+            <time id="timestampValue">no timestamp</time>
+            <span id="timestampGroup">no timestamp group</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="Formula metrics">
+        <article><span>DECIMALS</span><strong id="decimalCount">-</strong></article>
+        <article><span>ERROR</span><strong id="errorValue">-</strong></article>
+        <article><span>BOUNDS</span><strong id="boundsValue">-</strong></article>
+        <article><span>NEXT DIGIT</span><strong id="nextDigitValue">-</strong></article>
+      </section>
+
+      <section class="formula-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">SAVED STEPS</p>
+            <p class="section-note">green - decomposition | cyan - products and comparison</p>
+          </div>
+          <span id="dirtyState" class="dirty-state">synchronized with TXT</span>
+        </div>
+        <div id="formulaSteps" class="formula-steps"></div>
+      </section>
+
+      <section class="stop-panel">
+        <div class="section-head">
+          <p class="eyebrow">STOPPING RULE</p>
+          <span id="stopSummary" class="section-note">-</span>
+        </div>
+        <div id="stopTrace" class="stop-trace"></div>
+      </section>
+
+      <footer class="controls" aria-label="Archive controls">
+        <button class="button secondary" id="previousButton" type="button">Previous formula</button>
+        <button class="button primary" id="generateButton" type="button">Calculate and add the next prime</button>
+        <button class="button secondary" id="nextButton" type="button">Next formula</button>
+      </footer>
+    </main>
+  </div>
+
+  <template id="emptyTemplate">
+    <div class="empty-state">
+      <strong>Archive not loaded</strong>
+      <span>If you opened the HTML file directly, use "Load TXT archive".</span>
+    </div>
+  </template>
+
+  <script src="app.js?v=2" defer></script>
+</body>
+</html>
