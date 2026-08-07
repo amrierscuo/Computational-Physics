@@ -26,9 +26,11 @@
   map.createPane("s2L14Pane");
   map.createPane("s2L17Pane");
   map.createPane("s2SelectionPane");
+  map.createPane("poiPane");
   map.getPane("s2L14Pane").style.zIndex = "440";
   map.getPane("s2L17Pane").style.zIndex = "450";
   map.getPane("s2SelectionPane").style.zIndex = "460";
+  map.getPane("poiPane").style.zIndex = "470";
 
   const renderers = {
     14: L.canvas({ pane: "s2L14Pane", padding: 0.35 }),
@@ -50,13 +52,26 @@
   const gridLayers = { 14: L.layerGroup(), 17: L.layerGroup() };
   const selectionLayer = L.layerGroup().addTo(map);
   const locationLayer = L.layerGroup().addTo(map);
+  const poiLayer = L.layerGroup().addTo(map);
   const controls = collectControls();
   const state = {
     basemap: readStoredBasemap(),
     show: { 14: true, 17: true },
     opacity: Number(controls.gridOpacity.value) / 100,
     renderFrame: 0,
-    selected: null
+    selected: null,
+    cellStatus: "",
+    poi: {
+      records: [],
+      loaded: false,
+      error: null,
+      visibleCount: 0,
+      show: true,
+      types: {
+        "Wayspot Submission": true,
+        "Photo Submission": true
+      }
+    }
   };
 
   basemaps[state.basemap].addTo(map);
@@ -68,21 +83,31 @@
   bindMapEvents();
   selectPoint(map.getCenter(), false);
   scheduleRender();
+  loadPoiDataset();
 
   function collectControls() {
     return {
       basemapButton: document.getElementById("basemapButton"),
       cellsButton: document.getElementById("cellsButton"),
+      poiButton: document.getElementById("poiButton"),
       locateButton: document.getElementById("locateButton"),
       homeButton: document.getElementById("homeButton"),
       zoomInButton: document.getElementById("zoomInButton"),
       zoomOutButton: document.getElementById("zoomOutButton"),
       basemapPanel: document.getElementById("basemapPanel"),
       cellsPanel: document.getElementById("cellsPanel"),
+      poiPanel: document.getElementById("poiPanel"),
       showL14: document.getElementById("showL14"),
       showL17: document.getElementById("showL17"),
       gridOpacity: document.getElementById("gridOpacity"),
       opacityValue: document.getElementById("opacityValue"),
+      showPoi: document.getElementById("showPoi"),
+      showWayspots: document.getElementById("showWayspots"),
+      showPhotoSubmissions: document.getElementById("showPhotoSubmissions"),
+      fitPoiButton: document.getElementById("fitPoiButton"),
+      poiLoadedCount: document.getElementById("poiLoadedCount"),
+      poiVisibleCount: document.getElementById("poiVisibleCount"),
+      poiDatasetState: document.getElementById("poiDatasetState"),
       selectionSheet: document.getElementById("selectionSheet"),
       closeSelection: document.getElementById("closeSelection"),
       selectedCoordinate: document.getElementById("selectedCoordinate"),
@@ -94,6 +119,7 @@
       mapStatus: document.getElementById("mapStatus"),
       l14Count: document.getElementById("l14Count"),
       l17Count: document.getElementById("l17Count"),
+      poiCount: document.getElementById("poiCount"),
       infoButton: document.getElementById("infoButton"),
       infoSheet: document.getElementById("infoSheet"),
       closeInfo: document.getElementById("closeInfo"),
@@ -106,6 +132,7 @@
   function bindControls() {
     controls.basemapButton.addEventListener("click", () => togglePanel("basemap"));
     controls.cellsButton.addEventListener("click", () => togglePanel("cells"));
+    controls.poiButton.addEventListener("click", () => togglePanel("poi"));
     controls.basemapChoices.forEach((button) => {
       button.addEventListener("click", () => setBasemap(button.dataset.basemap));
     });
@@ -116,6 +143,19 @@
       controls.opacityValue.value = `${controls.gridOpacity.value}%`;
       scheduleRender();
     });
+    controls.showPoi.addEventListener("change", () => {
+      state.poi.show = controls.showPoi.checked;
+      renderPoiLayer();
+    });
+    controls.showWayspots.addEventListener("change", () => {
+      state.poi.types["Wayspot Submission"] = controls.showWayspots.checked;
+      renderPoiLayer();
+    });
+    controls.showPhotoSubmissions.addEventListener("change", () => {
+      state.poi.types["Photo Submission"] = controls.showPhotoSubmissions.checked;
+      renderPoiLayer();
+    });
+    controls.fitPoiButton.addEventListener("click", fitVisiblePoi);
     controls.locateButton.addEventListener("click", () => {
       controls.mapStatus.textContent = "Requesting your location";
       map.locate({ setView: true, maxZoom: 18, enableHighAccuracy: true });
@@ -177,18 +217,23 @@
   function togglePanel(name) {
     const showBasemap = name === "basemap" && controls.basemapPanel.hidden;
     const showCells = name === "cells" && controls.cellsPanel.hidden;
+    const showPoi = name === "poi" && controls.poiPanel.hidden;
     controls.basemapPanel.hidden = !showBasemap;
     controls.cellsPanel.hidden = !showCells;
+    controls.poiPanel.hidden = !showPoi;
     controls.basemapButton.setAttribute("aria-expanded", String(showBasemap));
     controls.cellsButton.setAttribute("aria-expanded", String(showCells));
+    controls.poiButton.setAttribute("aria-expanded", String(showPoi));
     controls.infoSheet.hidden = true;
   }
 
   function closePanels() {
     controls.basemapPanel.hidden = true;
     controls.cellsPanel.hidden = true;
+    controls.poiPanel.hidden = true;
     controls.basemapButton.setAttribute("aria-expanded", "false");
     controls.cellsButton.setAttribute("aria-expanded", "false");
+    controls.poiButton.setAttribute("aria-expanded", "false");
   }
 
   function setBasemap(name) {
@@ -264,7 +309,8 @@
 
     controls.l14Count.textContent = String(counts[14]);
     controls.l17Count.textContent = String(counts[17]);
-    controls.mapStatus.textContent = statusMessage(zoom, counts);
+    state.cellStatus = statusMessage(zoom, counts);
+    updateMapStatus();
     controls.loadingIndicator.classList.remove("is-visible");
   }
 
@@ -297,6 +343,194 @@
     if (zoom < DISPLAY_LEVELS[14].minZoom) return "Zoom to level 12 to draw L14 cells";
     if (zoom < DISPLAY_LEVELS[17].minZoom) return `${counts[14]} L14 cells - zoom to level 16 for L17`;
     return `${counts[14]} L14 and ${counts[17]} L17 cells in view`;
+  }
+
+  async function loadPoiDataset() {
+    controls.fitPoiButton.disabled = true;
+    try {
+      const response = await fetch("data/wayfarer-poi.json", { cache: "no-store" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      if (!payload || !Array.isArray(payload.records)) throw new Error("Invalid dataset structure");
+
+      state.poi.records = payload.records.filter((record) => (
+        (record.submissionType === "Wayspot Submission" || record.submissionType === "Photo Submission")
+        && Number.isFinite(Number(record.latitude))
+        && Number.isFinite(Number(record.longitude))
+      ));
+      state.poi.loaded = true;
+      state.poi.error = null;
+      controls.poiLoadedCount.value = String(state.poi.records.length);
+      controls.poiDatasetState.textContent = payload.publicReady && payload.reviewStatus === "complete"
+        ? `${state.poi.records.length} reviewed POIs - ${payload.imageCounts?.excluded || 0} images excluded`
+        : payload.partial
+          ? `${state.poi.records.length} local sample POIs - privacy review pending`
+          : `${state.poi.records.length} local POIs - privacy review pending`;
+      controls.fitPoiButton.disabled = state.poi.records.length === 0;
+      renderPoiLayer();
+    } catch {
+      state.poi.records = [];
+      state.poi.loaded = false;
+      state.poi.error = "POI dataset unavailable";
+      controls.poiLoadedCount.value = "0";
+      controls.poiVisibleCount.value = "0";
+      controls.poiCount.textContent = "0";
+      controls.poiDatasetState.textContent = "Local POI dataset not installed";
+      controls.fitPoiButton.disabled = true;
+      updateMapStatus();
+    }
+  }
+
+  function visiblePoiRecords() {
+    if (!state.poi.show) return [];
+    return state.poi.records.filter((record) => state.poi.types[record.submissionType]);
+  }
+
+  function renderPoiLayer() {
+    poiLayer.clearLayers();
+    const records = visiblePoiRecords();
+
+    records.forEach((record) => {
+      const marker = L.marker([Number(record.latitude), Number(record.longitude)], {
+        pane: "poiPane",
+        title: record.title,
+        keyboard: true,
+        icon: poiMarkerIcon(record.submissionType)
+      });
+      marker.bindPopup(buildPoiPopup(record), {
+        className: "poi-leaflet-popup",
+        maxWidth: 310,
+        minWidth: 220
+      });
+      marker.on("click", () => {
+        selectPoint(L.latLng(Number(record.latitude), Number(record.longitude)), false);
+      });
+      marker.addTo(poiLayer);
+    });
+
+    state.poi.visibleCount = records.length;
+    controls.poiVisibleCount.value = String(records.length);
+    controls.poiCount.textContent = String(records.length);
+    controls.fitPoiButton.disabled = records.length === 0;
+    updateMapStatus();
+  }
+
+  function poiMarkerIcon(submissionType) {
+    const kind = submissionType === "Photo Submission" ? "photo" : "wayspot";
+    return L.divIcon({
+      className: "poi-marker-icon",
+      html: `<span class="poi-marker poi-marker--${kind}" aria-hidden="true"></span>`,
+      iconSize: [19, 19],
+      iconAnchor: [10, 10],
+      popupAnchor: [0, -11]
+    });
+  }
+
+  function buildPoiPopup(record) {
+    const popup = document.createElement("article");
+    popup.className = "poi-popup";
+
+    const type = document.createElement("p");
+    type.className = "poi-popup__type";
+    type.textContent = record.submissionType;
+    popup.append(type);
+
+    const title = document.createElement("h3");
+    title.textContent = record.title || "Untitled contribution";
+    popup.append(title);
+
+    const meta = document.createElement("p");
+    meta.className = "poi-popup__meta";
+    meta.textContent = [record.submissionDate, record.locality].filter(Boolean).join(" - ");
+    popup.append(meta);
+
+    const images = record.submissionType === "Photo Submission"
+      ? [{ url: record.submittedPhotoUrl, label: "Your image submission" }]
+      : [
+          { url: record.mainSubmissionPhotoUrl, label: "Primary nomination photo" },
+          { url: record.supportingPhotoUrl, label: "Supporting photo" }
+        ];
+    const availableImages = images.filter((image) => image.url);
+
+    if (availableImages.length) {
+      const imageRow = document.createElement("div");
+      imageRow.className = `poi-popup__images${availableImages.length === 1 ? " is-single" : ""}`;
+      availableImages.forEach((image) => {
+        const element = document.createElement("img");
+        element.src = image.url;
+        element.alt = image.label;
+        element.loading = "lazy";
+        element.decoding = "async";
+        imageRow.append(element);
+      });
+      popup.append(imageRow);
+    }
+
+    if (record.address) {
+      const address = document.createElement("p");
+      address.className = "poi-popup__address";
+      address.textContent = record.address;
+      popup.append(address);
+    }
+
+    if (record.description || record.supportingInformation) {
+      const details = document.createElement("details");
+      details.className = "poi-popup__details";
+      const summary = document.createElement("summary");
+      summary.textContent = "Submission details";
+      details.append(summary);
+      [record.description, record.supportingInformation].filter(Boolean).forEach((value) => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = value;
+        details.append(paragraph);
+      });
+      popup.append(details);
+    }
+
+    const review = document.createElement("p");
+    review.className = "poi-popup__review";
+    const reviewRoles = record.submissionType === "Photo Submission" ? ["submitted"] : ["primary", "support"];
+    const reviewComplete = reviewRoles.every((role) => ["keep", "exclude"].includes(record.imageReview?.[role]));
+    review.textContent = reviewComplete
+      ? "Privacy review complete"
+      : "Privacy review pending - local preview only";
+    popup.append(review);
+
+    const l17 = S2Grid.Cell.fromLatLng({ lat: Number(record.latitude), lng: Number(record.longitude) }, 17);
+    const l14 = l17.parent(14);
+    const cells = document.createElement("p");
+    cells.className = "poi-popup__cells";
+    cells.textContent = `L17 ${l17.token()} | L14 ${l14.token()}`;
+    popup.append(cells);
+
+    return popup;
+  }
+
+  function fitVisiblePoi() {
+    const records = visiblePoiRecords();
+    if (!records.length) return;
+    if (records.length === 1) {
+      map.setView([Number(records[0].latitude), Number(records[0].longitude)], 18);
+    } else {
+      map.fitBounds(L.latLngBounds(records.map((record) => [Number(record.latitude), Number(record.longitude)])), {
+        padding: [42, 42],
+        maxZoom: 18
+      });
+    }
+    closePanels();
+  }
+
+  function updateMapStatus() {
+    const base = state.cellStatus || "Move or zoom to inspect the grid";
+    if (state.poi.error) {
+      controls.mapStatus.textContent = `${base} - POI dataset unavailable`;
+      return;
+    }
+    if (state.poi.loaded) {
+      controls.mapStatus.textContent = `${base} - ${state.poi.visibleCount} POIs active`;
+      return;
+    }
+    controls.mapStatus.textContent = base;
   }
 
   function selectPoint(latlng, reveal) {
