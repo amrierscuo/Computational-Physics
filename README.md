@@ -1,5 +1,5 @@
 S2Cells 
-https://amrierscuo.github.io/Computational-Physics/Args/Math/Fractals/S2cells/globe_levels.html
+https://amrierscuo.github.io/Computational-Physics/Args/Math/Fractals/S2cells/map.html
 
 https://amrierscuo.github.io/Computational-Physics/Args/Math/Prime-Root-Lab/
 
