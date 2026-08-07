@@ -29,7 +29,7 @@
   </header>
 
   <main class="map-shell">
-    <div id="map" aria-label="Interactive map with S2 level 14 and level 17 cell overlays"></div>
+    <div id="map" aria-label="Interactive map with S2 cells and accepted contribution POIs"></div>
 
     <section class="map-intro" aria-labelledby="mapTitle">
       <p class="map-kicker">Wayfarer planning layer</p>
@@ -40,6 +40,7 @@
     <div class="tool-rail" aria-label="Map tools">
       <button id="basemapButton" type="button" aria-label="Change basemap" aria-expanded="false"><span class="tool-glyph">MAP</span></button>
       <button id="cellsButton" type="button" aria-label="Configure S2 cell layers" aria-expanded="false"><span class="tool-glyph">S2</span></button>
+      <button id="poiButton" type="button" aria-label="Configure POI layers" aria-expanded="false"><span class="tool-glyph">POI</span></button>
       <button id="locateButton" type="button" aria-label="Find my position"><span class="target-glyph" aria-hidden="true"></span></button>
       <button id="homeButton" type="button" aria-label="Return to initial view"><span class="home-glyph" aria-hidden="true"></span></button>
       <button id="zoomInButton" type="button" aria-label="Zoom in"><span class="math-glyph">+</span></button>
@@ -57,6 +58,16 @@
       <label class="layer-choice"><span class="line-key l14-key"></span><span><strong>Level 14</strong><small>Parent planning cells</small></span><input id="showL14" type="checkbox" checked></label>
       <label class="layer-choice"><span class="line-key l17-key"></span><span><strong>Level 17</strong><small>Fine placement cells</small></span><input id="showL17" type="checkbox" checked></label>
       <label class="opacity-field"><span>Grid opacity</span><output id="opacityValue">82%</output><input id="gridOpacity" type="range" min="25" max="100" value="82"></label>
+    </section>
+
+    <section class="floating-panel poi-panel" id="poiPanel" aria-label="POI layer selection" hidden>
+      <p class="panel-label">Accepted contribution POIs</p>
+      <label class="layer-choice"><span class="marker-key all-poi-key"></span><span><strong>Show POIs</strong><small>Master visibility</small></span><input id="showPoi" type="checkbox" checked></label>
+      <label class="layer-choice"><span class="marker-key wayspot-key"></span><span><strong>Wayspot Submission</strong><small>Primary and support photos</small></span><input id="showWayspots" type="checkbox" checked></label>
+      <label class="layer-choice"><span class="marker-key photo-key"></span><span><strong>Photo Submission</strong><small>Your submitted photo only</small></span><input id="showPhotoSubmissions" type="checkbox" checked></label>
+      <div class="poi-summary"><span>Loaded <output id="poiLoadedCount">0</output></span><span>Visible <output id="poiVisibleCount">0</output></span></div>
+      <button class="panel-action" id="fitPoiButton" type="button">Fit visible POIs</button>
+      <p class="dataset-state" id="poiDatasetState">Loading reviewed POI dataset</p>
     </section>
 
     <section class="selection-sheet" id="selectionSheet" aria-live="polite" hidden>
@@ -78,6 +89,7 @@
       <div class="status-legend" aria-label="Cell legend">
         <span><i class="l14-dot"></i>L14 <b id="l14Count">0</b></span>
         <span><i class="l17-dot"></i>L17 <b id="l17Count">0</b></span>
+        <span><i class="poi-dot"></i>POI <b id="poiCount">0</b></span>
       </div>
       <button id="infoButton" class="info-button" type="button" aria-label="About this map">i</button>
     </section>
@@ -85,8 +97,9 @@
     <section class="info-sheet" id="infoSheet" hidden>
       <button class="sheet-close" id="closeInfo" type="button" aria-label="Close information">x</button>
       <p class="panel-label">About this layer</p>
-      <h2>Geometry only, no portal data.</h2>
-      <p>The boundaries are calculated locally from the S2 quadratic cube projection. No Ingress or Wayfarer portal dataset is loaded or requested.</p>
+      <h2>S2 geometry with an accepted POI layer.</h2>
+      <p>The boundaries are calculated locally from the S2 quadratic cube projection. This review build can also load an exported Accepted contribution dataset without requesting private Wayfarer services.</p>
+      <p>Wayspot nominations use the primary and support photos. Accepted photo contributions use only Your Image Submission. Images flagged during privacy review are excluded from the published dataset.</p>
       <p>L17 is drawn from zoom 16 and L14 from zoom 12 to keep mobile interaction fast.</p>
       <div class="source-links"><a href="https://s2geometry.io/" target="_blank" rel="noopener">S2 Geometry</a><a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener">Report a map issue</a></div>
     </section>
