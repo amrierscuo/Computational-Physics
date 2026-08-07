@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#07100f">
-  <meta name="description" content="A mobile S2 field map with exact L14 and L17 cells over street and satellite basemaps.">
+  <meta name="description" content="A mobile S2 field map with exact L14 and L17 cells, accepted Wayfarer contributions, and account-owned Street View 360 panoramas.">
   <meta property="og:title" content="S2 Field Map - Fractal Atlas">
   <meta property="og:description" content="Inspect real S2 L14 and L17 cells on an interactive field map.">
   <meta property="og:type" content="website">
@@ -29,7 +29,7 @@
   </header>
 
   <main class="map-shell">
-    <div id="map" aria-label="Interactive map with S2 cells and accepted contribution POIs"></div>
+    <div id="map" aria-label="Interactive map with S2 cells, accepted contribution POIs, and Street View 360 panoramas"></div>
 
     <section class="map-intro" aria-labelledby="mapTitle">
       <p class="map-kicker">Wayfarer planning layer</p>
@@ -40,9 +40,9 @@
     <div class="tool-rail" aria-label="Map tools">
       <button id="basemapButton" type="button" aria-label="Change basemap" aria-expanded="false"><span class="tool-glyph">MAP</span></button>
       <button id="cellsButton" type="button" aria-label="Configure S2 cell layers" aria-expanded="false"><span class="tool-glyph">S2</span></button>
-      <button id="poiButton" type="button" aria-label="Configure POI layers" aria-expanded="false"><span class="tool-glyph">POI</span></button>
+      <button id="poiButton" type="button" aria-label="Configure map point layers" aria-expanded="false"><span class="tool-glyph">POI</span></button>
       <button id="locateButton" type="button" aria-label="Find my position"><span class="target-glyph" aria-hidden="true"></span></button>
-      <button id="homeButton" type="button" aria-label="Return to initial view"><span class="home-glyph" aria-hidden="true"></span></button>
+      <button id="homeButton" type="button" aria-label="Return to initial view"><svg class="home-glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 10.5 12 3l8.5 7.5v10h-5.7v-6.2H9.2v6.2H3.5z"></path></svg></button>
       <button id="zoomInButton" type="button" aria-label="Zoom in"><span class="math-glyph">+</span></button>
       <button id="zoomOutButton" type="button" aria-label="Zoom out"><span class="math-glyph">-</span></button>
     </div>
@@ -61,13 +61,14 @@
     </section>
 
     <section class="floating-panel poi-panel" id="poiPanel" aria-label="POI layer selection" hidden>
-      <p class="panel-label">Accepted contribution POIs</p>
-      <label class="layer-choice"><span class="marker-key all-poi-key"></span><span><strong>Show POIs</strong><small>Master visibility</small></span><input id="showPoi" type="checkbox" checked></label>
+      <p class="panel-label">Map point layers</p>
+      <label class="layer-choice"><span class="marker-key all-poi-key"></span><span><strong>Show map points</strong><small>Master visibility</small></span><input id="showPoi" type="checkbox" checked></label>
       <label class="layer-choice"><span class="marker-key wayspot-key"></span><span><strong>Wayspot Submission</strong><small>Primary and support photos</small></span><input id="showWayspots" type="checkbox" checked></label>
       <label class="layer-choice"><span class="marker-key photo-key"></span><span><strong>Photo Submission</strong><small>Your submitted photo only</small></span><input id="showPhotoSubmissions" type="checkbox" checked></label>
+      <label class="layer-choice"><span class="marker-key streetview-key"></span><span><strong>Street View 360</strong><small>Your public spherical photos</small></span><input id="showStreetView" type="checkbox" checked></label>
       <div class="poi-summary"><span>Loaded <output id="poiLoadedCount">0</output></span><span>Visible <output id="poiVisibleCount">0</output></span></div>
-      <button class="panel-action" id="fitPoiButton" type="button">Fit visible POIs</button>
-      <p class="dataset-state" id="poiDatasetState">Loading reviewed POI dataset</p>
+      <button class="panel-action" id="fitPoiButton" type="button">Fit visible map points</button>
+      <p class="dataset-state" id="poiDatasetState">Loading map point datasets</p>
     </section>
 
     <section class="selection-sheet" id="selectionSheet" aria-live="polite" hidden>
@@ -97,9 +98,10 @@
     <section class="info-sheet" id="infoSheet" hidden>
       <button class="sheet-close" id="closeInfo" type="button" aria-label="Close information">x</button>
       <p class="panel-label">About this layer</p>
-      <h2>S2 geometry with an accepted POI layer.</h2>
-      <p>The boundaries are calculated locally from the S2 quadratic cube projection. This review build can also load an exported Accepted contribution dataset without requesting private Wayfarer services.</p>
+      <h2>S2 geometry with contribution and panorama layers.</h2>
+      <p>The boundaries are calculated locally from the S2 quadratic cube projection. The map loads static exports without requesting private Wayfarer or Google account services from the browser.</p>
       <p>Wayspot nominations use the primary and support photos. Accepted photo contributions use only Your Image Submission. Images flagged during privacy review are excluded from the published dataset.</p>
+      <p>Street View 360 points are account-owned public panoramas. Their thumbnails and public Google Maps links come from a local Street View Publish API export.</p>
       <p>L17 is drawn from zoom 16 and L14 from zoom 12 to keep mobile interaction fast.</p>
       <div class="source-links"><a href="https://s2geometry.io/" target="_blank" rel="noopener">S2 Geometry</a><a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener">Report a map issue</a></div>
     </section>
