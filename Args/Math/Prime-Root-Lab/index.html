@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#06110f">
   <meta name="description" content="Visual archive of prime square-root approximations.">
   <title>Prime Root Lab</title>
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
   <div id="loadingScreen" class="loading-screen" aria-live="polite">
@@ -18,7 +18,7 @@
       <div id="loadingProgress" class="loading-track" role="progressbar" aria-label="Loading archive" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <span id="loadingBar"></span>
       </div>
-      <p id="loadingText">Preparing TXT archive...</p>
+      <p id="loadingText">Loading the first 1,000 formulas...</p>
     </div>
   </div>
   <div class="shell">
@@ -34,22 +34,47 @@
         <a href="search.html">GW Search Lab</a>
       </nav>
 
-      <section class="brief" aria-label="Project rules">
-        <p><span>METHOD</span> Prime roots through scaled integer squares.</p>
-        <p><span>BLOCKS</span> Only 10, 5, 2 and 1 at different scales.</p>
-        <p><span>STOP</span> At least 3 decimals; continue while the next digit is &gt;= 5.</p>
-      </section>
+      <details id="methodDetails" class="brief">
+        <summary>Method and rules</summary>
+        <div class="brief-body">
+          <p><span>METHOD</span> Prime roots through scaled integer squares.</p>
+          <p><span>BLOCKS</span> Only 10, 5, 2 and 1 at different scales.</p>
+          <p><span>STOP</span> At least 3 decimals; continue while the next digit is &gt;= 5.</p>
+        </div>
+      </details>
 
       <div class="archive-head">
         <span>TXT ARCHIVE</span>
-        <strong id="recordCount">0 records</strong>
+        <strong id="recordCount">0 loaded</strong>
       </div>
-      <div class="jump-row">
-        <input id="recordJump" type="search" inputmode="search" placeholder="p=11 or v=2" aria-label="Go to prime number or version">
-        <button id="jumpButton" type="button">Go</button>
-      </div>
-      <p id="listWindow" class="list-window">no records</p>
-      <nav id="versionList" class="version-list" aria-label="Archived formulas"></nav>
+      <section class="load-panel" aria-label="Archive loading controls">
+        <div class="load-stats">
+          <strong id="archiveCoverage">0%</strong>
+          <span id="archiveBytes">0 B</span>
+        </div>
+        <div class="coverage-track" aria-hidden="true"><span id="coverageBar"></span></div>
+        <label class="block-label" for="blockPercent">
+          <span>Next archive block</span>
+          <output id="blockPercentValue" for="blockPercent">5%</output>
+        </label>
+        <input id="blockPercent" class="block-range" type="range" min="1" max="25" step="1" value="5" aria-label="Percentage of archive to load next">
+        <div class="load-actions">
+          <button id="loadBlockButton" type="button">Load next 5%</button>
+          <button id="loadAllButton" type="button">Load all</button>
+        </div>
+        <p id="loadHint">The first 1,000 records load automatically. Browser, groups and metrics use only the loaded subset.</p>
+      </section>
+      <details id="archiveBrowser" class="archive-browser" open>
+        <summary>
+          <span>Browse loaded records</span>
+          <span id="listWindow" class="list-window">no records</span>
+        </summary>
+        <div class="jump-row">
+          <input id="recordJump" type="search" inputmode="search" placeholder="p=11 or v=2" aria-label="Go to prime number or version">
+          <button id="jumpButton" type="button">Go</button>
+        </div>
+        <nav id="versionList" class="version-list" aria-label="Archived formulas"></nav>
+      </details>
     </aside>
 
     <main class="workspace">
@@ -58,12 +83,15 @@
           <p class="eyebrow" id="versionLabel">NO DATA</p>
           <p class="source-status" id="sourceStatus" role="status">Loading archive...</p>
         </div>
-        <div class="file-actions">
-          <label class="button secondary" for="fileInput">Load TXT archive</label>
-          <input id="fileInput" type="file" accept=".txt,text/plain" hidden>
-          <a class="button secondary" href="data/timestamp-groups.txt" download>Timestamp groups TXT</a>
-          <button class="button secondary" id="exportButton" type="button">Export TXT archive</button>
-        </div>
+        <details id="fileMenu" class="file-menu" open>
+          <summary>File tools</summary>
+          <div class="file-actions">
+            <label class="button secondary" for="fileInput">Load TXT archive</label>
+            <input id="fileInput" type="file" accept=".txt,text/plain" hidden>
+            <a class="button secondary" href="data/timestamp-groups.txt" download>Timestamp groups TXT</a>
+            <button class="button secondary" id="exportButton" type="button">Export full TXT</button>
+          </div>
+        </details>
       </header>
 
       <section class="result-card" aria-live="polite">
@@ -99,18 +127,18 @@
         <div id="formulaSteps" class="formula-steps"></div>
       </section>
 
-      <section class="stop-panel">
-        <div class="section-head">
+      <details class="stop-panel">
+        <summary class="section-head">
           <p class="eyebrow">STOPPING RULE</p>
           <span id="stopSummary" class="section-note">-</span>
-        </div>
+        </summary>
         <div id="stopTrace" class="stop-trace"></div>
-      </section>
+      </details>
 
       <footer class="controls" aria-label="Archive controls">
-        <button class="button secondary" id="previousButton" type="button">Previous formula</button>
-        <button class="button primary" id="generateButton" type="button">Calculate and add the next prime</button>
-        <button class="button secondary" id="nextButton" type="button">Next formula</button>
+        <button class="button secondary" id="previousButton" type="button">Previous</button>
+        <button class="button primary" id="generateButton" type="button">Add next prime</button>
+        <button class="button secondary" id="nextButton" type="button">Next</button>
       </footer>
     </main>
   </div>
@@ -122,6 +150,6 @@
     </div>
   </template>
 
-  <script src="app.js?v=2" defer></script>
+  <script src="app.js?v=3" defer></script>
 </body>
 </html>

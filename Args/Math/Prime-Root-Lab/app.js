@@ -2,6 +2,8 @@
 
 const DATA_URL = './data/prime-roots.txt';
 const MIN_DECIMALS = 3;
+const INITIAL_RECORD_LIMIT = 1000;
+const RANGE_CHUNK_BYTES = 512 * 1024;
 
 const state = {
   records: [],
@@ -10,7 +12,13 @@ const state = {
   loading: false,
   timestampGroups: new Map(),
   timestampGroupCount: 0,
-  sourceName: 'data/prime-roots.txt'
+  sourceName: 'data/prime-roots.txt',
+  archiveBytes: 0,
+  downloadedBytes: 0,
+  archiveComplete: false,
+  pendingText: '',
+  lineNumber: 0,
+  decoder: new TextDecoder()
 };
 
 const elements = {
@@ -24,6 +32,17 @@ const elements = {
   recordJump: document.getElementById('recordJump'),
   jumpButton: document.getElementById('jumpButton'),
   listWindow: document.getElementById('listWindow'),
+  archiveCoverage: document.getElementById('archiveCoverage'),
+  archiveBytes: document.getElementById('archiveBytes'),
+  coverageBar: document.getElementById('coverageBar'),
+  blockPercent: document.getElementById('blockPercent'),
+  blockPercentValue: document.getElementById('blockPercentValue'),
+  loadBlockButton: document.getElementById('loadBlockButton'),
+  loadAllButton: document.getElementById('loadAllButton'),
+  loadHint: document.getElementById('loadHint'),
+  archiveBrowser: document.getElementById('archiveBrowser'),
+  methodDetails: document.getElementById('methodDetails'),
+  fileMenu: document.getElementById('fileMenu'),
   versionLabel: document.getElementById('versionLabel'),
   sourceStatus: document.getElementById('sourceStatus'),
   primeValue: document.getElementById('primeValue'),
@@ -65,6 +84,40 @@ function finishLoading() {
 function cancelLoading(message) {
   elements.loadingText.textContent = message;
   elements.loadingScreen.classList.add('complete');
+}
+
+function formatBytes(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  const unitIndex = Math.min(Math.floor(Math.log(bytes) / Math.log(1000)), units.length - 1);
+  const value = bytes / (1000 ** unitIndex);
+  return `${value.toFixed(unitIndex > 1 ? 2 : 0)} ${units[unitIndex]}`;
+}
+
+function getArchivePercent() {
+  if (!state.archiveBytes) return state.archiveComplete ? 100 : 0;
+  return Math.min(100, state.downloadedBytes / state.archiveBytes * 100);
+}
+
+function updateArchiveControls() {
+  const percent = getArchivePercent();
+  const blockPercent = Number(elements.blockPercent.value);
+  const complete = state.archiveComplete;
+  const busy = state.loading;
+
+  elements.archiveCoverage.textContent = `${percent < 10 && !complete ? percent.toFixed(1) : Math.round(percent)}%`;
+  elements.archiveBytes.textContent = state.archiveBytes
+    ? `${formatBytes(state.downloadedBytes)} / ${formatBytes(state.archiveBytes)}`
+    : formatBytes(state.downloadedBytes);
+  elements.coverageBar.style.width = `${percent}%`;
+  elements.blockPercentValue.textContent = `${blockPercent}%`;
+  elements.loadBlockButton.textContent = complete ? 'Archive complete' : `Load next ${blockPercent}%`;
+  elements.loadBlockButton.disabled = busy || complete;
+  elements.loadAllButton.disabled = busy || complete;
+  elements.blockPercent.disabled = busy || complete;
+  elements.loadHint.textContent = complete
+    ? `${state.records.length} records loaded. Calculations and exports now use the complete archive.`
+    : `${state.records.length} records active. Browser, groups and metrics use only this loaded subset.`;
 }
 
 function isPrime(value) {
@@ -212,73 +265,137 @@ function allowPaint() {
   return new Promise((resolve) => requestAnimationFrame(resolve));
 }
 
-async function loadArchiveStream(response, sourceName) {
-  if (!response.body) {
-    loadText(await response.text(), sourceName);
-    return;
-  }
-
-  const totalBytes = Number(response.headers.get('content-length')) || 0;
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let pending = '';
-  let loadedBytes = 0;
-  let paintedBytes = 0;
-  let lineNumber = 0;
-  let firstPaintDone = false;
-
+function resetRemoteArchive(totalBytes, sourceName) {
   state.records = [];
   state.index = 0;
   state.dirty = false;
   state.loading = true;
+  state.timestampGroups = new Map();
+  state.timestampGroupCount = 0;
   state.sourceName = sourceName;
-  elements.sourceStatus.textContent = `${sourceName} | starting read...`;
-  updateLoadingProgress(0, 'Connecting to the TXT archive...');
+  state.archiveBytes = totalBytes;
+  state.downloadedBytes = 0;
+  state.archiveComplete = false;
+  state.pendingText = '';
+  state.lineNumber = 0;
+  state.decoder = new TextDecoder();
+  updateArchiveControls();
+}
 
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    loadedBytes += value.byteLength;
-    pending += decoder.decode(value, { stream: true });
-
-    let newlineIndex = pending.indexOf('\n');
-    while (newlineIndex >= 0) {
-      lineNumber += 1;
-      const record = parseArchiveLine(pending.slice(0, newlineIndex), lineNumber);
-      if (record) state.records.push(record);
-      pending = pending.slice(newlineIndex + 1);
-      newlineIndex = pending.indexOf('\n');
+function parsePendingLines(maxRecords = Number.POSITIVE_INFINITY) {
+  let added = 0;
+  let newlineIndex = state.pendingText.indexOf('\n');
+  while (newlineIndex >= 0 && added < maxRecords) {
+    state.lineNumber += 1;
+    const record = parseArchiveLine(state.pendingText.slice(0, newlineIndex), state.lineNumber);
+    state.pendingText = state.pendingText.slice(newlineIndex + 1);
+    if (record) {
+      state.records.push(record);
+      added += 1;
     }
+    newlineIndex = state.pendingText.indexOf('\n');
+  }
+  return added;
+}
 
-    if (!firstPaintDone && state.records.length) {
-      firstPaintDone = true;
-      render();
-      await allowPaint();
-    }
+function flushFinalArchiveLine(maxRecords = Number.POSITIVE_INFINITY) {
+  if (!state.pendingText.trim() || maxRecords <= 0) return 0;
+  state.lineNumber += 1;
+  const record = parseArchiveLine(state.pendingText, state.lineNumber);
+  state.pendingText = '';
+  if (!record) return 0;
+  state.records.push(record);
+  return 1;
+}
 
-    if (loadedBytes - paintedBytes >= 1_000_000) {
-      paintedBytes = loadedBytes;
-      const progress = totalBytes ? Math.min(100, loadedBytes / totalBytes * 100).toFixed(0) : '?';
-      elements.sourceStatus.textContent = `${sourceName} | ${progress}% | ${state.records.length} formulas`;
-      elements.recordCount.textContent = `${state.records.length} records`;
-      if (progress !== '?') updateLoadingProgress(progress, `${state.records.length} formulas read`);
-      await allowPaint();
+async function loadRemoteRange(endByte, maxNewRecords = Number.POSITIVE_INFINITY, onProgress) {
+  let added = parsePendingLines(maxNewRecords);
+  if (added >= maxNewRecords || state.downloadedBytes >= state.archiveBytes) return added;
+
+  const startByte = state.downloadedBytes;
+  const safeEnd = Math.min(endByte, state.archiveBytes - 1);
+  const response = await fetch(DATA_URL, {
+    cache: 'no-store',
+    headers: { Range: `bytes=${startByte}-${safeEnd}` }
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  if (startByte > 0 && response.status !== 206) {
+    throw new Error('This server did not honor the requested archive block.');
+  }
+
+  const contentRange = response.headers.get('content-range');
+  const rangeTotal = Number(contentRange?.split('/').at(-1));
+  if (Number.isFinite(rangeTotal) && rangeTotal > 0) state.archiveBytes = rangeTotal;
+
+  const readValue = (value) => {
+    state.downloadedBytes += value.byteLength;
+    state.pendingText += state.decoder.decode(value, { stream: true });
+    const remaining = maxNewRecords - added;
+    added += parsePendingLines(remaining);
+    updateArchiveControls();
+    if (onProgress) onProgress();
+  };
+
+  if (!response.body) {
+    readValue(new Uint8Array(await response.arrayBuffer()));
+  } else {
+    const reader = response.body.getReader();
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      readValue(value);
+      if (added >= maxNewRecords) {
+        await reader.cancel();
+        break;
+      }
     }
   }
 
-  pending += decoder.decode();
-  if (pending.trim()) {
-    lineNumber += 1;
-    const record = parseArchiveLine(pending, lineNumber);
-    if (record) state.records.push(record);
+  if (state.downloadedBytes >= state.archiveBytes) {
+    state.downloadedBytes = state.archiveBytes;
+    state.pendingText += state.decoder.decode();
+    const remaining = maxNewRecords - added;
+    added += parsePendingLines(remaining);
+    if (added < maxNewRecords) added += flushFinalArchiveLine(maxNewRecords - added);
+    state.archiveComplete = state.pendingText.trim() === '';
   }
-  if (!state.records.length) throw new Error('The file contains no records.');
+  updateArchiveControls();
+  return added;
+}
 
-  state.loading = false;
-  buildTimestampGroups();
-  elements.sourceStatus.textContent = `${sourceName} | ${state.records.length} formulas loaded`;
-  render();
-  finishLoading();
+async function loadArchiveTo(targetBytes, label) {
+  if (state.loading || state.archiveComplete) return;
+  state.loading = true;
+  updateArchiveControls();
+  elements.sourceStatus.textContent = label;
+  elements.generateButton.disabled = true;
+  elements.exportButton.disabled = true;
+
+  try {
+    parsePendingLines();
+    const target = Math.min(state.archiveBytes, Math.max(state.downloadedBytes, targetBytes));
+    while (state.downloadedBytes < target) {
+      const endByte = Math.min(target - 1, state.downloadedBytes + RANGE_CHUNK_BYTES - 1);
+      await loadRemoteRange(endByte, Number.POSITIVE_INFINITY, () => {
+        elements.recordCount.textContent = `${state.records.length} loaded`;
+      });
+      await allowPaint();
+    }
+
+    buildTimestampGroups();
+    state.index = Math.min(state.index, Math.max(0, state.records.length - 1));
+    state.loading = false;
+    elements.sourceStatus.textContent = state.archiveComplete
+      ? `${state.sourceName} | complete archive | ${state.records.length} formulas`
+      : `${state.sourceName} | ${getArchivePercent().toFixed(1)}% | ${state.records.length} formulas loaded`;
+    render();
+    updateArchiveControls();
+  } catch (error) {
+    state.loading = false;
+    elements.sourceStatus.textContent = `Block loading error: ${error.message}`;
+    updateArchiveControls();
+    render();
+  }
 }
 
 function serializeArchive() {
@@ -347,7 +464,7 @@ function renderFormulaStep(step, prime, index, total) {
 
 function renderVersionList() {
   elements.versionList.replaceChildren();
-  const windowSize = 80;
+  const windowSize = window.matchMedia('(max-width: 850px)').matches ? 12 : 24;
   const halfWindow = Math.floor(windowSize / 2);
   const start = Math.max(0, Math.min(state.index - halfWindow, state.records.length - windowSize));
   const end = Math.min(state.records.length, start + windowSize);
@@ -376,7 +493,7 @@ function renderVersionList() {
     });
     elements.versionList.append(button);
   });
-  elements.recordCount.textContent = `${state.records.length} records`;
+  elements.recordCount.textContent = `${state.records.length} loaded`;
   elements.listWindow.textContent = state.records.length
     ? `showing ${start + 1}-${end} of ${state.records.length}`
     : 'no records';
@@ -399,7 +516,9 @@ function jumpToRecord() {
   }
 
   if (index < 0) {
-    elements.sourceStatus.textContent = `No record found for ${query}.`;
+    elements.sourceStatus.textContent = state.archiveComplete
+      ? `No record found for ${query}.`
+      : `${query} is not in the loaded subset. Load another archive block and try again.`;
     return;
   }
   state.index = index;
@@ -437,10 +556,11 @@ function render() {
     return;
   }
 
-  elements.exportButton.disabled = state.loading;
+  elements.exportButton.disabled = state.loading || !state.archiveComplete;
   elements.previousButton.disabled = state.records.length < 2;
   elements.nextButton.disabled = state.records.length < 2;
-  elements.generateButton.disabled = state.loading;
+  elements.generateButton.disabled = state.loading || !state.archiveComplete;
+  elements.generateButton.textContent = state.archiveComplete ? 'Add next prime' : 'Load 100% to add';
   elements.versionLabel.textContent = `V${record.version} | PRIME NUMBER ${record.prime}`;
   elements.primeValue.textContent = record.prime;
   elements.approximationValue.textContent = record.metrics.approximation;
@@ -449,13 +569,15 @@ function render() {
   elements.timestampValue.dateTime = record.discoveredAt || '';
   const timestampGroup = state.timestampGroups.get(record.discoveredAt);
   elements.timestampGroup.textContent = timestampGroup
-    ? `group ${timestampGroup.index}/${state.timestampGroupCount} | ${timestampGroup.count} records at the same timestamp`
+    ? `loaded group ${timestampGroup.index}/${state.timestampGroupCount} | ${timestampGroup.count} records at the same timestamp`
     : 'grouping timestamps';
   elements.decimalCount.textContent = record.metrics.decimals;
   elements.errorValue.textContent = record.metrics.error;
   elements.boundsValue.textContent = `${record.bounds.tenth[0]} < sqrt(${record.prime}) < ${record.bounds.tenth[1]}`;
   elements.nextDigitValue.textContent = record.stop.nextDigit ?? 'end';
-  elements.dirtyState.textContent = state.dirty ? 'changes to export' : 'synchronized with TXT';
+  elements.dirtyState.textContent = state.dirty
+    ? 'changes to export'
+    : state.archiveComplete ? 'synchronized with TXT' : 'loaded subset';
   elements.dirtyState.classList.toggle('dirty', state.dirty);
 
   elements.formulaSteps.replaceChildren();
@@ -484,17 +606,49 @@ function loadText(text, sourceName) {
   state.index = 0;
   state.dirty = false;
   state.loading = false;
+  state.archiveBytes = new TextEncoder().encode(text).byteLength;
+  state.downloadedBytes = state.archiveBytes;
+  state.archiveComplete = true;
+  state.pendingText = '';
+  state.lineNumber = text.split(/\r?\n/).length;
+  state.decoder = new TextDecoder();
   buildTimestampGroups();
   state.sourceName = sourceName;
   elements.sourceStatus.textContent = `${sourceName} | ${state.records.length} formulas loaded`;
   render();
+  updateArchiveControls();
 }
 
 async function loadDefaultArchive() {
   try {
-    const response = await fetch(DATA_URL, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    await loadArchiveStream(response, 'data/prime-roots.txt');
+    const headResponse = await fetch(DATA_URL, { method: 'HEAD', cache: 'no-store' });
+    if (!headResponse.ok) throw new Error(`HTTP ${headResponse.status}`);
+    const totalBytes = Number(headResponse.headers.get('content-length'));
+    if (!Number.isFinite(totalBytes) || totalBytes <= 0) throw new Error('Archive size is unavailable.');
+
+    resetRemoteArchive(totalBytes, 'data/prime-roots.txt');
+    elements.sourceStatus.textContent = 'Loading the first 1,000 formulas...';
+    updateLoadingProgress(0, 'Connecting to the TXT archive...');
+
+    while (state.records.length < INITIAL_RECORD_LIMIT && state.downloadedBytes < state.archiveBytes) {
+      const endByte = Math.min(state.archiveBytes - 1, state.downloadedBytes + RANGE_CHUNK_BYTES - 1);
+      const remaining = INITIAL_RECORD_LIMIT - state.records.length;
+      await loadRemoteRange(endByte, remaining, () => {
+        const initialPercent = Math.min(100, state.records.length / INITIAL_RECORD_LIMIT * 100);
+        updateLoadingProgress(initialPercent, `${state.records.length} of ${INITIAL_RECORD_LIMIT} formulas`);
+      });
+      await allowPaint();
+    }
+
+    if (!state.records.length) throw new Error('The file contains no records.');
+    state.loading = false;
+    buildTimestampGroups();
+    elements.sourceStatus.textContent = state.archiveComplete
+      ? `${state.sourceName} | complete archive | ${state.records.length} formulas`
+      : `${state.sourceName} | initial subset | ${state.records.length} formulas`;
+    render();
+    updateArchiveControls();
+    finishLoading();
   } catch (error) {
     state.loading = false;
     elements.sourceStatus.textContent = 'Automatic loading is unavailable. Select the TXT file.';
@@ -530,6 +684,7 @@ elements.exportButton.addEventListener('click', () => {
 });
 
 elements.generateButton.addEventListener('click', () => {
+  if (!state.archiveComplete || state.loading) return;
   const last = state.records.at(-1);
   const prime = nextPrime(last ? last.prime : 5);
   const version = last ? last.version + 1 : 1;
@@ -554,5 +709,21 @@ elements.jumpButton.addEventListener('click', jumpToRecord);
 elements.recordJump.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') jumpToRecord();
 });
+
+elements.blockPercent.addEventListener('input', updateArchiveControls);
+elements.loadBlockButton.addEventListener('click', () => {
+  const blockBytes = Math.ceil(state.archiveBytes * Number(elements.blockPercent.value) / 100);
+  const target = Math.min(state.archiveBytes, state.downloadedBytes + blockBytes);
+  loadArchiveTo(target, `Loading the next ${elements.blockPercent.value}% archive block...`);
+});
+elements.loadAllButton.addEventListener('click', () => {
+  loadArchiveTo(state.archiveBytes, 'Loading the complete archive...');
+});
+
+if (window.matchMedia('(max-width: 850px)').matches) {
+  elements.archiveBrowser.open = false;
+  elements.methodDetails.open = false;
+  elements.fileMenu.open = false;
+}
 
 loadDefaultArchive();

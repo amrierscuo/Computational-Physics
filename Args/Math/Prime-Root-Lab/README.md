@@ -6,7 +6,7 @@ A static visual laboratory for studying prime square-root approximations through
 
 `data/prime-roots.txt` is the single source of prime data. It uses NDJSON with one JSON record per line. Each record preserves its version, prime number, timestamp, metrics, stopping rule, decompositions, products and comparisons.
 
-The distributed archive exceeds 52 MB and contains only complete consecutive mathematical records. Loading is streamed so the interface remains responsive. `data/timestamp-groups.txt` groups records by their real millisecond timestamp.
+The distributed archive exceeds 52 MB and contains only complete consecutive mathematical records. The formula archive initially requests at most 1,000 records through HTTP byte ranges. The user can then load additional blocks from 1% to 25%, or explicitly load the complete archive. All visible metrics update from the loaded subset. `data/timestamp-groups.txt` groups records by their real millisecond timestamp.
 
 ## Pages
 
