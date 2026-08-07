@@ -12,6 +12,7 @@
   --coral: #ff8066;
   --wayspot: #56f0a3;
   --photo: #ff8066;
+  --streetview: #73a7ff;
   --header-h: 58px;
   --status-h: 72px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -90,8 +91,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .target-glyph::before, .target-glyph::after { content: ""; position: absolute; background: currentColor; }
 .target-glyph::before { left: 7px; top: -6px; width: 2px; height: 28px; }
 .target-glyph::after { left: -6px; top: 7px; width: 28px; height: 2px; }
-.home-glyph { width: 17px; height: 17px; margin: 3px auto 0; display: block; border: 2px solid currentColor; border-top: 0; }
-.home-glyph::before { content: ""; width: 12px; height: 12px; display: block; border-left: 2px solid currentColor; border-top: 2px solid currentColor; transform: translate(1px, -6px) rotate(45deg); }
+.home-glyph { width: 22px; height: 22px; margin: auto; display: block; overflow: visible; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 .floating-panel, .selection-sheet, .info-sheet {
   position: absolute;
@@ -120,9 +120,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .l14-key { border-top-width: 4px; border-color: var(--l14); }
 .l17-key { border-top-width: 2px; border-color: var(--l17); }
 .marker-key { width: 17px; height: 17px; display: inline-block; border: 3px solid rgba(255, 255, 255, 0.86); background: var(--wayspot); box-shadow: 0 1px 7px rgba(0, 0, 0, 0.35); }
-.all-poi-key { border-radius: 50%; background: linear-gradient(135deg, var(--wayspot) 0 50%, var(--photo) 50% 100%); }
+.all-poi-key { border-radius: 50%; background: conic-gradient(var(--wayspot) 0 33%, var(--photo) 33% 66%, var(--streetview) 66% 100%); }
 .wayspot-key { border-radius: 50%; background: var(--wayspot); }
 .photo-key { border-radius: 4px; background: var(--photo); transform: rotate(45deg); }
+.streetview-key { width: 14px; height: 14px; margin-left: 2px; border: 2px solid rgba(255, 255, 255, 0.96); border-radius: 50%; background: #1a73e8; box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.22), 0 1px 7px rgba(0, 0, 0, 0.35); }
 .opacity-field { padding-top: 12px; display: grid; grid-template-columns: 1fr auto; gap: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.68rem; }
 .opacity-field input { grid-column: 1 / -1; width: 100%; accent-color: var(--cyan); }
 .opacity-field output { color: var(--text); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
@@ -131,7 +132,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .panel-action { width: 100%; min-height: 38px; border: 1px solid var(--cyan); border-radius: 10px; background: rgba(111, 255, 233, 0.1); color: var(--cyan); cursor: pointer; font-size: 0.69rem; font-weight: 800; }
 .panel-action:hover, .panel-action:focus-visible { outline: none; background: rgba(111, 255, 233, 0.18); }
 .panel-action:disabled { border-color: var(--line); color: var(--muted); cursor: not-allowed; opacity: 0.65; }
-.dataset-state { margin: 9px 0 0; color: var(--muted); font-size: 0.62rem; line-height: 1.4; }
+.dataset-state { margin: 9px 0 0; color: var(--muted); font-size: 0.62rem; line-height: 1.4; white-space: pre-line; }
 
 .status-bar {
   position: absolute;
@@ -160,7 +161,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .status-legend b { color: var(--text); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
 .l14-dot { background: var(--l14); }
 .l17-dot { background: var(--l17); }
-.poi-dot { background: var(--wayspot); box-shadow: inset -4px 0 0 var(--photo); }
+.poi-dot { background: conic-gradient(var(--wayspot) 0 33%, var(--photo) 33% 66%, var(--streetview) 66% 100%); }
 .info-button { width: 42px; height: 42px; border: 0; border-radius: 13px; background: #174f35; color: #e8fff4; cursor: pointer; font-family: Georgia, serif; font-size: 1.25rem; font-style: italic; font-weight: 700; }
 
 .selection-sheet, .info-sheet { left: 18px; bottom: calc(var(--status-h) + 16px); width: min(380px, calc(100% - 112px)); }
@@ -186,6 +187,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .poi-marker { width: 19px; height: 19px; display: block; border: 4px solid rgba(255, 255, 255, 0.92); box-shadow: 0 3px 12px rgba(0, 0, 0, 0.48); }
 .poi-marker--wayspot { border-radius: 50%; background: var(--wayspot); }
 .poi-marker--photo { border-radius: 4px; background: var(--photo); transform: rotate(45deg); }
+.poi-marker--streetview { position: relative; width: 14px; height: 14px; border: 2px solid rgba(255, 255, 255, 0.96); border-radius: 50%; background: #1a73e8; box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.24), 0 2px 9px rgba(0, 0, 0, 0.46); }
+.poi-marker--streetview.is-cluster { width: 28px; height: 28px; border-width: 3px; box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.2), 0 3px 12px rgba(0, 0, 0, 0.48); }
+.poi-marker__count { position: absolute; inset: 0; display: grid; place-items: center; color: white; font-size: 8px; font-style: normal; font-weight: 900; line-height: 1; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45); }
 .poi-leaflet-popup .leaflet-popup-content-wrapper { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--text); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); }
 .poi-leaflet-popup .leaflet-popup-tip { background: var(--panel); }
 .poi-leaflet-popup .leaflet-popup-content { width: min(270px, calc(100vw - 92px)) !important; margin: 13px; }
@@ -202,6 +206,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .poi-popup__details summary { color: var(--cyan); cursor: pointer; font-weight: 800; }
 .poi-popup__details p { margin: 7px 0 0; }
 .poi-popup__cells { margin: 0; padding-top: 7px; border-top: 1px solid var(--line); color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.58rem; line-height: 1.45; }
+.panorama-gallery { max-height: 270px; overflow-y: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.panorama-gallery.is-single { grid-template-columns: 1fr; }
+.panorama-card { overflow: hidden; display: grid; border: 1px solid var(--line); border-radius: 10px; background: rgba(115, 167, 255, 0.08); color: var(--text); text-decoration: none; }
+.panorama-card img { width: 100%; height: 102px; display: block; object-fit: cover; background: #17231f; }
+.panorama-card span { padding: 7px 8px 2px; color: var(--streetview); font-size: 0.65rem; font-weight: 850; }
+.panorama-card small { padding: 0 8px 7px; color: var(--muted); font-size: 0.56rem; }
 
 .location-marker { position: relative; width: 22px; height: 22px; display: block; border: 5px solid #071cff; border-radius: 50%; background: #26a7ff; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.88), 0 2px 12px rgba(0, 0, 0, 0.45); }
 @keyframes spin { to { transform: rotate(360deg); } }
