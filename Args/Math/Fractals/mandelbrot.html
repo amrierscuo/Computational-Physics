@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100f">
+  <meta name="description" content="A responsive GPU Mandelbrot explorer with presets, touch controls and shareable coordinates.">
+  <title>Mandelbrot Explorer - Fractal Atlas</title>
+  <link rel="stylesheet" href="fractals.css">
+  <link rel="stylesheet" href="lab.css">
+</head>
+<body class="lab-page">
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Fractal Atlas home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Fractal Atlas</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="./">Atlas</a>
+      <a aria-current="page" href="mandelbrot.html">Complex plane</a>
+      <a href="S2cells/globe_levels.html">Sphere cells</a>
+    </nav>
+  </header>
+
+  <main class="lab-workspace">
+    <aside class="control-panel" aria-label="Mandelbrot controls">
+      <p class="eyebrow">Lab 01 - escape time</p>
+      <h1>Mandelbrot explorer</h1>
+      <p class="panel-intro">Each pixel is a complex number <em>c</em>. Its color records how quickly the orbit of 0 escapes under <span class="formula">z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c</span>.</p>
+
+      <section class="control-group" aria-labelledby="locationLabel">
+        <div class="group-label" id="locationLabel">Location</div>
+        <label class="field">
+          <span class="field-label">Boundary preset</span>
+          <select id="preset">
+            <option value="overview">Full set</option>
+            <option value="seahorse">Seahorse valley</option>
+            <option value="elephant">Elephant valley</option>
+            <option value="spiral">Double spiral</option>
+            <option value="needle">Needle point</option>
+          </select>
+        </label>
+        <div class="segmented field">
+          <button class="lab-button primary" id="autoDive" type="button">Start auto dive</button>
+          <button class="lab-button" id="resetView" type="button">Reset view</button>
+        </div>
+      </section>
+
+      <section class="control-group" aria-labelledby="renderLabel">
+        <div class="group-label" id="renderLabel">Rendering</div>
+        <label class="field">
+          <span class="field-row"><span class="field-label">Iterations</span><output class="field-output" id="iterationValue">320</output></span>
+          <input id="iterations" type="range" min="80" max="1000" step="20" value="320">
+        </label>
+        <label class="field">
+          <span class="field-label">Color field</span>
+          <select id="palette">
+            <option value="tidal">Tidal cyan</option>
+            <option value="ember">Solar ember</option>
+            <option value="violet">Ultraviolet</option>
+            <option value="mono">Monochrome</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="control-group" aria-labelledby="measureLabel">
+        <div class="group-label" id="measureLabel">Live measurement</div>
+        <div class="stat-grid">
+          <div class="stat"><span>Zoom</span><output id="zoomValue">1.00x</output></div>
+          <div class="stat"><span>View width</span><output id="spanValue">3.200</output></div>
+          <div class="stat"><span>Real center</span><output id="realValue">-0.500000</output></div>
+          <div class="stat"><span>Imaginary</span><output id="imagValue">0.000000</output></div>
+        </div>
+        <button class="lab-button wide field" id="copyLink" type="button">Copy this view</button>
+      </section>
+
+      <div class="note-box"><strong>Precision note.</strong> This fast browser renderer uses GPU floating-point arithmetic. It is designed for interactive zooms up to about 10 million times, not arbitrary-precision deep zooms.</div>
+    </aside>
+
+    <section class="render-panel" id="renderPanel" aria-label="Interactive Mandelbrot rendering">
+      <canvas id="fractalCanvas" aria-label="Mandelbrot set. Drag to pan, use the wheel or pinch to zoom."></canvas>
+      <div class="canvas-overlay canvas-badge" id="renderStatus">Drag to pan - wheel or pinch to zoom - double click to dive</div>
+      <div class="canvas-overlay canvas-coordinate" id="pointerCoordinate">c = -0.500000 + 0.000000i</div>
+      <div class="canvas-actions" aria-label="Canvas zoom controls">
+        <button class="lab-button" id="zoomIn" type="button" aria-label="Zoom in">+</button>
+        <button class="lab-button" id="zoomOut" type="button" aria-label="Zoom out">-</button>
+      </div>
+      <div class="fallback-message" id="fallbackMessage">WebGL is unavailable in this browser. Try enabling hardware acceleration or opening the page in a current browser.</div>
+    </section>
+  </main>
+
+  <script src="mandelbrot.js" defer></script>
+</body>
+</html>
