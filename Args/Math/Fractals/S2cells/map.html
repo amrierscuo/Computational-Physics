@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07100f">
+  <meta name="description" content="A mobile S2 field map with exact L14 and L17 cells over street and satellite basemaps.">
+  <meta property="og:title" content="S2 Field Map - Fractal Atlas">
+  <meta property="og:description" content="Inspect real S2 L14 and L17 cells on an interactive field map.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://amrierscuo.github.io/Computational-Physics/Args/Math/Fractals/S2cells/og-s2-field-map.jpg">
+  <meta property="og:image:width" content="1199">
+  <meta property="og:image:height" content="675">
+  <title>S2 Field Map - Fractal Atlas</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="map.css">
+</head>
+<body>
+  <header class="map-header">
+    <a class="map-brand" href="../" aria-label="Fractal Atlas home">
+      <span class="brand-cell" aria-hidden="true"></span>
+      <span>S2 Field Map</span>
+    </a>
+    <nav aria-label="S2 navigation">
+      <a href="../">Atlas</a>
+      <a href="globe_levels.html">3D globe</a>
+      <a aria-current="page" href="map.html">Field map</a>
+    </nav>
+  </header>
+
+  <main class="map-shell">
+    <div id="map" aria-label="Interactive map with S2 level 14 and level 17 cell overlays"></div>
+
+    <section class="map-intro" aria-labelledby="mapTitle">
+      <p class="map-kicker">Wayfarer planning layer</p>
+      <h1 id="mapTitle">Real S2 cells on the ground.</h1>
+      <p>Street or satellite context, with the same quadratic S2 geometry used by IITC tools.</p>
+    </section>
+
+    <div class="tool-rail" aria-label="Map tools">
+      <button id="basemapButton" type="button" aria-label="Change basemap" aria-expanded="false"><span class="tool-glyph">MAP</span></button>
+      <button id="cellsButton" type="button" aria-label="Configure S2 cell layers" aria-expanded="false"><span class="tool-glyph">S2</span></button>
+      <button id="locateButton" type="button" aria-label="Find my position"><span class="target-glyph" aria-hidden="true"></span></button>
+      <button id="homeButton" type="button" aria-label="Return to initial view"><span class="home-glyph" aria-hidden="true"></span></button>
+      <button id="zoomInButton" type="button" aria-label="Zoom in"><span class="math-glyph">+</span></button>
+      <button id="zoomOutButton" type="button" aria-label="Zoom out"><span class="math-glyph">-</span></button>
+    </div>
+
+    <section class="floating-panel basemap-panel" id="basemapPanel" aria-label="Basemap selection" hidden>
+      <p class="panel-label">Basemap</p>
+      <button class="choice is-selected" type="button" data-basemap="street"><span class="choice-swatch street-swatch"></span><span><strong>Street</strong><small>OpenStreetMap</small></span></button>
+      <button class="choice" type="button" data-basemap="satellite"><span class="choice-swatch satellite-swatch"></span><span><strong>Satellite</strong><small>Esri World Imagery</small></span></button>
+    </section>
+
+    <section class="floating-panel cells-panel" id="cellsPanel" aria-label="S2 layer selection" hidden>
+      <p class="panel-label">Cell overlays</p>
+      <label class="layer-choice"><span class="line-key l14-key"></span><span><strong>Level 14</strong><small>Parent planning cells</small></span><input id="showL14" type="checkbox" checked></label>
+      <label class="layer-choice"><span class="line-key l17-key"></span><span><strong>Level 17</strong><small>Fine placement cells</small></span><input id="showL17" type="checkbox" checked></label>
+      <label class="opacity-field"><span>Grid opacity</span><output id="opacityValue">82%</output><input id="gridOpacity" type="range" min="25" max="100" value="82"></label>
+    </section>
+
+    <section class="selection-sheet" id="selectionSheet" aria-live="polite" hidden>
+      <button class="sheet-close" id="closeSelection" type="button" aria-label="Close cell details">x</button>
+      <p class="panel-label">Selected point</p>
+      <div class="coordinate" id="selectedCoordinate">41.90280, 12.49640</div>
+      <div class="cell-readout">
+        <div><span class="line-key l17-key"></span><span><small>L17 cell</small><strong id="selectedL17">F1 - L17</strong><code id="tokenL17">token</code></span></div>
+        <div><span class="line-key l14-key"></span><span><small>L14 parent</small><strong id="selectedL14">F1 - L14</strong><code id="tokenL14">token</code></span></div>
+      </div>
+      <button class="copy-button" id="copyView" type="button">Copy map link</button>
+    </section>
+
+    <section class="status-bar" aria-label="Map status">
+      <div class="status-main">
+        <span class="status-icon" aria-hidden="true"></span>
+        <span><strong>Cell overlay</strong><small id="mapStatus">Move or zoom to inspect the grid</small></span>
+      </div>
+      <div class="status-legend" aria-label="Cell legend">
+        <span><i class="l14-dot"></i>L14 <b id="l14Count">0</b></span>
+        <span><i class="l17-dot"></i>L17 <b id="l17Count">0</b></span>
+      </div>
+      <button id="infoButton" class="info-button" type="button" aria-label="About this map">i</button>
+    </section>
+
+    <section class="info-sheet" id="infoSheet" hidden>
+      <button class="sheet-close" id="closeInfo" type="button" aria-label="Close information">x</button>
+      <p class="panel-label">About this layer</p>
+      <h2>Geometry only, no portal data.</h2>
+      <p>The boundaries are calculated locally from the S2 quadratic cube projection. No Ingress or Wayfarer portal dataset is loaded or requested.</p>
+      <p>L17 is drawn from zoom 16 and L14 from zoom 12 to keep mobile interaction fast.</p>
+      <div class="source-links"><a href="https://s2geometry.io/" target="_blank" rel="noopener">S2 Geometry</a><a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener">Report a map issue</a></div>
+    </section>
+
+    <div class="loading-indicator" id="loadingIndicator" role="status"><span></span>Calculating visible cells</div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="s2geometry.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>

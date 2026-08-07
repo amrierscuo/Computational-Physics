@@ -129,9 +129,72 @@
     }
   }
 
+  function drawMap() {
+    const canvas = document.getElementById("mapPreview");
+    if (!canvas) return;
+    const { width, height } = fitCanvas(canvas);
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, width, height);
+
+    const background = ctx.createLinearGradient(0, 0, width, height);
+    background.addColorStop(0, "#10211e");
+    background.addColorStop(1, "#050a09");
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = "rgba(151, 180, 171, 0.13)";
+    ctx.lineWidth = Math.max(7, width * 0.012);
+    const streets = [
+      [[-0.05, 0.72], [0.26, 0.55], [0.54, 0.57], [1.05, 0.24]],
+      [[0.18, -0.08], [0.27, 0.25], [0.53, 0.48], [0.72, 1.1]],
+      [[-0.05, 0.27], [0.25, 0.33], [0.55, 0.23], [1.06, 0.3]],
+      [[0.58, -0.08], [0.55, 0.23], [0.65, 0.44], [1.05, 0.69]]
+    ];
+    streets.forEach((street) => {
+      ctx.beginPath();
+      street.forEach((point, index) => {
+        const x = point[0] * width;
+        const y = point[1] * height;
+        if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+
+    const grid = [
+      [[-0.08, 0.11], [0.34, 0.05], [0.75, 0.12], [1.08, 0.26]],
+      [[-0.08, 0.58], [0.31, 0.54], [0.7, 0.59], [1.08, 0.74]],
+      [[0.2, -0.08], [0.16, 0.27], [0.14, 0.65], [0.18, 1.08]],
+      [[0.62, -0.08], [0.58, 0.29], [0.57, 0.68], [0.61, 1.08]],
+      [[0.83, -0.08], [0.79, 0.33], [0.79, 0.76], [0.83, 1.08]]
+    ];
+    ctx.strokeStyle = "rgba(69, 240, 139, 0.88)";
+    ctx.lineWidth = Math.max(1.2, dpr * 1.2);
+    grid.forEach((line) => {
+      ctx.beginPath();
+      line.forEach((point, index) => {
+        const x = point[0] * width;
+        const y = point[1] * height;
+        if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+
+    ctx.strokeStyle = "rgba(255, 209, 102, 0.92)";
+    ctx.lineWidth = Math.max(2.4, dpr * 2.2);
+    ctx.strokeRect(width * 0.15, height * 0.06, width * 0.65, height * 0.63);
+    ctx.fillStyle = "#2979ff";
+    ctx.beginPath();
+    ctx.arc(width * 0.53, height * 0.49, Math.max(7, width * 0.012), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#88bfff";
+    ctx.lineWidth = Math.max(3, dpr * 2);
+    ctx.stroke();
+  }
+
   const redraw = () => {
     drawMandelbrot();
     drawSphere();
+    drawMap();
   };
   redraw();
   window.addEventListener("resize", redraw, { passive: true });
