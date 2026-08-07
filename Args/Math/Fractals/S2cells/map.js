@@ -69,7 +69,8 @@
       show: true,
       types: {
         "Wayspot Submission": true,
-        "Photo Submission": true
+        "Photo Submission": true,
+        "Street View 360": true
       }
     }
   };
@@ -104,6 +105,7 @@
       showPoi: document.getElementById("showPoi"),
       showWayspots: document.getElementById("showWayspots"),
       showPhotoSubmissions: document.getElementById("showPhotoSubmissions"),
+      showStreetView: document.getElementById("showStreetView"),
       fitPoiButton: document.getElementById("fitPoiButton"),
       poiLoadedCount: document.getElementById("poiLoadedCount"),
       poiVisibleCount: document.getElementById("poiVisibleCount"),
@@ -155,6 +157,10 @@
       state.poi.types["Photo Submission"] = controls.showPhotoSubmissions.checked;
       renderPoiLayer();
     });
+    controls.showStreetView.addEventListener("change", () => {
+      state.poi.types["Street View 360"] = controls.showStreetView.checked;
+      renderPoiLayer();
+    });
     controls.fitPoiButton.addEventListener("click", fitVisiblePoi);
     controls.locateButton.addEventListener("click", () => {
       controls.mapStatus.textContent = "Requesting your location";
@@ -185,9 +191,10 @@
       selectPoint(event.latlng, true);
     });
     map.on("dragstart zoomstart", dismissIntro);
-    map.on("moveend zoomend resize", () => {
+    map.on("moveend zoomend resize", (event) => {
       persistView();
       scheduleRender();
+      if (event.type === "zoomend" && state.poi.loaded) renderPoiLayer();
     });
     map.on("locationfound", (event) => {
       locationLayer.clearLayers();
@@ -347,38 +354,55 @@
 
   async function loadPoiDataset() {
     controls.fitPoiButton.disabled = true;
-    try {
-      const response = await fetch("data/wayfarer-poi.json", { cache: "no-store" });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const payload = await response.json();
-      if (!payload || !Array.isArray(payload.records)) throw new Error("Invalid dataset structure");
+    const [wayfarerResult, streetViewResult] = await Promise.allSettled([
+      loadJsonDataset("data/wayfarer-poi.json"),
+      loadJsonDataset("data/streetview-360.json")
+    ]);
+    const records = [];
+    const summaries = [];
 
-      state.poi.records = payload.records.filter((record) => (
+    if (wayfarerResult.status === "fulfilled") {
+      const payload = wayfarerResult.value;
+      const wayfarerRecords = payload.records.filter((record) => (
         (record.submissionType === "Wayspot Submission" || record.submissionType === "Photo Submission")
-        && Number.isFinite(Number(record.latitude))
-        && Number.isFinite(Number(record.longitude))
+        && hasValidCoordinates(record)
       ));
-      state.poi.loaded = true;
-      state.poi.error = null;
-      controls.poiLoadedCount.value = String(state.poi.records.length);
-      controls.poiDatasetState.textContent = payload.publicReady && payload.reviewStatus === "complete"
-        ? `${state.poi.records.length} reviewed POIs - ${payload.imageCounts?.excluded || 0} images excluded`
-        : payload.partial
-          ? `${state.poi.records.length} local sample POIs - privacy review pending`
-          : `${state.poi.records.length} local POIs - privacy review pending`;
-      controls.fitPoiButton.disabled = state.poi.records.length === 0;
-      renderPoiLayer();
-    } catch {
-      state.poi.records = [];
-      state.poi.loaded = false;
-      state.poi.error = "POI dataset unavailable";
-      controls.poiLoadedCount.value = "0";
-      controls.poiVisibleCount.value = "0";
-      controls.poiCount.textContent = "0";
-      controls.poiDatasetState.textContent = "Local POI dataset not installed";
-      controls.fitPoiButton.disabled = true;
-      updateMapStatus();
+      records.push(...wayfarerRecords);
+      summaries.push(payload.publicReady && payload.reviewStatus === "complete"
+        ? `${wayfarerRecords.length} reviewed contributions - ${payload.imageCounts?.excluded || 0} images excluded`
+        : `${wayfarerRecords.length} local contributions`);
     }
+
+    if (streetViewResult.status === "fulfilled") {
+      const payload = streetViewResult.value;
+      const streetViewRecords = payload.records.filter((record) => (
+        record.panoramaType === "Street View 360"
+        && record.publishStatus === "PUBLISHED"
+        && hasValidCoordinates(record)
+      )).map((record) => ({ ...record, submissionType: "Street View 360" }));
+      records.push(...streetViewRecords);
+      summaries.push(`${streetViewRecords.length} public panoramas${payload.nonPublishedCount ? ` - ${payload.nonPublishedCount} non-published hidden` : ""}`);
+    }
+
+    state.poi.records = records;
+    state.poi.loaded = records.length > 0;
+    state.poi.error = records.length ? null : "Map point datasets unavailable";
+    controls.poiLoadedCount.value = String(records.length);
+    controls.poiDatasetState.textContent = summaries.length ? summaries.join("\n") : "Local map point datasets not installed";
+    controls.fitPoiButton.disabled = records.length === 0;
+    renderPoiLayer();
+  }
+
+  async function loadJsonDataset(url) {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.records)) throw new Error("Invalid dataset structure");
+    return payload;
+  }
+
+  function hasValidCoordinates(record) {
+    return Number.isFinite(Number(record.latitude)) && Number.isFinite(Number(record.longitude));
   }
 
   function visiblePoiRecords() {
@@ -390,7 +414,7 @@
     poiLayer.clearLayers();
     const records = visiblePoiRecords();
 
-    records.forEach((record) => {
+    records.filter((record) => record.submissionType !== "Street View 360").forEach((record) => {
       const marker = L.marker([Number(record.latitude), Number(record.longitude)], {
         pane: "poiPane",
         title: record.title,
@@ -408,6 +432,25 @@
       marker.addTo(poiLayer);
     });
 
+    groupStreetViewRecords(records.filter((record) => record.submissionType === "Street View 360")).forEach((group) => {
+      const center = streetViewGroupCenter(group);
+      const marker = L.marker(center, {
+        pane: "poiPane",
+        title: group.length === 1 ? group[0].title : `${group.length} Street View 360 panoramas`,
+        keyboard: true,
+        icon: poiMarkerIcon("Street View 360", group.length)
+      });
+      marker.bindPopup(group.length > 8 ? buildStreetViewClusterPopup(group, center) : buildStreetViewPopup(group), {
+        className: "poi-leaflet-popup",
+        maxWidth: 310,
+        minWidth: 220
+      });
+      marker.on("click", () => {
+        selectPoint(L.latLng(center[0], center[1]), false);
+      });
+      marker.addTo(poiLayer);
+    });
+
     state.poi.visibleCount = records.length;
     controls.poiVisibleCount.value = String(records.length);
     controls.poiCount.textContent = String(records.length);
@@ -415,14 +458,46 @@
     updateMapStatus();
   }
 
-  function poiMarkerIcon(submissionType) {
-    const kind = submissionType === "Photo Submission" ? "photo" : "wayspot";
+  function groupStreetViewRecords(records) {
+    const groups = new Map();
+    records.forEach((record) => {
+      const key = map.getZoom() >= 15
+        ? `${Number(record.latitude).toFixed(7)},${Number(record.longitude).toFixed(7)}`
+        : (() => {
+            const point = map.project([Number(record.latitude), Number(record.longitude)], map.getZoom());
+            const cellSize = map.getZoom() < 9 ? 56 : 44;
+            return `${Math.floor(point.x / cellSize)},${Math.floor(point.y / cellSize)}`;
+          })();
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(record);
+    });
+    return Array.from(groups.values());
+  }
+
+  function streetViewGroupCenter(records) {
+    const total = records.reduce((sum, record) => ({
+      lat: sum.lat + Number(record.latitude),
+      lng: sum.lng + Number(record.longitude)
+    }), { lat: 0, lng: 0 });
+    return [total.lat / records.length, total.lng / records.length];
+  }
+
+  function poiMarkerIcon(submissionType, count = 1) {
+    const kind = submissionType === "Photo Submission"
+      ? "photo"
+      : submissionType === "Street View 360"
+        ? "streetview"
+        : "wayspot";
+    const isStreetViewCluster = kind === "streetview" && count > 1;
+    const countBadge = isStreetViewCluster ? `<b class="poi-marker__count">${count}</b>` : "";
+    const streetViewClass = isStreetViewCluster ? " is-cluster" : "";
+    const size = kind === "streetview" ? (isStreetViewCluster ? 28 : 14) : 19;
     return L.divIcon({
       className: "poi-marker-icon",
-      html: `<span class="poi-marker poi-marker--${kind}" aria-hidden="true"></span>`,
-      iconSize: [19, 19],
-      iconAnchor: [10, 10],
-      popupAnchor: [0, -11]
+      html: `<span class="poi-marker poi-marker--${kind}${streetViewClass}" aria-hidden="true">${countBadge}</span>`,
+      iconSize: [size, size],
+      iconAnchor: [Math.ceil(size / 2), Math.ceil(size / 2)],
+      popupAnchor: [0, -Math.ceil(size / 2) - 2]
     });
   }
 
@@ -506,6 +581,114 @@
     return popup;
   }
 
+  function buildStreetViewPopup(records) {
+    const record = records[0];
+    const popup = document.createElement("article");
+    popup.className = "poi-popup";
+
+    const type = document.createElement("p");
+    type.className = "poi-popup__type";
+    type.textContent = "Street View 360";
+    popup.append(type);
+
+    const title = document.createElement("h3");
+    title.textContent = records.length === 1 ? "Spherical panorama" : `${records.length} spherical panoramas at this point`;
+    popup.append(title);
+
+    const meta = document.createElement("p");
+    meta.className = "poi-popup__meta";
+    meta.textContent = records.length === 1
+      ? `Captured ${panoramaDate(record)}`
+      : `${records.length} captures - newest ${panoramaDate(record)}`;
+    popup.append(meta);
+
+    const gallery = document.createElement("div");
+    gallery.className = `panorama-gallery${records.length === 1 ? " is-single" : ""}`;
+    records.forEach((panorama) => {
+      const card = document.createElement("a");
+      card.className = "panorama-card";
+      card.href = panorama.shareLink;
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
+      card.setAttribute("aria-label", `Open Street View panorama captured ${panoramaDate(panorama)}`);
+
+      const image = document.createElement("img");
+      image.src = panorama.thumbnailUrl;
+      image.alt = `Street View 360 panorama captured ${panoramaDate(panorama)}`;
+      image.loading = "lazy";
+      image.decoding = "async";
+      card.append(image);
+
+      const action = document.createElement("span");
+      action.textContent = "Open panorama";
+      card.append(action);
+
+      const date = document.createElement("small");
+      date.textContent = panoramaDate(panorama);
+      card.append(date);
+      gallery.append(card);
+    });
+    popup.append(gallery);
+
+    const ownership = document.createElement("p");
+    ownership.className = "poi-popup__review";
+    ownership.textContent = "Account-owned public Street View photo";
+    popup.append(ownership);
+
+    const l17 = S2Grid.Cell.fromLatLng({ lat: Number(record.latitude), lng: Number(record.longitude) }, 17);
+    const l14 = l17.parent(14);
+    const cells = document.createElement("p");
+    cells.className = "poi-popup__cells";
+    cells.textContent = `L17 ${l17.token()} | L14 ${l14.token()}`;
+    popup.append(cells);
+
+    return popup;
+  }
+
+  function buildStreetViewClusterPopup(records, center) {
+    const popup = document.createElement("article");
+    popup.className = "poi-popup";
+
+    const type = document.createElement("p");
+    type.className = "poi-popup__type";
+    type.textContent = "Street View 360 collection";
+    popup.append(type);
+
+    const title = document.createElement("h3");
+    title.textContent = `${records.length} panoramas in this area`;
+    popup.append(title);
+
+    const meta = document.createElement("p");
+    meta.className = "poi-popup__meta";
+    meta.textContent = "Zoom in to separate the spherical photos and open their public Google Maps views.";
+    popup.append(meta);
+
+    const zoomButton = document.createElement("button");
+    zoomButton.type = "button";
+    zoomButton.className = "panel-action";
+    zoomButton.textContent = "Zoom to panoramas";
+    zoomButton.addEventListener("click", () => {
+      map.closePopup();
+      map.fitBounds(L.latLngBounds(records.map((record) => [Number(record.latitude), Number(record.longitude)])), {
+        padding: [48, 48],
+        maxZoom: Math.min(16, map.getZoom() + 4)
+      });
+    });
+    popup.append(zoomButton);
+
+    const l17 = S2Grid.Cell.fromLatLng({ lat: center[0], lng: center[1] }, 17);
+    const l14 = l17.parent(14);
+    const cells = document.createElement("p");
+    cells.className = "poi-popup__cells";
+    cells.textContent = `Group center - L17 ${l17.token()} | L14 ${l14.token()}`;
+    popup.append(cells);
+    return popup;
+  }
+
+  function panoramaDate(record) {
+    return String(record.captureTime || record.uploadTime || "Unknown date").slice(0, 10);
+  }
+
   function fitVisiblePoi() {
     const records = visiblePoiRecords();
     if (!records.length) return;
@@ -523,11 +706,11 @@
   function updateMapStatus() {
     const base = state.cellStatus || "Move or zoom to inspect the grid";
     if (state.poi.error) {
-      controls.mapStatus.textContent = `${base} - POI dataset unavailable`;
+      controls.mapStatus.textContent = `${base} - map point datasets unavailable`;
       return;
     }
     if (state.poi.loaded) {
-      controls.mapStatus.textContent = `${base} - ${state.poi.visibleCount} POIs active`;
+      controls.mapStatus.textContent = `${base} - ${state.poi.visibleCount} map points active`;
       return;
     }
     controls.mapStatus.textContent = base;
