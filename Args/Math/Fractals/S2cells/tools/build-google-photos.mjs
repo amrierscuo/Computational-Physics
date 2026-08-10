@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 const toolDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(toolDirectory, "..");
 const defaultWayfarerPath = path.join(projectDirectory, "data", "wayfarer-poi.json");
+const defaultPlacePinsPath = path.join(projectDirectory, "data", "google-photo-place-pins.json");
 const defaultOutputPath = path.join(projectDirectory, "data", "google-photos.json");
 const options = parseArguments(process.argv.slice(2));
 
@@ -58,9 +59,15 @@ for (const pair of options.pairs) {
   }
 }
 
-const wayfarerByTitle = buildWayfarerTitleIndex(wayfarer.records);
-reviewedRecords.forEach((record) => applyDirectLocation(record, wayfarerByTitle));
-propagateExactPlaceLocations(reviewedRecords);
+let placePinSummary = null;
+if (options.placePins) {
+  const placePins = await readJson(options.placePins);
+  placePinSummary = applyGooglePlacePins(reviewedRecords, placePins);
+} else {
+  const wayfarerByTitle = buildWayfarerTitleIndex(wayfarer.records);
+  reviewedRecords.forEach((record) => applyDirectLocation(record, wayfarerByTitle));
+  propagateExactPlaceLocations(reviewedRecords);
+}
 
 reviewedRecords.sort((left, right) => (
   Number(right.views) - Number(left.views)
@@ -84,7 +91,13 @@ const payload = {
   locatedCount,
   unlocatedCount: reviewedRecords.length - locatedCount,
   mappedPlaceCount,
-  locationPolicy: "Exact normalized title plus compatible municipality from an accepted Wayfarer record; exact place-label propagation only",
+  placePinSource: options.placePins ? path.basename(options.placePins) : null,
+  placeLinkedCount: placePinSummary?.linkedPhotoCount || 0,
+  resolvedPlaceIdCount: placePinSummary?.resolvedPlaceIdCount || 0,
+  unresolvedPlaceIdCount: placePinSummary?.unresolvedPlaceIdCount || 0,
+  locationPolicy: options.placePins
+    ? "Official Google Places API (New) location for the Place ID associated with each account-owned Google Maps photo"
+    : "Exact normalized title plus compatible municipality from an accepted Wayfarer record; exact place-label propagation only",
   bands,
   records: reviewedRecords
 };
@@ -98,6 +111,7 @@ function parseArguments(args) {
     check: false,
     help: false,
     wayfarer: defaultWayfarerPath,
+    placePins: defaultPlacePinsPath,
     output: defaultOutputPath,
     inbox: null,
     pairs: []
@@ -107,6 +121,8 @@ function parseArguments(args) {
     if (argument === "--check") parsed.check = true;
     else if (argument === "--help" || argument === "-h") parsed.help = true;
     else if (argument === "--wayfarer") parsed.wayfarer = path.resolve(args[++index]);
+    else if (argument === "--place-pins") parsed.placePins = path.resolve(args[++index]);
+    else if (argument === "--no-place-pins") parsed.placePins = null;
     else if (argument === "--output") parsed.output = path.resolve(args[++index]);
     else if (argument === "--inbox") parsed.inbox = path.resolve(args[++index]);
     else if (argument === "--pair") {
@@ -171,11 +187,47 @@ function normalizePhoto(record) {
     placeLabel: cleanText(record.placeLabel) || "Unknown place",
     views: Math.max(0, Number(record.views) || 0),
     thumbnailUrl: String(record.thumbnailUrl),
+    placeId: null,
+    placeStatus: null,
     latitude: null,
     longitude: null,
     locationMethod: null,
     locationReference: null,
     reviewStatus: "keep"
+  };
+}
+
+function applyGooglePlacePins(records, payload) {
+  if (!Array.isArray(payload.photos) || !Array.isArray(payload.places)) {
+    throw new Error("Invalid Google photo Place ID dataset.");
+  }
+  const photoLinks = new Map(payload.photos.map((item) => [String(item.photoId), item]));
+  const places = new Map(payload.places.map((item) => [String(item.placeId), item]));
+  const linkedPlaceIds = new Set();
+  let linkedPhotoCount = 0;
+
+  records.forEach((record) => {
+    const link = photoLinks.get(record.photoId);
+    if (!link?.placeId) throw new Error(`No Google Place ID for photoId: ${record.photoId}`);
+    const placeId = String(link.placeId);
+    const place = places.get(placeId);
+    if (!place) throw new Error(`Google Place ID not found in place table: ${placeId}`);
+    record.placeId = placeId;
+    record.placeStatus = cleanText(place.status) || "unknown";
+    linkedPhotoCount += 1;
+    linkedPlaceIds.add(placeId);
+    if (!hasValidCoordinates(place)) return;
+    record.latitude = Number(place.latitude);
+    record.longitude = Number(place.longitude);
+    record.locationMethod = "google-place-pin";
+    record.locationReference = placeId;
+  });
+
+  const linkedPlaces = [...linkedPlaceIds].map((placeId) => places.get(placeId));
+  return {
+    linkedPhotoCount,
+    resolvedPlaceIdCount: linkedPlaces.filter(hasValidCoordinates).length,
+    unresolvedPlaceIdCount: linkedPlaces.filter((place) => !hasValidCoordinates(place)).length
   };
 }
 
@@ -289,6 +341,9 @@ function validateOutput(payload) {
     ids.add(record.photoId);
     if (record.reviewStatus !== "keep") throw new Error(`Unapproved record in output: ${record.photoId}`);
     if (!record.thumbnailUrl || !Number.isFinite(Number(record.views))) throw new Error(`Invalid photo record: ${record.photoId}`);
+    if (record.locationMethod === "google-place-pin" && !record.placeId) {
+      throw new Error(`Google place pin has no placeId: ${record.photoId}`);
+    }
     const hasLatitude = record.latitude !== null && record.latitude !== undefined;
     const hasLongitude = record.longitude !== null && record.longitude !== undefined;
     if (hasLatitude !== hasLongitude) throw new Error(`Partial coordinates: ${record.photoId}`);
@@ -304,6 +359,11 @@ function printSummary(payload, outputPath) {
   console.log(`Excluded: ${payload.excludedCount}`);
   console.log(`Map-located: ${payload.locatedCount} photos across ${payload.mappedPlaceCount} places`);
   console.log(`Gallery-only: ${payload.unlocatedCount}`);
+  if (payload.placePinSource) {
+    console.log(`Google Place-linked: ${payload.placeLinkedCount}`);
+    console.log(`Resolved Place IDs: ${payload.resolvedPlaceIdCount}`);
+    console.log(`Unresolved Place IDs: ${payload.unresolvedPlaceIdCount}`);
+  }
   console.log(`Output: ${outputPath}`);
 }
 
@@ -312,6 +372,8 @@ function printHelp() {
   console.log("  node tools/build-google-photos.mjs --pair <dataset.json> <decisions.json> [--pair ...]");
   console.log("Options:");
   console.log("  --wayfarer <file>  Wayfarer coordinate reference dataset");
+  console.log("  --place-pins <file> Google photoId to Place ID and official pin dataset");
+  console.log("  --no-place-pins     Use the legacy Wayfarer title matching fallback");
   console.log("  --output <file>     Output path, defaults to data/google-photos.json");
   console.log("  --inbox <folder>    Auto-pair datasets and decision files in one folder");
   console.log("  --check             Validate the current output only");

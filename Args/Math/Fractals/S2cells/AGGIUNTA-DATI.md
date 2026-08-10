@@ -48,7 +48,15 @@ Le foto Google normali sono un tipo POI separato chiamato `Google Maps Photo`. L
 3. Controlla `map.html` in locale.
 4. Se il risultato e corretto, esegui commit del solo `data/google-photos.json` insieme a eventuali modifiche al codice.
 
-Lo script abbina automaticamente ciascun file di decisioni al dataset indicato in `sourceDataset`, applica le esclusioni, elimina duplicati e valida i conteggi. Le coordinate non vengono inventate: una foto viene posizionata sulla mappa soltanto quando titolo e comune coincidono con un Wayspot accettato. Le altre foto restano disponibili nella galleria.
+Lo script abbina automaticamente ciascun file di decisioni al dataset indicato in `sourceDataset`, applica le esclusioni, elimina duplicati e valida i conteggi. Il file `data/google-photo-place-pins.json` collega ogni `photoId` al Place ID associato nella pagina Google Maps Contributions. Le coordinate vengono dalla posizione ufficiale restituita da Places API (New), mai dai metadati della foto. Se Google dichiara il Place ID scaduto o non valido, la foto resta disponibile nella galleria senza creare un marker artificiale.
+
+Per sostituire il file dei pin con un checkpoint aggiornato:
+
+```powershell
+node tools/build-google-photos.mjs --place-pins data/google-photo-place-pins.json --inbox data/google-photo-inbox
+```
+
+`update-google-photos.cmd` usa automaticamente lo stesso file dei pin. L'opzione `--no-place-pins` resta disponibile soltanto per riprodurre il vecchio fallback basato su titolo e comune Wayfarer.
 
 Un record gia revisionato puo essere aggiunto a `data/inbox` come qualunque altro POI. Deve contenere almeno:
 
