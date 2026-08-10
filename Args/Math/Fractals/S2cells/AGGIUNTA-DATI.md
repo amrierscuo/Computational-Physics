@@ -4,7 +4,7 @@ Per aggiungere elementi appartenenti ai layer gia esistenti non devi piu modific
 
 ## Procedura normale
 
-1. Esporta i nuovi dati Wayfarer o Street View in formato JSON o JSONL.
+1. Esporta i nuovi dati Wayfarer, Street View o Google Maps Photo in formato JSON o JSONL.
 2. Copia i file nella cartella `data/inbox`.
 3. Fai doppio clic su `update-map-data.cmd`.
 4. Avvia il server locale e controlla `map.html`.
@@ -12,12 +12,14 @@ Per aggiungere elementi appartenenti ai layer gia esistenti non devi piu modific
 
 Lo script:
 
-- riconosce automaticamente Wayfarer e Street View 360;
+- riconosce automaticamente Wayfarer, Street View 360 e Google Maps Photo;
 - unisce i nuovi record con quelli gia presenti;
 - aggiorna un record esistente quando trova lo stesso `sourceId` o `photoId`;
 - evita duplicati;
 - accetta solo contributi Wayfarer finali `Accepted` o `Appeal Accepted`;
 - pubblica solo panorami Street View con stato `PUBLISHED`;
+- conserva soltanto foto Google Maps con `reviewStatus: "keep"`;
+- mantiene nel dataset le foto Google senza coordinate come elementi della galleria, ma non crea marker artificiali;
 - controlla coordinate e campi obbligatori;
 - aggiorna conteggi e data di generazione;
 - crea una copia di sicurezza locale in `.map-data-backups`;
@@ -37,9 +39,9 @@ Dal terminale, nella cartella `S2cells`:
 node tools/update-map-data.mjs --check
 ```
 
-## Aggiornare le foto Google Maps normali
+## Preparare e aggiornare le foto Google Maps normali
 
-Le foto Google normali hanno una procedura separata perche il dataset pubblico viene costruito soltanto dopo la review.
+Le foto Google normali sono un tipo POI separato chiamato `Google Maps Photo`. La prima costruzione del dataset pubblico richiede una review; dopo la review, il file ottenuto puo essere importato anche con la procedura normale insieme agli altri tipi.
 
 1. Copia nella cartella `data/google-photo-inbox` ogni dataset di fascia e il relativo file di decisioni.
 2. Fai doppio clic su `update-google-photos.cmd`.
@@ -47,6 +49,22 @@ Le foto Google normali hanno una procedura separata perche il dataset pubblico v
 4. Se il risultato e corretto, esegui commit del solo `data/google-photos.json` insieme a eventuali modifiche al codice.
 
 Lo script abbina automaticamente ciascun file di decisioni al dataset indicato in `sourceDataset`, applica le esclusioni, elimina duplicati e valida i conteggi. Le coordinate non vengono inventate: una foto viene posizionata sulla mappa soltanto quando titolo e comune coincidono con un Wayspot accettato. Le altre foto restano disponibili nella galleria.
+
+Un record gia revisionato puo essere aggiunto a `data/inbox` come qualunque altro POI. Deve contenere almeno:
+
+```json
+{
+  "photoId": "identificatore-univoco",
+  "submissionType": "Google Maps Photo",
+  "title": "Nome del luogo",
+  "thumbnailUrl": "https://...",
+  "reviewStatus": "keep",
+  "latitude": null,
+  "longitude": null
+}
+```
+
+Latitudine e longitudine possono essere entrambe `null`. Se sono presenti devono formare una coppia valida.
 
 Per controllare il dataset pubblico:
 

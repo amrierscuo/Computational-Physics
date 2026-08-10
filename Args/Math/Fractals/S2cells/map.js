@@ -127,6 +127,7 @@
       fitPoiButton: document.getElementById("fitPoiButton"),
       poiLoadedCount: document.getElementById("poiLoadedCount"),
       poiVisibleCount: document.getElementById("poiVisibleCount"),
+      googlePoiCount: document.getElementById("googlePoiCount"),
       poiDatasetState: document.getElementById("poiDatasetState"),
       googlePhotoSheet: document.getElementById("googlePhotoSheet"),
       closeGooglePhotos: document.getElementById("closeGooglePhotos"),
@@ -553,6 +554,7 @@
     state.poi.loaded = state.poi.records.length > 0;
     state.poi.error = state.poi.records.length ? null : "Map point datasets unavailable";
     controls.poiLoadedCount.value = String(state.poi.records.length);
+    controls.googlePoiCount.value = String(datasets.googlePhotos.records.length);
     controls.poiDatasetState.textContent = [datasets.streetView.summary, datasets.wayfarer.summary, datasets.googlePhotos.summary].filter(Boolean).join("\n");
     controls.loadWayfarerButton.disabled = datasets.wayfarer.status === "loaded" || datasets.wayfarer.status === "loading";
     controls.loadGooglePhotosButton.disabled = datasets.googlePhotos.status === "loaded" || datasets.googlePhotos.status === "loading";
