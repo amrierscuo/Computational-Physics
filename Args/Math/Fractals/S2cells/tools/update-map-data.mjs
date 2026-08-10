@@ -49,6 +49,8 @@ const importState = {
   wayfarerUpdated: 0,
   streetViewAdded: 0,
   streetViewUpdated: 0,
+  wayfarerInput: 0,
+  streetViewInput: 0,
 };
 
 const wayfarerByKey = new Map();
@@ -78,6 +80,7 @@ for (const imported of importedPayloads) {
   for (const incomingRecord of imported.records) {
     const kind = recordKind(incomingRecord);
     if (kind === "wayfarer") {
+      importState.wayfarerInput += 1;
       if (!hasValidCoordinates(incomingRecord)) {
         importState.invalidCoordinates += 1;
         continue;
@@ -111,6 +114,7 @@ for (const imported of importedPayloads) {
     }
 
     if (kind === "streetview") {
+      importState.streetViewInput += 1;
       if (incomingRecord.publishStatus !== "PUBLISHED") {
         importState.nonPublishedStreetView += 1;
         continue;
@@ -147,11 +151,13 @@ const nextStreetView = buildStreetViewPayload(currentStreetView, streetViewRecor
 validateWayfarerPayload(nextWayfarer);
 validateStreetViewPayload(nextStreetView);
 
-const backupPath = await backupCurrentFiles();
-await Promise.all([
-  writeCompactJson(wayfarerPath, nextWayfarer),
-  writeCompactJson(streetViewPath, nextStreetView),
-]);
+const writeWayfarer = importState.wayfarerInput > 0;
+const writeStreetView = importState.streetViewInput > 0;
+const backupPath = await backupCurrentFiles(writeWayfarer, writeStreetView);
+const writes = [];
+if (writeWayfarer) writes.push(writeCompactJson(wayfarerPath, nextWayfarer));
+if (writeStreetView) writes.push(writeCompactJson(streetViewPath, nextStreetView));
+await Promise.all(writes);
 
 console.log("Aggiornamento dati della Field Map completato");
 console.log(`File importati: ${importState.files}`);
@@ -429,14 +435,14 @@ function countBy(records, selector) {
   }, {});
 }
 
-async function backupCurrentFiles() {
+async function backupCurrentFiles(includeWayfarer, includeStreetView) {
   const stamp = new Date().toISOString().replaceAll(":", "-").replaceAll(".", "-");
   const target = path.join(backupDirectory, stamp);
   await mkdir(target, { recursive: true });
-  await Promise.all([
-    copyFile(wayfarerPath, path.join(target, path.basename(wayfarerPath))),
-    copyFile(streetViewPath, path.join(target, path.basename(streetViewPath))),
-  ]);
+  const copies = [];
+  if (includeWayfarer) copies.push(copyFile(wayfarerPath, path.join(target, path.basename(wayfarerPath))));
+  if (includeStreetView) copies.push(copyFile(streetViewPath, path.join(target, path.basename(streetViewPath))));
+  await Promise.all(copies);
   return target;
 }
 

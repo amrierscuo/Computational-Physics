@@ -68,9 +68,13 @@
       visibleCount: 0,
       show: true,
       types: {
-        "Wayspot Submission": true,
-        "Photo Submission": true,
+        "Wayspot Submission": false,
+        "Photo Submission": false,
         "Street View 360": true
+      },
+      datasets: {
+        wayfarer: { status: "idle", records: [], summary: "Wayfarer data available on demand" },
+        streetView: { status: "idle", records: [], summary: "Loading Street View 360" }
       }
     }
   };
@@ -84,7 +88,7 @@
   bindMapEvents();
   selectPoint(map.getCenter(), false);
   scheduleRender();
-  loadPoiDataset();
+  loadDefaultPoiDataset();
 
   function collectControls() {
     return {
@@ -106,6 +110,10 @@
       showWayspots: document.getElementById("showWayspots"),
       showPhotoSubmissions: document.getElementById("showPhotoSubmissions"),
       showStreetView: document.getElementById("showStreetView"),
+      loadWayfarerButton: document.getElementById("loadWayfarerButton"),
+      poiLoadProgress: document.getElementById("poiLoadProgress"),
+      poiLoadProgressBar: document.getElementById("poiLoadProgressBar"),
+      poiLoadProgressText: document.getElementById("poiLoadProgressText"),
       fitPoiButton: document.getElementById("fitPoiButton"),
       poiLoadedCount: document.getElementById("poiLoadedCount"),
       poiVisibleCount: document.getElementById("poiVisibleCount"),
@@ -149,17 +157,32 @@
       state.poi.show = controls.showPoi.checked;
       renderPoiLayer();
     });
-    controls.showWayspots.addEventListener("change", () => {
+    controls.showWayspots.addEventListener("change", async () => {
       state.poi.types["Wayspot Submission"] = controls.showWayspots.checked;
+      if (controls.showWayspots.checked && state.poi.datasets.wayfarer.status !== "loaded") {
+        await loadWayfarerDataset();
+        return;
+      }
       renderPoiLayer();
     });
-    controls.showPhotoSubmissions.addEventListener("change", () => {
+    controls.showPhotoSubmissions.addEventListener("change", async () => {
       state.poi.types["Photo Submission"] = controls.showPhotoSubmissions.checked;
+      if (controls.showPhotoSubmissions.checked && state.poi.datasets.wayfarer.status !== "loaded") {
+        await loadWayfarerDataset();
+        return;
+      }
       renderPoiLayer();
     });
     controls.showStreetView.addEventListener("change", () => {
       state.poi.types["Street View 360"] = controls.showStreetView.checked;
       renderPoiLayer();
+    });
+    controls.loadWayfarerButton.addEventListener("click", async () => {
+      controls.showWayspots.checked = true;
+      controls.showPhotoSubmissions.checked = true;
+      state.poi.types["Wayspot Submission"] = true;
+      state.poi.types["Photo Submission"] = true;
+      await loadWayfarerDataset();
     });
     controls.fitPoiButton.addEventListener("click", fitVisiblePoi);
     controls.locateButton.addEventListener("click", () => {
@@ -352,53 +375,125 @@
     return `${counts[14]} L14 and ${counts[17]} L17 cells in view`;
   }
 
-  async function loadPoiDataset() {
+  async function loadDefaultPoiDataset() {
     controls.fitPoiButton.disabled = true;
-    const [wayfarerResult, streetViewResult] = await Promise.allSettled([
-      loadJsonDataset("data/wayfarer-poi.json"),
-      loadJsonDataset("data/streetview-360.json")
-    ]);
-    const records = [];
-    const summaries = [];
-
-    if (wayfarerResult.status === "fulfilled") {
-      const payload = wayfarerResult.value;
-      const wayfarerRecords = payload.records.filter((record) => (
-        (record.submissionType === "Wayspot Submission" || record.submissionType === "Photo Submission")
-        && hasValidCoordinates(record)
-      ));
-      records.push(...wayfarerRecords);
-      summaries.push(payload.publicReady && payload.reviewStatus === "complete"
-        ? `${wayfarerRecords.length} reviewed contributions - ${payload.imageCounts?.excluded || 0} images excluded`
-        : `${wayfarerRecords.length} local contributions`);
-    }
-
-    if (streetViewResult.status === "fulfilled") {
-      const payload = streetViewResult.value;
-      const streetViewRecords = payload.records.filter((record) => (
+    const dataset = state.poi.datasets.streetView;
+    dataset.status = "loading";
+    setPoiLoadProgress("Loading Street View 360", 0, true);
+    try {
+      const payload = await loadJsonDataset("data/streetview-360.json", (received, total) => {
+        setPoiLoadProgress("Loading Street View 360", progressPercent(received, total), true);
+      });
+      dataset.records = payload.records.filter((record) => (
         record.panoramaType === "Street View 360"
         && record.publishStatus === "PUBLISHED"
         && hasValidCoordinates(record)
       )).map((record) => ({ ...record, submissionType: "Street View 360" }));
-      records.push(...streetViewRecords);
-      summaries.push(`${streetViewRecords.length} public panoramas${payload.nonPublishedCount ? ` - ${payload.nonPublishedCount} non-published hidden` : ""}`);
+      dataset.summary = `${dataset.records.length} public panoramas${payload.nonPublishedCount ? ` - ${payload.nonPublishedCount} non-published hidden` : ""}`;
+      dataset.status = "loaded";
+      setPoiLoadProgress("Street View 360 ready", 100, false);
+    } catch {
+      dataset.records = [];
+      dataset.summary = "Street View 360 dataset unavailable";
+      dataset.status = "error";
+      setPoiLoadProgress("Street View 360 could not load", 0, false);
     }
+    rebuildPoiRecords();
+  }
 
-    state.poi.records = records;
-    state.poi.loaded = records.length > 0;
-    state.poi.error = records.length ? null : "Map point datasets unavailable";
-    controls.poiLoadedCount.value = String(records.length);
-    controls.poiDatasetState.textContent = summaries.length ? summaries.join("\n") : "Local map point datasets not installed";
-    controls.fitPoiButton.disabled = records.length === 0;
+  async function loadWayfarerDataset() {
+    const dataset = state.poi.datasets.wayfarer;
+    if (dataset.status === "loaded") {
+      rebuildPoiRecords();
+      return;
+    }
+    if (dataset.status === "loading") return;
+
+    dataset.status = "loading";
+    controls.loadWayfarerButton.disabled = true;
+    controls.loadWayfarerButton.textContent = "Loading Wayfarer data";
+    setPoiLoadProgress("Loading Wayfarer data", 0, true);
+    try {
+      const payload = await loadJsonDataset("data/wayfarer-poi.json", (received, total) => {
+        const percent = progressPercent(received, total);
+        controls.loadWayfarerButton.textContent = percent > 0 ? `Loading Wayfarer data ${percent}%` : "Loading Wayfarer data";
+        setPoiLoadProgress("Loading Wayfarer data", percent, true);
+      });
+      dataset.records = payload.records.filter((record) => (
+        (record.submissionType === "Wayspot Submission" || record.submissionType === "Photo Submission")
+        && hasValidCoordinates(record)
+      ));
+      dataset.summary = payload.publicReady && payload.reviewStatus === "complete"
+        ? `${dataset.records.length} reviewed contributions - ${payload.imageCounts?.excluded || 0} images excluded`
+        : `${dataset.records.length} local contributions`;
+      dataset.status = "loaded";
+      controls.loadWayfarerButton.textContent = "Wayfarer data loaded";
+      setPoiLoadProgress("Wayfarer data ready", 100, false);
+    } catch {
+      dataset.records = [];
+      dataset.summary = "Wayfarer data unavailable - tap to retry";
+      dataset.status = "error";
+      state.poi.types["Wayspot Submission"] = false;
+      state.poi.types["Photo Submission"] = false;
+      controls.showWayspots.checked = false;
+      controls.showPhotoSubmissions.checked = false;
+      controls.loadWayfarerButton.disabled = false;
+      controls.loadWayfarerButton.textContent = "Retry Wayfarer data";
+      setPoiLoadProgress("Wayfarer data could not load", 0, false);
+    }
+    rebuildPoiRecords();
+  }
+
+  function rebuildPoiRecords() {
+    const datasets = state.poi.datasets;
+    state.poi.records = [...datasets.wayfarer.records, ...datasets.streetView.records];
+    state.poi.loaded = state.poi.records.length > 0;
+    state.poi.error = state.poi.records.length ? null : "Map point datasets unavailable";
+    controls.poiLoadedCount.value = String(state.poi.records.length);
+    controls.poiDatasetState.textContent = [datasets.streetView.summary, datasets.wayfarer.summary].filter(Boolean).join("\n");
+    controls.loadWayfarerButton.disabled = datasets.wayfarer.status === "loaded" || datasets.wayfarer.status === "loading";
+    controls.fitPoiButton.disabled = state.poi.records.length === 0;
     renderPoiLayer();
   }
 
-  async function loadJsonDataset(url) {
+  async function loadJsonDataset(url, onProgress) {
     const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const payload = await response.json();
+    const total = Number(response.headers.get("content-length")) || 0;
+    let payload;
+    if (response.body && typeof response.body.getReader === "function") {
+      const reader = response.body.getReader();
+      const chunks = [];
+      let received = 0;
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        received += value.byteLength;
+        onProgress?.(received, total);
+      }
+      const bytes = new Uint8Array(received);
+      let offset = 0;
+      chunks.forEach((chunk) => {
+        bytes.set(chunk, offset);
+        offset += chunk.byteLength;
+      });
+      payload = JSON.parse(new TextDecoder().decode(bytes));
+    } else {
+      payload = await response.json();
+    }
     if (!payload || !Array.isArray(payload.records)) throw new Error("Invalid dataset structure");
     return payload;
+  }
+
+  function progressPercent(received, total) {
+    return total > 0 ? Math.min(100, Math.round((received / total) * 100)) : 0;
+  }
+
+  function setPoiLoadProgress(label, percent, visible) {
+    controls.poiLoadProgress.hidden = !visible;
+    controls.poiLoadProgressBar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+    controls.poiLoadProgressText.textContent = percent > 0 ? `${label} ${percent}%` : label;
   }
 
   function hasValidCoordinates(record) {
