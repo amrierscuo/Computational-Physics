@@ -37,6 +37,23 @@ Dal terminale, nella cartella `S2cells`:
 node tools/update-map-data.mjs --check
 ```
 
+## Aggiornare le foto Google Maps normali
+
+Le foto Google normali hanno una procedura separata perche il dataset pubblico viene costruito soltanto dopo la review.
+
+1. Copia nella cartella `data/google-photo-inbox` ogni dataset di fascia e il relativo file di decisioni.
+2. Fai doppio clic su `update-google-photos.cmd`.
+3. Controlla `map.html` in locale.
+4. Se il risultato e corretto, esegui commit del solo `data/google-photos.json` insieme a eventuali modifiche al codice.
+
+Lo script abbina automaticamente ciascun file di decisioni al dataset indicato in `sourceDataset`, applica le esclusioni, elimina duplicati e valida i conteggi. Le coordinate non vengono inventate: una foto viene posizionata sulla mappa soltanto quando titolo e comune coincidono con un Wayspot accettato. Le altre foto restano disponibili nella galleria.
+
+Per controllare il dataset pubblico:
+
+```powershell
+node tools/build-google-photos.mjs --check
+```
+
 ## Regole per le immagini Wayfarer
 
 Ogni record nuovo dovrebbe contenere `imageReview`.
@@ -69,6 +86,7 @@ Questa procedura vale per:
 
 - `Wayspot Submission`;
 - `Photo Submission`;
-- `Street View 360`.
+- `Street View 360`;
+- foto Google Maps normali gia revisionate.
 
 Una categoria completamente nuova, con colore, icona, filtro o popup differenti, richiede invece una modifica una tantum all'interfaccia. Dopo aver creato il nuovo layer, anche i suoi elementi potranno essere gestiti con lo stesso sistema.
