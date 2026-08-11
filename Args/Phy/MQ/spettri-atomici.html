@@ -1,293 +1,327 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spettri Atomici</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spettri atomici - Dimostrazioni e ripasso orale</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Spettri Atomici</h1>
-    <h2>Definizione</h2>
-    <p>
-        Gli spettri atomici rappresentano la "firma" unica di un elemento chimico, prodotta dalle transizioni elettroniche tra 
-        diversi livelli energetici di un atomo. Questi spettri possono essere suddivisi in:
-    <ul>
-        <li><strong>Spettri di emissione:</strong> Linee prodotte quando un elettrone passa da uno stato energetico più alto a uno più basso.</li>
-        <li><strong>Spettri di assorbimento:</strong> Linee prodotte quando un elettrone assorbe energia e passa a uno stato più alto.</li>
-    </ul>
+    <div class="language-switch" data-i18n-skip="true" role="group" aria-label="Lingua / Language">
+      <button data-language="it" type="button" aria-pressed="false">ITA</button>
+      <button data-language="en" type="button" aria-pressed="false">ENG</button>
+    </div>
+<main id="lezione-spettri" class="lecture-depth" data-mq-enrichment="2026-08-11">
+  <div class="lecture-kicker">Lezione approfondita - Argomento 1 - DIM 18</div>
+  <h1>Spettri atomici</h1>
+  <p class="lecture-lead"><strong>Obiettivo.</strong> Leggere uno spettro come mappa delle differenze di energia: distinguere emissione, assorbimento, serie e limiti di ionizzazione, derivare Rydberg e Ritz e separare la posizione di una riga dalla sua intensità e larghezza.</p>
 
-    <h2>Interpretazione quantistica</h2>
-    <p>
-        L'interpretazione degli spettri atomici è legata alla quantizzazione dell'energia. Secondo il modello atomico di Bohr, 
-        le energie degli elettroni negli atomi sono discrete. Quando un elettrone cambia livello energetico, assorbe o emette un fotone 
-        con energia pari alla differenza tra i due livelli:
-    <div class="formula">
-        \[
-        \Delta E = h \nu
-        \]
-    <div>
-        Dove:
-        <ul>
-            <li>\( \Delta E \): Differenza di energia tra i livelli</li>
-            <li>\( h \): Costante di Planck (\(6.626 \times 10^{-34} \, \text{J·s}\))</li>
-            <li>\( \nu \): Frequenza della radiazione emessa o assorbita</li>
-        </ul>
-
-    <h2>Spettri dell'idrogeno</h2>
-    <p>
-        Lo spettro dell'atomo di idrogeno è uno dei casi più studiati. Le righe spettrali dell'idrogeno sono descritte dalla formula di Rydberg:
-    <div class="formula">
-        \[
-        \frac{1}{\lambda} = R \left( \frac{1}{n_1^2} - \frac{1}{n_2^2} \right)
-        \]
-    <div>
-        Dove:
-        <ul>
-            <li>\( R \): Costante di Rydberg (\(1.097 \times 10^7 \, \text{m}^{-1}\))</li>
-            <li>\( n_1 \): Numero quantico del livello inferiore</li>
-            <li>\( n_2 \): Numero quantico del livello superiore (\( n_2 > n_1 \))</li>
-        </ul>
-    
-
-    <h2>Serie spettrali</h2>
-    <p>
-        Le righe spettrali dell'idrogeno sono raggruppate in serie:
-    <ul>
-        <li><strong>Serie di Lyman:</strong> Transizioni verso il livello fondamentale (\( n_1 = 1 \)). Spettro nell'ultravioletto.</li>
-        <li><strong>Serie di Balmer:</strong> Transizioni verso il secondo livello (\( n_1 = 2 \)). Spettro nel visibile.</li>
-        <li><strong>Serie di Paschen:</strong> Transizioni verso il terzo livello (\( n_1 = 3 \)). Spettro nell'infrarosso.</li>
-        </li>seguono: Brackett N (\( n_1 = 4 \)), Pfund O (\( n_1 = 5 \)) poi Humphreys P (\(n_1 = 6\))nell'infrarosso.</li>
-    </ul>
-
-    <h2>Spettri di altri elementi</h2>
-    <p>
-        Per elementi più complessi, le interazioni tra elettroni e spin producono una maggiore complessità nelle righe spettrali, 
-        inclusa la <strong>struttura fine</strong> e la <strong>struttura iperfine</strong>. Questi effetti richiedono modelli avanzati, 
-        come la meccanica quantistica relativistica.
-    <div>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 1</div>
-  <h2>Spettri Atomici: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Leggere uno spettro atomico come mappa delle differenze di energia, distinguendo serie, limiti di ionizzazione, emissione e assorbimento.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Uno spettro atomico è formato da righe perché gli stati legati hanno energie discrete. Una riga non appartiene a un singolo livello, ma a una coppia di livelli: misura \(E_i-E_f\). Le serie dell'idrogeno raggruppano transizioni con lo stesso livello finale. Il loro limite, ottenuto per \(n_i\to\infty\), corrisponde all'energia necessaria per ionizzare l'atomo a partire da quel livello.</p>
-  <p>In emissione l'atomo perde energia e il fotone soddisfa \(h\nu=E_i-E_f&gt;0\). In assorbimento il campo fornisce la stessa differenza. Le posizioni delle righe sono determinate dallo spettro, mentre intensità e assenza di alcune righe richiedono elementi di matrice e regole di selezione. Questa distinzione evita di attribuire alla sola formula di Rydberg informazioni che non contiene.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Combinazione di Ritz<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Se a ogni livello si associa un termine spettrale \(T_n=-E_n/(hc)\), ogni numero d'onda è differenza di due termini. Questo garantisce relazioni additive tra righe.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\tilde\nu_{if}=\frac{1}{\lambda_{if}}=T_f-T_i"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle hc\tilde\nu_{if}=E_i-E_f,\quad T_n=-E_n/(hc)\ \Rightarrow\ \tilde\nu_{if}=\frac1{\lambda_{if}}=T_f-T_i\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Spettro idrogenoide<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Usando \(E_n=-hcR_\mu Z^2/n^2\) si ottiene la formula di Rydberg e si identificano Lyman, Balmer, Paschen in base a \(n_f\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\frac{1}{\lambda}=R_\mu Z^2\left(\frac{1}{n_f^2}-\frac{1}{n_i^2}\right),\qquad n_i&gt;n_f"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle E_n=-hcR_\mu Z^2/n^2,\quad hc/\lambda=E_{n_i}-E_{n_f}\ \Rightarrow\ \frac1\lambda=R_\mu Z^2\left(\frac1{n_f^2}-\frac1{n_i^2}\right)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Limite di serie<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Mandando \(n_i\) all'infinito resta il numero d'onda di ionizzazione dal livello \(n_f\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\tilde\nu_{\mathrm{lim}}=\frac{R_\mu Z^2}{n_f^2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \tilde\nu=R_\mu Z^2(n_f^{-2}-n_i^{-2}),\quad n_i\to\infty\ \Rightarrow\ \tilde\nu_{\rm lim}=R_\mu Z^2/n_f^2\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>4. Intensità e selezione<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Nell'approssimazione di dipolo l'ampiezza è governata dall'elemento di matrice della posizione. Una differenza energetica possibile non garantisce una riga intensa.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\mathcal A_{fi}\propto\langle f|\mathbf e\cdot\mathbf r|i\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle V(t)=-q\mathbf E(t)\cdot\mathbf r,\quad c_f^{(1)}\propto\langle f|V|i\rangle\ \Rightarrow\ \mathcal A_{fi}\propto\langle f|\mathbf e\cdot\mathbf r|i\rangle\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Limite di Balmer</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per la serie di Balmer \(n_f=2\).</p>
-    <p><strong>Calcolo.</strong> Il limite ha energia \(13.6/4=3.40\,\mathrm{eV}\) e lunghezza d'onda \(\lambda_{\rm lim}=hc/3.40\,\mathrm{eV}\simeq364.7\,\mathrm{nm}\).</p>
-    <p><strong>Risultato e controllo.</strong> Le righe della serie convergono verso il vicino ultravioletto; oltre il limite inizia il continuo di fotoionizzazione dal livello \(n=2\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 18</a> - copione e passaggi richiesti all'orale</li></ul></details>
   <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>La formula semplice vale per sistemi idrogenoidi e trascura struttura fine, Lamb shift e rinculo oltre la massa ridotta.</li>
-          <li>Le righe reali hanno larghezza finita per vita media, collisioni ed effetto Doppler.</li>
-          <li>Posizione, intensità e profilo di una riga sono tre informazioni fisiche distinte.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Lo spettro è una misura indiretta dell'Hamiltoniana: ricostruisce differenze tra autovalori. Per conoscere le autofunzioni servono anche intensità, polarizzazioni e regole di selezione, che sondano gli elementi di matrice.</p></article>
+    <article class="lecture-card lecture-warning">
+      <h3>La crisi del modello classico</h3>
+      <p>Il modello di Rutherford chiarisce la concentrazione della carica positiva nel nucleo, ma una dinamica puramente classica non stabilizza l'atomo e non seleziona frequenze discrete. Gli spettri a righe mostrano invece che ogni specie atomica assorbe ed emette soltanto a valori ben definiti di \(\nu\) o \(\lambda\).</p>
+    </article>
+    <article class="lecture-card lecture-result">
+      <h3>Informazione spettroscopica</h3>
+      <p>Una riga non misura l'energia di un singolo stato: misura una differenza \(|E_i-E_f|\). Le posizioni ricostruiscono gli autovalori a meno di uno zero comune; intensità, polarizzazione e larghezza forniscono informazioni ulteriori su stati, dinamica e ambiente.</p>
+    </article>
   </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Distingui il limite di una serie dalla sua prima riga.</li>
-          <li>Mostra come tre righe possano soddisfare il principio di combinazione di Ritz.</li>
-          <li>Spiega perché una transizione energeticamente possibile può essere proibita al dipolo.</li></ul></article>
 
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=27">Appunti-MQ.pdf, pp. 27-31: Rutherford, Rydberg e livelli discreti</a></li>
-          <li><a href="BibbiaAleHD.pdf#page=4">BibbiaAleHD.pdf, pp. 4: righe di emissione e assorbimento</a></li>
+  <h2>Che cosa si osserva</h2>
+  <div class="lecture-grid">
+    <article class="lecture-card">
+      <h3>Emissione e assorbimento</h3>
+      <ul>
+        <li>In emissione l'atomo passa da \(E_i\) a un livello inferiore \(E_f\) e crea un fotone.</li>
+        <li>In assorbimento un fotone porta il sistema da \(E_i\) a un livello superiore \(E_f\).</li>
+        <li>La stessa coppia di livelli produce la stessa frequenza nei due processi inversi.</li>
+      </ul>
+    </article>
+    <article class="lecture-card">
+      <h3>Righe, bordi e continuo</h3>
+      <p>Le transizioni tra due stati legati producono righe. Una transizione da uno stato legato al continuo produce un bordo di ionizzazione seguito da assorbimento continuo. In spettroscopia è utile il numero d'onda \(\tilde\nu=1/\lambda=\nu/c\), misurato spesso in \(\mathrm{cm}^{-1}\).</p>
+    </article>
+  </div>
+
+  <h2>Dimostrazioni compatte</h2>
+  <div class="lecture-steps">
+    <article class="lecture-card lecture-step">
+      <h4>1. Energia della riga<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>La conservazione dell'energia collega direttamente la separazione dei livelli alle tre descrizioni equivalenti del fotone.</p>
+      <div class="lecture-formula" aria-label="Energia di emissione e assorbimento"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle E_i>E_f:\ E_\gamma=E_i-E_f=h\nu=\frac{hc}{\lambda};\qquad E_f>E_i:\ E_\gamma=E_f-E_i\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>2. Termini spettrali<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Per stati legati con \(E_n&lt;0\), definiamo il termine positivo \(T_n=-E_n/(hc)\). Il numero d'onda di emissione è la differenza tra il termine del livello finale e quello iniziale.</p>
+      <div class="lecture-formula" aria-label="Derivazione dei termini spettrali"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \tilde\nu_{if}=\frac{E_i-E_f}{hc},\quad T_n=-\frac{E_n}{hc}\Rightarrow \tilde\nu_{if}=T_f-T_i\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>3. Combinazione di Ritz<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Per tre livelli ordinati \(E_a>E_b>E_c\), la separazione estrema è la somma delle due separazioni intermedie. Le righe obbediscono quindi a una relazione additiva verificabile nei dati.</p>
+      <div class="lecture-formula" aria-label="Principio di combinazione di Ritz"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \tilde\nu_{ac}=\frac{E_a-E_c}{hc}=\frac{E_a-E_b}{hc}+\frac{E_b-E_c}{hc}=\tilde\nu_{ab}+\tilde\nu_{bc}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>4. Formula di Rydberg<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Per un sistema idrogenoide, inserire \(E_n=-hcR_\mu Z^2/n^2\) nella relazione fotonica produce immediatamente le serie osservate.</p>
+      <div class="lecture-formula" aria-label="Derivazione dello spettro idrogenoide"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \frac1\lambda=\frac{E_{n_i}-E_{n_f}}{hc}=R_\mu Z^2\!\left(\frac1{n_f^2}-\frac1{n_i^2}\right),\qquad n_i>n_f\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>5. Limite di serie<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Mantenendo fisso \(n_f\) e mandando il livello iniziale nel continuo, si ricava l'energia di ionizzazione a partire da \(n_f\).</p>
+      <div class="lecture-formula" aria-label="Derivazione del limite di una serie"><span class="lecture-proof-tag">Esito</span><span class="lecture-proof-math">\(\displaystyle n_i\to\infty:\quad \tilde\nu_{\rm lim}=\frac1{\lambda_{\rm lim}}=\frac{R_\mu Z^2}{n_f^2},\qquad E_{\rm ion}(n_f)=hc\tilde\nu_{\rm lim}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>6. Convergenza delle righe<span class="lecture-step-boss">ORALE</span></h4>
+      <p>La distanza in numero d'onda tra due righe consecutive della stessa serie diminuisce come \(n^{-3}\), spiegando l'addensamento vicino al limite.</p>
+      <div class="lecture-formula" aria-label="Convergenza asintotica delle righe"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \tilde\nu_{n+1}-\tilde\nu_n=R_\mu Z^2\!\left(\frac1{n^2}-\frac1{(n+1)^2}\right)\simeq\frac{2R_\mu Z^2}{n^3}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>7. Massa ridotta e isotopi<span class="lecture-step-boss">ORALE</span></h4>
+      <p>Il nucleo non è immobile. La massa ridotta modifica la costante di Rydberg e rende leggermente diverse le righe di isotopi come idrogeno e deuterio.</p>
+      <div class="lecture-formula" aria-label="Correzione di massa ridotta alla costante di Rydberg"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \mu=\frac{m_eM}{m_e+M},\qquad R_M=R_\infty\frac{\mu}{m_e}=\frac{R_\infty}{1+m_e/M}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>8. Intensità di dipolo<span class="lecture-step-boss">ORALE</span></h4>
+      <p>Una differenza energetica possibile non garantisce una riga osservabile. Nell'approssimazione di dipolo elettrico conta l'elemento di matrice e da esso seguono le regole di selezione.</p>
+      <div class="lecture-formula" aria-label="Ampiezza e regole di selezione di dipolo"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \mathcal A_{fi}\propto\boldsymbol\epsilon{\cdot}\langle f|\mathbf r|i\rangle,\quad I_{fi}\propto|\mathcal A_{fi}|^2;\qquad \Delta\ell=\pm1,\quad\Delta m=0,\pm1\)</span></div>
+    </article>
+  </div>
+
+  <h2>Esempio d'esame: serie di Balmer</h2>
+  <article class="lecture-card lecture-result lecture-example">
+    <p><strong>Prima riga.</strong> Per \(n_i=3\to n_f=2\), \(1/\lambda=R_H(1/4-1/9)\), quindi \(\lambda_{H\alpha}\simeq656.3\,\mathrm{nm}\) ed \(E_\gamma\simeq1.89\,\mathrm{eV}\).</p>
+    <p><strong>Limite.</strong> Per \(n_i\to\infty\), \(1/\lambda_{\rm lim}=R_H/4\), dunque \(\lambda_{\rm lim}\simeq364.7\,\mathrm{nm}\) ed \(E_{\rm ion}(2)\simeq3.40\,\mathrm{eV}\).</p>
+    <p><strong>Controllo.</strong> Aumentando \(n_i\), la lunghezza d'onda diminuisce da \(656.3\,\mathrm{nm}\) verso \(364.7\,\mathrm{nm}\); il limite non è la prima riga della serie.</p>
+  </article>
+
+  <div class="lecture-grid">
+    <article class="lecture-card">
+      <h3>Principali serie dell'idrogeno</h3>
+      <ul>
+        <li>Lyman: \(n_f=1\), ultravioletto.</li>
+        <li>Balmer: \(n_f=2\), visibile e vicino ultravioletto.</li>
+        <li>Paschen: \(n_f=3\), infrarosso.</li>
+        <li>Brackett, Pfund, Humphreys: \(n_f=4,5,6\), infrarosso.</li>
+      </ul>
+    </article>
+    <article class="lecture-card">
+      <h3>Posizione contro intensità</h3>
+      <p>Rydberg determina dove può cadere una riga negli atomi idrogenoidi. Non ne determina l'intensità: occorrono popolazioni dei livelli, elementi di matrice e regole di selezione. Una transizione può essere energeticamente possibile ma proibita al dipolo.</p>
+      <p class="lecture-note">Anche una riga assente è informativa: segnala simmetrie, scarsa popolazione o un meccanismo di transizione più debole.</p>
+    </article>
+  </div>
+
+  <div class="lecture-grid">
+    <article class="lecture-card lecture-warning">
+      <h3>Larghezza e profilo reali</h3>
+      <ul>
+        <li>Vita media finita: allargamento naturale, di ordine \(\Delta\nu_{\rm nat}\sim1/(2\pi\tau)\).</li>
+        <li>Moto termico: allargamento Doppler dipendente dalla temperatura e dalla massa atomica.</li>
+        <li>Collisioni: allargamento e spostamento di pressione.</li>
+        <li>Strumento: la risoluzione sperimentale convolge il profilo fisico.</li>
+      </ul>
+    </article>
+    <article class="lecture-card">
+      <h3>Struttura oltre Rydberg</h3>
+      <p>Struttura fine, iperfine, Lamb shift ed effetti Zeeman e Stark scindono o spostano le righe. Negli atomi a più elettroni intervengono repulsione elettronica, schermaggio e accoppiamenti angolari: la semplice legge \(-1/n^2\) non basta.</p>
+    </article>
+  </div>
+
+  <article class="lecture-card lecture-oral">
+    <h3>Controllo da orale</h3>
+    <ul class="lecture-checks">
+      <li>Distingui energia di livello, differenza energetica e numero d'onda della riga.</li>
+      <li>Fissa correttamente i segni nei processi di emissione e assorbimento.</li>
+      <li>Deriva Rydberg dai livelli idrogenoidi e identifica \(n_i\) e \(n_f\).</li>
+      <li>Distingui prima riga, limite di serie e soglia di ionizzazione.</li>
+      <li>Dimostra il principio di combinazione di Ritz per tre livelli.</li>
+      <li>Spiega perché le righe si addensano come \(n^{-3}\) vicino al limite.</li>
+      <li>Separa posizione, intensità e larghezza di una riga.</li>
+      <li>Indica come massa ridotta, campi esterni e vita media modificano lo spettro ideale.</li>
     </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
+  </article>
 
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+  <details class="boss-ref">
+    <summary>Boss, appunti e pagine verificate</summary>
+    <ul>
+      <li><a href="boss/P3_DIM_13-18.txt">DIM 18</a> - crisi del modello classico, spettri a righe, Bohr e Rydberg</li>
+      <li><a href="Appunti-MQ.pdf#page=28">Appunti-MQ.pdf, pagine PDF 28-30</a> - Rutherford, righe atomiche, formula empirica e interpretazione di Bohr</li>
+      <li><a href="BibbiaAleHD.pdf#page=4">BibbiaAleHD.pdf, pagina PDF 4</a> - Balmer, Rydberg e livelli dell'idrogeno negli appunti di lezione</li>
+    </ul>
+    <p class="lecture-note">La lezione parte dalla formula osservativa delle dispense e aggiunge la lettura spettroscopica di termini, intensità, profili e correzione isotopica.</p>
+  </details>
+
+  <div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 1 - DIM 18":"In-depth lesson - Topic 1 - DIM 18","Spettri atomici":"Atomic spectra","Leggere uno spettro come mappa delle differenze di energia: distinguere emissione, assorbimento, serie e limiti di ionizzazione, derivare Rydberg e Ritz e separare la posizione di una riga dalla sua intensità e larghezza.":"Read a spectrum as a map of energy differences: distinguish emission, absorption, series, and ionization limits, derive the Rydberg and Ritz relations, and separate a line's position from its intensity and width.","La crisi del modello classico":"The crisis of the classical model","Il modello di Rutherford chiarisce la concentrazione della carica positiva nel nucleo, ma una dinamica puramente classica non stabilizza l'atomo e non seleziona frequenze discrete. Gli spettri a righe mostrano invece che ogni specie atomica assorbe ed emette soltanto a valori ben definiti di \\(\\nu\\) o \\(\\lambda\\).":"Rutherford's model explains the concentration of positive charge in the nucleus, but purely classical dynamics neither stabilizes the atom nor selects discrete frequencies. Line spectra instead show that each atomic species absorbs and emits only at well-defined values of \\(\\nu\\) or \\(\\lambda\\).","Informazione spettroscopica":"Spectroscopic information","Una riga non misura l'energia di un singolo stato: misura una differenza \\(|E_i-E_f|\\). Le posizioni ricostruiscono gli autovalori a meno di uno zero comune; intensità, polarizzazione e larghezza forniscono informazioni ulteriori su stati, dinamica e ambiente.":"A line does not measure the energy of a single state: it measures a difference \\(|E_i-E_f|\\). Line positions reconstruct the eigenvalues up to a common energy zero; intensities, polarization, and widths provide further information about states, dynamics, and environment.","Che cosa si osserva":"What is observed","Emissione e assorbimento":"Emission and absorption","In emissione l'atomo passa da \\(E_i\\) a un livello inferiore \\(E_f\\) e crea un fotone.":"In emission, the atom moves from \\(E_i\\) to a lower level \\(E_f\\) and creates a photon.","In assorbimento un fotone porta il sistema da \\(E_i\\) a un livello superiore \\(E_f\\).":"In absorption, a photon takes the system from \\(E_i\\) to a higher level \\(E_f\\).","La stessa coppia di livelli produce la stessa frequenza nei due processi inversi.":"The same pair of levels produces the same frequency in the two inverse processes.","Righe, bordi e continuo":"Lines, edges, and continua","Le transizioni tra due stati legati producono righe. Una transizione da uno stato legato al continuo produce un bordo di ionizzazione seguito da assorbimento continuo. In spettroscopia è utile il numero d'onda \\(\\tilde\\nu=1/\\lambda=\\nu/c\\), misurato spesso in \\(\\mathrm{cm}^{-1}\\).":"Transitions between two bound states produce lines. A transition from a bound state to the continuum produces an ionization edge followed by continuous absorption. In spectroscopy, the wavenumber \\(\\tilde\\nu=1/\\lambda=\\nu/c\\), often measured in \\(\\mathrm{cm}^{-1}\\), is useful.","Dimostrazioni compatte":"Compact derivations","1. Energia della riga":"1. Line energy","La conservazione dell'energia collega direttamente la separazione dei livelli alle tre descrizioni equivalenti del fotone.":"Energy conservation directly relates the level separation to the three equivalent descriptions of the photon.","2. Termini spettrali":"2. Spectral terms","Per stati legati con \\(E_n<0\\), definiamo il termine positivo \\(T_n=-E_n/(hc)\\). Il numero d'onda di emissione è la differenza tra il termine del livello finale e quello iniziale.":"For bound states with \\(E_n<0\\), define the positive term value \\(T_n=-E_n/(hc)\\). The emission wavenumber is the final-level term minus the initial-level term.","3. Combinazione di Ritz":"3. Ritz combination principle","Per tre livelli ordinati \\(E_a>E_b>E_c\\), la separazione estrema è la somma delle due separazioni intermedie. Le righe obbediscono quindi a una relazione additiva verificabile nei dati.":"For three ordered levels \\(E_a>E_b>E_c\\), the largest separation is the sum of the two intermediate separations. The lines therefore obey an additive relation that can be checked directly in the data.","4. Formula di Rydberg":"4. Rydberg formula","Per un sistema idrogenoide, inserire \\(E_n=-hcR_\\mu Z^2/n^2\\) nella relazione fotonica produce immediatamente le serie osservate.":"For a hydrogen-like system, inserting \\(E_n=-hcR_\\mu Z^2/n^2\\) into the photon relation immediately produces the observed series.","5. Limite di serie":"5. Series limit","Mantenendo fisso \\(n_f\\) e mandando il livello iniziale nel continuo, si ricava l'energia di ionizzazione a partire da \\(n_f\\).":"Holding \\(n_f\\) fixed and sending the initial level into the continuum gives the ionization energy from \\(n_f\\).","6. Convergenza delle righe":"6. Convergence of the lines","La distanza in numero d'onda tra due righe consecutive della stessa serie diminuisce come \\(n^{-3}\\), spiegando l'addensamento vicino al limite.":"The wavenumber spacing between consecutive lines of the same series decreases as \\(n^{-3}\\), explaining their accumulation near the limit.","7. Massa ridotta e isotopi":"7. Reduced mass and isotopes","Il nucleo non è immobile. La massa ridotta modifica la costante di Rydberg e rende leggermente diverse le righe di isotopi come idrogeno e deuterio.":"The nucleus is not stationary. The reduced mass changes the Rydberg constant and makes the lines of isotopes such as hydrogen and deuterium slightly different.","8. Intensità di dipolo":"8. Electric-dipole intensity","Una differenza energetica possibile non garantisce una riga osservabile. Nell'approssimazione di dipolo elettrico conta l'elemento di matrice e da esso seguono le regole di selezione.":"An allowed energy difference does not guarantee an observable line. In the electric-dipole approximation, the matrix element controls the amplitude and yields the selection rules.","Esempio d'esame: serie di Balmer":"Exam example: the Balmer series","Prima riga.":"First line.","Per \\(n_i=3\\to n_f=2\\), \\(1/\\lambda=R_H(1/4-1/9)\\), quindi \\(\\lambda_{H\\alpha}\\simeq656.3\\,\\mathrm{nm}\\) ed \\(E_\\gamma\\simeq1.89\\,\\mathrm{eV}\\).":"For \\(n_i=3\\to n_f=2\\), \\(1/\\lambda=R_H(1/4-1/9)\\), hence \\(\\lambda_{H\\alpha}\\simeq656.3\\,\\mathrm{nm}\\) and \\(E_\\gamma\\simeq1.89\\,\\mathrm{eV}\\).","Per \\(n_i\\to\\infty\\), \\(1/\\lambda_{\\rm lim}=R_H/4\\), dunque \\(\\lambda_{\\rm lim}\\simeq364.7\\,\\mathrm{nm}\\) ed \\(E_{\\rm ion}(2)\\simeq3.40\\,\\mathrm{eV}\\).":"For \\(n_i\\to\\infty\\), \\(1/\\lambda_{\\rm lim}=R_H/4\\), so \\(\\lambda_{\\rm lim}\\simeq364.7\\,\\mathrm{nm}\\) and \\(E_{\\rm ion}(2)\\simeq3.40\\,\\mathrm{eV}\\).","Aumentando \\(n_i\\), la lunghezza d'onda diminuisce da \\(656.3\\,\\mathrm{nm}\\) verso \\(364.7\\,\\mathrm{nm}\\); il limite non è la prima riga della serie.":"As \\(n_i\\) increases, the wavelength decreases from \\(656.3\\,\\mathrm{nm}\\) toward \\(364.7\\,\\mathrm{nm}\\); the limit is not the first line of the series.","Principali serie dell'idrogeno":"Principal hydrogen series","Lyman: \\(n_f=1\\), ultravioletto.":"Lyman: \\(n_f=1\\), ultraviolet.","Balmer: \\(n_f=2\\), visibile e vicino ultravioletto.":"Balmer: \\(n_f=2\\), visible and near ultraviolet.","Paschen: \\(n_f=3\\), infrarosso.":"Paschen: \\(n_f=3\\), infrared.","Brackett, Pfund, Humphreys: \\(n_f=4,5,6\\), infrarosso.":"Brackett, Pfund, and Humphreys: \\(n_f=4,5,6\\), infrared.","Posizione contro intensità":"Position versus intensity","Rydberg determina dove può cadere una riga negli atomi idrogenoidi. Non ne determina l'intensità: occorrono popolazioni dei livelli, elementi di matrice e regole di selezione. Una transizione può essere energeticamente possibile ma proibita al dipolo.":"The Rydberg formula determines where a line can occur in a hydrogen-like atom. It does not determine its intensity: level populations, matrix elements, and selection rules are required. A transition can be energetically possible yet electric-dipole forbidden.","Anche una riga assente è informativa: segnala simmetrie, scarsa popolazione o un meccanismo di transizione più debole.":"A missing line is also informative: it can reveal symmetries, a low population, or a weaker transition mechanism.","Larghezza e profilo reali":"Real line widths and profiles","Vita media finita: allargamento naturale, di ordine \\(\\Delta\\nu_{\\rm nat}\\sim1/(2\\pi\\tau)\\).":"Finite lifetime: natural broadening of order \\(\\Delta\\nu_{\\rm nat}\\sim1/(2\\pi\\tau)\\).","Moto termico: allargamento Doppler dipendente dalla temperatura e dalla massa atomica.":"Thermal motion: Doppler broadening that depends on temperature and atomic mass.","Collisioni: allargamento e spostamento di pressione.":"Collisions: pressure broadening and pressure shift.","Strumento: la risoluzione sperimentale convolge il profilo fisico.":"Instrument: finite experimental resolution convolves the physical line profile.","Struttura oltre Rydberg":"Structure beyond the Rydberg formula","Struttura fine, iperfine, Lamb shift ed effetti Zeeman e Stark scindono o spostano le righe. Negli atomi a più elettroni intervengono repulsione elettronica, schermaggio e accoppiamenti angolari: la semplice legge \\(-1/n^2\\) non basta.":"Fine structure, hyperfine structure, the Lamb shift, and the Zeeman and Stark effects split or shift the lines. In many-electron atoms, electron repulsion, screening, and angular-momentum couplings enter, so the simple \\(-1/n^2\\) law is insufficient.","Controllo da orale":"Oral-exam check","Distingui energia di livello, differenza energetica e numero d'onda della riga.":"Distinguish a level energy, an energy difference, and a line wavenumber.","Fissa correttamente i segni nei processi di emissione e assorbimento.":"Assign the signs correctly in emission and absorption processes.","Deriva Rydberg dai livelli idrogenoidi e identifica \\(n_i\\) e \\(n_f\\).":"Derive the Rydberg formula from the hydrogen-like levels and identify \\(n_i\\) and \\(n_f\\).","Distingui prima riga, limite di serie e soglia di ionizzazione.":"Distinguish the first line, the series limit, and the ionization threshold.","Dimostra il principio di combinazione di Ritz per tre livelli.":"Prove the Ritz combination principle for three levels.","Spiega perché le righe si addensano come \\(n^{-3}\\) vicino al limite.":"Explain why the lines accumulate as \\(n^{-3}\\) near the limit.","Separa posizione, intensità e larghezza di una riga.":"Separate the position, intensity, and width of a line.","Indica come massa ridotta, campi esterni e vita media modificano lo spettro ideale.":"Explain how reduced mass, external fields, and lifetime modify the ideal spectrum.","Boss, appunti e pagine verificate":"Boss material, lecture notes, and verified pages","- crisi del modello classico, spettri a righe, Bohr e Rydberg":"- crisis of the classical model, line spectra, Bohr, and Rydberg","Appunti-MQ.pdf, pagine PDF 28-30":"Appunti-MQ.pdf, PDF pages 28-30","- Rutherford, righe atomiche, formula empirica e interpretazione di Bohr":"- Rutherford, atomic lines, empirical formula, and Bohr's interpretation","BibbiaAleHD.pdf, pagina PDF 4":"BibbiaAleHD.pdf, PDF page 4","- Balmer, Rydberg e livelli dell'idrogeno negli appunti di lezione":"- Balmer, Rydberg, and the hydrogen levels in the lecture notes","La lezione parte dalla formula osservativa delle dispense e aggiunge la lettura spettroscopica di termini, intensità, profili e correzione isotopica.":"This lesson starts from the observational formula in the notes and adds the spectroscopic interpretation of terms, intensities, profiles, and isotope corrections.","Ritorna all'indice MQ":"Return to the Quantum Mechanics index","Obiettivo.":"Objective.","Base":"Core","Esito":"Result","ORALE":"ORAL","Check":"Check","Limite.":"Limit.","Controllo.":"Check."},"attrs":{"Energia di emissione e assorbimento":"Emission and absorption energy","Derivazione dei termini spettrali":"Derivation of the spectral terms","Principio di combinazione di Ritz":"Ritz combination principle","Derivazione dello spettro idrogenoide":"Derivation of the hydrogen-like spectrum","Derivazione del limite di una serie":"Derivation of a series limit","Convergenza asintotica delle righe":"Asymptotic convergence of the lines","Correzione di massa ridotta alla costante di Rydberg":"Reduced-mass correction to the Rydberg constant","Ampiezza e regole di selezione di dipolo":"Dipole amplitude and selection rules"},"title":{"it":"Spettri atomici - Dimostrazioni e ripasso orale","en":"Atomic Spectra - Derivations and Oral Review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
