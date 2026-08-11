@@ -1,298 +1,351 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campo B Uniforme</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Particella in un campo magnetico uniforme - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Campo B Uniforme</h1>
-    <p>
-        L'interazione di una particella con spin in un campo magnetico uniforme \( \mathbf{B} \) è un problema fondamentale nella meccanica quantistica. La particella, dotata di momento magnetico \( \boldsymbol{\mu} \), interagisce con \( \mathbf{B} \) attraverso l'energia di interazione
-    </p>
-    <div class="formula">
-        \( H = -\boldsymbol{\mu} \cdot \mathbf{B} \)
-    </div>
-    <p>
-        Il momento magnetico è legato allo spin della particella tramite la relazione:
-    </p>
-    <div class="formula">
-        \( \boldsymbol{\mu} = -g \mu_B \frac{\mathbf{S}}{\hbar} \)
-    </div>
-    <p>
-        dove \( g \) è il fattore di Landé, \( \mu_B \) è il magnetone di Bohr e \( \mathbf{S} \) è l'operatore di spin. Inserendo questa espressione nell'hamiltoniana, si ottiene:
-    </p>
-    <div class="formula">
-        \( H = g \mu_B \frac{\mathbf{S}}{\hbar} \cdot \mathbf{B} \)
-    </div>
-    <p>
-        Se il campo magnetico è orientato lungo l'asse \( z \), cioè \( \mathbf{B} = B_z \hat{z} \), l'hamiltoniana si riduce a:
-    </p>
-    <div class="formula">
-        \( H = g \mu_B B_z \frac{S_z}{\hbar} \)
-    </div>
-    <p>
-        Gli autostati dell'operatore \( S_z \) sono anche autostati dell'hamiltoniana. Per uno spin \( \frac{1}{2} \), i due possibili autovalori di \( S_z \) sono \( \pm \frac{\hbar}{2} \), e quindi i livelli energetici sono:
-    </p>
-    <div class="formula">
-        \( E_{\pm} = \pm \frac{1}{2} g \mu_B B_z \)
-    </div>
-    <p>
-        Questo porta alla separazione delle energie in due livelli distinti, fenomeno noto come <em>Effetto Zeeman normale</em>.
-    </p>
-    <p>
-        L'importanza di un campo magnetico uniforme si estende a molti sistemi fisici, come il controllo dei qubit nei computer quantistici, dove il campo viene utilizzato per manipolare gli stati di spin.
-    </p>
-	<h2>Derivazione Matematica e Interpretazione</h2>
-<p>
-    Per comprendere appieno l'interazione tra una particella con spin e un campo magnetico uniforme \( \mathbf{B} \), consideriamo gli operatori quantistici coinvolti. L'hamiltoniana
-</p>
-<div class="formula">
-    \( H = g \mu_B \frac{\mathbf{S}}{\hbar} \cdot \mathbf{B} \)
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
 </div>
-<p>
-    è un operatore che agisce sugli autostati dello spin. Se il campo è orientato lungo l'asse \( z \), possiamo scrivere:
-</p>
-<div class="formula">
-    \( H = g \mu_B B_z \frac{S_z}{\hbar} \)
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-campo-b-uniforme">
+<div class="lecture-kicker">Lezione approfondita - Argomento 9 - DIM 13</div>
+<h1>Particella in un campo magnetico uniforme</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Costruire l'Hamiltoniana gauge-covariante di una particella carica, ricavare il moto ciclotronico e i livelli di Landau, contare la degenerazione e aggiungere correttamente il termine di Pauli per lo spin senza confonderlo con il normale effetto Zeeman atomico.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Spettro orbitale</h3>
+<p>In tre dimensioni il campo quantizza il moto trasverso e lascia libero quello parallelo. L'energia non dipende dal centro dell'orbita, origine della degenerazione di Landau.</p>
+<div aria-label="Spettro dei livelli di Landau in tre dimensioni" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \boxed{E_{n,k_z}=\hbar\omega_c\left(n+\frac12\right)+\frac{\hbar^2k_z^2}{2m}},\qquad \omega_c=\frac{|q|B}{m},\quad n=0,1,2,\ldots\)</span></div>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Convenzione e segni</h3>
+<p>Si usa il SI e <span class="mq-math" data-i18n-skip="true">\(q\)</span> è la carica con segno. Per l'elettrone <span class="mq-math" data-i18n-skip="true">\(q=-e\)</span>, con <span class="mq-math" data-i18n-skip="true">\(e&gt;0\)</span>. La frequenza <span class="mq-math" data-i18n-skip="true">\(\omega_c\)</span> è definita positiva tramite <span class="mq-math" data-i18n-skip="true">\(|q|\)</span>; il verso di rotazione conserva invece il segno di <span class="mq-math" data-i18n-skip="true">\(q\)</span>.</p>
+</article>
 </div>
-<p>
-    Dove \( S_z \) è l'operatore di spin lungo \( z \). Per uno spin \( \frac{1}{2} \), gli autostati di \( S_z \) sono dati da \( \lvert + \rangle \) e \( \lvert - \rangle \), con autovalori rispettivamente \( +\frac{\hbar}{2} \) e \( -\frac{\hbar}{2} \). Inserendo questi valori nell'hamiltoniana:
-</p>
-<div class="formula">
-    \( H \lvert + \rangle = \left( +\frac{1}{2} g \mu_B B_z \right) \lvert + \rangle \)
+<h2>Oggetti fisici e gauge</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Momento canonico e cinetico</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(\mathbf p=-i\hbar\boldsymbol\nabla\)</span> dipende dalla scelta di gauge e non coincide con il momento meccanico. L'osservabile legata alla velocità è <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\pi=m\mathbf v\)</span>.</p>
+<div aria-label="Definizione del momento cinetico in un campo elettromagnetico" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \boldsymbol\pi=\mathbf p-q\mathbf A,\qquad H=\frac{\boldsymbol\pi^2}{2m}+q\phi,\qquad \mathbf B=\boldsymbol\nabla\times\mathbf A\)</span></div>
+</article>
+<article class="lecture-card">
+<h3>Campo uniforme, potenziali diversi</h3>
+<p>Per <span class="mq-math" data-i18n-skip="true">\(\mathbf B=B\hat{\mathbf z}\)</span> sono comode la gauge simmetrica e la gauge di Landau. Descrivono lo stesso campo e devono produrre lo stesso spettro.</p>
+<div aria-label="Gauge simmetrica e gauge di Landau per lo stesso campo uniforme" class="lecture-formula"><span class="lecture-proof-tag">Gauge</span><span class="lecture-proof-math">\(\displaystyle \mathbf A_S=\frac12\mathbf B\times\mathbf r=\frac B2(-y,x,0),\qquad \mathbf A_L=(0,Bx,0),\qquad \boldsymbol\nabla\times\mathbf A_{S,L}=\mathbf B\)</span></div>
+</article>
 </div>
-<div class="formula">
-    \( H \lvert - \rangle = \left( -\frac{1}{2} g \mu_B B_z \right) \lvert - \rangle \)
+<h2>Dimostrazione compatta, passaggio per passaggio</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Accoppiamento minimo<span class="lecture-step-boss">APPUNTI</span></h4>
+<p>La sostituzione canonica introduce i potenziali senza aggiungere a mano una forza magnetica.</p>
+<div aria-label="Sostituzione di accoppiamento minimo" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf p\longrightarrow\mathbf p-q\mathbf A,\qquad i\hbar\partial_t\longrightarrow i\hbar\partial_t-q\phi\Rightarrow H=\frac{(\mathbf p-q\mathbf A)^2}{2m}+q\phi\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Covarianza di gauge<span class="lecture-step-boss">ORALE</span></h4>
+<p>Potenziali diversi rappresentano gli stessi campi se anche la fase della funzione d'onda viene trasformata.</p>
+<div aria-label="Trasformazione di gauge dei potenziali e della funzione d'onda" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \mathbf A'=\mathbf A+\boldsymbol\nabla\chi,\quad\phi'=\phi-\partial_t\chi,\quad\psi'=e^{iq\chi/\hbar}\psi\Rightarrow(\mathbf p-q\mathbf A')\psi'=e^{iq\chi/\hbar}(\mathbf p-q\mathbf A)\psi\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Espansione ordinata<span class="lecture-step-boss">APPUNTI</span></h4>
+<p>In generale <span class="mq-math" data-i18n-skip="true">\(\mathbf p\)</span> e <span class="mq-math" data-i18n-skip="true">\(\mathbf A\)</span> non commutano; il termine misto va simmetrizzato.</p>
+<div aria-label="Espansione ordinata del quadrato del momento cinetico" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (\mathbf p-q\mathbf A)^2=\mathbf p^2-q(\mathbf p\cdot\mathbf A+\mathbf A\cdot\mathbf p)+q^2A^2,\qquad [p_i,A_j]=-i\hbar\partial_iA_j\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Gauge simmetrica<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Per campo costante, <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\nabla\cdot\mathbf A_S=0\)</span>, quindi il termine misto si riduce al momento angolare.</p>
+<div aria-label="Hamiltoniana orbitale in gauge simmetrica" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf A_S\cdot\mathbf p=\frac12\mathbf B\cdot(\mathbf r\times\mathbf p)=\frac12\mathbf B\cdot\mathbf L\Rightarrow H=\frac{p^2}{2m}-\frac{qB}{2m}L_z+\frac{q^2B^2}{8m}(x^2+y^2)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Momenti cinetici non commutanti<span class="lecture-step-boss">ORALE</span></h4>
+<p>La quantizzazione trasversa è già contenuta nell'algebra del momento cinetico.</p>
+<div aria-label="Commutatore delle componenti del momento cinetico" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [\pi_x,\pi_y]=[p_x-qA_x,p_y-qA_y]=iq\hbar(\partial_xA_y-\partial_yA_x)=iq\hbar B\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Forza di Lorentz da Heisenberg<span class="lecture-step-boss">ORALE</span></h4>
+<p>Il limite classico emerge dalle equazioni operatoriali; per campo uniforme l'ordinamento non crea ambiguità.</p>
+<div aria-label="Equazioni di Heisenberg e forza di Lorentz" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \dot{\mathbf r}=\frac{[\mathbf r,H]}{i\hbar}=\frac{\boldsymbol\pi}{m}=\mathbf v,\qquad m\dot{\mathbf v}=q\,\mathbf v\times\mathbf B,\qquad \omega_c=\frac{|q|B}{m}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Gauge di Landau<span class="lecture-step-boss">BASE</span></h4>
+<p>La traslazione lungo <span class="mq-math" data-i18n-skip="true">\(y,z\)</span> rende <span class="mq-math" data-i18n-skip="true">\(p_y,p_z\)</span> costanti del moto e trasforma il problema trasverso in un oscillatore.</p>
+<div aria-label="Hamiltoniana in gauge di Landau" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf A_L=(0,Bx,0)\Rightarrow H=\frac{p_x^2}{2m}+\frac{(p_y-qBx)^2}{2m}+\frac{p_z^2}{2m},\qquad[H,p_y]=[H,p_z]=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Centro guida e lunghezza magnetica<span class="lecture-step-boss">BASE</span></h4>
+<p>Fissato <span class="mq-math" data-i18n-skip="true">\(p_y=\hbar k_y\)</span>, l'oscillatore è centrato in <span class="mq-math" data-i18n-skip="true">\(x_0\)</span>; la larghezza naturale è la lunghezza magnetica.</p>
+<div aria-label="Centro guida e lunghezza magnetica" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle x_0=\frac{\hbar k_y}{qB},\qquad \frac{(\hbar k_y-qBx)^2}{2m}=\frac12m\omega_c^2(x-x_0)^2,\qquad \ell_B=\sqrt{\frac{\hbar}{|q|B}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Livelli di Landau<span class="lecture-step-boss">BASE</span></h4>
+<p>L'oscillatore trasverso ha passo <span class="mq-math" data-i18n-skip="true">\(\hbar\omega_c\)</span>; il moto lungo il campo resta continuo.</p>
+<div aria-label="Autofunzioni e spettro di Landau" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \psi_{n,k_y,k_z}=\frac{e^{i(k_yy+k_zz)}}{\sqrt{L_yL_z}}\,\varphi_n(x-x_0),\qquad E_{n,k_z}=\hbar\omega_c\left(n+\frac12\right)+\frac{\hbar^2k_z^2}{2m}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Degenerazione per area<span class="lecture-step-boss">ORALE</span></h4>
+<p>Con condizioni periodiche, i diversi <span class="mq-math" data-i18n-skip="true">\(k_y\)</span> spostano il centro guida senza cambiare l'energia.</p>
+<div aria-label="Conteggio della degenerazione di ciascun livello di Landau" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \Delta k_y=\frac{2\pi}{L_y},\quad0\le x_0\le L_x\Rightarrow N=\frac{L_xL_y|q|B}{2\pi\hbar},\qquad\boxed{\frac NA=\frac{|q|B}{h}=\frac1{2\pi\ell_B^2}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Quanto di flusso<span class="lecture-step-boss">ORALE</span></h4>
+<p>Ogni stato di un livello occupa un'area tale da contenere un quanto di flusso per la carica considerata.</p>
+<div aria-label="Relazione tra degenerazione e quanto di flusso" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \Phi=BA,\qquad \Phi_0=\frac{h}{|q|},\qquad N=\frac{BA}{\Phi_0},\qquad \frac AN=2\pi\ell_B^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Identità di Pauli<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Per spin <span class="mq-math" data-i18n-skip="true">\(1/2\)</span>, il termine magnetico emerge algebricamente dal quadrato di <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\sigma\cdot\boldsymbol\pi\)</span>.</p>
+<div aria-label="Identità di Pauli per il momento cinetico" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \sigma_i\sigma_j=\delta_{ij}+i\varepsilon_{ijk}\sigma_k,\quad[\pi_i,\pi_j]=iq\hbar\varepsilon_{ijk}B_k\Rightarrow(\boldsymbol\sigma\cdot\boldsymbol\pi)^2=\boldsymbol\pi^2-q\hbar\boldsymbol\sigma\cdot\mathbf B\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Hamiltoniana di Pauli<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Per una particella di Dirac non relativistica <span class="mq-math" data-i18n-skip="true">\(g_s\simeq2\)</span>; per particelle composite il fattore va inserito con il suo valore fisico.</p>
+<div aria-label="Hamiltoniana di Pauli con momento magnetico di spin" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle H_P=\frac{\boldsymbol\pi^2}{2m}-\frac{q\hbar}{2m}\boldsymbol\sigma\cdot\mathbf B+q\phi=\frac{\boldsymbol\pi^2}{2m}-\boldsymbol\mu_s\cdot\mathbf B+q\phi,\qquad \boldsymbol\mu_s=g_s\frac{q}{2m}\mathbf S\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Landau più spin per l'elettrone<span class="lecture-step-boss">ORALE</span></h4>
+<p>Con <span class="mq-math" data-i18n-skip="true">\(q=-e\)</span> e <span class="mq-math" data-i18n-skip="true">\(g_s=2\)</span>, il contributo di spin ha lo stesso passo ciclotronico ma dipende da <span class="mq-math" data-i18n-skip="true">\(m_s=\pm1/2\)</span>.</p>
+<div aria-label="Spettro di Landau con spin per un elettrone" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle E_{n,m_s,k_z}=\hbar\omega_c\left(n+\frac12+m_s\right)+\frac{\hbar^2k_z^2}{2m_e},\qquad m_s=\pm\frac12\quad(g_s=2)\)</span></div>
+</article>
 </div>
-<p>
-    Questi risultati mostrano che i livelli energetici della particella sono scissi in due valori distinti, separati da un'energia di:
-</p>
-<div class="formula">
-    \( \Delta E = g \mu_B B_z \)
+<h2>Esempio d'esame: elettrone a 2.00 T</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Elettrone in un campo uniforme <span class="mq-math" data-i18n-skip="true">\(B=2.00\,\mathrm T\)</span>, campione bidimensionale di area <span class="mq-math" data-i18n-skip="true">\(A=1.00\,\mathrm{mm^2}\)</span>.</p>
+<p><strong>Scale.</strong> <span class="mq-math" data-i18n-skip="true">\(\omega_c=eB/m_e=3.52\times10^{11}\,\mathrm{s^{-1}}\)</span>, <span class="mq-math" data-i18n-skip="true">\(\hbar\omega_c=0.232\,\mathrm{meV}\)</span> e <span class="mq-math" data-i18n-skip="true">\(\ell_B=18.1\,\mathrm{nm}\)</span>.</p>
+<p><strong>Degenerazione.</strong> <span class="mq-math" data-i18n-skip="true">\(N=AeB/h=4.84\times10^8\)</span> stati per livello di Landau, prima di eventuali degenerazioni interne aggiuntive.</p>
+</article>
+<h2>Interpretazione e confronti</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Il campo non compie lavoro</h3>
+<p>Classicamente <span class="mq-math" data-i18n-skip="true">\(q\mathbf v\times\mathbf B\)</span> è perpendicolare alla velocità. Quantisticamente il campo modifica comunque lo spettro perché <span class="mq-math" data-i18n-skip="true">\(\pi_x\)</span> e <span class="mq-math" data-i18n-skip="true">\(\pi_y\)</span> non commutano.</p>
+</article>
+<article class="lecture-card">
+<h3>Gauge diverse, stessa fisica</h3>
+<p>Le autofunzioni cambiano fase e forma apparente, ma energie, densità di probabilità, correnti e degenerazione sono gauge-invarianti. Tra le due gauge usate vale <span class="mq-math" data-i18n-skip="true">\(\mathbf A_L-\mathbf A_S=\boldsymbol\nabla(Bxy/2)\)</span>.</p>
+</article>
+<article class="lecture-card">
+<h3>Landau contro Zeeman</h3>
+<p>Landau quantizza il moto orbitale di una carica libera. Zeeman descrive lo spostamento di livelli atomici con momento magnetico; il caso normale richiede termini di singoletto e non è un generico doppietto di spin.</p>
+</article>
+<article class="lecture-card">
+<h3>Due e tre dimensioni</h3>
+<p>In due dimensioni ogni livello di Landau è discreto e macroscopicamente degenere. In tre dimensioni la dispersione continua <span class="mq-math" data-i18n-skip="true">\(\hbar^2k_z^2/(2m)\)</span> genera bande unidimensionali.</p>
+</article>
 </div>
-<p>
-    Questo scarto energetico è direttamente proporzionale all'intensità del campo magnetico uniforme \( B_z \), e l'effetto è alla base della spettroscopia di risonanza magnetica e dell'operazione di spin nei sistemi quantistici.
-</p>
-<h2>Conseguenze Fisiche</h2>
-<p>
-    L'effetto Zeeman normale si manifesta come una separazione delle linee spettrali di una sorgente emettente luce o radiazione elettromagnetica in presenza di un campo magnetico. Ogni linea spettrale osservata in assenza di campo viene divisa in due linee simmetriche rispetto alla posizione originale, corrispondenti ai livelli energetici \( E_+ \) ed \( E_- \).
-</p>
-<p>
-    Nelle applicazioni moderne, i campi magnetici uniformi sono utilizzati per manipolare stati quantistici in dispositivi come i risonatori EPR (Electron Paramagnetic Resonance) o nei computer quantistici, dove il controllo preciso degli stati di spin è essenziale per il funzionamento dei qubit.
-</p>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 9</div>
-  <h2>Campo B Uniforme: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Costruire l'Hamiltoniana con accoppiamento minimo e separare termini orbitale, diamagnetico e spin.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Il campo entra tramite \(\mathbf p-q\mathbf A\). Nel gauge simmetrico emergono un termine lineare in Lz e uno quadratico in B; per spin 1/2 si aggiunge Pauli.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Accoppiamento<span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Hamiltoniana gauge-covariante.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="H=\frac{(\mathbf p-q\mathbf A)^2}{2m}-\boldsymbol\mu_s\cdot\mathbf B"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf p\to\boldsymbol\pi=\mathbf p-q\mathbf A,\quad H_{\rm orb}=\boldsymbol\pi^2/(2m),\quad H_{\rm spin}=-\boldsymbol\mu_s\cdot\mathbf B\Rightarrow H=\frac{(\mathbf p-q\mathbf A)^2}{2m}-\boldsymbol\mu_s\cdot\mathbf B\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Gauge<span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Per \(\mathbf A=\mathbf B\times\mathbf r/2\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="H=\frac{p^2}{2m}-\frac{qB}{2m}L_z+\frac{q^2B^2r_\perp^2}{8m}+\cdots"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf A=\tfrac12\mathbf B\times\mathbf r,\quad\mathbf p\cdot\mathbf A+\mathbf A\cdot\mathbf p=\mathbf B\cdot\mathbf L,\quad A^2=B^2r_\perp^2/4\Rightarrow H=\frac{p^2}{2m}-\frac{qB}{2m}L_z+\frac{q^2B^2r_\perp^2}{8m}+\cdots\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Frequenza ciclotrone</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Particella libera nel piano.</p>
-    <p><strong>Calcolo.</strong> La scala è \(\omega_c=|q|B/m\), con livelli \(E_n=\hbar\omega_c(n+1/2)\).</p>
-    <p><strong>Risultato e controllo.</strong> La degenerazione di Landau riflette i diversi centri orbitali.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 13</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Gauge scelto ma osservabili gauge-invarianti.</li>
-          <li>Termini B² trascurabili solo in campo debole.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Il potenziale vettore modifica la fase anche quando la forza classica non compie lavoro.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Verifica l'invarianza di gauge.</li>
-          <li>Distingui segno per elettrone e carica positiva.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=268">Appunti-MQ.pdf, pp. 268-271 e 279-286: accoppiamento minimo e momento magnetico</a></li>
-          <li><a href="MQ.pdf#page=23">MQ.pdf, pp. capitolo 23: campo elettromagnetico esterno</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Usare <span class="mq-math" data-i18n-skip="true">\(\mathbf p\)</span> come momento fisico invece di <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\pi=\mathbf p-q\mathbf A\)</span>.</li>
+<li>Espandere il quadrato ignorando l'ordine di <span class="mq-math" data-i18n-skip="true">\(\mathbf p\)</span> e <span class="mq-math" data-i18n-skip="true">\(\mathbf A\)</span>.</li>
+<li>Dimenticare il segno di <span class="mq-math" data-i18n-skip="true">\(q\)</span> nel centro guida, pur usando <span class="mq-math" data-i18n-skip="true">\(|q|\)</span> in <span class="mq-math" data-i18n-skip="true">\(\omega_c\)</span> e <span class="mq-math" data-i18n-skip="true">\(\ell_B\)</span>.</li>
+<li>Attribuire significato fisico separato alla scelta di gauge.</li>
+<li>Contare <span class="mq-math" data-i18n-skip="true">\(k_y\)</span> come nuova energia invece che come degenerazione del centro guida.</li>
+</ul>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Limiti del modello</h3>
+<ul>
+<li>Campo uniforme, particella non relativistica e assenza di interazioni tra particelle.</li>
+<li>Bordi reali modificano gli stati vicino al margine e producono stati di bordo.</li>
+<li>Per campi estremi servono correzioni relativistiche; nei solidi si usa spesso la massa efficace.</li>
+<li>Un fattore <span class="mq-math" data-i18n-skip="true">\(g\)</span> materiale può differire sensibilmente da due.</li>
+</ul>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Distingui momento canonico e cinetico e scrivi l'accoppiamento minimo.</li>
+<li>Dimostra la covarianza sotto trasformazione di gauge.</li>
+<li>Espandi il quadrato mantenendo l'ordinamento degli operatori.</li>
+<li>Ricava l'Hamiltoniana in gauge simmetrica e identifica <span class="mq-math" data-i18n-skip="true">\(L_z\)</span> e il termine diamagnetico.</li>
+<li>Calcola <span class="mq-math" data-i18n-skip="true">\([\pi_x,\pi_y]\)</span> e ottieni la forza di Lorentz da Heisenberg.</li>
+<li>Riduci la gauge di Landau a un oscillatore centrato in <span class="mq-math" data-i18n-skip="true">\(x_0\)</span>.</li>
+<li>Deriva spettro, lunghezza magnetica e degenerazione per unità di area.</li>
+<li>Collega il conteggio al quanto di flusso <span class="mq-math" data-i18n-skip="true">\(h/|q|\)</span>.</li>
+<li>Usa l'identità di Pauli per ottenere il termine di spin e controllarne il segno per l'elettrone.</li>
+<li>Spiega perché Landau, Zeeman normale e scissione di spin non sono sinonimi.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P3_DIM_13-18.txt#L23">DIM 13</a> - momento magnetico, campo uniforme e collegamento con Zeeman</li>
+<li><a href="Appunti-MQ.pdf#page=268">Appunti-MQ.pdf, pagine PDF 268-270</a> - accoppiamento minimo, gauge simmetrica, termini orbitale, diamagnetico e di spin</li>
+<li><a href="effetto-zeeman-normale.html">Effetto Zeeman normale</a> - applicazione atomica, regole di selezione e confronto dei regimi</li>
+</ul>
+<p class="lecture-note">Gli appunti adottano unità gaussiane in alcune formule e mostrano fattori <span class="mq-math" data-i18n-skip="true">\(1/c\)</span>. Qui tutte le equazioni sono riscritte coerentemente in unità SI.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 9 - DIM 13":"In-depth lesson - Topic 9 - DIM 13","Particella in un campo magnetico uniforme":"Particle in a uniform magnetic field","Costruire l'Hamiltoniana gauge-covariante di una particella carica, ricavare il moto ciclotronico e i livelli di Landau, contare la degenerazione e aggiungere correttamente il termine di Pauli per lo spin senza confonderlo con il normale effetto Zeeman atomico.":"Construct the gauge-covariant Hamiltonian for a charged particle, derive cyclotron motion and the Landau levels, count their degeneracy, and correctly add the Pauli spin term without confusing it with the normal atomic Zeeman effect.","Spettro orbitale":"Orbital spectrum","In tre dimensioni il campo quantizza il moto trasverso e lascia libero quello parallelo. L'energia non dipende dal centro dell'orbita, origine della degenerazione di Landau.":"In three dimensions the field quantizes transverse motion while leaving motion parallel to the field free. The energy is independent of the orbit center, which is the origin of Landau degeneracy.","Convenzione e segni":"Convention and signs","Si usa il SI e":"We use SI units, and","è la carica con segno. Per l'elettrone":"is the signed charge. For an electron",", con":", with",". La frequenza":". The frequency","è definita positiva tramite":"is defined as positive through","; il verso di rotazione conserva invece il segno di":"; the direction of rotation instead retains the sign of","Oggetti fisici e gauge":"Physical quantities and gauge choices","Momento canonico e cinetico":"Canonical and kinetic momentum","dipende dalla scelta di gauge e non coincide con il momento meccanico. L'osservabile legata alla velocità è":"depends on the gauge choice and does not equal the mechanical momentum. The observable related to velocity is","Campo uniforme, potenziali diversi":"Uniform field, different potentials","Per":"For","sono comode la gauge simmetrica e la gauge di Landau. Descrivono lo stesso campo e devono produrre lo stesso spettro.":"the symmetric gauge and Landau gauge are convenient. They describe the same field and must produce the same spectrum.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Accoppiamento minimo":"1. Minimal coupling","La sostituzione canonica introduce i potenziali senza aggiungere a mano una forza magnetica.":"The canonical substitution introduces the potentials without adding a magnetic force by hand.","2. Covarianza di gauge":"2. Gauge covariance","Potenziali diversi rappresentano gli stessi campi se anche la fase della funzione d'onda viene trasformata.":"Different potentials represent the same fields provided that the wave-function phase is transformed as well.","3. Espansione ordinata":"3. Operator-ordered expansion","In generale":"In general","non commutano; il termine misto va simmetrizzato.":"do not commute; the mixed term must be symmetrized.","4. Gauge simmetrica":"4. Symmetric gauge","Per campo costante,":"For a constant field,",", quindi il termine misto si riduce al momento angolare.":", so the mixed term reduces to angular momentum.","5. Momenti cinetici non commutanti":"5. Noncommuting kinetic momenta","La quantizzazione trasversa è già contenuta nell'algebra del momento cinetico.":"Transverse quantization is already encoded in the algebra of kinetic momentum.","6. Forza di Lorentz da Heisenberg":"6. Lorentz force from Heisenberg's equation","Il limite classico emerge dalle equazioni operatoriali; per campo uniforme l'ordinamento non crea ambiguità.":"The classical limit follows from the operator equations; for a uniform field, operator ordering creates no ambiguity.","7. Gauge di Landau":"7. Landau gauge","La traslazione lungo":"Translation along","costanti del moto e trasforma il problema trasverso in un oscillatore.":"constants of motion and turns the transverse problem into an oscillator.","8. Centro guida e lunghezza magnetica":"8. Guiding center and magnetic length",", l'oscillatore è centrato in":", the oscillator is centered at","; la larghezza naturale è la lunghezza magnetica.":"; its natural width is the magnetic length.","9. Livelli di Landau":"9. Landau levels","L'oscillatore trasverso ha passo":"The transverse oscillator has spacing","; il moto lungo il campo resta continuo.":"; motion along the field remains continuous.","10. Degenerazione per area":"10. Degeneracy per unit area","Con condizioni periodiche, i diversi":"With periodic boundary conditions, the different","spostano il centro guida senza cambiare l'energia.":"values shift the guiding center without changing the energy.","11. Quanto di flusso":"11. Flux quantum","Ogni stato di un livello occupa un'area tale da contenere un quanto di flusso per la carica considerata.":"Each state in a level occupies an area containing one flux quantum for the charge under consideration.","12. Identità di Pauli":"12. Pauli identity","Per spin":"For spin",", il termine magnetico emerge algebricamente dal quadrato di":", the magnetic term follows algebraically from the square of","13. Hamiltoniana di Pauli":"13. Pauli Hamiltonian","Per una particella di Dirac non relativistica":"For a nonrelativistic Dirac particle","; per particelle composite il fattore va inserito con il suo valore fisico.":"; for composite particles the factor must be inserted with its physical value.","14. Landau più spin per l'elettrone":"14. Landau levels plus electron spin","Con":"With",", il contributo di spin ha lo stesso passo ciclotronico ma dipende da":", the spin contribution has the same cyclotron spacing but depends on","Esempio d'esame: elettrone a 2.00 T":"Exam example: electron at 2.00 T","Elettrone in un campo uniforme":"An electron in a uniform field",", campione bidimensionale di area":", in a two-dimensional sample of area","stati per livello di Landau, prima di eventuali degenerazioni interne aggiuntive.":"states per Landau level, before any additional internal degeneracies.","Interpretazione e confronti":"Interpretation and comparisons","Il campo non compie lavoro":"The field does no work","è perpendicolare alla velocità. Quantisticamente il campo modifica comunque lo spettro perché":"is perpendicular to the velocity. Quantum mechanically, the field still changes the spectrum because","non commutano.":"do not commute.","Gauge diverse, stessa fisica":"Different gauges, same physics","Le autofunzioni cambiano fase e forma apparente, ma energie, densità di probabilità, correnti e degenerazione sono gauge-invarianti. Tra le due gauge usate vale":"The eigenfunctions change phase and apparent form, but energies, probability densities, currents, and degeneracy are gauge invariant. The two gauges used here satisfy","Landau contro Zeeman":"Landau versus Zeeman","Landau quantizza il moto orbitale di una carica libera. Zeeman descrive lo spostamento di livelli atomici con momento magnetico; il caso normale richiede termini di singoletto e non è un generico doppietto di spin.":"Landau quantization concerns the orbital motion of a free charge. The Zeeman effect describes shifts of atomic levels carrying a magnetic moment; the normal case requires singlet terms and is not a generic spin doublet.","Due e tre dimensioni":"Two and three dimensions","In due dimensioni ogni livello di Landau è discreto e macroscopicamente degenere. In tre dimensioni la dispersione continua":"In two dimensions each Landau level is discrete and macroscopically degenerate. In three dimensions the continuous dispersion","genera bande unidimensionali.":"produces one-dimensional bands.","Errori tipici":"Common errors","come momento fisico invece di":"as the physical momentum instead of","Espandere il quadrato ignorando l'ordine di":"Expanding the square while ignoring the order of","Dimenticare il segno di":"Forgetting the sign of","nel centro guida, pur usando":"in the guiding center, while using","Attribuire significato fisico separato alla scelta di gauge.":"Assigning separate physical meaning to the gauge choice.","come nuova energia invece che come degenerazione del centro guida.":"as a new energy rather than as guiding-center degeneracy.","Limiti del modello":"Limits of the model","Campo uniforme, particella non relativistica e assenza di interazioni tra particelle.":"Uniform field, nonrelativistic particle, and no interactions between particles.","Bordi reali modificano gli stati vicino al margine e producono stati di bordo.":"Physical boundaries modify states near the edge and produce edge states.","Per campi estremi servono correzioni relativistiche; nei solidi si usa spesso la massa efficace.":"Extreme fields require relativistic corrections; in solids one often uses an effective mass.","Un fattore":"A material","materiale può differire sensibilmente da due.":"factor can differ substantially from two.","Controllo da orale":"Oral exam checklist","Distingui momento canonico e cinetico e scrivi l'accoppiamento minimo.":"Distinguish canonical from kinetic momentum and write the minimal-coupling Hamiltonian.","Dimostra la covarianza sotto trasformazione di gauge.":"Demonstrate covariance under a gauge transformation.","Espandi il quadrato mantenendo l'ordinamento degli operatori.":"Expand the square while preserving operator ordering.","Ricava l'Hamiltoniana in gauge simmetrica e identifica":"Derive the Hamiltonian in symmetric gauge and identify","e il termine diamagnetico.":"and the diamagnetic term.","e ottieni la forza di Lorentz da Heisenberg.":"and obtain the Lorentz force from Heisenberg's equation.","Riduci la gauge di Landau a un oscillatore centrato in":"Reduce the Landau-gauge problem to an oscillator centered at","Deriva spettro, lunghezza magnetica e degenerazione per unità di area.":"Derive the spectrum, magnetic length, and degeneracy per unit area.","Collega il conteggio al quanto di flusso":"Relate the counting to the flux quantum","Usa l'identità di Pauli per ottenere il termine di spin e controllarne il segno per l'elettrone.":"Use the Pauli identity to obtain the spin term and check its sign for an electron.","Spiega perché Landau, Zeeman normale e scissione di spin non sono sinonimi.":"Explain why Landau quantization, the normal Zeeman effect, and spin splitting are not synonyms.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- momento magnetico, campo uniforme e collegamento con Zeeman":"- magnetic moment, uniform field, and connection with the Zeeman effect","Appunti-MQ.pdf, pagine PDF 268-270":"Appunti-MQ.pdf, PDF pages 268-270","- accoppiamento minimo, gauge simmetrica, termini orbitale, diamagnetico e di spin":"- minimal coupling, symmetric gauge, and orbital, diamagnetic, and spin terms","Effetto Zeeman normale":"Normal Zeeman effect","- applicazione atomica, regole di selezione e confronto dei regimi":"- atomic application, selection rules, and comparison of regimes","Gli appunti adottano unità gaussiane in alcune formule e mostrano fattori":"Some formulas in the notes use Gaussian units and contain factors of",". Qui tutte le equazioni sono riscritte coerentemente in unità SI.":". Here all equations are consistently rewritten in SI units.","Ritorna all'indice MQ":"Return to the MQ index","APPUNTI":"NOTES","BASE":"CORE","Base":"Core","Calcola":"Calculate","Check":"Check","Classicamente":"Classically","Contare":"Counting","DIM 13":"DIM 13","Dati.":"Given.","Def":"Def","Degenerazione.":"Degeneracy.","Fissato":"For fixed","Gauge":"Gauge","ORALE":"ORAL","Obiettivo.":"Goal.","Risultato":"Result","Scale.":"Scales.","Usare":"Using","e":"and","in":"in","rende":"makes"},"attrs":{"Spettro dei livelli di Landau in tre dimensioni":"Landau-level spectrum in three dimensions","Definizione del momento cinetico in un campo elettromagnetico":"Definition of kinetic momentum in an electromagnetic field","Gauge simmetrica e gauge di Landau per lo stesso campo uniforme":"Symmetric and Landau gauges for the same uniform field","Sostituzione di accoppiamento minimo":"Minimal-coupling substitution","Trasformazione di gauge dei potenziali e della funzione d'onda":"Gauge transformation of the potentials and wave function","Espansione ordinata del quadrato del momento cinetico":"Operator-ordered expansion of the kinetic-momentum square","Hamiltoniana orbitale in gauge simmetrica":"Orbital Hamiltonian in symmetric gauge","Commutatore delle componenti del momento cinetico":"Commutator of the kinetic-momentum components","Equazioni di Heisenberg e forza di Lorentz":"Heisenberg equations and the Lorentz force","Hamiltoniana in gauge di Landau":"Hamiltonian in Landau gauge","Centro guida e lunghezza magnetica":"Guiding center and magnetic length","Autofunzioni e spettro di Landau":"Eigenfunctions and Landau spectrum","Conteggio della degenerazione di ciascun livello di Landau":"Degeneracy count for each Landau level","Relazione tra degenerazione e quanto di flusso":"Relation between degeneracy and the flux quantum","Identità di Pauli per il momento cinetico":"Pauli identity for kinetic momentum","Hamiltoniana di Pauli con momento magnetico di spin":"Pauli Hamiltonian with spin magnetic moment","Spettro di Landau con spin per un elettrone":"Landau spectrum with spin for an electron"},"title":{"it":"Particella in un campo magnetico uniforme - Dimostrazioni e ripasso orale","en":"Particle in a uniform magnetic field - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
