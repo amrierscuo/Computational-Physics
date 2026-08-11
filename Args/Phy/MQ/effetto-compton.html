@@ -1,315 +1,334 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Effetto Compton</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .note {
-            font-size: 0.9em;
-            color: #666;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effetto Compton - Dimostrazioni e ripasso orale</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Effetto Compton</h1>
-    <h2>Osservazione sperimentale</h2>
-    <p>
-        L'effetto Compton descrive la diffusione elastica di fotoni da particelle cariche, come elettroni, ed è accompagnato 
-        da un cambiamento di lunghezza d'onda della radiazione incidente. Fu osservato per la prima volta da Arthur H. Compton nel 1923.
-    </p>
-    <p>
-        L'esperimento di Compton mostrò che, quando un fotone interagisce con un elettrone quasi libero, la lunghezza d'onda 
-        della radiazione diffusa aumenta rispetto a quella della radiazione incidente, un fenomeno che non poteva essere spiegato 
-        dalla fisica classica.
-    </p>
-
-    <h2>Spiegazione teorica</h2>
-    <p>
-        Compton interpretò il fenomeno utilizzando i principi della meccanica quantistica e della conservazione dell'energia 
-        e della quantità di moto. La variazione della lunghezza d'onda (\( \Delta \lambda \)) è data da:
-    </p>
-    <div class="formula">
-        \[
-        \Delta \lambda = \lambda' - \lambda = \frac{h}{m_e c} (1 - \cos \theta)
-        \]
+    <div class="language-switch" data-i18n-skip="true" role="group" aria-label="Lingua / Language">
+      <button data-language="it" type="button" aria-pressed="false">ITA</button>
+      <button data-language="en" type="button" aria-pressed="false">ENG</button>
     </div>
-    
-        
-        <ul>
-            <li>\( \lambda \): Lunghezza d'onda della radiazione incidente</li>
-            <li>\( \lambda' \): Lunghezza d'onda della radiazione diffusa</li>
-            <li>\( h \): Costante di Planck (\( 6.626 \times 10^{-34} \, \text{J·s} \))</li>
-            <li>\( m_e \): Massa dell'elettrone (\( 9.109 \times 10^{-31} \, \text{kg} \))</li>
-            <li>\( c \): Velocità della luce (\( 3.00 \times 10^8 \, \text{m/s} \))</li>
-            <li>\( \theta \): Angolo di diffusione del fotone</li>
-        </ul>
-    
+<main id="lezione-compton" class="lecture-depth" data-mq-enrichment="2026-08-11">
+  <div class="lecture-kicker">Lezione approfondita - Argomento 1 - DIM 18</div>
+  <h1>Effetto Compton</h1>
+  <p class="lecture-lead"><strong>Obiettivo.</strong> Dall'esperimento di diffusione dei raggi X, derivare senza salti lo spostamento Compton usando il quadrimpulso, ricavare energia e direzione del rinculo e chiarire quali osservazioni richiedono energia e impulso corpuscolari del fotone.</p>
 
-    <h2>Conservazione dell'energia e della quantità di moto</h2>
-    <p>
-        Per spiegare l'effetto, Compton applicò la conservazione dell'energia e della quantità di moto tra il fotone e l'elettrone. 
-        L'energia totale è data da:
-    </p>
-    <div class="formula">
-        \[
-        h \nu = h \nu' + K
-        \]
-    </div>
-    <p>
-        Dove:
-        <ul>
-            <li>\( \nu \): Frequenza del fotone incidente</li>
-            <li>\( \nu' \): Frequenza del fotone diffuso</li>
-            <li>\( K \): Energia cinetica dell'elettrone</li>
-        </ul>
-    
-    <p>
-        La quantità di moto è conservata sia nella direzione incidente che in quella perpendicolare:
-    
-    <div class="formula">
-        \[
-        p_\text{fotone} = p_\text{fotone'} + p_\text{elettrone}
-        \]
-    </div>
-
-    <h2>Implicazioni teoriche</h2>
-    <p>
-        L'effetto Compton conferma la natura particellare della luce, fornendo evidenza diretta della dualità onda-particella. 
-        Ha anche dimostrato la validità del concetto di fotone come quanti di energia, consolidando la teoria quantistica 
-        della radiazione.
-   
-
-    <h2>Esperimenti successivi</h2>
-    <p>
-        Gli esperimenti di diffusione Compton sono stati fondamentali per lo sviluppo della fisica moderna. Le applicazioni includono:
-    </p>
-    <ul>
-        <li>Studio delle proprietà elettroniche nei materiali.</li>
-        <li>Indagini sull'interazione radiazione-materia in astrofisica.</li>
-        <li>Utilizzo nei dispositivi medici come i tomografi a emissione di positroni (PET).</li>
-    </ul>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 1</div>
-  <h2>Effetto Compton: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare lo spostamento Compton con conservazione relativistica di energia e impulso e distinguerlo da un semplice assorbimento.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La diffusione di raggi X su elettroni quasi liberi produce una componente con lunghezza d'onda maggiore di quella incidente. La variazione dipende dall'angolo di diffusione e non dal materiale: è quindi una proprietà cinematica dell'urto tra un fotone e un elettrone. Il fotone porta energia \(E=hc/\lambda\) e impulso \(p=h/\lambda\), mentre l'elettrone deve essere trattato relativisticamente.</p>
-  <p>L'analisi usa due conservazioni vettoriali: energia totale e impulso. Eliminando l'impulso finale dell'elettrone si ottiene una formula che non contiene l'energia di legame. L'approssimazione di elettrone libero è giustificata quando l'energia del fotone è molto maggiore delle energie atomiche tipiche; gli effetti di legame allargano la riga ma non cambiano il nucleo della cinematica.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Conservazione dell'energia<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>L'elettrone iniziale è assunto fermo. Dopo l'urto il fotone ha energia (È) e l'elettrone energia relativistica \(E_e\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="E+mc^2=E&#x27;+E_e"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle E_{\rm in}=E_{\rm out}:\quad E+mc^2=E'+\sqrt{p_e^2c^2+m^2c^4}=E'+E_e\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Conservazione dell'impulso<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Il quadrato del vettore impulso elettronico finale si ricava dal triangolo formato dagli impulsi dei due fotoni.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="p_e^2=p^2+p&#x27;^2-2pp&#x27;\cos\theta"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf p_e=\mathbf p-\mathbf p'\ \Rightarrow\ p_e^2=(\mathbf p-\mathbf p')^2=p^2+p'^2-2pp'\cos\theta\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Relazione energia-impulso<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Si usa \(E_e^2=p_e^2c^2+m^2c^4\) e si sostituiscono \(p=E/c\), \(p'=È/c\). I termini quadratici si cancellano lasciando una relazione lineare in \(1/È\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\frac{1}{E&#x27;}-\frac{1}{E}=\frac{1-\cos\theta}{mc^2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (E+mc^2-E')^2=c^2(p^2+p'^2-2pp'\cos\theta)+m^2c^4,\quad p=E/c\ \Rightarrow\ \frac1{E'}-\frac1E=\frac{1-\cos\theta}{mc^2}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>4. Spostamento in lunghezza d'onda<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Moltiplicando per (hc) emerge la lunghezza d'onda Compton dell'elettrone.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\Delta\lambda=\lambda&#x27;-\lambda=\frac{h}{mc}(1-\cos\theta)=\lambda_C(1-\cos\theta)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle E=hc/\lambda,\ E'=hc/\lambda'\ \Rightarrow\ \lambda'-\lambda=\frac h{mc}(1-\cos\theta)=\lambda_C(1-\cos\theta)\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Retrodiffusione</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Un fotone da \(100\,\mathrm{keV}\) viene diffuso a \(180^\circ\).</p>
-    <p><strong>Calcolo.</strong> Per \(\theta=\pi\), \(1/È=1/E+2/(mc^2)\). Con \(mc^2=511\,\mathrm{keV}\), si ottiene \(È\simeq71.9\,\mathrm{keV}\).</p>
-    <p><strong>Risultato e controllo.</strong> L'elettrone riceve circa \(28.1\,\mathrm{keV}\). Lo spostamento massimo è \(2\lambda_C\simeq4.86\,\mathrm{pm}\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 18</a> - copione e passaggi richiesti all'orale</li></ul></details>
   <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Elettrone iniziale libero o debolmente legato e approssimativamente fermo.</li>
-          <li>Conservazione relativistica completa: la formula non segue dalla sola energia classica.</li>
-          <li>A \(\theta=0\) lo spostamento è nullo; a \(\theta=\pi\) è massimo.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Compton dimostra contemporaneamente due proprietà corpuscolari del fotone: energia e impulso. Non basta attribuire alla luce pacchetti energetici, perché la dipendenza angolare nasce dal bilancio vettoriale dell'impulso.</p></article>
+    <article class="lecture-card">
+      <h3>Schema sperimentale</h3>
+      <p>Un fascio quasi monocromatico di raggi X, di lunghezza d'onda \(\lambda\), incide su un bersaglio leggero. Uno spettrometro misura a un angolo \(\theta\) la radiazione diffusa. Oltre alla componente non spostata, associata soprattutto allo scattering coerente su sistemi legati, compare una componente con \(\lambda'>\lambda\).</p>
+      <p class="lecture-note">Lo spostamento della componente Compton dipende dall'angolo, non dal materiale del bersaglio.</p>
+    </article>
+    <article class="lecture-card">
+      <h3>Tre osservazioni decisive</h3>
+      <ul class="observation-list">
+        <li>La frequenza diffusa è minore: il fotone cede energia all'elettrone.</li>
+        <li>Lo spostamento cresce con \(1-\cos\theta\) ed è massimo in retrodiffusione.</li>
+        <li>Il valore è fissato dalla massa dell'elettrone attraverso \(h/(m_ec)\).</li>
+        <li>Il bilancio richiede una quantità di moto fotonica \(p_\gamma=h/\lambda\).</li>
+      </ul>
+    </article>
   </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Ricava il limite \(\Delta\lambda=0\) per diffusione in avanti.</li>
-          <li>Spiega perché lo spostamento è indipendente dalla lunghezza d'onda incidente ma l'energia finale non lo è.</li>
-          <li>Confronta \(\lambda_C\) con le scale atomiche e commenta la sua piccolezza.</li></ul></article>
 
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=24">Appunti-MQ.pdf, pp. 24-26: cinematica relativistica fotone-elettrone</a></li>
-          <li><a href="BibbiaAleHD.pdf#page=3">BibbiaAleHD.pdf, pp. 3-4: interpretazione corpuscolare</a></li>
+  <h2>Perché Thomson non basta</h2>
+  <div class="lecture-grid">
+    <article class="lecture-card lecture-warning">
+      <h3>Previsione ondulatoria classica</h3>
+      <p>Nel modello di Thomson il campo incidente forza un elettrone a oscillare alla stessa frequenza. L'elettrone riemette quindi radiazione con frequenza uguale a quella incidente: cambia la direzione e l'intensità angolare, ma non compare una nuova lunghezza d'onda dipendente da \(\theta\).</p>
+    </article>
+    <article class="lecture-card lecture-result">
+      <h3>Interpretazione corpuscolare</h3>
+      <p>Compton tratta il processo come un urto relativistico tra un fotone e un elettrone quasi libero. Il fotone porta \(E_\gamma=h\nu\) e \(\mathbf p_\gamma=\hbar\mathbf k\), con \(|\mathbf p_\gamma|=E_\gamma/c=h/\lambda\). La dipendenza angolare nasce dalla conservazione vettoriale dell'impulso.</p>
+    </article>
+  </div>
+
+  <h2>Dimostrazione covariante compatta</h2>
+  <div class="lecture-steps">
+    <article class="lecture-card lecture-step">
+      <h4>1. Convenzioni<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Con metrica \((+,-,-,-)\), un quadrimpulso è \(P=(E/c,\mathbf p)\) e soddisfa \(P^2=m^2c^2\). Per il fotone la massa è nulla.</p>
+      <div class="lecture-formula" aria-label="Quadrimpulso del fotone"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle K=\left(\frac Ec,\mathbf p_\gamma\right),\quad K^2=0\Rightarrow |\mathbf p_\gamma|=\frac Ec=\frac h\lambda,\qquad E=h\nu=\frac{hc}{\lambda}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>2. Stato iniziale<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>L'elettrone bersaglio è assunto libero e fermo. Indichiamo con \(K,K'\) i fotoni iniziale e finale, con \(P,P'\) l'elettrone iniziale e quello di rinculo.</p>
+      <div class="lecture-formula" aria-label="Quadrimpulsi iniziali e finali"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P=(m_ec,\mathbf0),\quad P^2=P'^2=m_e^2c^2,\quad K^2=K'^2=0,\quad P+K=P'+K'\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>3. Isolamento di \(P'\)<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>La conservazione del quadrimpulso dà \(P'=P+K-K'\). Elevare al quadrato elimina direttamente l'impulso ignoto dell'elettrone finale.</p>
+      <div class="lecture-formula" aria-label="Sviluppo dell'invariante"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle m_e^2c^2=P'^2=(P+K-K')^2=P^2+K^2+K'^2+2P{\cdot}K-2P{\cdot}K'-2K{\cdot}K'\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>4. Prodotti scalari<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Nel sistema di laboratorio \(P\) non ha parte spaziale. L'angolo tra i fotoni è \(\theta\), quindi il loro prodotto contiene \(1-\cos\theta\).</p>
+      <div class="lecture-formula" aria-label="Calcolo dei prodotti scalari"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P{\cdot}K=m_eE,\quad P{\cdot}K'=m_eE',\quad K{\cdot}K'=\frac{EE'}{c^2}-\frac{EE'}{c^2}\cos\theta=\frac{EE'}{c^2}(1-\cos\theta)\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>5. Relazione energetica<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>I termini di massa ai due membri si cancellano. Dividendo per \(m_eEE'\) si ottiene la forma più utile per passare alle lunghezze d'onda.</p>
+      <div class="lecture-formula" aria-label="Relazione tra energie dei fotoni"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle 0=2m_e(E-E')-\frac{2EE'}{c^2}(1-\cos\theta)\Rightarrow \frac1{E'}-\frac1E=\frac{1-\cos\theta}{m_ec^2}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>6. Formula di Compton<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Poiché \(1/E=\lambda/(hc)\), la relazione precedente diventa uno spostamento di lunghezza d'onda. La costante \(\lambda_C\) usa \(h\), non \(\hbar\).</p>
+      <div class="lecture-formula" aria-label="Derivazione dello spostamento Compton"><span class="lecture-proof-tag">Esito</span><span class="lecture-proof-math">\(\displaystyle \frac{\lambda'-\lambda}{hc}=\frac{1-\cos\theta}{m_ec^2}\Rightarrow\boxed{\Delta\lambda=\lambda'-\lambda=\lambda_C(1-\cos\theta)},\quad \lambda_C=\frac h{m_ec}=2.426\,\mathrm{pm}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>7. Energia diffusa<span class="lecture-step-boss">ORALE</span></h4>
+      <p>Invertendo la relazione energetica si legge quanto il fotone perde in funzione dell'angolo. Il parametro naturale è \(\alpha=E/(m_ec^2)\).</p>
+      <div class="lecture-formula" aria-label="Energia finale del fotone"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle E'=\frac{E}{1+\alpha(1-\cos\theta)},\qquad \alpha=\frac{E}{m_ec^2},\qquad T_e=E-E'\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>8. Rinculo elettronico<span class="lecture-step-boss">ORALE</span></h4>
+      <p>Dalla conservazione tridimensionale \(\mathbf p_e=\mathbf p_\gamma-\mathbf p'_\gamma\). Se \(\varphi\) è l'angolo di rinculo rispetto al fascio incidente, componenti e modulo seguono dal triangolo degli impulsi.</p>
+      <div class="lecture-formula" aria-label="Impulso e angolo di rinculo"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle p_e^2=p_\gamma^2+p_\gamma'^2-2p_\gamma p_\gamma'\cos\theta,\qquad \tan\varphi=\frac{p_\gamma'\sin\theta}{p_\gamma-p_\gamma'\cos\theta}\)</span></div>
+    </article>
+  </div>
+
+  <h2>Limiti che devono tornare</h2>
+  <div class="lecture-grid">
+    <article class="lecture-card">
+      <h3>Controlli angolari</h3>
+      <ul>
+        <li>Diffusione in avanti: \(\theta=0\Rightarrow\Delta\lambda=0\) e \(E'=E\).</li>
+        <li>Retrodiffusione: \(\theta=\pi\Rightarrow\Delta\lambda_{\max}=2\lambda_C\).</li>
+        <li>A \(\theta=90^\circ\): \(\Delta\lambda=\lambda_C\).</li>
+      </ul>
+    </article>
+    <article class="lecture-card">
+      <h3>Regime Thomson</h3>
+      <p>Se \(E\ll m_ec^2\), allora \(\alpha\ll1\) ed \(E'/E\simeq1-\alpha(1-\cos\theta)\). Lo spostamento assoluto resta \(\lambda_C(1-\cos\theta)\), ma quello relativo \(\Delta\lambda/\lambda\) è piccolo: il limite classico diventa una buona approssimazione.</p>
+      <p class="lecture-note">La formula di Compton determina la cinematica; la probabilità angolare richiede la sezione d'urto di Klein-Nishina.</p>
+    </article>
+  </div>
+
+  <h2>Esempio d'esame: retrodiffusione di un fotone da 100 keV</h2>
+  <article class="lecture-card lecture-result lecture-example">
+    <p><strong>Dati.</strong> \(E=100\,\mathrm{keV}\), \(m_ec^2=511\,\mathrm{keV}\), \(\theta=\pi\). La lunghezza iniziale è \(\lambda=hc/E\simeq12.398\,\mathrm{pm}\).</p>
+    <p><strong>Calcolo.</strong> \(E'=100/[1+2(100/511)]\simeq71.88\,\mathrm{keV}\). Equivalentemente, \(\lambda'=\lambda+2\lambda_C\simeq17.250\,\mathrm{pm}\).</p>
+    <p><strong>Risultato.</strong> L'elettrone riceve \(T_e=E-E'\simeq28.12\,\mathrm{keV}\). Il controllo energetico è immediato: \(E=E'+T_e\).</p>
+  </article>
+
+  <div class="lecture-grid">
+    <article class="lecture-card lecture-warning">
+      <h3>Ipotesi e correzioni reali</h3>
+      <ul>
+        <li>L'elettrone è inizialmente fermo, libero oppure legato con energia trascurabile rispetto a \(E\).</li>
+        <li>Il moto iniziale degli elettroni produce allargamento Doppler della riga Compton.</li>
+        <li>Il legame atomico può lasciare una componente coerente non spostata e modificare il profilo misurato.</li>
+        <li>L'effetto Compton inverso è un altro regime: un elettrone relativistico trasferisce energia al fotone.</li>
+      </ul>
+    </article>
+    <article class="lecture-card">
+      <h3>Errori tipici</h3>
+      <ul>
+        <li>Confondere \(\lambda_C=h/(m_ec)\) con la lunghezza ridotta \(\bar\lambda_C=\hbar/(m_ec)\).</li>
+        <li>Usare soltanto la conservazione dell'energia, perdendo la dipendenza angolare.</li>
+        <li>Trattare classicamente l'energia cinetica dell'elettrone quando il rinculo non è non relativistico.</li>
+        <li>Dire che lo shift dipende da \(\lambda\): dipende da \(\theta\), mentre lo shift relativo dipende anche da \(\lambda\).</li>
+      </ul>
+    </article>
+  </div>
+
+  <article class="lecture-card lecture-oral">
+    <h3>Controllo da orale</h3>
+    <ul class="lecture-checks">
+      <li>Definisci tutti i quadrimpulsi e specifica la metrica prima di elevarli al quadrato.</li>
+      <li>Mostra perché \(K{\cdot}K'=EE'(1-\cos\theta)/c^2\).</li>
+      <li>Deriva la formula senza saltare la cancellazione degli invarianti di massa.</li>
+      <li>Ricava \(E'(\theta)\), \(T_e\) e l'angolo di rinculo \(\varphi\).</li>
+      <li>Verifica i limiti \(0\), \(90^\circ\) e \(180^\circ\).</li>
+      <li>Spiega perché il solo modello ondulatorio classico non produce lo spostamento osservato.</li>
+      <li>Distingui componente Compton, componente coerente non spostata e allargamento Doppler.</li>
+      <li>Controlla le dimensioni di \(h/(m_ec)\) e il valore numerico \(2.426\,\mathrm{pm}\).</li>
     </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
+  </article>
 
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+  <details class="boss-ref">
+    <summary>Boss, appunti e pagine verificate</summary>
+    <ul>
+      <li><a href="boss/P3_DIM_13-18.txt">DIM 18</a> - crisi della fisica classica, impulso del fotone e formula di Compton</li>
+      <li><a href="Appunti-MQ.pdf#page=25">Appunti-MQ.pdf, pagine PDF 25-26</a> - quadrimpulsi, invariante e derivazione dello spostamento</li>
+      <li><a href="BibbiaAleHD.pdf#page=4">BibbiaAleHD.pdf, pagina PDF 4</a> - urto relativistico e schema angolare degli appunti di lezione</li>
+    </ul>
+    <p class="lecture-note">La lezione integra i passaggi delle dispense con i controlli cinematici, il rinculo elettronico e le distinzioni sperimentali richieste all'orale.</p>
+  </details>
+
+  <div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 1 - DIM 18":"In-depth lesson - Topic 1 - DIM 18","Effetto Compton":"Compton effect","Dall'esperimento di diffusione dei raggi X, derivare senza salti lo spostamento Compton usando il quadrimpulso, ricavare energia e direzione del rinculo e chiarire quali osservazioni richiedono energia e impulso corpuscolari del fotone.":"Starting from the X-ray scattering experiment, derive the Compton shift step by step with four-momentum conservation, obtain the recoil energy and direction, and identify which observations require the photon to carry both energy and momentum.","Schema sperimentale":"Experimental setup","Un fascio quasi monocromatico di raggi X, di lunghezza d'onda \\(\\lambda\\), incide su un bersaglio leggero. Uno spettrometro misura a un angolo \\(\\theta\\) la radiazione diffusa. Oltre alla componente non spostata, associata soprattutto allo scattering coerente su sistemi legati, compare una componente con \\(\\lambda'>\\lambda\\).":"An almost monochromatic X-ray beam of wavelength \\(\\lambda\\) strikes a light target. A spectrometer measures the scattered radiation at an angle \\(\\theta\\). In addition to an unshifted component, associated mainly with coherent scattering by bound systems, a component with \\(\\lambda'>\\lambda\\) appears.","Lo spostamento della componente Compton dipende dall'angolo, non dal materiale del bersaglio.":"The shift of the Compton component depends on the angle, not on the target material.","Tre osservazioni decisive":"Three decisive observations","La frequenza diffusa è minore: il fotone cede energia all'elettrone.":"The scattered frequency is lower: the photon transfers energy to the electron.","Lo spostamento cresce con \\(1-\\cos\\theta\\) ed è massimo in retrodiffusione.":"The shift increases with \\(1-\\cos\\theta\\) and is greatest for backscattering.","Il valore è fissato dalla massa dell'elettrone attraverso \\(h/(m_ec)\\).":"Its value is set by the electron mass through \\(h/(m_ec)\\).","Il bilancio richiede una quantità di moto fotonica \\(p_\\gamma=h/\\lambda\\).":"Momentum balance requires the photon momentum \\(p_\\gamma=h/\\lambda\\).","Perché Thomson non basta":"Why Thomson scattering is insufficient","Previsione ondulatoria classica":"Classical wave prediction","Nel modello di Thomson il campo incidente forza un elettrone a oscillare alla stessa frequenza. L'elettrone riemette quindi radiazione con frequenza uguale a quella incidente: cambia la direzione e l'intensità angolare, ma non compare una nuova lunghezza d'onda dipendente da \\(\\theta\\).":"In the Thomson model, the incident field drives an electron to oscillate at the same frequency. The electron then reradiates at the incident frequency: the direction and angular intensity may change, but no new \\(\\theta\\)-dependent wavelength appears.","Interpretazione corpuscolare":"Particle interpretation","Compton tratta il processo come un urto relativistico tra un fotone e un elettrone quasi libero. Il fotone porta \\(E_\\gamma=h\\nu\\) e \\(\\mathbf p_\\gamma=\\hbar\\mathbf k\\), con \\(|\\mathbf p_\\gamma|=E_\\gamma/c=h/\\lambda\\). La dipendenza angolare nasce dalla conservazione vettoriale dell'impulso.":"Compton treats the process as a relativistic collision between a photon and an almost free electron. The photon carries \\(E_\\gamma=h\\nu\\) and \\(\\mathbf p_\\gamma=\\hbar\\mathbf k\\), with \\(|\\mathbf p_\\gamma|=E_\\gamma/c=h/\\lambda\\). The angular dependence follows from vector momentum conservation.","Dimostrazione covariante compatta":"Compact covariant derivation","Con metrica \\((+,-,-,-)\\), un quadrimpulso è \\(P=(E/c,\\mathbf p)\\) e soddisfa \\(P^2=m^2c^2\\). Per il fotone la massa è nulla.":"With metric \\((+,-,-,-)\\), a four-momentum is \\(P=(E/c,\\mathbf p)\\) and satisfies \\(P^2=m^2c^2\\). A photon has zero mass.","2. Stato iniziale":"2. Initial state","L'elettrone bersaglio è assunto libero e fermo. Indichiamo con \\(K,K'\\) i fotoni iniziale e finale, con \\(P,P'\\) l'elettrone iniziale e quello di rinculo.":"The target electron is assumed to be free and at rest. Let \\(K,K'\\) denote the initial and final photons, and \\(P,P'\\) the initial and recoiling electron.","3. Isolamento di \\(P'\\)":"3. Isolating \\(P'\\)","La conservazione del quadrimpulso dà \\(P'=P+K-K'\\). Elevare al quadrato elimina direttamente l'impulso ignoto dell'elettrone finale.":"Four-momentum conservation gives \\(P'=P+K-K'\\). Squaring this relation directly eliminates the unknown momentum of the final electron.","4. Prodotti scalari":"4. Scalar products","Nel sistema di laboratorio \\(P\\) non ha parte spaziale. L'angolo tra i fotoni è \\(\\theta\\), quindi il loro prodotto contiene \\(1-\\cos\\theta\\).":"In the laboratory frame, \\(P\\) has no spatial component. The angle between the photons is \\(\\theta\\), so their scalar product contains \\(1-\\cos\\theta\\).","5. Relazione energetica":"5. Energy relation","I termini di massa ai due membri si cancellano. Dividendo per \\(m_eEE'\\) si ottiene la forma più utile per passare alle lunghezze d'onda.":"The mass terms on both sides cancel. Dividing by \\(m_eEE'\\) gives the form most useful for converting to wavelengths.","6. Formula di Compton":"6. Compton formula","Poiché \\(1/E=\\lambda/(hc)\\), la relazione precedente diventa uno spostamento di lunghezza d'onda. La costante \\(\\lambda_C\\) usa \\(h\\), non \\(\\hbar\\).":"Because \\(1/E=\\lambda/(hc)\\), the preceding relation becomes a wavelength shift. The constant \\(\\lambda_C\\) contains \\(h\\), not \\(\\hbar\\).","7. Energia diffusa":"7. Scattered-photon energy","Invertendo la relazione energetica si legge quanto il fotone perde in funzione dell'angolo. Il parametro naturale è \\(\\alpha=E/(m_ec^2)\\).":"Inverting the energy relation shows how much energy the photon loses as a function of angle. The natural parameter is \\(\\alpha=E/(m_ec^2)\\).","8. Rinculo elettronico":"8. Electron recoil","Dalla conservazione tridimensionale \\(\\mathbf p_e=\\mathbf p_\\gamma-\\mathbf p'_\\gamma\\). Se \\(\\varphi\\) è l'angolo di rinculo rispetto al fascio incidente, componenti e modulo seguono dal triangolo degli impulsi.":"Three-momentum conservation gives \\(\\mathbf p_e=\\mathbf p_\\gamma-\\mathbf p'_\\gamma\\). If \\(\\varphi\\) is the recoil angle relative to the incident beam, its components and magnitude follow from the momentum triangle.","Limiti che devono tornare":"Required consistency limits","Controlli angolari":"Angular checks","Diffusione in avanti: \\(\\theta=0\\Rightarrow\\Delta\\lambda=0\\) e \\(E'=E\\).":"Forward scattering: \\(\\theta=0\\Rightarrow\\Delta\\lambda=0\\) and \\(E'=E\\).","Regime Thomson":"Thomson regime","Se \\(E\\ll m_ec^2\\), allora \\(\\alpha\\ll1\\) ed \\(E'/E\\simeq1-\\alpha(1-\\cos\\theta)\\). Lo spostamento assoluto resta \\(\\lambda_C(1-\\cos\\theta)\\), ma quello relativo \\(\\Delta\\lambda/\\lambda\\) è piccolo: il limite classico diventa una buona approssimazione.":"If \\(E\\ll m_ec^2\\), then \\(\\alpha\\ll1\\) and \\(E'/E\\simeq1-\\alpha(1-\\cos\\theta)\\). The absolute shift remains \\(\\lambda_C(1-\\cos\\theta)\\), but the relative shift \\(\\Delta\\lambda/\\lambda\\) is small, so the classical limit becomes a good approximation.","La formula di Compton determina la cinematica; la probabilità angolare richiede la sezione d'urto di Klein-Nishina.":"The Compton formula fixes the kinematics; the angular scattering probability requires the Klein-Nishina cross section.","Esempio d'esame: retrodiffusione di un fotone da 100 keV":"Exam example: backscattering of a 100 keV photon","\\(E=100\\,\\mathrm{keV}\\), \\(m_ec^2=511\\,\\mathrm{keV}\\), \\(\\theta=\\pi\\). La lunghezza iniziale è \\(\\lambda=hc/E\\simeq12.398\\,\\mathrm{pm}\\).":"\\(E=100\\,\\mathrm{keV}\\), \\(m_ec^2=511\\,\\mathrm{keV}\\), and \\(\\theta=\\pi\\). The initial wavelength is \\(\\lambda=hc/E\\simeq12.398\\,\\mathrm{pm}\\).","L'elettrone riceve \\(T_e=E-E'\\simeq28.12\\,\\mathrm{keV}\\). Il controllo energetico è immediato: \\(E=E'+T_e\\).":"The electron receives \\(T_e=E-E'\\simeq28.12\\,\\mathrm{keV}\\). The energy check is immediate: \\(E=E'+T_e\\).","Ipotesi e correzioni reali":"Real assumptions and corrections","L'elettrone è inizialmente fermo, libero oppure legato con energia trascurabile rispetto a \\(E\\).":"The electron is initially at rest and either free or bound with negligible binding energy compared with \\(E\\).","Il moto iniziale degli elettroni produce allargamento Doppler della riga Compton.":"The initial motion of the electrons produces Doppler broadening of the Compton line.","Il legame atomico può lasciare una componente coerente non spostata e modificare il profilo misurato.":"Atomic binding can leave an unshifted coherent component and modify the measured profile.","L'effetto Compton inverso è un altro regime: un elettrone relativistico trasferisce energia al fotone.":"Inverse Compton scattering is a different regime in which a relativistic electron transfers energy to a photon.","Errori tipici":"Common errors","Confondere \\(\\lambda_C=h/(m_ec)\\) con la lunghezza ridotta \\(\\bar\\lambda_C=\\hbar/(m_ec)\\).":"Confusing \\(\\lambda_C=h/(m_ec)\\) with the reduced wavelength \\(\\bar\\lambda_C=\\hbar/(m_ec)\\).","Usare soltanto la conservazione dell'energia, perdendo la dipendenza angolare.":"Using energy conservation alone and thereby losing the angular dependence.","Trattare classicamente l'energia cinetica dell'elettrone quando il rinculo non è non relativistico.":"Using the nonrelativistic kinetic-energy formula when the electron recoil is relativistic.","Dire che lo shift dipende da \\(\\lambda\\): dipende da \\(\\theta\\), mentre lo shift relativo dipende anche da \\(\\lambda\\).":"Saying that the absolute shift depends on \\(\\lambda\\): it depends on \\(\\theta\\), whereas the relative shift also depends on \\(\\lambda\\).","Controllo da orale":"Oral-exam check","Definisci tutti i quadrimpulsi e specifica la metrica prima di elevarli al quadrato.":"Define every four-momentum and state the metric before squaring the conservation law.","Mostra perché \\(K{\\cdot}K'=EE'(1-\\cos\\theta)/c^2\\).":"Show why \\(K{\\cdot}K'=EE'(1-\\cos\\theta)/c^2\\).","Deriva la formula senza saltare la cancellazione degli invarianti di massa.":"Derive the formula without skipping the cancellation of the mass invariants.","Ricava \\(E'(\\theta)\\), \\(T_e\\) e l'angolo di rinculo \\(\\varphi\\).":"Obtain \\(E'(\\theta)\\), \\(T_e\\), and the recoil angle \\(\\varphi\\).","Verifica i limiti \\(0\\), \\(90^\\circ\\) e \\(180^\\circ\\).":"Verify the limits \\(0\\), \\(90^\\circ\\), and \\(180^\\circ\\).","Spiega perché il solo modello ondulatorio classico non produce lo spostamento osservato.":"Explain why the classical wave model alone does not produce the observed shift.","Distingui componente Compton, componente coerente non spostata e allargamento Doppler.":"Distinguish the Compton component, the unshifted coherent component, and Doppler broadening.","Controlla le dimensioni di \\(h/(m_ec)\\) e il valore numerico \\(2.426\\,\\mathrm{pm}\\).":"Check the dimensions of \\(h/(m_ec)\\) and the numerical value \\(2.426\\,\\mathrm{pm}\\).","Boss, appunti e pagine verificate":"Boss material, lecture notes, and verified pages","- crisi della fisica classica, impulso del fotone e formula di Compton":"- crisis of classical physics, photon momentum, and the Compton formula","Appunti-MQ.pdf, pagine PDF 25-26":"Appunti-MQ.pdf, PDF pages 25-26","- quadrimpulsi, invariante e derivazione dello spostamento":"- four-momenta, invariant, and derivation of the shift","BibbiaAleHD.pdf, pagina PDF 4":"BibbiaAleHD.pdf, PDF page 4","- urto relativistico e schema angolare degli appunti di lezione":"- relativistic collision and angular diagram in the lecture notes","La lezione integra i passaggi delle dispense con i controlli cinematici, il rinculo elettronico e le distinzioni sperimentali richieste all'orale.":"This lesson combines the derivation in the lecture notes with kinematic checks, electron recoil, and the experimental distinctions required for the oral exam.","Ritorna all'indice MQ":"Return to the Quantum Mechanics index","Obiettivo.":"Objective.","1. Convenzioni":"1. Conventions","Base":"Core","Esito":"Result","ORALE":"ORAL","Check":"Check","Retrodiffusione: \\(\\theta=\\pi\\Rightarrow\\Delta\\lambda_{\\max}=2\\lambda_C\\).":"Backscattering: \\(\\theta=\\pi\\Rightarrow\\Delta\\lambda_{\\max}=2\\lambda_C\\).","A \\(\\theta=90^\\circ\\): \\(\\Delta\\lambda=\\lambda_C\\).":"At \\(\\theta=90^\\circ\\): \\(\\Delta\\lambda=\\lambda_C\\).","Dati.":"Data.","Calcolo.":"Calculation.","\\(E'=100/[1+2(100/511)]\\simeq71.88\\,\\mathrm{keV}\\). Equivalentemente, \\(\\lambda'=\\lambda+2\\lambda_C\\simeq17.250\\,\\mathrm{pm}\\).":"\\(E'=100/[1+2(100/511)]\\simeq71.88\\,\\mathrm{keV}\\). Equivalently, \\(\\lambda'=\\lambda+2\\lambda_C\\simeq17.250\\,\\mathrm{pm}\\).","Risultato.":"Result."},"attrs":{"Quadrimpulso del fotone":"Photon four-momentum","Quadrimpulsi iniziali e finali":"Initial and final four-momenta","Sviluppo dell'invariante":"Expansion of the invariant","Calcolo dei prodotti scalari":"Evaluation of the scalar products","Relazione tra energie dei fotoni":"Relation between the photon energies","Derivazione dello spostamento Compton":"Derivation of the Compton shift","Energia finale del fotone":"Final photon energy","Impulso e angolo di rinculo":"Recoil momentum and angle"},"title":{"it":"Effetto Compton - Dimostrazioni e ripasso orale","en":"Compton Effect - Derivations and Oral Review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
