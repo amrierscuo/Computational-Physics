@@ -1,357 +1,350 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esperimento di Stern-Gerlach</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Esperimento di Stern-Gerlach - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Esperimento di Stern-Gerlach</h1>
-
-    <p>
-        L'esperimento di Stern-Gerlach rappresenta uno degli esempi fondamentali per comprendere il concetto di spin e il comportamento quantistico delle particelle. Fu progettato per verificare l'esistenza di momenti angolari quantizzati, e dimostrò che il momento magnetico di una particella può assumere solo valori discreti, coerenti con le predizioni della meccanica quantistica.
-    </p>
-
-    <h2>Descrizione dell'esperimento</h2>
-    <p>
-        Nell'esperimento, un fascio di particelle (generalmente atomi di argento) viene fatto passare attraverso un campo magnetico non uniforme. Questo campo produce una forza dipendente dal momento magnetico della particella:
-    </p>
-
-    <div class="formula">
-        \[
-        \vec{F} = \nabla (\vec{\mu} \cdot \vec{B})
-        \]
-    </div>
-
-    <p>
-        Dove \( \vec{\mu} \) è il momento magnetico della particella e \( \vec{B} \) rappresenta il campo magnetico. A causa della quantizzazione del momento angolare intrinseco (spin), il fascio si divide in due componenti distinti, corrispondenti ai due possibili stati di spin (\( m_s = +\frac{1}{2} \) e \( m_s = -\frac{1}{2} \)).
-    </p>
-
-    <h2>Risultati dell'esperimento</h2>
-    <p>
-        La suddivisione del fascio in due tracce ben distinte evidenzia che il momento angolare intrinseco non è un vettore continuo, ma assume solo valori discreti. Questo risultato è stato fondamentale per l'introduzione del concetto di spin nella fisica quantistica e ha portato alla definizione dei numeri quantici.
-    </p>
-
-    <div class="formula">
-        \[
-        \mu_z = g_s \cdot \mu_B \cdot m_s
-        \]
-    </div>
-
-    <p>
-        Qui, \( g_s \) è il fattore di Landé, \( \mu_B \) è il magnetone di Bohr e \( m_s \) rappresenta il numero quantico di spin, che può assumere i valori \( \pm\frac{1}{2} \) per particelle con spin \( \frac{1}{2} \).
-    </p>
-
-    <h2>Interpretazione quantistica</h2>
-    <p>
-        L'esperimento di Stern-Gerlach dimostra che lo stato quantico di una particella è proiettato lungo una direzione specifica nel momento in cui viene effettuata una misura. In questo caso, la direzione del campo magnetico non uniforme rappresenta l'asse di misura (\( \hat{z} \)). La funzione d'onda della particella collassa in uno degli autostati dell'operatore spin:
-    </p>
-
-    <div class="formula">
-        \[
-        \hat{S}_z \ket{\psi} = m_s \hbar \ket{\psi}
-        \]
-    </div>
-
-    <p>
-        Dove \( \hat{S}_z \) è l'operatore spin lungo l'asse \( z \), \( \hbar \) è la costante di Planck ridotta, e \( m_s \) è il numero quantico associato alla misura.
-    </p>
-
-    <h2>Importanza per la meccanica quantistica</h2>
-    <p>
-        Questo esperimento ha dimostrato che la misura di una grandezza quantistica influenza lo stato del sistema, anticipando il concetto di "collasso della funzione d'onda". Inoltre, ha reso evidente la natura discreta di proprietà intrinseche come lo spin, che non hanno analoghi nella fisica classica.
-    </p>
-
-    <h2>La forza esercitata sul momento magnetico</h2>
-<p>
-    Il comportamento delle particelle nell'esperimento di Stern-Gerlach è spiegato analizzando l'interazione tra il momento magnetico della particella e il campo magnetico non uniforme. La forza esercitata è data da:
-</p>
-
-<div class="formula">
-    \[
-    \vec{F} = \nabla (\vec{\mu} \cdot \vec{B})
-    \]
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
 </div>
-
-<p>
-    Consideriamo il caso in cui il campo magnetico \( \vec{B} \) abbia una componente principale lungo l'asse \( z \), con un gradiente di campo. Allora:
-</p>
-
-<div class="formula">
-    \[
-    F_z = \mu_z \frac{\partial B_z}{\partial z}
-    \]
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-stern-gerlach">
+<div class="lecture-kicker">Lezione approfondita - Argomento 9 - DIM 13</div>
+<h1>Esperimento di Stern-Gerlach</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la forza su un dipolo in un campo non uniforme, spiegare perché il fascio d'argento produce due tracce e usare apparati sequenziali per ricavare proiettori, probabilità, incompatibilità delle componenti di spin e aggiornamento dello stato.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Risultato sperimentale</h3>
+<p>La previsione classica è una distribuzione continua di deviazioni. Il fascio d'argento forma invece due tracce discrete: la componente misurata del momento magnetico ha due soli esiti.</p>
+<div aria-label="Esiti della misura Stern-Gerlach per spin un mezzo" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle S_z=\pm\frac{\hbar}{2},\qquad \mu_z=\pm|\mu_z|,\qquad F_z\simeq\mu_z\frac{\partial B_z}{\partial z}\)</span></div>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Campo uniforme o gradiente?</h3>
+<p>Un campo uniforme genera energia e precessione, ma non separa il centro di massa. Stern-Gerlach richiede un gradiente: è la variazione spaziale di <span class="mq-math" data-i18n-skip="true">\(\mathbf B\)</span> a produrre forze opposte sui due autovalori.</p>
+</article>
 </div>
-
-<p>
-    Qui, \( \mu_z = -g_s \mu_B m_s \) è la componente del momento magnetico lungo \( z \), dove:
-</p>
+<h2>Apparato e sistema fisico</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Dal forno allo schermo</h3>
+<p>Un forno produce atomi neutri di argento; fenditure collimano il fascio, poli magnetici asimmetrici generano <span class="mq-math" data-i18n-skip="true">\(\partial_zB_z\ne0\)</span> e uno schermo registra la distribuzione finale. La neutralità sopprime la dominante deviazione di Lorentz del centro di massa.</p>
+</article>
+<article class="lecture-card">
+<h3>Perché argento?</h3>
+<p>I 46 elettroni interni formano gusci chiusi; l'elettrone esterno <span class="mq-math" data-i18n-skip="true">\(5s\)</span> ha <span class="mq-math" data-i18n-skip="true">\(L=0\)</span> e lascia <span class="mq-math" data-i18n-skip="true">\(J=1/2\)</span>. Le due tracce non sono spiegabili con il solo momento orbitale classico.</p>
+</article>
+</div>
+<h2>Dimostrazione compatta, passaggio per passaggio</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Energia del dipolo<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Il momento magnetico si accoppia localmente al campo esterno.</p>
+<div aria-label="Energia potenziale di un dipolo magnetico" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle U(\mathbf r)=-\boldsymbol\mu\cdot\mathbf B(\mathbf r),\qquad H_{\mathrm{int}}=-\boldsymbol\mu\cdot\mathbf B\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Energia diventa forza<span class="lecture-step-boss">DIM 13</span></h4>
+<p>La derivata spaziale dell'energia produce la separazione del fascio.</p>
+<div aria-label="Forza su un dipolo magnetico in un campo non uniforme" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf F=-\boldsymbol\nabla U=\boldsymbol\nabla(\boldsymbol\mu\cdot\mathbf B),\qquad F_z=\partial_z(\boldsymbol\mu\cdot\mathbf B)\simeq\mu_z\partial_zB_z\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Campo uniforme: nessuna separazione<span class="lecture-step-boss">CHECK</span></h4>
+<p>Se il campo non varia, la forza traslazionale è nulla, benché resti una coppia che fa precessare il dipolo.</p>
+<div aria-label="Forza e momento torcente in campo magnetico uniforme" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \boldsymbol\nabla\mathbf B=0\Rightarrow\mathbf F=0,\qquad\boldsymbol\tau=\boldsymbol\mu\times\mathbf B\ne0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Previsione classica<span class="lecture-step-boss">APPUNTI</span></h4>
+<p>Orientazioni iniziali continue darebbero una banda continua sul rivelatore.</p>
+<div aria-label="Intervallo classico continuo delle forze Stern-Gerlach" class="lecture-formula"><span class="lecture-proof-tag">Classico</span><span class="lecture-proof-math">\(\displaystyle \mu_z=\mu\cos\theta,\quad-\mu\le\mu_z\le\mu\Rightarrow-\mu\partial_zB_z\le F_z\le\mu\partial_zB_z\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Operatore misurato<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Per spin <span class="mq-math" data-i18n-skip="true">\(1/2\)</span>, l'apparato orientato lungo <span class="mq-math" data-i18n-skip="true">\(\mathbf n\)</span> misura la componente <span class="mq-math" data-i18n-skip="true">\(S_{\mathbf n}\)</span>.</p>
+<div aria-label="Operatore di spin lungo una direzione arbitraria" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle S_{\mathbf n}=\mathbf S\cdot\mathbf n=\frac{\hbar}{2}\boldsymbol\sigma\cdot\mathbf n,\qquad S_{\mathbf n}|\pm\mathbf n\rangle=\pm\frac{\hbar}{2}|\pm\mathbf n\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Proiettori dei due canali<span class="lecture-step-boss">ORALE</span></h4>
+<p>L'identità <span class="mq-math" data-i18n-skip="true">\((\boldsymbol\sigma\cdot\mathbf n)^2=I\)</span> costruisce direttamente i proiettori spettrali.</p>
+<div aria-label="Proiettori sugli autostati di spin lungo una direzione" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P_{\mathbf n}^{\pm}=|\pm\mathbf n\rangle\langle\pm\mathbf n|=\frac12(I\pm\boldsymbol\sigma\cdot\mathbf n),\quad(P_{\mathbf n}^{\pm})^2=P_{\mathbf n}^{\pm},\quad P_{\mathbf n}^+P_{\mathbf n}^-=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Spinore lungo una direzione<span class="lecture-step-boss">ORALE</span></h4>
+<p>Con <span class="mq-math" data-i18n-skip="true">\(\mathbf n=(\sin\theta\cos\phi,\sin\theta\sin\phi,\cos\theta)\)</span>, si diagonalizza <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\sigma\cdot\mathbf n\)</span>.</p>
+<div aria-label="Autospinori lungo una direzione arbitraria" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle |+\mathbf n\rangle=\cos\frac\theta2|+z\rangle+e^{i\phi}\sin\frac\theta2|-z\rangle,\quad|-\mathbf n\rangle=-e^{-i\phi}\sin\frac\theta2|+z\rangle+\cos\frac\theta2|-z\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Regola di Born<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Il peso di ciascuna traccia è il valore medio del proiettore del canale.</p>
+<div aria-label="Probabilità degli esiti Stern-Gerlach" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle p_\pm=\langle\psi|P_{\mathbf n}^{\pm}|\psi\rangle=|\langle\pm\mathbf n|\psi\rangle|^2,\qquad p_++p_-=1\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Legge del mezzo angolo<span class="lecture-step-boss">ORALE</span></h4>
+<p>Per uno stato preparato <span class="mq-math" data-i18n-skip="true">\(+z\)</span>, l'angolo fisico tra gli assi compare dimezzato nello spinore.</p>
+<div aria-label="Probabilità di Stern-Gerlach per assi inclinati" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle p(+\mathbf n|+z)=|\langle+\mathbf n|+z\rangle|^2=\cos^2\frac\theta2,\qquad p(-\mathbf n|+z)=\sin^2\frac\theta2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Aggiornamento selettivo<span class="lecture-step-boss">ORALE</span></h4>
+<p>Se si osserva e si seleziona un canale, lo stato in uscita è l'autostato corrispondente.</p>
+<div aria-label="Aggiornamento dello stato dopo una misura selettiva" class="lecture-formula"><span class="lecture-proof-tag">Misura</span><span class="lecture-proof-math">\(\displaystyle |\psi\rangle\xrightarrow{\pm}\frac{P_{\mathbf n}^{\pm}|\psi\rangle}{\sqrt{\langle\psi|P_{\mathbf n}^{\pm}|\psi\rangle}}=|\pm\mathbf n\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Sequenza z-x-z<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Dopo aver preparato <span class="mq-math" data-i18n-skip="true">\(+z\)</span> e selezionato <span class="mq-math" data-i18n-skip="true">\(+x\)</span>, la misura finale lungo <span class="mq-math" data-i18n-skip="true">\(z\)</span> torna casuale.</p>
+<div aria-label="Probabilità nella sequenza Stern-Gerlach z x z" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle |+z\rangle\xrightarrow{SG_x,+}|+x\rangle=\frac{|+z\rangle+|-z\rangle}{\sqrt2}\Rightarrow p(+z|+x)=p(-z|+x)=\frac12\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Componenti incompatibili<span class="lecture-step-boss">ORALE</span></h4>
+<p>La misura intermedia cambia la base: non sta semplicemente rivelando valori simultanei già presenti.</p>
+<div aria-label="Commutatore tra componenti ortogonali dello spin" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle [S_x,S_z]=-i\hbar S_y\ne0,\qquad \Delta S_x\Delta S_z\ge\frac\hbar2|\langle S_y\rangle|\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Misura non selettiva<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Se il risultato lungo <span class="mq-math" data-i18n-skip="true">\(x\)</span> viene registrato o disperso nell'ambiente ma poi ignorato, restano probabilità classiche tra rami.</p>
+<div aria-label="Mappa di misura non selettiva e perdita di coerenza" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \rho\longrightarrow\rho'=P_x^+\rho P_x^++P_x^-\rho P_x^-,\qquad \rho=|+z\rangle\langle+z|\Rightarrow\rho'=\frac I2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Ricombinazione coerente<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Separare i percorsi senza ottenere informazione non equivale a misurare: se fase e coerenza sono preservate, un apparato inverso può ricostruire lo stato iniziale.</p>
+<div aria-label="Evoluzione unitaria e ricombinazione coerente dei due rami" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle (\alpha|+x\rangle+\beta|-x\rangle)|0\rangle\xrightarrow{U}\alpha|+x\rangle|u\rangle+\beta|-x\rangle|d\rangle\xrightarrow{U^{-1}}(\alpha|+x\rangle+\beta|-x\rangle)|0\rangle\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: stima della separazione sullo schermo</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Atomi di Ag con <span class="mq-math" data-i18n-skip="true">\(m=1.79\times10^{-25}\,\mathrm{kg}\)</span>, <span class="mq-math" data-i18n-skip="true">\(v=500\,\mathrm{m/s}\)</span>, magnete lungo <span class="mq-math" data-i18n-skip="true">\(L=0.100\,\mathrm m\)</span>, deriva <span class="mq-math" data-i18n-skip="true">\(D=0.500\,\mathrm m\)</span> e <span class="mq-math" data-i18n-skip="true">\(\partial_zB_z=10^3\,\mathrm{T/m}\)</span>.</p>
+<p><strong>Calcolo.</strong> Con <span class="mq-math" data-i18n-skip="true">\(|\mu_z|\simeq\mu_B\)</span>, <span class="mq-math" data-i18n-skip="true">\(a_z=\mu_B\partial_zB_z/m=5.18\times10^4\,\mathrm{m/s^2}\)</span> e <span class="mq-math" data-i18n-skip="true">\(t_L=L/v=2.00\times10^{-4}\,\mathrm s\)</span>.</p>
+<p><strong>Risultato.</strong> <span class="mq-math" data-i18n-skip="true">\(z_{\mathrm{mag}}=a_zt_L^2/2=1.04\,\mathrm{mm}\)</span>, <span class="mq-math" data-i18n-skip="true">\(z_{\mathrm{drift}}=a_zt_LD/v=10.4\,\mathrm{mm}\)</span>; ogni traccia è a <span class="mq-math" data-i18n-skip="true">\(11.4\,\mathrm{mm}\)</span> dal centro e la separazione è <span class="mq-math" data-i18n-skip="true">\(22.8\,\mathrm{mm}\)</span>.</p>
+</article>
+<h2>Cosa misura davvero l'esperimento</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Entanglement prima del rivelatore</h3>
+<p>Il magnete correla spin e posizione con evoluzione unitaria. La traccia sullo schermo rende il ramo osservabile e realizza una misura effettiva; la parola collasso descrive l'aggiornamento condizionato all'esito.</p>
+</article>
+<article class="lecture-card">
+<h3>Asse arbitrario e sfera di Bloch</h3>
+<p>Per <span class="mq-math" data-i18n-skip="true">\(\rho=(I+\mathbf r\cdot\boldsymbol\sigma)/2\)</span>, un analizzatore lungo <span class="mq-math" data-i18n-skip="true">\(\mathbf n\)</span> dà <span class="mq-math" data-i18n-skip="true">\(p_\pm=(1\pm\mathbf r\cdot\mathbf n)/2\)</span>. L'apparato legge una proiezione della sfera di Bloch.</p>
+</article>
+<article class="lecture-card">
+<h3>Spin generale</h3>
+<p>Un grado di libertà con spin <span class="mq-math" data-i18n-skip="true">\(s\)</span> possiede <span class="mq-math" data-i18n-skip="true">\(2s+1\)</span> autovalori <span class="mq-math" data-i18n-skip="true">\(m_s=-s,\ldots,s\)</span>. Un analizzatore ideale può quindi produrre <span class="mq-math" data-i18n-skip="true">\(2s+1\)</span> fasci, non sempre di uguale intensità.</p>
+</article>
+<article class="lecture-card">
+<h3>Condizione adiabatica</h3>
+<p>L'asse locale di quantizzazione segue il campo se la precessione di Larmor è rapida rispetto alla variazione della direzione vista dall'atomo. Vicino a zeri di campo possono avvenire transizioni non adiabatiche.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
 <ul>
-    <li>\( g_s \): Fattore giromagnetico (circa 2 per gli elettroni)</li>
-    <li>\( \mu_B \): Magnetone di Bohr, definito come \( \mu_B = \frac{e \hbar}{2m_e} \)</li>
-    <li>\( m_s \): Numero quantico di spin, con valori \( \pm\frac{1}{2} \)</li>
+<li>Usare un campo uniforme per spiegare la separazione spaziale.</li>
+<li>Attribuire le due tracce dell'argento al solo momento orbitale, benché l'elettrone esterno abbia <span class="mq-math" data-i18n-skip="true">\(L=0\)</span>.</li>
+<li>Dimenticare il segno tra momento magnetico elettronico e spin quando si etichettano i fasci.</li>
+<li>Confondere probabilità condizionali dopo selezione con frazioni assolute del fascio iniziale.</li>
+<li>Trattare separazione coerente, misura non selettiva e blocco di un canale come la stessa operazione.</li>
 </ul>
-
-<p>
-    La forza \( F_z \) è quindi proporzionale al gradiente \( \frac{\partial B_z}{\partial z} \) e al valore del numero quantico \( m_s \). Questa relazione implica che le particelle con \( m_s = +\frac{1}{2} \) sono deflesse in una direzione, mentre quelle con \( m_s = -\frac{1}{2} \) nella direzione opposta.
-</p>
-
-<h2>Collasso della funzione d'onda e proiezione degli stati</h2>
-<p>
-    Durante il passaggio attraverso il campo magnetico, lo stato quantico della particella viene proiettato lungo la direzione del campo. La funzione d'onda iniziale \( \psi \) si riduce a uno degli autostati dell'operatore spin lungo \( z \):
-</p>
-
-<div class="formula">
-    \[
-    \psi \rightarrow \ket{m_s} \quad \text{con} \quad \hat{S}_z \ket{m_s} = m_s \hbar \ket{m_s}
-    \]
-</div>
-
-<p>
-    Qui, \( \hat{S}_z \) è l'operatore spin lungo l'asse \( z \), i cui autovalori sono \( \pm \frac{\hbar}{2} \) per particelle con spin \( \frac{1}{2} \). Questo processo di proiezione è fondamentale per comprendere la natura della misura in meccanica quantistica.
-</p>
-
-<h2>Visualizzazione delle traiettorie</h2>
-<p>
-    Le particelle, inizialmente distribuite casualmente in direzione dello spin, emergono dall'apparato Stern-Gerlach in due traiettorie distinte corrispondenti ai valori \( m_s = +\frac{1}{2} \) e \( m_s = -\frac{1}{2} \). La posizione finale sul rivelatore è determinata dalla forza magnetica applicata e segue la relazione:
-</p>
-
-<div class="formula">
-    \[
-    z = \frac{1}{2} \frac{\mu_B g_s \partial B_z}{m v^2} t^2
-    \]
-</div>
-
-<p>
-    Dove:
-</p>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Precisazioni storiche e fisiche</h3>
 <ul>
-    <li>\( m \): Massa della particella</li>
-    <li>\( v \): Velocità della particella</li>
-    <li>\( t \): Tempo di volo attraverso il campo magnetico</li>
+<li>L'esperimento originale osservò la quantizzazione spaziale prima della formulazione moderna dello spin.</li>
+<li>La sorgente usa atomi neutri, non elettroni liberi.</li>
+<li>Per un campo reale, <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\nabla\cdot\mathbf B=0\)</span>: un gradiente longitudinale implica anche struttura trasversa.</li>
+<li>L'intensità dei rami dipende dallo stato preparato, non è sempre metà e metà.</li>
 </ul>
-
-<p>
-    Questa formula mostra come la separazione spaziale sia proporzionale alla forza magnetica esercitata e al tempo di interazione con il campo.
-</p>
-
-<h2>Conseguenze fondamentali</h2>
-<p>
-    L'esperimento di Stern-Gerlach ha rivoluzionato la comprensione del mondo quantistico. Non solo ha introdotto il concetto di spin come proprietà intrinseca delle particelle, ma ha anche dimostrato sperimentalmente che la misura di una proprietà quantistica forza il sistema a collassare in uno stato discreto.
-</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 9</div>
-  <h2>Esperimento di Stern-Gerlach: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Spiegare separazione discreta, filtri sequenziali e incompatibilità delle componenti di spin.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Un gradiente di campo esercita una forza sul momento magnetico. Due fasci, non un continuo, mostrano gli autovalori di \(S_z\). Sequenze z-x-z rivelano che la misura lungo x distrugge la certezza lungo z.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Interazione<span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Energia e forza.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="H_{int}=-\boldsymbol\mu\cdot\mathbf B,\quad F_z\simeq\mu_z\partial_zB"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle U=-\boldsymbol\mu\cdot\mathbf B,\quad F_z=-\partial_zU=\partial_z(\boldsymbol\mu\cdot\mathbf B)\simeq\mu_z\partial_zB\Rightarrow H_{\rm int}=-\boldsymbol\mu\cdot\mathbf B\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Probabilità<span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Per spin preparato +z e misurato lungo n.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P(+\mathbf n)=\cos^2(\theta/2)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |+\mathbf n\rangle=\cos(\theta/2)|+z\rangle+e^{i\phi}\sin(\theta/2)|-z\rangle\Rightarrow P(+\mathbf n|+z)=|\langle+\mathbf n|+z\rangle|^2=\cos^2(\theta/2)\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Sequenza z-x-z</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Seleziona +z, poi +x, poi misura z.</p>
-    <p><strong>Calcolo.</strong> Dopo +x, le probabilità finali +z e -z sono entrambe 1/2.</p>
-    <p><strong>Risultato e controllo.</strong> Il filtro x non rivela un valore preesistente di z.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 13</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Fascio neutro per evitare dominante forza di Lorentz.</li>
-          <li>Gradiente e regione di precessione controllati.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>L'esperimento rende operativa la geometria dello spinore e l'incompatibilità tra basi.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Perché non compare un continuo classico?</li>
-          <li>Analizza una sequenza z-x-z senza selezione intermedia.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=46">Appunti-MQ.pdf, pp. 46-53 e 218-223: apparato, filtri sequenziali e spin</a></li>
-          <li><a href="BibbiaAleHD.pdf">BibbiaAleHD.pdf, pp. sezione sullo spin: interpretazione sperimentale</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
-
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Ricava la forza da <span class="mq-math" data-i18n-skip="true">\(U=-\boldsymbol\mu\cdot\mathbf B\)</span> e spiega perché serve un gradiente.</li>
+<li>Confronta previsione classica continua e risultato a due tracce.</li>
+<li>Spiega la struttura elettronica dell'argento e il ruolo dello spin.</li>
+<li>Costruisci <span class="mq-math" data-i18n-skip="true">\(P_{\mathbf n}^{\pm}\)</span> e verifica ortogonalità e completezza.</li>
+<li>Deriva gli spinori <span class="mq-math" data-i18n-skip="true">\(|\pm\mathbf n\rangle\)</span> e la legge <span class="mq-math" data-i18n-skip="true">\(\cos^2(\theta/2)\)</span>.</li>
+<li>Analizza la sequenza <span class="mq-math" data-i18n-skip="true">\(z-x-z\)</span> distinguendo probabilità condizionali e assolute.</li>
+<li>Mostra con il commutatore perché <span class="mq-math" data-i18n-skip="true">\(S_x\)</span> e <span class="mq-math" data-i18n-skip="true">\(S_z\)</span> sono incompatibili.</li>
+<li>Distingui selezione, misura non selettiva e ricombinazione coerente.</li>
+<li>Generalizza il numero dei fasci a spin <span class="mq-math" data-i18n-skip="true">\(s\)</span>.</li>
+<li>Stima una deviazione usando accelerazione nel magnete e deriva libera.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P3_DIM_13-18.txt#L67">DIM 13</a> - forza in campo non uniforme, argento, spin e apparati sequenziali</li>
+<li><a href="Appunti-MQ.pdf#page=46">Appunti-MQ.pdf, pagine PDF 46-53</a> - apparato, previsione classica, risultato, filtri ripetuti e ampiezze</li>
+<li><a href="Appunti-MQ.pdf#page=218">Appunti-MQ.pdf, pagine PDF 218-223</a> - algebra dello spin e formalismo di Pauli</li>
+<li><a href="BibbiaAleHD.pdf#page=54">BibbiaAleHD.pdf, pagina PDF 54</a> - derivazione manoscritta della forza e interpretazione dell'esperimento</li>
+</ul>
+<p class="lecture-note">La pagina separa il fatto sperimentale delle tracce discrete dal linguaggio interpretativo della misura e tratta esplicitamente i diversi esiti dei filtri sequenziali.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 9 - DIM 13":"In-depth lesson - Topic 9 - DIM 13","Esperimento di Stern-Gerlach":"Stern-Gerlach experiment","Derivare la forza su un dipolo in un campo non uniforme, spiegare perché il fascio d'argento produce due tracce e usare apparati sequenziali per ricavare proiettori, probabilità, incompatibilità delle componenti di spin e aggiornamento dello stato.":"Derive the force on a dipole in a nonuniform field, explain why a silver beam produces two traces, and use sequential analyzers to derive projectors, probabilities, incompatibility of spin components, and state update.","Risultato sperimentale":"Experimental result","La previsione classica è una distribuzione continua di deviazioni. Il fascio d'argento forma invece due tracce discrete: la componente misurata del momento magnetico ha due soli esiti.":"The classical prediction is a continuous distribution of deflections. The silver beam instead forms two discrete traces: the measured component of the magnetic moment has only two outcomes.","Campo uniforme o gradiente?":"Uniform field or gradient?","Un campo uniforme genera energia e precessione, ma non separa il centro di massa. Stern-Gerlach richiede un gradiente: è la variazione spaziale di":"A uniform field produces an energy shift and precession but does not separate the center of mass. Stern-Gerlach requires a gradient: the spatial variation of","a produrre forze opposte sui due autovalori.":"produces opposite forces for the two eigenvalues.","Apparato e sistema fisico":"Apparatus and physical system","Dal forno allo schermo":"From the oven to the screen","Un forno produce atomi neutri di argento; fenditure collimano il fascio, poli magnetici asimmetrici generano":"An oven produces neutral silver atoms; slits collimate the beam, and asymmetric magnetic poles generate","e uno schermo registra la distribuzione finale. La neutralità sopprime la dominante deviazione di Lorentz del centro di massa.":"while a screen records the final distribution. Neutrality suppresses the dominant Lorentz deflection of the center of mass.","Perché argento?":"Why silver?","I 46 elettroni interni formano gusci chiusi; l'elettrone esterno":"The 46 inner electrons form closed shells; the outer",". Le due tracce non sono spiegabili con il solo momento orbitale classico.":". The two traces cannot be explained by classical orbital angular momentum alone.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Energia del dipolo":"1. Dipole energy","Il momento magnetico si accoppia localmente al campo esterno.":"The magnetic moment couples locally to the external field.","2. Energia diventa forza":"2. From energy to force","La derivata spaziale dell'energia produce la separazione del fascio.":"The spatial derivative of the energy produces beam separation.","3. Campo uniforme: nessuna separazione":"3. Uniform field: no separation","4. Previsione classica":"4. Classical prediction","Orientazioni iniziali continue darebbero una banda continua sul rivelatore.":"A continuum of initial orientations would produce a continuous band on the detector.","5. Operatore misurato":"5. Measured operator","Per spin":"For spin",", l'apparato orientato lungo":", an analyzer oriented along","misura la componente":"measures the component","6. Proiettori dei due canali":"6. Projectors for the two channels","costruisce direttamente i proiettori spettrali.":"directly constructs the spectral projectors.","7. Spinore lungo una direzione":"7. Spinor along an arbitrary direction","Con":"With",", si diagonalizza":", one diagonalizes","8. Regola di Born":"8. Born rule","Il peso di ciascuna traccia è il valore medio del proiettore del canale.":"The weight of each trace is the expectation value of the channel projector.","9. Legge del mezzo angolo":"9. Half-angle law","Per uno stato preparato":"For a state prepared as",", l'angolo fisico tra gli assi compare dimezzato nello spinore.":", the physical angle between the axes appears halved in the spinor.","10. Aggiornamento selettivo":"10. Selective state update","Se si osserva e si seleziona un canale, lo stato in uscita è l'autostato corrispondente.":"If one observes and selects a channel, the output state is the corresponding eigenstate.","Dopo aver preparato":"After preparing",", la misura finale lungo":", the final measurement along","torna casuale.":"becomes random again.","12. Componenti incompatibili":"12. Incompatible components","La misura intermedia cambia la base: non sta semplicemente rivelando valori simultanei già presenti.":"The intermediate measurement changes the basis; it is not simply revealing preexisting simultaneous values.","13. Misura non selettiva":"13. Nonselective measurement","Se il risultato lungo":"If the result along","viene registrato o disperso nell'ambiente ma poi ignorato, restano probabilità classiche tra rami.":"is recorded or dispersed into the environment and then ignored, only classical probabilities between branches remain.","14. Ricombinazione coerente":"14. Coherent recombination","Separare i percorsi senza ottenere informazione non equivale a misurare: se fase e coerenza sono preservate, un apparato inverso può ricostruire lo stato iniziale.":"Separating paths without acquiring information is not equivalent to measuring: if phase and coherence are preserved, an inverse apparatus can reconstruct the initial state.","Esempio d'esame: stima della separazione sullo schermo":"Exam example: estimating the separation on the screen","Atomi di Ag con":"Ag atoms with",", magnete lungo":", magnet length","; ogni traccia è a":"; each trace lies","dal centro e la separazione è":"from the center, and the separation is","Cosa misura davvero l'esperimento":"What the experiment actually measures","Entanglement prima del rivelatore":"Entanglement before detection","Il magnete correla spin e posizione con evoluzione unitaria. La traccia sullo schermo rende il ramo osservabile e realizza una misura effettiva; la parola collasso descrive l'aggiornamento condizionato all'esito.":"The magnet correlates spin and position through unitary evolution. The trace on the screen makes the branch observable and implements an effective measurement; the word collapse describes the state update conditioned on the outcome.","Asse arbitrario e sfera di Bloch":"Arbitrary axis and Bloch sphere","Per":"For",", un analizzatore lungo":", an analyzer along",". L'apparato legge una proiezione della sfera di Bloch.":". The apparatus reads a projection of the Bloch sphere.","Spin generale":"General spin","Un grado di libertà con spin":"A degree of freedom with spin",". Un analizzatore ideale può quindi produrre":". An ideal analyzer can therefore produce","fasci, non sempre di uguale intensità.":"beams, not necessarily with equal intensity.","Condizione adiabatica":"Adiabatic condition","L'asse locale di quantizzazione segue il campo se la precessione di Larmor è rapida rispetto alla variazione della direzione vista dall'atomo. Vicino a zeri di campo possono avvenire transizioni non adiabatiche.":"The local quantization axis follows the field if Larmor precession is fast relative to the change in direction seen by the atom. Nonadiabatic transitions may occur near field zeros.","Errori tipici":"Common errors","Usare un campo uniforme per spiegare la separazione spaziale.":"Using a uniform field to explain spatial separation.","Attribuire le due tracce dell'argento al solo momento orbitale, benché l'elettrone esterno abbia":"Attributing the two silver traces to orbital angular momentum alone, even though the outer electron has","Dimenticare il segno tra momento magnetico elettronico e spin quando si etichettano i fasci.":"Forgetting the sign between the electron magnetic moment and spin when labeling the beams.","Confondere probabilità condizionali dopo selezione con frazioni assolute del fascio iniziale.":"Confusing conditional probabilities after selection with absolute fractions of the initial beam.","Trattare separazione coerente, misura non selettiva e blocco di un canale come la stessa operazione.":"Treating coherent separation, a nonselective measurement, and blocking one channel as the same operation.","Precisazioni storiche e fisiche":"Historical and physical qualifications","L'esperimento originale osservò la quantizzazione spaziale prima della formulazione moderna dello spin.":"The original experiment observed space quantization before the modern formulation of spin.","La sorgente usa atomi neutri, non elettroni liberi.":"The source uses neutral atoms, not free electrons.","Per un campo reale,":"For a physical field,",": un gradiente longitudinale implica anche struttura trasversa.":": a longitudinal gradient also implies transverse structure.","L'intensità dei rami dipende dallo stato preparato, non è sempre metà e metà.":"Branch intensities depend on the prepared state; they are not always fifty-fifty.","Controllo da orale":"Oral exam checklist","Ricava la forza da":"Derive the force from","e spiega perché serve un gradiente.":"and explain why a gradient is required.","Confronta previsione classica continua e risultato a due tracce.":"Compare the continuous classical prediction with the two-trace result.","Spiega la struttura elettronica dell'argento e il ruolo dello spin.":"Explain the electronic structure of silver and the role of spin.","e verifica ortogonalità e completezza.":"and verify orthogonality and completeness.","Deriva gli spinori":"Derive the spinors","e la legge":"and the law","Analizza la sequenza":"Analyze the sequence","distinguendo probabilità condizionali e assolute.":"distinguishing conditional from absolute probabilities.","Mostra con il commutatore perché":"Use the commutator to show why","sono incompatibili.":"are incompatible.","Distingui selezione, misura non selettiva e ricombinazione coerente.":"Distinguish selection, nonselective measurement, and coherent recombination.","Generalizza il numero dei fasci a spin":"Generalize the number of beams to spin","Stima una deviazione usando accelerazione nel magnete e deriva libera.":"Estimate a deflection using acceleration inside the magnet and free drift.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- forza in campo non uniforme, argento, spin e apparati sequenziali":"- force in a nonuniform field, silver, spin, and sequential analyzers","Appunti-MQ.pdf, pagine PDF 46-53":"Appunti-MQ.pdf, PDF pages 46-53","- apparato, previsione classica, risultato, filtri ripetuti e ampiezze":"- apparatus, classical prediction, result, repeated filters, and amplitudes","Appunti-MQ.pdf, pagine PDF 218-223":"Appunti-MQ.pdf, PDF pages 218-223","- algebra dello spin e formalismo di Pauli":"- spin algebra and Pauli formalism","BibbiaAleHD.pdf, pagina PDF 54":"BibbiaAleHD.pdf, PDF page 54","- derivazione manoscritta della forza e interpretazione dell'esperimento":"- handwritten force derivation and interpretation of the experiment","La pagina separa il fatto sperimentale delle tracce discrete dal linguaggio interpretativo della misura e tratta esplicitamente i diversi esiti dei filtri sequenziali.":"This page separates the experimental fact of discrete traces from the interpretive language of measurement and explicitly treats the different outcomes of sequential filters.","Ritorna all'indice MQ":"Return to the MQ index","Se il campo non varia, la forza traslazionale è nulla, benché resti una coppia che fa precessare il dipolo.":"If the field is spatially uniform, the translational force vanishes, although a torque remains and makes the dipole precess.","Obiettivo.":"Objective.","Risultato":"Result","ha":"has","e lascia":"and leaves","DIM 13":"DIM 13","Base":"Base","CHECK":"CHECK","Check":"Check","APPUNTI":"NOTES","Classico":"Classical",".":".","Def":"Def","ORALE":"ORAL","L'identità":"The identity","Misura":"Measurement","11. Sequenza z-x-z":"11. z-x-z sequence","e selezionato":"and selecting","ESTENSIONE":"EXTENSION","Estensione":"Extension","Dati.":"Data.",",":",",", deriva":", drift distance","e":"and","Calcolo.":"Calculation.","Risultato.":"Result.","dà":"gives","possiede":"has","autovalori":"eigenvalues","Costruisci":"Construct"},"attrs":{"Esiti della misura Stern-Gerlach per spin un mezzo":"Outcomes of a Stern-Gerlach measurement for spin one-half","Energia potenziale di un dipolo magnetico":"Potential energy of a magnetic dipole","Forza su un dipolo magnetico in un campo non uniforme":"Force on a magnetic dipole in a nonuniform field","Forza e momento torcente in campo magnetico uniforme":"Force and torque in a uniform magnetic field","Intervallo classico continuo delle forze Stern-Gerlach":"Classical continuous range of Stern-Gerlach forces","Operatore di spin lungo una direzione arbitraria":"Spin operator along an arbitrary direction","Proiettori sugli autostati di spin lungo una direzione":"Projectors onto spin eigenstates along a direction","Autospinori lungo una direzione arbitraria":"Spin eigenstates along an arbitrary direction","Probabilità degli esiti Stern-Gerlach":"Probabilities of Stern-Gerlach outcomes","Probabilità di Stern-Gerlach per assi inclinati":"Stern-Gerlach probabilities for tilted axes","Aggiornamento dello stato dopo una misura selettiva":"State update after a selective measurement","Probabilità nella sequenza Stern-Gerlach z x z":"Probabilities in the z x z Stern-Gerlach sequence","Commutatore tra componenti ortogonali dello spin":"Commutator of orthogonal spin components","Mappa di misura non selettiva e perdita di coerenza":"Nonselective measurement map and loss of coherence","Evoluzione unitaria e ricombinazione coerente dei due rami":"Unitary evolution and coherent recombination of the two branches"},"title":{"it":"Esperimento di Stern-Gerlach - Dimostrazioni e ripasso orale","en":"Stern-Gerlach experiment - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
