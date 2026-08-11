@@ -1,268 +1,336 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equazione di Schrödinger dall’Ottica</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Da Helmholtz a Schrödinger - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>L’equazione di Schrödinger dall’Ottica</h1>
-    <h2>Concetto introduttivo</h2>
-    L'equazione di Schrödinger, che descrive il comportamento delle particelle quantistiche, presenta analogie formali con le equazioni che governano la propagazione delle onde in ottica. Questo parallelismo permette di applicare tecniche ottiche allo studio della meccanica quantistica.
-
-    <h2>Equazione per la propagazione delle onde</h2>
-    La propagazione di un'onda elettromagnetica in un mezzo ottico può essere descritta dall'equazione delle onde:
-    <div class="formula">
-        \[
-        \nabla^2 E - \frac{1}{c^2} \frac{\partial^2 E}{\partial t^2} = 0
-        \]
-    </div>
-    dove \(E\) è il campo elettrico e \(c\) la velocità della luce. Considerando una soluzione monocromatica del tipo \(E(\vec{r}, t) = \psi(\vec{r}) e^{-i \omega t}\), l'equazione si riduce a:
-    <div class="formula">
-        \[
-        \nabla^2 \psi + k^2 \psi = 0
-        \]
-    </div>
-    con \(k = \frac{\omega}{c}\) che rappresenta il numero d'onda.
-
-    <h2>Equazione di Schrödinger stazionaria</h2>
-    Nell'ambito della meccanica quantistica, l'equazione di Schrödinger per una particella libera si scrive:
-    <div class="formula">
-        \[
-        -\frac{\hbar^2}{2m} \nabla^2 \psi + V(\vec{r}) \psi = E \psi
-        \]
-    </div>
-    Confrontando questa con l'equazione ottica, emergono somiglianze formali significative. Ad esempio, la funzione d'onda quantistica \(\psi\) assume un ruolo analogo al campo elettrico \(E\) in ottica.
-
-    <h2>Interpretazione del parallelismo</h2>
-    Nel contesto quantistico, il termine \(-\frac{\hbar^2}{2m} \nabla^2\) rappresenta l'energia cinetica, mentre \(V(\vec{r})\) descrive l'energia potenziale. Analogamente, nell'ottica geometrica il termine \(k^2\) descrive la variazione spaziale del campo.
-
-    <h2>Applicazioni del parallelismo</h2>
-    Le analogie tra ottica e meccanica quantistica offrono utili strumenti analitici e computazionali:
-    <ul>
-        <li>Lo studio della diffrazione ottica è analogo alla soluzione di problemi di scattering quantistico.</li>
-        <li>L'evoluzione temporale delle onde ottiche in mezzi non omogenei può essere mappata sull'equazione di Schrödinger dipendente dal tempo.</li>
-        <li>La propagazione dei fasci gaussiani è equivalente all'evoluzione di pacchetti d'onda quantistici.</li>
-    </ul>
-
-    <h2>Implicazioni per la ricerca</h2>
-    Il parallelismo tra ottica e meccanica quantistica permette di esplorare nuove soluzioni e modelli, utilizzando analogie che si estendono a settori come l'ottica quantistica e la materia condensata.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 2</div>
-  <h2>L’equazione di Schrödinger dall’Ottica: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Motivare la forma dell'equazione di Schrödinger dalla dispersione classica e recuperarne il limite Hamilton-Jacobi.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Per una particella libera si sostituiscono \(E\to i\hbar\partial_t\) e \(\mathbf p\to-i\hbar\nabla\) nella relazione \(E=p^2/2m+V\). La linearità consente sovrapposizioni; l'ordine primo nel tempo fissa un'evoluzione deterministica dello stato iniziale. Nel limite di fase rapida riemerge Hamilton-Jacobi.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Corrispondenza operatoriale<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>Applicata a un'onda piana restituisce gli autovalori \(E\) e \(p\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="i\hbar\partial_t\psi=\left[-\frac{\hbar^2}{2m}\nabla^2+V\right]\psi"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle E=p^2/(2m)+V,\quad E\to i\hbar\partial_t,\quad\mathbf p\to-i\hbar\nabla\ \Rightarrow\ i\hbar\partial_t\psi=\left[-\frac{\hbar^2}{2m}\nabla^2+V\right]\psi\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Decomposizione polare<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>Scrivi \(\psi=\sqrt\rho e^{iS/\hbar}\) e separa parti reale e immaginaria.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\partial_tS+\frac{(\nabla S)^2}{2m}+V+Q=0"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=\sqrt\rho e^{iS/\hbar},\quad\operatorname{Re}\!\left(\frac{i\hbar\partial_t\psi-H\psi}{\psi}\right)=0\ \Rightarrow\ \partial_tS+\frac{(\nabla S)^2}{2m}+V+Q=0\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Potenziale quantistico<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>Il termine \(Q\) contiene la curvatura dell'ampiezza e scompare nel limite semiclassico regolare.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="Q=-\frac{\hbar^2}{2m}\frac{\nabla^2\sqrt\rho}{\sqrt\rho}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle -\frac{\hbar^2}{2m}\frac{\nabla^2\sqrt\rho}{\sqrt\rho}\ \text{e il termine reale residuo}\ \Rightarrow\ Q=-\frac{\hbar^2}{2m}\frac{\nabla^2\sqrt\rho}{\sqrt\rho}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Onda piana libera</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Inserisci \(e^{i(\mathbf k\cdot\mathbf r-\omega t)}\).</p>
-    <p><strong>Calcolo.</strong> L'equazione impone \(\hbar\omega=\hbar^2k^2/2m\).</p>
-    <p><strong>Risultato e controllo.</strong> Si recuperano simultaneamente \(E=\hbar\omega\), \(p=\hbar k\) ed \(E=p^2/2m\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P3_DIM_13-18.txt">DIM 14</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Regime non relativistico e particella senza spin.</li>
-          <li>Per potenziali complessi l'evoluzione non è in generale unitaria.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>L'analogia ottica chiarisce la fase, ma la presenza del potenziale quantistico mostra dove la dinamica supera l'ottica geometrica.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Perché l'equazione è seconda in spazio ma prima in tempo?</li>
-          <li>Verifica che l'Hamiltoniana abbia dimensione di energia.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=32">Appunti-MQ.pdf, pp. 32-36 e 107-114: dall'analogia ondulatoria alla dinamica</a></li>
-          <li><a href="FisicaTeoricaMeccanicaQuantistica_compresso.pdf">FisicaTeoricaMeccanicaQuantistica_compresso.pdf, pp. dispensa manoscritta: Hamilton-Jacobi e fase semiclassica</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
+</div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-schrodinger-ottica">
+<div class="lecture-kicker">Lezione approfondita - Argomento 2 - DIM 0, 14 e 18</div>
+<h1>Da Helmholtz a Schrödinger</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Derivare Helmholtz da un'onda monocromatica, confrontare iconale e Hamilton-Jacobi, ottenere la forma di Helmholtz della Schrödinger stazionaria, motivare con precisione la TDSE e chiarire che cosa l'analogia ottica spiega e che cosa non può derivare.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Il ponte corretto</h3>
+<p>Ottica geometrica e meccanica classica emergono come limiti di fase rapida di due teorie ondulatorie. Le equazioni iconale e Hamilton-Jacobi hanno la stessa struttura quando la fase quantistica è l'azione divisa per <span class="mq-math" data-i18n-skip="true">\(\hbar\)</span>.</p>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Non è una derivazione della MQ</h3>
+<p>Il confronto con Helmholtz motiva la forma spaziale della TISE, ma non dimostra la regola di Born, la linearità complessa, il valore di <span class="mq-math" data-i18n-skip="true">\(\hbar\)</span> o la legge temporale. Questi elementi appartengono alla struttura empirica e postulata della teoria.</p>
+</article>
+</div>
+<h2>Tre equazioni, tre ruoli</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Helmholtz e TISE</h3>
+<p>Entrambe sono equazioni spaziali del secondo ordine a frequenza o energia fissata. Condizioni al contorno e normalizzabilità selezionano modi ottici o autostati energetici.</p>
+</article>
+<article class="lecture-card">
+<h3>TDSE</h3>
+<p>È un'equazione di evoluzione del primo ordine nel tempo. Assegnati Hamiltoniano e stato iniziale, determina lo stato successivo; non si ottiene cancellando semplicemente un fattore monocromatico da Helmholtz.</p>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Equazione d'onda ottica<span class="lecture-step-boss">DIM 18</span></h4>
+<p>Nell'approssimazione scalare, in un mezzo isotropo, non dispersivo, indipendente dal tempo e privo di sorgenti, il campo soddisfa l'equazione d'onda.</p>
+<div aria-label="Equazione d'onda scalare in un mezzo ottico" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \nabla^2\Psi(\mathbf r,t)-\frac{n^2(\mathbf r)}{c^2}\partial_t^2\Psi(\mathbf r,t)=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Riduzione a Helmholtz<span class="lecture-step-boss">DIM 18</span></h4>
+<p>Una dipendenza armonica nel tempo trasforma la derivata seconda in un fattore e lascia un problema puramente spaziale.</p>
+<div aria-label="Derivazione dell'equazione di Helmholtz monocromatica" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \Psi=\psi(\mathbf r)e^{-i\omega t},\quad\partial_t^2\Psi=-\omega^2\Psi\Rightarrow\nabla^2\psi+k_0^2n^2(\mathbf r)\psi=0,\qquad k_0=\omega/c\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Equazione iconale<span class="lecture-step-boss">DIM 18</span></h4>
+<p>Separando ampiezza lenta e fase rapida, la potenza dominante del numero d'onda impone l'iconale; l'ordine successivo trasporta l'ampiezza.</p>
+<div aria-label="Espansione iconale dell'equazione di Helmholtz" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=Ae^{ik_0S_o}:\quad k_0^2A[n^2-|\nabla S_o|^2]+ik_0[2\nabla A\!\cdot\!\nabla S_o+A\nabla^2S_o]+\nabla^2A=0\Rightarrow|\nabla S_o|^2=n^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Hamilton-Jacobi<span class="lecture-step-boss">DIM 18</span></h4>
+<p>Per una particella non relativistica a energia fissata, l'azione caratteristica genera l'impulso e soddisfa l'analogo meccanico dell'iconale.</p>
+<div aria-label="Equazione stazionaria di Hamilton-Jacobi" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H(\mathbf r,\nabla W)=E,\quad H=\frac{p^2}{2m}+V\Rightarrow|\nabla W|^2=2m(E-V),\qquad\mathbf p=\nabla W\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Ponte di de Broglie<span class="lecture-step-boss">DIM 18</span></h4>
+<p>La fase della materia è proporzionale all'azione. Il gradiente della fase restituisce il vettore d'onda e quindi l'impulso.</p>
+<div aria-label="Relazione tra azione, fase e vettore d'onda di de Broglie" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \varphi=\frac W\hbar,\qquad\mathbf k=\nabla\varphi=\frac{\nabla W}{\hbar}=\frac{\mathbf p}{\hbar},\qquad\lambda=\frac{2\pi}{k}=\frac hp\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. TISE in forma di Helmholtz<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Portando il potenziale a destra, la Schrödinger stazionaria espone un numero d'onda locale reale o immaginario.</p>
+<div aria-label="Equazione di Schrodinger stazionaria in forma di Helmholtz" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \left[-\frac{\hbar^2}{2m}\nabla^2+V\right]\phi=E\phi\Rightarrow\nabla^2\phi+k_q^2(\mathbf r)\phi=0,\qquad k_q^2=\frac{2m(E-V)}{\hbar^2}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Indice meccanico adimensionale<span class="lecture-step-boss">ORALE</span></h4>
+<p>Non si può scrivere <span class="mq-math" data-i18n-skip="true">\(n=p\)</span>: le dimensioni sono diverse. Scelto un impulso di riferimento, il rapporto diventa confrontabile con un indice ottico.</p>
+<div aria-label="Definizione adimensionale dell'indice meccanico" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle p_\star=\sqrt{2m(E-V_\star)},\quad k_\star=p_\star/\hbar,\quad n_q(\mathbf r)=\frac{k_q}{k_\star}=\frac{p(\mathbf r)}{p_\star}=\sqrt{\frac{E-V(\mathbf r)}{E-V_\star}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Corrispondenze operatoriali<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Su un'onda piana, le derivate estraggono energia e impulso. Sostituirle nella dispersione classica motiva la forma coordinata della TDSE.</p>
+<div aria-label="Corrispondenze energia impulso e forma coordinata della TDSE" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=e^{i(\mathbf k\cdot\mathbf r-\omega t)}:\quad i\hbar\partial_t\psi=\hbar\omega\psi,\ -i\hbar\nabla\psi=\hbar\mathbf k\psi\Rightarrow i\hbar\partial_t\psi=\left[-\frac{\hbar^2}{2m}\nabla^2+V\right]\psi\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Fondamento dinamico<span class="lecture-step-boss">DIM 0</span></h4>
+<p>L'argomento strutturale parte invece dall'evoluzione unitaria: il generatore autoaggiunto delle traslazioni temporali è l'Hamiltoniano diviso per <span class="mq-math" data-i18n-skip="true">\(\hbar\)</span>.</p>
+<div aria-label="Derivazione della TDSE dal generatore delle traslazioni temporali" class="lecture-formula"><span class="lecture-proof-tag">Orale</span><span class="lecture-proof-math">\(\displaystyle U(t+dt,t)=\mathbf1-\frac{i}{\hbar}\hat Hdt+O(dt^2),\quad|\psi(t+dt)\rangle=U|\psi(t)\rangle\Rightarrow i\hbar\partial_t|\psi(t)\rangle=\hat H|\psi(t)\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Separazione tempo-spazio<span class="lecture-step-boss">DIM 14</span></h4>
+<p>Se l'Hamiltoniano non dipende dal tempo, una soluzione separabile porta a un'unica costante reale, l'autovalore energetico.</p>
+<div aria-label="Separazione delle variabili tra TDSE e TISE" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi(\mathbf r,t)=\phi(\mathbf r)T(t)\Rightarrow i\hbar\frac{\dot T}{T}=\frac{\hat H\phi}{\phi}=E\Rightarrow T=e^{-iEt/\hbar},\quad\hat H\phi=E\phi\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Controllo con onda piana<span class="lecture-step-boss">DIM 14</span></h4>
+<p>Per la particella libera, Laplaciano e derivata temporale riproducono la dispersione non relativistica e le relazioni di de Broglie.</p>
+<div aria-label="Verifica della TDSE con un'onda piana libera" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \psi=Ae^{i(\mathbf k\cdot\mathbf r-\omega t)},\quad\nabla^2\psi=-k^2\psi,\quad\partial_t\psi=-i\omega\psi\Rightarrow E=\hbar\omega=\frac{\hbar^2k^2}{2m}=\frac{p^2}{2m}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Forma polare di Madelung<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Separare parte reale e immaginaria della TDSE produce un'equazione di Hamilton-Jacobi corretta e una legge di continuità.</p>
+<div aria-label="Equazioni di Madelung e potenziale quantistico" class="lecture-formula"><span class="lecture-proof-tag">Orale</span><span class="lecture-proof-math">\(\displaystyle \psi=\sqrt\rho\,e^{iS/\hbar}:\quad\partial_tS+\frac{|\nabla S|^2}{2m}+V+Q=0,\quad\partial_t\rho+\nabla\!\cdot\!\left(\rho\frac{\nabla S}{m}\right)=0,\quad Q=-\frac{\hbar^2}{2m}\frac{\nabla^2\sqrt\rho}{\sqrt\rho}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Limite WKB<span class="lecture-step-boss">ORALE</span></h4>
+<p>Quando l'ampiezza varia lentamente sulla scala della lunghezza d'onda locale, il termine quantistico è subdominante e riemerge Hamilton-Jacobi.</p>
+<div aria-label="Espansione WKB e recupero di Hamilton-Jacobi" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \phi=Ae^{iW/\hbar}:\quad |\nabla W|^2=2m(E-V)+\hbar^2\frac{\nabla^2A}{A},\qquad\nabla\!\cdot(A^2\nabla W)=0\Rightarrow \hbar^2|\nabla^2A/A|\ll p^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Mappa paraxiale<span class="lecture-step-boss">ORALE</span></h4>
+<p>Per un fascio quasi parallelo, eliminare la portante e trascurare la derivata seconda dell'inviluppo lungo <span class="mq-math" data-i18n-skip="true">\(z\)</span> produce una vera equazione di tipo Schrödinger.</p>
+<div aria-label="Equazione paraxiale in forma di Schrodinger" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \psi=u(\mathbf r_\perp,z)e^{in_0k_0z},\quad|\partial_z^2u|\ll n_0k_0|\partial_zu|\Rightarrow i\partial_zu=\left[-\frac{\nabla_\perp^2}{2n_0k_0}-k_0\Delta n(\mathbf r_\perp,z)\right]u\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: interfaccia come rifrazione quantistica</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Gradino con <span class="mq-math" data-i18n-skip="true">\(E=10.0\,\mathrm{eV}\)</span>, <span class="mq-math" data-i18n-skip="true">\(V_1=0\)</span> e <span class="mq-math" data-i18n-skip="true">\(V_2=6.00\,\mathrm{eV}\)</span>.</p>
+<p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\(k_2/k_1=\sqrt{(E-V_2)/(E-V_1)}=\sqrt{0.4}=0.632\)</span> e <span class="mq-math" data-i18n-skip="true">\(r=(k_1-k_2)/(k_1+k_2)\)</span>.</p>
+<p><strong>Risultato.</strong> <span class="mq-math" data-i18n-skip="true">\(R=|r|^2=0.0507\)</span>, <span class="mq-math" data-i18n-skip="true">\(T=(k_2/k_1)|t|^2=0.949\)</span> e <span class="mq-math" data-i18n-skip="true">\(R+T=1\)</span>. Il fattore di flusso distingue <span class="mq-math" data-i18n-skip="true">\(T\)</span> dal solo <span class="mq-math" data-i18n-skip="true">\(|t|^2\)</span>.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Regione classica e regione evanescente</h3>
+<p>Se <span class="mq-math" data-i18n-skip="true">\(E&gt;V\)</span>, <span class="mq-math" data-i18n-skip="true">\(k_q\)</span> è reale e la soluzione oscilla. Se <span class="mq-math" data-i18n-skip="true">\(E&lt;V\)</span>, <span class="mq-math" data-i18n-skip="true">\(k_q=i\kappa\)</span> e compaiono esponenziali: è l'analogo delle onde evanescenti, alla base del tunneling.</p>
+</article>
+<article class="lecture-card">
+<h3>Stazionario non significa immobile</h3>
+<p>Un singolo autostato energetico ha densità indipendente dal tempo, ma può trasportare corrente. Una sovrapposizione di energie diverse contiene fasi relative <span class="mq-math" data-i18n-skip="true">\(e^{-i(E_n-E_m)t/\hbar}\)</span> e in generale densità variabile.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Scrivere <span class="mq-math" data-i18n-skip="true">\(n=p\)</span> senza una scala di riferimento.</li>
+<li>Dire che Helmholtz dimostra la TDSE o la regola di Born.</li>
+<li>Confondere funzione monocromatica, stato stazionario e stato generico.</li>
+<li>Cancellare un unico fattore temporale in una sovrapposizione di energie diverse.</li>
+<li>Porre sempre <span class="mq-math" data-i18n-skip="true">\(Q=0\)</span>, anche vicino a nodi, caustiche o variazioni rapide.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Controlli dimensionali</h3>
+<p><span class="mq-math" data-i18n-skip="true">\([k_q]=\mathrm{m^{-1}}\)</span>, <span class="mq-math" data-i18n-skip="true">\([p/\hbar]=\mathrm{m^{-1}}\)</span> e ogni termine della TDSE ha dimensione energia per funzione d'onda. Nella mappa paraxiale <span class="mq-math" data-i18n-skip="true">\(z\)</span> ha dimensione di lunghezza e sostituisce formalmente il tempo, non fisicamente.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Deriva Helmholtz dalla dipendenza monocromatica.</li>
+<li>Ricava iconale e termine di trasporto ordinando le potenze di <span class="mq-math" data-i18n-skip="true">\(k_0\)</span>.</li>
+<li>Confronta iconale e Hamilton-Jacobi senza identificare quantità dimensionalmente diverse.</li>
+<li>Porta la TISE in forma di Helmholtz e discuti il segno di <span class="mq-math" data-i18n-skip="true">\(E-V\)</span>.</li>
+<li>Spiega perché le sostituzioni operatoriali sono una motivazione, non una dimostrazione completa.</li>
+<li>Deriva la TDSE dall'operatore di evoluzione infinitesimo.</li>
+<li>Separa TDSE e TISE quando <span class="mq-math" data-i18n-skip="true">\(\partial_t\hat H=0\)</span>.</li>
+<li>Verifica la dispersione dell'onda piana libera.</li>
+<li>Ricava entrambe le equazioni di Madelung e identifica <span class="mq-math" data-i18n-skip="true">\(Q\)</span>.</li>
+<li>Spiega la mappa paraxiale e il ruolo formale di <span class="mq-math" data-i18n-skip="true">\(z\)</span>.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0</a> - postulato dinamico, TDSE, TISE, fase e limite classico</li>
+<li><a href="boss/P3_DIM_13-18.txt#L1">DIM 14 e DIM 18</a> - particella libera tridimensionale e ponte ottica-meccanica</li>
+<li><a href="Appunti-MQ.pdf#page=107">Appunti-MQ.pdf, pagine PDF 107-114</a> - evoluzione unitaria, equazione d'onda e stati stazionari</li>
+<li><a href="BibbiaAleHD.pdf#page=5">BibbiaAleHD.pdf, pagine PDF 5 e 9</a> - iconale, Hamilton-Jacobi e costruzione manoscritta della TISE</li>
+<li><a href="analogia-ottica-meccanica.html">Analogia ottica-meccanica</a> - Fermat, Maupertuis, eikonal, WKB e rifrazione</li>
+</ul>
+<p class="lecture-note">La pagina usa l'analogia come guida controllata e la separa dalla giustificazione dinamica tramite unitarietà e generatore temporale.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 2 - DIM 0, 14 e 18":"In-depth lesson - Topic 2 - DIM 0, 14, and 18","Da Helmholtz a Schrödinger":"From Helmholtz to Schrödinger","Derivare Helmholtz da un'onda monocromatica, confrontare iconale e Hamilton-Jacobi, ottenere la forma di Helmholtz della Schrödinger stazionaria, motivare con precisione la TDSE e chiarire che cosa l'analogia ottica spiega e che cosa non può derivare.":"Derive Helmholtz from a monochromatic wave, compare the eikonal and Hamilton-Jacobi equations, obtain the Helmholtz form of the time-independent Schrödinger equation, motivate the TDSE precisely, and clarify what the optical analogy explains and what it cannot derive.","Il ponte corretto":"The proper bridge","Ottica geometrica e meccanica classica emergono come limiti di fase rapida di due teorie ondulatorie. Le equazioni iconale e Hamilton-Jacobi hanno la stessa struttura quando la fase quantistica è l'azione divisa per":"Geometrical optics and classical mechanics emerge as rapid-phase limits of two wave theories. The eikonal and Hamilton-Jacobi equations have the same structure when the quantum phase is the action divided by","Non è una derivazione della MQ":"It is not a derivation of quantum mechanics","Il confronto con Helmholtz motiva la forma spaziale della TISE, ma non dimostra la regola di Born, la linearità complessa, il valore di":"The comparison with Helmholtz motivates the spatial form of the TISE, but does not derive the Born rule, complex linearity, the value of","o la legge temporale. Questi elementi appartengono alla struttura empirica e postulata della teoria.":"or the time-evolution law. These elements belong to the empirical and postulated structure of the theory.","Tre equazioni, tre ruoli":"Three equations, three roles","Helmholtz e TISE":"Helmholtz and the TISE","Entrambe sono equazioni spaziali del secondo ordine a frequenza o energia fissata. Condizioni al contorno e normalizzabilità selezionano modi ottici o autostati energetici.":"Both are second-order spatial equations at fixed frequency or energy. Boundary conditions and normalizability select optical modes or energy eigenstates.","È un'equazione di evoluzione del primo ordine nel tempo. Assegnati Hamiltoniano e stato iniziale, determina lo stato successivo; non si ottiene cancellando semplicemente un fattore monocromatico da Helmholtz.":"It is a first-order time-evolution equation. Given the Hamiltonian and initial state, it determines the subsequent state; it is not obtained merely by canceling a monochromatic factor from Helmholtz.","Dimostrazioni compatte":"Compact derivations","1. Equazione d'onda ottica":"1. Optical wave equation","Nell'approssimazione scalare, in un mezzo isotropo, non dispersivo, indipendente dal tempo e privo di sorgenti, il campo soddisfa l'equazione d'onda.":"In the scalar approximation, the field in an isotropic, nondispersive, time-independent, source-free medium satisfies the wave equation.","2. Riduzione a Helmholtz":"2. Reduction to Helmholtz","Una dipendenza armonica nel tempo trasforma la derivata seconda in un fattore e lascia un problema puramente spaziale.":"Harmonic time dependence turns the second time derivative into a factor and leaves a purely spatial problem.","3. Equazione iconale":"3. Eikonal equation","Separando ampiezza lenta e fase rapida, la potenza dominante del numero d'onda impone l'iconale; l'ordine successivo trasporta l'ampiezza.":"Separating a slowly varying amplitude from a rapidly varying phase, the leading power of the wavenumber yields the eikonal equation; the next order transports the amplitude.","4. Hamilton-Jacobi":"4. Hamilton-Jacobi","Per una particella non relativistica a energia fissata, l'azione caratteristica genera l'impulso e soddisfa l'analogo meccanico dell'iconale.":"For a nonrelativistic particle at fixed energy, Hamilton's characteristic function generates the momentum and satisfies the mechanical analogue of the eikonal equation.","5. Ponte di de Broglie":"5. de Broglie bridge","La fase della materia è proporzionale all'azione. Il gradiente della fase restituisce il vettore d'onda e quindi l'impulso.":"The matter-wave phase is proportional to the action. Its gradient gives the wavevector and hence the momentum.","6. TISE in forma di Helmholtz":"6. TISE in Helmholtz form","Portando il potenziale a destra, la Schrödinger stazionaria espone un numero d'onda locale reale o immaginario.":"Moving the potential to the right exposes a real or imaginary local wavenumber in the time-independent Schrödinger equation.","7. Indice meccanico adimensionale":"7. Dimensionless mechanical index","Non si può scrivere":"One cannot write",": le dimensioni sono diverse. Scelto un impulso di riferimento, il rapporto diventa confrontabile con un indice ottico.":": their dimensions differ. Once a reference momentum is chosen, the ratio can be compared with an optical refractive index.","8. Corrispondenze operatoriali":"8. Operator correspondences","Su un'onda piana, le derivate estraggono energia e impulso. Sostituirle nella dispersione classica motiva la forma coordinata della TDSE.":"On a plane wave, the derivatives return the energy and momentum. Substituting them into the classical dispersion relation motivates the coordinate-space TDSE.","9. Fondamento dinamico":"9. Dynamical foundation","L'argomento strutturale parte invece dall'evoluzione unitaria: il generatore autoaggiunto delle traslazioni temporali è l'Hamiltoniano diviso per":"The structural argument instead starts from unitary evolution: the self-adjoint generator of time translations is the Hamiltonian divided by","10. Separazione tempo-spazio":"10. Time-space separation","Se l'Hamiltoniano non dipende dal tempo, una soluzione separabile porta a un'unica costante reale, l'autovalore energetico.":"If the Hamiltonian is time independent, a separable solution introduces a single real separation constant, the energy eigenvalue.","11. Controllo con onda piana":"11. Plane-wave check","Per la particella libera, Laplaciano e derivata temporale riproducono la dispersione non relativistica e le relazioni di de Broglie.":"For a free particle, the Laplacian and time derivative reproduce the nonrelativistic dispersion relation and the de Broglie relations.","12. Forma polare di Madelung":"12. Madelung polar form","Separare parte reale e immaginaria della TDSE produce un'equazione di Hamilton-Jacobi corretta e una legge di continuità.":"Separating the real and imaginary parts of the TDSE yields a corrected Hamilton-Jacobi equation and a continuity equation.","13. Limite WKB":"13. WKB limit","Quando l'ampiezza varia lentamente sulla scala della lunghezza d'onda locale, il termine quantistico è subdominante e riemerge Hamilton-Jacobi.":"When the amplitude varies slowly on the scale of the local wavelength, the quantum term is subleading and Hamilton-Jacobi re-emerges.","14. Mappa paraxiale":"14. Paraxial mapping","Per un fascio quasi parallelo, eliminare la portante e trascurare la derivata seconda dell'inviluppo lungo":"For a nearly parallel beam, removing the carrier and neglecting the second derivative of the envelope along","produce una vera equazione di tipo Schrödinger.":"yields a genuine Schrödinger-type equation.","Esempio d'esame: interfaccia come rifrazione quantistica":"Exam example: an interface as quantum refraction","Gradino con":"A step potential with",". Il fattore di flusso distingue":". The flux factor distinguishes","dal solo":"from","Regione classica e regione evanescente":"Classically allowed and evanescent regions","è reale e la soluzione oscilla. Se":"is real and the solution oscillates. If","e compaiono esponenziali: è l'analogo delle onde evanescenti, alla base del tunneling.":"and exponential solutions appear: this is the analogue of evanescent waves and underlies tunneling.","Stazionario non significa immobile":"Stationary does not mean motionless","Un singolo autostato energetico ha densità indipendente dal tempo, ma può trasportare corrente. Una sovrapposizione di energie diverse contiene fasi relative":"A single energy eigenstate has a time-independent density, but can carry probability current. A superposition of different energies contains relative phases","e in generale densità variabile.":"and generally has a time-dependent density.","Errori tipici":"Common errors","senza una scala di riferimento.":"without a reference scale.","Dire che Helmholtz dimostra la TDSE o la regola di Born.":"Claiming that Helmholtz derives the TDSE or the Born rule.","Confondere funzione monocromatica, stato stazionario e stato generico.":"Confusing a monochromatic field, a stationary state, and a general state.","Cancellare un unico fattore temporale in una sovrapposizione di energie diverse.":"Canceling a single time factor in a superposition of different energies.","Porre sempre":"Always setting",", anche vicino a nodi, caustiche o variazioni rapide.":", even near nodes, caustics, or rapid variations.","Controlli dimensionali":"Dimensional checks","e ogni termine della TDSE ha dimensione energia per funzione d'onda. Nella mappa paraxiale":"and every term in the TDSE has dimensions of energy times wave function. In the paraxial mapping","ha dimensione di lunghezza e sostituisce formalmente il tempo, non fisicamente.":"has dimensions of length and replaces time formally, not physically.","Controllo da orale":"Oral exam checklist","Deriva Helmholtz dalla dipendenza monocromatica.":"Derive Helmholtz from monochromatic time dependence.","Ricava iconale e termine di trasporto ordinando le potenze di":"Derive the eikonal and transport terms by ordering powers of","Confronta iconale e Hamilton-Jacobi senza identificare quantità dimensionalmente diverse.":"Compare the eikonal and Hamilton-Jacobi equations without identifying dimensionally different quantities.","Porta la TISE in forma di Helmholtz e discuti il segno di":"Put the TISE in Helmholtz form and discuss the sign of","Spiega perché le sostituzioni operatoriali sono una motivazione, non una dimostrazione completa.":"Explain why the operator substitutions are a motivation, not a complete derivation.","Deriva la TDSE dall'operatore di evoluzione infinitesimo.":"Derive the TDSE from the infinitesimal evolution operator.","Separa TDSE e TISE quando":"Separate the TDSE and TISE when","Verifica la dispersione dell'onda piana libera.":"Verify the free plane-wave dispersion relation.","Ricava entrambe le equazioni di Madelung e identifica":"Derive both Madelung equations and identify","Spiega la mappa paraxiale e il ruolo formale di":"Explain the paraxial mapping and the formal role of","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- postulato dinamico, TDSE, TISE, fase e limite classico":"- dynamical postulate, TDSE, TISE, phase, and classical limit","DIM 14 e DIM 18":"DIM 14 and DIM 18","- particella libera tridimensionale e ponte ottica-meccanica":"- three-dimensional free particle and optics-mechanics bridge","Appunti-MQ.pdf, pagine PDF 107-114":"Appunti-MQ.pdf, PDF pages 107-114","- evoluzione unitaria, equazione d'onda e stati stazionari":"- unitary evolution, wave equation, and stationary states","BibbiaAleHD.pdf, pagine PDF 5 e 9":"BibbiaAleHD.pdf, PDF pages 5 and 9","- iconale, Hamilton-Jacobi e costruzione manoscritta della TISE":"- eikonal equation, Hamilton-Jacobi, and handwritten construction of the TISE","Analogia ottica-meccanica":"Optics-mechanics analogy","- Fermat, Maupertuis, eikonal, WKB e rifrazione":"- Fermat, Maupertuis, eikonal, WKB, and refraction","La pagina usa l'analogia come guida controllata e la separa dalla giustificazione dinamica tramite unitarietà e generatore temporale.":"This page uses the analogy as a controlled guide and separates it from the dynamical justification based on unitarity and the generator of time translations.","Ritorna all'indice MQ":"Return to the MQ index","Obiettivo.":"Goal.","TDSE":"TDSE","DIM 18":"DIM 18","DIM 0":"DIM 0","DIM 14":"DIM 14","ORALE":"ORAL","Base":"Core","Check":"Check","Orale":"Oral","Estensione":"Extension","Dati.":"Given.","Calcolo.":"Calculation.","e":"and","Risultato.":"Result.","Se":"If","è":"is","Scrivere":"Writing"},"attrs":{"Equazione d'onda scalare in un mezzo ottico":"Scalar wave equation in an optical medium","Derivazione dell'equazione di Helmholtz monocromatica":"Derivation of the monochromatic Helmholtz equation","Espansione iconale dell'equazione di Helmholtz":"Eikonal expansion of the Helmholtz equation","Equazione stazionaria di Hamilton-Jacobi":"Time-independent Hamilton-Jacobi equation","Relazione tra azione, fase e vettore d'onda di de Broglie":"Relation among action, phase, and the de Broglie wavevector","Equazione di Schrodinger stazionaria in forma di Helmholtz":"Time-independent Schrödinger equation in Helmholtz form","Definizione adimensionale dell'indice meccanico":"Dimensionless definition of the mechanical index","Corrispondenze energia impulso e forma coordinata della TDSE":"Energy-momentum correspondences and the coordinate-space TDSE","Derivazione della TDSE dal generatore delle traslazioni temporali":"Derivation of the TDSE from the generator of time translations","Separazione delle variabili tra TDSE e TISE":"Separation of variables between the TDSE and TISE","Verifica della TDSE con un'onda piana libera":"Verification of the TDSE with a free plane wave","Equazioni di Madelung e potenziale quantistico":"Madelung equations and quantum potential","Espansione WKB e recupero di Hamilton-Jacobi":"WKB expansion and recovery of Hamilton-Jacobi","Equazione paraxiale in forma di Schrodinger":"Paraxial equation in Schrödinger form"},"title":{"it":"Da Helmholtz a Schrödinger - Dimostrazioni e ripasso orale","en":"From Helmholtz to Schrödinger - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
