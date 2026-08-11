@@ -1,274 +1,347 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esperimenti della Doppia Fenditura</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doppia fenditura - Dimostrazioni e ripasso orale</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Esperimenti della Doppia Fenditura</h1>
-    <h2>Descrizione dell'esperimento</h2>
-    L'esperimento della doppia fenditura, inizialmente concepito per studiare la natura della luce, è uno dei più importanti 
-    nella fisica moderna. Consiste nel far passare un fascio di luce o particelle attraverso due fenditure parallele, osservando 
-    il pattern risultante su uno schermo.
-
-    <h2>Comportamento ondulatorio</h2>
-    Quando un'onda luminosa attraversa le due fenditure, le onde diffratte interferiscono, producendo un pattern caratteristico di 
-    frange di interferenza. L'intensità \( I \) del pattern è descritta dalla formula:
-    <div class="formula">
-        \[
-        I(\theta) = I_0 \cos^2\left(\frac{\pi d \sin\theta}{\lambda}\right)
-        \]
+    <div class="language-switch" data-i18n-skip="true" role="group" aria-label="Lingua / Language">
+      <button data-language="it" type="button" aria-pressed="false">ITA</button>
+      <button data-language="en" type="button" aria-pressed="false">ENG</button>
     </div>
-    dove:
-    <ul>
-        <li>\( I_0 \): Intensità massima</li>
-        <li>\( d \): Distanza tra le fenditure</li>
-        <li>\( \lambda \): Lunghezza d'onda della radiazione</li>
-        <li>\( \theta \): Angolo di osservazione</li>
-    </ul>
+<main id="lezione-doppia-fenditura" class="lecture-depth" data-mq-enrichment="2026-08-11">
+  <div class="lecture-kicker">Lezione approfondita - Argomento 2 - DIM 18</div>
+  <h1>Esperimento della doppia fenditura</h1>
+  <p class="lecture-lead"><strong>Obiettivo.</strong> Confrontare particelle classiche, onde ed elettroni; derivare la distribuzione di interferenza dalla somma di ampiezze; includere l'inviluppo di diffrazione; spiegare con stati del rivelatore, visibilità e informazione di cammino perché le frange scompaiono.</p>
 
-    <h2>Comportamento corpuscolare</h2>
-    L'esperimento diventa particolarmente interessante quando si utilizzano particelle, come elettroni o fotoni, inviate 
-    una alla volta. Anche in questo caso, dopo molte iterazioni, si osserva lo stesso pattern di interferenza, suggerendo 
-    che ogni particella interferisce con sé stessa.
-
-    <h2>Dualità onda-particella</h2>
-    Questo esperimento dimostra la natura duale della luce e delle particelle. L'equazione di De Broglie:
-    <div class="formula">
-        \[
-        \lambda = \frac{h}{p}
-        \]
-    </div>
-    collega la lunghezza d'onda associata a una particella con il suo momento \( p \), fornendo una spiegazione quantistica 
-    del fenomeno.
-
-    <h2>Implicazioni teoriche</h2>
-    La doppia fenditura ha conseguenze profonde per la fisica teorica:
-    <ul>
-        <li>Introduce il concetto di sovrapposizione quantistica: ogni particella esiste in uno stato combinato fino a quando non viene misurata.</li>
-        <li>È alla base del principio di indeterminazione di Heisenberg, poiché l'interferenza scompare se si cerca di determinare quale fenditura sia stata attraversata.</li>
-    </ul>
-
-    <h2>Applicazioni</h2>
-    L'esperimento ha ispirato lo sviluppo di tecnologie basate sulla meccanica quantistica, come l'interferometria e i computer quantistici. 
-    Rimane un punto di riferimento nella didattica della fisica moderna.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 2</div>
-  <h2>Esperimenti della Doppia Fenditura: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Calcolare l'interferenza come somma di ampiezze e spiegare quantitativamente la perdita di visibilità quando esiste informazione di cammino.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Con due alternative indistinguibili si sommano ampiezze complesse, non probabilità. Il termine incrociato produce le frange anche quando le particelle arrivano una alla volta. Se un apparato registra il cammino, lo stato della particella si correla con due stati diversi del rivelatore e l'interferenza dipende dalla loro sovrapposizione.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Ampiezza totale<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Per fenditure equivalenti \(\psi_1=Ae^{i\phi_1}\) e \(\psi_2=Ae^{i\phi_2}\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P=|\psi_1+\psi_2|^2=2A^2[1+\cos(\Delta\phi)]"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P=|\psi_1+\psi_2|^2=|\psi_1|^2+|\psi_2|^2+2\operatorname{Re}(\psi_1^*\psi_2)\overset{\psi_j=Ae^{i\phi_j}}{\Rightarrow}2A^2[1+\cos\Delta\phi]\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Geometria lontana<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Nel regime di Fraunhofer la differenza di cammino vale \(d\sin\theta\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\Delta\phi=\frac{2\pi d\sin\theta}{\lambda}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \Delta\ell=d\sin\theta,\quad \Delta\phi=k\Delta\ell,\quad k=2\pi/\lambda\ \Rightarrow\ \Delta\phi=2\pi d\sin\theta/\lambda\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Marcatura del cammino<span class="lecture-step-boss">DIM 18</span></h4>
-      <p>Con stati del rivelatore \(|D_1\rangle,|D_2\rangle\), il termine di interferenza è moltiplicato dal loro prodotto scalare.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P\supset2\operatorname{Re}[\psi_1^*\psi_2\langle D_1|D_2\rangle]"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\Psi\rangle=\psi_1|D_1\rangle+\psi_2|D_2\rangle\Rightarrow P=\langle\Psi|\Psi\rangle\supset2\operatorname{Re}[\psi_1^*\psi_2\langle D_1|D_2\rangle]\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Spaziatura delle frange</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Con \(d=0.20\,\mathrm{mm}\), \(L=2.0\,\mathrm{m}\), \(\lambda=500\,\mathrm{nm}\).</p>
-    <p><strong>Calcolo.</strong> Per piccoli angoli \(\Delta y=\lambda L/d=5.0\,\mathrm{mm}\).</p>
-    <p><strong>Risultato e controllo.</strong> La posizione è geometrica; la visibilità dipende invece dalla coerenza e dall'informazione di cammino.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 18</a> - copione e passaggi richiesti all'orale</li></ul></details>
   <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Fenditure coerenti e stabilità della fase.</li>
-          <li>Regime di campo lontano per la formula lineare delle frange.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La complementarità non richiede una perturbazione meccanica incontrollata: basta che l'informazione di cammino sia, in principio, codificata in stati ortogonali dell'ambiente.</p></article>
+    <article class="lecture-card lecture-result">
+      <h3>Il fatto sperimentale</h3>
+      <p>Ogni elettrone produce un evento localizzato sullo schermo. Ripetendo l'esperimento con elettroni inviati uno alla volta, l'istogramma degli arrivi costruisce gradualmente una figura di interferenza. La granularità riguarda la rivelazione; l'interferenza riguarda la distribuzione di probabilità.</p>
+    </article>
+    <article class="lecture-card lecture-warning">
+      <h3>La domanda corretta</h3>
+      <p>Non si assegna a ogni evento una traiettoria classica nascosta attraverso una fenditura. Si chiede invece se le alternative siano fisicamente indistinguibili. Se lo sono si sommano ampiezze; se l'apparato conserva informazione affidabile sul cammino si sommano probabilità.</p>
+    </article>
   </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Spiega quando si sommano probabilità anziché ampiezze.</li>
-          <li>Collega visibilità e prodotto scalare degli stati del rivelatore.</li></ul></article>
 
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=37">Appunti-MQ.pdf, pp. 37-42: ampiezze, interferenza e informazione di cammino</a></li>
-          <li><a href="BibbiaAleHD.pdf#page=6">BibbiaAleHD.pdf, pp. 6-8: probabilità con alternative indistinguibili</a></li>
+  <h2>Tre esperimenti, tre regole</h2>
+  <div class="lecture-grid">
+    <article class="lecture-card">
+      <h3>Proiettili classici</h3>
+      <p>Gli impatti sono granulari e le alternative sono esclusive. Aprendo entrambe le fenditure, la distribuzione è la somma di quelle ottenute aprendo una fenditura alla volta: <span class="mq-math" data-i18n-skip="true">\(P_{12}=P_1+P_2\)</span>.</p>
+    </article>
+    <article class="lecture-card">
+      <h3>Onde classiche</h3>
+      <p>Le ampiezze si sovrappongono. L'intensità è il modulo quadro dell'ampiezza risultante e contiene un termine incrociato dipendente dalla fase: <span class="mq-math" data-i18n-skip="true">\(I_{12}\ne I_1+I_2\)</span> in generale.</p>
+    </article>
+    <article class="lecture-card">
+      <h3>Elettroni senza misura del cammino</h3>
+      <p>Gli arrivi sono discreti, ma con entrambe le fenditure aperte vale <span class="mq-math" data-i18n-skip="true">\(P_{12}=|\phi_1+\phi_2|^2\)</span>, non <span class="mq-math" data-i18n-skip="true">\(P_1+P_2\)</span>. In alcuni punti aprire la seconda fenditura riduce il numero di arrivi: è il segno diretto del termine di interferenza.</p>
+    </article>
+    <article class="lecture-card">
+      <h3>Elettroni con misura del cammino</h3>
+      <p>Se il rivelatore distingue in modo affidabile i due cammini, gli eventi possono essere classificati e la distribuzione diventa <span class="mq-math" data-i18n-skip="true">\(P'_{12}=P'_1+P'_2\)</span>. Non compaiono frange anche se nessuno legge materialmente il dato registrato.</p>
+    </article>
+  </div>
+
+  <h2>Dimostrazioni compatte</h2>
+  <div class="lecture-steps">
+    <article class="lecture-card lecture-step">
+      <h4>1. Alternative classiche<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Per alternative mutuamente esclusive e distinguibili si usa la regola della probabilità totale.</p>
+      <div class="lecture-formula" aria-label="Somma classica delle probabilità"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathcal A_1\cap\mathcal A_2=\varnothing,\qquad P_{12}(x)=P_1(x)+P_2(x)\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>2. Somma di ampiezze<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Per alternative indistinguibili si sommano numeri complessi e solo dopo si prende il modulo quadro.</p>
+      <div class="lecture-formula" aria-label="Derivazione del termine di interferenza"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P=|\phi_1+\phi_2|^2=|\phi_1|^2+|\phi_2|^2+2\operatorname{Re}(\phi_1^*\phi_2)=P_1+P_2+2\sqrt{P_1P_2}\cos\delta\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>3. Fenditure equivalenti<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Se le due ampiezze hanno lo stesso modulo, il termine incrociato si raccoglie in un coseno quadro.</p>
+      <div class="lecture-formula" aria-label="Interferenza per fenditure equivalenti"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \phi_1=Ae^{i\varphi_1},\quad\phi_2=Ae^{i\varphi_2}\Rightarrow P=2A^2(1+\cos\delta)=4A^2\cos^2\!\frac\delta2,\qquad\delta=\varphi_2-\varphi_1\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>4. Fase geometrica<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Nel campo lontano la differenza di cammino dipende dalla distanza <span class="mq-math" data-i18n-skip="true">\(d\)</span> tra i centri delle fenditure.</p>
+      <div class="lecture-formula" aria-label="Differenza di cammino e differenza di fase"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \Delta\ell=d\sin\theta,\quad k=\frac{2\pi}{\lambda}\Rightarrow\delta=k\Delta\ell=\frac{2\pi d\sin\theta}{\lambda}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>5. Massimi, minimi e passo<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Per piccoli angoli, la coordinata sullo schermo è <span class="mq-math" data-i18n-skip="true">\(y\simeq L\sin\theta\)</span>. Da qui si ricavano posizioni e spaziatura delle frange.</p>
+      <div class="lecture-formula" aria-label="Posizioni dei massimi e spaziatura delle frange"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle d\sin\theta_m=m\lambda\Rightarrow y_m\simeq m\frac{\lambda L}{d},\quad d\sin\theta_{\min}=\left(m+\frac12\right)\lambda,\qquad\Delta y=\frac{\lambda L}{d}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>6. Larghezza finita<span class="lecture-step-boss">ORALE</span></h4>
+      <p>Una fenditura di larghezza <span class="mq-math" data-i18n-skip="true">\(a\)</span> diffrange. Il profilo a due fenditure è quindi una figura di interferenza modulata dall'inviluppo di fenditura singola.</p>
+      <div class="lecture-formula" aria-label="Distribuzione di Fraunhofer per due fenditure finite"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \alpha=\frac{\pi d\sin\theta}{\lambda},\quad\beta=\frac{\pi a\sin\theta}{\lambda},\quad I(\theta)=4I_0\left(\frac{\sin\beta}{\beta}\right)^2\cos^2\alpha\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>7. Accumulo degli eventi<span class="lecture-step-boss">ORALE</span></h4>
+      <p>La legge di Born collega l'ampiezza al limite statistico delle frequenze osservate, non alla posizione del singolo impatto.</p>
+      <div class="lecture-formula" aria-label="Frequenza relativa e densità di probabilità"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \frac{N(x,x+dx)}{N_{\rm tot}}\xrightarrow{N_{\rm tot}\to\infty}P(x)\,dx,\qquad P(x)=\frac{|\phi_1(x)+\phi_2(x)|^2}{\int |\phi_1+\phi_2|^2dx}\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>8. Marcatore di cammino<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Il passaggio correla il cammino con due stati del rivelatore. Tracciando il rivelatore, il prodotto scalare <span class="mq-math" data-i18n-skip="true">\(\gamma=\langle D_1|D_2\rangle\)</span> moltiplica l'interferenza.</p>
+      <div class="lecture-formula" aria-label="Interferenza con un marcatore di cammino"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\Psi\rangle=\phi_1|D_1\rangle+\phi_2|D_2\rangle\Rightarrow P=|\phi_1|^2+|\phi_2|^2+2\operatorname{Re}[\phi_1^*\phi_2\langle D_1|D_2\rangle]\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>9. Visibilità e distinguibilità<span class="lecture-step-boss">ORALE</span></h4>
+      <p>Per cammini equilibrati la visibilità coincide con il modulo della sovrapposizione dei marcatori. Per stati puri vale la complementarità quantitativa.</p>
+      <div class="lecture-formula" aria-label="Relazione tra visibilità e distinguibilità"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \mathcal V=\frac{P_{\max}-P_{\min}}{P_{\max}+P_{\min}}=|\gamma|,\quad\mathcal D=\sqrt{1-|\gamma|^2}\Rightarrow\mathcal V^2+\mathcal D^2=1,\qquad\rho^2=\rho\)</span></div>
+    </article>
+
+    <article class="lecture-card lecture-step">
+      <h4>10. Lamina mobile Einstein-Bohr<span class="lecture-step-boss">DIM 18</span></h4>
+      <p>Il rinculo potrebbe marcare il cammino, ma risolverlo richiede un impulso iniziale preciso della lamina; l'indeterminazione della sua posizione rende incerta la fase delle frange.</p>
+      <div class="lecture-formula" aria-label="Stima di indeterminazione per la lamina mobile"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \Delta p_{\rm via}\sim p\frac dL,\quad\sigma_P\lesssim\Delta p_{\rm via},\quad\sigma_X\sigma_P\ge\frac\hbar2\Rightarrow\sigma_X\gtrsim\frac{\hbar L}{2pd}=\frac{\lambda L}{4\pi d},\quad\sigma_\varphi\sim\frac{2\pi d}{\lambda L}\sigma_X=O(1)\)</span></div>
+    </article>
+  </div>
+
+  <h2>Esempio d'esame: frange e inviluppo</h2>
+  <article class="lecture-card lecture-result lecture-example">
+    <p><strong>Dati.</strong> <span class="mq-math" data-i18n-skip="true">\(\lambda=500\,\mathrm{nm}\)</span>, <span class="mq-math" data-i18n-skip="true">\(d=0.20\,\mathrm{mm}\)</span>, <span class="mq-math" data-i18n-skip="true">\(a=0.050\,\mathrm{mm}\)</span>, <span class="mq-math" data-i18n-skip="true">\(L=2.0\,\mathrm m\)</span>.</p>
+    <p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\(\Delta y=\lambda L/d=5.0\,\mathrm{mm}\)</span>. Il primo zero dell'inviluppo è a <span class="mq-math" data-i18n-skip="true">\(y_{\rm env}\simeq\lambda L/a=20\,\mathrm{mm}\)</span>.</p>
+    <p><strong>Risultato.</strong> Nel massimo centrale cadono sette massimi non annullati, da <span class="mq-math" data-i18n-skip="true">\(m=-3\)</span> a <span class="mq-math" data-i18n-skip="true">\(m=3\)</span>; gli ordini <span class="mq-math" data-i18n-skip="true">\(m=\pm4\)</span> coincidono con i primi zeri dell'inviluppo.</p>
+  </article>
+
+  <div class="lecture-grid">
+    <article class="lecture-card">
+      <h3>Coerenza completa</h3>
+      <p>Se <span class="mq-math" data-i18n-skip="true">\(|D_1\rangle=|D_2\rangle\)</span>, allora <span class="mq-math" data-i18n-skip="true">\(\gamma=1\)</span>: il rivelatore non contiene informazione sul cammino e l'interferenza è massima. Le ampiezze restano coerenti.</p>
+    </article>
+    <article class="lecture-card">
+      <h3>Informazione completa</h3>
+      <p>Se <span class="mq-math" data-i18n-skip="true">\(\langle D_2|D_1\rangle=0\)</span>, i marcatori sono ortogonali e distinguibili: il termine incrociato scompare. Non serve una lettura cosciente e non basta attribuire il fenomeno a un urto classico incontrollato.</p>
+    </article>
+  </div>
+
+  <div class="lecture-grid">
+    <article class="lecture-card lecture-warning">
+      <h3>Condizioni sperimentali</h3>
+      <ul>
+        <li>Coerenza temporale e spaziale sufficiente tra le due alternative.</li>
+        <li>Stabilità della fase durante il tempo di accumulo degli eventi.</li>
+        <li>Risoluzione del rivelatore più fine della spaziatura <span class="mq-math" data-i18n-skip="true">\(\Delta y\)</span>.</li>
+        <li>Regime di Fraunhofer, oppure uso della propagazione di Fresnel se lo schermo è vicino.</li>
+        <li>Fenditure identiche se si usa la forma semplificata a contrasto unitario.</li>
+      </ul>
+    </article>
+    <article class="lecture-card">
+      <h3>Errori concettuali</h3>
+      <ul>
+        <li>Dire che un singolo punto sullo schermo è una frangia di interferenza.</li>
+        <li>Sommare <span class="mq-math" data-i18n-skip="true">\(P_1+P_2\)</span> quando le alternative sono indistinguibili.</li>
+        <li>Dimenticare l'inviluppo <span class="mq-math" data-i18n-skip="true">\(\operatorname{sinc}^2\)</span> per fenditure di larghezza finita.</li>
+        <li>Affermare che la coscienza dell'osservatore distrugge le frange.</li>
+        <li>Confondere perdita di visibilità, assenza di particelle e cattiva risoluzione strumentale.</li>
+      </ul>
+    </article>
+  </div>
+
+  <article class="lecture-card lecture-oral">
+    <h3>Controllo da orale</h3>
+    <ul class="lecture-checks">
+      <li>Confronta la distribuzione di proiettili, onde ed elettroni.</li>
+      <li>Deriva il termine incrociato da <span class="mq-math" data-i18n-skip="true">\(|\phi_1+\phi_2|^2\)</span>.</li>
+      <li>Ricava differenza di fase, massimi, minimi e spaziatura sullo schermo.</li>
+      <li>Inserisci l'inviluppo di una fenditura di larghezza finita.</li>
+      <li>Spiega come gli impatti singoli ricostruiscono la legge di Born.</li>
+      <li>Deriva il fattore <span class="mq-math" data-i18n-skip="true">\(\langle D_1|D_2\rangle\)</span> tracciando il rivelatore.</li>
+      <li>Definisci visibilità e distinguibilità e discuti i due limiti.</li>
+      <li>Spiega perché l'informazione di cammino è sufficiente anche senza lettura.</li>
+      <li>Ripercorri la stima della lamina mobile e il ruolo dell'indeterminazione.</li>
+      <li>Indica le ipotesi dietro le formule di Fraunhofer.</li>
     </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
+  </article>
 
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+  <details class="boss-ref">
+    <summary>Boss, appunti e pagine verificate</summary>
+    <ul>
+      <li><a href="boss/P3_DIM_13-18.txt#L1018">DIM 18</a> - interferenza di ampiezze, informazione di cammino e passaggi richiesti all'orale</li>
+      <li><a href="Appunti-MQ.pdf#page=34">Appunti-MQ.pdf, pagine PDF 34-38</a> - onde, elettroni, osservazione del cammino e tre regole fondamentali</li>
+      <li><a href="Appunti-MQ.pdf#page=39">Appunti-MQ.pdf, pagine PDF 39-42</a> - indeterminazione e lamina mobile nel dibattito Einstein-Bohr</li>
+      <li><a href="BibbiaAleHD.pdf#page=6">BibbiaAleHD.pdf, pagine PDF 6-8</a> - schema della doppia fenditura e somme di probabilità</li>
+    </ul>
+    <p class="lecture-note">La lezione conserva la sequenza sperimentale delle dispense e completa i passaggi con inviluppo di diffrazione, marcatore quantistico e visibilità.</p>
+  </details>
+
+  <div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 2 - DIM 18":"In-depth lesson - Topic 2 - DIM 18","Esperimento della doppia fenditura":"The double-slit experiment","Confrontare particelle classiche, onde ed elettroni; derivare la distribuzione di interferenza dalla somma di ampiezze; includere l'inviluppo di diffrazione; spiegare con stati del rivelatore, visibilità e informazione di cammino perché le frange scompaiono.":"Compare classical particles, waves, and electrons; derive the interference distribution by adding amplitudes; include the diffraction envelope; and use detector states, visibility, and which-path information to explain why the fringes disappear.","Il fatto sperimentale":"The experimental fact","Ogni elettrone produce un evento localizzato sullo schermo. Ripetendo l'esperimento con elettroni inviati uno alla volta, l'istogramma degli arrivi costruisce gradualmente una figura di interferenza. La granularità riguarda la rivelazione; l'interferenza riguarda la distribuzione di probabilità.":"Each electron produces one localized event on the screen. When electrons are sent one at a time, the arrival histogram gradually builds an interference pattern. Detection is granular; interference belongs to the probability distribution.","La domanda corretta":"The right question","Non si assegna a ogni evento una traiettoria classica nascosta attraverso una fenditura. Si chiede invece se le alternative siano fisicamente indistinguibili. Se lo sono si sommano ampiezze; se l'apparato conserva informazione affidabile sul cammino si sommano probabilità.":"Do not assign a hidden classical path through one slit to each event. Ask instead whether the alternatives are physically indistinguishable. If they are, add amplitudes; if the apparatus retains reliable which-path information, add probabilities.","Tre esperimenti, tre regole":"Three experiments, three rules","Proiettili classici":"Classical projectiles","Gli impatti sono granulari e le alternative sono esclusive. Aprendo entrambe le fenditure, la distribuzione è la somma di quelle ottenute aprendo una fenditura alla volta:":"Impacts are granular and the alternatives are exclusive. With both slits open, the distribution is the sum of the distributions obtained with one slit open at a time:","Onde classiche":"Classical waves","Le ampiezze si sovrappongono. L'intensità è il modulo quadro dell'ampiezza risultante e contiene un termine incrociato dipendente dalla fase:":"The amplitudes superpose. The intensity is the squared modulus of the resulting amplitude and contains a phase-dependent cross term:","in generale.":"in general.","Elettroni senza misura del cammino":"Electrons without a path measurement","Gli arrivi sono discreti, ma con entrambe le fenditure aperte vale":"Arrivals are discrete, but with both slits open the rule is",", non":", not",". In alcuni punti aprire la seconda fenditura riduce il numero di arrivi: è il segno diretto del termine di interferenza.":". At some positions, opening the second slit reduces the number of arrivals: this is direct evidence of the interference term.","Elettroni con misura del cammino":"Electrons with a path measurement","Se il rivelatore distingue in modo affidabile i due cammini, gli eventi possono essere classificati e la distribuzione diventa":"If the detector reliably distinguishes the two paths, the events can be classified and the distribution becomes",". Non compaiono frange anche se nessuno legge materialmente il dato registrato.":". No fringes appear even if nobody actually reads the recorded result.","Dimostrazioni compatte":"Compact derivations","1. Alternative classiche":"1. Classical alternatives","Per alternative mutuamente esclusive e distinguibili si usa la regola della probabilità totale.":"For mutually exclusive, distinguishable alternatives, use the law of total probability.","2. Somma di ampiezze":"2. Adding amplitudes","Per alternative indistinguibili si sommano numeri complessi e solo dopo si prende il modulo quadro.":"For indistinguishable alternatives, add the complex amplitudes first and only then take the squared modulus.","3. Fenditure equivalenti":"3. Equivalent slits","Se le due ampiezze hanno lo stesso modulo, il termine incrociato si raccoglie in un coseno quadro.":"If the two amplitudes have the same modulus, the cross term combines into a squared cosine.","4. Fase geometrica":"4. Geometrical phase","Nel campo lontano la differenza di cammino dipende dalla distanza":"In the far field, the path difference depends on the separation","tra i centri delle fenditure.":"between the slit centers.","5. Massimi, minimi e passo":"5. Maxima, minima, and fringe spacing","Per piccoli angoli, la coordinata sullo schermo è":"At small angles, the screen coordinate is",". Da qui si ricavano posizioni e spaziatura delle frange.":". This gives the fringe positions and spacing.","6. Larghezza finita":"6. Finite slit width","Una fenditura di larghezza":"A slit of width","diffrange. Il profilo a due fenditure è quindi una figura di interferenza modulata dall'inviluppo di fenditura singola.":"diffracts. The double-slit profile is therefore an interference pattern modulated by the single-slit envelope.","7. Accumulo degli eventi":"7. Accumulation of events","La legge di Born collega l'ampiezza al limite statistico delle frequenze osservate, non alla posizione del singolo impatto.":"Born's rule connects the amplitude to the statistical limit of the observed frequencies, not to the position of an individual impact.","8. Marcatore di cammino":"8. Which-path marker","Il passaggio correla il cammino con due stati del rivelatore. Tracciando il rivelatore, il prodotto scalare":"The passage correlates each path with a detector state. After tracing out the detector, the inner product","moltiplica l'interferenza.":"multiplies the interference term.","9. Visibilità e distinguibilità":"9. Visibility and distinguishability","Per cammini equilibrati la visibilità coincide con il modulo della sovrapposizione dei marcatori. Per stati puri vale la complementarità quantitativa.":"For balanced paths, the visibility equals the magnitude of the marker overlap. For pure states, the quantitative complementarity relation applies.","10. Lamina mobile Einstein-Bohr":"10. Einstein-Bohr movable diaphragm","Il rinculo potrebbe marcare il cammino, ma risolverlo richiede un impulso iniziale preciso della lamina; l'indeterminazione della sua posizione rende incerta la fase delle frange.":"The recoil could mark the path, but resolving it requires precise knowledge of the diaphragm's initial momentum; the resulting position uncertainty randomizes the fringe phase.","Esempio d'esame: frange e inviluppo":"Exam example: fringes and envelope",". Il primo zero dell'inviluppo è a":". The first zero of the envelope is at","Nel massimo centrale cadono sette massimi non annullati, da":"Seven nonvanishing interference maxima lie inside the central envelope lobe, from","; gli ordini":"; orders","coincidono con i primi zeri dell'inviluppo.":"coincide with the first zeros of the envelope.","Coerenza completa":"Full coherence",": il rivelatore non contiene informazione sul cammino e l'interferenza è massima. Le ampiezze restano coerenti.":": the detector contains no which-path information and the interference is maximal. The amplitudes remain coherent.","Informazione completa":"Complete which-path information",", i marcatori sono ortogonali e distinguibili: il termine incrociato scompare. Non serve una lettura cosciente e non basta attribuire il fenomeno a un urto classico incontrollato.":", the markers are orthogonal and distinguishable: the cross term vanishes. No conscious observation is required, and an uncontrolled classical kick is not the general explanation.","Condizioni sperimentali":"Experimental conditions","Coerenza temporale e spaziale sufficiente tra le due alternative.":"Sufficient temporal and spatial coherence between the two alternatives.","Stabilità della fase durante il tempo di accumulo degli eventi.":"Phase stability throughout the accumulation time.","Risoluzione del rivelatore più fine della spaziatura":"Detector resolution finer than the spacing","Regime di Fraunhofer, oppure uso della propagazione di Fresnel se lo schermo è vicino.":"Fraunhofer regime, or Fresnel propagation when the screen is close.","Fenditure identiche se si usa la forma semplificata a contrasto unitario.":"Identical slits when using the simplified unit-contrast expression.","Errori concettuali":"Conceptual errors","Dire che un singolo punto sullo schermo è una frangia di interferenza.":"Calling a single point on the screen an interference fringe.","quando le alternative sono indistinguibili.":"when the alternatives are indistinguishable.","Dimenticare l'inviluppo":"Omitting the envelope","per fenditure di larghezza finita.":"for slits of finite width.","Affermare che la coscienza dell'osservatore distrugge le frange.":"Claiming that the observer's consciousness destroys the fringes.","Confondere perdita di visibilità, assenza di particelle e cattiva risoluzione strumentale.":"Confusing loss of visibility, absence of particles, and poor instrumental resolution.","Controllo da orale":"Oral exam checklist","Confronta la distribuzione di proiettili, onde ed elettroni.":"Compare the distributions for projectiles, waves, and electrons.","Deriva il termine incrociato da":"Derive the cross term from","Ricava differenza di fase, massimi, minimi e spaziatura sullo schermo.":"Derive the phase difference, maxima, minima, and screen spacing.","Inserisci l'inviluppo di una fenditura di larghezza finita.":"Include the envelope of a finite-width slit.","Spiega come gli impatti singoli ricostruiscono la legge di Born.":"Explain how individual impacts reconstruct Born's rule.","Deriva il fattore":"Derive the factor","tracciando il rivelatore.":"by tracing out the detector.","Definisci visibilità e distinguibilità e discuti i due limiti.":"Define visibility and distinguishability and discuss both limits.","Spiega perché l'informazione di cammino è sufficiente anche senza lettura.":"Explain why stored which-path information is sufficient even when it is not read.","Ripercorri la stima della lamina mobile e il ruolo dell'indeterminazione.":"Reconstruct the movable-diaphragm estimate and the role of uncertainty.","Indica le ipotesi dietro le formule di Fraunhofer.":"State the assumptions behind the Fraunhofer formulas.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- interferenza di ampiezze, informazione di cammino e passaggi richiesti all'orale":"- amplitude interference, which-path information, and steps required in the oral exam","Appunti-MQ.pdf, pagine PDF 34-38":"Appunti-MQ.pdf, PDF pages 34-38","- onde, elettroni, osservazione del cammino e tre regole fondamentali":"- waves, electrons, path observation, and the three fundamental rules","Appunti-MQ.pdf, pagine PDF 39-42":"Appunti-MQ.pdf, PDF pages 39-42","- indeterminazione e lamina mobile nel dibattito Einstein-Bohr":"- uncertainty and the movable diaphragm in the Einstein-Bohr debate","BibbiaAleHD.pdf, pagine PDF 6-8":"BibbiaAleHD.pdf, PDF pages 6-8","- schema della doppia fenditura e somme di probabilità":"- double-slit setup and sums of probabilities","La lezione conserva la sequenza sperimentale delle dispense e completa i passaggi con inviluppo di diffrazione, marcatore quantistico e visibilità.":"The lesson preserves the experimental sequence of the notes and completes the derivations with the diffraction envelope, a quantum path marker, and visibility.","Ritorna all'indice MQ":"Return to the MQ index","Obiettivo.":"Goal.","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","Base":"Core","Check":"Check","ORALE":"ORAL","Se":"If",", allora":", then","e":"and","da":"from","a":"to","Sommare":"Adding"},"attrs":{"Somma classica delle probabilità":"Classical sum of probabilities","Derivazione del termine di interferenza":"Derivation of the interference term","Interferenza per fenditure equivalenti":"Interference from equivalent slits","Differenza di cammino e differenza di fase":"Path difference and phase difference","Posizioni dei massimi e spaziatura delle frange":"Positions of maxima and fringe spacing","Distribuzione di Fraunhofer per due fenditure finite":"Fraunhofer distribution for two finite-width slits","Frequenza relativa e densità di probabilità":"Relative frequency and probability density","Interferenza con un marcatore di cammino":"Interference with a which-path marker","Relazione tra visibilità e distinguibilità":"Relation between visibility and distinguishability","Stima di indeterminazione per la lamina mobile":"Uncertainty estimate for the movable diaphragm"},"title":{"it":"Doppia fenditura - Dimostrazioni e ripasso orale","en":"The double-slit experiment - Derivations and oral review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
