@@ -45,9 +45,46 @@
             bottom: 20px;
             font-size: 0.8em;
         }
-    </style>
+    
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
 </head>
 <body>
+    <div class="language-switch" data-i18n-skip="true" role="group" aria-label="Lingua / Language">
+      <button data-language="it" type="button" aria-pressed="false">ITA</button>
+      <button data-language="en" type="button" aria-pressed="false">ENG</button>
+    </div>
     <h1>Indice di Fisica</h1>
     <div class="links">
         <a href="https://amrierscuo.github.io/Computational-Physics/Args/Phy/PhI/FI.html">Fisica I (FI)</a>
@@ -58,5 +95,52 @@
     <footer>
         &copy; 2024 Computational Physics Project
     </footer>
-</body>
+\n<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Indice di Fisica":"Physics index","Fisica I (FI)":"Physics I (FI)","Fisica II (FII)":"Physics II (FII)","Meccanica Quantistica (MQ)":"Quantum Mechanics (MQ)","Fondamenti di Struttura della Materia(FDSDM)":"Fundamentals of the Structure of Matter (FDSDM)","© 2024 Computational Physics Project":"© 2024 Computational Physics Project"},"attrs":{},"title":{"it":"Indice Principale","en":"Main physics index"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>\n</body>
 </html>
