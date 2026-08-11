@@ -1,274 +1,321 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principio di Sovrapposizione</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Principio di sovrapposizione - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Principio di Sovrapposizione</h1>
-    <h2>Definizione</h2>
-    Il principio di sovrapposizione è un concetto fondamentale nella fisica ondulatoria e nella meccanica quantistica. 
-    Afferma che, in un sistema lineare, se due o più stati o onde indipendenti coesistono, la loro combinazione può essere descritta come 
-    la somma algebrica di questi stati o onde.
-
-    <h2>Applicazione alle onde</h2>
-    Per due onde di equazione:
-    <div class="formula">
-        \[
-        \psi_1(x, t) = A_1 e^{i(k_1x - \omega_1 t)}, \quad \psi_2(x, t) = A_2 e^{i(k_2x - \omega_2 t)}
-        \]
-    </div>
-    la sovrapposizione è data da:
-    <div class="formula">
-        \[
-        \psi(x, t) = \psi_1(x, t) + \psi_2(x, t)
-        \]
-    </div>
-    Se le onde hanno la stessa frequenza e numero d'onda, si possono verificare fenomeni di interferenza costruttiva o distruttiva.
-
-    <h2>Applicazione alla meccanica quantistica</h2>
-    In meccanica quantistica, il principio di sovrapposizione afferma che lo stato di un sistema può essere espresso come combinazione lineare 
-    di autostati di un'operatore osservabile. Se \( \phi_1 \) e \( \phi_2 \) sono autostati di un operatore \( \hat{O} \), allora:
-    <div class="formula">
-        \[
-        \psi = c_1 \phi_1 + c_2 \phi_2
-        \]
-    </div>
-    dove \( c_1 \) e \( c_2 \) sono coefficienti complessi.
-
-    <h2>Interferenza e coerenza</h2>
-    La sovrapposizione è alla base del fenomeno di interferenza. Per ottenere un'interferenza significativa, le onde devono essere coerenti, ovvero 
-    mantenere una relazione di fase costante. L'intensità risultante in un punto è data da:
-    <div class="formula">
-        \[
-        I \propto |\psi(x, t)|^2
-        \]
-    </div>
-
-    <h2>Applicazioni pratiche</h2>
-    Il principio di sovrapposizione è fondamentale in molti ambiti, tra cui:
-    <ul>
-        <li>Interferometria: utilizzo di sovrapposizione per misurazioni precise.</li>
-        <li>Spettroscopia: analisi delle transizioni quantistiche attraverso sovrapposizioni di stati energetici.</li>
-        <li>Teoria dell'informazione quantistica: utilizzo della sovrapposizione negli stati di qubit.</li>
-    </ul>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 2</div>
-  <h2>Principio di Sovrapposizione: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Distinguere combinazione lineare, miscela statistica e interferenza, includendo normalizzazione e fase relativa.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Se \(|a\rangle\) e \(|b\rangle\) sono stati ammessi, anche \(\alpha|a\rangle+\beta|b\rangle\) lo è. La previsione fisica dipende dalla fase relativa tra i coefficienti. Una miscela con le stesse popolazioni non contiene tale fase e si descrive con un operatore densità diverso.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Norma generale<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>Per stati non ortogonali compare un termine incrociato.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\|\alpha a+\beta b\|^2=|\alpha|^2+|\beta|^2+2\operatorname{Re}(\alpha^*\beta\langle a|b\rangle)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \|\alpha a+\beta b\|^2=(\alpha^*\langle a|+\beta^*\langle b|)(\alpha|a\rangle+\beta|b\rangle)=|\alpha|^2+|\beta|^2+2\operatorname{Re}(\alpha^*\beta\langle a|b\rangle)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Probabilità di misura<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>L'ampiezza su \(|m\rangle\) è la somma coerente dei contributi.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P(m)=|\alpha\langle m|a\rangle+\beta\langle m|b\rangle|^2"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle m|\psi\rangle=\alpha\langle m|a\rangle+\beta\langle m|b\rangle\ \Rightarrow\ P(m)=|\langle m|\psi\rangle|^2=|\alpha\langle m|a\rangle+\beta\langle m|b\rangle|^2\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Confronto con miscela<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>Nella miscela mancano gli elementi fuori diagonale nella base \(|a\rangle,|b\rangle\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\rho_{\rm mix}=|\alpha|^2|a\rangle\langle a|+|\beta|^2|b\rangle\langle b|"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \rho=\sum_jp_j|\psi_j\rangle\langle\psi_j|,\quad(p_a,p_b)=(|\alpha|^2,|\beta|^2)\ \Rightarrow\ \rho_{\rm mix}=|\alpha|^2|a\rangle\langle a|+|\beta|^2|b\rangle\langle b|\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Due stati ortogonali</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Con \(|\psi\rangle=(|a\rangle+e^{i\varphi}|b\rangle)/\sqrt2\), misura nella base \(|\pm\rangle=(|a\rangle\pm|b\rangle)/\sqrt2\).</p>
-    <p><strong>Calcolo.</strong> Si trova \(P_+=(1+\cos\varphi)/2\) e \(P_-=(1-\cos\varphi)/2\).</p>
-    <p><strong>Risultato e controllo.</strong> Le popolazioni in (a,b) restano \(1/2\), ma una base diversa rivela la fase.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P3_DIM_13-18.txt">DIM 14</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>La sovrapposizione è definita tra vettori dello stesso spazio di Hilbert.</li>
-          <li>La fase globale è irrilevante, quella relativa è osservabile.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La linearità è il motore dell'interferenza e dell'entanglement. Confonderla con ignoranza classica cancella proprio la parte più caratteristica della teoria.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Costruisci un'osservabile che distingua sovrapposizione e miscela.</li>
-          <li>Normalizza una somma di stati non ortogonali.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=37">Appunti-MQ.pdf, pp. 37-38 e 53-55: somma di ampiezze e vettori di stato</a></li>
-          <li><a href="MQ.pdf#page=1">MQ.pdf, pp. capitoli 1-4: struttura lineare dello spazio degli stati</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
+</div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-principio-sovrapposizione">
+<div class="lecture-kicker">Lezione approfondita - Argomento 2 - DIM 0</div>
+<h1>Principio di sovrapposizione</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la sovrapposizione dalla linearità della dinamica e dello spazio degli stati, espandere uno stato in una base completa, trattare normalizzazione e fase relativa e distinguere sperimentalmente uno stato puro coerente da una miscela statistica.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Enunciato</h3>
+<p>Se <span class="mq-math" data-i18n-skip="true">\(|a\rangle\)</span> e <span class="mq-math" data-i18n-skip="true">\(|b\rangle\)</span> sono vettori ammessi nello stesso spazio di Hilbert, allora <span class="mq-math" data-i18n-skip="true">\(\alpha|a\rangle+\beta|b\rangle\)</span> è ancora un vettore ammesso. Per rappresentare uno stato fisico deve essere non nullo e normalizzato.</p>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Non è ignoranza classica</h3>
+<p>Una sovrapposizione pura conserva la fase relativa tra le componenti e può interferire. Una miscela descrive invece una preparazione casuale: contiene popolazioni, ma non la stessa coerenza fuori diagonale.</p>
+</article>
+</div>
+<h2>Struttura lineare e base</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Vettori e raggi</h3>
+<p>I vettori <span class="mq-math" data-i18n-skip="true">\(|\psi\rangle\)</span> ed <span class="mq-math" data-i18n-skip="true">\(e^{i\chi}|\psi\rangle\)</span> rappresentano lo stesso stato fisico. La fase globale non è osservabile; rapporti di ampiezza e fasi relative lo sono.</p>
+</article>
+<article class="lecture-card">
+<h3>Dipendenza dalla base</h3>
+<p>Uno stato può essere un autostato di <span class="mq-math" data-i18n-skip="true">\(\hat A\)</span> e una sovrapposizione di autostati di <span class="mq-math" data-i18n-skip="true">\(\hat B\)</span>. Dire soltanto “il sistema è in sovrapposizione” è incompleto se non si specifica rispetto a quale base o osservabile.</p>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Linearità di Schrödinger<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Se due funzioni risolvono la stessa equazione con lo stesso Hamiltoniano lineare, ogni loro combinazione a coefficienti costanti è ancora soluzione.</p>
+<div aria-label="Dimostrazione della linearità dell'equazione di Schrodinger" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (i\hbar\partial_t-\hat H)\psi_1=0,\ (i\hbar\partial_t-\hat H)\psi_2=0\Rightarrow(i\hbar\partial_t-\hat H)(\alpha\psi_1+\beta\psi_2)=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Completezza della base<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Una base ortonormale completa risolve l'identità. Inserendola davanti allo stato si ottiene la sua espansione.</p>
+<div aria-label="Espansione di uno stato in una base completa" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle i|j\rangle=\delta_{ij},\quad\sum_i|i\rangle\langle i|=\mathbf1\Rightarrow|\psi\rangle=\sum_i|i\rangle\langle i|\psi\rangle=\sum_i c_i|i\rangle,\quad c_i=\langle i|\psi\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Composizione delle ampiezze<span class="lecture-step-boss">DIM 0</span></h4>
+<p>L'ampiezza tra due stati si può calcolare sommando coerentemente tutti i canali di una base intermedia completa.</p>
+<div aria-label="Legge di composizione delle ampiezze" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle\chi|\phi\rangle=\langle\chi|\mathbf1|\phi\rangle=\sum_i\langle\chi|i\rangle\langle i|\phi\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Coniugazione bra-ket<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Il passaggio al duale coniuga i coefficienti e inverte l'ordine del prodotto interno.</p>
+<div aria-label="Corrispondenza tra ket e bra" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi\rangle=\sum_i c_i|i\rangle\Rightarrow\langle\psi|=\sum_i c_i^*\langle i|,\qquad\langle\chi|\psi\rangle=\langle\psi|\chi\rangle^*\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Normalizzazione ortogonale<span class="lecture-step-boss">DIM 0</span></h4>
+<p>In una base ortonormale, la norma è la somma dei moduli quadri dei coefficienti e coincide con la probabilità totale.</p>
+<div aria-label="Normalizzazione in una base ortonormale" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle\psi|\psi\rangle=\sum_{ij}c_i^*c_j\langle i|j\rangle=\sum_i|c_i|^2=1,\qquad P(i)=|c_i|^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Stati non ortogonali<span class="lecture-step-boss">ORALE</span></h4>
+<p>Se i due vettori sono normalizzati ma non ortogonali, il termine incrociato modifica la costante necessaria.</p>
+<div aria-label="Norma di una somma di stati non ortogonali" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \|\alpha a+\beta b\|^2=|\alpha|^2+|\beta|^2+2\operatorname{Re}[\alpha^*\beta\langle a|b\rangle],\qquad|\psi\rangle=\frac{\alpha|a\rangle+\beta|b\rangle}{\sqrt{\|\alpha a+\beta b\|^2}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Probabilità in un'altra base<span class="lecture-step-boss">DIM 0</span></h4>
+<p>La proiezione su <span class="mq-math" data-i18n-skip="true">\(|m\rangle\)</span> somma le ampiezze delle componenti. Il modulo quadro contiene i termini di interferenza.</p>
+<div aria-label="Probabilità di misura per uno stato sovrapposto" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle m|\psi\rangle=\alpha\langle m|a\rangle+\beta\langle m|b\rangle\Rightarrow P(m)=|\alpha\langle m|a\rangle+\beta\langle m|b\rangle|^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Valore medio e coerenze<span class="lecture-step-boss">ORALE</span></h4>
+<p>Gli elementi fuori diagonale dell'osservabile permettono alla fase relativa di entrare nel valore medio.</p>
+<div aria-label="Valore medio in una sovrapposizione di due stati" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \langle A\rangle=|\alpha|^2A_{aa}+|\beta|^2A_{bb}+\alpha^*\beta A_{ab}+\beta^*\alpha A_{ba},\qquad A_{ab}=\langle a|\hat A|b\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Evoluzione della fase relativa<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Per autostati di energia, le popolazioni restano fisse ma le fasi relative evolvono alle frequenze di Bohr.</p>
+<div aria-label="Evoluzione temporale di una sovrapposizione energetica" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi(t)\rangle=\sum_n c_ne^{-iE_nt/\hbar}|n\rangle,\quad|c_n(t)|^2=|c_n|^2,\quad\Delta\varphi_{nm}(t)=\Delta\varphi_{nm}(0)-\frac{E_n-E_m}{\hbar}t\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Stato puro e miscela<span class="lecture-step-boss">ORALE</span></h4>
+<p>Le due preparazioni possono avere le stesse popolazioni in una base, ma differiscono per gli elementi fuori diagonale e per la purezza.</p>
+<div aria-label="Confronto tra matrice densità pura e miscela incoerente" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \rho_{\rm pure}=\frac12\!\begin{pmatrix}1&amp;e^{-i\varphi}\\e^{i\varphi}&amp;1\end{pmatrix},\quad\rho_{\rm mix}=\frac12\!\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix},\quad\operatorname{Tr}\rho_{\rm pure}^2=1,\quad\operatorname{Tr}\rho_{\rm mix}^2=\frac12\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Proiezione di misura<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Una misura ideale nella base <span class="mq-math" data-i18n-skip="true">\(|i\rangle\)</span> produce l'esito <span class="mq-math" data-i18n-skip="true">\(i\)</span> con la regola di Born e seleziona la componente corrispondente.</p>
+<div aria-label="Probabilità e stato successivo a una misura proiettiva" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P(i)=\langle\psi|\Pi_i|\psi\rangle=|c_i|^2,\quad\Pi_i=|i\rangle\langle i|,\quad|\psi\rangle\longrightarrow\frac{\Pi_i|\psi\rangle}{\sqrt{P(i)}}=e^{i\eta}|i\rangle\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: fase rivelata cambiando base</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> <span class="mq-math" data-i18n-skip="true">\(|\psi\rangle=(|0\rangle+e^{i\pi/3}|1\rangle)/\sqrt2\)</span> e <span class="mq-math" data-i18n-skip="true">\(|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2\)</span>.</p>
+<p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\(P_+=|\langle+|\psi\rangle|^2=(1+\cos\frac\pi3)/2=3/4\)</span> e <span class="mq-math" data-i18n-skip="true">\(P_-=1/4\)</span>. In base (0,1) si ha invece <span class="mq-math" data-i18n-skip="true">\(P_0=P_1=1/2\)</span>.</p>
+<p><strong>Risultato.</strong> La miscela <span class="mq-math" data-i18n-skip="true">\(\rho_{\rm mix}=\mathbf1/2\)</span> dà <span class="mq-math" data-i18n-skip="true">\(P_+=P_-=1/2\)</span>: la misura nella base ruotata distingue coerenza e ignoranza statistica.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Sovrapposizione continua</h3>
+<p>Per uno spettro continuo la somma diventa un integrale, come nei pacchetti d'onda: <span class="mq-math" data-i18n-skip="true">\(|\psi\rangle=\int dp\,\phi(p)|p\rangle\)</span>. Le regole restano identiche, sostituendo delta di Kronecker con delta di Dirac.</p>
+</article>
+<article class="lecture-card">
+<h3>Sovrapposizione ed entanglement</h3>
+<p>In un sistema composto, una somma di stati prodotto può essere non separabile. Tuttavia la sovrapposizione è un principio generale, mentre l'entanglement richiede almeno due sottosistemi e l'impossibilità di fattorizzare lo stato.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Dimenticare di normalizzare la combinazione lineare.</li>
+<li>Imporre <span class="mq-math" data-i18n-skip="true">\(|\alpha|^2+|\beta|^2=1\)</span> anche quando gli stati non sono ortogonali.</li>
+<li>Confondere fase globale e fase relativa.</li>
+<li>Trattare una sovrapposizione pura come una miscela classica.</li>
+<li>Dire che la sovrapposizione è indipendente dalla base.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Conservazione della sovrapposizione</h3>
+<p>L'evoluzione unitaria è lineare e conserva prodotti interni e norma. Un'interazione con l'ambiente può trasferire la coerenza nelle correlazioni sistema-ambiente; la descrizione ridotta appare allora decoerente.</p>
+<p class="lecture-note">La perdita di interferenza non implica che la dinamica fondamentale abbia smesso di essere lineare.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Dimostra la linearità dell'equazione di Schrödinger.</li>
+<li>Deriva espansione e coefficienti da completezza e ortonormalità.</li>
+<li>Spiega la regola di composizione delle ampiezze.</li>
+<li>Normalizza una somma di stati non ortogonali.</li>
+<li>Mostra dove compare la fase relativa in una probabilità o in un valore medio.</li>
+<li>Scrivi l'evoluzione di una sovrapposizione di autostati energetici.</li>
+<li>Confronta matrici densità, purezza e risultati di misura per puro e miscela.</li>
+<li>Spiega perché la nozione di sovrapposizione dipende dalla base.</li>
+<li>Distingui sovrapposizione, interferenza, decoerenza ed entanglement.</li>
+<li>Applica la regola di Born dopo una proiezione.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0</a> - stato vettoriale, sovrapposizione, Born ed evoluzione</li>
+<li><a href="Appunti-MQ.pdf#page=50">Appunti-MQ.pdf, pagine PDF 50-53</a> - ampiezze, base intermedia e legge di composizione</li>
+<li><a href="Appunti-MQ.pdf#page=53">Appunti-MQ.pdf, pagine PDF 53-55</a> - bra, ket, completezza, coefficienti e principio di sovrapposizione</li>
+<li><a href="MQ.pdf#page=6">MQ.pdf, pagine PDF 6-9</a> - struttura lineare dello spazio degli stati</li>
+</ul>
+<p class="lecture-note">La pagina segue la costruzione dagli esperimenti di Stern-Gerlach al formalismo vettoriale e aggiunge il confronto operativo con una miscela.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 2 - DIM 0":"In-depth lesson - Topic 2 - DIM 0","Principio di sovrapposizione":"Superposition principle","Derivare la sovrapposizione dalla linearità della dinamica e dello spazio degli stati, espandere uno stato in una base completa, trattare normalizzazione e fase relativa e distinguere sperimentalmente uno stato puro coerente da una miscela statistica.":"Derive superposition from the linearity of the dynamics and state space, expand a state in a complete basis, handle normalization and relative phase, and experimentally distinguish a coherent pure state from a statistical mixture.","sono vettori ammessi nello stesso spazio di Hilbert, allora":"are allowed vectors in the same Hilbert space, then","è ancora un vettore ammesso. Per rappresentare uno stato fisico deve essere non nullo e normalizzato.":"is also an allowed vector. To represent a physical state, it must be nonzero and normalized.","Non è ignoranza classica":"It is not classical ignorance","Una sovrapposizione pura conserva la fase relativa tra le componenti e può interferire. Una miscela descrive invece una preparazione casuale: contiene popolazioni, ma non la stessa coerenza fuori diagonale.":"A pure superposition preserves the relative phase between its components and can produce interference. A mixture instead describes a random preparation: it contains populations, but not the same off-diagonal coherence.","Struttura lineare e base":"Linear structure and basis","Vettori e raggi":"Vectors and rays","rappresentano lo stesso stato fisico. La fase globale non è osservabile; rapporti di ampiezza e fasi relative lo sono.":"represent the same physical state. The global phase is not observable, whereas amplitude ratios and relative phases are.","Dipendenza dalla base":"Basis dependence","Uno stato può essere un autostato di":"A state can be an eigenstate of","e una sovrapposizione di autostati di":"and a superposition of eigenstates of",". Dire soltanto “il sistema è in sovrapposizione” è incompleto se non si specifica rispetto a quale base o osservabile.":". Merely saying that the system is in a superposition is incomplete unless the basis or observable is specified.","Dimostrazioni compatte":"Compact derivations","1. Linearità di Schrödinger":"1. Linearity of the Schrödinger equation","Se due funzioni risolvono la stessa equazione con lo stesso Hamiltoniano lineare, ogni loro combinazione a coefficienti costanti è ancora soluzione.":"If two functions solve the same equation with the same linear Hamiltonian, every linear combination with constant coefficients is also a solution.","2. Completezza della base":"2. Completeness of a basis","Una base ortonormale completa risolve l'identità. Inserendola davanti allo stato si ottiene la sua espansione.":"A complete orthonormal basis resolves the identity. Inserting it before the state yields the basis expansion.","3. Composizione delle ampiezze":"3. Composition of amplitudes","L'ampiezza tra due stati si può calcolare sommando coerentemente tutti i canali di una base intermedia completa.":"The amplitude between two states can be computed by coherently summing all channels through a complete intermediate basis.","4. Coniugazione bra-ket":"4. Bra-ket conjugation","Il passaggio al duale coniuga i coefficienti e inverte l'ordine del prodotto interno.":"Passing to the dual conjugates the coefficients and reverses the order of the inner product.","5. Normalizzazione ortogonale":"5. Normalization in an orthonormal basis","In una base ortonormale, la norma è la somma dei moduli quadri dei coefficienti e coincide con la probabilità totale.":"In an orthonormal basis, the norm is the sum of the squared moduli of the coefficients and equals the total probability.","6. Stati non ortogonali":"6. Nonorthogonal states","Se i due vettori sono normalizzati ma non ortogonali, il termine incrociato modifica la costante necessaria.":"If the two vectors are normalized but not orthogonal, the cross term changes the required normalization factor.","7. Probabilità in un'altra base":"7. Probability in another basis","La proiezione su":"Projection onto","somma le ampiezze delle componenti. Il modulo quadro contiene i termini di interferenza.":"adds the component amplitudes. The squared modulus contains the interference terms.","8. Valore medio e coerenze":"8. Expectation value and coherences","Gli elementi fuori diagonale dell'osservabile permettono alla fase relativa di entrare nel valore medio.":"The off-diagonal matrix elements of the observable allow the relative phase to enter the expectation value.","9. Evoluzione della fase relativa":"9. Relative-phase evolution","Per autostati di energia, le popolazioni restano fisse ma le fasi relative evolvono alle frequenze di Bohr.":"For energy eigenstates, the populations remain fixed while relative phases evolve at the Bohr angular frequencies.","10. Stato puro e miscela":"10. Pure state and mixture","Le due preparazioni possono avere le stesse popolazioni in una base, ma differiscono per gli elementi fuori diagonale e per la purezza.":"The two preparations can have the same populations in one basis, but differ in their off-diagonal elements and purity.","11. Proiezione di misura":"11. Projective measurement","Una misura ideale nella base":"An ideal measurement in the basis","produce l'esito":"produces outcome","con la regola di Born e seleziona la componente corrispondente.":"according to the Born rule and selects the corresponding component.","Esempio d'esame: fase rivelata cambiando base":"Exam example: revealing phase by changing basis",". In base (0,1) si ha invece":". In the (0,1) basis, instead","La miscela":"The mixture",": la misura nella base ruotata distingue coerenza e ignoranza statistica.":": a measurement in the rotated basis distinguishes coherence from statistical ignorance.","Sovrapposizione continua":"Continuous superposition","Per uno spettro continuo la somma diventa un integrale, come nei pacchetti d'onda:":"For a continuous spectrum, the sum becomes an integral, as in wave packets:",". Le regole restano identiche, sostituendo delta di Kronecker con delta di Dirac.":". The rules remain the same, with the Kronecker delta replaced by the Dirac delta.","Sovrapposizione ed entanglement":"Superposition and entanglement","In un sistema composto, una somma di stati prodotto può essere non separabile. Tuttavia la sovrapposizione è un principio generale, mentre l'entanglement richiede almeno due sottosistemi e l'impossibilità di fattorizzare lo stato.":"In a composite system, a sum of product states can be nonseparable. Superposition is a general principle, whereas entanglement requires at least two subsystems and a state that cannot be factorized.","Errori tipici":"Common errors","Dimenticare di normalizzare la combinazione lineare.":"Forgetting to normalize the linear combination.","anche quando gli stati non sono ortogonali.":"even when the states are not orthogonal.","Confondere fase globale e fase relativa.":"Confusing global phase with relative phase.","Trattare una sovrapposizione pura come una miscela classica.":"Treating a pure superposition as a classical mixture.","Dire che la sovrapposizione è indipendente dalla base.":"Claiming that superposition is independent of the basis.","Conservazione della sovrapposizione":"Preservation of superposition","L'evoluzione unitaria è lineare e conserva prodotti interni e norma. Un'interazione con l'ambiente può trasferire la coerenza nelle correlazioni sistema-ambiente; la descrizione ridotta appare allora decoerente.":"Unitary evolution is linear and preserves inner products and the norm. An interaction with the environment can transfer coherence to system-environment correlations, so the reduced description appears decohered.","La perdita di interferenza non implica che la dinamica fondamentale abbia smesso di essere lineare.":"Loss of interference does not imply that the fundamental dynamics has ceased to be linear.","Controllo da orale":"Oral exam checklist","Dimostra la linearità dell'equazione di Schrödinger.":"Prove the linearity of the Schrödinger equation.","Deriva espansione e coefficienti da completezza e ortonormalità.":"Derive the expansion and coefficients from completeness and orthonormality.","Spiega la regola di composizione delle ampiezze.":"Explain the amplitude composition law.","Normalizza una somma di stati non ortogonali.":"Normalize a sum of nonorthogonal states.","Mostra dove compare la fase relativa in una probabilità o in un valore medio.":"Show where the relative phase enters a probability or an expectation value.","Scrivi l'evoluzione di una sovrapposizione di autostati energetici.":"Write the evolution of a superposition of energy eigenstates.","Confronta matrici densità, purezza e risultati di misura per puro e miscela.":"Compare density matrices, purity, and measurement results for a pure state and a mixture.","Spiega perché la nozione di sovrapposizione dipende dalla base.":"Explain why the notion of superposition depends on the basis.","Distingui sovrapposizione, interferenza, decoerenza ed entanglement.":"Distinguish superposition, interference, decoherence, and entanglement.","Applica la regola di Born dopo una proiezione.":"Apply the Born rule after a projection.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- stato vettoriale, sovrapposizione, Born ed evoluzione":"- state vectors, superposition, the Born rule, and evolution","Appunti-MQ.pdf, pagine PDF 50-53":"Appunti-MQ.pdf, PDF pages 50-53","- ampiezze, base intermedia e legge di composizione":"- amplitudes, intermediate basis, and composition law","Appunti-MQ.pdf, pagine PDF 53-55":"Appunti-MQ.pdf, PDF pages 53-55","- bra, ket, completezza, coefficienti e principio di sovrapposizione":"- bras, kets, completeness, coefficients, and the superposition principle","MQ.pdf, pagine PDF 6-9":"MQ.pdf, PDF pages 6-9","- struttura lineare dello spazio degli stati":"- linear structure of the state space","La pagina segue la costruzione dagli esperimenti di Stern-Gerlach al formalismo vettoriale e aggiunge il confronto operativo con una miscela.":"The page follows the route from Stern-Gerlach experiments to vector formalism and adds an operational comparison with a mixture.","Ritorna all'indice MQ":"Return to the MQ index","Obiettivo.":"Goal.","Enunciato":"Statement","Se":"If","e":"and","I vettori":"The vectors","ed":"and","Base":"Core","ORALE":"ORAL","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","dà":"gives","Imporre":"Imposing"},"attrs":{"Dimostrazione della linearità dell'equazione di Schrodinger":"Derivation of the linearity of the Schrodinger equation","Espansione di uno stato in una base completa":"Expansion of a state in a complete basis","Legge di composizione delle ampiezze":"Amplitude composition law","Corrispondenza tra ket e bra":"Correspondence between ket and bra","Normalizzazione in una base ortonormale":"Normalization in an orthonormal basis","Norma di una somma di stati non ortogonali":"Norm of a sum of nonorthogonal states","Probabilità di misura per uno stato sovrapposto":"Measurement probability for a superposed state","Valore medio in una sovrapposizione di due stati":"Expectation value in a two-state superposition","Evoluzione temporale di una sovrapposizione energetica":"Time evolution of a superposition of energy eigenstates","Confronto tra matrice densità pura e miscela incoerente":"Comparison of a pure-state density matrix and an incoherent mixture","Probabilità e stato successivo a una misura proiettiva":"Probability and post-measurement state for a projective measurement"},"title":{"it":"Principio di sovrapposizione - Dimostrazioni e ripasso orale","en":"Superposition principle - Demonstrations and oral review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
