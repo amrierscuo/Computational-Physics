@@ -1,265 +1,336 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Densità e Corrente di Probabilità</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Densità e corrente di probabilità - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Densità e Corrente di Probabilità</h1>
-    <h2>Definizione</h2>
-    La densità e la corrente di probabilità sono concetti fondamentali per descrivere la conservazione della probabilità nella meccanica quantistica. Sono strettamente legate alla funzione d'onda \(\psi(\vec{r}, t)\) e soddisfano l'equazione di continuità.
-
-    <h2>Densità di probabilità</h2>
-    La densità di probabilità \(\rho(\vec{r}, t)\) rappresenta la probabilità di trovare la particella in un volume infinitesimo attorno al punto \(\vec{r}\) al tempo \(t\). È definita come:
-    <div class="formula">
-        \[
-        \rho(\vec{r}, t) = |\psi(\vec{r}, t)|^2
-        \]
-    </div>
-
-    <h2>Corrente di probabilità</h2>
-    La corrente di probabilità \(\vec{j}(\vec{r}, t)\) descrive il flusso di probabilità attraverso una superficie unitaria. È data da:
-    <div class="formula">
-        \[
-        \vec{j}(\vec{r}, t) = \frac{\hbar}{2mi} \left( \psi^* \nabla \psi - \psi \nabla \psi^* \right)
-        \]
-    </div>
-    dove:
-    <ul>
-        <li>\( \hbar \): Costante di Planck ridotta</li>
-        <li>\( m \): Massa della particella</li>
-        <li>\( \psi \): Funzione d'onda</li>
-        <li>\( \psi^* \): Complesso coniugato della funzione d'onda</li>
-    </ul>
-
-    <h2>Equazione di continuità</h2>
-    La conservazione della probabilità è garantita dall'equazione di continuità:
-    <div class="formula">
-        \[
-        \frac{\partial \rho}{\partial t} + \nabla \cdot \vec{j} = 0
-        \]
-    </div>
-    Questa equazione esprime il fatto che una variazione temporale della densità di probabilità in un volume è bilanciata dal flusso di probabilità attraverso la superficie del volume.
-
-    <h2>Interpretazione fisica</h2>
-    La densità di probabilità e la corrente di probabilità forniscono un quadro completo della probabilità di localizzazione e del "movimento probabilistico" della particella. Questi concetti sono essenziali per comprendere la dinamica quantistica e garantire la coerenza delle previsioni probabilistiche.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 2</div>
-  <h2>Densità e Corrente di Probabilità: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la corrente quantistica e usarla per interpretare flusso, riflessione e trasmissione.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La densità \(\rho=|\psi|^2\) non basta a descrivere il movimento. La corrente contiene il gradiente della fase e indica il flusso netto di probabilità. È definita in modo che Schrödinger assuma una forma di continuità.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Sottrazione coniugata<span class="lecture-step-boss">DIM 1</span></h4>
-      <p>Moltiplica Schrödinger per \(\psi^*\), la coniugata per \(\psi\), poi sottrai; il potenziale reale si cancella.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\partial_t|\psi|^2=-\nabla\cdot\mathbf j"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle i\hbar\psi^*\dot\psi=-\frac{\hbar^2}{2m}\psi^*\nabla^2\psi+V|\psi|^2,\quad\text{coniugata e sottrazione}\Rightarrow\partial_t|\psi|^2=-\nabla\cdot\mathbf j\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Corrente<span class="lecture-step-boss">DIM 1</span></h4>
-      <p>La combinazione è reale ed equivale alla parte immaginaria di \(\psi^*\nabla\psi\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\mathbf j=\frac{\hbar}{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)=\frac{\hbar}{m}\operatorname{Im}(\psi^*\nabla\psi)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi^*\nabla^2\psi-\psi\nabla^2\psi^*=\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)\Rightarrow\mathbf j=\frac\hbar{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)=\frac\hbar m\operatorname{Im}(\psi^*\nabla\psi)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Forma polare<span class="lecture-step-boss">DIM 1</span></h4>
-      <p>Per \(\psi=\sqrt\rho e^{iS/\hbar}\), il campo di velocità è \(\nabla S/m\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\mathbf j=\rho\frac{\nabla S}{m}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=\sqrt\rho e^{iS/\hbar}\Rightarrow\psi^*\nabla\psi-\psi\nabla\psi^*=2i\rho\nabla S/\hbar\Rightarrow\mathbf j=\rho\nabla S/m\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Onda piana</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per \(\psi=Ae^{i(kx-\omega t)}\).</p>
-    <p><strong>Calcolo.</strong> Si ottiene \(j=(\hbar k/m)|A|^2\). Per \(e^{-ikx}\) il segno cambia.</p>
-    <p><strong>Risultato e controllo.</strong> Nello scattering i coefficienti fisici sono rapporti di correnti, non semplici moduli delle ampiezze quando le velocità differiscono.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 1</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_6.html">Domanda 2025 n. 6</a> - Conservazione della probabilita globale e locale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Potenziale reale e accoppiamento standard.</li>
-          <li>Con campo magnetico la corrente contiene il termine con il potenziale vettore.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Uno stato stazionario può avere densità costante e corrente non nulla: la stazionarietà non significa assenza di flusso.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Calcola la corrente di un'onda stazionaria reale.</li>
-          <li>Spiega il fattore \(k_2/k_1\) nella trasmissione su un gradino.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=114">Appunti-MQ.pdf, pp. 114-117: densità e corrente per Schrödinger</a></li>
-          <li><a href="BibbiaAleHD.pdf#page=15">BibbiaAleHD.pdf, pp. 15-17: interpretazione del flusso</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
+</div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-densita-corrente">
+<div class="lecture-kicker">Lezione approfondita - Argomento 2 - DIM 1</div>
+<h1>Densità e corrente di probabilità</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Passare dalla regola di Born a una descrizione locale del trasporto quantistico, derivare la corrente associata all'Hamiltoniano di Schrödinger e usarla correttamente per fase, onde piane, stati stazionari, scattering e accoppiamento elettromagnetico.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Che cosa misura la densità</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(\rho=|\psi|^2\)</span> è probabilità per unità di volume, non densità di materia né traiettoria della particella. L'integrale su una regione fornisce la probabilità di rivelazione in quella regione.</p>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Che cosa misura la corrente</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(\mathbf j\)</span> è probabilità per unità di area e di tempo, orientata. Dipende dalla fase e dall'Hamiltoniano: due stati con la stessa densità possono trasportare correnti opposte.</p>
+</article>
+</div>
+<h2>Densità, flusso e velocità</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Regola di Born locale</h3>
+<p>Per uno stato puro normalizzato, la misura di posizione associa a ogni volume la misura di probabilità positiva e additiva.</p>
+<div aria-label="Densità e probabilità in un volume" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \rho(\mathbf r,t)=\psi^*\psi\ge0,\qquad P(\Omega,t)=\int_\Omega\rho\,d^3r,\qquad\int_{\mathbb R^3}\rho\,d^3r=1\)</span></div>
+</article>
+<article class="lecture-card">
+<h3>Flusso orientato</h3>
+<p>Il segno di <span class="mq-math" data-i18n-skip="true">\(\mathbf j\!\cdot\!\hat{\mathbf n}\)</span> distingue probabilità uscente ed entrante. La corrente attraversa una superficie, mentre la densità occupa un volume.</p>
+<div aria-label="Flusso della corrente attraverso una superficie" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \Phi_S(t)=\int_S\mathbf j\!\cdot\!\hat{\mathbf n}\,dS,\qquad [\rho]=\mathrm{m^{-3}},\quad[\mathbf j]=\mathrm{m^{-2}s^{-1}},\quad[\Phi_S]=\mathrm{s^{-1}}\)</span></div>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Derivata di Born<span class="lecture-step-boss">DIM 1</span></h4>
+<p>La regola del prodotto espone le due equazioni dinamiche che devono essere combinate.</p>
+<div aria-label="Derivata temporale della densità di Born" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \rho=\psi^*\psi\Rightarrow\partial_t\rho=\psi^*\partial_t\psi+\psi\partial_t\psi^*\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Uso della TDSE<span class="lecture-step-boss">DIM 1</span></h4>
+<p>Con potenziale scalare reale i contributi di <span class="mq-math" data-i18n-skip="true">\(V\)</span> si cancellano; resta la differenza dei Laplaciani.</p>
+<div aria-label="Sostituzione della TDSE nella derivata della densità" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \partial_t\psi=\frac{i\hbar}{2m}\nabla^2\psi-\frac{iV}{\hbar}\psi,\quad\partial_t\psi^*=-\frac{i\hbar}{2m}\nabla^2\psi^*+\frac{iV}{\hbar}\psi^*\Rightarrow\partial_t\rho=\frac{i\hbar}{2m}(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Identità di divergenza<span class="lecture-step-boss">DIM 1</span></h4>
+<p>I termini misti sono uguali e si eliminano nella differenza.</p>
+<div aria-label="Identità che trasforma i Laplaciani in una divergenza" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \nabla\!\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)=\nabla\psi^*\!\cdot\nabla\psi+\psi^*\nabla^2\psi-\nabla\psi\!\cdot\nabla\psi^*-\psi\nabla^2\psi^*=\psi^*\nabla^2\psi-\psi\nabla^2\psi^*\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Corrente standard<span class="lecture-step-boss">DIM 1</span></h4>
+<p>La scelta rende la TDSE una legge di continuità e mostra subito che la corrente è reale.</p>
+<div aria-label="Definizioni equivalenti della corrente di probabilità" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \mathbf j=\frac{\hbar}{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)=\frac\hbar m\operatorname{Im}(\psi^*\nabla\psi),\qquad\mathbf j^*=\mathbf j,\qquad\partial_t\rho+\nabla\!\cdot\mathbf j=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Forma polare<span class="lecture-step-boss">ORALE</span></h4>
+<p>Il gradiente dell'ampiezza è reale e non contribuisce alla parte immaginaria; il trasporto è governato dalla fase.</p>
+<div aria-label="Corrente nella rappresentazione polare della funzione d'onda" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=\sqrt\rho\,e^{iS/\hbar},\quad\psi^*\nabla\psi=\sqrt\rho\,\nabla\sqrt\rho+\frac{i}{\hbar}\rho\nabla S\Rightarrow\boxed{\mathbf j=\rho\frac{\nabla S}{m}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Velocità locale<span class="lecture-step-boss">ORALE</span></h4>
+<p>Dove la densità non è nulla si può definire una velocità di flusso. Ai nodi il rapporto può essere singolare e va interpretato con cautela.</p>
+<div aria-label="Velocità locale associata alla corrente" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \mathbf v_{\mathrm{flusso}}=\frac{\mathbf j}{\rho}=\frac{\nabla S}{m}\quad(\rho&gt;0),\qquad\mathbf j=\rho\mathbf v_{\mathrm{flusso}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Onda piana<span class="lecture-step-boss">ORALE</span></h4>
+<p>Per la dispersione libera, velocità di gruppo e velocità di flusso coincidono.</p>
+<div aria-label="Densità e corrente di un'onda piana libera" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \psi=Ae^{i(\mathbf k\cdot\mathbf r-\omega t)},\quad\rho=|A|^2,\quad\mathbf j=\frac{\hbar\mathbf k}{m}|A|^2=\rho\mathbf v_g,\quad\mathbf v_g=\nabla_{\mathbf k}\omega=\frac{\hbar\mathbf k}{m}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Stato reale<span class="lecture-step-boss">ORALE</span></h4>
+<p>Una funzione spaziale reale porta corrente nulla, ma questo non vale per ogni stato stazionario.</p>
+<div aria-label="Corrente nulla per una funzione d'onda reale" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \psi(\mathbf r,t)=\phi(\mathbf r)e^{-iEt/\hbar},\ \phi\in\mathbb R\Rightarrow\psi^*\nabla\psi=\phi\nabla\phi\in\mathbb R\Rightarrow\mathbf j=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Due onde opposte<span class="lecture-step-boss">ORALE</span></h4>
+<p>Nella corrente i termini di interferenza sono reali e non contribuiscono; resta la differenza dei flussi.</p>
+<div aria-label="Corrente di due onde piane contropropaganti" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=Ae^{ikx}+Be^{-ikx}\Rightarrow j=\frac\hbar m\operatorname{Im}(\psi^*\partial_x\psi)=\frac{\hbar k}{m}(|A|^2-|B|^2)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Corrente media<span class="lecture-step-boss">ORALE</span></h4>
+<p>Per uno stato normalizzato che decade al bordo, la corrente integrata restituisce la velocità media.</p>
+<div aria-label="Relazione tra corrente integrata e impulso medio" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \int\mathbf j\,d^3r=\frac\hbar m\operatorname{Im}\!\int\psi^*\nabla\psi\,d^3r=\frac{\langle\hat{\mathbf p}\rangle}{m}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Rapporti di flusso<span class="lecture-step-boss">ORALE</span></h4>
+<p>Riflessione e trasmissione sono definite da correnti orientate, non dai soli moduli delle ampiezze.</p>
+<div aria-label="Coefficienti di riflessione e trasmissione come rapporti di corrente" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle j_i=\frac{\hbar k_1}{m},\quad j_r=-\frac{\hbar k_1}{m}|r|^2,\quad j_t=\frac{\hbar k_2}{m}|t|^2\Rightarrow R=-\frac{j_r}{j_i}=|r|^2,\quad T=\frac{j_t}{j_i}=\frac{k_2}{k_1}|t|^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Gradino reale<span class="lecture-step-boss">ORALE</span></h4>
+<p>Continuità di funzione e derivata fissa le ampiezze; il fattore di velocità chiude il bilancio.</p>
+<div aria-label="Ampiezze e flussi per un gradino di potenziale" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle r=\frac{k_1-k_2}{k_1+k_2},\quad t=\frac{2k_1}{k_1+k_2}\Rightarrow R=\frac{(k_1-k_2)^2}{(k_1+k_2)^2},\quad T=\frac{4k_1k_2}{(k_1+k_2)^2},\quad R+T=1\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Campo elettromagnetico<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Con accoppiamento minimo il momento cinetico contiene il potenziale vettore, quindi anche la corrente deve contenerlo.</p>
+<div aria-label="Corrente di probabilità con potenziale vettore" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \hat H=\frac{(-i\hbar\nabla-q\mathbf A)^2}{2m}+q\varphi\Rightarrow\mathbf j=\frac1m\operatorname{Re}[\psi^*(-i\hbar\nabla-q\mathbf A)\psi]=\frac\hbar m\operatorname{Im}(\psi^*\nabla\psi)-\frac qm\mathbf A\rho\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Invarianza di gauge<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Il termine di fase aggiuntivo cancella esattamente il cambiamento del potenziale vettore.</p>
+<div aria-label="Invarianza di gauge della corrente di probabilità" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \mathbf A'=\mathbf A+\nabla\chi,\quad\psi'=e^{iq\chi/\hbar}\psi\Rightarrow\frac\hbar m\operatorname{Im}(\psi'^*\nabla\psi')=\frac\hbar m\operatorname{Im}(\psi^*\nabla\psi)+\frac qm\rho\nabla\chi\Rightarrow\mathbf j'=\mathbf j\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: gradino con velocità diverse</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Elettrone con <span class="mq-math" data-i18n-skip="true">\(E=9.00\,\mathrm{eV}\)</span> incidente su <span class="mq-math" data-i18n-skip="true">\(V_0=5.00\,\mathrm{eV}\)</span>. Allora <span class="mq-math" data-i18n-skip="true">\(k_2/k_1=\sqrt{(E-V_0)/E}=2/3\)</span>.</p>
+<p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\(r=(1-2/3)/(1+2/3)=1/5\)</span> e <span class="mq-math" data-i18n-skip="true">\(t=2/(1+2/3)=6/5\)</span>, quindi <span class="mq-math" data-i18n-skip="true">\(R=1/25\)</span> e <span class="mq-math" data-i18n-skip="true">\(T=(2/3)(36/25)=24/25\)</span>.</p>
+<p><strong>Risultato.</strong> <span class="mq-math" data-i18n-skip="true">\(R=0.040\)</span>, <span class="mq-math" data-i18n-skip="true">\(T=0.960\)</span>. Usare soltanto <span class="mq-math" data-i18n-skip="true">\(|t|^2=1.44\)</span> produrrebbe un falso coefficiente maggiore di uno.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Stazionario non significa senza corrente</h3>
+<p>Un autostato ha densità indipendente dal tempo. In una buca unidimensionale non degenere può essere scelto reale e ha corrente nulla; su un anello, invece, <span class="mq-math" data-i18n-skip="true">\(e^{i\ell\varphi}\)</span> è stazionario e porta corrente persistente.</p>
+</article>
+<article class="lecture-card">
+<h3>Più particelle</h3>
+<p>La corrente vive nello spazio delle configurazioni: per la particella <span class="mq-math" data-i18n-skip="true">\(a\)</span>, <span class="mq-math" data-i18n-skip="true">\(\mathbf j_a=(\hbar/m_a)\operatorname{Im}(\Psi^*\nabla_a\Psi)\)</span>. Una corrente nello spazio ordinario richiede l'integrazione sulle altre coordinate.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Interpretare <span class="mq-math" data-i18n-skip="true">\(|\psi|^2\)</span> come traiettoria o densità di massa.</li>
+<li>Dire che corrente nulla segue sempre da densità stazionaria.</li>
+<li>Usare <span class="mq-math" data-i18n-skip="true">\(|t|^2\)</span> come trasmissione quando le velocità asintotiche differiscono.</li>
+<li>Dimenticare il termine <span class="mq-math" data-i18n-skip="true">\(-q\mathbf A\rho/m\)</span> in presenza di campo magnetico.</li>
+<li>Leggere <span class="mq-math" data-i18n-skip="true">\(\mathbf j/\rho\)</span> ai nodi senza controllare il limite.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Precisione concettuale</h3>
+<p>La continuità determina la divergenza della corrente; in più dimensioni si potrebbe aggiungere formalmente un campo solenoidale. La forma fisica di <span class="mq-math" data-i18n-skip="true">\(\mathbf j\)</span> è selezionata dall'Hamiltoniano, dalle simmetrie e dal limite classico.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Definisci densità, probabilità in un volume e dimensioni fisiche.</li>
+<li>Deriva la corrente dalla TDSE e dalla coniugata senza saltare l'identità di divergenza.</li>
+<li>Mostra che la corrente è reale e riscrivila come parte immaginaria.</li>
+<li>Passa alla forma polare e identifica la velocità di flusso.</li>
+<li>Calcola corrente e velocità di gruppo di un'onda piana.</li>
+<li>Confronta funzione reale, onda stazionaria e stato stazionario con fase spaziale.</li>
+<li>Dimostra la cancellazione dei termini incrociati per due onde contropropaganti.</li>
+<li>Definisci <span class="mq-math" data-i18n-skip="true">\(R\)</span> e <span class="mq-math" data-i18n-skip="true">\(T\)</span> come rapporti di corrente e verifica <span class="mq-math" data-i18n-skip="true">\(R+T=1\)</span>.</li>
+<li>Scrivi la corrente con accoppiamento minimo e provane l'invarianza di gauge.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 1</a> - densità, corrente, continuità, Gauss e condizioni al bordo</li>
+<li><a href="Appunti-MQ.pdf#page=114">Appunti-MQ.pdf, pagine PDF 114-117</a> - regola di Born, corrente e flusso di onda piana</li>
+<li><a href="BibbiaAleHD.pdf#page=15">BibbiaAleHD.pdf, pagine PDF 15-17</a> - interpretazione della corrente e scattering</li>
+<li><a href="Domanda2025_6.html">Domanda 2025 n. 6</a> - conservazione globale e locale della probabilità</li>
+</ul>
+<p class="lecture-note">Questa pagina sviluppa la corrente e i suoi usi; la pagina sulla continuità concentra invece forma differenziale, forma integrale, sorgenti e condizioni al bordo.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 2 - DIM 1":"In-depth lesson - Topic 2 - DIM 1","Densità e corrente di probabilità":"Probability density and current","Passare dalla regola di Born a una descrizione locale del trasporto quantistico, derivare la corrente associata all'Hamiltoniano di Schrödinger e usarla correttamente per fase, onde piane, stati stazionari, scattering e accoppiamento elettromagnetico.":"Move from the Born rule to a local description of quantum transport, derive the current associated with the Schrödinger Hamiltonian, and use it correctly for phase, plane waves, stationary states, scattering, and electromagnetic coupling.","Che cosa misura la densità":"What the density measures","è probabilità per unità di volume, non densità di materia né traiettoria della particella. L'integrale su una regione fornisce la probabilità di rivelazione in quella regione.":"is probability per unit volume, not matter density or the particle's trajectory. Its integral over a region gives the probability of detection in that region.","Che cosa misura la corrente":"What the current measures","è probabilità per unità di area e di tempo, orientata. Dipende dalla fase e dall'Hamiltoniano: due stati con la stessa densità possono trasportare correnti opposte.":"is oriented probability per unit area and time. It depends on the phase and the Hamiltonian: two states with the same density can carry opposite currents.","Densità, flusso e velocità":"Density, flux, and velocity","Regola di Born locale":"Local Born rule","Per uno stato puro normalizzato, la misura di posizione associa a ogni volume la misura di probabilità positiva e additiva.":"For a normalized pure state, a position measurement assigns a positive, additive probability measure to every region.","Flusso orientato":"Oriented flux","Il segno di":"The sign of","distingue probabilità uscente ed entrante. La corrente attraversa una superficie, mentre la densità occupa un volume.":"distinguishes outgoing from incoming probability. Current crosses a surface, whereas density occupies a volume.","Dimostrazioni compatte":"Compact derivations","1. Derivata di Born":"1. Derivative of the Born density","La regola del prodotto espone le due equazioni dinamiche che devono essere combinate.":"The product rule displays the two dynamical equations that must be combined.","2. Uso della TDSE":"2. Using the TDSE","Con potenziale scalare reale i contributi di":"For a real scalar potential, the contributions from","si cancellano; resta la differenza dei Laplaciani.":"cancel, leaving the difference of the two Laplacians.","3. Identità di divergenza":"3. Divergence identity","I termini misti sono uguali e si eliminano nella differenza.":"The mixed terms are equal and cancel in the difference.","4. Corrente standard":"4. Standard probability current","La scelta rende la TDSE una legge di continuità e mostra subito che la corrente è reale.":"This choice casts the TDSE as a continuity law and immediately shows that the current is real.","5. Forma polare":"5. Polar form","Il gradiente dell'ampiezza è reale e non contribuisce alla parte immaginaria; il trasporto è governato dalla fase.":"The amplitude gradient is real and does not contribute to the imaginary part; transport is governed by the phase.","6. Velocità locale":"6. Local velocity","Dove la densità non è nulla si può definire una velocità di flusso. Ai nodi il rapporto può essere singolare e va interpretato con cautela.":"Where the density is nonzero, one can define a flow velocity. At nodes the ratio may be singular and must be interpreted cautiously.","7. Onda piana":"7. Plane wave","Per la dispersione libera, velocità di gruppo e velocità di flusso coincidono.":"For the free-particle dispersion relation, group velocity and flow velocity coincide.","8. Stato reale":"8. Real spatial state","Una funzione spaziale reale porta corrente nulla, ma questo non vale per ogni stato stazionario.":"A real spatial wave function carries zero current, but this is not true of every stationary state.","9. Due onde opposte":"9. Two counterpropagating waves","Nella corrente i termini di interferenza sono reali e non contribuiscono; resta la differenza dei flussi.":"In the current, the interference terms are real and do not contribute; the difference of the two fluxes remains.","10. Corrente media":"10. Integrated current","Per uno stato normalizzato che decade al bordo, la corrente integrata restituisce la velocità media.":"For a normalized state that decays at the boundary, the integrated current gives the mean velocity.","11. Rapporti di flusso":"11. Flux ratios","Riflessione e trasmissione sono definite da correnti orientate, non dai soli moduli delle ampiezze.":"Reflection and transmission are defined by oriented currents, not by amplitude moduli alone.","12. Gradino reale":"12. Real potential step","Continuità di funzione e derivata fissa le ampiezze; il fattore di velocità chiude il bilancio.":"Continuity of the wave function and its derivative fixes the amplitudes; the velocity factor closes the balance.","13. Campo elettromagnetico":"13. Electromagnetic field","Con accoppiamento minimo il momento cinetico contiene il potenziale vettore, quindi anche la corrente deve contenerlo.":"With minimal coupling, the kinetic momentum contains the vector potential, so the current must contain it as well.","14. Invarianza di gauge":"14. Gauge invariance","Il termine di fase aggiuntivo cancella esattamente il cambiamento del potenziale vettore.":"The additional phase-gradient term exactly cancels the change in the vector potential.","Esempio d'esame: gradino con velocità diverse":"Exam example: potential step with different velocities","Elettrone con":"An electron with","incidente su":"incident on",", quindi":", hence",". Usare soltanto":". Using only","produrrebbe un falso coefficiente maggiore di uno.":"would produce a spurious coefficient greater than one.","Stazionario non significa senza corrente":"Stationary does not mean currentless","Un autostato ha densità indipendente dal tempo. In una buca unidimensionale non degenere può essere scelto reale e ha corrente nulla; su un anello, invece,":"An energy eigenstate has a time-independent density. In a nondegenerate one-dimensional well it can be chosen real and has zero current; on a ring, however,","è stazionario e porta corrente persistente.":"is stationary and carries a persistent current.","Più particelle":"Many-particle states","La corrente vive nello spazio delle configurazioni: per la particella":"The current lives in configuration space: for particle",". Una corrente nello spazio ordinario richiede l'integrazione sulle altre coordinate.":". A current in ordinary space requires integration over the other coordinates.","Errori tipici":"Common errors","come traiettoria o densità di massa.":"as a trajectory or mass density.","Dire che corrente nulla segue sempre da densità stazionaria.":"Claiming that zero current always follows from stationary density.","come trasmissione quando le velocità asintotiche differiscono.":"as the transmission coefficient when the asymptotic velocities differ.","Dimenticare il termine":"Forgetting the term","in presenza di campo magnetico.":"in the presence of a magnetic field.","ai nodi senza controllare il limite.":"at nodes without checking the limit.","Precisione concettuale":"Conceptual precision","La continuità determina la divergenza della corrente; in più dimensioni si potrebbe aggiungere formalmente un campo solenoidale. La forma fisica di":"The continuity equation determines the divergence of the current; in more than one dimension, a divergence-free field could formally be added. The physical form of","è selezionata dall'Hamiltoniano, dalle simmetrie e dal limite classico.":"is selected by the Hamiltonian, the symmetries, and the classical limit.","Controllo da orale":"Oral exam checklist","Definisci densità, probabilità in un volume e dimensioni fisiche.":"Define density, probability in a region, and their physical dimensions.","Deriva la corrente dalla TDSE e dalla coniugata senza saltare l'identità di divergenza.":"Derive the current from the TDSE and its complex conjugate without skipping the divergence identity.","Mostra che la corrente è reale e riscrivila come parte immaginaria.":"Show that the current is real and rewrite it as an imaginary part.","Passa alla forma polare e identifica la velocità di flusso.":"Use the polar form and identify the flow velocity.","Calcola corrente e velocità di gruppo di un'onda piana.":"Calculate the current and group velocity of a plane wave.","Confronta funzione reale, onda stazionaria e stato stazionario con fase spaziale.":"Compare a real wave function, a standing wave, and a stationary state with spatial phase.","Dimostra la cancellazione dei termini incrociati per due onde contropropaganti.":"Prove the cancellation of the cross terms for two counterpropagating waves.","come rapporti di corrente e verifica":"as current ratios and verify","Scrivi la corrente con accoppiamento minimo e provane l'invarianza di gauge.":"Write the current with minimal coupling and prove its gauge invariance.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- densità, corrente, continuità, Gauss e condizioni al bordo":"- density, current, continuity, the divergence theorem, and boundary conditions","Appunti-MQ.pdf, pagine PDF 114-117":"Appunti-MQ.pdf, PDF pages 114-117","- regola di Born, corrente e flusso di onda piana":"- Born rule, current, and plane-wave flux","BibbiaAleHD.pdf, pagine PDF 15-17":"BibbiaAleHD.pdf, PDF pages 15-17","- interpretazione della corrente e scattering":"- interpretation of current and scattering","Domanda 2025 n. 6":"2025 question no. 6","- conservazione globale e locale della probabilità":"- global and local probability conservation","Questa pagina sviluppa la corrente e i suoi usi; la pagina sulla continuità concentra invece forma differenziale, forma integrale, sorgenti e condizioni al bordo.":"This page develops the probability current and its uses; the continuity page instead focuses on differential and integral forms, sources, and boundary conditions.","Ritorna all'indice MQ":"Return to the MQ index","Obiettivo.":"Goal.","Def":"Def","Base":"Core","Risultato":"Result","Check":"Check","Estensione":"Extension","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","Interpretare":"Interpreting","Usare":"Using","Leggere":"Evaluating","Definisci":"Define"},"attrs":{"Densità e probabilità in un volume":"Density and probability in a region","Flusso della corrente attraverso una superficie":"Probability-current flux through a surface","Derivata temporale della densità di Born":"Time derivative of the Born density","Sostituzione della TDSE nella derivata della densità":"Substitution of the TDSE into the density derivative","Identità che trasforma i Laplaciani in una divergenza":"Identity that turns the Laplacian difference into a divergence","Definizioni equivalenti della corrente di probabilità":"Equivalent definitions of the probability current","Corrente nella rappresentazione polare della funzione d'onda":"Probability current in the polar representation of the wave function","Velocità locale associata alla corrente":"Local velocity associated with the probability current","Densità e corrente di un'onda piana libera":"Density and current of a free plane wave","Corrente nulla per una funzione d'onda reale":"Zero current for a real wave function","Corrente di due onde piane contropropaganti":"Current of two counterpropagating plane waves","Relazione tra corrente integrata e impulso medio":"Relation between integrated current and mean momentum","Coefficienti di riflessione e trasmissione come rapporti di corrente":"Reflection and transmission coefficients as current ratios","Ampiezze e flussi per un gradino di potenziale":"Amplitudes and fluxes at a potential step","Corrente di probabilità con potenziale vettore":"Probability current in the presence of a vector potential","Invarianza di gauge della corrente di probabilità":"Gauge invariance of the probability current"},"title":{"it":"Densità e corrente di probabilità - Dimostrazioni e ripasso orale","en":"Probability density and current - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
