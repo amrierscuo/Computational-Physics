@@ -1,338 +1,141 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spazi Prodotto Diretto</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistemi composti e prodotto tensoriale</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Spazi Prodotto Diretto</h1>
-    <p>
-        In meccanica quantistica, lo spazio prodotto diretto è uno strumento matematico essenziale per descrivere sistemi composti. Quando consideriamo due o più sistemi quantistici distinti, il loro stato congiunto è rappresentato dallo spazio di Hilbert prodotto diretto degli spazi di Hilbert associati ai singoli sottosistemi.
-    </p>
-    <p>
-        Se \( \mathcal{H}_1 \) e \( \mathcal{H}_2 \) sono gli spazi di Hilbert dei sistemi individuali, il prodotto diretto è definito come:
-    </p>
-    <div class="formula">
-        \[
-        \mathcal{H} = \mathcal{H}_1 \otimes \mathcal{H}_2
-        \]
-    </div>
-    <p>
-        Gli stati dello spazio prodotto diretto sono combinazioni lineari di stati del tipo \( |\psi_1\rangle \otimes |\psi_2\rangle \), dove \( |\psi_1\rangle \in \mathcal{H}_1 \) e \( |\psi_2\rangle \in \mathcal{H}_2 \). Questo formalismo consente di descrivere stati entangled, che non possono essere separati in termini di stati dei sottosistemi.
-    </p>
-    <h2>Proprietà Principali</h2>
-    <ul>
-        <li>
-            <strong>Dimensione dello Spazio:</strong> Se \( \dim(\mathcal{H}_1) = d_1 \) e \( \dim(\mathcal{H}_2) = d_2 \), allora la dimensione dello spazio prodotto diretto è:
-            <div class="formula">
-                \[
-                \dim(\mathcal{H}) = d_1 \cdot d_2
-                \]
-            </div>
-        </li>
-        <li>
-            <strong>Operatori:</strong> Un operatore che agisce sull'intero spazio \( \mathcal{H} \) può essere rappresentato come il prodotto tensoriale di operatori sui singoli sottospazi:
-            <div class="formula">
-                \[
-                \hat{O} = \hat{O}_1 \otimes \hat{O}_2
-                \]
-            </div>
-        </li>
-        <li>
-            <strong>Entanglement:</strong> Gli stati entangled non possono essere scritti come un prodotto di stati dei sottosistemi:
-            <div class="formula">
-                \[
-                |\Psi\rangle \neq |\psi_1\rangle \otimes |\psi_2\rangle
-                \]
-            </div>
-        </li>
-    </ul>
-    <h2>Esempio: Spin ½ di Due Particelle</h2>
-    <p>
-        Consideriamo due particelle con spin \( \frac{1}{2} \). Gli stati individuali di ciascuna particella appartengono allo spazio \( \mathbb{C}^2 \), con basi \( \{| \uparrow\rangle, |\downarrow\rangle\} \). Lo spazio prodotto diretto delle due particelle è:
-    </p>
-    <div class="formula">
-        \[
-        \mathcal{H} = \mathbb{C}^2 \otimes \mathbb{C}^2
-        \]
-    </div>
-    <p>
-        La base dello spazio congiunto è data da:
-    </p>
-    <div class="formula">
-        \[
-        \{| \uparrow\uparrow\rangle, |\uparrow\downarrow\rangle, |\downarrow\uparrow\rangle, |\downarrow\downarrow\rangle\}
-        \]
-    </div>
-    <p>
-        Questa costruzione è fondamentale per descrivere stati entangled, come il famoso stato di Bell:
-    </p>
-    <div class="formula">
-        \[
-        |\Phi^+\rangle = \frac{1}{\sqrt{2}} (|\uparrow\uparrow\rangle + |\downarrow\downarrow\rangle)
-        \]
-    </div>
-    <h2>Formalismo Matematico e Operatori nel Prodotto Diretto</h2>
-<p>
-    La rappresentazione degli operatori negli spazi prodotto diretto è cruciale per descrivere l'interazione e le misure nei sistemi quantistici composti. Consideriamo due operatori \( \hat{A}_1 \) e \( \hat{A}_2 \), che agiscono rispettivamente sugli spazi \( \mathcal{H}_1 \) e \( \mathcal{H}_2 \). L'operatore totale \( \hat{A} \) nel prodotto diretto è dato da:
-</p>
-<div class="formula">
-    \[
-    \hat{A} = \hat{A}_1 \otimes \hat{I}_2 + \hat{I}_1 \otimes \hat{A}_2
-    \]
-</div>
-<p>
-    Dove \( \hat{I}_1 \) e \( \hat{I}_2 \) sono gli operatori identità sui rispettivi sottospazi. Questo formalismo consente di trattare l'evoluzione e le interazioni tra i sottosistemi in maniera rigorosa.
-</p>
-<h2>Relazione con l’Entropia di Entanglement</h2>
-<p>
-    Una caratteristica fondamentale degli stati entangled è la correlazione quantistica tra i sottosistemi, che può essere quantificata mediante l’entropia di entanglement. Dato uno stato puro \( |\Psi\rangle \) nello spazio \( \mathcal{H}_1 \otimes \mathcal{H}_2 \), si calcola la matrice densità ridotta tracciando rispetto a uno dei sottospazi, ad esempio:
-</p>
-<div class="formula">
-    \[
-    \rho_1 = \mathrm{Tr}_2(|\Psi\rangle \langle \Psi|)
-    \]
-</div>
-<p>
-    L'entropia di entanglement è quindi definita come:
-</p>
-<div class="formula">
-    \[
-    S = -\mathrm{Tr}(\rho_1 \ln \rho_1)
-    \]
-</div>
-<p>
-    Questa quantità è nulla per stati separabili e positiva per stati entangled.
-</p>
-<h2>Applicazione ai Sistemi di Spin in Campo Magnetico</h2>
-<p>
-    Nei sistemi con spin soggetti a un campo magnetico, lo spazio prodotto diretto consente di descrivere l'interazione tra gli spin e il campo. L'hamiltoniana totale del sistema è tipicamente data da:
-</p>
-<div class="formula">
-    \[
-    \hat{H} = -\gamma_1 \hat{\mathbf{B}} \cdot \hat{\mathbf{S}}_1 - \gamma_2 \hat{\mathbf{B}} \cdot \hat{\mathbf{S}}_2 + J \hat{\mathbf{S}}_1 \cdot \hat{\mathbf{S}}_2
-    \]
-</div>
-<p>
-    Dove \( \gamma_1 \) e \( \gamma_2 \) sono i rapporti giromagnetici, \( \hat{\mathbf{B}} \) il campo magnetico, e \( J \) il coefficiente di interazione di scambio. Questo modello è cruciale per spiegare fenomeni come l'effetto Zeeman e le correlazioni tra spin.
-</p>
-<h2>Conclusioni sull'Utilizzo degli Spazi Prodotto Diretto</h2>
-<p>
-    Gli spazi prodotto diretto non solo forniscono la struttura matematica per trattare sistemi composti, ma sono anche essenziali per comprendere proprietà fondamentali come l'entanglement, la correlazione quantistica e l'interazione tra sottosistemi. La loro applicazione si estende dai sistemi di spin agli stati di particelle correlate, costituendo un pilastro della meccanica quantistica.
-</p>
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 9</div>
-  <h2>Spazi Prodotto Diretto: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Costruire sistemi composti e distinguere stati prodotto da stati intrecciati.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Lo spazio composto è \(\mathcal H_A\otimes\mathcal H_B\). Un vettore generico non fattorizza; le correlazioni si descrivono tramite riduzione parziale.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Base<span class="lecture-step-boss">DIM 8</span><span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Prodotto di basi complete.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|\psi\rangle=\sum_{ij}c_{ij}|i\rangle_A|j\rangle_B"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle I_{AB}=I_A\otimes I_B=\sum_i|i\rangle\langle i|\otimes\sum_j|j\rangle\langle j|\Rightarrow|\psi\rangle=I_{AB}|\psi\rangle=\sum_{ij}c_{ij}|i\rangle_A|j\rangle_B\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Riduzione<span class="lecture-step-boss">DIM 8</span><span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Stato locale di A.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\rho_A=\operatorname{Tr}_B|\psi\rangle\langle\psi|"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \rho_{AB}=|\psi\rangle\langle\psi|=\sum_{ii'jj'}c_{ij}c^*_{i'j'}|i,j\rangle\langle i',j'|;\quad\operatorname{Tr}_B\rho_{AB}=\sum_j\langle j|\rho_{AB}|j\rangle=\rho_A\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Bell</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per \(|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2\).</p>
-    <p><strong>Calcolo.</strong> La matrice ridotta è \(I/2\), pur essendo lo stato globale puro.</p>
-    <p><strong>Risultato e controllo.</strong> Nessun ket locale descrive A: l'informazione è nelle correlazioni.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 8</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P3_DIM_13-18.txt">DIM 13</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Sottosistemi distinti; per identici serve simmetrizzazione.</li>
-          <li>Fattorizzazione dipende dalla partizione fisica.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Entanglement non significa semplice correlazione statistica: una miscela locale nasce da uno stato globale puro.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Testa la fattorizzabilità della matrice c.</li>
-          <li>Calcola correlazioni zz per Bell.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=223">Appunti-MQ.pdf, pp. 223-230: composizione e basi prodotto</a></li>
-          <li><a href="MQ.pdf#page=15">MQ.pdf, pp. capitolo 15: prodotto tensoriale e intreccio</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a class="back-link" href="1mq.html">Torna all'indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-spazi-prodotto"><div class="lecture-kicker">Lezione approfondita - Argomento 11 - DIM 8 e DIM 13</div><h1>Sistemi composti e prodotto tensoriale</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire lo spazio di Hilbert di un sistema composto, distinguere prodotto tensoriale e somma diretta, riconoscere gli stati separabili, ricavare traccia parziale e decomposizione di Schmidt e applicare il formalismo a Bell e a due spin un mezzo.</p><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Correzione terminologica</h3><p>Per comporre sottosistemi quantistici si usa il prodotto tensoriale. La somma diretta descrive invece settori alternativi e produce una dimensione additiva, non moltiplicativa.</p></article><article class="lecture-card lecture-result"><h3>Contenuto fisico</h3><p>Un vettore generico dello spazio composto è una sovrapposizione di prodotti. Se non può essere ridotto a un singolo prodotto, le proprietà dei sottosistemi sono codificate nelle correlazioni quantistiche.</p></article></div><h2>Struttura dello spazio composto</h2><div class="lecture-grid"><article class="lecture-card "><h3>Base e dimensione</h3><p>Il prodotto di due basi ortonormali è una base ortonormale dello spazio composto. Per questo il numero di stati di base è il prodotto delle dimensioni.</p></article><article class="lecture-card "><h3>Prodotto non significa indipendenza</h3><p>Lo spazio è sempre tensoriale, anche quando i sottosistemi interagiscono. È il particolare vettore di stato a essere separabile o entangled; non lo spazio in sé.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Definizione bilineare<span class="lecture-step-boss">BASE</span></h4><p>Il simbolo tensoriale è lineare separatamente in ciascun fattore; questa proprietà fissa come si espandono le sovrapposizioni.</p><div class="lecture-formula" aria-label="Bilinearità del prodotto tensoriale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (\alpha|a\rangle+\beta|b\rangle)\otimes|c\rangle=\alpha|a,c\rangle+\beta|b,c\rangle,\quad|a\rangle\otimes(\gamma|c\rangle+\delta|d\rangle)=\gamma|a,c\rangle+\delta|a,d\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Base prodotto e completezza<span class="lecture-step-boss">ORALE</span></h4><p>Inserendo le identità dei due sottosistemi si ottiene l'espansione generale in una base prodotto.</p><div class="lecture-formula" aria-label="Completezza della base prodotto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle I_{AB}=I_A\otimes I_B=\sum_{ij}|i,j\rangle\langle i,j|,\qquad|\Psi\rangle=\sum_{ij}c_{ij}|i,j\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Dimensione moltiplicativa<span class="lecture-step-boss">CHECK</span></h4><p>Le coppie di indici indipendenti contano tutte le direzioni dello spazio composto.</p><div class="lecture-formula" aria-label="Confronto tra dimensione tensoriale e somma diretta"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \dim(\mathcal H_A\otimes\mathcal H_B)=d_Ad_B,\qquad\dim(\mathcal H_A\oplus\mathcal H_B)=d_A+d_B\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Prodotto scalare<span class="lecture-step-boss">BASE</span></h4><p>L'ortogonalità della base prodotto segue dalla fattorizzazione del prodotto scalare.</p><div class="lecture-formula" aria-label="Prodotto scalare nello spazio tensoriale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle a,b|a',b'\rangle=\langle a|a'\rangle\langle b|b'\rangle,\qquad\langle i,j|k,l\rangle=\delta_{ik}\delta_{jl}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Matrice dei coefficienti<span class="lecture-step-boss">DIM 8</span></h4><p>Raccogliere le ampiezze in una matrice rende algebrico il test di separabilità.</p><div class="lecture-formula" aria-label="Matrice delle ampiezze di uno stato bipartito"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\Psi\rangle=\sum_{ij}C_{ij}|i,j\rangle,\qquad|a\rangle\otimes|b\rangle\Longleftrightarrow C_{ij}=a_i b_j\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Criterio di fattorizzazione<span class="lecture-step-boss">ORALE</span></h4><p>Uno stato puro è prodotto se e solo se la matrice dei coefficienti ha rango uno; per due qubit basta annullarne il determinante.</p><div class="lecture-formula" aria-label="Criterio di rango per la separabilità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\Psi\rangle=|a\rangle\otimes|b\rangle\Longleftrightarrow\operatorname{rank}C=1,\qquad C=\begin{pmatrix}c_{00}&c_{01}\\c_{10}&c_{11}\end{pmatrix}:\ c_{00}c_{11}-c_{01}c_{10}=0\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Decomposizione di Schmidt<span class="lecture-step-boss">DIM 8</span></h4><p>La decomposizione ai valori singolari della matrice dei coefficienti produce basi locali ortonormali e coefficienti non negativi.</p><div class="lecture-formula" aria-label="Decomposizione di Schmidt di uno stato puro"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle C=U\,\operatorname{diag}(\sqrt{\lambda_r})V^{\dagger}\Rightarrow|\Psi\rangle=\sum_{r=1}^{R}\sqrt{\lambda_r}\,|u_r\rangle_A|v_r^*\rangle_B,\quad\sum_r\lambda_r=1\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Traccia parziale<span class="lecture-step-boss">DIM 13</span></h4><p>Eliminare gli esiti non osservati del sottosistema B lascia l'operatore che riproduce tutte le statistiche locali di A.</p><div class="lecture-formula" aria-label="Definizione della traccia parziale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho_A=\operatorname{Tr}_B\rho_{AB}=\sum_j{}_B\langle j|\rho_{AB}|j\rangle_B,\qquad\rho_{AB}=|\Psi\rangle\langle\Psi|\Rightarrow\rho_A=CC^{\dagger}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Purezza ed entropia<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Per uno stato globale puro, la riduzione è pura solo nel caso separabile; i suoi autovalori sono i pesi di Schmidt.</p><div class="lecture-formula" aria-label="Purezza ed entropia di entanglement"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \operatorname{Tr}\rho_A^2=\sum_r\lambda_r^2,\qquad S(\rho_A)=-\operatorname{Tr}(\rho_A\ln\rho_A)=-\sum_r\lambda_r\ln\lambda_r\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Operatori locali<span class="lecture-step-boss">BASE</span></h4><p>Un osservabile di un solo sottosistema si estende con l'identità sull'altro; operatori su fattori diversi commutano.</p><div class="lecture-formula" aria-label="Estensione degli operatori locali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A\mapsto A\otimes I_B,\quad B\mapsto I_A\otimes B,\qquad[A\otimes I_B,I_A\otimes B]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Hamiltoniana composta<span class="lecture-step-boss">CHECK</span></h4><p>La parte di interazione impedisce in generale di fattorizzare l'evoluzione e può generare entanglement da uno stato inizialmente prodotto.</p><div class="lecture-formula" aria-label="Hamiltoniana ed evoluzione di un sistema composto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=H_A\otimes I+I\otimes H_B+H_{\rm int};\quad H_{\rm int}=0\Rightarrow U(t)=U_A(t)\otimes U_B(t)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Misura locale<span class="lecture-step-boss">ORALE</span></h4><p>La regola di Born usa un proiettore locale esteso; la probabilità dipende soltanto dalla matrice ridotta.</p><div class="lecture-formula" aria-label="Probabilità e aggiornamento per una misura locale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p(a)=\operatorname{Tr}_{AB}[(P_a\otimes I)\rho_{AB}]=\operatorname{Tr}_A(P_a\rho_A),\qquad\rho'_{AB}=\frac{(P_a\otimes I)\rho_{AB}(P_a\otimes I)}{p(a)}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Stato di Bell<span class="lecture-step-boss">DIM 13</span></h4><p>Lo stato globale è puro e massimamente correlato, mentre ciascun qubit preso da solo è massimamente misto.</p><div class="lecture-formula" aria-label="Stato di Bell e sue riduzioni locali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\Phi^+\rangle=\frac{|00\rangle+|11\rangle}{\sqrt2},\qquad\rho_A=\rho_B=\frac I2,\quad\langle\sigma_z\otimes\sigma_z\rangle=1,\quad S=\ln2\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Due spin un mezzo<span class="lecture-step-boss">DIM 8</span></h4><p>La base accoppiata è una trasformazione unitaria della base prodotto: tre stati simmetrici formano il tripletto e quello antisimmetrico il singoletto.</p><div class="lecture-formula" aria-label="Base accoppiata tripletto e singoletto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal T=\left\{|++\rangle,\frac{|+-\rangle+|-+\rangle}{\sqrt2},|--\rangle\right\},\qquad\mathcal S=\left\{\frac{|+-\rangle-|-+\rangle}{\sqrt2}\right\}\)</span></div></article></section><h2>Esempio d'esame: test completo di separabilità</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Stato.</strong> Consideriamo una sovrapposizione normalizzata di tre vettori della base computazionale.</p><p data-i18n-skip="true">\(\displaystyle |\psi\rangle=\frac{|00\rangle+|01\rangle+|11\rangle}{\sqrt3},\quad C=\frac1{\sqrt3}\begin{pmatrix}1&1\\0&1\end{pmatrix},\quad\det C=\frac13\ne0\)</p><p><strong>Risultato.</strong> Il rango è due, quindi lo stato è entangled. La riduzione ha autovalori tre più o meno radice di cinque, diviso sei, da cui si ottengono purezza ed entropia senza diagonalizzare lo stato globale.</p></article><h2>Interpretazione e collegamenti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Correlazione non basta</h3><p>Anche una miscela classica può avere risultati correlati. L'entanglement richiede che la matrice densità non sia una combinazione convessa di stati prodotto; per gli stati puri equivale a rango di Schmidt maggiore di uno.</p></article><article class="lecture-card "><h3>Stato locale misto da globale puro</h3><p>La perdita di purezza locale non è ignoranza su quale stato puro possieda realmente il sottosistema. È la conseguenza della correlazione con l'altro fattore e scompare solo descrivendo il sistema completo.</p></article><article class="lecture-card "><h3>Dipendenza dalla partizione</h3><p>La separabilità è definita rispetto a una scelta fisica di sottosistemi. Lo stesso spazio astratto può ammettere diverse fattorizzazioni, con diverse nozioni di operatore locale ed entanglement.</p></article><article class="lecture-card "><h3>Particelle identiche</h3><p>Per particelle indistinguibili il prodotto tensoriale etichettato è solo il punto di partenza: lo spazio fisico viene ristretto al settore simmetrico per bosoni o antisimmetrico per fermioni.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Chiamare prodotto diretto il prodotto tensoriale; supporre che ogni vettore fattorizzi; scrivere A più B senza identità implicite; confondere stato globale puro con riduzioni pure; interpretare la traccia parziale come una misura selettiva.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Controllare normalizzazione, dimensione, rango della matrice C, positività e traccia unitaria delle riduzioni, uguaglianza degli spettri non nulli di rho A e rho B e commutazione degli operatori locali distinti.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Distingui con un esempio prodotto tensoriale e somma diretta.</li><li>Costruisci base, identità e dimensione dello spazio composto.</li><li>Dimostra il criterio di rango uno per uno stato puro separabile.</li><li>Ricava la decomposizione di Schmidt dalla decomposizione ai valori singolari.</li><li>Calcola una traccia parziale indice per indice.</li><li>Mostra che una misura locale dipende solo dalla matrice ridotta.</li><li>Per Bell calcola riduzioni, entropia e correlazione lungo z.</li><li>Deriva tripletto e singoletto con operatore di discesa e ortogonalità.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="MQ.pdf#page=61">MQ.pdf, pagine PDF 61-67 - sistemi composti, operatori, misure e stati intrecciati</a></li><li><a href="Appunti-MQ.pdf#page=223">Appunti-MQ.pdf, pagine PDF 223-229 - base prodotto, Clebsch-Gordan, tripletto e singoletto</a></li><li><a href="boss/P2_DIM_7-12.txt#L385">DIM 8 - composizione dei momenti angolari e base accoppiata</a></li><li><a href="boss/P3_DIM_13-18.txt#L123">DIM 13 - spazio di spin e formalismo a due componenti</a></li><li><a href="spinori-pauli.html">Spinori di Pauli - base locale, proiettori e misure di spin</a></li></ul><p class="lecture-note">La pagina corregge la terminologia originale e separa costruzione dello spazio, proprietà dello stato e scelta fisica della partizione.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 11 - DIM 8 e DIM 13":"In-depth lesson - Topic 11 - DIM 8 and DIM 13","Sistemi composti e prodotto tensoriale":"Composite systems and tensor products","Obiettivo.":"Objective.","Costruire lo spazio di Hilbert di un sistema composto, distinguere prodotto tensoriale e somma diretta, riconoscere gli stati separabili, ricavare traccia parziale e decomposizione di Schmidt e applicare il formalismo a Bell e a due spin un mezzo.":"Build the Hilbert space of a composite system, distinguish a tensor product from a direct sum, recognize separable states, derive the partial trace and Schmidt decomposition, and apply the formalism to Bell states and two spin-one-half particles.","Correzione terminologica":"Terminology correction","Per comporre sottosistemi quantistici si usa il prodotto tensoriale. La somma diretta descrive invece settori alternativi e produce una dimensione additiva, non moltiplicativa.":"Quantum subsystems are combined with a tensor product. A direct sum instead describes alternative sectors and produces an additive rather than multiplicative dimension.","Contenuto fisico":"Physical content","Un vettore generico dello spazio composto è una sovrapposizione di prodotti. Se non può essere ridotto a un singolo prodotto, le proprietà dei sottosistemi sono codificate nelle correlazioni quantistiche.":"A generic vector in the composite space is a superposition of products. If it cannot be reduced to one product, subsystem properties are encoded in quantum correlations.","Struttura dello spazio composto":"Structure of the composite space","Base e dimensione":"Basis and dimension","Il prodotto di due basi ortonormali è una base ortonormale dello spazio composto. Per questo il numero di stati di base è il prodotto delle dimensioni.":"The product of two orthonormal bases is an orthonormal basis of the composite space. Therefore the number of basis states is the product of the dimensions.","Prodotto non significa indipendenza":"Product space does not imply independence","Lo spazio è sempre tensoriale, anche quando i sottosistemi interagiscono. È il particolare vettore di stato a essere separabile o entangled; non lo spazio in sé.":"The space is always a tensor product, even when subsystems interact. A particular state vector is separable or entangled; the space itself is not.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Definizione bilineare":"1. Bilinear definition","BASE":"BASE","Il simbolo tensoriale è lineare separatamente in ciascun fattore; questa proprietà fissa come si espandono le sovrapposizioni.":"The tensor symbol is linear in each factor separately; this property fixes how superpositions expand.","Passaggio":"Step","2. Base prodotto e completezza":"2. Product basis and completeness","ORALE":"ORAL","Inserendo le identità dei due sottosistemi si ottiene l'espansione generale in una base prodotto.":"Inserting the identities of the two subsystems gives the general expansion in a product basis.","3. Dimensione moltiplicativa":"3. Multiplicative dimension","CHECK":"CHECK","Le coppie di indici indipendenti contano tutte le direzioni dello spazio composto.":"Independent index pairs count all directions in the composite space.","4. Prodotto scalare":"4. Inner product","L'ortogonalità della base prodotto segue dalla fattorizzazione del prodotto scalare.":"Orthonormality of the product basis follows from factorization of the inner product.","5. Matrice dei coefficienti":"5. Coefficient matrix","DIM 8":"DIM 8","Raccogliere le ampiezze in una matrice rende algebrico il test di separabilità.":"Collecting amplitudes in a matrix turns separability into an algebraic test.","6. Criterio di fattorizzazione":"6. Factorization criterion","Uno stato puro è prodotto se e solo se la matrice dei coefficienti ha rango uno; per due qubit basta annullarne il determinante.":"A pure state is a product state if and only if its coefficient matrix has rank one; for two qubits it is enough to set its determinant to zero.","7. Decomposizione di Schmidt":"7. Schmidt decomposition","La decomposizione ai valori singolari della matrice dei coefficienti produce basi locali ortonormali e coefficienti non negativi.":"The singular-value decomposition of the coefficient matrix produces orthonormal local bases and nonnegative coefficients.","8. Traccia parziale":"8. Partial trace","DIM 13":"DIM 13","Eliminare gli esiti non osservati del sottosistema B lascia l'operatore che riproduce tutte le statistiche locali di A.":"Summing over the unobserved outcomes of subsystem B leaves the operator reproducing all local statistics of A.","9. Purezza ed entropia":"9. Purity and entropy","ESTENSIONE":"EXTENSION","Per uno stato globale puro, la riduzione è pura solo nel caso separabile; i suoi autovalori sono i pesi di Schmidt.":"For a pure global state, the reduced state is pure only in the separable case; its eigenvalues are the Schmidt weights.","10. Operatori locali":"10. Local operators","Un osservabile di un solo sottosistema si estende con l'identità sull'altro; operatori su fattori diversi commutano.":"An observable of one subsystem is extended by the identity on the other; operators on different factors commute.","11. Hamiltoniana composta":"11. Composite Hamiltonian","La parte di interazione impedisce in generale di fattorizzare l'evoluzione e può generare entanglement da uno stato inizialmente prodotto.":"The interaction term generally prevents factorization of the evolution and can generate entanglement from an initially product state.","12. Misura locale":"12. Local measurement","La regola di Born usa un proiettore locale esteso; la probabilità dipende soltanto dalla matrice ridotta.":"The Born rule uses an extended local projector; the probability depends only on the reduced density matrix.","13. Stato di Bell":"13. Bell state","Lo stato globale è puro e massimamente correlato, mentre ciascun qubit preso da solo è massimamente misto.":"The global state is pure and maximally correlated, while each qubit alone is maximally mixed.","14. Due spin un mezzo":"14. Two spin-one-half particles","La base accoppiata è una trasformazione unitaria della base prodotto: tre stati simmetrici formano il tripletto e quello antisimmetrico il singoletto.":"The coupled basis is a unitary transformation of the product basis: three symmetric states form the triplet and the antisymmetric state is the singlet.","Esempio d'esame: test completo di separabilità":"Exam example: complete separability test","Stato.":"State.","Consideriamo una sovrapposizione normalizzata di tre vettori della base computazionale.":"Consider a normalized superposition of three computational-basis vectors.","Risultato.":"Result.","Il rango è due, quindi lo stato è entangled. La riduzione ha autovalori tre più o meno radice di cinque, diviso sei, da cui si ottengono purezza ed entropia senza diagonalizzare lo stato globale.":"The rank is two, so the state is entangled. The reduced state has eigenvalues three plus or minus square root of five, divided by six, yielding purity and entropy without diagonalizing the global state.","Interpretazione e collegamenti":"Interpretation and connections","Correlazione non basta":"Correlation is not enough","Anche una miscela classica può avere risultati correlati. L'entanglement richiede che la matrice densità non sia una combinazione convessa di stati prodotto; per gli stati puri equivale a rango di Schmidt maggiore di uno.":"A classical mixture may also have correlated outcomes. Entanglement requires that the density matrix not be a convex combination of product states; for pure states this is equivalent to Schmidt rank greater than one.","Stato locale misto da globale puro":"Locally mixed from globally pure","La perdita di purezza locale non è ignoranza su quale stato puro possieda realmente il sottosistema. È la conseguenza della correlazione con l'altro fattore e scompare solo descrivendo il sistema completo.":"Local loss of purity is not ignorance about which pure state the subsystem really has. It follows from correlation with the other factor and disappears only when the full system is described.","Dipendenza dalla partizione":"Dependence on the partition","La separabilità è definita rispetto a una scelta fisica di sottosistemi. Lo stesso spazio astratto può ammettere diverse fattorizzazioni, con diverse nozioni di operatore locale ed entanglement.":"Separability is defined relative to a physical choice of subsystems. The same abstract space may admit different factorizations, with different notions of local operator and entanglement.","Particelle identiche":"Identical particles","Per particelle indistinguibili il prodotto tensoriale etichettato è solo il punto di partenza: lo spazio fisico viene ristretto al settore simmetrico per bosoni o antisimmetrico per fermioni.":"For indistinguishable particles, the labeled tensor product is only the starting point: the physical space is restricted to the symmetric sector for bosons or the antisymmetric sector for fermions.","Errori tipici":"Common errors","Chiamare prodotto diretto il prodotto tensoriale; supporre che ogni vettore fattorizzi; scrivere A più B senza identità implicite; confondere stato globale puro con riduzioni pure; interpretare la traccia parziale come una misura selettiva.":"Calling a tensor product a direct product; assuming every vector factorizes; writing A plus B without implicit identities; confusing a pure global state with pure reductions; interpreting the partial trace as a selective measurement.","Controlli rapidi":"Quick checks","Controllare normalizzazione, dimensione, rango della matrice C, positività e traccia unitaria delle riduzioni, uguaglianza degli spettri non nulli di rho A e rho B e commutazione degli operatori locali distinti.":"Check normalization, dimension, rank of the coefficient matrix C, positivity and unit trace of reduced states, equality of the nonzero spectra of rho A and rho B, and commutation of distinct local operators.","Controllo da orale":"Oral exam checklist","Distingui con un esempio prodotto tensoriale e somma diretta.":"Distinguish a tensor product from a direct sum with an example.","Costruisci base, identità e dimensione dello spazio composto.":"Construct the basis, identity, and dimension of the composite space.","Dimostra il criterio di rango uno per uno stato puro separabile.":"Prove the rank-one criterion for a separable pure state.","Ricava la decomposizione di Schmidt dalla decomposizione ai valori singolari.":"Derive the Schmidt decomposition from the singular-value decomposition.","Calcola una traccia parziale indice per indice.":"Compute a partial trace index by index.","Mostra che una misura locale dipende solo dalla matrice ridotta.":"Show that a local measurement depends only on the reduced density matrix.","Per Bell calcola riduzioni, entropia e correlazione lungo z.":"For a Bell state compute reductions, entropy, and the z correlation.","Deriva tripletto e singoletto con operatore di discesa e ortogonalità.":"Derive triplet and singlet states using the lowering operator and orthogonality.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","MQ.pdf, pagine PDF 61-67 - sistemi composti, operatori, misure e stati intrecciati":"MQ.pdf, PDF pages 61-67 - composite systems, operators, measurements, and entangled states","Appunti-MQ.pdf, pagine PDF 223-229 - base prodotto, Clebsch-Gordan, tripletto e singoletto":"Appunti-MQ.pdf, PDF pages 223-229 - product basis, Clebsch-Gordan coefficients, triplet, and singlet","DIM 8 - composizione dei momenti angolari e base accoppiata":"DIM 8 - angular-momentum composition and coupled basis","DIM 13 - spazio di spin e formalismo a due componenti":"DIM 13 - spin space and two-component formalism","Spinori di Pauli - base locale, proiettori e misure di spin":"Pauli spinors - local basis, projectors, and spin measurements","La pagina corregge la terminologia originale e separa costruzione dello spazio, proprietà dello stato e scelta fisica della partizione.":"The page corrects the original terminology and separates construction of the space, properties of the state, and the physical choice of partition.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Bilinearità del prodotto tensoriale":"Bilinearity of the tensor product","Completezza della base prodotto":"Completeness of the product basis","Confronto tra dimensione tensoriale e somma diretta":"Tensor-product versus direct-sum dimension","Prodotto scalare nello spazio tensoriale":"Inner product in the tensor-product space","Matrice delle ampiezze di uno stato bipartito":"Amplitude matrix of a bipartite state","Criterio di rango per la separabilità":"Rank criterion for separability","Decomposizione di Schmidt di uno stato puro":"Schmidt decomposition of a pure state","Definizione della traccia parziale":"Definition of the partial trace","Purezza ed entropia di entanglement":"Purity and entanglement entropy","Estensione degli operatori locali":"Extension of local operators","Hamiltoniana ed evoluzione di un sistema composto":"Hamiltonian and evolution of a composite system","Probabilità e aggiornamento per una misura locale":"Probability and update for a local measurement","Stato di Bell e sue riduzioni locali":"Bell state and its local reductions","Base accoppiata tripletto e singoletto":"Coupled triplet and singlet basis"},"title":{"it":"Sistemi composti e prodotto tensoriale","en":"Composite systems and tensor products"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
