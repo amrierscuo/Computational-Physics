@@ -1,335 +1,141 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spin ½: Spinori di Pauli</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spin un mezzo - Spinori e matrici di Pauli</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Spin ½: Spinori di Pauli</h1>
-
-    <p>Gli spinori di Pauli sono una rappresentazione fondamentale del concetto di spin ½, utilizzata per descrivere particelle come gli elettroni e altre particelle con spin frazionario. Questa rappresentazione è essenziale per il formalismo della meccanica quantistica e si basa sull'uso di matrici e vettori nello spazio di Hilbert.</p>
-
-    <h2>Rappresentazione Matematica</h2>
-    <p>Un sistema con spin ½ è descritto da uno stato quantistico rappresentato da un vettore colonna (spinore) nel seguente modo:</p>
-    <div class="formula">
-        \[
-        |\psi\rangle = 
-        \begin{pmatrix}
-        \alpha \\
-        \beta
-        \end{pmatrix}
-        \quad \text{con} \quad |\alpha|^2 + |\beta|^2 = 1
-        \]
-    </div>
-    <p>Qui, \(\alpha\) e \(\beta\) sono coefficienti complessi che determinano la probabilità di trovare la particella con spin "su" (\(+\)) o "giù" (\(-\)) lungo un asse specifico.</p>
-
-    <h2>Operatori di Spin e Matrici di Pauli</h2>
-    <p>Le componenti dello spin sono rappresentate da operatori associati alle matrici di Pauli:</p>
-    <div class="formula">
-        \[
-        \sigma_x = 
-        \begin{pmatrix}
-        0 & 1 \\
-        1 & 0
-        \end{pmatrix}, \quad
-        \sigma_y = 
-        \begin{pmatrix}
-        0 & -i \\
-        i & 0
-        \end{pmatrix}, \quad
-        \sigma_z = 
-        \begin{pmatrix}
-        1 & 0 \\
-        0 & -1
-        \end{pmatrix}
-        \]
-    </div>
-    <p>Queste matrici soddisfano la relazione di commutazione tipica degli operatori di spin:</p>
-    <div class="formula">
-        \[
-        [\sigma_i, \sigma_j] = 2i\epsilon_{ijk}\sigma_k
-        \]
-    </div>
-    <p>dove \(\epsilon_{ijk}\) è il simbolo di Levi-Civita.</p>
-
-    <h2>Proprietà</h2>
-    <ul>
-        <li>Gli autovalori delle matrici di Pauli sono \(\pm 1\), corrispondenti agli stati \(|+\rangle\) e \(|-\rangle\) lungo un asse specifico.</li>
-        <li>La norma dello spinore è sempre unitaria: \(|\alpha|^2 + |\beta|^2 = 1\).</li>
-        <li>Le matrici di Pauli formano una base nello spazio degli operatori hermitiani \(2 \times 2\).</li>
-    </ul>
-
-    <h2>Applicazioni</h2>
-    <p>I spinori di Pauli sono utilizzati per descrivere una varietà di fenomeni, come l'interazione tra il momento magnetico di una particella e un campo magnetico esterno (Effetto Zeeman) e l'evoluzione di stati di spin nel tempo secondo l'equazione di Schrödinger dipendente dal tempo.</p>
-
-    <h2>Rotazione degli Stati di Spin</h2>
-<p>Gli stati di spin possono essere ruotati utilizzando operatori di rotazione unitari, definiti come:</p>
-<div class="formula">
-    \[
-    U(\mathbf{n}, \theta) = \exp\left(-i \frac{\theta}{2} (\mathbf{n} \cdot \boldsymbol{\sigma})\right)
-    \]
-</div>
-<p>dove \(\mathbf{n}\) è un vettore unitario che definisce l'asse di rotazione, \(\theta\) è l'angolo di rotazione, e \(\boldsymbol{\sigma} = (\sigma_x, \sigma_y, \sigma_z)\) rappresenta il vettore delle matrici di Pauli.</p>
-
-<p>Applicando \(U(\mathbf{n}, \theta)\) a uno stato \(|\psi\rangle\), si ottiene lo stato ruotato:</p>
-<div class="formula">
-    \[
-    |\psi'\rangle = U(\mathbf{n}, \theta) |\psi\rangle
-    \]
-</div>
-<p>Questa operazione conserva la norma dello stato e rispetta le regole della meccanica quantistica.</p>
-
-<h2>Momento Magnetico e Effetto Zeeman</h2>
-<p>Il momento magnetico associato allo spin è proporzionale all'operatore di spin:</p>
-<div class="formula">
-    \[
-    \mathbf{\mu} = -g \frac{e}{2m} \mathbf{S}
-    \]
-</div>
-<p>dove \(g\) è il fattore di Landé, \(e\) è la carica dell'elettrone, \(m\) la sua massa, e \(\mathbf{S}\) è l'operatore di spin.</p>
-
-<p>In presenza di un campo magnetico uniforme \(\mathbf{B}\), l'energia potenziale dell'interazione è data da:</p>
-<div class="formula">
-    \[
-    H_Z = -\mathbf{\mu} \cdot \mathbf{B} = g \frac{e}{2m} (\mathbf{S} \cdot \mathbf{B})
-    \]
-</div>
-<p>Questo termine, chiamato energia di Zeeman, causa una separazione dei livelli energetici proporzionale alla componente dello spin lungo \(\mathbf{B}\):</p>
-<div class="formula">
-    \[
-    \Delta E = g \mu_B B
-    \]
-</div>
-<p>dove \(\mu_B = \frac{e\hbar}{2m}\) è il magnetone di Bohr.</p>
-
-<h2>Misurazione dello Spin</h2>
-<p>Un aspetto fondamentale dello spin è che il suo valore misurabile lungo un asse specifico è sempre quantizzato. Se si misura lo spin lungo l'asse \(z\), gli unici risultati possibili sono \(\pm \hbar/2\), corrispondenti agli autovalori di \(\sigma_z\):</p>
-<div class="formula">
-    \[
-    \sigma_z |\pm\rangle = \pm |\pm\rangle
-    \]
-</div>
-<p>L'evoluzione temporale degli stati di spin in presenza di un campo magnetico segue l'equazione di Schrödinger:</p>
-<div class="formula">
-    \[
-    i\hbar \frac{\partial}{\partial t} |\psi(t)\rangle = H_Z |\psi(t)\rangle
-    \]
-</div>
-<p>La soluzione di questa equazione descrive la precessione dello spin attorno al campo magnetico, un fenomeno osservabile in esperimenti come l'effetto Stern-Gerlach.</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 9</div>
-  <h2>Spin ½: Spinori di Pauli: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Rappresentare stati puri sulla sfera di Bloch e calcolare misure lungo assi arbitrari.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Uno spinore normalizzato ha due componenti complesse; tolte norma e fase globale restano due parametri, gli angoli della sfera di Bloch.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Stato<span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Autostato + lungo n.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|\mathbf n,+\rangle=\cos(\theta/2)|+z\rangle+e^{i\phi}\sin(\theta/2)|-z\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (\mathbf n\cdot\boldsymbol\sigma)|\mathbf n,+\rangle=|\mathbf n,+\rangle,\quad\mathbf n=(\sin\theta\cos\phi,\sin\theta\sin\phi,\cos\theta)\Rightarrow|\mathbf n,+\rangle=\cos(\theta/2)|+z\rangle+e^{i\phi}\sin(\theta/2)|-z\rangle\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Proiettore<span class="lecture-step-boss">DIM 13</span></h4>
-      <p>Con matrici di Pauli.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P_+(\mathbf n)=\frac12(I+\mathbf n\cdot\boldsymbol\sigma)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (\mathbf n\cdot\boldsymbol\sigma)^2=I,\quad\text{autovalori }\pm1\Rightarrow P_+=\frac{I+\mathbf n\cdot\boldsymbol\sigma}{2};\quad P_+^2=P_+,\ P_+|\mathbf n,+\rangle=|\mathbf n,+\rangle\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Assi n e m</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Prepara +n e misura +m.</p>
-    <p><strong>Calcolo.</strong> La traccia dei proiettori dà \(P=(1+\mathbf n\cdot\mathbf m)/2\).</p>
-    <p><strong>Risultato e controllo.</strong> Per assi opposti la probabilità è zero, per perpendicolari è 1/2.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 13</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Stato puro; miscele stanno dentro la sfera.</li>
-          <li>Rotazioni SU(2) hanno angolo dimezzato.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Il segno dopo una rotazione di \(2\pi\) cambia lo spinore ma non il raggio isolato; interferenze possono renderlo osservabile.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Diagonalizza \(\mathbf n\cdot\sigma\).</li>
-          <li>Ricava il vettore di Bloch da rho.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=218">Appunti-MQ.pdf, pp. 218-223: matrici di Pauli e spinori</a></li>
-          <li><a href="MQ.pdf#page=16">MQ.pdf, pp. capitolo 16: teoria di Pauli</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth"><div class="lecture-kicker">Lezione approfondita - Argomento 10 - DIM 13</div><h1>Spin un mezzo: spinori e matrici di Pauli</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire il formalismo dello spin un mezzo dalla base bidimensionale, ricavare algebra, autostati e proiettori di Pauli, collegarlo alla sfera di Bloch e dimostrare le rotazioni degli spinori fino al segno acquisito dopo un giro completo.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Che cos'è uno spinore?</h3><p>È un vettore complesso a due componenti nello spazio interno dello spin. Non è un vettore ordinario nello spazio fisico: sotto rotazione trasforma secondo la rappresentazione SU(2).</p></article><article class="lecture-card lecture-warning"><h3>Spazio totale</h3><p>Per una particella con posizione e spin, le ampiezze spaziali delle due componenti formano una funzione d'onda spinoriale; le probabilità si sommano sulle componenti interne.</p></article></div><h2>Base, stato fisico e geometria</h2><div class="lecture-grid"><article class="lecture-card "><h3>Base lungo z</h3><p>Scelta una base ortonormale, i moduli quadrati delle componenti sono le probabilità degli esiti. La normalizzazione elimina un parametro reale.</p></article><article class="lecture-card "><h3>Fase globale e sfera di Bloch</h3><p>Una fase globale non cambia alcuna probabilità. Restano due parametri reali, rappresentabili da un punto sulla sfera di Bloch; la fase relativa determina l'azimut.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Stato normalizzato<span class="lecture-step-boss">BASE</span></h4><p>La base lungo z identifica direttamente le due ampiezze di probabilità.</p><div class="lecture-formula" aria-label="Spinore normalizzato nella base z"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\alpha|+z\rangle+\beta|-z\rangle=\binom{\alpha}{\beta},\qquad |\alpha|^2+|\beta|^2=1\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Matrici di Pauli<span class="lecture-step-boss">DIM 13</span></h4><p>Le tre matrici hermitiane e a traccia nulla generano gli osservabili di spin.</p><div class="lecture-formula" aria-label="Definizione delle matrici di Pauli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sigma_x=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad\sigma_y=\begin{pmatrix}0&-i\\i&0\end{pmatrix},\quad\sigma_z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Identità di prodotto<span class="lecture-step-boss">ORALE</span></h4><p>Moltiplicando le matrici si separano parte scalare simmetrica e parte vettoriale antisimmetrica.</p><div class="lecture-formula" aria-label="Identità di prodotto delle matrici di Pauli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sigma_i\sigma_j=\delta_{ij}I+i\varepsilon_{ijk}\sigma_k,\qquad(\boldsymbol\sigma\!\cdot\!\mathbf a)(\boldsymbol\sigma\!\cdot\!\mathbf b)=\mathbf a\!\cdot\!\mathbf b\,I+i\boldsymbol\sigma\!\cdot\!(\mathbf a\!\times\!\mathbf b)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Commutatore e anticommutatore<span class="lecture-step-boss">DIM 13</span></h4><p>Somma e differenza del prodotto precedente danno immediatamente l'algebra completa.</p><div class="lecture-formula" aria-label="Algebra di commutazione e anticommutazione di Pauli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [\sigma_i,\sigma_j]=2i\varepsilon_{ijk}\sigma_k,\qquad\{\sigma_i,\sigma_j\}=2\delta_{ij}I\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Operatori di spin e Casimir<span class="lecture-step-boss">CHECK</span></h4><p>La normalizzazione fisica introduce h tagliato e riproduce spin un mezzo.</p><div class="lecture-formula" aria-label="Operatori di spin e autovalore del Casimir"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S_i=\frac{\hbar}{2}\sigma_i,\qquad[S_i,S_j]=i\hbar\varepsilon_{ijk}S_k,\qquad\mathbf S^2=\frac{3}{4}\hbar^2I=\hbar^2s(s+1)I\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Autostati lungo z<span class="lecture-step-boss">BASE</span></h4><p>La diagonalizzazione di sigma z fissa la convenzione della base computazionale.</p><div class="lecture-formula" aria-label="Autostati di spin lungo z"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |+z\rangle=\binom10,\quad|-z\rangle=\binom01,\qquad S_z|\pm z\rangle=\pm\frac{\hbar}{2}|\pm z\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Autostati lungo un asse<span class="lecture-step-boss">ORALE</span></h4><p>Risolvendo l'equazione agli autovalori compare il mezzo angolo caratteristico degli spinori.</p><div class="lecture-formula" aria-label="Autospinori lungo una direzione arbitraria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |+\mathbf n\rangle=\binom{\cos(\theta/2)}{e^{i\phi}\sin(\theta/2)},\quad|-\mathbf n\rangle=\binom{-e^{-i\phi}\sin(\theta/2)}{\cos(\theta/2)}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Proiettori spettrali<span class="lecture-step-boss">DIM 13</span></h4><p>Poiché il quadrato di sigma punto n è l'identità, i due polinomi lineari sono proiettori ortogonali e completi.</p><div class="lecture-formula" aria-label="Proiettori spettrali dello spin lungo n"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{\mathbf n}^{\pm}=\frac12(I\pm\boldsymbol\sigma\cdot\mathbf n),\quad(P_{\mathbf n}^{\pm})^2=P_{\mathbf n}^{\pm},\quad P_{\mathbf n}^+P_{\mathbf n}^-=0,\quad P_++P_-=I\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Born e valore medio<span class="lecture-step-boss">RISULTATO</span></h4><p>Le probabilità e il valore medio sono proiezioni del vettore di Bloch sull'asse dell'analizzatore.</p><div class="lecture-formula" aria-label="Probabilità di Born e valore medio dello spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p_\pm=\langle\psi|P_{\mathbf n}^{\pm}|\psi\rangle=\frac12(1\pm\mathbf r\cdot\mathbf n),\qquad\langle S_{\mathbf n}\rangle=\frac\hbar2\mathbf r\cdot\mathbf n\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Matrice densità<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Ogni stato puro di spin un mezzo è equivalente a un vettore di Bloch unitario; gli stati misti riempiono l'interno della sfera.</p><div class="lecture-formula" aria-label="Rappresentazione di Bloch della matrice densità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho=|\psi\rangle\langle\psi|=\frac12(I+\mathbf r\cdot\boldsymbol\sigma),\quad r_i=\operatorname{Tr}(\rho\sigma_i),\quad|\mathbf r|=1\Leftrightarrow\rho^2=\rho,\quad|\mathbf r|<1\Rightarrow\operatorname{Tr}\rho^2<1\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Esponenziale di rotazione<span class="lecture-step-boss">DIM 13</span></h4><p>Le potenze pari e dispari si sommano separatamente perché il generatore al quadrato vale l'identità.</p><div class="lecture-formula" aria-label="Operatore di rotazione per spin un mezzo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U_{\mathbf n}(\vartheta)=e^{-i\vartheta\boldsymbol\sigma\cdot\mathbf n/2}=I\cos\frac\vartheta2-i\boldsymbol\sigma\cdot\mathbf n\sin\frac\vartheta2\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Rotazione degli osservabili<span class="lecture-step-boss">CHECK</span></h4><p>La coniugazione unitaria ruota il vettore di Bloch con la corrispondente rotazione tridimensionale.</p><div class="lecture-formula" aria-label="Azione della rotazione sugli osservabili di Pauli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U_{\mathbf n}^{\dagger}(\vartheta)(\boldsymbol\sigma\cdot\mathbf a)U_{\mathbf n}(\vartheta)=\boldsymbol\sigma\cdot[R_{\mathbf n}(-\vartheta)\mathbf a]\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Segno a due pi greco<span class="lecture-step-boss">BOSS</span></h4><p>Un giro completo cambia il segno dello spinore, mentre due giri lo riportano identico; il segno globale emerge in interferenza relativa.</p><div class="lecture-formula" aria-label="Segno dello spinore dopo rotazioni di due e quattro pi greco"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U_{\mathbf n}(2\pi)=-I,\qquad U_{\mathbf n}(4\pi)=I,\qquad SU(2)\xrightarrow{\,2:1\,}SO(3)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Campo magnetico e Larmor<span class="lecture-step-boss">APPLICAZIONE</span></h4><p>Il termine di Zeeman genera una rotazione temporale dello spin attorno al campo.</p><div class="lecture-formula" aria-label="Hamiltoniana di Zeeman e frequenza di Larmor"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=-\boldsymbol\mu\cdot\mathbf B=\frac{g\mu_B}{\hbar}\mathbf S\cdot\mathbf B,\quad U(t)=e^{-iHt/\hbar},\quad\omega_L=\frac{g\mu_BB}{\hbar}\)</span></div></article></section><h2>Esempio d'esame: dallo spinore alle misure</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Stato.</strong> Scegliamo un punto della sfera di Bloch con angolo polare pi greco su tre e azimut pi greco su due.</p><p data-i18n-skip="true">\(\displaystyle |\psi\rangle=\frac{\sqrt3}{2}|+z\rangle+\frac{i}{2}|-z\rangle,\quad \mathbf r=(0,\sqrt3/2,1/2)\)</p><p><strong>Risultato.</strong> Le misure lungo z hanno probabilità tre quarti e un quarto; lungo y hanno probabilità uno più o meno radice di tre su due, il tutto diviso due.</p></article><h2>Interpretazione e collegamenti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Spinore contro vettore</h3><p>Le componenti dello spinore dipendono dalla base e trasformano con SU(2); il vettore di Bloch è costruito dai valori medi e ruota con SO(3).</p></article><article class="lecture-card "><h3>Fase globale e fase relativa</h3><p>Moltiplicare tutto lo stato per la stessa fase non cambia gli osservabili. Cambiare la fase relativa tra le componenti ruota invece il vettore di Bloch attorno a z.</p></article><article class="lecture-card "><h3>Completezza di Pauli</h3><p>Identità e matrici di Pauli formano una base ortogonale per tutte le matrici complesse due per due; ogni Hamiltoniana hermitiana è una parte scalare più un campo efficace.</p></article><article class="lecture-card "><h3>Misure incompatibili</h3><p>Autostati di componenti diverse non coincidono. Il commutatore non nullo impedisce valori definiti simultanei e produce probabilità non banali negli apparati Stern-Gerlach sequenziali.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Confondere spinore e vettore tridimensionale; dimenticare il mezzo angolo; usare trasposto invece di aggiunto hermitiano; trattare il segno a due pi greco come una probabilità negativa; omettere la fase relativa.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Verificare hermiticità e traccia delle matrici di Pauli, norma degli spinori, idempotenza dei proiettori, unitarietà delle rotazioni e somma a uno delle probabilità.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi le matrici di Pauli e ricava prodotto, commutatore e anticommutatore.</li><li>Mostra che il Casimir dà spin un mezzo.</li><li>Diagonalizza sigma punto n e ricava gli spinori con il mezzo angolo.</li><li>Costruisci i proiettori e dimostra ortogonalità e completezza.</li><li>Collega stato puro, matrice densità e vettore di Bloch.</li><li>Somma la serie esponenziale dell'operatore di rotazione.</li><li>Spiega il doppio rivestimento SU(2) su SO(3) e il segno a due pi greco.</li><li>Deriva la precessione di Larmor dall'Hamiltoniana di Zeeman.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L123">DIM 13 - spazio di spin, Pauli, misure e rotazioni</a></li><li><a href="Appunti-MQ.pdf#page=218">Appunti-MQ.pdf, pagine PDF 218-223 - algebra dello spin e spinori</a></li><li><a href="esperimento-stern-gerlach.html">Stern-Gerlach - proiettori, probabilità e apparati sequenziali</a></li><li><a href="effetto-zeeman-normale.html">Effetto Zeeman - momento magnetico e dinamica nel campo</a></li></ul><p class="lecture-note">La pagina mantiene distinti algebra, geometria dello stato e dinamica, così ogni formula può essere ricostruita senza affidarsi alla sola memoria.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 10 - DIM 13":"In-depth lesson - Topic 10 - DIM 13","Spin un mezzo: spinori e matrici di Pauli":"Spin one-half: spinors and Pauli matrices","Obiettivo.":"Objective.","Costruire il formalismo dello spin un mezzo dalla base bidimensionale, ricavare algebra, autostati e proiettori di Pauli, collegarlo alla sfera di Bloch e dimostrare le rotazioni degli spinori fino al segno acquisito dopo un giro completo.":"Build the spin-one-half formalism from a two-dimensional basis, derive the Pauli algebra, eigenstates and projectors, connect it to the Bloch sphere, and prove spinor rotations through the sign acquired after one full turn.","Che cos'è uno spinore?":"What is a spinor?","È un vettore complesso a due componenti nello spazio interno dello spin. Non è un vettore ordinario nello spazio fisico: sotto rotazione trasforma secondo la rappresentazione SU(2).":"It is a two-component complex vector in the internal spin space. It is not an ordinary vector in physical space: under rotations it transforms in the SU(2) representation.","Spazio totale":"Total Hilbert space","Per una particella con posizione e spin, le ampiezze spaziali delle due componenti formano una funzione d'onda spinoriale; le probabilità si sommano sulle componenti interne.":"For a particle with position and spin, the spatial amplitudes of the two components form a spinor wavefunction; probabilities are summed over the internal components.","Base, stato fisico e geometria":"Basis, physical state, and geometry","Base lungo z":"Basis along z","Scelta una base ortonormale, i moduli quadrati delle componenti sono le probabilità degli esiti. La normalizzazione elimina un parametro reale.":"After choosing an orthonormal basis, the squared moduli of the components are the outcome probabilities. Normalization removes one real parameter.","Fase globale e sfera di Bloch":"Global phase and Bloch sphere","Una fase globale non cambia alcuna probabilità. Restano due parametri reali, rappresentabili da un punto sulla sfera di Bloch; la fase relativa determina l'azimut.":"A global phase changes no probability. Two real parameters remain and can be represented by a point on the Bloch sphere; the relative phase determines the azimuth.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Stato normalizzato":"1. Normalized state","BASE":"BASE","La base lungo z identifica direttamente le due ampiezze di probabilità.":"The z basis directly identifies the two probability amplitudes.","Passaggio":"Step","2. Matrici di Pauli":"2. Pauli matrices","DIM 13":"DIM 13","Le tre matrici hermitiane e a traccia nulla generano gli osservabili di spin.":"The three Hermitian traceless matrices generate the spin observables.","3. Identità di prodotto":"3. Product identity","ORALE":"ORAL","Moltiplicando le matrici si separano parte scalare simmetrica e parte vettoriale antisimmetrica.":"Matrix multiplication separates a symmetric scalar part from an antisymmetric vector part.","4. Commutatore e anticommutatore":"4. Commutator and anticommutator","Somma e differenza del prodotto precedente danno immediatamente l'algebra completa.":"The sum and difference of the preceding product immediately give the complete algebra.","5. Operatori di spin e Casimir":"5. Spin operators and Casimir","CHECK":"CHECK","La normalizzazione fisica introduce h tagliato e riproduce spin un mezzo.":"Physical normalization introduces h-bar and reproduces spin one-half.","6. Autostati lungo z":"6. Eigenstates along z","La diagonalizzazione di sigma z fissa la convenzione della base computazionale.":"Diagonalizing sigma z fixes the computational-basis convention.","7. Autostati lungo un asse":"7. Eigenstates along an axis","Risolvendo l'equazione agli autovalori compare il mezzo angolo caratteristico degli spinori.":"Solving the eigenvalue equation produces the half-angle characteristic of spinors.","8. Proiettori spettrali":"8. Spectral projectors","Poiché il quadrato di sigma punto n è l'identità, i due polinomi lineari sono proiettori ortogonali e completi.":"Because sigma dot n squares to the identity, the two linear polynomials are orthogonal and complete projectors.","9. Born e valore medio":"9. Born rule and expectation","RISULTATO":"RESULT","Le probabilità e il valore medio sono proiezioni del vettore di Bloch sull'asse dell'analizzatore.":"Probabilities and the expectation value are projections of the Bloch vector onto the analyzer axis.","10. Matrice densità":"10. Density matrix","ESTENSIONE":"EXTENSION","Ogni stato puro di spin un mezzo è equivalente a un vettore di Bloch unitario; gli stati misti riempiono l'interno della sfera.":"Every pure spin-one-half state is equivalent to a unit Bloch vector; mixed states fill the interior of the sphere.","11. Esponenziale di rotazione":"11. Rotation exponential","Le potenze pari e dispari si sommano separatamente perché il generatore al quadrato vale l'identità.":"Even and odd powers sum separately because the squared generator is the identity.","12. Rotazione degli osservabili":"12. Rotation of observables","La coniugazione unitaria ruota il vettore di Bloch con la corrispondente rotazione tridimensionale.":"Unitary conjugation rotates the Bloch vector by the corresponding three-dimensional rotation.","13. Segno a due pi greco":"13. Sign under two pi","BOSS":"BOSS","Un giro completo cambia il segno dello spinore, mentre due giri lo riportano identico; il segno globale emerge in interferenza relativa.":"One full turn changes the spinor sign, whereas two turns restore it; the global sign becomes observable through relative interference.","14. Campo magnetico e Larmor":"14. Magnetic field and Larmor motion","APPLICAZIONE":"APPLICATION","Il termine di Zeeman genera una rotazione temporale dello spin attorno al campo.":"The Zeeman term generates a time rotation of the spin about the field.","Esempio d'esame: dallo spinore alle misure":"Exam example: from the spinor to measurements","Stato.":"State.","Scegliamo un punto della sfera di Bloch con angolo polare pi greco su tre e azimut pi greco su due.":"Choose a Bloch-sphere point with polar angle pi over three and azimuth pi over two.","Risultato.":"Result.","Le misure lungo z hanno probabilità tre quarti e un quarto; lungo y hanno probabilità uno più o meno radice di tre su due, il tutto diviso due.":"Measurements along z have probabilities three quarters and one quarter; along y they have probabilities one plus or minus square root of three over two, all divided by two.","Interpretazione e collegamenti":"Interpretation and connections","Spinore contro vettore":"Spinor versus vector","Le componenti dello spinore dipendono dalla base e trasformano con SU(2); il vettore di Bloch è costruito dai valori medi e ruota con SO(3).":"Spinor components depend on the basis and transform under SU(2); the Bloch vector is built from expectation values and rotates under SO(3).","Fase globale e fase relativa":"Global and relative phase","Moltiplicare tutto lo stato per la stessa fase non cambia gli osservabili. Cambiare la fase relativa tra le componenti ruota invece il vettore di Bloch attorno a z.":"Multiplying the whole state by the same phase changes no observable. Changing the relative phase between components instead rotates the Bloch vector about z.","Completezza di Pauli":"Completeness of the Pauli basis","Identità e matrici di Pauli formano una base ortogonale per tutte le matrici complesse due per due; ogni Hamiltoniana hermitiana è una parte scalare più un campo efficace.":"The identity and Pauli matrices form an orthogonal basis for all two-by-two complex matrices; every Hermitian Hamiltonian is a scalar part plus an effective field.","Misure incompatibili":"Incompatible measurements","Autostati di componenti diverse non coincidono. Il commutatore non nullo impedisce valori definiti simultanei e produce probabilità non banali negli apparati Stern-Gerlach sequenziali.":"Eigenstates of different components do not coincide. The nonzero commutator prevents simultaneous definite values and produces nontrivial probabilities in sequential Stern-Gerlach analyzers.","Errori tipici":"Common errors","Confondere spinore e vettore tridimensionale; dimenticare il mezzo angolo; usare trasposto invece di aggiunto hermitiano; trattare il segno a due pi greco come una probabilità negativa; omettere la fase relativa.":"Confusing a spinor with a three-dimensional vector; forgetting the half-angle; using a transpose instead of a Hermitian adjoint; treating the two-pi sign as a negative probability; omitting the relative phase.","Controlli rapidi":"Quick checks","Verificare hermiticità e traccia delle matrici di Pauli, norma degli spinori, idempotenza dei proiettori, unitarietà delle rotazioni e somma a uno delle probabilità.":"Check Hermiticity and trace of the Pauli matrices, spinor normalization, projector idempotence, rotation unitarity, and normalization of probabilities.","Controllo da orale":"Oral exam checklist","Scrivi le matrici di Pauli e ricava prodotto, commutatore e anticommutatore.":"Write the Pauli matrices and derive their product, commutator, and anticommutator.","Mostra che il Casimir dà spin un mezzo.":"Show that the Casimir gives spin one-half.","Diagonalizza sigma punto n e ricava gli spinori con il mezzo angolo.":"Diagonalize sigma dot n and derive the half-angle spinors.","Costruisci i proiettori e dimostra ortogonalità e completezza.":"Construct the projectors and prove orthogonality and completeness.","Collega stato puro, matrice densità e vettore di Bloch.":"Connect a pure state, density matrix, and Bloch vector.","Somma la serie esponenziale dell'operatore di rotazione.":"Sum the exponential series for the rotation operator.","Spiega il doppio rivestimento SU(2) su SO(3) e il segno a due pi greco.":"Explain the SU(2) double cover of SO(3) and the two-pi sign.","Deriva la precessione di Larmor dall'Hamiltoniana di Zeeman.":"Derive Larmor precession from the Zeeman Hamiltonian.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 13 - spazio di spin, Pauli, misure e rotazioni":"DIM 13 - spin space, Pauli matrices, measurements, and rotations","Appunti-MQ.pdf, pagine PDF 218-223 - algebra dello spin e spinori":"Appunti-MQ.pdf, PDF pages 218-223 - spin algebra and spinors","Stern-Gerlach - proiettori, probabilità e apparati sequenziali":"Stern-Gerlach - projectors, probabilities, and sequential analyzers","Effetto Zeeman - momento magnetico e dinamica nel campo":"Zeeman effect - magnetic moment and field dynamics","La pagina mantiene distinti algebra, geometria dello stato e dinamica, così ogni formula può essere ricostruita senza affidarsi alla sola memoria.":"The page keeps algebra, state geometry, and dynamics distinct, so every formula can be reconstructed rather than merely memorized.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Spinore normalizzato nella base z":"Normalized spinor in the z basis","Definizione delle matrici di Pauli":"Definition of the Pauli matrices","Identità di prodotto delle matrici di Pauli":"Pauli matrix product identity","Algebra di commutazione e anticommutazione di Pauli":"Pauli commutator and anticommutator algebra","Operatori di spin e autovalore del Casimir":"Spin operators and Casimir eigenvalue","Autostati di spin lungo z":"Spin eigenstates along z","Autospinori lungo una direzione arbitraria":"Spin eigenstates along an arbitrary direction","Proiettori spettrali dello spin lungo n":"Spectral projectors for spin along n","Probabilità di Born e valore medio dello spin":"Born probabilities and spin expectation value","Rappresentazione di Bloch della matrice densità":"Bloch representation of the density matrix","Operatore di rotazione per spin un mezzo":"Rotation operator for spin one-half","Azione della rotazione sugli osservabili di Pauli":"Action of rotations on Pauli observables","Segno dello spinore dopo rotazioni di due e quattro pi greco":"Spinor sign after two-pi and four-pi rotations","Hamiltoniana di Zeeman e frequenza di Larmor":"Zeeman Hamiltonian and Larmor frequency"},"title":{"it":"Spin un mezzo - Spinori e matrici di Pauli","en":"Spin one-half - Spinors and Pauli matrices"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
