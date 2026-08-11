@@ -2,6 +2,10 @@
   (function(){
     "use strict";
 
+    const MQ_LANG = window.CP_LANGUAGE === 'en' ? 'en' : 'it';
+    const IS_EN = MQ_LANG === 'en';
+    const L = (italian, english) => IS_EN ? english : italian;
+
     // =========================
     // Data (TIMELINE from tree)
     // =========================
@@ -249,6 +253,105 @@
         html: `<b>DIM 18:</b> Limiti della classica + Esperimenti: Corpo Nero (BB), Effetto Fotoelettrico, <span class="br">[Compton (metodo covariante)]</span> (risoluzione completa + significato fisico), Atomo di Bohr, spettri atomici, Doppia Fenditura, esperimento con elettroni, analogia ottica-meccanica`,
       },
     ];
+
+    // English scientific catalog. The Italian source remains the canonical course outline;
+    // this catalog changes only the labels shown by the interface.
+    const TIMELINE_EN = {
+      'p1-01': ['1) Experiments and introduction', 'Complete experiments and introduction'],
+      'p1-02': ['2) Optics-mechanics analogies', 'Double-slit experiment'],
+      'p1-03': ['3) Gaussian wave packets', 'TISE/TDSE and introduction'],
+      'p1-04': ['4) Continuity and probability conservation', ''],
+      'p1-05': ['5) Properties and expectation values', ''],
+      'p1-06': ['6) Ehrenfest theorem', ''],
+      'p1-07': ['7) Foundations: calculations and expectation values', ''],
+      'p1-08': ['8) One-dimensional problems: potential well', 'Generic potential and free particle'],
+      'p1-09': ['9) Potential step and barrier', 'Optical analogy'],
+      'p1-10': ['10) Further potential-well problems', ''],
+      'p1-11a': ['11) Quantum and classical harmonic oscillators', 'Quantum versus classical description'],
+      'p1-11b': ['11) Quantum and classical harmonic oscillators', 'Mathematical foundations'],
+      'p1-12': ['12) Operator formulation of the harmonic oscillator', 'Matrix notation'],
+      'p1-13': ['13) Postulates', ''],
+      'p1-14a': ['14) Compatible observables', ''],
+      'p1-14b': ['14) Optical analogy', ''],
+      'p1-15': ['15) Uncertainty principle', ''],
+      'p1-16': ['16) Commutator calculations', ''],
+      'p1-17a': ['17) Angular momentum', 'Introduction'],
+      'p1-17b': ['17) Spherical harmonics', 'Coordinate representation and extensions'],
+      'p1-18': ['18) Time evolution', ''],
+      'p1-19': ['19) Conservation laws and continuous symmetries', 'Direct product'],
+      'p1-20a': ['20) Central potentials', ''],
+      'p1-20b': ['20) Coulomb potential and Kummer equation', ''],
+      'p1-21a': ['21) Zeeman effect', ''],
+      'p1-21b': ['21) Stern-Gerlach experiment and spin', ''],
+      'p1-21c': ['21) Non-interacting particles', 'Introduction'],
+      'p1-22': ['22) Three-dimensional Schrödinger equation', 'Free particle and harmonic oscillator'],
+      'p2-23a': ['23) Addition of angular momenta', 'General composition'],
+      'p2-23b': ['23) Addition of angular momenta', 'Two fermions'],
+      'p2-24': ['24) Identical particles', ''],
+      'p2-25a': ['25) Time-independent perturbation theory', 'Non-degenerate case'],
+      'p2-25b': ['25) Time-independent perturbation theory', 'Degenerate case'],
+      'p2-26': ['26) Fine structure', 'Relativistic corrections'],
+      'p2-27': ['27) Hellmann-Feynman theorem', ''],
+      'p2-28a': ['28) Time-dependent perturbation theory', 'TDPT'],
+      'p2-28b': ['28) Time-dependent perturbation theory', 'Constant and periodic perturbations; resonance'],
+      'p2-28c': ['28) Continuum limit', 'Conclusion'],
+    };
+
+    const GLOSSARY_EN = [
+      ['Ehrenfest theorem', 'Relation between quantum evolution and expectation values, forming a bridge to classical mechanics.'],
+      ['Continuity equation', 'Continuity equation for probability density and probability current.'],
+      ['Uncertainty principle', 'The ΔxΔp bound and its connection with commutators.'],
+      ['Barrier and step', 'Reflection and transmission in one dimension, with optical analogies.'],
+      ['Operators', 'Operator notation, matrix representations, and postulates.'],
+      ['Compatible observables', 'Commutation, simultaneous measurements, and a common eigenbasis.'],
+      ['Angular momentum', 'Angular-momentum operators, spherical harmonics, and the |l,m⟩ basis.'],
+      ['Coulomb potential and Kummer equation', 'Solution of the hydrogenic problem using special functions.'],
+      ['Stern-Gerlach experiment', 'Spin quantization and discrete measurement outcomes.'],
+      ['Identical particles', 'Bosonic and fermionic symmetrization of many-particle states.'],
+      ['Time-independent perturbation theory', 'Non-degenerate and degenerate cases.'],
+      ['TDPT', 'Time-dependent perturbations, transitions, resonance, and limiting cases.'],
+    ];
+
+    const BOSS_HTML_EN = {
+      0: String.raw`<b>DIM 0 (Foundations):</b> Postulates and solution of the TDSE/TISE: 1. Schrödinger equation and superposition principle, 2. Measurement and possible outcomes, hence observables, 3. Probability of a measurement outcome (Born rule), 4. Expectation value of an observable, 5. Symmetrized products, 6. Wave-function reduction (collapse of the wave function)`,
+      1: String.raw`<b>DIM 1:</b> <span class="br">[Global and local conservation of probability]</span> <em>(Hermiticity of \(H\) and the <span class="br">[continuity equation]</span>) (through \(\vec{j}\) and the Gauss-Green theorem)</em>`,
+      2: String.raw`<b>DIM 2:</b> <span class="br">[Heisenberg uncertainty relation]</span> <em>(derived from commutators)</em>: \((\Delta A)^2(\Delta B)^2 \ge \frac{1}{4}\,|\langle [A,B]\rangle|^2\), with \(A=x\), \(B=p\). Identify the minimum-uncertainty condition <em>(equality)</em> and discuss the Gaussian wave packet as a minimum-uncertainty state.`,
+      3: String.raw`<b>DIM 3:</b> <span class="br">[Compatible observables]</span> &lt;=&gt; \([A,B]=0\) (<span class="br">[commuting operators]</span>), in both the non-degenerate and degenerate cases.`,
+      4: String.raw`<b>DIM 4:</b> Expectation values and the <span class="br">[Ehrenfest theorem]</span>, including \(\frac{d\langle x\rangle}{dt}\) and \(\frac{d\langle p\rangle}{dt}\); time evolution of operators in the Schrödinger, Heisenberg, and interaction pictures; symmetries and conservation laws, with generators of translations and rotations.`,
+      5: String.raw`<b>DIM 5:</b> Physical considerations <em>(energy and potential)</em>; generic potential profile and the <span class="br">[free particle]</span> (eigenfunctions of \(\hat p\)); quantum-classical comparison; potential <span class="br">[step]</span>, <span class="br">[barrier]</span>, and <span class="br">[finite/infinite well]</span>; forms of \(\psi\), boundary conditions, and \(R\), \(T\) from probability current; optical analogy, <span class="br">[parity]</span>, bound states, and scattering states.`,
+      6: String.raw`<b>DIM 6:</b> Physical considerations <em>(energy and potential)</em>; quantum-classical comparison; <span class="br">[operator method for the harmonic oscillator]</span>: \(a, a^\dagger, N\), spectrum, and ladder construction.`,
+      7: String.raw`<b>DIM 7:</b> <span class="br">[Time-independent perturbation theory]</span>: <span class="br">[non-degenerate case]</span> \(E^{(1)},\ |\psi^{(1)}\rangle,\ E^{(2)}\); <span class="br">[degenerate case]</span>, secular equation, and diagonalization in \(S_n\).`,
+      8: String.raw`<b>DIM 8:</b> <span class="br">[Addition of general angular momenta]</span> \(J = J_1 + J_2\): coupled and uncoupled bases, Clebsch-Gordan coefficients, and ladder construction; example of two fermions with \(\tfrac12 + \tfrac12\), with triplet and singlet states constructed using \(J_-\).`,
+      9: String.raw`<b>DIM 9:</b> <span class="br">[Identical particles]</span> <em>(N interacting particles)</em>: \(P_{ij}\), eigenvalues \(\pm 1\), \([P,H]=0\), symmetric and antisymmetric states, Pauli principle, and Slater determinants; singlet/triplet rule &lt;-&gt; even/odd \(\ell\), since exchange gives \((-1)^{\ell}\).`,
+      10: String.raw`<b>DIM 10:</b> <span class="br">[Hellmann-Feynman theorem]</span> and spectroscopic notation: \(\frac{dE_n}{d\lambda} = \langle n\,|\,\frac{\partial H}{\partial \lambda}\,|\,n\rangle\).`,
+      11: String.raw`<b>DIM 11:</b> Relativistic corrections: \(H_{MV}\), \(H_D\), and the complete <span class="br">[spin-orbit]</span> contribution \(H_{SO}\); fine structure of hydrogen.`,
+      12: String.raw`<b>DIM 12:</b> <span class="br">[TDPT]</span>: variation of the constants and the amplitudes \(c_n(t)\); transitions and resonance, including resonant emission and absorption and identification of the <span class="br">[Bohr angular frequency]</span>; constant and <span class="br">[periodic]</span> perturbations; transition to the <span class="br">[continuum]</span> through <span class="br">[Fermi's golden rule]</span>; \(\tau\) and \(\Gamma\).`,
+      13: String.raw`<b>DIM 13:</b> Spin: normal Zeeman effect, interaction with an electromagnetic field and a uniform \(B\) field, spin \(\tfrac12\) and Pauli spinors, Stern-Gerlach experiment, and Stark effect.`,
+      14: String.raw`<b>DIM 14:</b> Schrödinger equation in three dimensions: separation of variables, three-dimensional harmonic oscillator, and three-dimensional free particle.`,
+      15: String.raw`<b>DIM 15:</b> Mathematical foundations leading to angular momentum: commutators, spherical coordinates, spherical harmonics, matrix representations, and generators of rotations and translations; physical and mathematical transition to <span class="br">[spin]</span>.`,
+      16: String.raw`<b>DIM 16:</b> Central potentials and the hydrogen atom with a Coulomb potential: radial solution using the Kummer or Laplace method.`,
+      17: String.raw`<b>DIM 17:</b> Potential wells with finite and infinite walls, including bound and scattering states and parity.`,
+      18: String.raw`<b>DIM 18:</b> Limits of classical physics and foundational experiments: black-body radiation, photoelectric effect, <span class="br">[Compton scattering by the covariant method]</span> with complete derivation and physical interpretation, Bohr atom, atomic spectra, double-slit experiment with electrons, and the optics-mechanics analogy.`,
+    };
+
+    if(IS_EN){
+      for(const block of TIMELINE){
+        const translated = TIMELINE_EN[block.id];
+        if(!translated) continue;
+        block.title = translated[0];
+        block.subtitle = translated[1];
+        block.path = `${block.part} › ${translated[0]}${translated[1] ? ` › ${translated[1]}` : ''}`;
+      }
+      GLOSSARY.forEach((entry, index) => {
+        const translated = GLOSSARY_EN[index];
+        if(!translated) return;
+        entry.term = translated[0];
+        entry.desc = translated[1];
+      });
+      BOSS_DIMS.forEach(dim => {
+        if(BOSS_HTML_EN[dim.id]) dim.html = BOSS_HTML_EN[dim.id];
+      });
+    }
 
 
 
@@ -504,15 +607,15 @@ function unlockPageScroll(){
   window.scrollTo(0, __scrollLockY);
 }
 function humanLabel(file){
-      // 12.jpg -> Pag. 12
+      // 12.jpg -> Pag. 12 / Page 12
       const m = /^([0-9]+)\.jpg$/i.exec(file);
-      if(m) return `Pag. ${m[1]}`;
+      if(m) return `${L('Pag.', 'Page')} ${m[1]}`;
       const v = /^([0-9]+)_p([12])t0?([12])\.jpg$/i.exec(file);
       if(v){
         const n = v[1];
         const part = v[2];
         const t = v[3];
-        return `Pag. ${n} · parte ${t}/2`;
+        return `${L('Pag.', 'Page')} ${n} · ${L('parte', 'part')} ${t}/2`;
       }
       return file;
     }
@@ -574,7 +677,9 @@ function humanLabel(file){
       goldCountEl.textContent = state.coins.gold;
       const canConvert = state.coins.silver >= CONVERT_COST_SILVER;
       btnConvert.disabled = !canConvert;
-      convertHint.textContent = canConvert ? 'Pronto.' : `Ti mancano ${Math.max(0, CONVERT_COST_SILVER - state.coins.silver)} Silver.`;
+      convertHint.textContent = canConvert
+        ? L('Pronto.', 'Ready.')
+        : L(`Ti mancano ${Math.max(0, CONVERT_COST_SILVER - state.coins.silver)} Silver.`, `${Math.max(0, CONVERT_COST_SILVER - state.coins.silver)} more Silver required.`);
     }
 
 
@@ -629,13 +734,13 @@ function humanLabel(file){
         state.bossRewardUnlocked = true;
         saveState();
         renderJukebox();
-        toastShow('Jukebox', 'Track finale sbloccata: Classical Pack');
+        toastShow('Jukebox', L('Traccia finale sbloccata: Classical Pack', 'Final track unlocked: Classical Pack'));
         return;
       }
       // Generic: just re-render + toastEl
       renderJukebox();
       const tr = TRACKS.find(t=>t.id===trackId);
-      if(tr) toast(`Track sbloccata: ${tr.label}`);
+      if(tr) toast(L(`Traccia sbloccata: ${tr.label}`, `Track unlocked: ${tr.label}`));
     }
 
     function earnSilver(amount, reason=''){
@@ -654,7 +759,7 @@ function humanLabel(file){
       refreshCoins();
 
       if(reason){
-        if(goldDrops>0) toastShow('QC + reward', `${reason} · +${n} Silver · +${goldDrops} Gold (drop raro)`);
+        if(goldDrops>0) toastShow('QC + reward', L(`${reason} · +${n} Silver · +${goldDrops} Gold (drop raro)`, `${reason} · +${n} Silver · +${goldDrops} Gold (rare drop)`));
         else toastShow('QC + reward', `${reason} · +${n} Silver`);
       }
       return { silver:n, gold:goldDrops };
@@ -679,7 +784,7 @@ function humanLabel(file){
       spin(goldCoin,true);
       burst(goldBurst);
       refreshCoins();
-      toastShow('Conversione', `-100 Silver → +1 Gold`);
+      toastShow(L('Conversione', 'Conversion'), `-100 Silver → +1 Gold`);
       renderAll();
     }
 
@@ -688,12 +793,12 @@ function humanLabel(file){
     // =========================
 
     const ACH = [
-      { id:'firstBlock', title:'Primo blocco', desc:'Completa 1 blocco.', check: s => completedCount(s) >= 1, reward: () => ({silver: 20, gold:0}) },
-      { id:'eight', title:'8 blocchi', desc:'Arriva a 8 blocchi completati.', check: s => completedCount(s) >= 8, reward: () => ({silver: 40, gold:1}) },
-      { id:'p1done', title:'P1 clear', desc:'Completa tutti i 28 blocchi di P1.', check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
-      { id:'p2done', title:'P2 clear', desc:'Completa tutti i blocchi di P2.', check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
-      { id:'fullclear', title:'Full clear', desc:'Completa tutti i blocchi (P1+P2).', check: s => completedCount(s) >= TOTAL_BLOCKS, reward: () => ({silver: 100, gold:5}) },
-      { id:'egg', title:'Easter egg', desc:'Trova la traccia segreta.', check: s => !!s.eggFound, reward: () => ({silver: 25, gold:2}) },
+      { id:'firstBlock', title:L('Primo blocco', 'First block'), desc:L('Completa 1 blocco.', 'Complete one block.'), check: s => completedCount(s) >= 1, reward: () => ({silver: 20, gold:0}) },
+      { id:'eight', title:L('8 blocchi', 'Eight blocks'), desc:L('Arriva a 8 blocchi completati.', 'Complete eight blocks.'), check: s => completedCount(s) >= 8, reward: () => ({silver: 40, gold:1}) },
+      { id:'p1done', title:'P1 clear', desc:L('Completa tutti i 28 blocchi di P1.', 'Complete all 28 P1 blocks.'), check: s => p1Done(s) >= p1Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'p2done', title:'P2 clear', desc:L('Completa tutti i blocchi di P2.', 'Complete all P2 blocks.'), check: s => p2Done(s) >= p2Total(), reward: () => ({silver: 60, gold:5}) },
+      { id:'fullclear', title:'Full clear', desc:L('Completa tutti i blocchi (P1+P2).', 'Complete every P1 and P2 block.'), check: s => completedCount(s) >= TOTAL_BLOCKS, reward: () => ({silver: 100, gold:5}) },
+      { id:'egg', title:'Easter egg', desc:L('Trova la traccia segreta.', 'Find the secret track.'), check: s => !!s.eggFound, reward: () => ({silver: 25, gold:2}) },
     ];
 
     function grantAchievement(id){
@@ -740,7 +845,7 @@ function humanLabel(file){
       if(completedCount() >= 1){
         state.jukeboxUnlocked = true;
         saveState();
-        toastShow('Sblocco', 'Hai sbloccato il Jukebox 🎧');
+        toastShow(L('Sblocco', 'Unlocked'), L('Hai sbloccato il Jukebox 🎧', 'You unlocked the Jukebox 🎧'));
       }
     }
 
@@ -786,7 +891,7 @@ function humanLabel(file){
           <span class="bmeta">
             <span class="chip"><b>${block.files.length}</b><span>img</span></span>
             <span class="chip"><b>+${reward.silver}</b><span>Silver</span></span>
-            ${hasSplit ? '<span class="chip" title="Contiene pagine divise in 2">½</span>' : ''}
+            ${hasSplit ? `<span class="chip" title="${L('Contiene pagine divise in 2', 'Contains pages split into two images')}">½</span>` : ''}
             <span class="chip" style="${done?'border-color:rgba(57,217,138,.45);background:rgba(57,217,138,.10);':''}">
               <b>${done ? 'DONE' : 'TODO'}</b>
             </span>
@@ -795,13 +900,13 @@ function humanLabel(file){
         <div class="block-body">
           <div class="block-actions">
             <div class="left">
-              <button class="btn" data-action="open" title="Apri viewer (prima pagina)"><span class="dot"></span><span>Apri viewer</span></button>
-              <button class="btn" data-action="mark" title="Segna completato"><span class="dot ok"></span><span>Completa</span></button>
+              <button class="btn" data-action="open" title="${L('Apri viewer (prima pagina)', 'Open viewer at the first page')}"><span class="dot"></span><span>${L('Apri viewer', 'Open viewer')}</span></button>
+              <button class="btn" data-action="mark" title="${L('Segna completato', 'Mark as completed')}"><span class="dot ok"></span><span>${L('Completa', 'Complete')}</span></button>
             </div>
             <div class="muted">${escapeHtml(block.path)}</div>
           </div>
           <div class="thumbs" data-thumbs="${block.id}"></div>
-          <div class="muted"><em>Tip:</em> clicca una miniatura per aprire la pagina in grande. Arrivando all’ultima pagina si completa automaticamente.</div>
+          <div class="muted"><em>Tip:</em> ${L('clicca una miniatura per aprire la pagina in grande. Arrivando all’ultima pagina si completa automaticamente.', 'select a thumbnail to open the full-size page. Reaching the last page automatically completes the block.')}</div>
         </div>
       `;
 
@@ -909,8 +1014,8 @@ function humanLabel(file){
         t.className = 'thumb more';
         t.tabIndex = 0;
         t.setAttribute('role','button');
-        t.setAttribute('aria-label', `Carica altre miniature (restanti ${remaining})`);
-        t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>Carica altre</small></div>`;
+        t.setAttribute('aria-label', L(`Carica altre miniature (restanti ${remaining})`, `Load more thumbnails (${remaining} remaining)`));
+        t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>${L('Carica altre', 'Load more')}</small></div>`;
 
         const doLoad = ()=>{
           t.remove();
@@ -1068,7 +1173,7 @@ function humanLabel(file){
         li.innerHTML = `
           <strong>${got ? '✅' : '⬜'} ${escapeHtml(a.title)}</strong>
           <p>${escapeHtml(a.desc)}</p>
-          <p class="muted">Reward: +${reward.silver} Silver · +${reward.gold} Gold</p>
+          <p class="muted">${L('Ricompensa', 'Reward')}: +${reward.silver} Silver · +${reward.gold} Gold</p>
         `;
         achList.appendChild(li);
       }
@@ -1085,14 +1190,14 @@ function humanLabel(file){
         const unlocked = trackUnlocked(t);
         const row = document.createElement('div');
         row.className = 'track';
-        const req = t.requiresBoss ? 'bossfight' : (t.requiresEgg ? 'easter egg' : `≥ ${t.unlockBlocks} blocchi`);
+        const req = t.requiresBoss ? 'bossfight' : (t.requiresEgg ? 'easter egg' : `≥ ${t.unlockBlocks} ${L('blocchi', 'blocks')}`);
         row.innerHTML = `
           <div class="left">
             <strong>${escapeHtml(t.label)}</strong>
-            <div class="tmeta">Sblocco: ${escapeHtml(req)}</div>
+            <div class="tmeta">${L('Sblocco', 'Unlock requirement')}: ${escapeHtml(req)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;">
-            <span class="lock ${unlocked?'on':''}"><span class="ic"></span><span>${unlocked ? 'sbloccata' : 'bloccata'}</span></span>
+            <span class="lock ${unlocked?'on':''}"><span class="ic"></span><span>${unlocked ? L('sbloccata', 'unlocked') : L('bloccata', 'locked')}</span></span>
             <button class="btn" ${unlocked?'':'disabled'} data-play="${t.id}"><span class="dot"></span><span>Play</span></button>
           </div>
         `;
@@ -1142,10 +1247,13 @@ function humanLabel(file){
         vThumbList.appendChild(li);
       }
 
-      vReward.textContent = `Completa il blocco per ottenere +${blockReward(block).silver} Silver (più eventuale drop Gold).`;
+      vReward.textContent = L(
+        `Completa il blocco per ottenere +${blockReward(block).silver} Silver (più eventuale drop Gold).`,
+        `Complete the block to earn +${blockReward(block).silver} Silver, with a possible Gold drop.`
+      );
       vHint.textContent = isBlockDone(block.id)
-        ? 'Blocco già completato. Puoi comunque rivedere le pagine.'
-        : 'Completa arrivando all’ultima pagina o premendo ✓.';
+        ? L('Blocco già completato. Puoi comunque rivedere le pagine.', 'This block is already completed; you can still review its pages.')
+        : L('Completa arrivando all’ultima pagina o premendo ✓.', 'Reach the final page or press ✓ to complete the block.');
 
       openModal(viewerModal);
       setViewerIndex(currentIndex);
@@ -1192,7 +1300,7 @@ function humanLabel(file){
     function markBlockDone(blockId, sourceEl){
       const already = isBlockDone(blockId);
       if(already){
-        toastShow('OK', 'Blocco già segnato come completato.');
+        toastShow('OK', L('Blocco già segnato come completato.', 'The block is already marked as completed.'));
         return;
       }
       state.completed[blockId] = true;
@@ -1201,7 +1309,7 @@ function humanLabel(file){
 
       const block = TIMELINE.find(b=>b.id===blockId);
       const reward = block ? blockReward(block) : {silver: 10, gold:0};
-      earnSilver(reward.silver, `${block ? block.key : 'Blocco'} completato`);
+      earnSilver(reward.silver, L(`${block ? block.key : 'Blocco'} completato`, `${block ? block.key : 'Block'} completed`));
 
       // unlock features
       unlockJukeboxIfNeeded();
@@ -1209,11 +1317,11 @@ function humanLabel(file){
       // milestone gold (guarantee 15 total on full completion)
       // - P1 complete
       if(p1Done() === p1Total()){
-        earnGold(5, 'Milestone: P1 completato');
+        earnGold(5, L('Milestone: P1 completato', 'Milestone: P1 completed'));
       }
       // - P2 complete
       if(p2Done() === p2Total()){
-        earnGold(5, 'Milestone: P2 completato');
+        earnGold(5, L('Milestone: P2 completato', 'Milestone: P2 completed'));
       }
       // - full clear
       if(completedCount() === TOTAL_BLOCKS){
@@ -1243,7 +1351,7 @@ function humanLabel(file){
 
       // prompt for boss readiness
       if(canEnterBoss() && !state.bossUnlockedOnce){
-        toastShow('Bossfight pronta', 'Hai completato il programma. Se hai 15 Gold, puoi entrare nella simulazione orale.');
+        toastShow(L('Bossfight pronta', 'Bossfight ready'), L('Hai completato il programma. Se hai 15 Gold, puoi entrare nella simulazione orale.', 'You completed the course. With 15 Gold, you can enter the oral-exam simulation.'));
       }
 
       renderJukebox();
@@ -1282,9 +1390,9 @@ function renderBossIntro(){
     }
 
     const BOSS_PART_TITLES = {
-      1: 'Parte 1 (Obbligatori)',
-      2: 'Parte 2 (Obbligatori)',
-      3: 'Parte 3 (Extra-Impegnative e Rare)',
+      1: L('Parte 1 (Obbligatori)', 'Part 1 (Required)'),
+      2: L('Parte 2 (Obbligatori)', 'Part 2 (Required)'),
+      3: L('Parte 3 (Extra-Impegnative e Rare)', 'Part 3 (Extra - Challenging and Rare)'),
     };
 
     function bossRequiredDims(){
@@ -1307,15 +1415,15 @@ function renderBossIntro(){
       const pct = Math.round((done / total) * 100);
       bossHPFill.style.width = pct + '%';
       const remaining = Math.max(0, req.length - done);
-      bossHPText.textContent = `Obbligatori: ${done}/${req.length} · Mancano: ${remaining}`;
+      bossHPText.textContent = L(`Obbligatori: ${done}/${req.length} · Mancano: ${remaining}`, `Required: ${done}/${req.length} · Remaining: ${remaining}`);
       const allDone = BOSS_DIMS.every(d => !!state.boss.done[d.id]);
       if(bossHintText){
         if(allDone){
-          bossHintText.textContent = '🏁 Tutte le DIM completate. Ricompensa sbloccata.';
+          bossHintText.textContent = L('🏁 Tutte le DIM completate. Ricompensa sbloccata.', '🏁 Every DIM is completed. Reward unlocked.');
         } else if(remaining === 0){
-          bossHintText.textContent = '✅ Obbligatori completati. Completa anche gli extra per sbloccare la traccia VI.';
+          bossHintText.textContent = L('✅ Obbligatori completati. Completa anche gli extra per sbloccare la traccia VI.', '✅ Required DIMs completed. Complete the extra DIMs to unlock track VI.');
         } else {
-          bossHintText.textContent = 'Completa gli obbligatori per “battere” la bossfight.';
+          bossHintText.textContent = L('Completa gli obbligatori per “battere” la bossfight.', 'Complete the required DIMs to defeat the bossfight.');
         }
       }
 
@@ -1336,7 +1444,7 @@ function renderBossIntro(){
         const wrap = document.createElement('div');
         wrap.className = 'boss-part';
         const h = document.createElement('h4');
-        h.textContent = BOSS_PART_TITLES[p] || ('Parte ' + p);
+        h.textContent = BOSS_PART_TITLES[p] || (L('Parte ', 'Part ') + p);
         wrap.appendChild(h);
 
         const dims = BOSS_DIMS.filter(d => d.part === p);
@@ -1360,7 +1468,7 @@ function renderBossIntro(){
             saveState();
             bossUpdateHP();
             if(cb.checked){
-              toastShow('Bossfight', `Segnata: DIM ${d.id}`);
+              toastShow('Bossfight', L(`Segnata: DIM ${d.id}`, `Marked: DIM ${d.id}`));
             }
           });
           checkWrap.appendChild(cb);
@@ -1378,7 +1486,7 @@ function renderBossIntro(){
 
           const practice = document.createElement('button');
           practice.className = 'btn sm';
-          practice.textContent = 'Allenati';
+          practice.textContent = L('Allenati', 'Practise');
           practice.addEventListener('click', () => openChallenge(d.id));
           actions.appendChild(practice);
 
@@ -1387,7 +1495,7 @@ function renderBossIntro(){
           const det = document.createElement('details');
           det.className = 'spoiler';
           const sum = document.createElement('summary');
-          sum.textContent = 'Soluzioni (opzionale)';
+          sum.textContent = L('Soluzioni (opzionale)', 'Solutions (optional)');
           det.appendChild(sum);
 
           const body = document.createElement('div');
@@ -1397,7 +1505,10 @@ function renderBossIntro(){
           // Soluzioni - thumbnails leggere (come block-body): batch + lazy reale
           const hint = document.createElement('div');
           hint.className = 'muted small';
-          hint.innerHTML = `Metti le immagini in <code>${base}_1.jpg</code> ... <code>${base}_6.jpg</code> (nella cartella <code>boss/</code>). Se non ci sono ancora, nessun problema.`;
+          hint.innerHTML = L(
+            `Metti le immagini in <code>${base}_1.jpg</code> ... <code>${base}_6.jpg</code> (nella cartella <code>boss/</code>). Se non ci sono ancora, nessun problema.`,
+            `Place images at <code>${base}_1.jpg</code> ... <code>${base}_6.jpg</code> in the <code>boss/</code> folder. Missing images cause no error.`
+          );
           body.appendChild(hint);
 
           const grid = document.createElement('div');
@@ -1434,7 +1545,7 @@ function renderBossIntro(){
             img.className = 'sol-img';
             img.loading = 'lazy';
             img.decoding = 'async';
-            img.alt = `Soluzione DIM ${d.id} (${k})`;
+            img.alt = L(`Soluzione DIM ${d.id} (${k})`, `DIM ${d.id} solution (${k})`);
             img.src = TINY;
             img.dataset.src = `${base}_${k}.jpg`;
             img.setAttribute('fetchpriority','low');
@@ -1466,7 +1577,7 @@ function renderBossIntro(){
             t.className = 'sol-more';
             t.tabIndex = 0;
             t.setAttribute('role','button');
-            t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>Carica altre</small></div>`;
+            t.innerHTML = `<div class="moretxt"><b>+${remaining}</b><small>${L('Carica altre', 'Load more')}</small></div>`;
 
             const doLoad = ()=>{
               t.remove();
@@ -1541,19 +1652,19 @@ function renderBossIntro(){
 
     function challengeStop(){
       if(challengeInterval){ clearInterval(challengeInterval); challengeInterval = null; }
-      if(challengeStartBtn) challengeStartBtn.textContent = 'Avvia timer';
+      if(challengeStartBtn) challengeStartBtn.textContent = L('Avvia timer', 'Start timer');
     }
 
     function challengeStart(){
       if(challengeInterval) return;
       if(challengeRemaining <= 0) challengeSetTime(90);
-      if(challengeStartBtn) challengeStartBtn.textContent = 'Pausa';
+      if(challengeStartBtn) challengeStartBtn.textContent = L('Pausa', 'Pause');
       challengeInterval = setInterval(() => {
         challengeRemaining -= 1;
         if(challengeTimer) challengeTimer.textContent = fmtTime(challengeRemaining);
         if(challengeRemaining <= 0){
           challengeStop();
-          toastShow('Timer', 'Tempo! Se hai finito, premi “Ho risposto”.');
+          toastShow('Timer', L('Tempo! Se hai finito, premi “Ho risposto”.', 'Time is up. If you finished, select “I have answered”.'));
         }
       }, 1000);
     }
@@ -1570,7 +1681,7 @@ function renderBossIntro(){
       const d = BOSS_DIMS.find(x => x.id === dimId);
       if(!d) return;
       challengeActiveId = dimId;
-      if(challengeTitle) challengeTitle.textContent = `Sfida · DIM ${d.id}`;
+      if(challengeTitle) challengeTitle.textContent = L(`Sfida · DIM ${d.id}`, `Challenge · DIM ${d.id}`);
       if(challengeText) challengeText.innerHTML = d.html;
       if(challengeText) typesetMath(challengeText);
       challengeSetTime(90);
@@ -1590,7 +1701,7 @@ function renderBossIntro(){
     function openRandomChallenge(){
       ensureBossState();
       const d = pickRandomDim();
-      if(!d){ toastShow('Bossfight', 'Nessuna DIM disponibile.'); return; }
+      if(!d){ toastShow('Bossfight', L('Nessuna DIM disponibile.', 'No DIM is available.')); return; }
       openChallenge(d.id);
       // auto-start timer
       challengeStart();
@@ -1602,7 +1713,7 @@ function renderBossIntro(){
       state.boss.done[challengeActiveId] = true;
       saveState();
       bossRenderList(); // refresh checks & HP
-      toastShow('Bossfight', `✅ Completata: DIM ${challengeActiveId}`);
+      toastShow('Bossfight', L(`✅ Completata: DIM ${challengeActiveId}`, `✅ Completed: DIM ${challengeActiveId}`));
     }
 
     function bossOpenModal(){
@@ -1631,14 +1742,14 @@ function renderBossIntro(){
     function startBossfight(){
       const allDone = completedCount() === TOTAL_BLOCKS;
       if(!allDone){
-        toastShow('Bossfight', 'Prima completa tutti i blocchi (P1 + P2).');
+        toastShow('Bossfight', L('Prima completa tutti i blocchi (P1 + P2).', 'Complete every P1 and P2 block first.'));
         return;
       }
 
       // Ticket: 15 monete d'oro (una sola volta)
       if(!state.bossUnlockedOnce){
         if(state.coins.gold < 15){
-          toastShow('Bossfight', 'Servono 15 monete d’oro (le ottieni completando il programma).');
+          toastShow('Bossfight', L('Servono 15 monete d’oro (le ottieni completando il programma).', 'You need 15 Gold coins, which are earned by completing the course.'));
           return;
         }
         state.coins.gold -= 15;
@@ -1677,7 +1788,7 @@ function renderBossIntro(){
 
       const unlocked = trackUnlocked(track) || opts.force;
       if(!unlocked){
-        toastShow('Jukebox', 'Traccia ancora bloccata.');
+        toastShow('Jukebox', L('Traccia ancora bloccata.', 'This track is still locked.'));
         return;
       }
 
@@ -1696,7 +1807,7 @@ function renderBossIntro(){
           nowPlaying.textContent = track.label;
         }).catch(()=>{
           // Autoplay blocked or missing file
-          if(opts.showToast!==false) toastShow('Audio', 'Impossibile avviare (autoplay bloccato o file mancante).');
+          if(opts.showToast!==false) toastShow('Audio', L('Impossibile avviare (autoplay bloccato o file mancante).', 'Playback failed because autoplay is blocked or the file is missing.'));
         });
       }else{
         if(opts.showToast!==false) toastShow('🎧 Now playing', track.label);
@@ -1712,8 +1823,8 @@ function renderBossIntro(){
       if(!bossMusicBtn) return;
       const on = audio && audio.dataset.bossMusic === '1' && !audio.paused;
       bossMusicBtn.innerHTML = on
-        ? '<span class="dot ok"></span><span>Musica: ON</span>'
-        : '<span class="dot"></span><span>Musica: OFF</span>';
+        ? `<span class="dot ok"></span><span>${L('Musica', 'Music')}: ON</span>`
+        : `<span class="dot"></span><span>${L('Musica', 'Music')}: OFF</span>`;
     }
 
     function ensureBossMusicBtn(){
@@ -1725,7 +1836,7 @@ function renderBossIntro(){
       const btn = document.createElement('button');
       btn.id = 'bossMusicBtn';
       btn.className = 'btn sm';
-      btn.title = 'Avvia/Ferma la musica della Bossfight';
+      btn.title = L('Avvia/Ferma la musica della Bossfight', 'Start or stop the Bossfight music');
       btn.style.marginRight = '8px';
       btn.addEventListener('click', ()=>{
         if(audio && audio.dataset.bossMusic === '1' && !audio.paused) stopBossMusic();
@@ -1755,7 +1866,7 @@ function renderBossIntro(){
           updateBossMusicBtn();
         }).catch(()=>{
           updateBossMusicBtn();
-          toastShow('Audio', 'Autoplay bloccato: premi "Musica" nella Bossfight per avviare.');
+          toastShow('Audio', L('Autoplay bloccato: premi "Musica" nella Bossfight per avviare.', 'Autoplay is blocked; select “Music” in the Bossfight to start playback.'));
         });
       }else{
         nowPlaying.textContent = BOSS_MUSIC_LABEL;
@@ -1798,7 +1909,7 @@ function stopAudio(){
       if(state.eggFound) return;
       state.eggFound = true;
       saveState();
-      toastShow('Easter egg найден', `Hai trovato l’easter egg! ${reason ? '· '+reason : ''}`);
+      toastShow(L('Easter egg trovato', 'Easter egg found'), L(`Hai trovato l’easter egg! ${reason ? '· '+reason : ''}`, `You found the easter egg! ${reason ? '· '+reason : ''}`));
       checkAchievements();
       renderJukebox();
       renderStats();
@@ -1856,25 +1967,25 @@ function stopAudio(){
 
     btnExpandAll.addEventListener('click', ()=>{
       $$('details.block').forEach(d=> d.open = true);
-      toastShow('Indice', 'Tutti i blocchi espansi.');
+      toastShow(L('Indice', 'Index'), L('Tutti i blocchi espansi.', 'All blocks expanded.'));
     });
     btnCollapseAll.addEventListener('click', ()=>{
       $$('details.block').forEach(d=> d.open = false);
-      toastShow('Indice', 'Tutti i blocchi chiusi.');
+      toastShow(L('Indice', 'Index'), L('Tutti i blocchi chiusi.', 'All blocks collapsed.'));
     });
 
     btnReset.addEventListener('click', ()=>{
-      const ok = confirm('Reset totale progressi? (solo sul browser: localStorage)');
+      const ok = confirm(L('Reset totale progressi? (solo sul browser: localStorage)', 'Reset all progress stored in this browser?'));
       if(!ok) return;
       localStorage.removeItem(STORAGE_KEY);
       if(typeof STORAGE_KEY_FALLBACK !== 'undefined') localStorage.removeItem(STORAGE_KEY_FALLBACK);
       state = loadState();
-      toastShow('Reset', 'Progressi resettati.');
+      toastShow('Reset', L('Progressi resettati.', 'Progress reset.'));
       location.reload();
     });
 
     function confirmLeaveIndex(){
-      const ok = confirm('Vuoi tornare all’indice principale?');
+      const ok = confirm(L('Vuoi tornare all’indice principale?', 'Return to the main index?'));
       if(ok){
         window.location.href = 'https://amrierscuo.github.io/Computational-Physics/Args/Phy/Phy.html';
       }
@@ -1929,7 +2040,7 @@ function stopAudio(){
     jbStop.addEventListener('click', stopAudio);
 
     btnKonami.addEventListener('click', ()=>{
-      toastShow('Hint', '↑↑↓↓←→←→BA  (oppure ψ×7 sulla moneta Silver)');
+      toastShow('Hint', L('↑↑↓↓←→←→BA  (oppure ψ×7 sulla moneta Silver)', '↑↑↓↓←→←→BA  (or ψ×7 on the Silver coin)'));
     });
 
     // Boss
@@ -1941,7 +2052,7 @@ function stopAudio(){
     }
     if(bossClose) bossClose.addEventListener('click', bossCloseModal);
     if(bossBackHome) bossBackHome.addEventListener('click', () => {
-      const ok = confirm('Vuoi tornare al menu principale?');
+      const ok = confirm(L('Vuoi tornare al menu principale?', 'Return to the main menu?'));
       if(ok) bossCloseModal();
     });
     if(bossScrollTop) bossScrollTop.addEventListener('click', () => {
@@ -1949,13 +2060,13 @@ function stopAudio(){
     });
     if(bossRandomBtn) bossRandomBtn.addEventListener('click', openRandomChallenge);
     if(bossResetBtn) bossResetBtn.addEventListener('click', () => {
-      const ok = confirm('Reset bossfight: vuoi togliere tutti i check delle DIM? (Non tocca i blocchi P1/P2)');
+      const ok = confirm(L('Reset bossfight: vuoi togliere tutti i check delle DIM? (Non tocca i blocchi P1/P2)', 'Reset the bossfight and clear every DIM check? P1 and P2 blocks are not affected.'));
       if(!ok) return;
       ensureBossState();
       state.boss.done = {};
       saveState();
       bossRenderList();
-      toastShow('Bossfight', 'Reset completato.');
+      toastShow('Bossfight', L('Reset completato.', 'Reset completed.'));
     });
 
     if(challengeClose) challengeClose.addEventListener('click', () => {
@@ -2038,12 +2149,14 @@ function stopAudio(){
 
     if(btnCompleteAll){
       btnCompleteAll.addEventListener('click', ()=>{
-        const ok = confirm(`Segnare TUTTO come completato e saltare alla Bossfight?
+        const ok = confirm(L(`Segnare TUTTO come completato e saltare alla Bossfight?
 
-(Usalo per test o se vuoi andare diretto alla simulazione orale.)`);
+(Usalo per test o se vuoi andare diretto alla simulazione orale.)`, `Mark EVERYTHING as completed and jump to the Bossfight?
+
+(Use this for testing or to go directly to the oral-exam simulation.)`));
         if(!ok) return;
         completeAllForBoss();
-        toast('✔ Programma marcato come completato');
+        toast(L('✔ Programma marcato come completato', '✔ Course marked as completed'));
         startBossfight();
       });
     }
