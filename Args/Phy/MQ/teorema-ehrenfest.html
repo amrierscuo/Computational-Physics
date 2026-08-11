@@ -1,266 +1,335 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teorema di Ehrenfest</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Teorema di Ehrenfest - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Teorema di Ehrenfest</h1>
-    <h2>Concetto e formulazione</h2>
-    Il teorema di Ehrenfest stabilisce un legame tra la meccanica quantistica e la meccanica classica, mostrando che le equazioni del moto classiche emergono come media degli operatori quantistici. Esso afferma che:
-    <div class="formula">
-        \[
-        \frac{d}{dt} \langle \hat{A} \rangle = \frac{i}{\hbar} \langle [\hat{H}, \hat{A}] \rangle + \left\langle \frac{\partial \hat{A}}{\partial t} \right\rangle
-        \]
-    </div>
-    dove \( \hat{A} \) è un operatore generico, \( \hat{H} \) è l'Hamiltoniana e \( [\hat{H}, \hat{A}] \) è il commutatore.
-
-    <h2>Applicazione alla posizione e al momento</h2>
-    Consideriamo gli operatori posizione \( \hat{x} \) e momento \( \hat{p} \). Le equazioni del teorema di Ehrenfest diventano:
-    <div class="formula">
-        \[
-        \frac{d}{dt} \langle \hat{x} \rangle = \frac{\langle \hat{p} \rangle}{m}
-        \]
-    </div>
-    e
-    <div class="formula">
-        \[
-        \frac{d}{dt} \langle \hat{p} \rangle = -\left\langle \frac{\partial V}{\partial x} \right\rangle
-        \]
-    </div>
-    dove \( V(x) \) è il potenziale. Queste relazioni mostrano che il moto medio segue le leggi della meccanica classica.
-
-    <h2>Significato fisico</h2>
-    Il teorema di Ehrenfest evidenzia come le medie quantistiche degli operatori posizione e momento rispettino le leggi di Newton nel limite classico. Tuttavia, nei sistemi dominati da effetti quantistici (ad esempio, nel caso di barriere di potenziale o stati legati), le medie possono discostarsi significativamente dalle predizioni classiche.
-
-    <h2>Proprietà del commutatore</h2>
-    Il commutatore \([ \hat{H}, \hat{A} ]\) determina come l'osservabile associata all'operatore \( \hat{A} \) evolve nel tempo. Per esempio:
-    <div class="formula">
-        \[
-        [ \hat{H}, \hat{p} ] = -i \hbar \frac{\partial V}{\partial x}
-        \]
-    </div>
-    mostra come il momento sia influenzato dal gradiente del potenziale.
-
-    <h2>Conclusioni dal limite classico</h2>
-    Nel limite in cui le dimensioni caratteristiche del sistema sono molto grandi rispetto alla lunghezza d'onda di de Broglie, le medie degli operatori posizione e momento convergono ai valori classici, rendendo il teorema di Ehrenfest uno strumento fondamentale per comprendere la corrispondenza tra meccanica classica e quantistica.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 2</div>
-  <h2>Teorema di Ehrenfest: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare le equazioni dei valori medi e identificare precisamente quando il moto del centro coincide con quello classico.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Ehrenfest collega Schrödinger alle equazioni di Hamilton per i valori medi. Il primo passaggio è esatto; il limite classico entra soltanto quando si sostituisce \(\langle V'(x)\rangle\) con \(V'(\langle x\rangle)\), approssimazione valida per pacchetti stretti o potenziali al più quadratici.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Derivata generale<span class="lecture-step-boss">DIM 4</span></h4>
-      <p>Per un operatore con possibile dipendenza esplicita dal tempo.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\frac{d}{dt}\langle A\rangle=\frac{i}{\hbar}\langle[H,A]\rangle+\left\langle\frac{\partial A}{\partial t}\right\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle A\rangle=\langle\dot\psi|A|\psi\rangle+\langle\psi|\partial_tA|\psi\rangle+\langle\psi|A|\dot\psi\rangle\Rightarrow\frac d{dt}\langle A\rangle=\frac i\hbar\langle[H,A]\rangle+\langle\partial_tA\rangle\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Posizione<span class="lecture-step-boss">DIM 4</span></h4>
-      <p>Con \(H=p^2/2m+V(x)\), il commutatore con x dà la velocità media.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\frac{d}{dt}\langle x\rangle=\frac{\langle p\rangle}{m}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H=p^2/(2m)+V(x),\quad[p^2,x]=-2i\hbar p\Rightarrow\frac d{dt}\langle x\rangle=\frac i\hbar\left\langle\frac{[p^2,x]}{2m}\right\rangle=\langle p\rangle/m\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Impulso<span class="lecture-step-boss">DIM 4</span></h4>
-      <p>Il commutatore \([V,p]=i\hbar V'\) fornisce la forza media.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\frac{d}{dt}\langle p\rangle=-\langle V&#x27;(x)\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [V(x),p]=i\hbar V'(x),\quad[p^2,p]=0\Rightarrow\frac d{dt}\langle p\rangle=\frac i\hbar\langle[V,p]\rangle=-\langle V'(x)\rangle\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Oscillatore armonico</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per \(V=m\omega^2x^2/2\).</p>
-    <p><strong>Calcolo.</strong> Poiché \(V'=m\omega^2x\), la media passa esattamente attraverso la derivata.</p>
-    <p><strong>Risultato e controllo.</strong> Il centro soddisfa \(d^2\langle x\rangle/dt^2+\omega^2\langle x\rangle=0\) per qualunque stato, non solo semiclassico.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 4</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Hamiltoniana standard e stati nel dominio dei commutatori.</li>
-          <li>Per potenziali fortemente non lineari le fluttuazioni alimentano il moto del centro.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La corrispondenza classica riguarda certe osservabili e certe scale, non la scomparsa automatica di sovrapposizioni e dispersioni.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Trova il primo termine correttivo espandendo (V'\(x\)) attorno a \(\langle x\rangle\).</li>
-          <li>Spiega perché l'oscillatore è un caso esatto.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=159">Appunti-MQ.pdf, pp. 159-168: equazione del moto dei valori medi</a></li>
-          <li><a href="MQ.pdf#page=11">MQ.pdf, pp. capitolo 11: limite classico</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
+</div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-ehrenfest">
+<div class="lecture-kicker">Lezione approfondita - Argomento 3 - DIM 4</div>
+<h1>Teorema di Ehrenfest</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'equazione del moto dei valori medi per un operatore anche esplicitamente dipendente dal tempo, applicarla a posizione, impulso ed energia e precisare quando il moto del centro del pacchetto coincide davvero con la dinamica classica.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Forma generale</h3>
+<p>L'evoluzione del valore medio contiene due cause distinte: evoluzione dello stato tramite l'Hamiltoniano e dipendenza temporale esplicita dell'osservabile.</p>
+<div aria-label="Forma generale del teorema di Ehrenfest" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \boxed{\frac d{dt}\langle A\rangle=\frac1{i\hbar}\langle[A,H]\rangle+\left\langle\frac{\partial A}{\partial t}\right\rangle}\)</span></div>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Non è ancora Newton</h3>
+<p>Per <span class="mq-math" data-i18n-skip="true">\(H=p^2/(2m)+V(x)\)</span> si ottiene <span class="mq-math" data-i18n-skip="true">\(m\,d^2\langle x\rangle/dt^2=-\langle V'(x)\rangle\)</span>. In generale <span class="mq-math" data-i18n-skip="true">\(\langle V'(x)\rangle\ne V'(\langle x\rangle)\)</span>.</p>
+</article>
+</div>
+<h2>Ipotesi e notazione</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Stato e osservabile</h3>
+<p>Nel quadro di Schrödinger evolve lo stato, mentre <span class="mq-math" data-i18n-skip="true">\(A(t)\)</span> può avere anche parametri esterni dipendenti dal tempo.</p>
+<div aria-label="Valore medio di un osservabile in forma astratta e coordinata" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \langle A\rangle=\langle\psi(t)|A(t)|\psi(t)\rangle=\int\psi^*(\mathbf r,t)A(t)\psi(\mathbf r,t)\,d^3r\)</span></div>
+</article>
+<article class="lecture-card">
+<h3>Condizioni matematiche</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(H(t)\)</span> deve essere autoaggiunto sul dominio fisico; stato, <span class="mq-math" data-i18n-skip="true">\(A\psi\)</span> e prodotti successivi devono appartenere ai domini richiesti. In coordinate, i termini di bordo usati nell'integrazione per parti devono annullarsi.</p>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Derivata del valore medio<span class="lecture-step-boss">DIM 4</span></h4>
+<p>Leibniz produce tre termini: derivata del bra, derivata esplicita dell'operatore e derivata del ket.</p>
+<div aria-label="Regola di Leibniz per il valore medio" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle\psi|A|\psi\rangle=\langle\dot\psi|A|\psi\rangle+\left\langle\psi\left|\frac{\partial A}{\partial t}\right|\psi\right\rangle+\langle\psi|A|\dot\psi\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. TDSE per ket e bra<span class="lecture-step-boss">DIM 4</span></h4>
+<p>Il segno del bra cambia perché si prende l'aggiunto della TDSE e si usa l'autoaggiuntezza di <span class="mq-math" data-i18n-skip="true">\(H\)</span>.</p>
+<div aria-label="Derivate temporali del ket e del bra" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\dot\psi\rangle=-\frac{i}{\hbar}H|\psi\rangle,\qquad\langle\dot\psi|=\frac{i}{\hbar}\langle\psi|H\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Raccolta dei termini<span class="lecture-step-boss">DIM 4</span></h4>
+<p>I due contributi dinamici hanno ordine opposto e si raccolgono nel commutatore.</p>
+<div aria-label="Raccolta della derivata nel commutatore" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle A\rangle=\frac{i}{\hbar}\langle HA\rangle-\frac{i}{\hbar}\langle AH\rangle+\left\langle\frac{\partial A}{\partial t}\right\rangle=\frac1{i\hbar}\langle[A,H]\rangle+\left\langle\frac{\partial A}{\partial t}\right\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Realtà del risultato<span class="lecture-step-boss">ORALE</span></h4>
+<p>Per osservabili autoaggiunte il commutatore è anti-autoaggiunto, quindi il suo valore medio è immaginario puro e il fattore <span class="mq-math" data-i18n-skip="true">\(1/i\)</span> rende reale la derivata.</p>
+<div aria-label="Controllo di realtà del termine di commutatore" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle [A,H]^\dagger=-[A,H]\Rightarrow\langle[A,H]\rangle^*=-\langle[A,H]\rangle\Rightarrow\frac1{i\hbar}\langle[A,H]\rangle\in\mathbb R\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Commutatore con la posizione<span class="lecture-step-boss">DIM 4</span></h4>
+<p>Il potenziale commuta con <span class="mq-math" data-i18n-skip="true">\(x\)</span>; Leibniz e la relazione canonica fissano il termine cinetico.</p>
+<div aria-label="Commutatore della posizione con l'Hamiltoniano" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [x,H]=\frac1{2m}[x,p^2]+[x,V]=\frac1{2m}([x,p]p+p[x,p])=\frac{i\hbar}{m}p\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Prima equazione di Ehrenfest<span class="lecture-step-boss">DIM 4</span></h4>
+<p>La velocità del centro della distribuzione è l'impulso medio diviso per la massa.</p>
+<div aria-label="Equazione di Ehrenfest per la posizione" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle x\rangle=\frac1{i\hbar}\langle[x,H]\rangle=\frac{\langle p\rangle}{m}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Commutatore con l'impulso<span class="lecture-step-boss">DIM 4</span></h4>
+<p>Il termine cinetico commuta con <span class="mq-math" data-i18n-skip="true">\(p\)</span>; sulla funzione di prova la derivata del potenziale lascia il gradiente.</p>
+<div aria-label="Commutatore dell'impulso con l'Hamiltoniano" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [p,H]=[p,V],\quad[p,V]\psi=-i\hbar\partial_x(V\psi)+i\hbar V\partial_x\psi=-i\hbar V'(x)\psi\Rightarrow[p,H]=-i\hbar V'(x)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Seconda equazione di Ehrenfest<span class="lecture-step-boss">DIM 4</span></h4>
+<p>La variazione dell'impulso medio è il valor medio della forza, non in generale la forza valutata nel valor medio.</p>
+<div aria-label="Equazione di Ehrenfest per l'impulso" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle p\rangle=\frac1{i\hbar}\langle[p,H]\rangle=-\langle V'(x)\rangle=\langle F(x)\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Forma newtoniana<span class="lecture-step-boss">DIM 4</span></h4>
+<p>Combinando le due equazioni si ottiene una legge esatta per il centro del pacchetto.</p>
+<div aria-label="Forma newtoniana esatta per il centro del pacchetto" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \boxed{m\frac{d^2}{dt^2}\langle x\rangle=-\langle V'(x)\rangle}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Correzione di larghezza<span class="lecture-step-boss">ORALE</span></h4>
+<p>Espandere attorno a <span class="mq-math" data-i18n-skip="true">\(\mu=\langle x\rangle\)</span> quantifica quando il pacchetto segue la forza classica locale.</p>
+<div aria-label="Espansione della forza media attorno al centro del pacchetto" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle V'(x)\rangle=V'(\mu)+\frac12V^{(3)}(\mu)(\Delta x)^2+\frac1{3!}V^{(4)}(\mu)\langle(x-\mu)^3\rangle+\cdots\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Energia media<span class="lecture-step-boss">ORALE</span></h4>
+<p>Ponendo <span class="mq-math" data-i18n-skip="true">\(A=H\)</span>, il commutatore si annulla ma può restare la dipendenza esplicita dal tempo.</p>
+<div aria-label="Derivata temporale dell'energia media" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle H\rangle=\frac1{i\hbar}\langle[H,H]\rangle+\left\langle\frac{\partial H}{\partial t}\right\rangle=\left\langle\frac{\partial H}{\partial t}\right\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Quantità conservata<span class="lecture-step-boss">DIM 4</span></h4>
+<p>Un osservabile senza dipendenza esplicita dal tempo è conservato se commuta con l'Hamiltoniano; più in generale i due termini possono cancellarsi.</p>
+<div aria-label="Condizione generale e condizione sufficiente di conservazione" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \frac1{i\hbar}[A,H]+\frac{\partial A}{\partial t}=0\Rightarrow\frac d{dt}\langle A\rangle=0;\qquad\partial_tA=0,\ [A,H]=0\Rightarrow A\ \text{conservato}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Momenti secondi<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Ehrenfest governa anche forma e dispersione del pacchetto, non soltanto il suo centro.</p>
+<div aria-label="Equazioni di Ehrenfest per i secondi momenti" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle x^2\rangle=\frac1m\langle xp+px\rangle,\qquad\frac d{dt}\langle p^2\rangle=-\langle pV'(x)+V'(x)p\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Quadro di Heisenberg<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>La stessa struttura diventa un'equazione operatoriale; i valori medi coincidono con quelli del quadro di Schrödinger.</p>
+<div aria-label="Equazione del moto nel quadro di Heisenberg" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle A_H=U^\dagger A_SU\Rightarrow\frac{dA_H}{dt}=\frac1{i\hbar}[A_H,H_H]+\left(\frac{\partial A_S}{\partial t}\right)_H,\qquad\langle A\rangle_H=\langle A\rangle_S\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: centro di un pacchetto armonico</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Stato coerente di un elettrone in <span class="mq-math" data-i18n-skip="true">\(V=\tfrac12m\omega^2x^2\)</span>, con <span class="mq-math" data-i18n-skip="true">\(\omega=1.00\times10^{14}\,\mathrm{s^{-1}}\)</span>, <span class="mq-math" data-i18n-skip="true">\(\langle x\rangle_0=2.00\,\mathrm{nm}\)</span> e <span class="mq-math" data-i18n-skip="true">\(\langle p\rangle_0=0\)</span>.</p>
+<p><strong>Calcolo.</strong> Poiché la forza è lineare, <span class="mq-math" data-i18n-skip="true">\(\langle V'\rangle=m\omega^2\langle x\rangle\)</span> esattamente: <span class="mq-math" data-i18n-skip="true">\(\langle x\rangle=x_0\cos\omega t\)</span>, <span class="mq-math" data-i18n-skip="true">\(\langle p\rangle=-m\omega x_0\sin\omega t\)</span>.</p>
+<p><strong>Risultato.</strong> A <span class="mq-math" data-i18n-skip="true">\(t=\pi/(2\omega)=15.7\,\mathrm{fs}\)</span>, <span class="mq-math" data-i18n-skip="true">\(\langle x\rangle=0\)</span> e <span class="mq-math" data-i18n-skip="true">\(\langle p\rangle=-1.82\times10^{-25}\,\mathrm{kg\,m\,s^{-1}}\)</span>.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Quando il risultato è classico esatto</h3>
+<p>Per potenziali al più quadratici, <span class="mq-math" data-i18n-skip="true">\(V'(x)\)</span> è lineare e la media passa attraverso la funzione. Il centro del pacchetto obbedisce esattamente all'equazione classica, anche se il pacchetto può allargarsi.</p>
+</article>
+<article class="lecture-card">
+<h3>Esempio anarmonico</h3>
+<p>Per <span class="mq-math" data-i18n-skip="true">\(V=\lambda x^4\)</span>, <span class="mq-math" data-i18n-skip="true">\(m\ddot\mu=-4\lambda\langle x^3\rangle=-4\lambda[\mu^3+3\mu(\Delta x)^2+\langle(x-\mu)^3\rangle]\)</span>. Larghezza e asimmetria modificano il moto del centro.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Dimenticare <span class="mq-math" data-i18n-skip="true">\(\langle\partial_tA\rangle\)</span> quando l'operatore dipende esplicitamente dal tempo.</li>
+<li>Usare <span class="mq-math" data-i18n-skip="true">\([H,A]\)</span> mantenendo il prefattore <span class="mq-math" data-i18n-skip="true">\(1/(i\hbar)\)</span> della convenzione <span class="mq-math" data-i18n-skip="true">\([A,H]\)</span>.</li>
+<li>Sostituire sempre <span class="mq-math" data-i18n-skip="true">\(\langle F(x)\rangle\)</span> con <span class="mq-math" data-i18n-skip="true">\(F(\langle x\rangle)\)</span>.</li>
+<li>Dire che Ehrenfest assegna una traiettoria definita alla particella.</li>
+<li>Ignorare domini e termini di bordo nel passaggio di <span class="mq-math" data-i18n-skip="true">\(H\)</span> tra bra e ket.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Parentesi di Poisson</h3>
+<p>La corrispondenza formale è <span class="mq-math" data-i18n-skip="true">\(\{A,H\}_{\mathrm P}\leftrightarrow[A,H]/(i\hbar)\)</span>. Le parentesi graffe classiche sono parentesi di Poisson, non l'anticommutatore quantistico.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Deriva il valore medio con tre termini di Leibniz.</li>
+<li>Scrivi correttamente TDSE per ket e bra.</li>
+<li>Raccogli i termini nella convenzione <span class="mq-math" data-i18n-skip="true">\([A,H]/(i\hbar)\)</span>.</li>
+<li>Controlla che la derivata di un valore medio reale sia reale.</li>
+<li>Calcola <span class="mq-math" data-i18n-skip="true">\([x,H]\)</span> e <span class="mq-math" data-i18n-skip="true">\([p,H]\)</span> senza saltare Leibniz.</li>
+<li>Ottieni le due equazioni di Ehrenfest e combinale.</li>
+<li>Spiega perché il limite classico richiede forza lineare o pacchetto stretto.</li>
+<li>Applica il teorema a <span class="mq-math" data-i18n-skip="true">\(A=H\)</span> e a una quantità conservata.</li>
+<li>Mostra l'equivalenza con l'equazione del moto di Heisenberg.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1019">DIM 4</a> - derivazione generale, casi posizione e impulso, corrispondenza classica</li>
+<li><a href="Appunti-MQ.pdf#page=159">Appunti-MQ.pdf, pagine PDF 159-168</a> - valori medi, quantità conservate, Ehrenfest e quadro di Heisenberg</li>
+<li><a href="MQ.pdf#page=95">MQ.pdf, sezioni su commutatori canonici ed evoluzione degli operatori</a></li>
+</ul>
+<p class="lecture-note">La pagina separa il teorema esatto dall'approssimazione classica del centro del pacchetto e rende espliciti i termini di larghezza trascurati.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 3 - DIM 4":"In-depth lesson - Topic 3 - DIM 4","Teorema di Ehrenfest":"Ehrenfest's theorem","Derivare l'equazione del moto dei valori medi per un operatore anche esplicitamente dipendente dal tempo, applicarla a posizione, impulso ed energia e precisare quando il moto del centro del pacchetto coincide davvero con la dinamica classica.":"Derive the equation of motion for expectation values, including an operator with explicit time dependence; apply it to position, momentum, and energy; and state precisely when the wave-packet center truly follows classical dynamics.","Forma generale":"General form","L'evoluzione del valore medio contiene due cause distinte: evoluzione dello stato tramite l'Hamiltoniano e dipendenza temporale esplicita dell'osservabile.":"The evolution of an expectation value has two distinct causes: evolution of the state through the Hamiltonian and explicit time dependence of the observable.","Non è ancora Newton":"This is not yet Newton's law","Per":"For","si ottiene":"one obtains",". In generale":". In general","Ipotesi e notazione":"Assumptions and notation","Stato e osservabile":"State and observable","Nel quadro di Schrödinger evolve lo stato, mentre":"In the Schrödinger picture the state evolves, while","può avere anche parametri esterni dipendenti dal tempo.":"may also contain time-dependent external parameters.","Condizioni matematiche":"Mathematical conditions","deve essere autoaggiunto sul dominio fisico; stato,":"must be self-adjoint on its physical domain; the state,","e prodotti successivi devono appartenere ai domini richiesti. In coordinate, i termini di bordo usati nell'integrazione per parti devono annullarsi.":"and subsequent products must belong to the required domains. In coordinate space, the boundary terms introduced by integration by parts must vanish.","Dimostrazioni compatte":"Compact derivations","1. Derivata del valore medio":"1. Derivative of the expectation value","Leibniz produce tre termini: derivata del bra, derivata esplicita dell'operatore e derivata del ket.":"The Leibniz rule produces three terms: the derivative of the bra, the explicit derivative of the operator, and the derivative of the ket.","2. TDSE per ket e bra":"2. TDSE for ket and bra","Il segno del bra cambia perché si prende l'aggiunto della TDSE e si usa l'autoaggiuntezza di":"The sign in the bra equation changes because one takes the adjoint of the TDSE and uses the self-adjointness of","3. Raccolta dei termini":"3. Combining the terms","I due contributi dinamici hanno ordine opposto e si raccolgono nel commutatore.":"The two dynamical contributions have opposite operator order and combine into a commutator.","4. Realtà del risultato":"4. Reality check","Per osservabili autoaggiunte il commutatore è anti-autoaggiunto, quindi il suo valore medio è immaginario puro e il fattore":"For self-adjoint observables the commutator is anti-self-adjoint, so its expectation value is purely imaginary and the factor","rende reale la derivata.":"makes the derivative real.","5. Commutatore con la posizione":"5. Commutator with position","Il potenziale commuta con":"The potential commutes with","; Leibniz e la relazione canonica fissano il termine cinetico.":"; the Leibniz rule and the canonical relation determine the kinetic term.","6. Prima equazione di Ehrenfest":"6. First Ehrenfest equation","La velocità del centro della distribuzione è l'impulso medio diviso per la massa.":"The velocity of the distribution's center is the mean momentum divided by the mass.","7. Commutatore con l'impulso":"7. Commutator with momentum","Il termine cinetico commuta con":"The kinetic term commutes with","; sulla funzione di prova la derivata del potenziale lascia il gradiente.":"; on a test function, differentiating the potential leaves its gradient.","8. Seconda equazione di Ehrenfest":"8. Second Ehrenfest equation","La variazione dell'impulso medio è il valor medio della forza, non in generale la forza valutata nel valor medio.":"The rate of change of mean momentum is the expectation value of the force, not in general the force evaluated at the mean position.","9. Forma newtoniana":"9. Newton-like form","Combinando le due equazioni si ottiene una legge esatta per il centro del pacchetto.":"Combining the two equations gives an exact law for the wave-packet center.","10. Correzione di larghezza":"10. Finite-width correction","Espandere attorno a":"Expanding about","quantifica quando il pacchetto segue la forza classica locale.":"quantifies when the packet follows the local classical force.","11. Energia media":"11. Mean energy",", il commutatore si annulla ma può restare la dipendenza esplicita dal tempo.":", the commutator vanishes but explicit time dependence may remain.","12. Quantità conservata":"12. Conserved quantity","Un osservabile senza dipendenza esplicita dal tempo è conservato se commuta con l'Hamiltoniano; più in generale i due termini possono cancellarsi.":"An observable with no explicit time dependence is conserved if it commutes with the Hamiltonian; more generally, the two terms may cancel.","13. Momenti secondi":"13. Second moments","Ehrenfest governa anche forma e dispersione del pacchetto, non soltanto il suo centro.":"Ehrenfest's theorem also governs the packet's shape and spread, not only its center.","14. Quadro di Heisenberg":"14. Heisenberg picture","La stessa struttura diventa un'equazione operatoriale; i valori medi coincidono con quelli del quadro di Schrödinger.":"The same structure becomes an operator equation; its expectation values agree with those in the Schrödinger picture.","Esempio d'esame: centro di un pacchetto armonico":"Exam example: center of a harmonic wave packet","Stato coerente di un elettrone in":"A coherent state of an electron in",", con":", with","Poiché la forza è lineare,":"Because the force is linear,","Quando il risultato è classico esatto":"When the classical result is exact","Per potenziali al più quadratici,":"For potentials of at most quadratic degree,","è lineare e la media passa attraverso la funzione. Il centro del pacchetto obbedisce esattamente all'equazione classica, anche se il pacchetto può allargarsi.":"is linear and averaging commutes with the function. The packet center obeys the classical equation exactly, although the packet may spread.","Esempio anarmonico":"Anharmonic example",". Larghezza e asimmetria modificano il moto del centro.":". Width and asymmetry modify the motion of the center.","Errori tipici":"Common errors","quando l'operatore dipende esplicitamente dal tempo.":"when the operator depends explicitly on time.","mantenendo il prefattore":"while retaining the prefactor","della convenzione":"from the convention","Sostituire sempre":"Always replacing","con":"by","Dire che Ehrenfest assegna una traiettoria definita alla particella.":"Claiming that Ehrenfest's theorem assigns a definite trajectory to the particle.","Ignorare domini e termini di bordo nel passaggio di":"Ignoring domains and boundary terms when moving","tra bra e ket.":"between bra and ket.","Parentesi di Poisson":"Poisson brackets","La corrispondenza formale è":"The formal correspondence is",". Le parentesi graffe classiche sono parentesi di Poisson, non l'anticommutatore quantistico.":". The classical braces denote a Poisson bracket, not the quantum anticommutator.","Controllo da orale":"Oral exam checklist","Deriva il valore medio con tre termini di Leibniz.":"Differentiate the expectation value into three Leibniz terms.","Scrivi correttamente TDSE per ket e bra.":"Write the TDSE correctly for both ket and bra.","Raccogli i termini nella convenzione":"Combine the terms using the convention","Controlla che la derivata di un valore medio reale sia reale.":"Check that the derivative of a real expectation value is real.","senza saltare Leibniz.":"without skipping the Leibniz rule.","Ottieni le due equazioni di Ehrenfest e combinale.":"Obtain the two Ehrenfest equations and combine them.","Spiega perché il limite classico richiede forza lineare o pacchetto stretto.":"Explain why the classical approximation requires a linear force or a narrow wave packet.","Applica il teorema a":"Apply the theorem to","e a una quantità conservata.":"and to a conserved quantity.","Mostra l'equivalenza con l'equazione del moto di Heisenberg.":"Show its equivalence to the Heisenberg equation of motion.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- derivazione generale, casi posizione e impulso, corrispondenza classica":"- general derivation, position and momentum cases, and classical correspondence","Appunti-MQ.pdf, pagine PDF 159-168":"Appunti-MQ.pdf, PDF pages 159-168","- valori medi, quantità conservate, Ehrenfest e quadro di Heisenberg":"- expectation values, conserved quantities, Ehrenfest's theorem, and the Heisenberg picture","MQ.pdf, sezioni su commutatori canonici ed evoluzione degli operatori":"MQ.pdf, sections on canonical commutators and operator evolution","La pagina separa il teorema esatto dall'approssimazione classica del centro del pacchetto e rende espliciti i termini di larghezza trascurati.":"This page separates the exact theorem from the classical approximation for the packet center and makes the neglected finite-width terms explicit.","Ritorna all'indice MQ":"Return to the MQ index","Obiettivo.":"Goal.","Risultato":"Result","Def":"Def","Base":"Core","Check":"Check","Estensione":"Extension","Ponendo":"Setting","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","A":"At","Dimenticare":"Forgetting","Usare":"Using","Calcola":"Calculate"},"attrs":{"Forma generale del teorema di Ehrenfest":"General form of Ehrenfest's theorem","Valore medio di un osservabile in forma astratta e coordinata":"Expectation value of an observable in abstract and coordinate forms","Regola di Leibniz per il valore medio":"Leibniz rule for an expectation value","Derivate temporali del ket e del bra":"Time derivatives of the ket and bra","Raccolta della derivata nel commutatore":"Combining the derivative terms into a commutator","Controllo di realtà del termine di commutatore":"Reality check for the commutator term","Commutatore della posizione con l'Hamiltoniano":"Commutator of position with the Hamiltonian","Equazione di Ehrenfest per la posizione":"Ehrenfest equation for position","Commutatore dell'impulso con l'Hamiltoniano":"Commutator of momentum with the Hamiltonian","Equazione di Ehrenfest per l'impulso":"Ehrenfest equation for momentum","Forma newtoniana esatta per il centro del pacchetto":"Exact Newton-like equation for the wave-packet center","Espansione della forza media attorno al centro del pacchetto":"Expansion of the mean force about the wave-packet center","Derivata temporale dell'energia media":"Time derivative of the mean energy","Condizione generale e condizione sufficiente di conservazione":"General and sufficient conditions for conservation","Equazioni di Ehrenfest per i secondi momenti":"Ehrenfest equations for second moments","Equazione del moto nel quadro di Heisenberg":"Equation of motion in the Heisenberg picture"},"title":{"it":"Teorema di Ehrenfest - Dimostrazioni e ripasso orale","en":"Ehrenfest's theorem - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
