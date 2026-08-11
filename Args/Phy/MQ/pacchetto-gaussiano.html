@@ -1,280 +1,332 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pacchetto Gaussiano</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pacchetto gaussiano - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Pacchetto Gaussiano</h1>
-    <h2>Definizione</h2>
-    Il pacchetto gaussiano è una soluzione importante delle equazioni d'onda, particolarmente rilevante in meccanica quantistica per descrivere 
-    una particella localizzata nello spazio. La funzione d'onda associata a un pacchetto gaussiano in una dimensione è data da:
-    <div class="formula">
-        \[
-        \psi(x, t) = A e^{-\frac{(x - x_0)^2}{4\sigma^2}} e^{i(k_0 x - \omega_0 t)}
-        \]
-    </div>
-    dove:
-    <ul>
-        <li>\( A \): costante di normalizzazione</li>
-        <li>\( \sigma \): larghezza del pacchetto</li>
-        <li>\( x_0 \): posizione centrale</li>
-        <li>\( k_0 \): numero d'onda medio</li>
-        <li>\( \omega_0 \): frequenza angolare media</li>
-    </ul>
-
-    <h2>Proprietà del pacchetto gaussiano</h2>
-    <ul>
-        <li><strong>Localizzazione:</strong> La funzione \( \psi(x, t) \) è ben localizzata nello spazio, con una larghezza spaziale proporzionale a \( \sigma \).</li>
-        <li><strong>Dualità:</strong> La trasformata di Fourier del pacchetto gaussiano nel dominio dei numeri d'onda (\( k \)) è anch'essa una gaussiana.</li>
-        <li><strong>Relazione incertezza:</strong> Il prodotto delle incertezze spaziale e di impulso soddisfa:
-            <div class="formula">
-                \[
-                \Delta x \Delta p \geq \frac{\hbar}{2}
-                \]
-            </div>
-        </li>
-    </ul>
-
-    <h2>Trasformata di Fourier</h2>
-    La rappresentazione del pacchetto gaussiano nel dominio dei numeri d'onda è data da:
-    <div class="formula">
-        \[
-        \phi(k) = \sqrt{2\pi\sigma^2} e^{-\frac{\sigma^2 (k - k_0)^2}{2}}
-        \]
-    </div>
-    Questo dimostra che una particella descritta da un pacchetto gaussiano ha una distribuzione di impulsi ben definita.
-
-    <h2>Propagazione temporale</h2>
-    In assenza di potenziale (\( V = 0 \)), il pacchetto gaussiano si propaga mantenendo la sua forma gaussiana. Tuttavia, la larghezza del pacchetto 
-    aumenta nel tempo a causa della dispersione:
-    <div class="formula">
-        \[
-        \sigma(t) = \sigma_0 \sqrt{1 + \frac{\hbar^2 t^2}{4m^2 \sigma_0^4}}
-        \]
-    </div>
-    dove \( \sigma_0 \) è la larghezza iniziale del pacchetto e \( m \) è la massa della particella.
-
-    <h2>Importanza fisica</h2>
-    Il pacchetto gaussiano fornisce un modello fondamentale per descrivere particelle quantistiche localizzate. La sua rappresentazione simultanea 
-    in spazio e impulso illustra chiaramente il principio di indeterminazione di Heisenberg.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 2</div>
-  <h2>Pacchetto Gaussiano: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Calcolare esattamente centro, larghezza e dispersione temporale di un pacchetto gaussiano libero.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La gaussiana è speciale perché la trasformata di Fourier e l'evoluzione libera restano gaussiane. Senza fase quadratica iniziale satura Heisenberg. Il centro segue Ehrenfest, mentre la larghezza cresce perché componenti con impulsi diversi possiedono velocità diverse.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Stato iniziale<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>La convenzione scelta rende \(\sigma_x\) la deviazione standard della densità.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\psi(x,0)=\frac{e^{-(x-x_0)^2/(4\sigma_x^2)}e^{ip_0x/\hbar}}{(2\pi\sigma_x^2)^{1/4}}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi|^2=C^2e^{-(x-x_0)^2/(2\sigma_x^2)},\quad\int|\psi|^2dx=1\Rightarrow C=(2\pi\sigma_x^2)^{-1/4}\Rightarrow\psi(x,0)=Ce^{-(x-x_0)^2/(4\sigma_x^2)}e^{ip_0x/\hbar}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Larghezza in impulso<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>La trasformata gaussiana dà il minimo prodotto di indeterminazione.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\sigma_p=\frac{\hbar}{2\sigma_x},\qquad \sigma_x\sigma_p=\frac{\hbar}{2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \phi(p)\propto e^{-\sigma_x^2(p-p_0)^2/\hbar^2}=e^{-(p-p_0)^2/(4\sigma_p^2)}\Rightarrow\sigma_p=\hbar/(2\sigma_x)\Rightarrow\sigma_x\sigma_p=\hbar/2\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Dispersione<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 14</span></h4>
-      <p>L'integrazione delle fasi libere produce una larghezza quadratica nel tempo.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\sigma_x(t)=\sigma_x\sqrt{1+\left(\frac{\hbar t}{2m\sigma_x^2}\right)^2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \sigma_x^2(t)=\sigma_x^2+\frac{t^2}{m^2}\sigma_p^2=\sigma_x^2+\frac{\hbar^2t^2}{4m^2\sigma_x^2}\Rightarrow\sigma_x(t)=\sigma_x\sqrt{1+\left(\frac{\hbar t}{2m\sigma_x^2}\right)^2}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Tempo di raddoppio quadratico</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Definisci \(t_d=2m\sigma_x^2/\hbar\).</p>
-    <p><strong>Calcolo.</strong> A \(t=t_d\), \(\sigma_x(t)=\sqrt2\sigma_x\); a tempi lunghi \(\sigma_x(t)\simeq\sigma_pt/m\).</p>
-    <p><strong>Risultato e controllo.</strong> Il limite lungo coincide con la separazione balistica dovuta alla distribuzione delle velocità.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P3_DIM_13-18.txt">DIM 14</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_15.html">Domanda 2025 n. 15</a> - Pacchetto a indeterminazione minima</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Particella libera non relativistica.</li>
-          <li>Una fase quadratica iniziale modifica la correlazione x-p e può produrre focalizzazione prima dell'allargamento.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Il centro classico non implica un oggetto rigido: la dinamica della varianza conserva l'informazione pienamente quantistica.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Deriva \(t_d\) dimensionalmente.</li>
-          <li>Distingui larghezza dell'ampiezza da larghezza della densità.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=100">Appunti-MQ.pdf, pp. 100-105: trasformata gaussiana e indeterminazioni</a></li>
-          <li><a href="BibbiaAleHD.pdf#page=10">BibbiaAleHD.pdf, pp. 10-12: dispersione del pacchetto libero</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
+</div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-pacchetto-gaussiano">
+<div class="lecture-kicker">Lezione approfondita - Argomento 2 - DIM 2</div>
+<h1>Pacchetto gaussiano</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Normalizzare il pacchetto, calcolare esattamente i momenti di posizione e impulso, ricavare la trasformata di Fourier con tutte le costanti, verificare la minima indeterminazione e descrivere centro, fase e dispersione durante l'evoluzione libera.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Perché è lo stato modello</h3>
+<p>Una gaussiana è localizzata, resta gaussiana sotto trasformata di Fourier e sotto evoluzione libera. Senza fase quadratica iniziale satura il limite di Heisenberg: è quindi il ponte più pulito tra localizzazione, distribuzione degli impulsi e dispersione.</p>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>La convenzione va dichiarata</h3>
+<p>Qui <span class="mq-math" data-i18n-skip="true">\(\sigma_0=\Delta x(0)\)</span> è la deviazione standard della densità <span class="mq-math" data-i18n-skip="true">\(|\psi|^2\)</span>, non dell'ampiezza. Perciò l'esponente dell'ampiezza contiene <span class="mq-math" data-i18n-skip="true">\(4\sigma_0^2\)</span>, mentre quello della densità contiene <span class="mq-math" data-i18n-skip="true">\(2\sigma_0^2\)</span>.</p>
+</article>
+</div>
+<h2>Stato iniziale e rappresentazioni</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>In posizione</h3>
+<p>Il centro iniziale è <span class="mq-math" data-i18n-skip="true">\(x_0\)</span>; la fase lineare fissa l'impulso medio <span class="mq-math" data-i18n-skip="true">\(p_0\)</span>. Una fase globale aggiuntiva non cambierebbe alcuna probabilità.</p>
+<div aria-label="Pacchetto gaussiano normalizzato in posizione" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \psi(x,0)=\frac{\exp[-(x-x_0)^2/(4\sigma_0^2)+ip_0(x-x_0)/\hbar]}{(2\pi\sigma_0^2)^{1/4}}\)</span></div>
+</article>
+<article class="lecture-card">
+<h3>In impulso</h3>
+<p>Adottiamo la coppia simmetrica di Fourier con fattore <span class="mq-math" data-i18n-skip="true">\((2\pi\hbar)^{-1/2}\)</span>. Anche <span class="mq-math" data-i18n-skip="true">\(\phi(p)\)</span> è normalizzata e la sua densità è centrata in <span class="mq-math" data-i18n-skip="true">\(p_0\)</span>.</p>
+<div aria-label="Convenzione di Fourier tra posizione e impulso" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \phi(p)=\frac1{\sqrt{2\pi\hbar}}\int dx\,e^{-ipx/\hbar}\psi(x),\qquad\psi(x)=\frac1{\sqrt{2\pi\hbar}}\int dp\,e^{ipx/\hbar}\phi(p)\)</span></div>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Normalizzazione<span class="lecture-step-boss">DIM 2</span></h4>
+<p>Il modulo elimina la fase. Traslando l'origine e usando l'integrale gaussiano si fissa il prefattore senza ambiguità.</p>
+<div aria-label="Normalizzazione del pacchetto gaussiano" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle 1=|N|^2\!\int e^{-(x-x_0)^2/(2\sigma_0^2)}dx=|N|^2\sqrt{2\pi\sigma_0^2}\Rightarrow N=(2\pi\sigma_0^2)^{-1/4}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Momenti di posizione<span class="lecture-step-boss">DIM 2</span></h4>
+<p>La densità è pari rispetto al centro. Il primo momento centrato è nullo e il secondo si ottiene derivando l'integrale gaussiano.</p>
+<div aria-label="Calcolo dei momenti di posizione della gaussiana" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle y=x-x_0:\ \langle y\rangle=0,\quad\int y^2e^{-ay^2}dy=-\partial_a\sqrt{\pi/a}=\frac{\sqrt\pi}{2a^{3/2}}\Rightarrow\langle x\rangle=x_0,\ \langle x^2\rangle=x_0^2+\sigma_0^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Azione dell'impulso<span class="lecture-step-boss">DIM 2</span></h4>
+<p>Una sola derivata separa il contributo della fase lineare da quello, dispari, prodotto dall'inviluppo.</p>
+<div aria-label="Azione dell'operatore impulso sulla gaussiana" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \partial_x\psi=\left[-\frac{x-x_0}{2\sigma_0^2}+\frac{ip_0}{\hbar}\right]\psi\Rightarrow\hat p\psi=-i\hbar\partial_x\psi=\left[p_0+\frac{i\hbar(x-x_0)}{2\sigma_0^2}\right]\psi\Rightarrow\langle p\rangle=p_0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Secondo momento dell'impulso<span class="lecture-step-boss">DIM 2</span></h4>
+<p>Applicando una seconda volta l'operatore restano un termine costante e uno proporzionale alla varianza spaziale.</p>
+<div aria-label="Calcolo del secondo momento dell'impulso" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \hat p^2\psi=\left[p_0^2+\frac{\hbar^2}{2\sigma_0^2}-\frac{\hbar^2(x-x_0)^2}{4\sigma_0^4}+\frac{i\hbar p_0(x-x_0)}{\sigma_0^2}\right]\psi\Rightarrow\langle p^2\rangle=p_0^2+\frac{\hbar^2}{4\sigma_0^2}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Trasformata di Fourier<span class="lecture-step-boss">DIM 2</span></h4>
+<p>Posto <span class="mq-math" data-i18n-skip="true">\(y=x-x_0\)</span>, il completamento del quadrato produce una gaussiana in impulso e la fase di traslazione.</p>
+<div aria-label="Trasformata di Fourier completa del pacchetto gaussiano" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \int e^{-y^2/(4\sigma_0^2)-i(p-p_0)y/\hbar}dy=2\sqrt\pi\sigma_0e^{-\sigma_0^2(p-p_0)^2/\hbar^2}\Rightarrow\phi(p)=\left(\frac{2\sigma_0^2}{\pi\hbar^2}\right)^{1/4}e^{-\sigma_0^2(p-p_0)^2/\hbar^2}e^{-ipx_0/\hbar}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Minima indeterminazione<span class="lecture-step-boss">DIM 2</span></h4>
+<p>Le due densità hanno deviazioni standard reciproche. La gaussiana priva di fase quadratica satura il limite, non lo viola.</p>
+<div aria-label="Verifica della minima indeterminazione per il pacchetto gaussiano" class="lecture-formula"><span class="lecture-proof-tag">Orale</span><span class="lecture-proof-math">\(\displaystyle (\Delta x)^2=\sigma_0^2,\quad(\Delta p)^2=\frac{\hbar^2}{4\sigma_0^2}\Rightarrow\Delta x\,\Delta p=\sigma_0\frac{\hbar}{2\sigma_0}=\frac\hbar2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Evoluzione in impulso<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Per la particella libera ciascuna componente di impulso acquista una fase diversa, mentre la distribuzione degli impulsi resta invariata.</p>
+<div aria-label="Evoluzione libera del pacchetto nella rappresentazione degli impulsi" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle i\hbar\partial_t\phi(p,t)=\frac{p^2}{2m}\phi(p,t)\Rightarrow\phi(p,t)=\phi(p,0)e^{-ip^2t/(2m\hbar)},\qquad|\phi(p,t)|^2=|\phi(p,0)|^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Soluzione libera esatta<span class="lecture-step-boss">DIM 0</span></h4>
+<p>L'antitrasformata è ancora un integrale gaussiano complesso. Definendo un tempo naturale si separano traslazione, fase e allargamento.</p>
+<div aria-label="Soluzione esatta del pacchetto gaussiano libero" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle t_d=\frac{2m\sigma_0^2}{\hbar},\ \tau=\frac t{t_d},\ x_c=x_0+\frac{p_0t}{m}:\quad\psi(x,t)=\frac{e^{-(x-x_c)^2/[4\sigma_0^2(1+i\tau)]+ip_0(x-x_0)/\hbar-ip_0^2t/(2m\hbar)}}{(2\pi\sigma_0^2)^{1/4}\sqrt{1+i\tau}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Densità e larghezza<span class="lecture-step-boss">ORALE</span></h4>
+<p>Il modulo quadro elimina la fase ma conserva il fattore proveniente dal denominatore complesso. La densità rimane normalizzata.</p>
+<div aria-label="Densità e larghezza temporale del pacchetto libero" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle |\psi(x,t)|^2=\frac{e^{-(x-x_c)^2/[2\sigma_0^2(1+\tau^2)]}}{\sqrt{2\pi}\sigma_0\sqrt{1+\tau^2}},\qquad\sigma_x(t)=\sigma_0\sqrt{1+\tau^2}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Varianza da Heisenberg<span class="lecture-step-boss">ORALE</span></h4>
+<p>Lo stesso risultato segue senza integrare la funzione d'onda. Questa forma mostra anche che una correlazione iniziale può focalizzare il pacchetto.</p>
+<div aria-label="Evoluzione generale della varianza in posizione" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \hat x(t)=\hat x+\frac t m\hat p\Rightarrow\sigma_x^2(t)=\sigma_x^2(0)+\frac{2t}{m}\operatorname{Cov}(x,p)_0+\frac{t^2}{m^2}\sigma_p^2,\quad\operatorname{Cov}(x,p)=\frac12\langle\{\Delta\hat x,\Delta\hat p\}\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Centro ed energia<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Il centro segue la traiettoria classica di Ehrenfest, ma il pacchetto non è rigido. L'energia include il costo cinetico della localizzazione.</p>
+<div aria-label="Moto del centro ed energia media del pacchetto" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle x\rangle_t=x_0+\frac{p_0t}{m},\quad\langle p\rangle_t=p_0,\quad\langle H\rangle=\frac{\langle p^2\rangle}{2m}=\frac{p_0^2}{2m}+\frac{\hbar^2}{8m\sigma_0^2}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Scala di dispersione<span class="lecture-step-boss">ORALE</span></h4>
+<p>Il tempo <span class="mq-math" data-i18n-skip="true">\(t_d\)</span> segnala quando la correzione dispersiva uguaglia la varianza iniziale. Non è il tempo di raddoppio della deviazione standard.</p>
+<div aria-label="Tempo caratteristico e limite asintotico della dispersione" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \sigma_x(t_d)=\sqrt2\,\sigma_0,\qquad\sigma_x(t)=2\sigma_0\Rightarrow t=\sqrt3\,t_d,\qquad t\gg t_d:\ \sigma_x(t)\simeq\frac{\Delta p}{m}|t|\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Gaussiana con chirp<span class="lecture-step-boss">ORALE</span></h4>
+<p>Una fase quadratica non modifica la densità iniziale, ma introduce correlazione posizione-impulso. Il prodotto semplice cresce, mentre il limite completo di Schrödinger-Robertson resta saturo.</p>
+<div aria-label="Covarianza e incertezza di una gaussiana con fase quadratica" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \psi_\kappa\propto e^{-(1-i\kappa)(x-x_0)^2/(4\sigma_0^2)}:\quad\sigma_p^2=\frac{\hbar^2(1+\kappa^2)}{4\sigma_0^2},\ \operatorname{Cov}(x,p)=\frac{\kappa\hbar}{2},\ \sigma_x^2\sigma_p^2-\operatorname{Cov}^2=\frac{\hbar^2}{4}\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: elettrone localizzato a 1 nm</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Elettrone libero con <span class="mq-math" data-i18n-skip="true">\(\sigma_0=1.00\,\mathrm{nm}\)</span> e chirp nullo.</p>
+<p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\(\Delta p=5.27\times10^{-26}\,\mathrm{kg\,m\,s^{-1}}\)</span>, <span class="mq-math" data-i18n-skip="true">\(\Delta v=5.79\times10^4\,\mathrm{m\,s^{-1}}\)</span> e <span class="mq-math" data-i18n-skip="true">\(t_d=17.3\,\mathrm{fs}\)</span>.</p>
+<p><strong>Risultato.</strong> A <span class="mq-math" data-i18n-skip="true">\(t_d\)</span> la larghezza è <span class="mq-math" data-i18n-skip="true">\(1.41\,\mathrm{nm}\)</span>; raddoppia a <span class="mq-math" data-i18n-skip="true">\(29.9\,\mathrm{fs}\)</span> e dopo <span class="mq-math" data-i18n-skip="true">\(1.00\,\mathrm{ps}\)</span> vale circa <span class="mq-math" data-i18n-skip="true">\(57.9\,\mathrm{nm}\)</span>.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Perché si allarga</h3>
+<p>Non agisce una forza che spinge i bordi. Le componenti del pacchetto hanno impulsi, quindi velocità, differenti; le loro fasi si separano perché la dispersione libera è quadratica: <span class="mq-math" data-i18n-skip="true">\(E(p)=p^2/(2m)\)</span>.</p>
+</article>
+<article class="lecture-card">
+<h3>Quando non vale questa legge</h3>
+<p>La formula precedente riguarda una particella libera non relativistica. Un potenziale armonico può mantenere costante la larghezza di uno stato coerente; un mezzo con diversa relazione di dispersione richiede di ricalcolare l'evoluzione delle fasi.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Usare lo stesso denominatore nell'ampiezza e nella densità.</li>
+<li>Dimenticare il fattore <span class="mq-math" data-i18n-skip="true">\((2\pi\hbar)^{-1/2}\)</span> nella trasformata.</li>
+<li>Dire che <span class="mq-math" data-i18n-skip="true">\(t_d\)</span> raddoppia la larghezza.</li>
+<li>Confondere la velocità del centro <span class="mq-math" data-i18n-skip="true">\(p_0/m\)</span> con la velocità di allargamento <span class="mq-math" data-i18n-skip="true">\(\Delta p/m\)</span>.</li>
+<li>Affermare che ogni gaussiana ha <span class="mq-math" data-i18n-skip="true">\(\Delta x\Delta p=\hbar/2\)</span> ignorando il chirp.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Controlli dimensionali</h3>
+<p><span class="mq-math" data-i18n-skip="true">\([\phi]=[p]^{-1/2}\)</span>, <span class="mq-math" data-i18n-skip="true">\([\Delta p]=\mathrm{kg\,m\,s^{-1}}\)</span> e <span class="mq-math" data-i18n-skip="true">\([2m\sigma_0^2/\hbar]=\mathrm{s}\)</span>. Nel limite <span class="mq-math" data-i18n-skip="true">\(\hbar\to0\)</span> a parametri fissati, la scala dispersiva cresce e l'allargamento quantistico rallenta.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Dichiara la convenzione di <span class="mq-math" data-i18n-skip="true">\(\sigma_0\)</span> prima di iniziare.</li>
+<li>Normalizza la funzione con l'integrale gaussiano.</li>
+<li>Calcola <span class="mq-math" data-i18n-skip="true">\(\langle x\rangle\)</span>, <span class="mq-math" data-i18n-skip="true">\(\langle x^2\rangle\)</span>, <span class="mq-math" data-i18n-skip="true">\(\langle p\rangle\)</span> e <span class="mq-math" data-i18n-skip="true">\(\langle p^2\rangle\)</span>.</li>
+<li>Completa il quadrato nella trasformata di Fourier e conserva il prefattore.</li>
+<li>Mostra perché il pacchetto senza chirp satura Heisenberg.</li>
+<li>Scrivi prima l'evoluzione in impulso, poi l'antitrasformata.</li>
+<li>Separa moto del centro, fase e crescita della varianza.</li>
+<li>Deriva la varianza anche con <span class="mq-math" data-i18n-skip="true">\(\hat x(t)=\hat x+t\hat p/m\)</span>.</li>
+<li>Spiega la differenza tra <span class="mq-math" data-i18n-skip="true">\(t_d\)</span> e il vero tempo di raddoppio.</li>
+<li>Descrivi come una fase quadratica modifica covarianza e focalizzazione.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 2</a> - Cauchy-Schwarz, caso posizione-impulso e gaussiana a minima indeterminazione</li>
+<li><a href="Appunti-MQ.pdf#page=101">Appunti-MQ.pdf, pagine PDF 101-105</a> - Fourier, normalizzazione, momenti e dispersioni del pacchetto gaussiano</li>
+<li><a href="onde-piane-pacchetti.html">Onde piane e pacchetti d'onda</a> - base continua, velocità di gruppo e dispersione libera</li>
+<li><a href="Domanda2025_15.html">Domanda 2025 n. 15</a> - pacchetto a indeterminazione minima</li>
+</ul>
+<p class="lecture-note">Le formule seguono la convenzione degli appunti, mentre l'evoluzione esatta, il controllo numerico e il caso con chirp rendono espliciti i passaggi richiesti all'orale.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 2 - DIM 2":"In-depth lesson - Topic 2 - DIM 2","Pacchetto gaussiano":"Gaussian wave packet","Normalizzare il pacchetto, calcolare esattamente i momenti di posizione e impulso, ricavare la trasformata di Fourier con tutte le costanti, verificare la minima indeterminazione e descrivere centro, fase e dispersione durante l'evoluzione libera.":"Normalize the wave packet, compute the position and momentum moments exactly, derive the Fourier transform with every constant, verify minimum uncertainty, and describe the center, phase, and spreading during free evolution.","Perché è lo stato modello":"Why it is the model state","Una gaussiana è localizzata, resta gaussiana sotto trasformata di Fourier e sotto evoluzione libera. Senza fase quadratica iniziale satura il limite di Heisenberg: è quindi il ponte più pulito tra localizzazione, distribuzione degli impulsi e dispersione.":"A Gaussian is localized and remains Gaussian under both the Fourier transform and free evolution. Without an initial quadratic phase, it saturates the Heisenberg bound, making it the clearest link among localization, the momentum distribution, and spreading.","La convenzione va dichiarata":"State the convention explicitly","è la deviazione standard della densità":"is the standard deviation of the density",", non dell'ampiezza. Perciò l'esponente dell'ampiezza contiene":", not of the amplitude. Therefore, the amplitude exponent contains",", mentre quello della densità contiene":", whereas the density exponent contains","Stato iniziale e rappresentazioni":"Initial state and representations","In posizione":"Position representation","Il centro iniziale è":"The initial center is","; la fase lineare fissa l'impulso medio":"; the linear phase fixes the mean momentum",". Una fase globale aggiuntiva non cambierebbe alcuna probabilità.":". An additional global phase would not change any probability.","In impulso":"Momentum representation","Adottiamo la coppia simmetrica di Fourier con fattore":"We use the symmetric Fourier-transform pair with factor","è normalizzata e la sua densità è centrata in":"is normalized, and its density is centered at","Dimostrazioni compatte":"Compact derivations","Il modulo elimina la fase. Traslando l'origine e usando l'integrale gaussiano si fissa il prefattore senza ambiguità.":"The modulus removes the phase. Shifting the origin and using the Gaussian integral fixes the prefactor unambiguously.","2. Momenti di posizione":"2. Position moments","La densità è pari rispetto al centro. Il primo momento centrato è nullo e il secondo si ottiene derivando l'integrale gaussiano.":"The density is even about its center. The first centered moment vanishes, and the second follows by differentiating the Gaussian integral.","3. Azione dell'impulso":"3. Action of the momentum operator","Una sola derivata separa il contributo della fase lineare da quello, dispari, prodotto dall'inviluppo.":"One derivative separates the contribution from the linear phase from the odd contribution produced by the envelope.","4. Secondo momento dell'impulso":"4. Second momentum moment","Applicando una seconda volta l'operatore restano un termine costante e uno proporzionale alla varianza spaziale.":"Applying the operator a second time leaves a constant term and a term proportional to the position variance.","5. Trasformata di Fourier":"5. Fourier transform",", il completamento del quadrato produce una gaussiana in impulso e la fase di traslazione.":", completing the square produces a Gaussian in momentum and the translation phase.","6. Minima indeterminazione":"6. Minimum uncertainty","Le due densità hanno deviazioni standard reciproche. La gaussiana priva di fase quadratica satura il limite, non lo viola.":"The two densities have reciprocal standard deviations. A Gaussian with no quadratic phase saturates the bound; it does not violate it.","7. Evoluzione in impulso":"7. Evolution in momentum space","Per la particella libera ciascuna componente di impulso acquista una fase diversa, mentre la distribuzione degli impulsi resta invariata.":"For a free particle, each momentum component acquires a different phase while the momentum distribution remains unchanged.","8. Soluzione libera esatta":"8. Exact free-particle solution","L'antitrasformata è ancora un integrale gaussiano complesso. Definendo un tempo naturale si separano traslazione, fase e allargamento.":"The inverse transform is another complex Gaussian integral. Introducing a natural timescale separates translation, phase, and spreading.","9. Densità e larghezza":"9. Density and width","Il modulo quadro elimina la fase ma conserva il fattore proveniente dal denominatore complesso. La densità rimane normalizzata.":"The squared modulus removes the phase but retains the factor from the complex denominator. The density remains normalized.","10. Varianza da Heisenberg":"10. Variance in the Heisenberg picture","Lo stesso risultato segue senza integrare la funzione d'onda. Questa forma mostra anche che una correlazione iniziale può focalizzare il pacchetto.":"The same result follows without integrating the wave function. This form also shows that an initial correlation can focus the wave packet.","11. Centro ed energia":"11. Center and energy","Il centro segue la traiettoria classica di Ehrenfest, ma il pacchetto non è rigido. L'energia include il costo cinetico della localizzazione.":"The center follows the classical Ehrenfest trajectory, but the wave packet is not rigid. The energy includes the kinetic cost of localization.","12. Scala di dispersione":"12. Spreading timescale","Il tempo":"The time","segnala quando la correzione dispersiva uguaglia la varianza iniziale. Non è il tempo di raddoppio della deviazione standard.":"marks when the dispersive correction equals the initial variance. It is not the doubling time of the standard deviation.","13. Gaussiana con chirp":"13. Chirped Gaussian","Una fase quadratica non modifica la densità iniziale, ma introduce correlazione posizione-impulso. Il prodotto semplice cresce, mentre il limite completo di Schrödinger-Robertson resta saturo.":"A quadratic phase does not change the initial density, but introduces position-momentum correlation. The simple uncertainty product increases, while the full Schrödinger-Robertson bound remains saturated.","Esempio d'esame: elettrone localizzato a 1 nm":"Exam example: an electron localized to 1 nm","Elettrone libero con":"A free electron with","e chirp nullo.":"and zero chirp.","la larghezza è":"the width is","vale circa":"is approximately","Perché si allarga":"Why it spreads","Non agisce una forza che spinge i bordi. Le componenti del pacchetto hanno impulsi, quindi velocità, differenti; le loro fasi si separano perché la dispersione libera è quadratica:":"No force pushes the edges outward. The wave-packet components have different momenta and therefore different velocities; their phases separate because the free-particle dispersion relation is quadratic:","Quando non vale questa legge":"When this law does not apply","La formula precedente riguarda una particella libera non relativistica. Un potenziale armonico può mantenere costante la larghezza di uno stato coerente; un mezzo con diversa relazione di dispersione richiede di ricalcolare l'evoluzione delle fasi.":"The preceding formula applies to a nonrelativistic free particle. A harmonic potential can keep the width of a coherent state constant; a medium with a different dispersion relation requires the phase evolution to be recalculated.","Errori tipici":"Common errors","Usare lo stesso denominatore nell'ampiezza e nella densità.":"Using the same denominator in the amplitude and the density.","Dimenticare il fattore":"Forgetting the factor","nella trasformata.":"in the transform.","Dire che":"Claiming that","raddoppia la larghezza.":"doubles the width.","Confondere la velocità del centro":"Confusing the velocity of the center","con la velocità di allargamento":"with the spreading rate","Affermare che ogni gaussiana ha":"Claiming that every Gaussian has","ignorando il chirp.":"while ignoring the chirp.","Controlli dimensionali":"Dimensional checks",". Nel limite":". In the limit","a parametri fissati, la scala dispersiva cresce e l'allargamento quantistico rallenta.":"at fixed parameters, the spreading timescale grows and quantum spreading slows down.","Controllo da orale":"Oral exam checklist","Dichiara la convenzione di":"State the convention for","prima di iniziare.":"before starting.","Normalizza la funzione con l'integrale gaussiano.":"Normalize the function with the Gaussian integral.","Completa il quadrato nella trasformata di Fourier e conserva il prefattore.":"Complete the square in the Fourier transform and retain the prefactor.","Mostra perché il pacchetto senza chirp satura Heisenberg.":"Show why the unchirped wave packet saturates the Heisenberg bound.","Scrivi prima l'evoluzione in impulso, poi l'antitrasformata.":"Write the momentum-space evolution first, then take the inverse transform.","Separa moto del centro, fase e crescita della varianza.":"Separate the motion of the center, the phase, and the growth of the variance.","Deriva la varianza anche con":"Also derive the variance using","Spiega la differenza tra":"Explain the difference between","e il vero tempo di raddoppio.":"and the actual doubling time.","Descrivi come una fase quadratica modifica covarianza e focalizzazione.":"Describe how a quadratic phase changes covariance and focusing.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- Cauchy-Schwarz, caso posizione-impulso e gaussiana a minima indeterminazione":"- Cauchy-Schwarz, the position-momentum case, and a minimum-uncertainty Gaussian","Appunti-MQ.pdf, pagine PDF 101-105":"Appunti-MQ.pdf, PDF pages 101-105","- Fourier, normalizzazione, momenti e dispersioni del pacchetto gaussiano":"- Fourier transforms, normalization, moments, and variances of the Gaussian wave packet","Onde piane e pacchetti d'onda":"Plane waves and wave packets","- base continua, velocità di gruppo e dispersione libera":"- continuous basis, group velocity, and free-particle spreading","Domanda 2025 n. 15":"2025 question no. 15","- pacchetto a indeterminazione minima":"- minimum-uncertainty wave packet","Le formule seguono la convenzione degli appunti, mentre l'evoluzione esatta, il controllo numerico e il caso con chirp rendono espliciti i passaggi richiesti all'orale.":"The formulas follow the convention used in the notes, while the exact evolution, numerical check, and chirped case make the oral-exam steps explicit.","Ritorna all'indice MQ":"Return to the MQ index","Obiettivo.":"Goal.","1. Normalizzazione":"1. Normalization","DIM 2":"DIM 2","DIM 0":"DIM 0","ORALE":"ORAL","Def":"Def","Base":"Core","Orale":"Oral","Check":"Check","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","e":"and","A":"At","e dopo":"and after","Calcola":"Compute","Qui":"Here",". Anche":". Likewise,","Posto":"Setting","; raddoppia a":"; it doubles at"},"attrs":{"Pacchetto gaussiano normalizzato in posizione":"Normalized Gaussian wave packet in position space","Convenzione di Fourier tra posizione e impulso":"Fourier-transform convention between position and momentum space","Normalizzazione del pacchetto gaussiano":"Normalization of the Gaussian wave packet","Calcolo dei momenti di posizione della gaussiana":"Calculation of the Gaussian position moments","Azione dell'operatore impulso sulla gaussiana":"Action of the momentum operator on the Gaussian","Calcolo del secondo momento dell'impulso":"Calculation of the second momentum moment","Trasformata di Fourier completa del pacchetto gaussiano":"Full Fourier transform of the Gaussian wave packet","Verifica della minima indeterminazione per il pacchetto gaussiano":"Verification of minimum uncertainty for the Gaussian wave packet","Evoluzione libera del pacchetto nella rappresentazione degli impulsi":"Free evolution of the wave packet in momentum space","Soluzione esatta del pacchetto gaussiano libero":"Exact solution for the free Gaussian wave packet","Densità e larghezza temporale del pacchetto libero":"Time-dependent density and width of the free wave packet","Evoluzione generale della varianza in posizione":"General evolution of the position variance","Moto del centro ed energia media del pacchetto":"Motion of the center and mean energy of the wave packet","Tempo caratteristico e limite asintotico della dispersione":"Characteristic timescale and asymptotic spreading limit","Covarianza e incertezza di una gaussiana con fase quadratica":"Covariance and uncertainty of a Gaussian with quadratic phase"},"title":{"it":"Pacchetto gaussiano - Dimostrazioni e ripasso orale","en":"Gaussian wave packet - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
