@@ -14,3 +14,5 @@ https://amrierscuo.github.io/Computational-Physics/Args/Phy/Struttura/FDSDM.html
 git --version,
 https://git-scm.com/downloads/win,
 git clone https://github.com/amrierscuo/Computational-Physics.git
+
+Scoped Math/Phy publishing: [tools/SCOPED_PUBLISHING.md](tools/SCOPED_PUBLISHING.md)
