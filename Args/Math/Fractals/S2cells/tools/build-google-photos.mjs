@@ -339,6 +339,9 @@ function validateOutput(payload) {
   payload.records.forEach((record) => {
     if (!record.photoId || ids.has(record.photoId)) throw new Error(`Invalid or duplicate photoId: ${record.photoId}`);
     ids.add(record.photoId);
+    if (record.submissionType !== "Google Maps Photo" && record.submissionType !== "Google Maps Video") {
+      throw new Error(`Invalid Google Maps media type: ${record.submissionType}`);
+    }
     if (record.reviewStatus !== "keep") throw new Error(`Unapproved record in output: ${record.photoId}`);
     if (!record.thumbnailUrl || !Number.isFinite(Number(record.views))) throw new Error(`Invalid photo record: ${record.photoId}`);
     if (record.locationMethod === "google-place-pin" && !record.placeId) {
@@ -354,10 +357,10 @@ function validateOutput(payload) {
 }
 
 function printSummary(payload, outputPath) {
-  console.log("Google Maps photo dataset ready");
-  console.log(`Approved: ${payload.approvedCount}`);
+  console.log("Google Maps media dataset ready");
+  console.log(`Approved: ${payload.approvedCount} (${payload.photoCount ?? payload.approvedCount} photos, ${payload.videoCount ?? 0} videos)`);
   console.log(`Excluded: ${payload.excludedCount}`);
-  console.log(`Map-located: ${payload.locatedCount} photos across ${payload.mappedPlaceCount} places`);
+  console.log(`Map-located: ${payload.locatedCount} media across ${payload.mappedPlaceCount} places`);
   console.log(`Gallery-only: ${payload.unlocatedCount}`);
   if (payload.placePinSource) {
     console.log(`Google Place-linked: ${payload.placeLinkedCount}`);

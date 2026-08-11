@@ -213,8 +213,8 @@ console.log("Aggiornamento dati della Field Map completato");
 console.log(`File importati: ${importState.files}`);
 console.log(`Wayfarer: ${currentWayfarer.records.length} -> ${nextWayfarer.records.length} (${importState.wayfarerAdded} nuovi, ${importState.wayfarerUpdated} aggiornati)`);
 console.log(`Street View 360: ${currentStreetView.records.length} -> ${nextStreetView.records.length} (${importState.streetViewAdded} nuovi, ${importState.streetViewUpdated} aggiornati)`);
-console.log(`Google Maps Photo: ${currentGooglePhotos.records.length} -> ${nextGooglePhotos.records.length} (${importState.googlePhotosAdded} nuove, ${importState.googlePhotosUpdated} aggiornate)`);
-console.log(`Ignorati: ${importState.unsupported} tipi non supportati, ${importState.nonFinalWayfarer} Wayfarer non finali, ${importState.nonPublishedStreetView} panorami non pubblicati, ${importState.googlePhotosNotKept} foto Google senza review keep, ${importState.invalidCoordinates} coordinate non valide`);
+console.log(`Google Maps media: ${currentGooglePhotos.records.length} -> ${nextGooglePhotos.records.length} (${importState.googlePhotosAdded} nuovi, ${importState.googlePhotosUpdated} aggiornati)`);
+console.log(`Ignorati: ${importState.unsupported} tipi non supportati, ${importState.nonFinalWayfarer} Wayfarer non finali, ${importState.nonPublishedStreetView} panorami non pubblicati, ${importState.googlePhotosNotKept} media Google senza review keep, ${importState.invalidCoordinates} coordinate non valide`);
 console.log(`Backup locale: ${backupPath}`);
 console.log("Ora controlla map.html in locale. Se e corretto, fai commit e push dei file JSON modificati.");
 
@@ -272,7 +272,7 @@ async function readInput(inputPath) {
 
 function recordKind(record) {
   if (allowedWayfarerTypes.has(record?.submissionType)) return "wayfarer";
-  if (record?.submissionType === "Google Maps Photo") return "googlephoto";
+  if (record?.submissionType === "Google Maps Photo" || record?.submissionType === "Google Maps Video") return "googlephoto";
   if (record?.panoramaType === "Street View 360" || record?.photoId) return "streetview";
   return null;
 }
@@ -382,10 +382,12 @@ function normalizeStreetViewRecord(record) {
 function normalizeGooglePhotoRecord(record) {
   const located = hasValidCoordinates(record);
   const views = Number(record.views);
+  const isVideo = record.submissionType === "Google Maps Video" || record.mediaType === "video";
   return {
     ...record,
     photoId: String(record.photoId),
-    submissionType: "Google Maps Photo",
+    mediaType: isVideo ? "video" : "photo",
+    submissionType: isVideo ? "Google Maps Video" : "Google Maps Photo",
     title: record.title || "Unknown place",
     placeLabel: record.placeLabel || record.title || "Unknown place",
     views: Number.isFinite(views) ? Math.max(0, views) : 0,
@@ -446,6 +448,8 @@ function buildStreetViewPayload(previous, records, generatedAt, nonPublishedCoun
 
 function buildGooglePhotosPayload(previous, records, generatedAt, candidateCount, excludedCount) {
   const located = records.filter(hasValidCoordinates);
+  const photoCount = records.filter((record) => record.submissionType === "Google Maps Photo").length;
+  const videoCount = records.length - photoCount;
   const finalExcludedCount = Math.max(0, Number(excludedCount || 0));
   return {
     ...previous,
@@ -458,7 +462,11 @@ function buildGooglePhotosPayload(previous, records, generatedAt, candidateCount
     candidateCount: Math.max(Number(candidateCount || 0), records.length + finalExcludedCount),
     approvedCount: records.length,
     excludedCount: finalExcludedCount,
+    photoCount,
+    videoCount,
     locatedCount: located.length,
+    locatedPhotoCount: located.filter((record) => record.submissionType === "Google Maps Photo").length,
+    locatedVideoCount: located.filter((record) => record.submissionType === "Google Maps Video").length,
     unlocatedCount: records.length - located.length,
     mappedPlaceCount: new Set(located.map(coordinateKey)).size,
     records,
@@ -497,13 +505,13 @@ function validateGooglePhotosPayload(payload) {
   const keys = new Set();
   let locatedCount = 0;
   for (const record of payload.records) {
-    if (record.submissionType !== "Google Maps Photo") throw new Error(`Tipo foto Google non valido: ${record.submissionType}`);
-    if (record.reviewStatus !== "keep") throw new Error(`Foto Google non approvata nel dataset pubblico: ${record.photoId}`);
-    if (!record.thumbnailUrl) throw new Error(`Foto Google senza thumbnailUrl: ${record.photoId}`);
-    if (hasAnyCoordinate(record) && !hasValidCoordinates(record)) throw new Error(`Coordinate foto Google non valide: ${record.photoId}`);
+    if (record.submissionType !== "Google Maps Photo" && record.submissionType !== "Google Maps Video") throw new Error(`Tipo media Google non valido: ${record.submissionType}`);
+    if (record.reviewStatus !== "keep") throw new Error(`Media Google non approvato nel dataset pubblico: ${record.photoId}`);
+    if (!record.thumbnailUrl) throw new Error(`Media Google senza thumbnailUrl: ${record.photoId}`);
+    if (hasAnyCoordinate(record) && !hasValidCoordinates(record)) throw new Error(`Coordinate media Google non valide: ${record.photoId}`);
     if (hasValidCoordinates(record)) locatedCount += 1;
     const key = googlePhotoKey(record);
-    if (keys.has(key)) throw new Error(`Duplicato Google Maps Photo: ${key}`);
+    if (keys.has(key)) throw new Error(`Duplicato Google Maps media: ${key}`);
     keys.add(key);
   }
   if (Number(payload.approvedCount) !== payload.records.length) throw new Error("Conteggio approvedCount non coerente in google-photos.json.");
@@ -589,7 +597,7 @@ function printValidationSummary(wayfarer, streetView, googlePhotos) {
   console.log("Dataset validi");
   console.log(`Wayfarer: ${wayfarer.records.length}`);
   console.log(`Street View 360: ${streetView.records.length}`);
-  console.log(`Google Maps Photo: ${googlePhotos.records.length} (${googlePhotos.locatedCount} sulla mappa, ${googlePhotos.unlocatedCount} solo galleria)`);
+  console.log(`Google Maps media: ${googlePhotos.records.length} (${googlePhotos.photoCount || 0} foto, ${googlePhotos.videoCount || 0} video, ${googlePhotos.locatedCount} sulla mappa, ${googlePhotos.unlocatedCount} solo galleria)`);
   console.log(`Totale punti localizzati: ${wayfarer.records.length + streetView.records.length + googlePhotos.locatedCount}`);
 }
 
@@ -600,5 +608,5 @@ function printHelp() {
   node tools/update-map-data.mjs --check
 
 I file possono contenere un array, un oggetto con records, JSONL oppure GeoJSON.
-Tipi supportati: Wayspot Submission, Photo Submission, Street View 360 e Google Maps Photo.`);
+Tipi supportati: Wayspot Submission, Photo Submission, Street View 360, Google Maps Photo e Google Maps Video.`);
 }

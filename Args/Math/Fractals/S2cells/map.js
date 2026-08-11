@@ -71,16 +71,18 @@
         "Wayspot Submission": false,
         "Photo Submission": false,
         "Street View 360": true,
-        "Google Maps Photo": false
+        "Google Maps Photo": false,
+        "Google Maps Video": false
       },
       datasets: {
         wayfarer: { status: "idle", records: [], summary: "Wayfarer data available on demand" },
         streetView: { status: "idle", records: [], summary: "Loading Street View 360" },
-        googlePhotos: { status: "idle", records: [], allRecords: [], summary: "Google photo gallery available on demand" }
+        googlePhotos: { status: "idle", records: [], allRecords: [], summary: "Google media gallery available on demand" }
       },
       googleGallery: {
         visibleLimit: 48,
         search: "",
+        mediaType: "all",
         locationFilter: "all"
       }
     }
@@ -118,6 +120,7 @@
       showPhotoSubmissions: document.getElementById("showPhotoSubmissions"),
       showStreetView: document.getElementById("showStreetView"),
       showGooglePhotos: document.getElementById("showGooglePhotos"),
+      showGoogleVideos: document.getElementById("showGoogleVideos"),
       loadWayfarerButton: document.getElementById("loadWayfarerButton"),
       loadGooglePhotosButton: document.getElementById("loadGooglePhotosButton"),
       browseGooglePhotosButton: document.getElementById("browseGooglePhotosButton"),
@@ -135,6 +138,7 @@
       googleGalleryTotal: document.getElementById("googleGalleryTotal"),
       googleGalleryMapped: document.getElementById("googleGalleryMapped"),
       googlePhotoSearch: document.getElementById("googlePhotoSearch"),
+      googleMediaTypeFilter: document.getElementById("googleMediaTypeFilter"),
       googlePhotoLocationFilter: document.getElementById("googlePhotoLocationFilter"),
       googlePhotoGrid: document.getElementById("googlePhotoGrid"),
       googlePhotoLoadMore: document.getElementById("googlePhotoLoadMore"),
@@ -205,6 +209,14 @@
       }
       renderPoiLayer();
     });
+    controls.showGoogleVideos.addEventListener("change", async () => {
+      state.poi.types["Google Maps Video"] = controls.showGoogleVideos.checked;
+      if (controls.showGoogleVideos.checked && state.poi.datasets.googlePhotos.status !== "loaded") {
+        await loadGooglePhotosDataset();
+        return;
+      }
+      renderPoiLayer();
+    });
     controls.loadWayfarerButton.addEventListener("click", async () => {
       controls.showWayspots.checked = true;
       controls.showPhotoSubmissions.checked = true;
@@ -226,6 +238,11 @@
     });
     controls.googlePhotoSearch.addEventListener("input", () => {
       state.poi.googleGallery.search = controls.googlePhotoSearch.value.trim().toLocaleLowerCase();
+      state.poi.googleGallery.visibleLimit = 48;
+      renderGooglePhotoGallery();
+    });
+    controls.googleMediaTypeFilter.addEventListener("change", () => {
+      state.poi.googleGallery.mediaType = controls.googleMediaTypeFilter.value;
       state.poi.googleGallery.visibleLimit = 48;
       renderGooglePhotoGallery();
     });
@@ -511,27 +528,29 @@
     dataset.status = "loading";
     controls.loadGooglePhotosButton.disabled = true;
     controls.browseGooglePhotosButton.disabled = true;
-    controls.loadGooglePhotosButton.textContent = "Loading Google photo data";
-    setPoiLoadProgress("Loading Google photo data", 0, true);
+    controls.loadGooglePhotosButton.textContent = "Loading Google media data";
+    setPoiLoadProgress("Loading Google media data", 0, true);
     try {
       const payload = await loadJsonDataset("data/google-photos.json", (received, total) => {
         const percent = progressPercent(received, total);
-        controls.loadGooglePhotosButton.textContent = percent > 0 ? `Loading Google photos ${percent}%` : "Loading Google photo data";
-        setPoiLoadProgress("Loading Google photos", percent, true);
+        controls.loadGooglePhotosButton.textContent = percent > 0 ? `Loading Google media ${percent}%` : "Loading Google media data";
+        setPoiLoadProgress("Loading Google media", percent, true);
       });
       dataset.allRecords = payload.records.filter((record) => (
-        record.submissionType === "Google Maps Photo"
+        (record.submissionType === "Google Maps Photo" || record.submissionType === "Google Maps Video")
         && record.reviewStatus === "keep"
         && record.photoId
         && record.thumbnailUrl
       ));
       dataset.records = dataset.allRecords.filter(hasValidCoordinates);
-      dataset.summary = `${dataset.allRecords.length} reviewed Google photos - ${dataset.records.length} mapped, ${dataset.allRecords.length - dataset.records.length} gallery only`;
+      const photoCount = dataset.allRecords.filter((record) => record.submissionType === "Google Maps Photo").length;
+      const videoCount = dataset.allRecords.length - photoCount;
+      dataset.summary = `${photoCount} Google photos and ${videoCount} videos - ${dataset.records.length} mapped, ${dataset.allRecords.length - dataset.records.length} gallery only`;
       dataset.status = "loaded";
       dataset.payload = payload;
-      controls.loadGooglePhotosButton.textContent = "Google photo data loaded";
+      controls.loadGooglePhotosButton.textContent = "Google media data loaded";
       controls.browseGooglePhotosButton.disabled = false;
-      setPoiLoadProgress("Google photo data ready", 100, false);
+      setPoiLoadProgress("Google media data ready", 100, false);
       renderGooglePhotoGallery();
     } catch {
       dataset.records = [];
@@ -539,11 +558,13 @@
       dataset.summary = "Google photo dataset unavailable - tap to retry";
       dataset.status = "error";
       state.poi.types["Google Maps Photo"] = false;
+      state.poi.types["Google Maps Video"] = false;
       controls.showGooglePhotos.checked = false;
+      controls.showGoogleVideos.checked = false;
       controls.loadGooglePhotosButton.disabled = false;
       controls.browseGooglePhotosButton.disabled = false;
-      controls.loadGooglePhotosButton.textContent = "Retry Google photo data";
-      setPoiLoadProgress("Google photo data could not load", 0, false);
+      controls.loadGooglePhotosButton.textContent = "Retry Google media data";
+      setPoiLoadProgress("Google media data could not load", 0, false);
     }
     rebuildPoiRecords();
   }
@@ -618,7 +639,11 @@
     poiLayer.clearLayers();
     const records = visiblePoiRecords();
 
-    records.filter((record) => record.submissionType !== "Street View 360" && record.submissionType !== "Google Maps Photo").forEach((record) => {
+    records.filter((record) => (
+      record.submissionType !== "Street View 360"
+      && record.submissionType !== "Google Maps Photo"
+      && record.submissionType !== "Google Maps Video"
+    )).forEach((record) => {
       const marker = L.marker([Number(record.latitude), Number(record.longitude)], {
         pane: "poiPane",
         title: record.title,
@@ -655,23 +680,26 @@
       marker.addTo(poiLayer);
     });
 
-    groupGooglePhotoRecords(records.filter((record) => record.submissionType === "Google Maps Photo")).forEach((group) => {
-      const center = [Number(group[0].latitude), Number(group[0].longitude)];
-      const marker = L.marker(center, {
-        pane: "poiPane",
-        title: group.length === 1 ? group[0].title : `${group.length} reviewed Google Maps photos`,
-        keyboard: true,
-        icon: poiMarkerIcon("Google Maps Photo", group.length)
+    ["Google Maps Photo", "Google Maps Video"].forEach((submissionType) => {
+      groupGoogleMediaRecords(records.filter((record) => record.submissionType === submissionType)).forEach((group) => {
+        const center = [Number(group[0].latitude), Number(group[0].longitude)];
+        const mediaLabel = submissionType === "Google Maps Video" ? "videos" : "photos";
+        const marker = L.marker(center, {
+          pane: "poiPane",
+          title: group.length === 1 ? group[0].title : `${group.length} reviewed Google Maps ${mediaLabel}`,
+          keyboard: true,
+          icon: poiMarkerIcon(submissionType, group.length)
+        });
+        marker.bindPopup(buildGoogleMediaPopup(group), {
+          className: "poi-leaflet-popup",
+          maxWidth: 330,
+          minWidth: 230
+        });
+        marker.on("click", () => {
+          selectPoint(L.latLng(center[0], center[1]), false);
+        });
+        marker.addTo(poiLayer);
       });
-      marker.bindPopup(buildGooglePhotoPopup(group), {
-        className: "poi-leaflet-popup",
-        maxWidth: 330,
-        minWidth: 230
-      });
-      marker.on("click", () => {
-        selectPoint(L.latLng(center[0], center[1]), false);
-      });
-      marker.addTo(poiLayer);
     });
 
     state.poi.visibleCount = records.length;
@@ -697,7 +725,7 @@
     return Array.from(groups.values());
   }
 
-  function groupGooglePhotoRecords(records) {
+  function groupGoogleMediaRecords(records) {
     const groups = new Map();
     records.forEach((record) => {
       const key = `${Number(record.latitude).toFixed(7)},${Number(record.longitude).toFixed(7)}`;
@@ -722,9 +750,11 @@
         ? "streetview"
         : submissionType === "Google Maps Photo"
           ? "google"
+          : submissionType === "Google Maps Video"
+            ? "google-video"
           : "wayspot";
     const isStreetViewCluster = kind === "streetview" && count > 1;
-    const isGoogleCluster = kind === "google" && count > 1;
+    const isGoogleCluster = (kind === "google" || kind === "google-video") && count > 1;
     const countBadge = isStreetViewCluster || isGoogleCluster ? `<b class="poi-marker__count">${count}</b>` : "";
     const clusterClass = isStreetViewCluster || isGoogleCluster ? " is-cluster" : "";
     const size = kind === "streetview" ? (isStreetViewCluster ? 28 : 14) : isGoogleCluster ? 27 : 19;
@@ -817,24 +847,28 @@
     return popup;
   }
 
-  function buildGooglePhotoPopup(records) {
+  function buildGoogleMediaPopup(records) {
     const first = records[0];
+    const isVideo = first.submissionType === "Google Maps Video";
+    const singular = isVideo ? "video" : "photo";
+    const plural = isVideo ? "videos" : "photos";
     const popup = document.createElement("article");
     popup.className = "poi-popup";
 
     const type = document.createElement("p");
     type.className = "poi-popup__type";
-    type.textContent = "Reviewed Google Maps photos";
+    type.textContent = `Reviewed Google Maps ${plural}`;
     popup.append(type);
 
     const title = document.createElement("h3");
-    title.textContent = records.length === 1 ? first.title : `${records.length} photos at this mapped place`;
+    title.textContent = records.length === 1 ? first.title : `${records.length} ${plural} at this mapped place`;
     popup.append(title);
 
     const totalViews = records.reduce((sum, record) => sum + Number(record.views || 0), 0);
     const meta = document.createElement("p");
     meta.className = "poi-popup__meta";
-    meta.textContent = `${totalViews.toLocaleString()} total views - ${records.length} approved photo${records.length === 1 ? "" : "s"}`;
+    const duration = isVideo && records.length === 1 && first.duration ? ` - ${first.duration}` : "";
+    meta.textContent = `${totalViews.toLocaleString()} total views - ${records.length} approved ${records.length === 1 ? singular : plural}${duration}`;
     popup.append(meta);
 
     const gallery = document.createElement("div");
@@ -844,7 +878,7 @@
       link.href = record.thumbnailUrl;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.setAttribute("aria-label", `Open ${record.title} photo`);
+      link.setAttribute("aria-label", `Open ${record.title} ${singular} thumbnail`);
       const image = document.createElement("img");
       image.src = record.thumbnailUrl;
       image.alt = record.title;
@@ -858,7 +892,7 @@
     if (records.length > 12) {
       const remainder = document.createElement("p");
       remainder.className = "poi-popup__meta";
-      remainder.textContent = `${records.length - 12} more photos are available in the full gallery.`;
+      remainder.textContent = `${records.length - 12} more ${plural} are available in the full gallery.`;
       popup.append(remainder);
     }
 
@@ -869,7 +903,7 @@
 
     const search = document.createElement("a");
     search.className = "google-popup-action";
-    search.href = googleMapsSearchUrl(first.placeLabel);
+    search.href = first.placeUrl || googleMapsSearchUrl(first.placeLabel, first.placeId);
     search.target = "_blank";
     search.rel = "noopener noreferrer";
     search.textContent = "Open place in Google Maps";
@@ -887,7 +921,7 @@
 
     const review = document.createElement("p");
     review.className = "poi-popup__review";
-    review.textContent = "Position matched conservatively to an accepted Wayspot title and municipality";
+    review.textContent = "Position uses the verified pin of the associated Google Maps Place ID";
     popup.append(review);
 
     const l17 = S2Grid.Cell.fromLatLng({ lat: Number(first.latitude), lng: Number(first.longitude) }, 17);
@@ -1018,7 +1052,7 @@
   function renderGooglePhotoGallery() {
     const dataset = state.poi.datasets.googlePhotos;
     if (dataset.status !== "loaded") {
-      controls.googleGallerySummary.textContent = "Load the reviewed dataset to browse the gallery.";
+      controls.googleGallerySummary.textContent = "Load the reviewed dataset to browse the media gallery.";
       controls.googleGalleryTotal.textContent = "0";
       controls.googleGalleryMapped.textContent = "0";
       controls.googlePhotoGrid.replaceChildren();
@@ -1029,6 +1063,8 @@
     const allRecords = dataset.allRecords;
     const filtered = allRecords.filter((record) => {
       const mapped = hasValidCoordinates(record);
+      const mediaType = record.submissionType === "Google Maps Video" ? "video" : "photo";
+      if (state.poi.googleGallery.mediaType !== "all" && state.poi.googleGallery.mediaType !== mediaType) return false;
       if (state.poi.googleGallery.locationFilter === "mapped" && !mapped) return false;
       if (state.poi.googleGallery.locationFilter === "gallery" && mapped) return false;
       if (!state.poi.googleGallery.search) return true;
@@ -1040,18 +1076,19 @@
     controls.googleGalleryMapped.textContent = dataset.records.length.toLocaleString();
     controls.googlePhotoGrid.replaceChildren(...visible.map(buildGooglePhotoCard));
     controls.googlePhotoLoadMore.hidden = visible.length >= filtered.length;
-    controls.googlePhotoLoadMore.textContent = `Show ${Math.min(48, filtered.length - visible.length)} more photos`;
+    controls.googlePhotoLoadMore.textContent = `Show ${Math.min(48, filtered.length - visible.length)} more media`;
   }
 
   function buildGooglePhotoCard(record) {
+    const isVideo = record.submissionType === "Google Maps Video";
     const card = document.createElement("article");
-    card.className = "google-photo-card";
+    card.className = `google-photo-card${isVideo ? " is-video" : ""}`;
 
     const imageLink = document.createElement("a");
     imageLink.href = record.thumbnailUrl;
     imageLink.target = "_blank";
     imageLink.rel = "noopener noreferrer";
-    imageLink.setAttribute("aria-label", `Open ${record.title} photo`);
+    imageLink.setAttribute("aria-label", `Open ${record.title} ${isVideo ? "video" : "photo"} thumbnail`);
     const image = document.createElement("img");
     image.src = record.thumbnailUrl;
     image.alt = record.title;
@@ -1068,17 +1105,17 @@
     const meta = document.createElement("div");
     meta.className = "google-photo-card__meta";
     const views = document.createElement("span");
-    views.textContent = `${Number(record.views).toLocaleString()} views`;
+    views.textContent = `${Number(record.views).toLocaleString()} views${isVideo && record.duration ? ` - ${record.duration}` : ""}`;
     const badge = document.createElement("span");
     badge.className = "google-photo-card__badge";
-    badge.textContent = hasValidCoordinates(record) ? "Mapped" : "Gallery only";
+    badge.textContent = `${isVideo ? "Video" : "Photo"} - ${hasValidCoordinates(record) ? "mapped" : "gallery only"}`;
     meta.append(views, badge);
     body.append(title, place, meta);
 
     const actions = document.createElement("div");
     actions.className = "google-photo-card__actions";
     const search = document.createElement("a");
-    search.href = googleMapsSearchUrl(record.placeLabel);
+    search.href = record.placeUrl || googleMapsSearchUrl(record.placeLabel, record.placeId);
     search.target = "_blank";
     search.rel = "noopener noreferrer";
     search.textContent = "Google Maps";
@@ -1090,9 +1127,10 @@
       show.addEventListener("click", () => {
         controls.googlePhotoSheet.hidden = true;
         controls.showPoi.checked = true;
-        controls.showGooglePhotos.checked = true;
         state.poi.show = true;
-        state.poi.types["Google Maps Photo"] = true;
+        controls.showGooglePhotos.checked = !isVideo || controls.showGooglePhotos.checked;
+        controls.showGoogleVideos.checked = isVideo || controls.showGoogleVideos.checked;
+        state.poi.types[record.submissionType] = true;
         renderPoiLayer();
         map.setView([Number(record.latitude), Number(record.longitude)], 18);
         selectPoint(L.latLng(Number(record.latitude), Number(record.longitude)), false);
@@ -1104,10 +1142,11 @@
     return card;
   }
 
-  function googleMapsSearchUrl(placeLabel) {
+  function googleMapsSearchUrl(placeLabel, placeId = null) {
     const url = new URL("https://www.google.com/maps/search/");
     url.searchParams.set("api", "1");
     url.searchParams.set("query", placeLabel || "Google Maps photo");
+    if (placeId) url.searchParams.set("query_place_id", placeId);
     return url.href;
   }
 
