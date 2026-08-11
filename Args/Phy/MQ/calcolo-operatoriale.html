@@ -1,304 +1,337 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcolo Operatoriale</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Calcolo operatoriale - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Calcolo Operatoriale</h1>
-    <h2>Operatori e loro proprietà</h2>
-    Gli operatori nella meccanica quantistica rappresentano osservabili fisiche, come posizione, momento o energia. 
-    Un operatore \( \hat{A} \) agisce su una funzione d'onda \( \psi(x) \), generando una nuova funzione. Gli operatori lineari soddisfano:
-    <div class="formula">
-        \[
-        \hat{A}(c_1 \psi_1 + c_2 \psi_2) = c_1 \hat{A} \psi_1 + c_2 \hat{A} \psi_2
-        \]
-    </div>
-    dove \( c_1 \) e \( c_2 \) sono costanti scalari.
-
-    <h2>Operatori di posizione e momento</h2>
-    L'operatore di posizione \( \hat{x} \) agisce su una funzione d'onda come:
-    <div class="formula">
-        \[
-        \hat{x} \psi(x) = x \psi(x)
-        \]
-    </div>
-    L'operatore di momento \( \hat{p}_x \), definito come:
-    <div class="formula">
-        \[
-        \hat{p}_x = -i\hbar \frac{\partial}{\partial x}
-        \]
-    </div>
-    agisce come una derivata spaziale.
-
-    <h2>Commutatori</h2>
-    Il commutatore di due operatori \( \hat{A} \) e \( \hat{B} \) è definito come:
-    <div class="formula">
-        \[
-        [\hat{A}, \hat{B}] = \hat{A} \hat{B} - \hat{B} \hat{A}
-        \]
-    </div>
-    Per gli operatori di posizione e momento, si ha:
-    <div class="formula">
-        \[
-        [\hat{x}, \hat{p}_x] = i\hbar
-        \]
-    </div>
-    Questa relazione esprime il principio di indeterminazione di Heisenberg.
-
-    <h2>Autovalori e autostati</h2>
-    Gli operatori possono avere autovalori e autostati, soddisfacendo:
-    <div class="formula">
-        \[
-        \hat{A} \psi = a \psi
-        \]
-    </div>
-    dove \( a \) è l'autovalore e \( \psi \) l'autostato. Ad esempio, per \( \hat{p}_x \), gli autostati sono funzioni d'onda piane:
-    <div class="formula">
-        \[
-        \psi(x) = e^{i k x}
-        \]
-    </div>
-
-    <h2>Operatori hermitiani</h2>
-    Gli operatori associati a osservabili fisiche sono hermitiani, soddisfacendo:
-    <div class="formula">
-        \[
-        \int \psi_1^*(\hat{A} \psi_2) dx = \int (\hat{A} \psi_1)^* \psi_2 dx
-        \]
-    </div>
-    Questo garantisce che gli autovalori siano reali.
-
-    <h2>Prodotto scalare e completezza</h2>
-    Il prodotto scalare tra due funzioni d'onda \( \phi \) e \( \psi \) è definito come:
-    <div class="formula">
-        \[
-        \langle \phi | \psi \rangle = \int \phi^*(x) \psi(x) dx
-        \]
-    </div>
-    Gli autostati di un operatore hermitiano formano una base completa per lo spazio delle funzioni d'onda, consentendo di espandere qualsiasi stato come:
-    <div class="formula">
-        \[
-        \psi(x) = \sum_n c_n \phi_n(x)
-        \]
-    </div>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 2</div>
-  <h2>Calcolo Operatoriale: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Usare prodotti, commutatori, aggiunti e funzioni di operatori senza perdere l'ordine non commutativo.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Il calcolo operatoriale traduce la dinamica in identità algebriche. La difficoltà principale è che l'ordine conta: (AB) significa applicare prima \(B\), e le regole di derivazione dei commutatori sostituiscono molte espansioni in coordinate.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Regola di Leibniz<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>La si ottiene aggiungendo e sottraendo (BAC).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="[A,BC]=[A,B]C+B[A,C]"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [A,BC]=ABC-BCA=(ABC-BAC)+(BAC-BCA)=[A,B]C+B[A,C]\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Potenze canoniche<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Da \([x,p]=i\hbar\) segue per induzione la derivata formale dei polinomi.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="[x,p^n]=i\hbar n p^{n-1},\qquad [p,x^n]=-i\hbar n x^{n-1}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [x,p^{n+1}]=[x,p^n]p+p^n[x,p]=(i\hbar np^{n-1})p+i\hbar p^n=i\hbar(n+1)p^n\Rightarrow[x,p^n]=i\hbar np^{n-1}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>3. Coniugazione<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>La formula BCH genera trasformazioni finite quando i commutatori annidati terminano.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="e^A B e^{-A}=B+[A,B]+\frac1{2!}[A,[A,B]]+\cdots"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle F(s)=e^{sA}Be^{-sA},\quad F'(s)=e^{sA}[A,B]e^{-sA}\Rightarrow F(1)=B+[A,B]+\frac1{2!}[A,[A,B]]+\cdots\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Traslazione di x</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Poni \(A=-ia p/\hbar\).</p>
-    <p><strong>Calcolo.</strong> Poiché \([A,x]=-a\) e i commutatori successivi sono nulli, \(e^Axe^{-A}=x-a\).</p>
-    <p><strong>Risultato e controllo.</strong> A seconda della convenzione attiva o passiva, il segno va collegato all'azione sul ket o sulla funzione d'onda.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P1_DIM_0-6.txt">DIM 3</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Domini comuni necessari per operatori non limitati.</li>
-          <li>Non sostituire operatori con numeri prima di aver gestito i commutatori.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Il commutatore misura l'ostruzione a scambiare due operazioni e, fisicamente, controlla compatibilità, generatori e moto temporale.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Dimostra la regola di Jacobi.</li>
-          <li>Calcola \([x^2,p^2]\) mantenendo l'ordine.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=55">Appunti-MQ.pdf, pp. 55-63 e 86-105: operatori, commutatori e rappresentazioni</a></li>
-          <li><a href="MQ.pdf#page=2">MQ.pdf, pp. capitoli 2-5: algebra lineare degli operatori</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
+</div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" id="lezione-calcolo-operatoriale">
+<div class="lecture-kicker">Lezione approfondita - Argomento 3 - DIM 0 e DIM 3</div>
+<h1>Calcolo operatoriale</h1>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Usare operatori, aggiunti, proiettori e commutatori senza trattarli come numeri; dimostrare le identità di Leibniz, Jacobi, potenze, inversi e coniugazione unitaria, quindi applicarle alle relazioni canoniche e alle funzioni di operatori.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Ordine operativo</h3>
+<p>Nel prodotto <span class="mq-math" data-i18n-skip="true">\(\hat A\hat B|\psi\rangle\)</span> agisce prima <span class="mq-math" data-i18n-skip="true">\(\hat B\)</span>. In generale <span class="mq-math" data-i18n-skip="true">\(\hat A\hat B\ne\hat B\hat A\)</span>; il commutatore misura precisamente la differenza tra i due ordini.</p>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Dominio operativo</h3>
+<p>Per operatori non limitati come posizione e impulso, le identità valgono sugli stati per cui tutti i prodotti coinvolti sono definiti. Simmetrico su un dominio non significa automaticamente autoaggiunto.</p>
+</article>
+</div>
+<h2>Base, matrici e completezza</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Elementi di matrice</h3>
+<p>Inserire l'identità tra operatore e stato trasforma l'azione astratta nel consueto prodotto matrice-vettore.</p>
+<div aria-label="Sviluppo di un operatore in una base ortonormale" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \mathbf1=\sum_n|n\rangle\langle n|,\qquad\hat A=\sum_{mn}|m\rangle A_{mn}\langle n|,\quad A_{mn}=\langle m|\hat A|n\rangle\)</span></div>
+</article>
+<article class="lecture-card">
+<h3>Prodotto esterno e proiettore</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(|u\rangle\langle v|\)</span> è un operatore di rango uno. Se il ket è normalizzato, <span class="mq-math" data-i18n-skip="true">\(\hat P_u=|u\rangle\langle u|\)</span> proietta lungo <span class="mq-math" data-i18n-skip="true">\(|u\rangle\)</span>.</p>
+<div aria-label="Azione di un prodotto esterno e proprietà di un proiettore" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle (|u\rangle\langle v|)|\psi\rangle=|u\rangle\langle v|\psi\rangle,\qquad\hat P_u^2=|u\rangle\langle u|u\rangle\langle u|=\hat P_u,\quad\hat P_u^\dagger=\hat P_u\)</span></div>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Linearità<span class="lecture-step-boss">BASE</span></h4>
+<p>Un operatore lineare distribuisce sulla sovrapposizione e porta fuori gli scalari complessi.</p>
+<div aria-label="Definizione di operatore lineare" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \hat A(\alpha|\psi\rangle+\beta|\phi\rangle)=\alpha\hat A|\psi\rangle+\beta\hat A|\phi\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Prodotto di operatori<span class="lecture-step-boss">BASE</span></h4>
+<p>L'identità inserita tra i fattori produce il prodotto righe per colonne e fissa l'ordine.</p>
+<div aria-label="Elementi di matrice del prodotto di operatori" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (AB)_{mn}=\langle m|\hat A\mathbf1\hat B|n\rangle=\sum_k\langle m|\hat A|k\rangle\langle k|\hat B|n\rangle=\sum_kA_{mk}B_{kn}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Commutatore<span class="lecture-step-boss">DIM 3</span></h4>
+<p>Definizione, antisimmetria e bilinearità seguono direttamente dalla distributività del prodotto.</p>
+<div aria-label="Definizione e proprietà elementari del commutatore" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [A,B]=AB-BA,\quad[A,B]=-[B,A],\quad[A,\alpha B+\beta C]=\alpha[A,B]+\beta[A,C],\quad[A,\mathbf1]=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Regola di Leibniz<span class="lecture-step-boss">DIM 3</span></h4>
+<p>Si aggiunge e sottrae il termine intermedio <span class="mq-math" data-i18n-skip="true">\(BAC\)</span>.</p>
+<div aria-label="Dimostrazione della regola di Leibniz per i commutatori" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [A,BC]=ABC-BCA=ABC-BAC+BAC-BCA=[A,B]C+B[A,C]\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Identità di Jacobi<span class="lecture-step-boss">ORALE</span></h4>
+<p>Espandendo i tre doppi commutatori, ciascun prodotto ordinato compare una volta con ogni segno.</p>
+<div aria-label="Identità di Jacobi per tre operatori" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle [A,[B,C]]+[B,[C,A]]+[C,[A,B]]=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Aggiunto del prodotto<span class="lecture-step-boss">DIM 0</span></h4>
+<p>L'aggiunto inverte l'ordine perché il prodotto scalare trasferisce prima l'operatore più esterno.</p>
+<div aria-label="Dimostrazione dell'aggiunto di un prodotto" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle\phi|AB\psi\rangle=\langle A^\dagger\phi|B\psi\rangle=\langle B^\dagger A^\dagger\phi|\psi\rangle\Rightarrow(AB)^\dagger=B^\dagger A^\dagger\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Aggiunto del commutatore<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Il commutatore di due operatori autoaggiunti è anti-autoaggiunto; moltiplicarlo per <span class="mq-math" data-i18n-skip="true">\(-i\)</span> dà un operatore autoaggiunto.</p>
+<div aria-label="Anti-autoaggiuntezza del commutatore di osservabili" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle A^\dagger=A,\ B^\dagger=B:\quad[A,B]^\dagger=(AB-BA)^\dagger=BA-AB=-[A,B],\quad(-i[A,B])^\dagger=-i[A,B]\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Commutatore canonico<span class="lecture-step-boss">DIM 3</span></h4>
+<p>La derivata deve agire sul prodotto <span class="mq-math" data-i18n-skip="true">\(x\psi\)</span>; omettere il termine derivato di <span class="mq-math" data-i18n-skip="true">\(x\)</span> cancella erroneamente tutto.</p>
+<div aria-label="Derivazione del commutatore canonico posizione impulso" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [x,p]\psi=x(-i\hbar\psi')-[-i\hbar(x\psi)']=-i\hbar x\psi'+i\hbar(x\psi'+\psi)=i\hbar\psi\Rightarrow[x,p]=i\hbar\mathbf1\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Potenze<span class="lecture-step-boss">DIM 3</span></h4>
+<p>Iterando Leibniz si ottiene la somma ordinata; soltanto per un commutatore centrale i termini diventano uguali.</p>
+<div aria-label="Commutatore con una potenza di operatore" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [A,B^n]=\sum_{k=0}^{n-1}B^k[A,B]B^{n-1-k},\qquad[[A,B],B]=0\Rightarrow[A,B^n]=n[A,B]B^{n-1}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Funzioni canoniche<span class="lecture-step-boss">DIM 3</span></h4>
+<p>La regola delle potenze estende la derivata ai polinomi e, per serie convergenti, alle funzioni analitiche.</p>
+<div aria-label="Commutatori di posizione e impulso con funzioni" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle [p,f(x)]=-i\hbar f'(x),\qquad[x,g(p)]=i\hbar g'(p)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Operatore inverso<span class="lecture-step-boss">ORALE</span></h4>
+<p>Si applica Leibniz all'identità <span class="mq-math" data-i18n-skip="true">\(BB^{-1}=\mathbf1\)</span> e si moltiplica a sinistra per l'inverso.</p>
+<div aria-label="Commutatore con l'inverso di un operatore" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle 0=[A,BB^{-1}]=[A,B]B^{-1}+B[A,B^{-1}]\Rightarrow[A,B^{-1}]=-B^{-1}[A,B]B^{-1}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Calcolo spettrale<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Le funzioni di un operatore autoaggiunto agiscono sui suoi sottospazi spettrali sostituendo l'autovalore nella funzione.</p>
+<div aria-label="Rappresentazione spettrale e funzione di un operatore" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle A=\sum_n a_nP_n,\quad P_nP_m=\delta_{nm}P_n,\quad\sum_nP_n=\mathbf1\Rightarrow f(A)=\sum_nf(a_n)P_n\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Cambio di base<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Una base ortonormale cambia tramite unitaria; valori medi e commutatori sono invarianti se si trasformano insieme stati e operatori.</p>
+<div aria-label="Trasformazione unitaria di stati operatori e commutatori" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle |\psi\rangle_b=U^\dagger|\psi\rangle_a,\quad A_b=U^\dagger A_aU,\quad[A_b,B_b]=U^\dagger[A_a,B_a]U,\quad\langle\psi|A|\psi\rangle_b=\langle\psi|A|\psi\rangle_a\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Coniugazione esponenziale<span class="lecture-step-boss">ORALE</span></h4>
+<p>La serie di Hadamard organizza i commutatori annidati. Per una traslazione la serie termina al primo ordine.</p>
+<div aria-label="Lemma di Hadamard e traslazione dell'operatore posizione" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle e^XYe^{-X}=Y+[X,Y]+\frac1{2!}[X,[X,Y]]+\cdots,\quad T(a)=e^{-iap/\hbar}\Rightarrow T^\dagger(a)xT(a)=x+a\mathbf1\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: non perdere l'ordine</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Relazione canonica <span class="mq-math" data-i18n-skip="true">\([x,p]=i\hbar\)</span>. Calcolare <span class="mq-math" data-i18n-skip="true">\([x^2,p^3]\)</span> senza sostituire gli operatori con numeri.</p>
+<p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\([x^2,p]=2i\hbar x\)</span>, dunque <span class="mq-math" data-i18n-skip="true">\([x^2,p^3]=2i\hbar(xp^2+pxp+p^2x)=3i\hbar\{x,p^2\}\)</span>.</p>
+<p><strong>Risultato.</strong> Ordinando <span class="mq-math" data-i18n-skip="true">\(x\)</span> a sinistra: <span class="mq-math" data-i18n-skip="true">\([x^2,p^3]=6i\hbar xp^2+6\hbar^2p\)</span>. Il secondo termine è la correzione persa da un calcolo commutativo ingenuo.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Commutatore e anticommutatore</h3>
+<p>Ogni prodotto si separa in parte antisimmetrica e simmetrica: <span class="mq-math" data-i18n-skip="true">\(AB=\tfrac12[A,B]+\tfrac12\{A,B\}\)</span>. Per osservabili, <span class="mq-math" data-i18n-skip="true">\(\tfrac12\{A,B\}\)</span> è autoaggiunto e fornisce l'ordinamento simmetrizzato del prodotto classico.</p>
+</article>
+<article class="lecture-card">
+<h3>Test con matrici di Pauli</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(\sigma_x\sigma_y=i\sigma_z\)</span> e <span class="mq-math" data-i18n-skip="true">\(\sigma_y\sigma_x=-i\sigma_z\)</span>, quindi <span class="mq-math" data-i18n-skip="true">\([\sigma_x,\sigma_y]=2i\sigma_z\)</span> mentre <span class="mq-math" data-i18n-skip="true">\(\{\sigma_x,\sigma_y\}=0\)</span>.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Invertire l'ordine in <span class="mq-math" data-i18n-skip="true">\((AB)^\dagger\)</span>.</li>
+<li>Scrivere sempre <span class="mq-math" data-i18n-skip="true">\([A,B^n]=n[A,B]B^{n-1}\)</span> senza controllare il commutatore annidato.</li>
+<li>Usare <span class="mq-math" data-i18n-skip="true">\([A,BC]=[A,B][A,C]\)</span> al posto della regola di Leibniz.</li>
+<li>Dimenticare che la derivata in <span class="mq-math" data-i18n-skip="true">\(p=-i\hbar\partial_x\)</span> agisce su tutto ciò che segue.</li>
+<li>Confondere trasformazione attiva dello stato e cambio passivo di base.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Controlli rapidi</h3>
+<p><span class="mq-math" data-i18n-skip="true">\([A,B]\)</span> ha dimensioni del prodotto <span class="mq-math" data-i18n-skip="true">\(AB\)</span>; l'esponente di un operatore deve essere adimensionale; la traccia di un commutatore finito è nulla; un commutatore di autoaggiunti è anti-autoaggiunto.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Definisci prodotto, commutatore, aggiunto e prodotto esterno.</li>
+<li>Inserisci la completezza per ottenere il prodotto matriciale.</li>
+<li>Dimostra Leibniz aggiungendo e sottraendo il termine intermedio corretto.</li>
+<li>Espandi Jacobi e mostra la cancellazione dei sei prodotti.</li>
+<li>Dimostra <span class="mq-math" data-i18n-skip="true">\((AB)^\dagger=B^\dagger A^\dagger\)</span> dal prodotto scalare.</li>
+<li>Calcola <span class="mq-math" data-i18n-skip="true">\([x,p]\)</span> su una funzione di prova.</li>
+<li>Ricava le formule per potenze, funzioni e inversi.</li>
+<li>Spiega il calcolo spettrale e il ruolo dei proiettori degeneri.</li>
+<li>Mostra che una trasformazione unitaria conserva commutatori e valori medi.</li>
+<li>Applica la serie di Hadamard a una traslazione spaziale.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 e DIM 3</a> - autoaggiuntezza, unitarietà, commutatori e osservabili compatibili</li>
+<li><a href="Appunti-MQ.pdf#page=55">Appunti-MQ.pdf, pagine PDF 55-63</a> - operatori, matrici, prodotti esterni, aggiunti e cambi di base</li>
+<li><a href="Appunti-MQ.pdf#page=86">Appunti-MQ.pdf, pagine PDF 86-105</a> - posizione, impulso, traslazioni e commutatori canonici</li>
+<li><a href="MQ.pdf#page=2">MQ.pdf, pagine PDF 2-12</a> - algebra lineare, completezza e rappresentazione spettrale</li>
+</ul>
+<p class="lecture-note">La pagina raccoglie gli strumenti algebrici. Compatibilità, misure, Ehrenfest e generatori sono sviluppati nelle rispettive lezioni dedicate.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 3 - DIM 0 e DIM 3":"In-depth lesson - Topic 3 - DIM 0 and DIM 3","Calcolo operatoriale":"Operator calculus","Usare operatori, aggiunti, proiettori e commutatori senza trattarli come numeri; dimostrare le identità di Leibniz, Jacobi, potenze, inversi e coniugazione unitaria, quindi applicarle alle relazioni canoniche e alle funzioni di operatori.":"Use operators, adjoints, projectors, and commutators without treating them as numbers; prove the Leibniz, Jacobi, power, inverse, and unitary-conjugation identities, then apply them to canonical relations and functions of operators.","Ordine operativo":"Order of operations","Nel prodotto":"In the product","agisce prima":"acts first",". In generale":". In general","; il commutatore misura precisamente la differenza tra i due ordini.":"; the commutator measures precisely the difference between the two orders.","Dominio operativo":"Operator domains","Per operatori non limitati come posizione e impulso, le identità valgono sugli stati per cui tutti i prodotti coinvolti sono definiti. Simmetrico su un dominio non significa automaticamente autoaggiunto.":"For unbounded operators such as position and momentum, the identities hold on states for which every product involved is defined. Symmetric on a domain does not automatically mean self-adjoint.","Base, matrici e completezza":"Basis, matrices, and completeness","Elementi di matrice":"Matrix elements","Inserire l'identità tra operatore e stato trasforma l'azione astratta nel consueto prodotto matrice-vettore.":"Inserting the identity between an operator and a state turns the abstract action into the usual matrix-vector product.","Prodotto esterno e proiettore":"Outer product and projector","è un operatore di rango uno. Se il ket è normalizzato,":"is a rank-one operator. If the ket is normalized,","proietta lungo":"projects onto","Dimostrazioni compatte":"Compact derivations","Un operatore lineare distribuisce sulla sovrapposizione e porta fuori gli scalari complessi.":"A linear operator distributes over a superposition and factors out complex scalars.","2. Prodotto di operatori":"2. Product of operators","L'identità inserita tra i fattori produce il prodotto righe per colonne e fissa l'ordine.":"The identity inserted between the factors yields the row-by-column product and fixes the order.","Definizione, antisimmetria e bilinearità seguono direttamente dalla distributività del prodotto.":"Definition, antisymmetry, and bilinearity follow directly from distributivity of the product.","4. Regola di Leibniz":"4. Leibniz rule","Si aggiunge e sottrae il termine intermedio":"Add and subtract the intermediate term","5. Identità di Jacobi":"5. Jacobi identity","Espandendo i tre doppi commutatori, ciascun prodotto ordinato compare una volta con ogni segno.":"After expanding the three nested commutators, each ordered product appears once with each sign.","6. Aggiunto del prodotto":"6. Adjoint of a product","L'aggiunto inverte l'ordine perché il prodotto scalare trasferisce prima l'operatore più esterno.":"The adjoint reverses the order because the inner product transfers the outermost operator first.","7. Aggiunto del commutatore":"7. Adjoint of a commutator","Il commutatore di due operatori autoaggiunti è anti-autoaggiunto; moltiplicarlo per":"The commutator of two self-adjoint operators is anti-self-adjoint; multiplying it by","dà un operatore autoaggiunto.":"gives a self-adjoint operator.","8. Commutatore canonico":"8. Canonical commutator","La derivata deve agire sul prodotto":"The derivative must act on the product","; omettere il termine derivato di":"; omitting the derivative term of","cancella erroneamente tutto.":"incorrectly makes everything cancel.","Iterando Leibniz si ottiene la somma ordinata; soltanto per un commutatore centrale i termini diventano uguali.":"Iterating the Leibniz rule yields the ordered sum; only when the commutator is central do all terms become equal.","10. Funzioni canoniche":"10. Canonical functions","La regola delle potenze estende la derivata ai polinomi e, per serie convergenti, alle funzioni analitiche.":"The power rule extends the derivative identity to polynomials and, through convergent series, to analytic functions.","11. Operatore inverso":"11. Inverse operator","Si applica Leibniz all'identità":"Apply the Leibniz rule to the identity","e si moltiplica a sinistra per l'inverso.":"and multiply on the left by the inverse.","12. Calcolo spettrale":"12. Spectral calculus","Le funzioni di un operatore autoaggiunto agiscono sui suoi sottospazi spettrali sostituendo l'autovalore nella funzione.":"Functions of a self-adjoint operator act on its spectral subspaces by substituting each eigenvalue into the function.","13. Cambio di base":"13. Change of basis","Una base ortonormale cambia tramite unitaria; valori medi e commutatori sono invarianti se si trasformano insieme stati e operatori.":"An orthonormal basis changes through a unitary transformation; expectation values and commutators are invariant when states and operators are transformed consistently.","14. Coniugazione esponenziale":"14. Exponential conjugation","La serie di Hadamard organizza i commutatori annidati. Per una traslazione la serie termina al primo ordine.":"The Hadamard series organizes nested commutators. For a translation, the series terminates at first order.","Esempio d'esame: non perdere l'ordine":"Exam example: preserve operator ordering","Relazione canonica":"Canonical relation","senza sostituire gli operatori con numeri.":"without replacing the operators by commuting numbers.",". Il secondo termine è la correzione persa da un calcolo commutativo ingenuo.":". The second term is the correction lost in a naive commutative calculation.","Commutatore e anticommutatore":"Commutator and anticommutator","Ogni prodotto si separa in parte antisimmetrica e simmetrica:":"Every product splits into antisymmetric and symmetric parts:",". Per osservabili,":". For observables,","è autoaggiunto e fornisce l'ordinamento simmetrizzato del prodotto classico.":"is self-adjoint and gives the symmetrized ordering of the classical product.","Test con matrici di Pauli":"Check with Pauli matrices",", quindi":", hence","Errori tipici":"Common errors","Invertire l'ordine in":"Reversing the wrong order in","Scrivere sempre":"Always writing","senza controllare il commutatore annidato.":"without checking the nested commutator.","al posto della regola di Leibniz.":"instead of the Leibniz rule.","Dimenticare che la derivata in":"Forgetting that the derivative in","agisce su tutto ciò che segue.":"acts on everything to its right.","Confondere trasformazione attiva dello stato e cambio passivo di base.":"Confusing an active transformation of the state with a passive change of basis.","Controlli rapidi":"Quick checks","ha dimensioni del prodotto":"has the dimensions of the product","; l'esponente di un operatore deve essere adimensionale; la traccia di un commutatore finito è nulla; un commutatore di autoaggiunti è anti-autoaggiunto.":"; the exponent of an operator must be dimensionless; the trace of a finite-dimensional commutator vanishes; a commutator of self-adjoint operators is anti-self-adjoint.","Controllo da orale":"Oral exam checklist","Definisci prodotto, commutatore, aggiunto e prodotto esterno.":"Define operator product, commutator, adjoint, and outer product.","Inserisci la completezza per ottenere il prodotto matriciale.":"Insert completeness to obtain matrix multiplication.","Dimostra Leibniz aggiungendo e sottraendo il termine intermedio corretto.":"Prove the Leibniz rule by adding and subtracting the correct intermediate term.","Espandi Jacobi e mostra la cancellazione dei sei prodotti.":"Expand the Jacobi identity and show the cancellation of all six products.","dal prodotto scalare.":"from the inner product.","su una funzione di prova.":"on a test function.","Ricava le formule per potenze, funzioni e inversi.":"Derive the formulas for powers, functions, and inverses.","Spiega il calcolo spettrale e il ruolo dei proiettori degeneri.":"Explain spectral calculus and the role of degenerate projectors.","Mostra che una trasformazione unitaria conserva commutatori e valori medi.":"Show that a unitary transformation preserves commutators and expectation values.","Applica la serie di Hadamard a una traslazione spaziale.":"Apply the Hadamard series to a spatial translation.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 e DIM 3":"DIM 0 and DIM 3","- autoaggiuntezza, unitarietà, commutatori e osservabili compatibili":"- self-adjointness, unitarity, commutators, and compatible observables","Appunti-MQ.pdf, pagine PDF 55-63":"Appunti-MQ.pdf, PDF pages 55-63","- operatori, matrici, prodotti esterni, aggiunti e cambi di base":"- operators, matrices, outer products, adjoints, and changes of basis","Appunti-MQ.pdf, pagine PDF 86-105":"Appunti-MQ.pdf, PDF pages 86-105","- posizione, impulso, traslazioni e commutatori canonici":"- position, momentum, translations, and canonical commutators","MQ.pdf, pagine PDF 2-12":"MQ.pdf, PDF pages 2-12","- algebra lineare, completezza e rappresentazione spettrale":"- linear algebra, completeness, and spectral representation","La pagina raccoglie gli strumenti algebrici. Compatibilità, misure, Ehrenfest e generatori sono sviluppati nelle rispettive lezioni dedicate.":"This page collects the algebraic tools. Compatibility, measurements, Ehrenfest's theorem, and generators are developed in their dedicated lessons.","Ritorna all'indice MQ":"Return to the MQ index","1. Linearità":"1. Linearity","3. Commutatore":"3. Commutator","9. Potenze":"9. Powers","Obiettivo.":"Goal.","Def":"Def","Base":"Core","Risultato":"Result","Check":"Check","Estensione":"Extension","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","Calcolare":"Calculate","Ordinando":"Ordering","Dimostra":"Prove","Calcola":"Calculate"},"attrs":{"Sviluppo di un operatore in una base ortonormale":"Expansion of an operator in an orthonormal basis","Azione di un prodotto esterno e proprietà di un proiettore":"Action of an outer product and properties of a projector","Definizione di operatore lineare":"Definition of a linear operator","Elementi di matrice del prodotto di operatori":"Matrix elements of a product of operators","Definizione e proprietà elementari del commutatore":"Definition and elementary properties of the commutator","Dimostrazione della regola di Leibniz per i commutatori":"Proof of the Leibniz rule for commutators","Identità di Jacobi per tre operatori":"Jacobi identity for three operators","Dimostrazione dell'aggiunto di un prodotto":"Proof of the adjoint of a product","Anti-autoaggiuntezza del commutatore di osservabili":"Anti-self-adjointness of the commutator of observables","Derivazione del commutatore canonico posizione impulso":"Derivation of the canonical position-momentum commutator","Commutatore con una potenza di operatore":"Commutator with a power of an operator","Commutatori di posizione e impulso con funzioni":"Commutators of position and momentum with functions","Commutatore con l'inverso di un operatore":"Commutator with the inverse of an operator","Rappresentazione spettrale e funzione di un operatore":"Spectral representation and function of an operator","Trasformazione unitaria di stati operatori e commutatori":"Unitary transformation of states, operators, and commutators","Lemma di Hadamard e traslazione dell'operatore posizione":"Hadamard lemma and translation of the position operator"},"title":{"it":"Calcolo operatoriale - Dimostrazioni e ripasso orale","en":"Operator calculus - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
