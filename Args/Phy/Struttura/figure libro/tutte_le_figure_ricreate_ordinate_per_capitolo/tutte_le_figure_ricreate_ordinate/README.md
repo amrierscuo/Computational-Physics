@@ -1,4 +1,4 @@
-# Figure e tabelle ricreate — ordine per libro e capitolo
+# Figure e tabelle ricreate - ordine per libro e capitolo
 
 Questo archivio contiene:
 

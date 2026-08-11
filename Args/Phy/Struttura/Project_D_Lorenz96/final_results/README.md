@@ -1,4 +1,4 @@
-# Lorenz96 curated results — V2
+# Lorenz96 curated results - V2
 
 This is a refined presentation package.
 

@@ -6,10 +6,10 @@ ASSETS 3D (procedurali)
 Creati apposta per il progetto MQ. Uso libero.
 
 ====================================================================
-COORDINATE COUNTING (RINGS + GRID) — recap con offset lampioni = pi/16
+COORDINATE COUNTING (RINGS + GRID) - recap con offset lampioni = pi/16
 ====================================================================
 
-[0] HEADER — LOGICA GENERAZIONE ENVIRONMENT 3D (come è costruito)
+[0] HEADER - LOGICA GENERAZIONE ENVIRONMENT 3D (come è costruito)
 -----------------------------------------------------------------
 Questo environment 3D è costruito con 3 “famiglie” di posizionamenti:
 
@@ -71,7 +71,7 @@ SE offset = pi/16 (attuale):
    (si sposta di ±11.25° dalle direzioni dei pilastri).
 
 -----------------------------------------------------------------
-[2] LAMPIONI — RICALCOLO COORDINATE CON offset = pi/16, R=18, N=8
+[2] LAMPIONI - RICALCOLO COORDINATE CON offset = pi/16, R=18, N=8
 -----------------------------------------------------------------
 Formula:
   ang = (i/8)*2*pi + pi/16 = i*(pi/4) + pi/16
@@ -88,7 +88,7 @@ L6: ang=4.908739 rad (281.25°)  x=  3.512  z=-17.654
 L7: ang=5.694137 rad (326.25°)  x= 14.966  z=-10.000
 
 -----------------------------------------------------------------
-[3] “CUBI” SUI PILASTRI — COORDINATE (ring N=16, R=24, offset=0)
+[3] “CUBI” SUI PILASTRI - COORDINATE (ring N=16, R=24, offset=0)
 -----------------------------------------------------------------
 Formula:
   ang = (i/16)*2*pi = i*(pi/8)
@@ -117,7 +117,7 @@ NOTA “collinearità vecchia” (offset lamp=pi/8):
   C01, C03, C05, C07, C09, C11, C13, C15
 
 -----------------------------------------------------------------
-[4] BLOCCHI DIM (GRID 6x3) — COORDINATE XZ (DIM 1..18)
+[4] BLOCCHI DIM (GRID 6x3) - COORDINATE XZ (DIM 1..18)
 -----------------------------------------------------------------
 Parametri:
   cols=6 rows=3 spacing=6
@@ -179,7 +179,7 @@ NOTA PRATICA:
   -> NON aggiungerlo a colliders[].
 
 -----------------------------------------------------------------
-[6] OFFLINE (senza internet) — come farlo funzionare in caso
+[6] OFFLINE (senza internet) - come farlo funzionare in caso
 -----------------------------------------------------------------
 Questo file usa librerie da CDN (Three.js, KaTeX). Per OFFLINE:
 

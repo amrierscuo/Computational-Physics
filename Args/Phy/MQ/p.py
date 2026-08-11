@@ -14,7 +14,7 @@ questions = [
     "Perturbazioni dipendenti dal tempo",
     "Principio di Heisenberg",
     "Pacchetto d’onda a indeterminazione minima",
-    "Coefficienti di Clebsch–Gordan",
+    "Coefficienti di Clebsch-Gordan",
     "Gradino di potenziale",
     "Composizione di momenti angolari totali"
 ]
