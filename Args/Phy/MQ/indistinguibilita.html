@@ -1,401 +1,141 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indistinguibilità</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Particelle identiche e indistinguibilità</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Indistinguibilità</h1>
-    <p>
-        Nel contesto della meccanica quantistica, il concetto di indistinguibilità si applica a particelle elementari identiche, come elettroni, protoni o neutroni, che non possono essere differenziate nemmeno in principio. Ciò implica che lo scambio di due particelle identiche non produce alcun effetto osservabile.
-    </p>
-    <div>
-        <h2>Simmetria dello stato quantistico</h2>
-        <p>
-            Per particelle indistinguibili, lo stato quantistico complessivo del sistema deve rispettare specifiche simmetrie:
-        </p>
-        <ul>
-            <li>
-                <strong>Fermioni:</strong> Per particelle con spin semi-intero (\( \frac{1}{2}, \frac{3}{2}, \dots \)), lo stato complessivo deve essere <em>antisimmetrico</em> rispetto allo scambio di due particelle:
-                <div class="formula">
-                    \(\psi(1, 2) = -\psi(2, 1)\)
-                </div>
-            </li>
-            <li>
-                <strong>Bosoni:</strong> Per particelle con spin intero (\( 0, 1, 2, \dots \)), lo stato complessivo deve essere <em>simmetrico</em>:
-                <div class="formula">
-                    \(\psi(1, 2) = \psi(2, 1)\)
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div>
-        <h2>Effetti dell'indistinguibilità</h2>
-        <p>
-            L'indistinguibilità porta a conseguenze fisiche significative, tra cui:
-        </p>
-        <ul>
-            <li>
-                <strong>Principio di esclusione di Pauli:</strong> Per i fermioni, due particelle non possono occupare lo stesso stato quantico:
-                <div class="formula">
-                    \(\psi(1, 2) = 0 \quad \text{se } 1 = 2\)
-                </div>
-            </li>
-            <li>
-                <strong>Distribuzioni statistiche:</strong> Bosoni e fermioni seguono rispettivamente la statistica di Bose-Einstein e di Fermi-Dirac.
-            </li>
-        </ul>
-    </div>
-    <div>
-        <h2>Rappresentazioni Matematiche</h2>
-        <p>
-            Per un sistema di \( N \) particelle indistinguibili, lo stato complessivo si rappresenta con una combinazione lineare che include tutti i possibili scambi tra particelle. Ad esempio, per due particelle fermioniche:
-        </p>
-        <div class="formula">
-            \(\Psi(1, 2) = \frac{1}{\sqrt{2}} \left( \psi_a(1)\psi_b(2) - \psi_a(2)\psi_b(1) \right)\)
-        </div>
-        <p>
-            Per bosoni, la combinazione lineare diventa:
-        </p>
-        <div class="formula">
-            \(\Psi(1, 2) = \frac{1}{\sqrt{2}} \left( \psi_a(1)\psi_b(2) + \psi_a(2)\psi_b(1) \right)\)
-        </div>
-    </div>
-	    <div>
-        <h2>Operatori di scambio</h2>
-        <p>
-            In meccanica quantistica, l'operatore di scambio \( \hat{P}_{12} \) scambia le coordinate di due particelle. Applicando questo operatore allo stato quantistico di due particelle, si ottiene:
-        </p>
-        <div class="formula">
-            \(\hat{P}_{12} \Psi(1, 2) = \Psi(2, 1)\)
-        </div>
-        <p>
-            Gli autovalori dell'operatore di scambio sono \( +1 \) e \( -1 \), corrispondenti rispettivamente a stati simmetrici (bosoni) e antisimmetrici (fermioni). Questo implica che:
-        </p>
-        <div class="formula">
-            \(\hat{P}_{12}^2 = \hat{I}\)
-        </div>
-        <p>
-            dove \( \hat{I} \) è l'operatore identità. Ciò riflette il fatto che scambiare due particelle identiche due volte lascia invariato lo stato.
-        </p>
-    </div>
-    <div>
-        <h2>Determinante di Slater</h2>
-        <p>
-            Per descrivere il comportamento di un sistema di \( N \) fermioni, lo stato complessivo deve essere antisimmetrico rispetto a qualsiasi scambio di particelle. Questo è realizzato tramite il determinante di Slater:
-        </p>
-        <div class="formula">
-            \(\Psi(1, 2, \dots, N) = \frac{1}{\sqrt{N!}} \begin{vmatrix}
-            \psi_1(1) & \psi_2(1) & \dots & \psi_N(1) \\
-            \psi_1(2) & \psi_2(2) & \dots & \psi_N(2) \\
-            \vdots & \vdots & \ddots & \vdots \\
-            \psi_1(N) & \psi_2(N) & \dots & \psi_N(N)
-            \end{vmatrix}\)
-        </div>
-        <p>
-            Questo determinante garantisce che il risultato sia zero se due particelle occupano lo stesso stato quantico, come richiesto dal principio di esclusione di Pauli.
-        </p>
-    </div>
-    <div>
-        <h2>Distribuzioni statistiche</h2>
-        <p>
-            L'indistinguibilità influenza le distribuzioni statistiche delle particelle:
-        </p>
-        <ul>
-            <li>
-                <strong>Bose-Einstein:</strong> Per bosoni, la probabilità di trovare più particelle nello stesso stato aumenta, portando al fenomeno della condensazione di Bose-Einstein.
-            </li>
-            <li>
-                <strong>Fermi-Dirac:</strong> Per fermioni, il principio di esclusione di Pauli impedisce che due particelle occupino lo stesso stato, generando una configurazione dove gli stati energetici più bassi sono occupati (esempio: gas di elettroni nei metalli).
-            </li>
-        </ul>
-    </div>
-    <div>
-        <h2>Applicazioni pratiche</h2>
-        <p>
-            L'indistinguibilità delle particelle ha applicazioni dirette in molti fenomeni fisici:
-        </p>
-        <ul>
-            <li>
-                <strong>Spettri atomici:</strong> La struttura fine degli spettri è spiegata considerando gli scambi tra elettroni.
-            </li>
-            <li>
-                <strong>Superconduttività:</strong> La formazione di coppie di Cooper tra elettroni di spin opposto sfrutta la simmetria della funzione d'onda.
-            </li>
-            <li>
-                <strong>Fisica dello stato solido:</strong> Le proprietà dei semiconduttori e dei metalli dipendono dalla statistica di Fermi-Dirac.
-            </li>
-        </ul>
-    </div>
-	<div>
-    <h2>Condizioni al contorno: bosoni e fermioni</h2>
-    <p>
-        In sistemi con coordinate cicliche (ad esempio una particella su un anello di lunghezza <span class="formula">b</span>), la simmetria della funzione d’onda rispetto allo scambio delle particelle impone condizioni specifiche ai bordi:
-    </p>
-    <ul>
-        <li>
-            <strong>Bosoni:</strong> La funzione d’onda totale è simmetrica, quindi deve essere <strong>periodica</strong>:
-            <div class="formula">\(\psi(x + b) = \psi(x)\)</div>
-            <p>
-                Si cerca una soluzione del tipo <span class="formula">\(\psi(x) = e^{i \lambda x}\)</span>. Applicando la condizione periodica si ha:
-            </p>
-            <div class="formula">
-                \(e^{i\lambda(x + b)} = e^{i\lambda x} \Rightarrow e^{i\lambda b} = 1\)
-            </div>
-            <p>
-                Questa equazione è verificata per <span class="formula">\(\lambda b = 2\pi n\)</span> con <span class="formula">n \in \mathbb{Z}</span>, cioè:
-            </p>
-            <div class="formula">
-                \(\lambda = \frac{2\pi n}{b}\)
-            </div>
-            <p>
-                I valori ammessi del momento angolare (ad esempio, per <span class="formula">\(\hat{L}_z = -i\hbar \frac{d}{dx}\)</span>) sono allora multipli interi:
-            </p>
-            <div class="formula">
-                \(L_n = \hbar \lambda_n = \hbar \frac{2\pi n}{b}\)
-            </div>
-        </li>
-        <li>
-            <strong>Fermioni:</strong> La funzione d’onda totale è antisimmetrica, quindi deve essere <strong>antiperiodica</strong>:
-            <div class="formula">\(\psi(x + b) = -\psi(x)\)</div>
-            <p>
-                Anche qui si parte da <span class="formula">\(\psi(x) = e^{i \lambda x}\)</span>. Applicando la condizione antiperiodica:
-            </p>
-            <div class="formula">
-                \(e^{i\lambda(x + b)} = -e^{i\lambda x} \Rightarrow e^{i\lambda b} = -1\)
-            </div>
-            <p>
-                Questa equazione è verificata per <span class="formula">\(\lambda b = (2n+1)\pi\)</span> con <span class="formula">n \in \mathbb{Z}</span>, cioè:
-            </p>
-            <div class="formula">
-                \(\lambda = \frac{(2n+1)\pi}{b}\)
-            </div>
-            <p>
-                I valori ammessi del momento angolare diventano quindi <strong>seminteri</strong>:
-            </p>
-            <div class="formula">
-                \(L_n = \hbar \lambda_n = \hbar \frac{(2n+1)\pi}{b}\)
-            </div>
-        </li>
-    </ul>
-    <p>
-        In sintesi: la simmetria della funzione d’onda (simmetrica per bosoni, antisimmetrica per fermioni) si traduce direttamente nella scelta delle condizioni al contorno e nei valori quantizzati delle osservabili come il momento angolare.
-    </p>
-</div>
-
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 10</div>
-  <h2>Indistinguibilità: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Formulare lo scambio quando le etichette delle particelle non sono osservabili.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Per particelle identiche tutte le osservabili fisiche commutano con le permutazioni. Scambiare etichette non crea un nuovo stato fisico distinguibile.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Scambio<span class="lecture-step-boss">DIM 9</span></h4>
-      <p>Per due particelle.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P_{12}\psi(x_1,x_2)=\psi(x_2,x_1)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P_{12}|x_1,x_2\rangle=|x_2,x_1\rangle\Rightarrow(P_{12}\psi)(x_1,x_2)=\langle x_1,x_2|P_{12}|\psi\rangle=\psi(x_2,x_1)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Settori<span class="lecture-step-boss">DIM 9</span></h4>
-      <p>Da \(P_{12}^2=I\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P_{12}\psi=\pm\psi"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P_{12}^2=I\Rightarrow p^2=1\Rightarrow p=\pm1;\quad P_{12}\psi=p\psi\Rightarrow P_{12}\psi=\pm\psi\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Due pacchetti sovrapposti</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Le ampiezze '1 in a, 2 in b' e '1 in b, 2 in a' sono indistinguibili.</p>
-    <p><strong>Calcolo.</strong> Vanno sommate con segno più o meno prima del modulo quadro.</p>
-    <p><strong>Risultato e controllo.</strong> Compare correlazione di scambio anche senza forza tra particelle.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 9</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_7.html">Domanda 2025 n. 7</a> - Sistemi di particelle identiche</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Particelle della stessa specie e stessi numeri interni.</li>
-          <li>Etichette sono strumenti di calcolo.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>L'indistinguibilità cambia lo spazio degli stati, non soltanto il modo di contare.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Distingui identiche da semplicemente uguali.</li>
-          <li>Mostra l'invarianza delle osservabili.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=230">Appunti-MQ.pdf, pp. 230-237: significato fisico dello scambio</a></li>
-          <li><a href="MQ.pdf#page=17">MQ.pdf, pp. capitolo 17: osservabili simmetriche</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-indistinguibilita"><div class="lecture-kicker">Lezione approfondita - Argomento 12 - DIM 9</div><h1>Particelle identiche e indistinguibilità</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Spiegare perché le etichette delle particelle identiche non sono osservabili, costruire l'operatore di scambio e le sue proprietà, dimostrare l'invarianza dell'Hamiltoniana e la conservazione dei settori di simmetria, quindi collegare il postulato bosoni/fermioni allo stato totale di posizione e spin.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Identiche non significa solo uguali</h3><p>Due oggetti classici uguali possono essere seguiti lungo traiettorie distinte. In meccanica quantistica le etichette 1 e 2 non identificano proprietà fisiche permanenti: servono solo a scrivere le coordinate del sistema composto.</p></article><article class="lecture-card lecture-warning"><h3>Che cosa resta osservabile</h3><p>Sono osservabili le occupazioni degli stati, le densità e le correlazioni, non l'affermazione che una particolare particella etichettata abbia seguito un percorso. Gli operatori fisici devono essere invarianti sotto scambio.</p></article></div><h2>Scambio come simmetria fisica</h2><div class="lecture-grid"><article class="lecture-card "><h3>Coordinate complete</h3><p>La variabile di una particella comprende posizione e spin. Scambiare le particelle significa permutare simultaneamente tutte le loro variabili, non soltanto le coordinate spaziali.</p></article><article class="lecture-card "><h3>Postulato e teorema</h3><p>Nel corso non relativistico si assume il postulato di simmetrizzazione. Il legame tra spin intero e bosoni, o spin semintero e fermioni, è il contenuto del teorema spin-statistica della teoria relativistica dei campi.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Definizione dello scambio<span class="lecture-step-boss">DIM 9</span></h4><p>Lo scambio permuta le variabili complete delle due particelle e i fattori di un ket prodotto.</p><div class="lecture-formula" aria-label="Definizione dell&#x27;operatore di scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (P_{12}\psi)(x_1,x_2)=\psi(x_2,x_1),\qquad P_{12}|a\rangle_1|b\rangle_2=|b\rangle_1|a\rangle_2\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Scambio doppio<span class="lecture-step-boss">BASE</span></h4><p>Permutare due volte ripristina l'ordine iniziale su ogni vettore dello spazio.</p><div class="lecture-formula" aria-label="Involutività dell&#x27;operatore di scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{12}^2|\psi\rangle=|\psi\rangle\quad\forall|\psi\rangle\Rightarrow P_{12}^2=I,\qquad P_{12}^{-1}=P_{12}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Unitarietà<span class="lecture-step-boss">ORALE</span></h4><p>Il cambio di variabili nello spazio delle configurazioni conserva norma e prodotti scalari.</p><div class="lecture-formula" aria-label="Dimostrazione dell&#x27;unitarietà dello scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle P\phi|P\psi\rangle=\int dx_1dx_2\,\phi^*(x_2,x_1)\psi(x_2,x_1)=\langle\phi|\psi\rangle\Rightarrow P^{\dagger}P=I\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Hermiticità<span class="lecture-step-boss">CHECK</span></h4><p>Unitarietà e involutività identificano aggiunto, inverso e operatore stesso.</p><div class="lecture-formula" aria-label="Hermiticità dell&#x27;operatore di scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P^{\dagger}=P^{-1}=P,\qquad P=P^{\dagger},\qquad P^2=I\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Autovalori ammessi<span class="lecture-step-boss">DIM 9</span></h4><p>Applicare due volte lo scambio a un autovettore vincola la fase a due soli valori in tre dimensioni.</p><div class="lecture-formula" aria-label="Autovalori simmetrico e antisimmetrico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P|\psi\rangle=\lambda|\psi\rangle\Rightarrow|\psi\rangle=P^2|\psi\rangle=\lambda^2|\psi\rangle\Rightarrow\lambda=\pm1\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Proiettori di simmetria<span class="lecture-step-boss">ORALE</span></h4><p>I polinomi spettrali di P estraggono le componenti simmetrica e antisimmetrica di qualunque ket etichettato.</p><div class="lecture-formula" aria-label="Proiettori simmetrizzatore e antisimmetrizzatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S=\frac{I+P}{2},\quad A=\frac{I-P}{2},\qquad S^2=S,\ A^2=A,\ SA=0,\ S+A=I\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Stati da due orbitali<span class="lecture-step-boss">BASE</span></h4><p>Per orbitali ortonormali le combinazioni normalizzate sono autostati di scambio con segno opposto.</p><div class="lecture-formula" aria-label="Combinazioni simmetrica e antisimmetrica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |a,b\rangle_{\pm}=\frac{|a\rangle_1|b\rangle_2\pm|b\rangle_1|a\rangle_2}{\sqrt2},\qquad P|a,b\rangle_{\pm}=\pm|a,b\rangle_{\pm}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Hamiltoniana identica<span class="lecture-step-boss">DIM 9</span></h4><p>Stesse masse, stessi potenziali esterni e interazione simmetrica rendono invariata l'Hamiltoniana sotto permutazione.</p><div class="lecture-formula" aria-label="Hamiltoniana invariante per scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=h(1)+h(2)+U(|\mathbf r_1-\mathbf r_2|),\qquad PHP=H\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Commutatore nullo<span class="lecture-step-boss">ORALE</span></h4><p>Moltiplicando l'invarianza per P e usando P al quadrato uguale a I si ottiene la compatibilità.</p><div class="lecture-formula" aria-label="Commutazione tra Hamiltoniana e scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle PHP=H\Rightarrow PH=HP\Rightarrow[H,P]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Conservazione temporale<span class="lecture-step-boss">CHECK</span></h4><p>L'evoluzione generata da H commuta con P: uno stato non può passare dal settore simmetrico a quello antisimmetrico.</p><div class="lecture-formula" aria-label="Conservazione temporale della simmetria di scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H,P]=0\Rightarrow[P,U(t)]=0,\quad P|\psi_{\pm}(t)\rangle=PU(t)|\psi_{\pm}(0)\rangle=\pm|\psi_{\pm}(t)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Osservabili fisici<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Un operatore misurabile non deve dipendere da quale particella viene chiamata uno o due.</p><div class="lecture-formula" aria-label="Osservabili invarianti sotto scambio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle POP=O\Longleftrightarrow[O,P]=0,\qquad O_{\rm tot}=o(1)+o(2),\quad n_a=|a\rangle_1\langle a|+|a\rangle_2\langle a|\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Postulato bosoni e fermioni<span class="lecture-step-boss">BOSS</span></h4><p>La natura della specie seleziona un solo settore fisico dello spazio etichettato.</p><div class="lecture-formula" aria-label="Postulato di simmetrizzazione per bosoni e fermioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{ij}|\Psi_B\rangle=+|\Psi_B\rangle\quad(s\in\mathbb Z),\qquad P_{ij}|\Psi_F\rangle=-|\Psi_F\rangle\quad(s\in\mathbb Z+\tfrac12)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Posizione per spin<span class="lecture-step-boss">DIM 9</span></h4><p>Quando H non dipende dallo spin, la funzione totale può fattorizzare, ma è il prodotto delle parità di scambio a dover rispettare la statistica.</p><div class="lecture-formula" aria-label="Fattorizzazione tra parte spaziale e spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Psi(x_1,x_2)=\varphi(\mathbf r_1,\mathbf r_2)\chi(\sigma_1,\sigma_2),\qquad\eta_{\rm tot}=\eta_{\rm space}\eta_{\rm spin}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Singoletto e tripletto<span class="lecture-step-boss">DIM 8</span></h4><p>Per due elettroni il totale è antisimmetrico: singoletto di spin e spazio simmetrico, oppure tripletto di spin e spazio antisimmetrico.</p><div class="lecture-formula" aria-label="Simmetria totale per singoletto e tripletto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \eta_F=-1:\quad(\eta_{\rm spin},\eta_{\rm space})=(-1,+1)\ {\rm singoletto},\quad(+1,-1)\ {\rm tripletto}\)</span></div></article></section><h2>Esempio d'esame: normalizzazione con orbitali non ortogonali</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Dati.</strong> Due stati a una particella normalizzati hanno sovrapposizione complessa s. Si vogliono normalizzare le combinazioni di scambio.</p><p data-i18n-skip="true">\(\displaystyle \| |a,b\rangle\pm|b,a\rangle\|^2=2(1\pm|s|^2),\qquad s=\langle a|b\rangle\)</p><p><strong>Risultato.</strong> Il fattore è uno diviso la radice di due per uno più o meno il modulo quadro di s. Nel limite a uguale b, la norma antisimmetrica si annulla: è già il nucleo del principio di Pauli.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Etichette contro stati</h3><p>Dire che due elettroni sono indistinguibili non significa che occupino lo stesso stato. Possono avere numeri quantici diversi; ciò che non ha significato fisico è attribuire permanentemente a ciascun elettrone una delle due etichette.</p></article><article class="lecture-card "><h3>Degenerazione di scambio</h3><p>I prodotti etichettati con le etichette invertite danno le stesse occupazioni. Le combinazioni fisiche risolvono questa ridondanza scegliendo autostati di P, non nuovi livelli distinguibili tramite l'identità delle particelle.</p></article><article class="lecture-card "><h3>Spin-statistica</h3><p>La relazione bosone/fermione non segue da P al quadrato uguale a I. Quest'ultima dà soltanto i due settori. La scelta del settore per una specie richiede il teorema spin-statistica o, qui, un postulato.</p></article><article class="lecture-card "><h3>Dimensione e topologia</h3><p>La conclusione più o meno uno vale per lo scambio ordinario in tre dimensioni. In due dimensioni la topologia consente statistiche anyoniche; non si deve dedurre l'antiperiodicità su un anello dal solo carattere fermionico.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Scambiare solo le posizioni e non lo spin; credere che P al quadrato uguale a I dimostri lo spin-statistica; applicare il segno alla sola parte spaziale; usare operatori che distinguono etichette; confondere indistinguibilità con sovrapposizione degli orbitali.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Verificare che P sia unitario ed hermitiano, che i proiettori siano idempotenti, che H e gli osservabili fisici commutino con P, che la simmetria totale includa tutte le variabili e che lo stato resti nello stesso settore durante l'evoluzione.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci P in coordinate complete e sui ket prodotto.</li><li>Dimostra P al quadrato uguale a I, unitarietà ed hermiticità.</li><li>Ricava gli autovalori più e meno uno e i proiettori S e A.</li><li>Mostra esplicitamente perché un'Hamiltoniana identica commuta con P.</li><li>Dimostra che la simmetria di scambio si conserva nel tempo.</li><li>Distingui postulato di simmetrizzazione e teorema spin-statistica.</li><li>Costruisci e normalizza stati simmetrici e antisimmetrici.</li><li>Collega singoletto, tripletto e simmetria della parte spaziale.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L785">DIM 9 - scambio, invarianza, simmetria totale e legame con lo spin</a></li><li><a href="Appunti-MQ.pdf#page=230">Appunti-MQ.pdf, pagine PDF 230-236 - indistinguibilità, P, bosoni/fermioni e conservazione</a></li><li><a href="MQ.pdf#page=71">MQ.pdf, pagine PDF 71-72 - particelle identiche e principio spin-statistica</a></li><li><a href="spazi-prodotto.html">Sistemi composti - spazio tensoriale, operatori locali e partizione</a></li><li><a href="spinori-pauli.html">Spinori di Pauli - gradi di libertà interni e base di spin</a></li></ul><p class="lecture-note">La pagina resta centrata sul significato e sull'operatore di scambio; simmetrizzazione, Slater e Pauli saranno sviluppati separatamente nelle pagine successive.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 12 - DIM 9":"In-depth lesson - Topic 12 - DIM 9","Particelle identiche e indistinguibilità":"Identical particles and indistinguishability","Obiettivo.":"Objective.","Spiegare perché le etichette delle particelle identiche non sono osservabili, costruire l'operatore di scambio e le sue proprietà, dimostrare l'invarianza dell'Hamiltoniana e la conservazione dei settori di simmetria, quindi collegare il postulato bosoni/fermioni allo stato totale di posizione e spin.":"Explain why labels of identical particles are not observable, construct the exchange operator and its properties, prove Hamiltonian invariance and conservation of symmetry sectors, then connect the boson/fermion postulate to the total position-spin state.","Identiche non significa solo uguali":"Identical means more than equal","Due oggetti classici uguali possono essere seguiti lungo traiettorie distinte. In meccanica quantistica le etichette 1 e 2 non identificano proprietà fisiche permanenti: servono solo a scrivere le coordinate del sistema composto.":"Two equal classical objects can be tracked along distinct trajectories. In quantum mechanics labels 1 and 2 do not identify permanent physical properties: they only serve to write coordinates for the composite system.","Che cosa resta osservabile":"What remains observable","Sono osservabili le occupazioni degli stati, le densità e le correlazioni, non l'affermazione che una particolare particella etichettata abbia seguito un percorso. Gli operatori fisici devono essere invarianti sotto scambio.":"State occupations, densities, and correlations are observable, not the assertion that a particular labeled particle followed a path. Physical operators must be invariant under exchange.","Scambio come simmetria fisica":"Exchange as a physical symmetry","Coordinate complete":"Complete coordinates","La variabile di una particella comprende posizione e spin. Scambiare le particelle significa permutare simultaneamente tutte le loro variabili, non soltanto le coordinate spaziali.":"A particle variable includes position and spin. Exchanging particles means simultaneously permuting all their variables, not only their spatial coordinates.","Postulato e teorema":"Postulate and theorem","Nel corso non relativistico si assume il postulato di simmetrizzazione. Il legame tra spin intero e bosoni, o spin semintero e fermioni, è il contenuto del teorema spin-statistica della teoria relativistica dei campi.":"In the nonrelativistic course the symmetrization postulate is assumed. The connection between integer spin and bosons, or half-integer spin and fermions, is the content of the spin-statistics theorem in relativistic quantum field theory.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Definizione dello scambio":"1. Definition of exchange","DIM 9":"DIM 9","Lo scambio permuta le variabili complete delle due particelle e i fattori di un ket prodotto.":"Exchange permutes the complete variables of the two particles and the factors of a product ket.","Passaggio":"Step","2. Scambio doppio":"2. Double exchange","BASE":"BASE","Permutare due volte ripristina l'ordine iniziale su ogni vettore dello spazio.":"Exchanging twice restores the original ordering for every vector in the space.","3. Unitarietà":"3. Unitarity","ORALE":"ORAL","Il cambio di variabili nello spazio delle configurazioni conserva norma e prodotti scalari.":"The change of variables in configuration space preserves norms and inner products.","4. Hermiticità":"4. Hermiticity","CHECK":"CHECK","Unitarietà e involutività identificano aggiunto, inverso e operatore stesso.":"Unitarity and involutivity identify the adjoint, inverse, and operator itself.","5. Autovalori ammessi":"5. Allowed eigenvalues","Applicare due volte lo scambio a un autovettore vincola la fase a due soli valori in tre dimensioni.":"Applying exchange twice to an eigenvector constrains the phase to only two values in three dimensions.","6. Proiettori di simmetria":"6. Symmetry projectors","I polinomi spettrali di P estraggono le componenti simmetrica e antisimmetrica di qualunque ket etichettato.":"The spectral polynomials of P extract symmetric and antisymmetric components from any labeled ket.","7. Stati da due orbitali":"7. States from two orbitals","Per orbitali ortonormali le combinazioni normalizzate sono autostati di scambio con segno opposto.":"For orthonormal orbitals the normalized combinations are exchange eigenstates with opposite signs.","8. Hamiltoniana identica":"8. Identical-particle Hamiltonian","Stesse masse, stessi potenziali esterni e interazione simmetrica rendono invariata l'Hamiltoniana sotto permutazione.":"Equal masses, equal external potentials, and a symmetric interaction make the Hamiltonian invariant under permutation.","9. Commutatore nullo":"9. Vanishing commutator","Moltiplicando l'invarianza per P e usando P al quadrato uguale a I si ottiene la compatibilità.":"Multiplying the invariance relation by P and using P squared equal to I gives compatibility.","10. Conservazione temporale":"10. Time preservation","L'evoluzione generata da H commuta con P: uno stato non può passare dal settore simmetrico a quello antisimmetrico.":"Evolution generated by H commutes with P: a state cannot move from the symmetric to the antisymmetric sector.","11. Osservabili fisici":"11. Physical observables","ESTENSIONE":"EXTENSION","Un operatore misurabile non deve dipendere da quale particella viene chiamata uno o due.":"A measurable operator cannot depend on which particle is called one or two.","12. Postulato bosoni e fermioni":"12. Boson and fermion postulate","BOSS":"BOSS","La natura della specie seleziona un solo settore fisico dello spazio etichettato.":"The particle species selects a single physical sector of the labeled space.","13. Posizione per spin":"13. Position times spin","Quando H non dipende dallo spin, la funzione totale può fattorizzare, ma è il prodotto delle parità di scambio a dover rispettare la statistica.":"When H is spin independent, the total wavefunction may factorize, but the product of exchange parities must obey the particle statistics.","14. Singoletto e tripletto":"14. Singlet and triplet","DIM 8":"DIM 8","Per due elettroni il totale è antisimmetrico: singoletto di spin e spazio simmetrico, oppure tripletto di spin e spazio antisimmetrico.":"For two electrons the total state is antisymmetric: spin singlet with symmetric space, or spin triplet with antisymmetric space.","Esempio d'esame: normalizzazione con orbitali non ortogonali":"Exam example: normalization with nonorthogonal orbitals","Dati.":"Data.","Due stati a una particella normalizzati hanno sovrapposizione complessa s. Si vogliono normalizzare le combinazioni di scambio.":"Two normalized one-particle states have complex overlap s. Normalize their exchange combinations.","Risultato.":"Result.","Il fattore è uno diviso la radice di due per uno più o meno il modulo quadro di s. Nel limite a uguale b, la norma antisimmetrica si annulla: è già il nucleo del principio di Pauli.":"The factor is one over the square root of two times one plus or minus the modulus squared of s. When a equals b, the antisymmetric norm vanishes: this is already the core of the Pauli principle.","Interpretazione e limiti":"Interpretation and limits","Etichette contro stati":"Labels versus states","Dire che due elettroni sono indistinguibili non significa che occupino lo stesso stato. Possono avere numeri quantici diversi; ciò che non ha significato fisico è attribuire permanentemente a ciascun elettrone una delle due etichette.":"Saying that two electrons are indistinguishable does not mean they occupy the same state. They may have different quantum numbers; what has no physical meaning is permanently assigning one of the two labels to each electron.","Degenerazione di scambio":"Exchange degeneracy","I prodotti etichettati con le etichette invertite danno le stesse occupazioni. Le combinazioni fisiche risolvono questa ridondanza scegliendo autostati di P, non nuovi livelli distinguibili tramite l'identità delle particelle.":"Labeled products with reversed labels give the same occupations. Physical combinations resolve this redundancy by choosing eigenstates of P, not new levels distinguishable through particle identity.","Spin-statistica":"Spin-statistics","La relazione bosone/fermione non segue da P al quadrato uguale a I. Quest'ultima dà soltanto i due settori. La scelta del settore per una specie richiede il teorema spin-statistica o, qui, un postulato.":"The boson/fermion connection does not follow from P squared equal to I. That relation gives only the two sectors. Selecting a sector for a species requires the spin-statistics theorem or, here, a postulate.","Dimensione e topologia":"Dimension and topology","La conclusione più o meno uno vale per lo scambio ordinario in tre dimensioni. In due dimensioni la topologia consente statistiche anyoniche; non si deve dedurre l'antiperiodicità su un anello dal solo carattere fermionico.":"The plus-or-minus-one conclusion applies to ordinary exchange in three dimensions. In two dimensions topology allows anyonic statistics; antiperiodicity on a ring must not be inferred from fermionic character alone.","Errori tipici":"Common errors","Scambiare solo le posizioni e non lo spin; credere che P al quadrato uguale a I dimostri lo spin-statistica; applicare il segno alla sola parte spaziale; usare operatori che distinguono etichette; confondere indistinguibilità con sovrapposizione degli orbitali.":"Exchanging positions but not spin; believing that P squared equal to I proves spin-statistics; applying the sign only to the spatial part; using operators that distinguish labels; confusing indistinguishability with orbital overlap.","Controlli rapidi":"Quick checks","Verificare che P sia unitario ed hermitiano, che i proiettori siano idempotenti, che H e gli osservabili fisici commutino con P, che la simmetria totale includa tutte le variabili e che lo stato resti nello stesso settore durante l'evoluzione.":"Check that P is unitary and Hermitian, that the projectors are idempotent, that H and physical observables commute with P, that total symmetry includes all variables, and that the state remains in the same sector during evolution.","Controllo da orale":"Oral exam checklist","Definisci P in coordinate complete e sui ket prodotto.":"Define P in complete coordinates and on product kets.","Dimostra P al quadrato uguale a I, unitarietà ed hermiticità.":"Prove that P squared equals I and prove unitarity and Hermiticity.","Ricava gli autovalori più e meno uno e i proiettori S e A.":"Derive the plus and minus one eigenvalues and the projectors S and A.","Mostra esplicitamente perché un'Hamiltoniana identica commuta con P.":"Show explicitly why an identical-particle Hamiltonian commutes with P.","Dimostra che la simmetria di scambio si conserva nel tempo.":"Prove that exchange symmetry is preserved in time.","Distingui postulato di simmetrizzazione e teorema spin-statistica.":"Distinguish the symmetrization postulate from the spin-statistics theorem.","Costruisci e normalizza stati simmetrici e antisimmetrici.":"Construct and normalize symmetric and antisymmetric states.","Collega singoletto, tripletto e simmetria della parte spaziale.":"Connect singlet, triplet, and spatial-part symmetry.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 9 - scambio, invarianza, simmetria totale e legame con lo spin":"DIM 9 - exchange, invariance, total symmetry, and connection with spin","Appunti-MQ.pdf, pagine PDF 230-236 - indistinguibilità, P, bosoni/fermioni e conservazione":"Appunti-MQ.pdf, PDF pages 230-236 - indistinguishability, P, bosons/fermions, and conservation","MQ.pdf, pagine PDF 71-72 - particelle identiche e principio spin-statistica":"MQ.pdf, PDF pages 71-72 - identical particles and the spin-statistics principle","Sistemi composti - spazio tensoriale, operatori locali e partizione":"Composite systems - tensor-product space, local operators, and partition","Spinori di Pauli - gradi di libertà interni e base di spin":"Pauli spinors - internal degrees of freedom and spin basis","La pagina resta centrata sul significato e sull'operatore di scambio; simmetrizzazione, Slater e Pauli saranno sviluppati separatamente nelle pagine successive.":"The page remains centered on the meaning and operator of exchange; symmetrization, Slater determinants, and Pauli exclusion are developed separately in the following pages.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Definizione dell'operatore di scambio":"Definition of the exchange operator","Involutività dell'operatore di scambio":"Involutory property of the exchange operator","Dimostrazione dell'unitarietà dello scambio":"Proof of exchange unitarity","Hermiticità dell'operatore di scambio":"Hermiticity of the exchange operator","Autovalori simmetrico e antisimmetrico":"Symmetric and antisymmetric eigenvalues","Proiettori simmetrizzatore e antisimmetrizzatore":"Symmetrizer and antisymmetrizer projectors","Combinazioni simmetrica e antisimmetrica":"Symmetric and antisymmetric combinations","Hamiltoniana invariante per scambio":"Exchange-invariant Hamiltonian","Commutazione tra Hamiltoniana e scambio":"Commutation of Hamiltonian and exchange","Conservazione temporale della simmetria di scambio":"Time preservation of exchange symmetry","Osservabili invarianti sotto scambio":"Exchange-invariant observables","Postulato di simmetrizzazione per bosoni e fermioni":"Symmetrization postulate for bosons and fermions","Fattorizzazione tra parte spaziale e spin":"Factorization into spatial and spin parts","Simmetria totale per singoletto e tripletto":"Total symmetry for singlet and triplet states"},"title":{"it":"Particelle identiche e indistinguibilità","en":"Identical particles and indistinguishability"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

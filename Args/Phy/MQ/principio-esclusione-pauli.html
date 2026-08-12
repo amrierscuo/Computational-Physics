@@ -1,339 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principio di Esclusione di Pauli</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principio di esclusione di Pauli</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Principio di Esclusione di Pauli</h1>
-    <p>
-        Il principio di esclusione di Pauli è un risultato fondamentale della meccanica quantistica, applicabile a particelle identiche che obbediscono alla statistica di Fermi-Dirac, note come fermioni. Secondo questo principio, due fermioni non possono occupare lo stesso stato quantico in un sistema.
-    </p>
-    <div>
-        <h2>Definizione Formale</h2>
-        <p>
-            In termini matematici, il principio di esclusione di Pauli si esprime imponendo la simmetria antisimmmetrica della funzione d'onda totale per un sistema di fermioni. Se \( \psi(x_1, x_2) \) è la funzione d'onda di due particelle identiche, allora:
-        </p>
-        <div class="formula">
-            \[
-            \psi(x_1, x_2) = -\psi(x_2, x_1)
-            \]
-        </div>
-        <p>
-            Se \( x_1 = x_2 \), segue che \( \psi(x_1, x_1) = -\psi(x_1, x_1) \), e quindi \( \psi(x_1, x_1) = 0 \). Questo implica che due fermioni non possono trovarsi nello stesso stato quantico.
-        </p>
-    </div>
-    <div>
-        <h2>Applicazioni</h2>
-        <ul>
-            <li>
-                <strong>Struttura atomica:</strong> Il principio di esclusione è cruciale per spiegare la configurazione elettronica degli atomi. Gli elettroni, essendo fermioni con spin \( 1/2 \), occupano i livelli energetici in modo che nessun livello contenga due elettroni con gli stessi numeri quantici.
-            </li>
-            <li>
-                <strong>Stabilità della materia:</strong> Il principio di esclusione impedisce agli elettroni di collassare verso stati energeticamente inferiori, contribuendo alla stabilità della materia ordinaria.
-            </li>
-            <li>
-                <strong>Nane bianche e stelle di neutroni:</strong> Il principio di esclusione gioca un ruolo chiave nella stabilizzazione di oggetti astrofisici densi. La pressione di degenerazione elettronica sostiene le nane bianche, mentre quella neutronica sostiene le stelle di neutroni.
-            </li>
-        </ul>
-    </div>
-    <div>
-        <h2>Determinante di Slater</h2>
-        <p>
-            Per un sistema di fermioni, la funzione d'onda totale può essere costruita utilizzando un determinante di Slater. Questo garantisce la proprietà antisimmmetrica richiesta:
-        </p>
-        <div class="formula">
-            \[
-            \psi(x_1, x_2, \dots, x_N) = \frac{1}{\sqrt{N!}}
-            \begin{vmatrix}
-                \phi_1(x_1) & \phi_2(x_1) & \dots & \phi_N(x_1) \\
-                \phi_1(x_2) & \phi_2(x_2) & \dots & \phi_N(x_2) \\
-                \vdots & \vdots & \ddots & \vdots \\
-                \phi_1(x_N) & \phi_2(x_N) & \dots & \phi_N(x_N)
-            \end{vmatrix}
-            \]
-        </div>
-        <p>
-            Qui, \( \phi_i(x_j) \) rappresenta la funzione d'onda dello stato \( i \)-esimo occupato dalla particella \( j \)-esima. Il determinante di Slater garantisce che la funzione d'onda cambi segno per uno scambio di due particelle, rispettando così il principio di esclusione di Pauli.
-        </p>
-    </div>
-	<div>
-    <h2>Connessione con il Postulato di Simmetrizzazione</h2>
-    <p>
-        Il principio di esclusione di Pauli è una conseguenza diretta del postulato di simmetrizzazione per particelle identiche. Per fermioni, la funzione d'onda totale \( \Psi \) deve essere antisimmmetrica rispetto allo scambio di due particelle. Questo si applica sia alla funzione d'onda spaziale \( \psi \) che a quella di spin \( \chi \), risultando in:
-    </p>
-    <div class="formula">
-        \[
-        \Psi(\vec{r}_1, \vec{r}_2, s_1, s_2) = \psi(\vec{r}_1, \vec{r}_2)\chi(s_1, s_2)
-        \]
-    </div>
-    <p>
-        La simmetria totale è data dal prodotto delle simmetrie delle componenti spaziale e di spin. Per esempio, se \( \psi \) è simmetrica, \( \chi \) deve essere antisimmmetrica, e viceversa.
-    </p>
-</div>
-<div>
-    <h2>Espansione del Determinante di Slater</h2>
-    <p>
-        Per un sistema con \( N = 2 \) particelle, il determinante di Slater diventa:
-    </p>
-    <div class="formula">
-        \[
-        \psi(\vec{r}_1, \vec{r}_2) = \frac{1}{\sqrt{2}}
-        \begin{vmatrix}
-            \phi_1(\vec{r}_1) & \phi_2(\vec{r}_1) \\
-            \phi_1(\vec{r}_2) & \phi_2(\vec{r}_2)
-        \end{vmatrix}
-        = \frac{1}{\sqrt{2}} \big[ \phi_1(\vec{r}_1)\phi_2(\vec{r}_2) - \phi_1(\vec{r}_2)\phi_2(\vec{r}_1) \big]
-        \]
-    </div>
-    <p>
-        L'antisimmetria è evidente: scambiando \( \vec{r}_1 \) con \( \vec{r}_2 \), la funzione d'onda cambia segno. Se \( \phi_1 = \phi_2 \), il determinante diventa nullo, riflettendo l'impossibilità per due fermioni di occupare lo stesso stato.
-    </p>
-</div>
-<div>
-    <h2>Conseguenze Osservabili</h2>
-    <p>
-        Un esempio pratico del principio di esclusione è nella struttura elettronica degli atomi. Gli elettroni, essendo fermioni con spin \( s = 1/2 \), possono assumere due stati di spin (\( m_s = +1/2 \) o \( m_s = -1/2 \)). Questo limita il numero di elettroni che possono occupare lo stesso livello energetico, definito dai numeri quantici principali (\( n \)), angolari (\( l \)) e magnetici (\( m_l \)).
-    </p>
-    <ul>
-        <li>
-            <strong>Configurazione elettronica:</strong> Negli atomi, gli elettroni riempiono i livelli energetici secondo il principio di esclusione, creando la periodicità osservata nella tavola periodica.
-        </li>
-        <li>
-            <strong>Pressione di degenerazione:</strong> Questo principio è responsabile della pressione che impedisce il collasso gravitazionale in oggetti come le nane bianche e le stelle di neutroni.
-        </li>
-    </ul>
-</div>
-<div>
-    <h2>Relazione con la Meccanica Statistica</h2>
-    <p>
-        I fermioni seguono la statistica di Fermi-Dirac, la cui distribuzione è data da:
-    </p>
-    <div class="formula">
-        \[
-        f(E) = \frac{1}{e^{(E - \mu)/k_B T} + 1}
-        \]
-    </div>
-    <p>
-        Qui, \( \mu \) è il potenziale chimico, \( k_B \) la costante di Boltzmann, \( T \) la temperatura, e \( E \) l'energia. Questa funzione riflette il fatto che ogni stato quantico può essere occupato al massimo da un fermione.
-    </p>
-    <p>
-        A temperature molto basse, tutti gli stati con \( E < \mu \) sono occupati, mentre quelli con \( E > \mu \) sono vuoti, definendo una "superficie di Fermi" negli stati solidi.
-    </p>
-</div>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 10</div>
-  <h2>Principio di Esclusione di Pauli: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'esclusione dall'antisimmetria e applicarla agli spin-orbitali.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Due fermioni non possono occupare lo stesso spin-orbitale perché il determinante avrebbe colonne uguali. Possono condividere la parte spaziale se gli spin sono opposti.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Spin-orbitale<span class="lecture-step-boss">DIM 9</span></h4>
-      <p>La coordinata completa è \(x=(\mathbf r,s)\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\chi_i(x)=\phi_i(\mathbf r)\eta_i(s)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle x=(\mathbf r,s),\quad\mathcal H_1=\mathcal H_{\rm orb}\otimes\mathcal H_{\rm spin}\Rightarrow\chi_i(x)=\phi_i(\mathbf r)\eta_i(s)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Occupazione<span class="lecture-step-boss">DIM 9</span></h4>
-      <p>Per elettroni.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="n_i\in\{0,1\}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (a_i^\dagger)^2=0\ \text{per fermioni}\Rightarrow n_i=a_i^\dagger a_i,\quad n_i^2=n_i\Rightarrow n_i\in\{0,1\}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Orbitale 1s</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Due elettroni possono avere la stessa phi1s.</p>
-    <p><strong>Calcolo.</strong> Devono formare spinori ortogonali + e -, equivalenti allo stato di spin singoletto per la parte simmetrica spaziale.</p>
-    <p><strong>Risultato e controllo.</strong> Un terzo elettrone non può occupare lo stesso 1s.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 9</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_7.html">Domanda 2025 n. 7</a> - Sistemi di particelle identiche</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Fermioni identici.</li>
-          <li>L'esclusione riguarda lo spin-orbitale completo.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Pauli organizza la tavola periodica perché converte l'antisimmetria in vincoli di occupazione.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Perché due spin paralleli evitano la coincidenza spaziale?</li>
-          <li>Distingui orbitale e spin-orbitale.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=230">Appunti-MQ.pdf, pp. 230-237: esclusione come conseguenza dell'antisimmetria</a></li>
-          <li><a href="MQ.pdf#page=17">MQ.pdf, pp. capitoli 17 e 19: riempimento degli orbitali</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a class="back-link" href="1mq.html">Torna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-principio-pauli"><div class="lecture-kicker">Lezione approfondita - Argomento 11 - DIM 9</div><h1>Principio di esclusione di Pauli</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'esclusione dall'antisimmetria fermionica, formularla in termini di spin-orbitali e numeri di occupazione, applicarla a gusci atomici e stati spazio-spin e collegarla, con ipotesi esplicite, alla distribuzione di Fermi-Dirac e alla pressione di degenerazione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Enunciato corretto</h3><p>In uno stato fermionico puro non possono comparire due fermioni identici nello stesso stato a una particella completo. Per gli elettroni questo stato è uno spin-orbitale, non il solo orbitale spaziale.</p></article><article class="lecture-card lecture-warning"><h3>Conseguenza, non forza</h3><p>Pauli segue dal segno della funzione d'onda sotto scambio. Non introduce una forza repulsiva supplementare: modifica gli stati consentiti, l'energia cinetica minima e le correlazioni di scambio.</p></article></div><h2>Dall'antisimmetria al vincolo di occupazione</h2><div class="lecture-grid"><article class="lecture-card "><h3>Prima quantizzazione</h3><p>Se due argomenti completi coincidono, lo scambio non cambia il punto della funzione ma deve cambiarne il segno. Ne segue un nodo esatto sulla diagonale di coincidenza.</p></article><article class="lecture-card "><h3>Seconda quantizzazione</h3><p>Le relazioni canoniche di anticommutazione rendono nilpotente ogni operatore di creazione fermionico. Lo stesso contenuto diventa la regola n uguale a zero oppure uno.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Nodo di coincidenza<span class="lecture-step-boss">DIM 9</span></h4><p>Antisimmetria e coincidenza dei due argomenti completi impongono simultaneamente valore uguale e opposto.</p><div class="lecture-formula" aria-label="Derivazione del nodo fermionico alla coincidenza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Psi(\ldots,x_i,\ldots,x_j,\ldots)=-\Psi(\ldots,x_j,\ldots,x_i,\ldots),\quad x_i=x_j\Rightarrow\Psi=-\Psi\Rightarrow\Psi=0\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Determinante nullo<span class="lecture-step-boss">BOSS</span></h4><p>Nel determinante di Slater lo stesso risultato appare come identità di due colonne associate allo stesso spin-orbitale.</p><div class="lecture-formula" aria-label="Esclusione come annullamento del determinante"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \phi_a=\phi_b\Rightarrow C_a=C_b\Rightarrow\det[\phi_a(x_i)]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Spin-orbitale completo<span class="lecture-step-boss">ORALE</span></h4><p>La coordinata x comprende spazio e spin. Due elettroni possono avere la stessa parte spaziale soltanto se le parti di spin sono ortogonali.</p><div class="lecture-formula" aria-label="Costruzione dei due spin-orbitali da un orbitale spaziale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle x=(\mathbf r,\sigma),\qquad\varphi_{a\uparrow}(x)=u_a(\mathbf r)\alpha(\sigma),\quad\varphi_{a\downarrow}(x)=u_a(\mathbf r)\beta(\sigma),\quad\langle\alpha|\beta\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Quattro numeri quantici<span class="lecture-step-boss">ATOMI</span></h4><p>In un atomo idrogenoide uno spin-orbitale è etichettato da n, l, m_l e m_s. Nessuna coppia di elettroni può condividere l'intera quadrupla.</p><div class="lecture-formula" aria-label="Numeri quantici di uno spin-orbitale atomico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n\ell m_\ell m_s\rangle,\qquad m_\ell=-\ell,\ldots,\ell,\qquad m_s=\pm\frac12\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Capienza di un sottoguscio<span class="lecture-step-boss">CONTEGGIO</span></h4><p>Per n e l fissati vi sono due l più uno valori magnetici e due proiezioni di spin; Pauli consente un elettrone per ciascuna coppia.</p><div class="lecture-formula" aria-label="Derivazione della capienza di un sottoguscio elettronico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle g_\ell=(2\ell+1)(2s+1)=2(2\ell+1),\qquad N_{n\ell}^{\max}=2(2\ell+1)\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Capienza di un guscio<span class="lecture-step-boss">CONTEGGIO</span></h4><p>Nel modello idrogenoide l varia da zero a n meno uno. La somma delle capacità dei sottogusci produce la regola due n quadrato.</p><div class="lecture-formula" aria-label="Somma delle capacità dei sottogusci in un guscio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle N_n^{\max}=2\sum_{\ell=0}^{n-1}(2\ell+1)=2n^2\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Singoletto e tripletto<span class="lecture-step-boss">DIM 8</span></h4><p>Per due elettroni la parità totale è il prodotto delle parità spaziale e di spin e deve valere meno uno.</p><div class="lecture-formula" aria-label="Abbinamento tra simmetria spaziale e di spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Psi_{\rm tot}=\psi_{\rm sp}\chi_{\rm spin},\qquad \eta_{\rm sp}\eta_{\rm spin}=-1:\quad \psi_S\chi_{00}\ \text{oppure}\ \psi_A\chi_{1m}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Momento relativo<span class="lecture-step-boss">ORALE</span></h4><p>Lo scambio inverte la coordinata relativa. L'armonica sferica acquista il fattore meno uno alla l, che seleziona i canali compatibili con singoletto o tripletto.</p><div class="lecture-formula" aria-label="Selezione della parità orbitale per due fermioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf r=\mathbf r_1-\mathbf r_2\xrightarrow{P_{12}}-\mathbf r,\qquad Y_{\ell m}(-\hat{\mathbf r})=(-1)^\ell Y_{\ell m}(\hat{\mathbf r});\quad S=0:\ell\ \text{pari},\ S=1:\ell\ \text{dispari}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Anticommutatori<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Le relazioni canoniche codificano il segno di scambio. Ponendo uguali gli indici, la creazione doppia dello stesso modo si annulla.</p><div class="lecture-formula" aria-label="Relazioni canoniche di anticommutazione fermioniche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \{c_a,c_b^\dagger\}=\delta_{ab},\quad\{c_a,c_b\}=\{c_a^\dagger,c_b^\dagger\}=0\Rightarrow(c_a^\dagger)^2=0\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Operatore numero<span class="lecture-step-boss">PAULI</span></h4><p>L'operatore numero di un modo è un proiettore. I suoi soli autovalori sono zero e uno.</p><div class="lecture-formula" aria-label="Idempotenza dell&#x27;operatore numero fermionico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle n_a=c_a^\dagger c_a,\qquad n_a^2=c_a^\dagger(1-c_a^\dagger c_a)c_a=n_a\Rightarrow n_a\in\{0,1\}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Fermi-Dirac da un modo<span class="lecture-step-boss">STATISTICA</span></h4><p>Nel gran canonico il modo può contenere soltanto zero o una particella. La sua funzione di partizione ha quindi due termini.</p><div class="lecture-formula" aria-label="Derivazione della distribuzione di Fermi-Dirac"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal Z_\varepsilon=\sum_{n=0}^{1}e^{-\beta(\varepsilon-\mu)n}=1+e^{-\beta(\varepsilon-\mu)},\qquad\langle n\rangle=\frac1{e^{\beta(\varepsilon-\mu)}+1}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Limite a temperatura zero<span class="lecture-step-boss">STATISTICA</span></h4><p>Quando beta tende a infinito, l'occupazione diventa un gradino. Per il gas ideale tridimensionale si riempie una sfera nello spazio k.</p><div class="lecture-formula" aria-label="Mare di Fermi e energia di Fermi a temperatura zero"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T\to0:\ f(\varepsilon)=\Theta(E_F-\varepsilon),\qquad k_F=(3\pi^2n)^{1/3},\qquad E_F=\frac{\hbar^2k_F^2}{2m}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Pressione di degenerazione<span class="lecture-step-boss">APPLICAZIONE</span></h4><p>Per un gas ideale non relativistico uniforme a temperatura zero, riempire stati di impulso crescenti produce energia e pressione anche senza agitazione termica.</p><div class="lecture-formula" aria-label="Pressione di degenerazione di un gas di Fermi ideale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac EV=\frac35nE_F,\qquad P=-\left(\frac{\partial E}{\partial V}\right)_N=\frac25nE_F\propto n^{5/3}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Buco di scambio<span class="lecture-step-boss">INTERPRETAZIONE</span></h4><p>Per spin paralleli la probabilità congiunta si annulla alla coincidenza. Questa anticorrelazione statistica esiste anche senza potenziale tra le particelle.</p><div class="lecture-formula" aria-label="Annullamento della correlazione a coppie per spin paralleli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho^{(2)}_{\sigma\sigma}(\mathbf r,\mathbf r)=0,\qquad g_{\sigma\sigma}(0)=0\)</span></div></article></section><h2>Esempio d'esame: configurazione 1s dell'elio</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Domanda.</strong> Quanti elettroni possono occupare l'orbitale spaziale 1s e quale deve essere lo stato di spin?</p><p data-i18n-skip="true">\(\displaystyle \psi_{\rm sp}=u_{1s}(1)u_{1s}(2)=+P_{12}\psi_{\rm sp}\Rightarrow\chi_{\rm spin}=\chi_{00}=\frac{|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle}{\sqrt2}\)</p><p><strong>Risultato.</strong> Sono ammessi due elettroni, uno in 1sα e uno in 1sβ. Un terzo richiederebbe di duplicare uno dei due spin-orbitali disponibili e il determinante si annullerebbe.</p></article><h2>Portata fisica e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Tavola periodica</h3><p>Pauli fissa la capienza degli spin-orbitali; l'ordine energetico reale e le eccezioni nelle configurazioni richiedono anche interazione coulombiana, schermaggio, regole di Hund e struttura fine.</p></article><article class="lecture-card "><h3>Stabilità della materia</h3><p>L'esclusione aumenta l'energia cinetica quando molti elettroni sono confinati nello stesso volume e contribuisce alla stabilità estensiva. Non sostituisce l'attrazione e la repulsione coulombiana né costituisce da sola una prova completa.</p></article><article class="lecture-card "><h3>Oggetti compatti</h3><p>La pressione elettronica sostiene i modelli di nane bianche e quella neutronica contribuisce alle stelle di neutroni. Alle alte densità servono regime relativistico, interazioni forti, equilibrio gravitazionale e relatività generale.</p></article><article class="lecture-card "><h3>Regola per fermioni identici</h3><p>L'esclusione confronta stati di particelle della stessa specie. Elettrone e muone, oppure protone e neutrone se trattati come specie distinte, non sono esclusi dal condividere la stessa funzione spaziale.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dire che due elettroni non possono stare nello stesso orbitale spaziale; applicare Pauli a particelle distinguibili; attribuire tutto l'ordine energetico atomico alla sola esclusione; usare la formula non relativistica della pressione oltre il suo regime.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Specificare sempre lo spin-orbitale, porre due argomenti completi uguali, verificare colonne duplicate, contare m_l e m_s, provare n al quadrato uguale n e dichiarare le ipotesi termodinamiche prima di usare E_F o P.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Enuncia Pauli usando lo stato a una particella completo.</li><li>Deriva il nodo di coincidenza dall'antisimmetria.</li><li>Ripeti la prova con due colonne del determinante.</li><li>Spiega perché due elettroni possono condividere un orbitale spaziale.</li><li>Ricava le capacità 2(2l+1) e 2n².</li><li>Abbina singoletto e tripletto alla parità spaziale e a l.</li><li>Dimostra n² uguale n dalle anticommutazioni.</li><li>Deriva Fermi-Dirac dal singolo modo e dichiara i limiti della pressione ideale.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1000">DIM 9 - principio di esclusione, determinante e stati spazio-spin</a></li><li><a href="Appunti-MQ.pdf#page=233">Appunti-MQ.pdf, pagine PDF 233-236 - Pauli, Hamiltoniana simmetrica e singoletto-tripletto</a></li><li><a href="MQ.pdf#page=72">MQ.pdf, pagina PDF 72 - antisimmetria elettronica e principio di esclusione</a></li><li><a href="Domanda2025_7.html">Domanda 2025 n. 7 - sistemi di particelle identiche</a></li><li><a href="determinante-slater.html">Determinante di Slater - costruzione, norma e regole a molti corpi</a></li><li><a href="postulato-simmetrizzazione.html">Postulato di simmetrizzazione - origine del settore fermionico</a></li></ul><p class="lecture-note">La pagina distingue le conseguenze rigorose dell'antisimmetria dalle applicazioni che richiedono ipotesi aggiuntive, così da non trasformare Pauli in una spiegazione generica di fenomeni diversi.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 11 - DIM 9":"In-depth lesson - Topic 11 - DIM 9","Principio di esclusione di Pauli":"Pauli exclusion principle","Obiettivo.":"Objective.","Derivare l'esclusione dall'antisimmetria fermionica, formularla in termini di spin-orbitali e numeri di occupazione, applicarla a gusci atomici e stati spazio-spin e collegarla, con ipotesi esplicite, alla distribuzione di Fermi-Dirac e alla pressione di degenerazione.":"Derive exclusion from fermionic antisymmetry, formulate it in terms of spin orbitals and occupation numbers, apply it to atomic shells and space-spin states, and connect it, with explicit assumptions, to the Fermi-Dirac distribution and degeneracy pressure.","Enunciato corretto":"Correct statement","In uno stato fermionico puro non possono comparire due fermioni identici nello stesso stato a una particella completo. Per gli elettroni questo stato è uno spin-orbitale, non il solo orbitale spaziale.":"A pure fermionic state cannot contain two identical fermions in the same complete one-particle state. For electrons this state is a spin orbital, not merely a spatial orbital.","Conseguenza, non forza":"Consequence, not a force","Pauli segue dal segno della funzione d'onda sotto scambio. Non introduce una forza repulsiva supplementare: modifica gli stati consentiti, l'energia cinetica minima e le correlazioni di scambio.":"Pauli follows from the sign of the wavefunction under exchange. It introduces no additional repulsive force: it changes the allowed states, the minimum kinetic energy, and exchange correlations.","Dall'antisimmetria al vincolo di occupazione":"From antisymmetry to the occupation constraint","Prima quantizzazione":"First quantization","Se due argomenti completi coincidono, lo scambio non cambia il punto della funzione ma deve cambiarne il segno. Ne segue un nodo esatto sulla diagonale di coincidenza.":"If two complete arguments coincide, exchange does not change the point of the wavefunction but must change its sign. An exact node follows on the coincidence diagonal.","Seconda quantizzazione":"Second quantization","Le relazioni canoniche di anticommutazione rendono nilpotente ogni operatore di creazione fermionico. Lo stesso contenuto diventa la regola n uguale a zero oppure uno.":"Canonical anticommutation relations make each fermionic creation operator nilpotent. The same content becomes the rule that n equals zero or one.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Nodo di coincidenza":"1. Coincidence node","DIM 9":"DIM 9","Antisimmetria e coincidenza dei due argomenti completi impongono simultaneamente valore uguale e opposto.":"Antisymmetry and coincidence of the two complete arguments impose simultaneously equal and opposite values.","Passaggio":"Step","2. Determinante nullo":"2. Zero determinant","BOSS":"BOSS","Nel determinante di Slater lo stesso risultato appare come identità di due colonne associate allo stesso spin-orbitale.":"In a Slater determinant the same result appears as equality of two columns associated with the same spin orbital.","3. Spin-orbitale completo":"3. Complete spin orbital","ORALE":"ORAL","La coordinata x comprende spazio e spin. Due elettroni possono avere la stessa parte spaziale soltanto se le parti di spin sono ortogonali.":"Coordinate x includes space and spin. Two electrons may have the same spatial part only if their spin parts are orthogonal.","4. Quattro numeri quantici":"4. Four quantum numbers","ATOMI":"ATOMS","In un atomo idrogenoide uno spin-orbitale è etichettato da n, l, m_l e m_s. Nessuna coppia di elettroni può condividere l'intera quadrupla.":"In a hydrogenic atom a spin orbital is labeled by n, l, m_l, and m_s. No pair of electrons may share the entire quadruple.","5. Capienza di un sottoguscio":"5. Subshell capacity","CONTEGGIO":"COUNTING","Per n e l fissati vi sono due l più uno valori magnetici e due proiezioni di spin; Pauli consente un elettrone per ciascuna coppia.":"For fixed n and l there are two l plus one magnetic values and two spin projections; Pauli allows one electron for each pair.","6. Capienza di un guscio":"6. Shell capacity","Nel modello idrogenoide l varia da zero a n meno uno. La somma delle capacità dei sottogusci produce la regola due n quadrato.":"In the hydrogenic model l ranges from zero to n minus one. Summing subshell capacities gives the two-n-squared rule.","7. Singoletto e tripletto":"7. Singlet and triplet","DIM 8":"DIM 8","Per due elettroni la parità totale è il prodotto delle parità spaziale e di spin e deve valere meno uno.":"For two electrons total parity is the product of spatial and spin parities and must equal minus one.","8. Momento relativo":"8. Relative angular momentum","Lo scambio inverte la coordinata relativa. L'armonica sferica acquista il fattore meno uno alla l, che seleziona i canali compatibili con singoletto o tripletto.":"Exchange reverses the relative coordinate. The spherical harmonic acquires the factor minus one to l, selecting the channels compatible with singlet or triplet.","9. Anticommutatori":"9. Anticommutators","ESTENSIONE":"EXTENSION","Le relazioni canoniche codificano il segno di scambio. Ponendo uguali gli indici, la creazione doppia dello stesso modo si annulla.":"Canonical relations encode the exchange sign. Setting the indices equal makes double creation in the same mode vanish.","10. Operatore numero":"10. Number operator","PAULI":"PAULI","L'operatore numero di un modo è un proiettore. I suoi soli autovalori sono zero e uno.":"The number operator of a mode is a projector. Its only eigenvalues are zero and one.","11. Fermi-Dirac da un modo":"11. Fermi-Dirac from one mode","STATISTICA":"STATISTICS","Nel gran canonico il modo può contenere soltanto zero o una particella. La sua funzione di partizione ha quindi due termini.":"In the grand canonical ensemble a mode can contain only zero or one particle. Its partition function therefore has two terms.","12. Limite a temperatura zero":"12. Zero-temperature limit","Quando beta tende a infinito, l'occupazione diventa un gradino. Per il gas ideale tridimensionale si riempie una sfera nello spazio k.":"As beta tends to infinity, occupation becomes a step. For the three-dimensional ideal gas a sphere in k space is filled.","13. Pressione di degenerazione":"13. Degeneracy pressure","APPLICAZIONE":"APPLICATION","Per un gas ideale non relativistico uniforme a temperatura zero, riempire stati di impulso crescenti produce energia e pressione anche senza agitazione termica.":"For a uniform nonrelativistic ideal gas at zero temperature, filling states of increasing momentum produces energy and pressure even without thermal agitation.","14. Buco di scambio":"14. Exchange hole","INTERPRETAZIONE":"INTERPRETATION","Per spin paralleli la probabilità congiunta si annulla alla coincidenza. Questa anticorrelazione statistica esiste anche senza potenziale tra le particelle.":"For parallel spins the joint probability vanishes at coincidence. This statistical anticorrelation exists even without a potential between the particles.","Esempio d'esame: configurazione 1s dell'elio":"Exam example: the helium 1s configuration","Domanda.":"Question.","Quanti elettroni possono occupare l'orbitale spaziale 1s e quale deve essere lo stato di spin?":"How many electrons can occupy spatial orbital 1s, and what must their spin state be?","Risultato.":"Result.","Sono ammessi due elettroni, uno in 1sα e uno in 1sβ. Un terzo richiederebbe di duplicare uno dei due spin-orbitali disponibili e il determinante si annullerebbe.":"Two electrons are allowed, one in 1sα and one in 1sβ. A third would require duplicating one of the two available spin orbitals and the determinant would vanish.","Portata fisica e limiti":"Physical scope and limits","Tavola periodica":"Periodic table","Pauli fissa la capienza degli spin-orbitali; l'ordine energetico reale e le eccezioni nelle configurazioni richiedono anche interazione coulombiana, schermaggio, regole di Hund e struttura fine.":"Pauli fixes spin-orbital capacity; actual energy ordering and configuration exceptions also require Coulomb interaction, screening, Hund rules, and fine structure.","Stabilità della materia":"Stability of matter","L'esclusione aumenta l'energia cinetica quando molti elettroni sono confinati nello stesso volume e contribuisce alla stabilità estensiva. Non sostituisce l'attrazione e la repulsione coulombiana né costituisce da sola una prova completa.":"Exclusion raises kinetic energy when many electrons are confined to the same volume and contributes to extensive stability. It neither replaces Coulomb attraction and repulsion nor by itself constitutes a complete proof.","Oggetti compatti":"Compact objects","La pressione elettronica sostiene i modelli di nane bianche e quella neutronica contribuisce alle stelle di neutroni. Alle alte densità servono regime relativistico, interazioni forti, equilibrio gravitazionale e relatività generale.":"Electron pressure supports white-dwarf models and neutron pressure contributes to neutron stars. At high density one needs relativistic kinematics, strong interactions, gravitational equilibrium, and general relativity.","Regola per fermioni identici":"Rule for identical fermions","L'esclusione confronta stati di particelle della stessa specie. Elettrone e muone, oppure protone e neutrone se trattati come specie distinte, non sono esclusi dal condividere la stessa funzione spaziale.":"Exclusion compares states of particles of the same species. An electron and a muon, or a proton and neutron treated as distinct species, are not excluded from sharing the same spatial function.","Errori tipici":"Common errors","Dire che due elettroni non possono stare nello stesso orbitale spaziale; applicare Pauli a particelle distinguibili; attribuire tutto l'ordine energetico atomico alla sola esclusione; usare la formula non relativistica della pressione oltre il suo regime.":"Saying that two electrons cannot occupy the same spatial orbital; applying Pauli to distinguishable particles; attributing all atomic energy ordering to exclusion alone; using the nonrelativistic pressure formula beyond its regime.","Controlli rapidi":"Quick checks","Specificare sempre lo spin-orbitale, porre due argomenti completi uguali, verificare colonne duplicate, contare m_l e m_s, provare n al quadrato uguale n e dichiarare le ipotesi termodinamiche prima di usare E_F o P.":"Always specify the spin orbital, set two complete arguments equal, check duplicate columns, count m_l and m_s, prove n squared equals n, and state thermodynamic assumptions before using E_F or P.","Controllo da orale":"Oral exam checklist","Enuncia Pauli usando lo stato a una particella completo.":"State Pauli using the complete one-particle state.","Deriva il nodo di coincidenza dall'antisimmetria.":"Derive the coincidence node from antisymmetry.","Ripeti la prova con due colonne del determinante.":"Repeat the proof with two determinant columns.","Spiega perché due elettroni possono condividere un orbitale spaziale.":"Explain why two electrons can share a spatial orbital.","Ricava le capacità 2(2l+1) e 2n².":"Derive the capacities 2(2l+1) and 2n².","Abbina singoletto e tripletto alla parità spaziale e a l.":"Pair singlet and triplet with spatial parity and l.","Dimostra n² uguale n dalle anticommutazioni.":"Prove n squared equals n from anticommutation relations.","Deriva Fermi-Dirac dal singolo modo e dichiara i limiti della pressione ideale.":"Derive Fermi-Dirac from one mode and state the limits of ideal degeneracy pressure.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 9 - principio di esclusione, determinante e stati spazio-spin":"DIM 9 - exclusion principle, determinant, and space-spin states","Appunti-MQ.pdf, pagine PDF 233-236 - Pauli, Hamiltoniana simmetrica e singoletto-tripletto":"Appunti-MQ.pdf, PDF pages 233-236 - Pauli, symmetric Hamiltonian, and singlet-triplet pairing","MQ.pdf, pagina PDF 72 - antisimmetria elettronica e principio di esclusione":"MQ.pdf, PDF page 72 - electronic antisymmetry and exclusion principle","Domanda 2025 n. 7 - sistemi di particelle identiche":"2025 question 7 - systems of identical particles","Determinante di Slater - costruzione, norma e regole a molti corpi":"Slater determinant - construction, norm, and many-body rules","Postulato di simmetrizzazione - origine del settore fermionico":"Symmetrization postulate - origin of the fermionic sector","La pagina distingue le conseguenze rigorose dell'antisimmetria dalle applicazioni che richiedono ipotesi aggiuntive, così da non trasformare Pauli in una spiegazione generica di fenomeni diversi.":"The page distinguishes rigorous consequences of antisymmetry from applications requiring additional assumptions, so that Pauli is not turned into a generic explanation of different phenomena.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Derivazione del nodo fermionico alla coincidenza":"Derivation of the fermionic coincidence node","Esclusione come annullamento del determinante":"Exclusion as vanishing of the determinant","Costruzione dei due spin-orbitali da un orbitale spaziale":"Construction of two spin orbitals from one spatial orbital","Numeri quantici di uno spin-orbitale atomico":"Quantum numbers of an atomic spin orbital","Derivazione della capienza di un sottoguscio elettronico":"Derivation of an electronic subshell capacity","Somma delle capacità dei sottogusci in un guscio":"Sum of subshell capacities in a shell","Abbinamento tra simmetria spaziale e di spin":"Pairing of spatial and spin symmetry","Selezione della parità orbitale per due fermioni":"Orbital-parity selection for two fermions","Relazioni canoniche di anticommutazione fermioniche":"Canonical fermionic anticommutation relations","Idempotenza dell'operatore numero fermionico":"Idempotence of the fermionic number operator","Derivazione della distribuzione di Fermi-Dirac":"Derivation of the Fermi-Dirac distribution","Mare di Fermi e energia di Fermi a temperatura zero":"Fermi sea and Fermi energy at zero temperature","Pressione di degenerazione di un gas di Fermi ideale":"Degeneracy pressure of an ideal Fermi gas","Annullamento della correlazione a coppie per spin paralleli":"Vanishing pair correlation for parallel spins"},"title":{"it":"Principio di esclusione di Pauli","en":"Pauli exclusion principle"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

@@ -1,338 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postulato di Simmetrizzazione</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postulato di simmetrizzazione</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Postulato di Simmetrizzazione</h1>
-    <p>
-        Il postulato di simmetrizzazione è un principio fondamentale nella meccanica quantistica per descrivere lo stato di sistemi costituiti da particelle identiche. Poiché tali particelle sono indistinguibili, gli stati quantistici devono rispettare una specifica simmetria in base alla loro natura.
-    </p>
-    <p>
-        Esistono due categorie principali di particelle identiche:
-    </p>
-    <ul>
-        <li><strong>Fermioni:</strong> Particelle con spin semi-intero (\(s = 1/2, 3/2, \dots\)) che obbediscono al <em>principio di esclusione di Pauli</em>. Gli stati quantistici devono essere antisimmetrici rispetto allo scambio di due particelle.</li>
-        <li><strong>Bosoni:</strong> Particelle con spin intero (\(s = 0, 1, \dots\)) che seguono una simmetria dello stato quantistico, ovvero simmetrici rispetto allo scambio.</li>
-    </ul>
-    <h2>Espressione Matematica</h2>
-    <p>
-        Per un sistema di due particelle identiche, lo stato quantistico totale \(\Psi(\mathbf{r}_1, \mathbf{r}_2)\) può essere scritto come:
-    </p>
-    <div class="formula">
-        \[
-        \Psi(\mathbf{r}_1, \mathbf{r}_2) =
-        \begin{cases} 
-        +\Psi(\mathbf{r}_1, \mathbf{r}_2) & \text{(Bosoni)} \\ 
-        -\Psi(\mathbf{r}_1, \mathbf{r}_2) & \text{(Fermioni)}
-        \end{cases}
-        \]
-    </div>
-    <p>
-        Qui, \(\mathbf{r}_1\) e \(\mathbf{r}_2\) rappresentano le coordinate delle due particelle. Nel caso di fermioni, l'antisimmetria implica che lo stato totale diventa nullo quando due particelle occupano lo stesso stato quantistico, soddisfacendo il principio di esclusione di Pauli.
-    </p>
-    <h2>Applicazioni e Conseguenze</h2>
-    <p>
-        La simmetrizzazione ha importanti implicazioni in vari campi della fisica:
-    </p>
-    <ul>
-        <li><strong>Determinante di Slater:</strong> Una costruzione matematica utilizzata per rappresentare gli stati di più fermioni in modo antisimmetrico.</li>
-        <li><strong>Superfluidità e Condensato di Bose-Einstein:</strong> Fenomeni osservabili nei bosoni, derivanti dalla simmetria dello stato quantistico.</li>
-        <li><strong>Struttura elettronica degli atomi:</strong> La disposizione degli elettroni segue rigorosamente il principio di esclusione di Pauli, che governa la chimica e le proprietà elettroniche dei materiali.</li>
-    </ul>
-    <p>
-        Nel caso di più particelle identiche, la simmetrizzazione si estende a una somma (o differenza) di permutazioni degli stati di singola particella, descritte dal gruppo simmetrico \(S_N\), dove \(N\) è il numero di particelle.
-    </p>
-    <div class="formula">
-        \[
-        \Psi_{\text{totale}} = \frac{1}{\sqrt{N!}} \sum_{\sigma \in S_N} (\pm 1)^{p(\sigma)} \prod_{i=1}^N \psi_i(\mathbf{r}_{\sigma(i)})
-        \]
-    </div>
-    <p>
-        Qui, \(\psi_i\) rappresenta gli stati di singola particella, \(p(\sigma)\) è la parità della permutazione \(\sigma\), e il segno dipende dalla natura delle particelle (positivo per bosoni, negativo per fermioni).
-    </p>
-    <h2>Simmetria e Permutazioni</h2>
-<p>
-    La simmetria della funzione d'onda totale è governata dal comportamento rispetto alle permutazioni degli indici delle particelle. Considerando \(N\) particelle identiche, lo stato totale può essere scritto come combinazione lineare delle permutazioni:
-</p>
-<div class="formula">
-    \[
-    \Psi_{\text{totale}}(\mathbf{r}_1, \dots, \mathbf{r}_N) = \frac{1}{\sqrt{N!}} \sum_{\sigma \in S_N} \chi(\sigma) \prod_{i=1}^N \psi_i(\mathbf{r}_{\sigma(i)})
-    \]
-</div>
-<p>
-    Dove:
-</p>
-<ul>
-    <li>\(\sigma\) è una permutazione appartenente al gruppo simmetrico \(S_N\).</li>
-    <li>\(\chi(\sigma)\) è il carattere della rappresentazione associata: \(\chi(\sigma) = +1\) per bosoni (simmetria) e \(\chi(\sigma) = (-1)^{p(\sigma)}\) per fermioni (antisimmetria).</li>
-    <li>\(\psi_i(\mathbf{r})\) rappresenta gli stati quantistici di singola particella.</li>
-</ul>
-<p>
-    Questa formulazione implica che per i fermioni, lo stato cambia segno con una permutazione dispari, mentre per i bosoni rimane invariato sotto qualsiasi permutazione.
-
-<h2>Esempio: Due Particelle Identiche</h2>
-<p>
-    Consideriamo due particelle identiche con coordinate \(\mathbf{r}_1, \mathbf{r}_2\) e stati di singola particella \(\psi_a\) e \(\psi_b\). La funzione d'onda totale è:
-</p>
-<div class="formula">
-    \[
-    \Psi_{\text{totale}}(\mathbf{r}_1, \mathbf{r}_2) =
-    \begin{cases}
-    \frac{1}{\sqrt{2}} \left[ \psi_a(\mathbf{r}_1)\psi_b(\mathbf{r}_2) + \psi_b(\mathbf{r}_1)\psi_a(\mathbf{r}_2) \right] & \text{(Bosoni)} \\
-    \frac{1}{\sqrt{2}} \left[ \psi_a(\mathbf{r}_1)\psi_b(\mathbf{r}_2) - \psi_b(\mathbf{r}_1)\psi_a(\mathbf{r}_2) \right] & \text{(Fermioni)}
-    \end{cases}
-    \]
-</div>
-<p>
-    Per i bosoni, il termine è simmetrico; scambiare \(\mathbf{r}_1\) e \(\mathbf{r}_2\) non altera la funzione. Per i fermioni, l'antisimmetria implica che lo scambio introduce un segno negativo. Se \(\psi_a = \psi_b\), la funzione d'onda fermionica si annulla, riflettendo il principio di esclusione di Pauli.
-
-<h2>Antisimmetria e Matrici di Densità</h2>
-<p>
-    L'antisimmetria nei fermioni ha un impatto diretto sulle proprietà osservabili, come nella matrice di densità ridotta. La matrice di densità a due particelle, data da:
-</p>
-<div class="formula">
-    \[
-    \rho(\mathbf{r}_1, \mathbf{r}_2; \mathbf{r}'_1, \mathbf{r}'_2) = \Psi_{\text{totale}}^*(\mathbf{r}_1, \mathbf{r}_2) \Psi_{\text{totale}}(\mathbf{r}'_1, \mathbf{r}'_2)
-    \]
-</div>
-<p>
-    Per i fermioni, questa matrice include termini che si annullano quando le particelle occupano lo stesso stato quantistico, mentre per i bosoni non ci sono restrizioni di questo tipo. Questo ha implicazioni rilevanti nella fisica della materia condensata, come nei condensati di Bose-Einstein e nei gas di Fermi debolmente interagenti.
-
-<h2>Conseguenze nella Statistica Quantistica</h2>
-<p>
-    La distinzione tra bosoni e fermioni conduce a due diverse distribuzioni statistiche:
-</p>
-<ul>
-    <li><strong>Statistica di Bose-Einstein:</strong> Per bosoni, il numero medio di particelle in uno stato di energia \(\epsilon_i\) è dato da:
-    \[
-    \langle n_i \rangle = \frac{1}{e^{\beta (\epsilon_i - \mu)} - 1}
-    \]
-    Questa distribuzione consente a un numero arbitrariamente grande di bosoni di occupare lo stesso stato.</li>
-    <li><strong>Statistica di Fermi-Dirac:</strong> Per fermioni, il numero medio di particelle è:
-    \[
-    \langle n_i \rangle = \frac{1}{e^{\beta (\epsilon_i - \mu)} + 1}
-    \]
-    Questa distribuzione rispetta il principio di esclusione di Pauli, limitando il numero di particelle per stato a uno.</li>
-</ul>
-<p>
-    Qui, \(\beta = 1/k_BT\) è il fattore termico, \(\mu\) è il potenziale chimico, e \(\epsilon_i\) è l'energia dello stato \(i\).
-</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 10</div>
-  <h2>Postulato di Simmetrizzazione: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Costruire proiettori bosonico e fermionico e generalizzarli a N particelle.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Gli stati fisici appartengono a rappresentazioni definite del gruppo delle permutazioni; in tre dimensioni le particelle elementari ordinarie usano settori totalmente simmetrico o antisimmetrico.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Due corpi<span class="lecture-step-boss">DIM 9</span></h4>
-      <p>Normalizzazione inclusa per orbitali ortogonali.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\psi_\pm=\frac{\phi_a(1)\phi_b(2)\pm\phi_b(1)\phi_a(2)}{\sqrt2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P_{12}[\phi_a(1)\phi_b(2)]=\phi_a(2)\phi_b(1);\quad(1\pm P_{12})\phi_a(1)\phi_b(2)\Rightarrow\psi_\pm=\frac{\phi_a(1)\phi_b(2)\pm\phi_b(1)\phi_a(2)}{\sqrt2}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. N corpi<span class="lecture-step-boss">DIM 9</span></h4>
-      <p>Somma sulle permutazioni.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\mathcal S_\pm=\frac1{N!}\sum_P(\pm1)^P P"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathcal S_\pm=\frac1{N!}\sum_P(\pm1)^PP;\quad Q\mathcal S_\pm=(\pm1)^Q\mathcal S_\pm,\quad\mathcal S_\pm^2=\mathcal S_\pm\Rightarrow\mathcal S_\pm\ \text{proietta nel settore (anti)simmetrico}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Stesso orbitale</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Poni a=b.</p>
-    <p><strong>Calcolo.</strong> Lo stato antisimmetrico si annulla, quello simmetrico raddoppia prima della rinormalizzazione.</p>
-    <p><strong>Risultato e controllo.</strong> L'esclusione fermionica segue immediatamente.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 9</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_7.html">Domanda 2025 n. 7</a> - Sistemi di particelle identiche</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Orbitali comprendono coordinate spaziali e spin.</li>
-          <li>Normalizzazione cambia se gli stati non sono ortogonali.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La statistica è una restrizione globale sullo stato e sopravvive anche senza interazione dinamica.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Verifica che i simmetrizzatori siano proiettori.</li>
-          <li>Includi lo spin in x.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=230">Appunti-MQ.pdf, pp. 230-237: settori bosonico e fermionico</a></li>
-          <li><a href="MQ.pdf#page=17">MQ.pdf, pp. capitolo 17: operatori di permutazione</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-postulato-simmetrizzazione"><div class="lecture-kicker">Lezione approfondita - Argomento 13 - DIM 9</div><h1>Postulato di simmetrizzazione</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Generalizzare lo scambio a N particelle tramite il gruppo delle permutazioni, costruire e dimostrare i proiettori bosonico e fermionico, normalizzare correttamente gli stati con occupazioni ripetute e chiarire perché la simmetria è una restrizione globale sullo stato totale.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Dal caso a due al caso N</h3><p>Ogni permutazione può essere composta da scambi elementari. Il postulato assegna a tutte le permutazioni una legge coerente: nessun segno per i bosoni, segno uguale alla parità per i fermioni.</p></article><article class="lecture-card lecture-warning"><h3>Stato totale</h3><p>Il vincolo agisce su tutte le variabili di ogni particella, comprese posizione e spin. Simmetrizzare soltanto la parte spaziale è corretto solo dopo aver controllato la simmetria della parte interna.</p></article></div><h2>Permutazioni e settori fisici</h2><div class="lecture-grid"><article class="lecture-card "><h3>Gruppo simmetrico</h3><p>Il gruppo S_N contiene N fattoriale permutazioni. La composizione è non commutativa per N almeno tre, ma la parità del prodotto è sempre il prodotto delle parità.</p></article><article class="lecture-card "><h3>Nessuna dinamica necessaria</h3><p>La statistica non nasce dall'interazione tra particelle. Anche un Hamiltoniano privo di interazione evolve nello stesso settore di simmetria perché il settore è parte della definizione dello spazio fisico.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Azione di una permutazione<span class="lecture-step-boss">BASE</span></h4><p>L'operatore U di P riordina simultaneamente i fattori e le coordinate, senza cambiare gli stati a una particella.</p><div class="lecture-formula" aria-label="Azione di una permutazione su un ket prodotto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(P)|\alpha_1,\ldots,\alpha_N\rangle=|\alpha_{P^{-1}(1)},\ldots,\alpha_{P^{-1}(N)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Rappresentazione del gruppo<span class="lecture-step-boss">ORALE</span></h4><p>L'inverso nell'indice garantisce che la composizione degli operatori segua nello stesso ordine la composizione delle permutazioni.</p><div class="lecture-formula" aria-label="Rappresentazione unitaria del gruppo simmetrico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(P)U(Q)=U(PQ),\qquad U(P)^{\dagger}=U(P^{-1}),\qquad U(e)=I\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Parità<span class="lecture-step-boss">DIM 9</span></h4><p>Una permutazione pari richiede un numero pari di trasposizioni; il segno non dipende dalla particolare decomposizione scelta.</p><div class="lecture-formula" aria-label="Parità e segno di una permutazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \operatorname{sgn}(P)=(-1)^{p(P)},\qquad\operatorname{sgn}(PQ)=\operatorname{sgn}(P)\operatorname{sgn}(Q)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Postulato per N particelle<span class="lecture-step-boss">BOSS</span></h4><p>I bosoni realizzano la rappresentazione banale; i fermioni la rappresentazione alternante.</p><div class="lecture-formula" aria-label="Postulato di simmetrizzazione per N particelle"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(P)|\Psi_B\rangle=|\Psi_B\rangle,\qquad U(P)|\Psi_F\rangle=\operatorname{sgn}(P)|\Psi_F\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Simmetrizzatore<span class="lecture-step-boss">DIM 9</span></h4><p>La media uniforme su tutte le permutazioni elimina ogni dipendenza dall'ordine delle etichette.</p><div class="lecture-formula" aria-label="Definizione del simmetrizzatore a N particelle"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal S=\frac1{N!}\sum_{P\in S_N}U(P)\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Antisimmetrizzatore<span class="lecture-step-boss">DIM 9</span></h4><p>Pesare ogni permutazione con la sua parità produce il settore che cambia segno sotto ogni trasposizione.</p><div class="lecture-formula" aria-label="Definizione dell&#x27;antisimmetrizzatore a N particelle"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal A=\frac1{N!}\sum_{P\in S_N}\operatorname{sgn}(P)U(P)\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Azione di una permutazione<span class="lecture-step-boss">ORALE</span></h4><p>Rietichettare l'indice di somma mostra direttamente il carattere bosonico o fermionico del risultato.</p><div class="lecture-formula" aria-label="Azione delle permutazioni sui proiettori"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(Q)\mathcal S=\mathcal S,\qquad U(Q)\mathcal A=\operatorname{sgn}(Q)\mathcal A\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Proprietà di proiettore<span class="lecture-step-boss">CHECK</span></h4><p>Per ogni prodotto R esistono esattamente N fattoriale coppie P,Q con PQ uguale a R.</p><div class="lecture-formula" aria-label="Idempotenza dei proiettori di simmetria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal S^2=\frac1{(N!)^2}\sum_{P,Q}U(PQ)=\frac1{N!}\sum_RU(R)=\mathcal S,\qquad\mathcal A^2=\mathcal A\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Hermiticità e ortogonalità<span class="lecture-step-boss">CHECK</span></h4><p>L'inversione permuta la somma senza cambiarla; i settori più e meno sono mutuamente ortogonali.</p><div class="lecture-formula" aria-label="Hermiticità e ortogonalità dei settori"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal S^{\dagger}=\mathcal S,\quad\mathcal A^{\dagger}=\mathcal A,\qquad N>1:\ \mathcal S\mathcal A=0\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Bosoni con occupazioni<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Se alcuni orbitali coincidono, le permutazioni non generano tutti ket distinti; i fattoriali delle occupazioni correggono la norma.</p><div class="lecture-formula" aria-label="Normalizzazione bosonica con occupazioni ripetute"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\{n_\alpha\}\rangle_B=\sqrt{\frac{\prod_\alpha n_\alpha!}{N!}}\sum_{\rm distinti}U(P)|\alpha_1\cdots\alpha_N\rangle,\qquad\sum_\alpha n_\alpha=N\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Fermioni distinti<span class="lecture-step-boss">DIM 9</span></h4><p>Per orbitali ortonormali tutti distinti, la somma alternata contiene N fattoriale termini ortogonali di uguale norma.</p><div class="lecture-formula" aria-label="Stato fermionico antisimmetrizzato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\alpha_1\cdots\alpha_N\rangle_F=\frac1{\sqrt{N!}}\sum_P\operatorname{sgn}(P)U(P)|\alpha_1\cdots\alpha_N\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Duplicazione fermionica<span class="lecture-step-boss">PAULI</span></h4><p>Se due orbitali sono uguali, una trasposizione lascia il prodotto invariato ma l'antisimmetrizzatore gli assegna segno opposto.</p><div class="lecture-formula" aria-label="Annullamento dello stato fermionico duplicato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \alpha_i=\alpha_j:\quad U(P_{ij})|\Phi\rangle=|\Phi\rangle,\quad U(P_{ij})\mathcal A|\Phi\rangle=-\mathcal A|\Phi\rangle\Rightarrow\mathcal A|\Phi\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Operatori simmetrici<span class="lecture-step-boss">ORALE</span></h4><p>Hamiltoniana e osservabili fisici commutano con tutte le permutazioni e non mescolano i settori.</p><div class="lecture-formula" aria-label="Conservazione e ortogonalità dei settori"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [O,U(P)]=0\ \forall P\Rightarrow[O,\mathcal S]=[O,\mathcal A]=0,\qquad\mathcal S O\mathcal A=0\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Spazio per spin<span class="lecture-step-boss">DIM 8</span></h4><p>La parità totale è il prodotto delle parità dei fattori, perciò i due elettroni ammettono solo due abbinamenti.</p><div class="lecture-formula" aria-label="Composizione della simmetria spaziale e di spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P\Psi_{\rm tot}=P(\varphi\chi)=\eta_{\rm space}\eta_{\rm spin}\Psi_{\rm tot},\qquad\eta_{\rm space}\eta_{\rm spin}=-1\)</span></div></article></section><h2>Esempio d'esame: tre bosoni in due orbitali</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Dati.</strong> Tre bosoni occupano due volte l'orbitale a e una volta l'orbitale b, con a e b ortonormali.</p><p data-i18n-skip="true">\(\displaystyle N=3,\ n_a=2,\ n_b=1:\quad|2_a,1_b\rangle=\frac{|aab\rangle+|aba\rangle+|baa\rangle}{\sqrt3}\)</p><p><strong>Controllo.</strong> I tre ket sono ortogonali e la norma è uno. La stessa occupazione per fermioni darebbe zero, perché due colonne o due orbitali coincidono.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Proiettore non normalizzatore</h3><p>Applicare S o A seleziona un settore ma non garantisce norma uno. Dopo la proiezione occorre dividere per la radice del valore medio del proiettore, salvo usare formule già normalizzate.</p></article><article class="lecture-card "><h3>Occupazioni e prima quantizzazione</h3><p>Le etichette di particella spariscono dalla lettura fisica e restano i numeri di occupazione. Questa osservazione prepara il linguaggio degli operatori di creazione e annichilazione della seconda quantizzazione.</p></article><article class="lecture-card "><h3>Settori di superselezione</h3><p>Gli osservabili simmetrici preservano la statistica e non producono interferenza tra settori bosonico e fermionico. Non si prepara una sovrapposizione fisica di specie con statistiche diverse mediante osservabili ordinari.</p></article><article class="lecture-card "><h3>Portata del postulato</h3><p>La costruzione usa le rappresentazioni completamente simmetrica e antisimmetrica appropriate alle particelle ordinarie in tre dimensioni. Possibilità topologiche bidimensionali e parastatistiche richiedono un quadro più generale.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dimenticare il fattore uno su N fattoriale nei proiettori; confondere somma su tutte le permutazioni e somma sui ket distinti; usare sempre uno su radice di N fattoriale quando vi sono occupazioni ripetute; simmetrizzare solo lo spazio senza includere lo spin.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Contare N fattoriale elementi, verificare legge di composizione e parità, provare idempotenza ed hermiticità, calcolare esplicitamente la norma dopo la proiezione e controllare il segno sotto una trasposizione qualsiasi.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci U di P e dimostra la legge di composizione.</li><li>Definisci la parità e mostra che è moltiplicativa.</li><li>Costruisci S e A come somme sul gruppo S_N.</li><li>Dimostra azione, idempotenza, hermiticità e ortogonalità.</li><li>Normalizza un esempio bosonico con occupazioni ripetute.</li><li>Mostra in una riga perché un duplicato fermionico si annulla.</li><li>Spiega perché gli osservabili fisici non mescolano i settori.</li><li>Combina correttamente simmetria spaziale e di spin.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L922">DIM 9 - postulato, proiettori e costruzione a N particelle</a></li><li><a href="Appunti-MQ.pdf#page=232">Appunti-MQ.pdf, pagine PDF 232-236 - bosoni, fermioni, permutazioni e normalizzazione</a></li><li><a href="MQ.pdf#page=71">MQ.pdf, pagine PDF 71-72 - simmetria totale e somma sulle permutazioni</a></li><li><a href="Domanda2025_7.html">Domanda 2025 n. 7 - sistemi di particelle identiche</a></li><li><a href="indistinguibilita.html">Indistinguibilità - operatore di scambio e invarianza dinamica</a></li></ul><p class="lecture-note">Questa pagina sviluppa la proiezione sui settori a N particelle; determinante di Slater e principio di Pauli vengono derivati in dettaglio nelle due pagine dedicate.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 13 - DIM 9":"In-depth lesson - Topic 13 - DIM 9","Postulato di simmetrizzazione":"Symmetrization postulate","Obiettivo.":"Objective.","Generalizzare lo scambio a N particelle tramite il gruppo delle permutazioni, costruire e dimostrare i proiettori bosonico e fermionico, normalizzare correttamente gli stati con occupazioni ripetute e chiarire perché la simmetria è una restrizione globale sullo stato totale.":"Generalize exchange to N particles through the permutation group, construct and prove the bosonic and fermionic projectors, correctly normalize states with repeated occupations, and clarify why symmetry is a global restriction on the total state.","Dal caso a due al caso N":"From two particles to N","Ogni permutazione può essere composta da scambi elementari. Il postulato assegna a tutte le permutazioni una legge coerente: nessun segno per i bosoni, segno uguale alla parità per i fermioni.":"Every permutation can be composed from elementary exchanges. The postulate assigns a consistent rule to all permutations: no sign for bosons, and the parity sign for fermions.","Stato totale":"Total state","Il vincolo agisce su tutte le variabili di ogni particella, comprese posizione e spin. Simmetrizzare soltanto la parte spaziale è corretto solo dopo aver controllato la simmetria della parte interna.":"The constraint acts on all variables of every particle, including position and spin. Symmetrizing only the spatial part is correct only after checking the symmetry of the internal part.","Permutazioni e settori fisici":"Permutations and physical sectors","Gruppo simmetrico":"Symmetric group","Il gruppo S_N contiene N fattoriale permutazioni. La composizione è non commutativa per N almeno tre, ma la parità del prodotto è sempre il prodotto delle parità.":"The group S_N contains N factorial permutations. Composition is noncommutative for N at least three, but the parity of a product is always the product of the parities.","Nessuna dinamica necessaria":"No interaction required","La statistica non nasce dall'interazione tra particelle. Anche un Hamiltoniano privo di interazione evolve nello stesso settore di simmetria perché il settore è parte della definizione dello spazio fisico.":"Statistics does not arise from interactions between particles. Even a noninteracting Hamiltonian evolves within the same symmetry sector because the sector is part of the definition of the physical space.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Azione di una permutazione":"1. Action of a permutation","BASE":"BASE","L'operatore U di P riordina simultaneamente i fattori e le coordinate, senza cambiare gli stati a una particella.":"The operator U of P simultaneously reorders factors and coordinates without changing the one-particle states.","Passaggio":"Step","2. Rappresentazione del gruppo":"2. Group representation","ORALE":"ORAL","L'inverso nell'indice garantisce che la composizione degli operatori segua nello stesso ordine la composizione delle permutazioni.":"The inverse in the index ensures that operator composition follows permutation composition in the same order.","3. Parità":"3. Parity","DIM 9":"DIM 9","Una permutazione pari richiede un numero pari di trasposizioni; il segno non dipende dalla particolare decomposizione scelta.":"An even permutation requires an even number of transpositions; the sign does not depend on the chosen decomposition.","4. Postulato per N particelle":"4. Postulate for N particles","BOSS":"BOSS","I bosoni realizzano la rappresentazione banale; i fermioni la rappresentazione alternante.":"Bosons realize the trivial representation; fermions realize the alternating representation.","5. Simmetrizzatore":"5. Symmetrizer","La media uniforme su tutte le permutazioni elimina ogni dipendenza dall'ordine delle etichette.":"The uniform average over all permutations removes every dependence on label ordering.","6. Antisimmetrizzatore":"6. Antisymmetrizer","Pesare ogni permutazione con la sua parità produce il settore che cambia segno sotto ogni trasposizione.":"Weighting each permutation by its parity produces the sector that changes sign under every transposition.","7. Azione di una permutazione":"7. Action of any permutation","Rietichettare l'indice di somma mostra direttamente il carattere bosonico o fermionico del risultato.":"Relabeling the summation index directly shows the bosonic or fermionic character of the result.","8. Proprietà di proiettore":"8. Projector property","CHECK":"CHECK","Per ogni prodotto R esistono esattamente N fattoriale coppie P,Q con PQ uguale a R.":"For each product R there are exactly N factorial pairs P,Q whose product equals R.","9. Hermiticità e ortogonalità":"9. Hermiticity and orthogonality","L'inversione permuta la somma senza cambiarla; i settori più e meno sono mutuamente ortogonali.":"Inversion permutes the sum without changing it; the plus and minus sectors are mutually orthogonal.","10. Bosoni con occupazioni":"10. Bosons with occupations","ESTENSIONE":"EXTENSION","Se alcuni orbitali coincidono, le permutazioni non generano tutti ket distinti; i fattoriali delle occupazioni correggono la norma.":"If some orbitals coincide, permutations do not generate all distinct kets; occupation factorials correct the norm.","11. Fermioni distinti":"11. Distinct fermion orbitals","Per orbitali ortonormali tutti distinti, la somma alternata contiene N fattoriale termini ortogonali di uguale norma.":"For distinct orthonormal orbitals, the alternating sum contains N factorial orthogonal terms of equal norm.","12. Duplicazione fermionica":"12. Fermionic duplication","PAULI":"PAULI","Se due orbitali sono uguali, una trasposizione lascia il prodotto invariato ma l'antisimmetrizzatore gli assegna segno opposto.":"If two orbitals are equal, a transposition leaves the product unchanged while the antisymmetrizer assigns it the opposite sign.","13. Operatori simmetrici":"13. Symmetric operators","Hamiltoniana e osservabili fisici commutano con tutte le permutazioni e non mescolano i settori.":"The Hamiltonian and physical observables commute with every permutation and do not mix the sectors.","14. Spazio per spin":"14. Space times spin","DIM 8":"DIM 8","La parità totale è il prodotto delle parità dei fattori, perciò i due elettroni ammettono solo due abbinamenti.":"Total parity is the product of factor parities, so two electrons admit only two pairings.","Esempio d'esame: tre bosoni in due orbitali":"Exam example: three bosons in two orbitals","Dati.":"Data.","Tre bosoni occupano due volte l'orbitale a e una volta l'orbitale b, con a e b ortonormali.":"Three bosons occupy orbital a twice and orbital b once, with a and b orthonormal.","Controllo.":"Check.","I tre ket sono ortogonali e la norma è uno. La stessa occupazione per fermioni darebbe zero, perché due colonne o due orbitali coincidono.":"The three kets are orthogonal and the norm is one. The same occupation for fermions would give zero because two columns or two orbitals coincide.","Interpretazione e limiti":"Interpretation and limits","Proiettore non normalizzatore":"Projector, not normalizer","Applicare S o A seleziona un settore ma non garantisce norma uno. Dopo la proiezione occorre dividere per la radice del valore medio del proiettore, salvo usare formule già normalizzate.":"Applying S or A selects a sector but does not guarantee unit norm. After projection one must divide by the square root of the projector expectation value unless an already normalized formula is used.","Occupazioni e prima quantizzazione":"Occupations and first quantization","Le etichette di particella spariscono dalla lettura fisica e restano i numeri di occupazione. Questa osservazione prepara il linguaggio degli operatori di creazione e annichilazione della seconda quantizzazione.":"Particle labels disappear from the physical description and occupation numbers remain. This observation prepares the creation and annihilation operator language of second quantization.","Settori di superselezione":"Superselection sectors","Gli osservabili simmetrici preservano la statistica e non producono interferenza tra settori bosonico e fermionico. Non si prepara una sovrapposizione fisica di specie con statistiche diverse mediante osservabili ordinari.":"Symmetric observables preserve statistics and do not produce interference between bosonic and fermionic sectors. Ordinary observables do not prepare a physical superposition of species with different statistics.","Portata del postulato":"Scope of the postulate","La costruzione usa le rappresentazioni completamente simmetrica e antisimmetrica appropriate alle particelle ordinarie in tre dimensioni. Possibilità topologiche bidimensionali e parastatistiche richiedono un quadro più generale.":"The construction uses the fully symmetric and antisymmetric representations appropriate to ordinary particles in three dimensions. Two-dimensional topological possibilities and parastatistics require a broader framework.","Errori tipici":"Common errors","Dimenticare il fattore uno su N fattoriale nei proiettori; confondere somma su tutte le permutazioni e somma sui ket distinti; usare sempre uno su radice di N fattoriale quando vi sono occupazioni ripetute; simmetrizzare solo lo spazio senza includere lo spin.":"Forgetting the one-over-N-factorial factor in the projectors; confusing a sum over all permutations with a sum over distinct kets; always using one over square root of N factorial when occupations repeat; symmetrizing space alone without including spin.","Controlli rapidi":"Quick checks","Contare N fattoriale elementi, verificare legge di composizione e parità, provare idempotenza ed hermiticità, calcolare esplicitamente la norma dopo la proiezione e controllare il segno sotto una trasposizione qualsiasi.":"Count N factorial elements, verify composition and parity laws, prove idempotence and Hermiticity, explicitly compute the norm after projection, and check the sign under any transposition.","Controllo da orale":"Oral exam checklist","Definisci U di P e dimostra la legge di composizione.":"Define U of P and prove the composition law.","Definisci la parità e mostra che è moltiplicativa.":"Define parity and show that it is multiplicative.","Costruisci S e A come somme sul gruppo S_N.":"Construct S and A as sums over the group S_N.","Dimostra azione, idempotenza, hermiticità e ortogonalità.":"Prove their action, idempotence, Hermiticity, and orthogonality.","Normalizza un esempio bosonico con occupazioni ripetute.":"Normalize a bosonic example with repeated occupations.","Mostra in una riga perché un duplicato fermionico si annulla.":"Show in one line why a duplicated fermion orbital vanishes.","Spiega perché gli osservabili fisici non mescolano i settori.":"Explain why physical observables do not mix the sectors.","Combina correttamente simmetria spaziale e di spin.":"Correctly combine spatial and spin symmetry.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 9 - postulato, proiettori e costruzione a N particelle":"DIM 9 - postulate, projectors, and N-particle construction","Appunti-MQ.pdf, pagine PDF 232-236 - bosoni, fermioni, permutazioni e normalizzazione":"Appunti-MQ.pdf, PDF pages 232-236 - bosons, fermions, permutations, and normalization","MQ.pdf, pagine PDF 71-72 - simmetria totale e somma sulle permutazioni":"MQ.pdf, PDF pages 71-72 - total symmetry and sum over permutations","Domanda 2025 n. 7 - sistemi di particelle identiche":"2025 question 7 - systems of identical particles","Indistinguibilità - operatore di scambio e invarianza dinamica":"Indistinguishability - exchange operator and dynamical invariance","Questa pagina sviluppa la proiezione sui settori a N particelle; determinante di Slater e principio di Pauli vengono derivati in dettaglio nelle due pagine dedicate.":"This page develops projection onto N-particle sectors; the Slater determinant and Pauli principle are derived in detail in their dedicated pages.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Azione di una permutazione su un ket prodotto":"Action of a permutation on a product ket","Rappresentazione unitaria del gruppo simmetrico":"Unitary representation of the symmetric group","Parità e segno di una permutazione":"Parity and sign of a permutation","Postulato di simmetrizzazione per N particelle":"Symmetrization postulate for N particles","Definizione del simmetrizzatore a N particelle":"Definition of the N-particle symmetrizer","Definizione dell'antisimmetrizzatore a N particelle":"Definition of the N-particle antisymmetrizer","Azione delle permutazioni sui proiettori":"Action of permutations on the projectors","Idempotenza dei proiettori di simmetria":"Idempotence of symmetry projectors","Hermiticità e ortogonalità dei settori":"Hermiticity and orthogonality of the sectors","Normalizzazione bosonica con occupazioni ripetute":"Bosonic normalization with repeated occupations","Stato fermionico antisimmetrizzato":"Antisymmetrized fermion state","Annullamento dello stato fermionico duplicato":"Vanishing of a duplicated fermion state","Conservazione e ortogonalità dei settori":"Conservation and orthogonality of symmetry sectors","Composizione della simmetria spaziale e di spin":"Composition of spatial and spin symmetry"},"title":{"it":"Postulato di simmetrizzazione","en":"Symmetrization postulate"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
