@@ -82,6 +82,30 @@
     }
     .btn:hover{ background: rgba(255,255,255,.10); }
 
+    .language-switch{
+      display:inline-flex;
+      align-items:center;
+      gap:3px;
+      padding:3px;
+      border:1px solid rgba(125,211,252,.28);
+      border-radius:999px;
+      background:rgba(3,8,18,.36);
+    }
+    .language-switch button{
+      min-width:38px;
+      padding:7px 9px;
+      border:0;
+      border-radius:999px;
+      background:transparent;
+      color:var(--muted);
+      font:900 11px/1 system-ui, sans-serif;
+      cursor:pointer;
+    }
+    .language-switch button.is-active{
+      color:#07111f;
+      background:linear-gradient(135deg,#38bdf8,#c4b5fd);
+    }
+
     .btn.primary{
       background: rgba(43,127,255,.18);
       border-color: rgba(43,127,255,.38);
@@ -416,6 +440,15 @@
     }
 
     @media (max-width: 520px){
+      #topbar{ align-items:flex-start; flex-wrap:wrap; }
+      #topbar > .chip:first-child{
+        max-width:calc(100vw - 20px);
+        flex-wrap:wrap;
+        gap:5px;
+        padding:6px;
+      }
+      #topbar > .chip:last-child{ display:none; }
+      #topbar .btn{ padding:8px 9px; font-size:12px; }
       .drawer{ width: calc(100vw - 20px); }
       /* Su schermi piccoli mettiamo entrambi i drawer sul lato sinistro (full width) */
       #drawerSol{ left:10px; right:10px; }
@@ -619,6 +652,10 @@
       <button class="btn" id="btnSol" title="Apri/chiudi ultima soluzione">Ultima soluzione</button>
       <button class="btn" id="btnLights" title="Toggle luci (L)">L</button>
       <button class="btn" id="btnMusic" title="Musica">♪</button>
+      <div class="language-switch" aria-label="Lingua / Language" role="group">
+        <button id="langIt" type="button" data-language="it">ITA</button>
+        <button id="langEn" type="button" data-language="en">ENG</button>
+      </div>
     </div>
     <div class="chip">
       <span class="mini" id="miniHelp">Desktop: clicca per mouse-look - WASD - E interagisci - ESC libera il mouse</span>
@@ -648,7 +685,7 @@
   <div class="drawer" id="drawerInv">
     <div class="dhead">
       <div>
-        <strong>Help e problemi</strong>
+        <strong id="invHeading">Help e problemi</strong>
         <div class="sol-meta" id="invMeta">-</div>
       </div>
       <div class="right">
@@ -658,7 +695,7 @@
     <div class="dbody">
 <div id="invHelper" class="helper-card">
   <div class="helper-title">DIM 0 Helper</div>
-  <div class="helper-sub">Comandi + navigazione</div>
+  <div class="helper-sub" id="helperSubtitle">Comandi + navigazione</div>
 
   <div class="helper-grid">
     <div class="helper-col">
@@ -721,12 +758,38 @@
   (function(){
     "use strict";
 
+    const storedLanguage = (()=>{
+      try{ return localStorage.getItem("cp-language-v1"); }catch(error){ return null; }
+    })();
+    let currentLanguage = storedLanguage === "en" ? "en" : "it";
+
+    const DEVICE_PROFILE = (()=>{
+      const params = new URLSearchParams(location.search);
+      const forced = params.get("quality");
+      const ua = navigator.userAgent || "";
+      const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      const coarse = !!(window.matchMedia && window.matchMedia("(hover:none) and (pointer:coarse)").matches);
+      const narrow = Math.min(screen.width || innerWidth, screen.height || innerHeight) <= 820;
+      const lowMemory = Number(navigator.deviceMemory || 8) <= 4;
+      const saveData = !!(navigator.connection && navigator.connection.saveData);
+      const lightweight = forced === "low" || (forced !== "high" && (ios || saveData || lowMemory || (coarse && narrow)));
+      return {
+        lightweight,
+        ios,
+        usePBR: !lightweight,
+        useEnvironment: !lightweight,
+        maxAnisotropy: lightweight ? 2 : 16,
+        pixelRatio: Math.min(window.devicePixelRatio || 1, lightweight ? 1.15 : 1.6),
+      };
+    })();
+
     // Local assets (metti assets3d/ nella cartella boss/ assieme a questo file)
     const ASSETS = {
       sky: "assets3d/skybox_clouds_sun_4096x2048.jpg",
 
       // High-definition PBR sets (see assets3d/ folder)
       marble: {
+        preview: "assets3d/Marble012_4K-JPG/Marble012.png",
         color: "assets3d/Marble012_4K-JPG/Marble012_4K-JPG_Color.jpg",
         roughness: "assets3d/Marble012_4K-JPG/Marble012_4K-JPG_Roughness.jpg",
         normal: "assets3d/Marble012_4K-JPG/Marble012_4K-JPG_NormalGL.jpg",
@@ -734,6 +797,7 @@
 
       // Part 1 blocks: gold (4K)
 metalP1: {
+  preview: "assets3d/Metal048C_4K-JPG/Metal048C.png",
   color: "assets3d/Metal048C_4K-JPG/Metal048C_4K-JPG_Color.jpg",
   roughness: "assets3d/Metal048C_4K-JPG/Metal048C_4K-JPG_Roughness.jpg",
   metalness: "assets3d/Metal048C_4K-JPG/Metal048C_4K-JPG_Metalness.jpg",
@@ -742,6 +806,7 @@ metalP1: {
 
 // Part 2 blocks: use the previous P3 steel/industrial
 metalP2: {
+  preview: "assets3d/Metal034_4K-JPG/Metal034.png",
   color: "assets3d/Metal034_4K-JPG/Metal034_4K-JPG_Color.jpg",
   roughness: "assets3d/Metal034_4K-JPG/Metal034_4K-JPG_Roughness.jpg",
   metalness: "assets3d/Metal034_4K-JPG/Metal034_4K-JPG_Metalness.jpg",
@@ -750,6 +815,7 @@ metalP2: {
 
 // Part 3 blocks + columns: use Metal048A (8K)
 metalP3: {
+  preview: "assets3d/Metal048A_8K-JPG/Metal048A.png",
   color: "assets3d/Metal048A_8K-JPG/Metal048A_8K-JPG_Color.jpg",
   roughness: "assets3d/Metal048A_8K-JPG/Metal048A_8K-JPG_Roughness.jpg",
   metalness: "assets3d/Metal048A_8K-JPG/Metal048A_8K-JPG_Metalness.jpg",
@@ -762,11 +828,18 @@ metalDecorPng: "assets3d/Metal049A_8K-JPG/Metal049A.png",
 ;
 
     // TXT files: puoi metterli in boss/ oppure in root (un livello sopra)
-    const TXT_FILES = [
-      { paths: ["./P1_DIM_0-6.txt", "../P1_DIM_0-6.txt"] },
-      { paths: ["./P2_DIM_7-12.txt", "../P2_DIM_7-12.txt"] },
-      { paths: ["./P3_DIM_13-18.txt", "../P3_DIM_13-18.txt"] },
-    ];
+    const TXT_FILES = {
+      it: [
+        { paths: ["./P1_DIM_0-6.txt", "../P1_DIM_0-6.txt"] },
+        { paths: ["./P2_DIM_7-12.txt", "../P2_DIM_7-12.txt"] },
+        { paths: ["./P3_DIM_13-18.txt", "../P3_DIM_13-18.txt"] },
+      ],
+      en: [
+        { paths: ["./P1_DIM_0-6.en.txt", "../P1_DIM_0-6.en.txt"] },
+        { paths: ["./P2_DIM_7-12.en.txt", "../P2_DIM_7-12.en.txt"] },
+        { paths: ["./P3_DIM_13-18.en.txt", "../P3_DIM_13-18.en.txt"] },
+      ],
+    };
 
     // 18 blocchi 3D per DIM 1-18. DIM 0 vive nell'inventario.
     const DIM_BLOCKS = Array.from({length: 18}, (_,i)=> i+1);
@@ -908,8 +981,93 @@ metalDecorPng: "assets3d/Metal049A_8K-JPG/Metal049A.png",
       },
     ];
 
+    const BOSS_DIM_EN = {
+      0: {
+        plain: "DIM 0 (Foundations): Postulates + solving the TDSE/TISE: 1. Schrodinger equation and superposition principle, 2. measurement outcomes and wave-function collapse, 3. Born rule, 4. expectation value of an observable, 5. symmetrized operator products, 6. reduction of the wave packet.",
+        html: String.raw`<b>DIM 0 (Foundations):</b> Postulates + solving the TDSE/TISE: 1. Schrodinger equation and superposition principle, 2. measurement outcomes and wave-function collapse, 3. Born rule, 4. expectation value of an observable, 5. symmetrized operator products, 6. reduction of the wave packet.`,
+      },
+      1: {
+        plain: "DIM 1: Global and local conservation of probability: Hermiticity of H + continuity equation, through the probability current j and the Gauss-Green theorem.",
+        html: String.raw`<b>DIM 1:</b> <span class="br">Global and local conservation of probability</span>: Hermiticity of \(H\) + continuity equation, through the probability current \(\vec j\) and the Gauss-Green theorem.`,
+      },
+      2: {
+        plain: "DIM 2: Heisenberg uncertainty principle from commutators; minimum-uncertainty equality and the Gaussian wave packet.",
+        html: String.raw`<b>DIM 2:</b> <span class="br">Heisenberg uncertainty principle</span> from commutators: \((\Delta A)^2(\Delta B)^2 \ge \frac14|\langle[A,B]\rangle|^2\), with \(A=x\), \(B=p\); equality and the minimum-uncertainty Gaussian wave packet.`,
+      },
+      3: {
+        plain: "DIM 3: Compatible observables if and only if [A,B] = 0, in the non-degenerate and degenerate cases.",
+        html: String.raw`<b>DIM 3:</b> Compatible observables if and only if \([A,B]=0\), in the non-degenerate and degenerate cases.`,
+      },
+      4: {
+        plain: "DIM 4: Expectation values and Ehrenfest's theorem; time derivatives of position and momentum; Schrodinger, Heisenberg, and interaction pictures; symmetries, translations, rotations, and conserved quantities.",
+        html: String.raw`<b>DIM 4:</b> Expectation values and Ehrenfest's theorem, \(d\langle x\rangle/dt\) and \(d\langle p\rangle/dt\); Schrodinger, Heisenberg, and interaction pictures; symmetries, translations, rotations, and conserved quantities.`,
+      },
+      5: {
+        plain: "DIM 5: Physical and energetic analysis of generic one-dimensional potentials; free particle; quantum-classical comparison; step, barrier, and finite/infinite wells; wave functions, boundary matching, R and T from the current; optical analogy; parity; bound and scattering states.",
+        html: String.raw`<b>DIM 5:</b> Physical and energetic analysis of generic one-dimensional potentials; free particle; quantum-classical comparison; step, barrier, and finite/infinite wells; wave functions, boundary matching, \(R\) and \(T\) from the current; optical analogy; parity; bound and scattering states.`,
+      },
+      6: {
+        plain: "DIM 6: Physical and energetic discussion and quantum-classical comparison for the harmonic oscillator; operator method with a, a dagger, N, spectrum, and ladder structure.",
+        html: String.raw`<b>DIM 6:</b> Physical and energetic discussion and quantum-classical comparison for the harmonic oscillator; operator method with \(a\), \(a^\dagger\), \(N\), spectrum, and ladder structure.`,
+      },
+      7: {
+        plain: "DIM 7: Time-independent perturbation theory: non-degenerate first-order energy and state corrections and second-order energy; degenerate secular equation and diagonalization in the degenerate eigenspace.",
+        html: String.raw`<b>DIM 7:</b> Time-independent perturbation theory: non-degenerate \(E^{(1)}\), \(|\psi^{(1)}\rangle\), and \(E^{(2)}\); degenerate secular equation and diagonalization in the degenerate eigenspace.`,
+      },
+      8: {
+        plain: "DIM 8: Addition of general angular momenta J = J1 + J2: complete commuting sets, Clebsch-Gordan coefficients, and ladder construction; two spin-1/2 fermions and triplet/singlet states.",
+        html: String.raw`<b>DIM 8:</b> Addition of general angular momenta \(\vec J=\vec J_1+\vec J_2\): complete commuting sets, Clebsch-Gordan coefficients, and ladder construction; two spin-\(1/2\) fermions and triplet/singlet states.`,
+      },
+      9: {
+        plain: "DIM 9: Identical particles: exchange operator, eigenvalues +/-1, [P,H] = 0, symmetric and antisymmetric states, Pauli principle and Slater determinant; singlet/triplet rule and even/odd orbital angular momentum.",
+        html: String.raw`<b>DIM 9:</b> Identical particles: exchange operator, eigenvalues \(\pm1\), \([P,H]=0\), symmetric and antisymmetric states, Pauli principle and Slater determinant; singlet/triplet rule and even/odd \(\ell\) under exchange \((-1)^\ell\).`,
+      },
+      10: {
+        plain: "DIM 10: Hellmann-Feynman theorem and spectroscopic notation: dE_n/dlambda = <n|dH/dlambda|n>.",
+        html: String.raw`<b>DIM 10:</b> Hellmann-Feynman theorem and spectroscopic notation: \(\frac{dE_n}{d\lambda}=\langle n|\frac{\partial H}{\partial\lambda}|n\rangle\).`,
+      },
+      11: {
+        plain: "DIM 11: Relativistic corrections: mass-velocity term, Darwin term, complete spin-orbit interaction, and the fine structure of hydrogen.",
+        html: String.raw`<b>DIM 11:</b> Relativistic corrections: \(H_{MV}\), \(H_D\), complete spin-orbit interaction \(H_{SO}\), and the fine structure of hydrogen.`,
+      },
+      12: {
+        plain: "DIM 12: Time-dependent perturbation theory: variation of constants and c_n(t); resonance, emission, absorption, and Bohr frequency; constant and periodic perturbations; continuum limit, Fermi's golden rule, lifetime, and linewidth.",
+        html: String.raw`<b>DIM 12:</b> Time-dependent perturbation theory: variation of constants and \(c_n(t)\); resonance, emission, absorption, and Bohr frequency; constant and periodic perturbations; continuum limit, Fermi's golden rule, lifetime \(\tau\), and linewidth \(\Gamma\).`,
+      },
+      13: {
+        plain: "DIM 13: Spin: normal Zeeman effect, interaction with a uniform magnetic field, spin 1/2 and Pauli spinors, Stern-Gerlach experiment, and Stark effect.",
+        html: String.raw`<b>DIM 13:</b> Spin: normal Zeeman effect, interaction with a uniform magnetic field, spin \(1/2\) and Pauli spinors, Stern-Gerlach experiment, and Stark effect.`,
+      },
+      14: {
+        plain: "DIM 14: Schrodinger equation in three dimensions: separation of variables, three-dimensional harmonic oscillator, and free particle in three dimensions.",
+        html: String.raw`<b>DIM 14:</b> Schrodinger equation in three dimensions: separation of variables, three-dimensional harmonic oscillator, and free particle in three dimensions.`,
+      },
+      15: {
+        plain: "DIM 15: Mathematical foundations of angular momentum: commutators, spherical coordinates, spherical harmonics, matrix representations, generators of rotations and translations, and the physical and mathematical transition to spin.",
+        html: String.raw`<b>DIM 15:</b> Mathematical foundations of angular momentum: commutators, spherical coordinates, spherical harmonics, matrix representations, generators of rotations and translations, and the physical and mathematical transition to spin.`,
+      },
+      16: {
+        plain: "DIM 16: Central potentials and the Coulomb problem: separation of variables, radial equation, and hydrogenic quantization through the Kummer/Laplace method.",
+        html: String.raw`<b>DIM 16:</b> Central potentials and the Coulomb problem: separation of variables, radial equation, and hydrogenic quantization through the Kummer/Laplace method.`,
+      },
+      17: {
+        plain: "DIM 17: Infinite and finite potential wells, bound and scattering states, and parity.",
+        html: String.raw`<b>DIM 17:</b> Infinite and finite potential wells, bound and scattering states, and parity.`,
+      },
+      18: {
+        plain: "DIM 18: Limits of classical physics and foundational experiments: black-body radiation, photoelectric effect, covariant Compton derivation and physical interpretation, Bohr atom, atomic spectra, double slit with electrons, and the optical-mechanical analogy.",
+        html: String.raw`<b>DIM 18:</b> Limits of classical physics and foundational experiments: black-body radiation, photoelectric effect, covariant Compton derivation and physical interpretation, Bohr atom, atomic spectra, double slit with electrons, and the optical-mechanical analogy.`,
+      },
+    };
+
     const DIM_META = {};
     for(const d of BOSS_DIMS) DIM_META[d.id] = d;
+
+    function getDimMeta(dim){
+      const base = DIM_META[dim] || { id: dim, part: 1, title: "DIM " + dim };
+      if(currentLanguage === "en" && BOSS_DIM_EN[dim]) return { ...base, ...BOSS_DIM_EN[dim] };
+      return base;
+    }
 
     function stripLeadingDimBold(html){
       // remove initial "<b>DIM ...</b>" if present (for compact subtitles)
@@ -974,6 +1132,123 @@ function hideLoader(){
     const mLeft = document.getElementById("mLeft");
     const mRight = document.getElementById("mRight");
     const mInteract = document.getElementById("mInteract");
+    const langIt = document.getElementById("langIt");
+    const langEn = document.getElementById("langEn");
+
+    const UI_TEXT = {
+      it: {
+        title: "Soluzioni DIM - 3D",
+        back: "Indietro",
+        help: "Help e problemi",
+        lastSolution: "Ultima soluzione",
+        interact: "Interagisci",
+        close: "Chiudi",
+        copy: "Copia",
+        solution: "Soluzione",
+        search: "Cerca DIM o parole...",
+        desktopHelp: "Desktop: clicca per mouse-look - WASD - E interagisci - ESC libera il mouse",
+        mobileHelp: "Mobile: joystick - Interagisci - trascina per guardare",
+        readyCount: "Soluzioni pronte",
+        available: "Soluzione disponibile",
+        unavailable: "Soluzione non disponibile",
+        open: "Apri",
+        contentLoaded: "contenuto caricato",
+        contentUnavailable: "contenuto non disponibile",
+        noSolution: "Soluzione non disponibile. Il contenuto resta intenzionalmente vuoto finche non esiste una soluzione verificata.",
+        approach: "OK. Avvicinati a un blocco DIM e premi E (o Interagisci).",
+        loadError: "Errore nel caricamento dei file di soluzione.",
+        copied: "Copiato.",
+        copyError: "Copia non disponibile su questo browser.",
+        lightProfile: "Profilo mobile leggero",
+        loading: "Caricamento texture...",
+        ready: "Pronto.",
+      },
+      en: {
+        title: "DIM Solutions - 3D",
+        back: "Back",
+        help: "Help and problems",
+        lastSolution: "Last solution",
+        interact: "Interact",
+        close: "Close",
+        copy: "Copy",
+        solution: "Solution",
+        search: "Search DIMs or keywords...",
+        desktopHelp: "Desktop: click for mouse look - WASD - E to interact - ESC to release the mouse",
+        mobileHelp: "Mobile: joystick - Interact - drag to look around",
+        readyCount: "Solutions ready",
+        available: "Solution available",
+        unavailable: "Solution unavailable",
+        open: "Open",
+        contentLoaded: "content loaded",
+        contentUnavailable: "content unavailable",
+        noSolution: "No solution is available. This section intentionally remains empty until a verified solution exists.",
+        approach: "Ready. Approach a DIM block and press E, or use Interact.",
+        loadError: "The solution files could not be loaded.",
+        copied: "Copied.",
+        copyError: "Copy is unavailable in this browser.",
+        lightProfile: "Light mobile profile",
+        loading: "Loading textures...",
+        ready: "Ready.",
+      },
+    };
+
+    function tr(key){ return UI_TEXT[currentLanguage][key] || UI_TEXT.it[key] || key; }
+
+    function helperMarkup(){
+      if(currentLanguage === "en") return `
+        <div class="helper-title">DIM 0 Helper</div>
+        <div class="helper-sub">Controls + navigation</div>
+        <div class="helper-grid">
+          <div class="helper-col"><div class="helper-h">Desktop</div><ul>
+            <li><b>Click</b> the canvas to enable mouse look</li><li><b>W A S D</b>: move</li>
+            <li><b>E</b>: open the DIM you are facing</li><li><b>I</b>: toggle <i>Help and problems</i></li>
+            <li><b>O</b>: toggle the <i>Last solution</i></li><li><b>L</b>: toggle lights</li>
+            <li><b>M</b>: music on/off</li><li><b>ESC</b>: close panels and release the mouse</li>
+          </ul></div>
+          <div class="helper-col"><div class="helper-h">Mobile</div><ul>
+            <li><b>Joystick</b>: move</li><li><b>Drag</b> the screen to look around</li>
+            <li><b>Interact</b>: open the DIM you are facing</li>
+            <li>Top buttons: <b>Help and problems</b>, <b>Last solution</b>, <b>L</b> lights, <b>♪</b> music</li>
+          </ul></div>
+        </div><div class="helper-note">Double-click a DIM from the list to teleport near its block.</div>`;
+      return `
+        <div class="helper-title">DIM 0 Helper</div>
+        <div class="helper-sub">Comandi + navigazione</div>
+        <div class="helper-grid">
+          <div class="helper-col"><div class="helper-h">Desktop</div><ul>
+            <li><b>Click</b> nel canvas: attiva mouse-look</li><li><b>W A S D</b>: movimento</li>
+            <li><b>E</b>: apri la DIM che stai guardando</li><li><b>I</b>: apri/chiudi <i>Help e problemi</i></li>
+            <li><b>O</b>: apri/chiudi <i>Ultima soluzione</i></li><li><b>L</b>: toggle luci</li>
+            <li><b>M</b>: musica on/off</li><li><b>ESC</b>: chiude pannelli e libera il mouse</li>
+          </ul></div>
+          <div class="helper-col"><div class="helper-h">Mobile</div><ul>
+            <li><b>Joystick</b>: movimento</li><li><b>Trascina</b> sullo schermo: guarda attorno</li>
+            <li><b>Interagisci</b>: apri la DIM guardata</li>
+            <li>Pulsanti in alto: <b>Help e problemi</b>, <b>Ultima soluzione</b>, <b>L</b> luci, <b>♪</b> musica</li>
+          </ul></div>
+        </div><div class="helper-note">Nella lista puoi fare doppio click su una DIM per teletrasportarti vicino al blocco.</div>`;
+    }
+
+    function applyUiLanguage(){
+      document.documentElement.lang = currentLanguage;
+      document.title = tr("title");
+      btnBack.textContent = tr("back");
+      btnInv.textContent = tr("help");
+      btnSol.textContent = tr("lastSolution");
+      mInteract.textContent = tr("interact");
+      btnInvClose.textContent = tr("close");
+      btnSolClose.textContent = tr("close");
+      btnCopy.textContent = tr("copy");
+      invSearch.placeholder = tr("search");
+      document.getElementById("invHeading").textContent = tr("help");
+      document.getElementById("invHelper").innerHTML = helperMarkup();
+      document.getElementById("miniHelp").textContent = isTouch ? tr("mobileHelp") : tr("desktopHelp");
+      if(currentOpenDim == null) solTitle.textContent = tr("solution");
+      langIt.classList.toggle("is-active", currentLanguage === "it");
+      langEn.classList.toggle("is-active", currentLanguage === "en");
+      langIt.setAttribute("aria-pressed", String(currentLanguage === "it"));
+      langEn.setAttribute("aria-pressed", String(currentLanguage === "en"));
+    }
 
     // State
     const solutions = {};   // dim -> raw text
@@ -1003,6 +1278,7 @@ function hideLoader(){
     let audioCtx = null, walkingBuf = null, glitchBuf = null, musicBuf = null;
     let walkSrc = null, walkGain = null;
     let musicSrc = null, musicGain = null;
+    let effectsLoadPromise = null, musicLoadPromise = null;
     const SLICE_DUR = 0.250; // 250ms
     let musicEnabled = false;
     let audioState = { moving:false, wasColliding:false, hitCooldown:0 };
@@ -1015,15 +1291,28 @@ function hideLoader(){
       return await audioCtx.decodeAudioData(a);
     }
 
-    async function initAudioOnce(){
-      if(audioCtx) return;
-      audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-      try{ walkingBuf = await loadBuf("./audio/walking-on-concrete-ver-2-268513.mp3"); }catch(e){}
-      try{ glitchBuf  = await loadBuf("./audio/glitch-sound-effect-96251.mp3"); }catch(e){}
-      try{ musicBuf   = await loadBuf("./audio/music_3d.mp3"); }catch(e){}
+    async function initAudioOnce(options={}){
+      const withMusic = !!options.withMusic;
+      if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
       try{ await audioCtx.resume(); }catch(e){}
-      // Se la musica era richiesta prima che i buffer fossero pronti, avviala ora
-      if(musicEnabled) startMusic();
+
+      // Small interaction effects are loaded once. The 57.6 MB music track is never
+      // fetched by movement or touch: it is requested only from the Music button.
+      if(!effectsLoadPromise){
+        effectsLoadPromise = Promise.all([
+          loadBuf("./audio/walking-on-concrete-ver-2-268513.mp3").then(value=>{ walkingBuf=value; }).catch(()=>{}),
+          loadBuf("./audio/glitch-sound-effect-96251.mp3").then(value=>{ glitchBuf=value; }).catch(()=>{}),
+        ]);
+      }
+      await effectsLoadPromise;
+
+      if(withMusic && !musicLoadPromise){
+        musicLoadPromise = loadBuf("./audio/music_3d.mp3")
+          .then(value=>{ musicBuf=value; })
+          .catch(()=>{});
+      }
+      if(withMusic && musicLoadPromise) await musicLoadPromise;
+      if(musicEnabled && musicBuf) startMusic();
     }
 
     function startWalking(){
@@ -1087,7 +1376,6 @@ function hideLoader(){
     function toggleMusic(){
       musicEnabled = !musicEnabled;
       if(musicEnabled){
-        // se non abbiamo ancora inizializzato audio, segniamo e partiamo dopo initAudioOnce()
         if(audioCtx && musicBuf) startMusic();
       }else{
         stopMusic();
@@ -1369,10 +1657,15 @@ const MATH_RENDER_OPTS = {
       return "DIM " + dim;
     }
 
-    async function loadSolutions(){
+    async function loadSolutions(options={}){
       try{
-        const texts = await Promise.all(TXT_FILES.map(f=> fetchFirst(f.paths)));
+        const files = TXT_FILES[currentLanguage] || TXT_FILES.it;
+        const texts = await Promise.all(files.map(f=> fetchFirst(f.paths)));
         const maps = texts.map(parseDims);
+
+        for(const key of Object.keys(solutions)) delete solutions[key];
+        for(const key of Object.keys(titles)) delete titles[key];
+        for(const key of Object.keys(hasSol)) delete hasSol[key];
 
         for(const mp of maps){
           for(const k in mp){
@@ -1383,29 +1676,29 @@ const MATH_RENDER_OPTS = {
         for(let d=0; d<=18; d++){
           const c = (solutions[d]||"").trim();
           hasSol[d] = c.length > 0;
-          const meta = DIM_META[d];
+          const meta = getDimMeta(d);
           titles[d] = meta && meta.plain ? safeDash(meta.plain) : extractTitle(d, c);
         }
 
         rebuildInventory();
-        showHint("OK. Avvicinati a un blocco DIM e premi E (o Interagisci).", 1800);
+        if(!options.quiet) showHint(tr("approach"), 1800);
       }catch(e){
         console.error(e);
         rebuildInventory(); // mostra comunque la lista, anche se vuota
-        showHint("Errore caricamento txt: usa python -m http.server e metti i file txt in boss/ o in root.", 2600);
+        showHint(tr("loadError"), 2600);
       }
     }
 
     function rebuildInventory(){
       const all = [0].concat(DIM_BLOCKS);
       const ok = all.filter(d=> !!hasSol[d]).length;
-      invMeta.textContent = "Soluzioni pronte: " + ok + "/" + all.length;
+      invMeta.textContent = tr("readyCount") + ": " + ok + "/" + all.length;
 
       const q = (invSearch.value||"").trim().toLowerCase();
       invList.innerHTML = "";
 
       for(const d of all){
-        const meta = DIM_META[d];
+        const meta = getDimMeta(d);
         const titlePlain = safeDash((meta && meta.plain) ? meta.plain : (titles[d] || ("DIM " + d)));
         const titleHtml = (meta && meta.html) ? meta.html : escapeHtml(titlePlain);
         const raw = (solutions[d]||"");
@@ -1426,13 +1719,13 @@ const MATH_RENDER_OPTS = {
 
         const sub = document.createElement("div");
         sub.className = "dim-sub";
-        sub.textContent = hasSol[d] ? "Soluzione disponibile" : "Soluzione non disponibile";
+        sub.textContent = hasSol[d] ? tr("available") : tr("unavailable");
         mid.appendChild(t);
         mid.appendChild(sub);
 
         const btn = document.createElement("button");
         btn.className = "pill " + (hasSol[d] ? "ok" : "miss");
-        btn.textContent = "Apri";
+        btn.textContent = tr("open");
         btn.addEventListener("click", ()=> openSolution(d));
 
         item.appendChild(num);
@@ -1476,7 +1769,7 @@ const MATH_RENDER_OPTS = {
         return;
       }
 
-      const meta = DIM_META[dim];
+      const meta = getDimMeta(dim);
       const titlePlain = safeDash(titles[dim] || ("DIM " + dim));
       const titleHtml = (meta && meta.html) ? meta.html : escapeHtml(titlePlain);
 
@@ -1485,7 +1778,7 @@ const MATH_RENDER_OPTS = {
       renderMath(solTitle);
 
       // Meta riga
-      solSub.textContent = "DIM " + dim + (hasSol[dim] ? " - contenuto caricato" : " - contenuto non disponibile");
+      solSub.textContent = "DIM " + dim + " - " + (hasSol[dim] ? tr("contentLoaded") : tr("contentUnavailable"));
 
       const raw = (solutions[dim]||"").trim();
       currentOpenDim = dim;
@@ -1495,7 +1788,7 @@ const MATH_RENDER_OPTS = {
       if(raw){
         solText.innerHTML = markdownToHtml(raw);
       }else{
-        solText.innerHTML = "<em>Soluzione non disponibile (in aggiornamento).</em>";
+        solText.innerHTML = "<em>" + escapeHtml(tr("noSolution")) + "</em>";
       }
       renderMath(solText);
 
@@ -1508,9 +1801,9 @@ const MATH_RENDER_OPTS = {
         : (solText ? (solText.textContent || "") : "");
       try{
         await navigator.clipboard.writeText(txt);
-        showHint("Copiato.", 900);
+        showHint(tr("copied"), 900);
       }catch(e){
-        showHint("Copia non disponibile su questo browser.", 1400);
+        showHint(tr("copyError"), 1400);
       }
     }
     function toggleLights(force){
@@ -1538,8 +1831,12 @@ const MATH_RENDER_OPTS = {
       camera = new THREE.PerspectiveCamera(70, 1, 0.1, 200);
       camera.position.set(0, 1.7, 14);
 
-      renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:"high-performance" });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.6));
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: !DEVICE_PROFILE.lightweight,
+        powerPreference: DEVICE_PROFILE.lightweight ? "low-power" : "high-performance",
+      });
+      renderer.setPixelRatio(DEVICE_PROFILE.pixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
 
       // Color management + tone mapping (migliora resa PBR)
@@ -1549,8 +1846,8 @@ const MATH_RENDER_OPTS = {
       renderer.physicallyCorrectLights = true;
 
       // PMREM: environment prefiltrata per riflessi realistici
-      const pmremGen = new THREE.PMREMGenerator(renderer);
-      pmremGen.compileEquirectangularShader();
+      const pmremGen = DEVICE_PROFILE.useEnvironment ? new THREE.PMREMGenerator(renderer) : null;
+      if(pmremGen) pmremGen.compileEquirectangularShader();
 
       clock = new THREE.Clock();
       raycaster = new THREE.Raycaster();
@@ -1571,21 +1868,23 @@ const MATH_RENDER_OPTS = {
 const loaderManager = new THREE.LoadingManager();
 const tl = new THREE.TextureLoader(loaderManager);
 
-let pmremReady = false;
+let pmremReady = !DEVICE_PROFILE.useEnvironment;
 let managerDone = false;
 
 // HUD hint (non vincolante): numero mappe attese
-const TOTAL_MAPS_HINT = 17;
+const TOTAL_MAPS_HINT = DEVICE_PROFILE.usePBR ? 17 : 5;
 if(loaderChip2) loaderChip2.textContent = "∑ maps: " + TOTAL_MAPS_HINT;
 
 loaderManager.onStart = ()=>{
-  setLoader(0, "Loading textures…");
-  if(loaderSub) loaderSub.textContent = "Preparazione shader, caricamento mappe PBR, PMREM…";
+  setLoader(0, DEVICE_PROFILE.lightweight ? tr("lightProfile") : tr("loading"));
+  if(loaderSub) loaderSub.textContent = DEVICE_PROFILE.lightweight
+    ? (currentLanguage === "en" ? "Loading compact preview textures." : "Caricamento delle texture preview compatte.")
+    : (currentLanguage === "en" ? "Preparing shaders, PBR maps, and PMREM." : "Preparazione shader, mappe PBR e PMREM.");
 };
 loaderManager.onProgress = (url, loaded, total)=>{
   const p = total ? (loaded / total) : 0;
   // teniamo l'ultimo 5% per PMREM/environment
-  setLoader(p * 95, "Loading textures…");
+  setLoader(p * 95, DEVICE_PROFILE.lightweight ? tr("lightProfile") : tr("loading"));
 };
 loaderManager.onLoad = ()=>{
   managerDone = true;
@@ -1594,29 +1893,27 @@ loaderManager.onLoad = ()=>{
 
 function maybeFinishLoader(){
   if(managerDone && pmremReady){
-    setLoader(100, "Pronto.");
+    setLoader(100, tr("ready"));
     setTimeout(hideLoader, 180);
   }
 }
 
 
-      const marbleColor = tl.load(ASSETS.marble.color);
+      const marbleColor = tl.load(DEVICE_PROFILE.usePBR ? ASSETS.marble.color : ASSETS.marble.preview);
       if(THREE.SRGBColorSpace) marbleColor.colorSpace = THREE.SRGBColorSpace;
-      marbleColor.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+      marbleColor.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), DEVICE_PROFILE.maxAnisotropy);
       marbleColor.wrapS = marbleColor.wrapT = THREE.RepeatWrapping;
       marbleColor.repeat.set(10, 10);
 
-      const marbleRough = tl.load(ASSETS.marble.roughness);
-      if(THREE.SRGBColorSpace) marbleRough.colorSpace = THREE.NoColorSpace;
-      marbleRough.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
-      marbleRough.wrapS = marbleRough.wrapT = THREE.RepeatWrapping;
-      marbleRough.repeat.set(10, 10);
-
-      const marbleNormal = tl.load(ASSETS.marble.normal);
-      if(THREE.SRGBColorSpace) marbleNormal.colorSpace = THREE.NoColorSpace;
-      marbleNormal.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
-      marbleNormal.wrapS = marbleNormal.wrapT = THREE.RepeatWrapping;
-      marbleNormal.repeat.set(10, 10);
+      const marbleRough = DEVICE_PROFILE.usePBR ? tl.load(ASSETS.marble.roughness) : null;
+      const marbleNormal = DEVICE_PROFILE.usePBR ? tl.load(ASSETS.marble.normal) : null;
+      for(const map of [marbleRough, marbleNormal]){
+        if(!map) continue;
+        if(THREE.SRGBColorSpace) map.colorSpace = THREE.NoColorSpace;
+        map.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), DEVICE_PROFILE.maxAnisotropy);
+        map.wrapS = map.wrapT = THREE.RepeatWrapping;
+        map.repeat.set(10, 10);
+      }
 
       const groundMat = new THREE.MeshStandardMaterial({
         map: marbleColor,
@@ -1635,7 +1932,7 @@ function maybeFinishLoader(){
 // Decorative metal (Metal049A.png) for lamp poles + platforms
 const decorTex = tl.load(ASSETS.metalDecorPng);
 if(THREE.SRGBColorSpace) decorTex.colorSpace = THREE.SRGBColorSpace;
-decorTex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+decorTex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), DEVICE_PROFILE.maxAnisotropy);
 decorTex.wrapS = decorTex.wrapT = THREE.RepeatWrapping;
 decorTex.repeat.set(1.0, 1.0);
 
@@ -1649,29 +1946,22 @@ const decorMat = new THREE.MeshStandardMaterial({
 
       // --- High-definition PBR metals (per-part) ---
       function loadPBR(set, repeatX, repeatY){
-        const color = tl.load(set.color);
+        const color = tl.load(DEVICE_PROFILE.usePBR ? set.color : set.preview);
         if(THREE.SRGBColorSpace) color.colorSpace = THREE.SRGBColorSpace;
-        color.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+        color.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), DEVICE_PROFILE.maxAnisotropy);
         color.wrapS = color.wrapT = THREE.RepeatWrapping;
         color.repeat.set(repeatX, repeatY);
 
-        const rough = tl.load(set.roughness);
-        if(THREE.SRGBColorSpace) rough.colorSpace = THREE.NoColorSpace;
-        rough.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
-        rough.wrapS = rough.wrapT = THREE.RepeatWrapping;
-        rough.repeat.set(repeatX, repeatY);
-
-        const metal = tl.load(set.metalness);
-        if(THREE.SRGBColorSpace) metal.colorSpace = THREE.NoColorSpace;
-        metal.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
-        metal.wrapS = metal.wrapT = THREE.RepeatWrapping;
-        metal.repeat.set(repeatX, repeatY);
-
-        const normal = tl.load(set.normal);
-        if(THREE.SRGBColorSpace) normal.colorSpace = THREE.NoColorSpace;
-        normal.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
-        normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
-        normal.repeat.set(repeatX, repeatY);
+        const rough = DEVICE_PROFILE.usePBR ? tl.load(set.roughness) : null;
+        const metal = DEVICE_PROFILE.usePBR ? tl.load(set.metalness) : null;
+        const normal = DEVICE_PROFILE.usePBR ? tl.load(set.normal) : null;
+        for(const map of [rough, metal, normal]){
+          if(!map) continue;
+          if(THREE.SRGBColorSpace) map.colorSpace = THREE.NoColorSpace;
+          map.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), DEVICE_PROFILE.maxAnisotropy);
+          map.wrapS = map.wrapT = THREE.RepeatWrapping;
+          map.repeat.set(repeatX, repeatY);
+        }
 
         return { color, rough, metal, normal };
       }
@@ -1874,7 +2164,7 @@ for(let i=0;i<16;i++){
 	   const x = 0.0, z = 27.5;
 	   const y = 1;
 
-	   const meta = DIM_META[dim];
+       const meta = getDimMeta(dim);
 	   const part = meta ? meta.part : 1;
 	   const base = (part===1) ? metalMatP1 : (part===2) ? metalMatP2 : metalMatP3;
 	   const mat = base.clone();
@@ -1915,7 +2205,7 @@ for(let i=0;i<16;i++){
         const x = startX + col*spacing;
         const z = startZ + row*spacing;
 
-        const meta = DIM_META[dim];
+        const meta = getDimMeta(dim);
         const part = meta ? meta.part : 1;
         const base = (part===1) ? metalMatP1 : (part===2) ? metalMatP2 : metalMatP3;
         const mat = base.clone();
@@ -1947,23 +2237,27 @@ for(let i=0;i<16;i++){
         blocks.push({ dim, mesh, label });
       }
 
-      // Skybox equirectangular
-      tl.load(ASSETS.sky, (tex)=>{
-        // Background: quello che vedi
-        if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-        tex.mapping = THREE.EquirectangularReflectionMapping;
-        scene.background = tex;
-
-        // Environment: PMREM prefiltrata (riflessi realistici)
-        const envRT = pmremGen.fromEquirectangular(tex);
-        scene.environment = envRT.texture;
-
+      // Desktop keeps the sky and PMREM reflections. Mobile uses an immediate
+      // color background, avoiding another large decode and GPU allocation.
+      if(DEVICE_PROFILE.useEnvironment){
+        tl.load(ASSETS.sky, (tex)=>{
+          if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+          tex.mapping = THREE.EquirectangularReflectionMapping;
+          scene.background = tex;
+          const envRT = pmremGen.fromEquirectangular(tex);
+          scene.environment = envRT.texture;
+          pmremReady = true;
+          maybeFinishLoader();
+        }, undefined, ()=>{
+          scene.background = new THREE.Color(0x091426);
+          pmremReady = true;
+          maybeFinishLoader();
+        });
+      }else{
+        scene.background = new THREE.Color(0x091426);
         pmremReady = true;
         maybeFinishLoader();
-
-        // Nota: non facciamo dispose di tex perché lo usiamo come background.
-        // envRT.texture verrà gestita dal renderer; se fai hot-reload conviene pulirla.
-      });
+      }
 
       // Events
       window.addEventListener("resize", onResize, { passive:true });
@@ -1990,7 +2284,7 @@ for(let i=0;i<16;i++){
 
       // Touch look
       if(isTouch){
-        document.getElementById("miniHelp").textContent = "Mobile: joystick - Interagisci - trascina per guardare";
+        document.getElementById("miniHelp").textContent = tr("mobileHelp");
         canvas.addEventListener("touchstart", (e)=>{
           if(e.touches.length !== 1) return;
           initAudioOnce().catch(()=>{});
@@ -2026,7 +2320,7 @@ for(let i=0;i<16;i++){
         if(e.code==="KeyL") toggleLights();
 
         
-        if(e.code==="KeyM") initAudioOnce().catch(()=>{}).finally(()=> toggleMusic());
+        if(e.code==="KeyM") initAudioOnce({ withMusic:true }).catch(()=>{}).finally(()=> toggleMusic());
 if(e.code==="Escape"){
           openDrawer(drawerInv,false);
           openDrawer(drawerSol,false);
@@ -2168,7 +2462,7 @@ if(e.code==="Escape"){
         nf.mesh.material.emissiveIntensity = 0.90;
         focused = nf;
 
-        const meta = DIM_META[nf.dim];
+        const meta = getDimMeta(nf.dim);
         const titlePlain = safeDash(titles[nf.dim] || ("DIM " + nf.dim));
         const titleHtml = (meta && meta.html) ? meta.html : escapeHtml(titlePlain);
         const statusHtml = hasSol[nf.dim]
@@ -2265,7 +2559,7 @@ if(e.code==="Escape"){
     mInteract.addEventListener("click", ()=>{
       initAudioOnce().catch(()=>{});
       if(focused) openSolution(focused.dim);
-      else showHint("Avvicinati a un blocco DIM e guardalo.", 1200);
+      else showHint(currentLanguage === "en" ? "Approach a DIM block and face it." : "Avvicinati a un blocco DIM e guardalo.", 1200);
     });
 
     // UI events
@@ -2279,19 +2573,31 @@ if(e.code==="Escape"){
     btnLights.addEventListener("click", ()=> toggleLights());
     if(btnMusic){
       btnMusic.addEventListener("click", ()=>{
-        initAudioOnce().catch(()=>{}).finally(()=> toggleMusic());
+        initAudioOnce({ withMusic:true }).catch(()=>{}).finally(()=> toggleMusic());
       });
       btnMusic.classList.toggle("primary", musicEnabled);
     }
     btnInvClose.addEventListener("click", ()=> openDrawer(drawerInv,false));
     btnSolClose.addEventListener("click", ()=> openDrawer(drawerSol,false));
     btnCopy.addEventListener("click", copySolution);
+    async function setLanguage(language){
+      if(language !== "it" && language !== "en") return;
+      currentLanguage = language;
+      try{ localStorage.setItem("cp-language-v1", language); }catch(error){}
+      applyUiLanguage();
+      await loadSolutions({ quiet:true });
+      if(currentOpenDim != null) openSolution(currentOpenDim);
+      else showHint(tr("approach"), 1600);
+    }
+    langIt.addEventListener("click", ()=> setLanguage("it"));
+    langEn.addEventListener("click", ()=> setLanguage("en"));
     toggleLights(true);
 
     invSearch.addEventListener("input", rebuildInventory);
 
     // Boot
     window.addEventListener("load", async ()=>{
+      applyUiLanguage();
       await loadSolutions();
       init3D();
 

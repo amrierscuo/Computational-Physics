@@ -1,0 +1,2077 @@
+<<<DIM 7 START>>>
+# DIM 7 - Time-independent perturbation theory: non-degenerate and degenerate cases
+**(development in \(\lambda\), corrections \(E^{(1)}\), \(|\psi^{(1)}\rangle\), \(E^{(2)}\); degenerate case: diagonalization of \(H'\) in subspace and secular equation)**
+
+## where it appears in the notes
+- **Core (non-degenerate):** P2·25A `img/220.jpg`-`img/223.jpg`  
+- **Core (degenerate):** P2·25B `img/224.jpg`-`img/227.jpg`  
+- **Boss references (same notation):** `boss/solbf7_1.jpg`, `boss/solbf7_2.jpg`  
+- **Support (bra-ket / completeness):** P1·12 `img/126.jpg`-`img/132.jpg`
+
+---
+
+# 0) Goal "boss" (what you need to do without hesitation)
+1) Set:
+\[
+H = H_0 + \lambda H', \qquad \lambda\ll 1,
+\]
+and put the equation to stationary eigenvalues:
+\[
+H|\Psi_n\rangle = E_n|\Psi_n\rangle.
+\]
+
+2) **Non-degenerate case**: obtain (until order II)
+\[
+\boxed{E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle}
+\]
+\[
+\boxed{|\Psi_n^{(1)}\rangle=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle}
+\]
+\[
+\boxed{E_n^{(2)}=\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}}
+\]
+and say **validity condition**:
+\[
+|\lambda\,H'_{mn}|\ll |E_n^{(0)}-E_m^{(0)}|.
+\]
+
+3) **Degenerate Case**: Say the correct procedure well:
+- If \(E_n^{(0)}\) is \(r_n\)-degenerate, first **diagonalize \(H'\)** in degenerate subspace \(S_n\);
+- Solve the **secular equation**:
+\[
+\boxed{\det\!\big(H'_{ij}-E^{(1)}\delta_{ij}\big)=0},
+\qquad
+H'_{ij}=\langle \phi_n^{(i)}|H'|\phi_n^{(j)}\rangle,
+\]
+getting \(r_n\) corrections \(E_{n,a}^{(1)}\) and combinations “good” \(|\phi_{n,a}^{(0)}\rangle\).
+
+4) Know how to write also (after choosing the "good" eigenstates in the subspace):
+\[
+\boxed{|\Psi_{n,a}^{(1)}\rangle=\sum_{m\notin S_n}\frac{\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle},
+\qquad
+\boxed{E_{n,a}^{(2)}=\sum_{m\notin S_n}\frac{|\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle|^2}{E_n^{(0)}-E_m^{(0)}}}.
+\]
+
+5) Example: "Safe shot" \(r_n=2\) (splitting):
+\[
+\det\begin{pmatrix}
+H'_{11}-E^{(1)} & H'_{12}\\
+H'_{21} & H'_{22}-E^{(1)}
+\end{pmatrix}=0
+\Rightarrow
+\boxed{E_\pm^{(1)}=\frac{H'_{11}+H'_{22}}{2}\pm\frac12\sqrt{(H'_{11}-H'_{22})^2+4|H'_{12}|^2}}.
+\]
+
+---
+
+# 1) General setup (perturbative expansion)
+Assume the eigenvalues and eigenstates are known of \(H_0\):
+\[
+H_0|\phi_n\rangle = E_n^{(0)}|\phi_n\rangle,
+\qquad
+\langle \phi_m|\phi_n\rangle=\delta_{mn}.
+\]
+
+I will introduce a *stationary* \(H'\) perturbation and a count parameter (s) of \(\lambda\):
+\[
+H = H_0+\lambda H',\qquad \lambda\ll 1.
+\]
+
+I'm looking for a solution of:
+\[
+H|\Psi_n\rangle = E_n|\Psi_n\rangle,
+\]
+expanding in series:
+\[
+E_n = E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}+\dots
+\]
+\[
+|\Psi_n\rangle = |\phi_n\rangle+\lambda|\Psi_n^{(1)}\rangle+\lambda^2|\Psi_n^{(2)}\rangle+\dots
+\]
+
+**Intermediate normalization (clipboard):**
+\[
+\boxed{\langle \phi_n|\Psi_n\rangle=1}
+\quad\Rightarrow\quad
+\langle \phi_n|\Psi_n^{(1)}\rangle=0,\ \langle \phi_n|\Psi_n^{(2)}\rangle=0,\dots
+\]
+(it is used to make corrections unique and to make certain terms disappear).
+
+---
+
+# 2) Non-degenerate case - demonstration of \(E_n^{(1)}\), \(|\Psi_n^{(1)}\rangle\), \(E_n^{(2)}\)
+
+## 2A) Order \(\lambda^0\)
+Replace expansions to \(H|\Psi_n\rangle=E_n|\Psi_n\rangle\) and take the end to \(\lambda^0\):
+\[
+H_0|\phi_n\rangle = E_n^{(0)}|\phi_n\rangle
+\]
+(true by definition).
+
+## 2B) Order \(\lambda^1\)
+The term at \(\lambda^1\) gives:
+\[
+H_0|\Psi_n^{(1)}\rangle + H'|\phi_n\rangle
+=
+E_n^{(0)}|\Psi_n^{(1)}\rangle + E_n^{(1)}|\phi_n\rangle.
+\]
+I'll take it all to the left:
+\[
+\boxed{(H_0-E_n^{(0)})|\Psi_n^{(1)}\rangle + (H'-E_n^{(1)})|\phi_n\rangle=0.}
+\]
+
+### (i) Derivation of \(E_n^{(1)}\)
+Multiply left by \(\langle \phi_n|\). The first term disappears because
+\(\langle\phi_n|(H_0-E_n^{(0)})=0\).
+I get:
+\[
+\langle \phi_n|H'|\phi_n\rangle - E_n^{(1)}\langle \phi_n|\phi_n\rangle=0
+\Rightarrow
+\boxed{E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle.}
+\]
+
+### (ii) Derivation of \(|\Psi_n^{(1)}\rangle\)
+Expand \(|\Psi_n^{(1)}\rangle\) based on \(H_0\):
+\[
+|\Psi_n^{(1)}\rangle=\sum_{m}c_{nm}^{(1)}|\phi_m\rangle.
+\]
+The intermediate Normalization requires \(c_{nn}^{(1)}=\langle\phi_n|\Psi_n^{(1)}\rangle=0\), therefore:
+\[
+|\Psi_n^{(1)}\rangle=\sum_{m\neq n}c_{nm}^{(1)}|\phi_m\rangle.
+\]
+
+Multiply the order equation 1 by \(\langle \phi_m|\) with \(m\neq n\):
+\[
+\langle \phi_m|(H_0-E_n^{(0)})|\Psi_n^{(1)}\rangle + \langle \phi_m|H'|\phi_n\rangle = 0
+\]
+because \(\langle \phi_m|\phi_n\rangle=0\) when \(m\neq n\).
+
+Time:
+\[
+\langle \phi_m|H_0|\Psi_n^{(1)}\rangle
+=\sum_{k\neq n}c_{nk}^{(1)}\langle \phi_m|H_0|\phi_k\rangle
+=\sum_{k\neq n}c_{nk}^{(1)}E_k^{(0)}\delta_{mk}
+= c_{nm}^{(1)}E_m^{(0)}.
+\]
+So:
+\[
+c_{nm}^{(1)}(E_m^{(0)}-E_n^{(0)}) + \langle \phi_m|H'|\phi_n\rangle=0
+\]
+\[
+\Rightarrow
+\boxed{c_{nm}^{(1)}=\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+I'm replacing:
+\[
+\boxed{
+|\Psi_n^{(1)}\rangle=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle.}
+\]
+
+## 2C) Order \(\lambda^2\) and \(E_n^{(2)}\)
+The term at \(\lambda^2\) gives:
+\[
+H_0|\Psi_n^{(2)}\rangle + H'|\Psi_n^{(1)}\rangle
+=
+E_n^{(0)}|\Psi_n^{(2)}\rangle + E_n^{(1)}|\Psi_n^{(1)}\rangle + E_n^{(2)}|\phi_n\rangle.
+\]
+Port to the left:
+\[
+(H_0-E_n^{(0)})|\Psi_n^{(2)}\rangle + (H'-E_n^{(1)})|\Psi_n^{(1)}\rangle - E_n^{(2)}|\phi_n\rangle=0.
+\]
+
+I multiply left by \(\langle \phi_n|\). The first term disappears and, using intermediate normalization (\(\langle \phi_n|\Psi_n^{(1)}\rangle=0\)), I get:
+\[
+\langle \phi_n|H'|\Psi_n^{(1)}\rangle - E_n^{(2)}=0
+\Rightarrow
+\boxed{E_n^{(2)}=\langle \phi_n|H'|\Psi_n^{(1)}\rangle.}
+\]
+
+Replace \(|\Psi_n^{(1)}\rangle=\sum_{m\neq n}c_{nm}^{(1)}|\phi_m\rangle\):
+\[
+E_n^{(2)}=\sum_{m\neq n}c_{nm}^{(1)}\langle \phi_n|H'|\phi_m\rangle
+=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle\langle \phi_n|H'|\phi_m\rangle}{E_n^{(0)}-E_m^{(0)}}.
+\]
+If \(H'\) is hermitian, \(\langle \phi_n|H'|\phi_m\rangle = \langle \phi_m|H'|\phi_n\rangle^*\), then:
+\[
+\boxed{E_n^{(2)}=\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+**Energy summary to order II (later \(\lambda=1\)):**
+\[
+\boxed{
+E_n \simeq E_n^{(0)}+\lambda\langle \phi_n|H'|\phi_n\rangle
++\lambda^2\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+---
+
+# 3) Why the expansion fails near degeneracy (validity condition)
+In the mixing coefficient there is:
+\[
+c_{nm}^{(1)}=\frac{H'_{mn}}{E_n^{(0)}-E_m^{(0)}}.
+\]
+If \(E_n^{(0)}\approx E_m^{(0)}\) the denominator is small ⇒ the correction explodes.
+
+So the practical condition is:
+\[
+\boxed{|\lambda H'_{mn}|\ll |E_n^{(0)}-E_m^{(0)}| \quad \forall\,m\neq n.}
+\]
+
+If there is real degeneracy (\(E_n^{(0)}=E_m^{(0)}\)), the non-degenerate method should be replaced by the **degenerate method**.
+
+---
+
+# 4) Degenerate case - secular equation and good states
+Suppose a \(E_n^{(0)}\) level is \(r_n\)-fold degenerate. There is an orthonormal base of degenerate subspace \(S_n\):
+\[
+H_0|\phi_n^{(i)}\rangle = E_n^{(0)}|\phi_n^{(i)}\rangle,
+\qquad
+i=1,\dots,r_n,
+\qquad
+\langle \phi_n^{(i)}|\phi_n^{(j)}\rangle=\delta_{ij}.
+\]
+
+## 4A) Key idea: the perturbation selects the proper linear combinations
+The real eigenstates (order 0 in \(\lambda\)) is not a specific \(|\phi_n^{(i)}\rangle\), but a combination:
+\[
+|\phi_{n,a}^{(0)}\rangle=\sum_{i=1}^{r_n}\alpha_i^{(a)}|\phi_n^{(i)}\rangle,
+\qquad a=1,\dots,r_n.
+\]
+
+Expand:
+\[
+E_{n,a}=E_n^{(0)}+\lambda E_{n,a}^{(1)}+\lambda^2E_{n,a}^{(2)}+\dots
+\]
+\[
+|\Psi_{n,a}\rangle = |\phi_{n,a}^{(0)}\rangle+\lambda|\Psi_{n,a}^{(1)}\rangle+\dots
+\]
+
+## 4B) Order \(\lambda^1\): derivation of the homogeneous secular system
+Reconciliating the same passage of order 1:
+\[
+(H_0-E_n^{(0)})|\Psi_{n,a}^{(1)}\rangle + (H'-E_{n,a}^{(1)})|\phi_{n,a}^{(0)}\rangle=0.
+\]
+
+Projection on \(\langle \phi_n^{(j)}|\) (which is in the degenerate subspace): the first term gives zero, then:
+\[
+\langle \phi_n^{(j)}|H'|\phi_{n,a}^{(0)}\rangle
+- E_{n,a}^{(1)}\langle \phi_n^{(j)}|\phi_{n,a}^{(0)}\rangle =0.
+\]
+
+But
+\[
+\langle \phi_n^{(j)}|H'|\phi_{n,a}^{(0)}\rangle
+=\sum_{i=1}^{r_n}\alpha_i^{(a)}\langle \phi_n^{(j)}|H'|\phi_n^{(i)}\rangle
+=\sum_{i=1}^{r_n}H'_{ji}\alpha_i^{(a)},
+\]
+e
+\[
+\langle \phi_n^{(j)}|\phi_{n,a}^{(0)}\rangle=\alpha_j^{(a)}.
+\]
+
+So I get the system:
+\[
+\boxed{
+\sum_{i=1}^{r_n}\big(H'_{ji}-E_{n,a}^{(1)}\delta_{ji}\big)\,\alpha_i^{(a)}=0,
+\qquad j=1,\dots,r_n.}
+\]
+
+To have non-trivial solutions \(\alpha^{(a)}\neq 0\) must be:
+\[
+\boxed{\det\!\big(H'_{ij}-E^{(1)}\delta_{ij}\big)=0.}
+\]
+The \(r_n\) solutions \(E^{(1)}\) are **eigenvalues** of the \(H'\) matrix restricted to \(S_n\); the corresponding autovectors give the coefficients \(\alpha_i^{(a)}\).
+
+*In practice:* “in the degenerate subspace, diagonally \(H'\)”.
+
+## 4C) Corrections outside of subspace (as in non-degenerate)
+Selected the "good" eigenstates \(|\phi_{n,a}^{(0)}\rangle\), I can write:
+\[
+\boxed{|\Psi_{n,a}^{(1)}\rangle=\sum_{m\notin S_n}\frac{\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle}{E_n^{(0)}-E_m^{(0)}}\,|\phi_m\rangle}
+\]
+e
+\[
+\boxed{E_{n,a}^{(2)}=\sum_{m\notin S_n}\frac{|\langle \phi_m|H'|\phi_{n,a}^{(0)}\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.}
+\]
+
+---
+
+# 5) Example \(r_n=2\): splitting and mixing
+In degenerate subspace with base \(\{|\phi_n^{(1)}\rangle,|\phi_n^{(2)}\rangle\}\), the matrix is:
+\[
+H'^{(S_n)}=
+\begin{pmatrix}
+H'_{11} & H'_{12}\\
+H'_{21} & H'_{22}
+\end{pmatrix},
+\qquad H'_{21}=H_{12}^{\prime *}.
+\]
+
+Secular equation:
+\[
+\det\begin{pmatrix}
+H'_{11}-E^{(1)} & H'_{12}\\
+H'_{21} & H'_{22}-E^{(1)}
+\end{pmatrix}=0.
+\]
+
+Solution:
+\[
+\boxed{E_\pm^{(1)}=\frac{H'_{11}+H'_{22}}{2}\pm\frac12\sqrt{(H'_{11}-H'_{22})^2+4|H'_{12}|^2}}.
+\]
+Interpreting: the level is **scakes** into two separate layers of a root proportional amount.
+
+If \(H'_{12}=0\) (no coupling between the two states), then:
+\[
+E_+^{(1)}=H'_{11},\qquad E_-^{(1)}=H'_{22},
+\]
+and the "good" eigenstates coincide with those chosen at the beginning (no mixing).
+
+---
+
+# Symbols dictionary (to know each by one)
+- \(H_0\): Hamiltonian not disturbed (note, solvable exactly).
+- \(H'\): time-independent perturbations (small operator compared to \(H_0\)).
+- \(\lambda\): dimension parameter “Count” (\(\lambda\ll 1\)); at the end of the day, \(\lambda=1\).
+- \(|\phi_n\rangle\): \(H_0\) eigenstates.
+- \(E_n^{(0)}\): unperturbed energies.
+- \(|\Psi_n\rangle\): \(H\) (perturbed) eigenstates.
+- \(E_n\): disturbed energies.
+- \(E_n^{(1)},E_n^{(2)}\): corrections to I and II order.
+- \(H'_{mn}=\langle \phi_m|H'|\phi_n\rangle\): perturbation matrix elements in \(H_0\) base.
+- \(c_{nm}^{(1)}\): \(|\Psi_n^{(1)}\rangle\) expansion coefficients based on \(|\phi_m\rangle\).
+- \(r_n\): Layer degeneracy order \(E_n^{(0)}\).
+- \(S_n\): Degenerous subspace associated with \(E_n^{(0)}\).
+- \(H'^{(S_n)}\): \(H'\) subspace restricted matrix \(S_n\).
+- “secular equation”: \(\det(H'_{ij}-E^{(1)}\delta_{ij})=0\).
+
+---
+
+# Physical meaning (to be said well)
+- The perturbation is mixed with the eigenstates of \(H_0\): the exact states no longer coincide with those not disturbed, but are linear combinations.
+- \(E_n^{(1)}=\langle H'\rangle\) is the medium shift of the unperturbed state perturbation.
+- \(E_n^{(2)}\) describes the effect of mixing with other layers: the denominator \(E_n^{(0)}-E_m^{(0)}\) appears.  
+  In particular, it is related to **repulsion of ** layers: neighbouring layers tend to drift away.
+- In the presence of degeneracy, the perturbation eliminates (usually) degeneracy: the good statuses are those that diagonalize \(H'\) in the subspace.
+
+---
+
+# Oral script (2 minutes, super repeatable)
+“I set up the theory of stationary perturbation theory: \(H=H_0+\lambda H'\), with \(\lambda\ll 1\). I know \(H_0|\phi_n\rangle=E_n^{(0)}|\phi_n\rangle\) and I seek \(H|\Psi_n\rangle=E_n|\Psi_n\rangle\) expanding \(E_n=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}+\dots\) and \(|\Psi_n\rangle=|\phi_n\rangle+\lambda|\Psi_n^{(1)}\rangle+\dots\), using intermediate normalization \(\langle \phi_n|\Psi_n\rangle=1\).  
+All order \(\lambda\) get \((H_0-E_n^{(0)})|\Psi_n^{(1)}\rangle+(H'-E_n^{(1)})|\phi_n\rangle=0\). Projecting on \(\langle \phi_n|\) Derivation of \(E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle\). Expanding \(|\Psi_n^{(1)}\rangle=\sum_{m\neq n}c_{nm}^{(1)}|\phi_m\rangle\) and projecting on \(\langle \phi_m|\) with \(m\neq n\) find \(c_{nm}^{(1)}=\langle \phi_m|H'|\phi_n\rangle/(E_n^{(0)}-E_m^{(0)})\).  
+All order \(\lambda^2\), projecting to \(\langle \phi_n|\) get \(E_n^{(2)}=\sum_{m\neq n}|\langle \phi_m|H'|\phi_n\rangle|^2/(E_n^{(0)}-E_m^{(0)})\). Validity requires \(|\lambda H'_{mn}|\ll|E_n^{(0)}-E_m^{(0)}|\).  
+If there is degeneracy, before diagonalizing \(H'\) in degenerate subspace: Solve \(\det(H'_{ij}-E^{(1)}\delta_{ij})=0\), eigenvalues give shift to first order and autovectors give combinations of "good" states that eliminate degeneracy.
+
+---
+
+# Mini-version 60-75 sec
+- \(H=H_0+\lambda H'\), \(H_0|\phi_n\rangle=E_n^{(0)}|\phi_n\rangle\).  
+- Expand: \(E_n=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}\), \(|\Psi_n\rangle=|\phi_n\rangle+\lambda|\Psi_n^{(1)}\rangle+\dots\).  
+- non-degenerate:
+\[
+E_n^{(1)}=\langle \phi_n|H'|\phi_n\rangle,\quad
+|\Psi_n^{(1)}\rangle=\sum_{m\neq n}\frac{\langle \phi_m|H'|\phi_n\rangle}{E_n^{(0)}-E_m^{(0)}}|\phi_m\rangle,
+\]
+\[
+E_n^{(2)}=\sum_{m\neq n}\frac{|\langle \phi_m|H'|\phi_n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}.
+\]
+- degeneracy: Diagonalize \(H'\) to \(S_n\): \(\det(H'_{ij}-E^{(1)}\delta_{ij})=0\). Solutions are shift and autovectors give the "good" states.
+
+<<<DIM 7 END>>>
+
+
+<<<DIM 8 START>>>
+# DIM 8 - Addition of angular momenta \( \vec J=\vec J_1+\vec J_2 \)
+**(ICOC/CSCO, possible values of \(j\), build with ladder, Clebsch-Gordan coefficients, example \( \tfrac12+\tfrac12 \))**
+
+## where it appears in the notes
+- **Core (sum of angular momenta, coupled base, CG):** P2·23A `img/208.jpg`-`img/214.jpg`  
+- **Example 2 fermions / symmetries (useful for triplet/singlet):** P2·23B `img/214.jpg`-`img/215.jpg`  
+- **Support (algebra of \(L\), ladder, switchers):** P1·17A/B `img/147.jpg`-`img/165.jpg`  
+- **Spin 1/2 support (Pauli/Stern-Gerlach):** P1·21B `img/188.jpg`-`img/199.jpg`
+
+---
+
+# 0) Target boss (what you need to be able to prove and say)
+1) Define the sum:
+\[
+\vec J=\vec J_1+\vec J_2,\qquad J_z=J_{1z}+J_{2z},\qquad J_\pm=J_{1\pm}+J_{2\pm}.
+\]
+
+2) Say which is the natural (l)**ICOC/CSCO** and why:
+- base **not coupled** (uncoupled): \(|j_1 m_1\rangle|j_2 m_2\rangle\)
+- base **coupled** (coupled): \(|j_1 j_2; j m\rangle\)
+
+3) Demonstrate **possible values of total**:
+\[
+\boxed{j = j_1+j_2,\; j_1+j_2-1,\; \dots,\; |j_1-j_2|}
+\qquad\text{and}\qquad
+\boxed{m=-j,-j+1,\dots,j}
+\]
+(with degeneracy \(2j+1\)).
+
+4) Write the transformation between bases with **Clebsch-Gordan**:
+\[
+\boxed{|j_1 j_2; j m\rangle=\sum_{m_1,m_2} C^{\,j m}_{j_1 m_1\, j_2 m_2}\,|j_1 m_1\rangle|j_2 m_2\rangle}
+\]
+with constraint
+\[
+\boxed{m=m_1+m_2.}
+\]
+
+5) Give the key example:
+\[
+\boxed{\tfrac12\oplus\tfrac12 = 1 \oplus 0}
+\]
+with triplet and explicit singlet.
+
+---
+
+# 1) Essential algebra (the toolbox)
+Each angular momenta \(\vec J\) meets:
+\[
+[J_x,J_y]=i\hbar J_z\quad \text{(and cyclical)}.
+\]
+
+I define:
+\[
+J_\pm = J_x \pm iJ_y.
+\]
+
+Standard reports:
+\[
+[J_z,J_\pm]=\pm \hbar J_\pm,
+\qquad
+[J^2,J_z]=0,
+\qquad
+[J^2,J_\pm]=0.
+\]
+
+eigenstates of \(J^2\) and \(J_z\):
+\[
+J^2|j m\rangle=\hbar^2 j(j+1)|j m\rangle,
+\qquad
+J_z|j m\rangle=\hbar m|j m\rangle.
+\]
+
+Ladder action:
+\[
+J_\pm|j m\rangle=\hbar\sqrt{j(j+1)-m(m\pm1)}\,|j,m\pm1\rangle.
+\]
+
+---
+
+# 2) Two angular momenta: which operators commute
+You have two independent systems with \(\vec J_1,\vec J_2\). Different system components ** switch**:
+\[
+[J_{1a},J_{2b}]=0\quad \forall a,b\in\{x,y,z\}.
+\]
+
+I define the total:
+\[
+\vec J=\vec J_1+\vec J_2.
+\]
+
+So:
+\[
+J^2=(\vec J_1+\vec J_2)^2=J_1^2+J_2^2+2\,\vec J_1\cdot\vec J_2.
+\]
+
+**ICOC/CSCO typical:**
+- **Uncoupled base:** \(\{J_1^2,J_{1z},J_2^2,J_{2z}\}\)  
+  \(|j_1 m_1\rangle|j_2 m_2\rangle\)
+- **Coupled base:** \(\{J_1^2,J_2^2,J^2,J_z\}\)  
+  \(|j_1 j_2; j m\rangle\)
+
+Why does it work?
+\[
+[J_1^2,J^2]=[J_2^2,J^2]=0,\qquad [J^2,J_z]=0
+\]
+and \(J_1^2, J_2^2\) fix the type of moments you are adding up.
+
+---
+
+# 3) Demonstration of possible values of \(m\)
+This is the easiest part of the boss test.
+
+Non-coupled base:
+\[
+J_{1z}|j_1 m_1\rangle=\hbar m_1|j_1 m_1\rangle,\quad
+J_{2z}|j_2 m_2\rangle=\hbar m_2|j_2 m_2\rangle.
+\]
+
+On the product:
+\[
+J_z\,(|j_1 m_1\rangle|j_2 m_2\rangle)
+=(J_{1z}+J_{2z})|j_1 m_1\rangle|j_2 m_2\rangle
+=\hbar(m_1+m_2)|j_1 m_1\rangle|j_2 m_2\rangle.
+\]
+
+So:
+\[
+\boxed{m=m_1+m_2.}
+\]
+
+And since:
+\[
+m_1\in[-j_1,j_1],\quad m_2\in[-j_2,j_2]
+\]
+the maximum \(m\) obtainable is:
+\[
+m_{\max}=j_1+j_2
+\]
+and the minimum:
+\[
+m_{\min}=-(j_1+j_2).
+\]
+
+---
+
+# 4) Demonstration of possible values of \(j\)
+This is where the standard clipboard demonstration uses: **maximum weight state + ladder + size count**.
+
+## 4A) There is a state with \(m=j_1+j_2\)
+Get the state:
+\[
+|j_1,j_1\rangle|j_2,j_2\rangle.
+\]
+Ha:
+\[
+m=j_1+j_2.
+\]
+
+In any representation of \(SU(2)\), a state with \(m\) maximum is annihilated by \(J_+\). We check directly:
+\[
+J_+=J_{1+}+J_{2+}.
+\]
+Ma:
+\[
+J_{1+}|j_1,j_1\rangle=0,\qquad J_{2+}|j_2,j_2\rangle=0
+\]
+then:
+\[
+J_+|j_1,j_1\rangle|j_2,j_2\rangle=0.
+\]
+
+So this is a **candidate state of maximum weight of ** for some total representation with \(j=m_{\max}\).  
+So it has to be:
+\[
+\boxed{j_{\max}=j_1+j_2.}
+\]
+
+## 4B) Generate a complete multiplet with \(J_-\)
+Applying \(J_- = J_{1-}+J_{2-}\) repeatedly, son-in-law states with:
+\[
+m=j_1+j_2,\; j_1+j_2-1,\; \dots,\; -(j_1+j_2)
+\]
+and then a multiple with:
+\[
+2(j_1+j_2)+1
+\]
+States.
+
+These (normalized) states form the multiplet with:
+\[
+\boxed{j=j_1+j_2.}
+\]
+
+## 4C) And the others \(j\)? (idea: maximum multiplets and repeats)
+The total space has size:
+\[
+(2j_1+1)(2j_2+1).
+\]
+
+Without multiple \(j=j_1+j_2\) having \(2(j_1+j_2)+1\) states, a space with size remains:
+\[
+(2j_1+1)(2j_2+1)-\big(2(j_1+j_2)+1\big),
+\]
+which still decomposes into multiplets of \(SU(2)\). The next maximum \(m\) remaining is \(j_1+j_2-1\), so the next \(j\) is:
+\[
+j=j_1+j_2-1.
+\]
+
+Repeating, you get the chain:
+\[
+\boxed{j=j_1+j_2,\; j_1+j_2-1,\;\dots\;}
+\]
+
+The process stops when you reach the minimum \(j\) possible compatible with the size and existence of the states: the minimum is:
+\[
+\boxed{j_{\min}=|j_1-j_2|.}
+\]
+
+## 4D) Dimensional control (super elegant, to say if they ask you why just up to \(|j_1-j_2|\)?
+It shall apply to:
+\[
+\boxed{(2j_1+1)(2j_2+1)=\sum_{j=|j_1-j_2|}^{j_1+j_2}(2j+1)}
+\]
+which is true (sum of multiplettes that fill all the space).  
+This closes the demonstration of completeness and the values allowed.
+
+---
+
+# 5) Clebsch-Gordan coefficients (transformation between bases)
+You have two complete bases:
+
+### Uncoupled base
+\[
+|j_1 m_1\rangle|j_2 m_2\rangle
+\quad\text{(diagonalizza }J_{1z},J_{2z}\text{)}
+\]
+
+### Coupled base
+\[
+|j_1 j_2; j m\rangle
+\quad\text{(diagonalizza }J^2,J_z\text{)}
+\]
+
+The transformation is a unitary basic change:
+\[
+\boxed{
+|j_1 j_2; j m\rangle=\sum_{m_1,m_2}
+C^{\,j m}_{j_1 m_1\, j_2 m_2}\;
+|j_1 m_1\rangle|j_2 m_2\rangle
+}
+\]
+
+**Required selection rule:**
+\[
+\boxed{C^{jm}_{j_1m_1j_2m_2}\neq0 \ \Rightarrow\  m=m_1+m_2.}
+\]
+
+**Ortonormality (useful if asked):**
+\[
+\sum_{m_1,m_2} C^{jm}_{j_1m_1j_2m_2}\, C^{j'm'}_{j_1m_1j_2m_2}=\delta_{jj'}\delta_{mm'}.
+\]
+
+**Physical interpretation:** \(C\) are amplitudes (complex numbers, often real in standard conventions) that say 'how much' a total state \(j,m\) is made from combinations of the two \(m_1,m_2\).
+
+---
+
+# 6) Basic example: \(j_1=\tfrac12\), \(j_2=\tfrac12\)
+This is the example you must know how to act perfect.
+
+## 6A) Uncoupled base (spin up/down)
+Identifying:
+\[
+\left|\tfrac12,+\tfrac12\right\rangle \equiv |\uparrow\rangle,\qquad
+\left|\tfrac12,-\tfrac12\right\rangle \equiv |\downarrow\rangle.
+\]
+
+The possible products are 4:
+\[
+|\uparrow\uparrow\rangle,\quad
+|\uparrow\downarrow\rangle,\quad
+|\downarrow\uparrow\rangle,\quad
+|\downarrow\downarrow\rangle.
+\]
+
+Size: \((2\cdot\tfrac12+1)^2=2^2=4\).
+
+## 6B) Possible values of \(j\)
+\[
+j = j_1+j_2=1,\quad \text{oppure}\quad j=|j_1-j_2|=0.
+\]
+So:
+\[
+\boxed{\tfrac12\oplus\tfrac12 = 1\oplus 0}
+\]
+That is, a triplet (\(j=1\), 3 states) + a singlet (\(j=0\), 1 state).
+
+## 6C) Explanatory construction with ladder (more demonstration method)
+### Maximum state \(m\)
+Maximum \(m=m_1+m_2=+\tfrac12+\tfrac12=+1\).
+The only product that makes it is:
+\[
+\boxed{|1,1\rangle = |\uparrow\uparrow\rangle.}
+\]
+
+### Apply \(J_-\) to get \(|1,0\rangle\)
+\[
+J_- = J_{1-}+J_{2-}.
+\]
+
+I act on \(|\uparrow\uparrow\rangle\):
+- \(J_{1-}|\uparrow\uparrow\rangle \propto |\downarrow\uparrow\rangle\)
+- \(J_{2-}|\uparrow\uparrow\rangle \propto |\uparrow\downarrow\rangle\)
+
+So:
+\[
+J_-|\uparrow\uparrow\rangle \propto |\downarrow\uparrow\rangle+|\uparrow\downarrow\rangle.
+\]
+
+I normalize and define:
+\[
+\boxed{|1,0\rangle=\frac{1}{\sqrt2}\big(|\uparrow\downarrow\rangle+|\downarrow\uparrow\rangle\big).}
+\]
+
+### Apply again \(J_-\) for \(|1,-1\rangle\)
+By symmetry:
+\[
+\boxed{|1,-1\rangle=|\downarrow\downarrow\rangle.}
+\]
+
+### The remaining state must be orthogonal: the singlet \(|0,0\rangle\)
+Between the two states with \(m=0\), i.e. \(|\uparrow\downarrow\rangle\) and \(|\downarrow\uparrow\rangle\), we have already used the symmetrical combination for \(|1,0\rangle\).  
+The only orthogonal combination is the antisymmetrical:
+
+\[
+\boxed{|0,0\rangle=\frac{1}{\sqrt2}\big(|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle\big).}
+\]
+
+End of construction.
+
+## 6D) explicit Clebsch-Gordan by \( \tfrac12+\tfrac12 \)
+In practice:
+- \(C^{1,1}_{\frac12,\frac12;\frac12,\frac12}=1\)
+- \(C^{1,0}_{\frac12,\frac12;\frac12,-\frac12}=\frac{1}{\sqrt2}\), \(C^{1,0}_{\frac12,-\frac12;\frac12,\frac12}=\frac{1}{\sqrt2}\)
+- \(C^{1,-1}_{\frac12,-\frac12;\frac12,-\frac12}=1\)
+- \(C^{0,0}_{\frac12,\frac12;\frac12,-\frac12}=\frac{1}{\sqrt2}\), \(C^{0,0}_{\frac12,-\frac12;\frac12,\frac12}=-\frac{1}{\sqrt2}\)
+
+(With the Standard Phase Convention: the..............................................................
+
+---
+
+# 7) Symmetry of exchange (super important, also in view of DIM 9)
+Exchange the two particles \(1\leftrightarrow2\):
+
+- Triplet (\(j=1\)) is **symmetric**:
+  \[
+  |\uparrow\uparrow\rangle \to |\uparrow\uparrow\rangle,\quad
+  \frac{|\uparrow\downarrow\rangle+|\downarrow\uparrow\rangle}{\sqrt2}\to \text{uguale},\quad
+  |\downarrow\downarrow\rangle\to|\downarrow\downarrow\rangle
+  \]
+- Singlet (\(j=0\)) is **antisymmetric**:
+  \[
+  \frac{|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle}{\sqrt2}\to -\text{(self)}
+  \]
+
+**Physical meaning:** for two spins \(1/2\), total spin 1  
+This sentence is exactly the same when you make identical particles and Pauli principle.
+
+---
+
+# Symbol Dictionary (to know one by one)
+- \(\vec J_1,\vec J_2\): angular momenta of the two subsystems (orbital or spin).
+- \(\vec J\): total angular momentum, \(\vec J=\vec J_1+\vec J_2\).
+- \(J^2=\vec J\cdot\vec J\): Frame module of total.
+- \(J_z\): Long component \(z\).
+- \(J_\pm=J_x\pm iJ_y\): ascent/descent operators.
+- \(j_1,j_2\): quantic numbers of \(J_1,J_2\) modules.
+- \(m_1,m_2\): Quantum numbers of components \(J_{1z},J_{2z}\).
+- \(j,m\): Quantum numbers of total \(J^2,J_z\).
+- \(|j_1 m_1\rangle|j_2 m_2\rangle\): Base not coupled (products).
+- \(|j_1 j_2; j m\rangle\): Coupled base (diagonalize \(J^2,J_z\) plus \(J_1^2,J_2^2\)).
+- \(C^{jm}_{j_1m_1j_2m_2}\): Clebsch-Gordan coefficient (base change amplitude).
+- \(\hbar\): Reduced Planck constant.
+- “multiplet”: set of \(2j+1\) been with the same \(j\) and \(m\) which varies.
+
+---
+
+# Physical meaning (to be said well)
+- The composition serves every time you have two angular momenta sources: two spins, spin+orbital, two particles, etc.
+- The total is not classic sum: in QM the total module is quantized and can take only certain \(j\).
+- The Clebsch-Gordan tell you how the measurements “local” (\(m_1,m_2\)) reorganize into measures “global” (\(j,m\)).
+- For \(\tfrac12+\tfrac12\): the physical distinction is born between **tripletto** (total spin 1) and **singlelet** (total spin 0), crucial for two electron states and Pauli.
+
+---
+
+# Oral-exam script (2 minutes, ordered)
+I have two angular momenta \(J_1\) and \(J_2\) with standard algebra and \([J_{1a},J_{2b}]=0\). I define the total \(J=J_1+J_2\), then \(J_z=J_{1z}+J_{2z}\) and \(J_\pm=J_{1\pm}+J_{2\pm}\). The natural bases are: uncoupled \(|j_1m_1\rangle|j_2m_2\rangle\) that diagonalizes \(J_{1z},J_{2z}\), and paired \(|j_1j_2;jm\rangle\) that diagonalizes \(J^2,J_z\). Since \(J_z\) is sum, on a product I have \(m=m_1+m_2\), then \(m\) goes from \(-(j_1+j_2)\) to \(j_1+j_2\). There is state with \(m_{\max}=j_1+j_2\), i.e. \(|j_1,j_1\rangle|j_2,j_2\rangle\), and is annihilated from \(J_+\), then it corresponds to multiple with \(j=j_1+j_2\). Applying \(J_-\) begs all \(m\) up to \(-j\). By removing this multiple and repeating I get \(j=j_1+j_2, j_1+j_2-1,\dots,|j_1-j_2|\), and the size returns because \((2j_1+1)(2j_2+1)=\sum_j(2j+1)\). The basic change is written with the Clebsch-Gordan: \(|j_1j_2;jm\rangle=\sum_{m_1,m_2}C^{jm}_{j_1m_1j_2m_2}|j_1m_1\rangle|j_2m_2\rangle\) with constraint \(m=m_1+m_2\). Example \(1/2+1/2\): I get \(j=1\) triplet and \(j=0\) singlet: \(|1,1\rangle=|\uparrow\uparrow\rangle\), \(|1,0\rangle=(|\uparrow\downarrow\rangle+|\downarrow\uparrow\rangle)/\sqrt2\), \(|1,-1\rangle=|\downarrow\downarrow\rangle\), \(|0,0\rangle=(|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle)/\sqrt2\). The triplet is symmetrical and the singlet is antisymmetric by exchange.
+<<<DIM 8 END>>>
+
+<<<DIM 9 START>>>
+# DIM 9 - Identical particles: exchange operator, symmetrization/antisymmetrization, \([P,H]=0\), Pauli/Slater, singlet-triplet relation ↔ even/odd \(\ell\)
+
+## where it appears in the notes
+- **Core:** P2·24 = identical parts → `img/215.jpg`-`img/220.jpg`  
+- **Useful support (spin 1/2 triplet/singlet):** P2·23B `img/214.jpg`-`img/215.jpg` (the part that fits with DIM 8)
+
+---
+
+# 0) Objectives
+Demonstrate and know how to say well:
+
+1) Define the **exchange operator** \( \hat P_{12} \) and its properties:
+\[
+\hat P_{12}^2=\hat I,\qquad \hat P_{12}^\dagger=\hat P_{12},\qquad \text{eigenvalues } \pm 1.
+\]
+
+2) For **identical particles**: Hamiltonian is invariant by exchange ⇒
+\[
+\hat P_{12}\hat H\hat P_{12}=\hat H\quad\Longleftrightarrow\quad [\hat H,\hat P_{12}]=0.
+\]
+
+3) If \([H,P]=0\), then I can choose common eigenstates ⇒ the physical states separate into:
+- **symmetric**: \( \hat P_{12}|\psi\rangle=+|\psi\rangle\) (bosons)
+- **Symmetrical anti-anti-symmetry**: \( \hat P_{12}|\psi\rangle=-|\psi\rangle\) (fermions)
+
+4) Build symmetric/antisymmetric states from \(|a\rangle|b\rangle\) products and get to:
+- **Pauli principle** (if \(a=b\) Fermion status is zero)
+- **Slater Determinant**
+
+5) Connect with spin 1/2 (DIM 8): triplet/singlet + symmetry of the spatial part.  
+And say the typical rule:
+\[
+\text{singoletto} \Rightarrow \text{symmetric space} \Rightarrow \ell \ \text{pari}
+\]
+\[
+\text{tripletto} \Rightarrow \text{antisymmetrical space} \Rightarrow \ell \ \text{dispari}
+\]
+(where \(\ell\) is the orbital angular momentum of relative motion).
+
+---
+
+# 1) Definition of the exchange operator \( \hat P_{12} \)
+I consider two particles and one state in full representation (position + spin):
+\[
+x_1\equiv(\vec r_1,\sigma_1),\qquad x_2\equiv(\vec r_2,\sigma_2).
+\]
+The two-body wave function is:
+\[
+\psi(x_1,x_2)=\langle x_1,x_2|\psi\rangle.
+\]
+
+**Defining** l-exchanger \( \hat P_{12} \) as the one exchanging labels 1 and 2:
+\[
+(\hat P_{12}\psi)(x_1,x_2)=\psi(x_2,x_1).
+\]
+
+---
+
+# 2) Key properties of \( \hat P_{12} \)
+## 2A) \( \hat P_{12}^2=\hat I \)
+Exchange twice:
+\[
+(\hat P_{12}^2\psi)(x_1,x_2)=\hat P_{12}\big(\psi(x_2,x_1)\big)=\psi(x_1,x_2).
+\]
+So:
+\[
+\boxed{\hat P_{12}^2=\hat I.}
+\]
+
+## 2B) \( \hat P_{12}^\dagger=\hat P_{12} \) and unitarity
+From the exchange does not change the norm (it is only a permutation of variables):
+\[
+\int |(\hat P_{12}\psi)(x_1,x_2)|^2\,dx_1dx_2
+=\int |\psi(x_2,x_1)|^2\,dx_1dx_2
+=\int |\psi(x_1,x_2)|^2\,dx_1dx_2.
+\]
+So \(P\) is **unitary**: \(P^\dagger P=I\).  
+Plus, with \(P^2=I\) follows \(P^{-1}=P\). But for a unit \(P^{-1}=P^\dagger\), then:
+\[
+\boxed{\hat P_{12}^\dagger=\hat P_{12}.}
+\]
+So \(P\) is also **hermitian**.
+
+## 2C) Values of \( \hat P_{12} \) are \(\pm 1\)
+If \(\hat P_{12}|\psi\rangle = \lambda |\psi\rangle\), I apply \(P\) again:
+\[
+\hat P_{12}^2|\psi\rangle=\lambda^2|\psi\rangle.
+\]
+But \(P^2=I\), then:
+\[
+|\psi\rangle=\lambda^2|\psi\rangle \Rightarrow \lambda^2=1 \Rightarrow \boxed{\lambda=\pm 1.}
+\]
+
+Thus the states are divided into **symmetric** (+) and **antisymmetric** (−).
+
+---
+
+# 3) For identical particles: because \([H,P]=0\)
+For two identical particles (same mass, same charge, etc.) the Hamiltonian has the same shape for 1 and 2. A typical model is:
+\[
+\hat H=\underbrace{\frac{\hat p_1^2}{2m}+V(\hat r_1)}_{\hat h(1)}
++\underbrace{\frac{\hat p_2^2}{2m}+V(\hat r_2)}_{\hat h(2)}
++\underbrace{U(|\hat r_1-\hat r_2|)}_{\text{symmetric interaction}}.
+\]
+
+If exchange \(1\leftrightarrow 2\):
+- \(\hat p_1^2 \leftrightarrow \hat p_2^2\)
+- \(V(\hat r_1)\leftrightarrow V(\hat r_2)\)
+- \(U(|r_1-r_2|)\) remains the same because it depends only on distance.
+
+So:
+\[
+\boxed{\hat P_{12}\hat H\hat P_{12}=\hat H.}
+\]
+Multiplying right by \(\hat P_{12}\) and using \(\hat P_{12}^2=I\):
+\[
+\hat P_{12}\hat H=\hat H\hat P_{12}
+\quad\Rightarrow\quad
+\boxed{[\hat H,\hat P_{12}]=0.}
+\]
+
+**Physical interpretation:** If the particles are really identical, the particles can't change any measurable prediction ⇒ \(H\) must respect this symmetry.
+
+---
+
+# 4) Consequences: common eigenstates ⇒ symmetry of the wave function
+If \([H,P]=0\), then \(H\) and \(P\) are **compatible** (DIM 3): I can choose a common eigenstates base.
+
+So I can take the energy eigenstates so that they are also exchange eigenstates:
+\[
+\hat H|\psi\rangle=E|\psi\rangle,\qquad \hat P_{12}|\psi\rangle=\pm|\psi\rangle.
+\]
+
+Therefore, for identical particles, energy states (and in general those physically admitted) can be chosen **symmetric ** or **antisymmetric**.
+
+---
+
+# 5) Symmetrization postulate (bosons vs fermions)
+At this point the physical data (spin-statistics) enters:
+- **Bosons (whole spin)**: total state must be **symmetric**
+  \[
+  \boxed{\hat P_{12}|\psi\rangle=+|\psi\rangle}
+  \]
+- **fermions (semi-whole spin)**: total state must be **antisymmetric**
+  \[
+  \boxed{\hat P_{12}|\psi\rangle=-|\psi\rangle}
+  \]
+
+(In non-relativistic MQ courses it is often taken as a postulate; the deep origin is relativistic/QFT.)
+
+---
+
+# 6) Express construction: symmetrizer and antisymmetrizer
+I define the projectors:
+\[
+\boxed{\hat S=\frac{1+\hat P_{12}}{2}},\qquad
+\boxed{\hat A=\frac{1-\hat P_{12}}{2}}.
+\]
+Properties to remember:
+\[
+\hat S^2=\hat S,\quad \hat A^2=\hat A,\quad \hat S\hat A=0,\quad \hat S+\hat A=I.
+\]
+Then \(S\) project into the symmetrical space, \(A\) into the antisymmetric space.
+
+---
+
+## 6A) From product states to symmetric/antisymmetric states
+I take two states to a particle \(|a\rangle\), \(|b\rangle\). The product is \(|a\rangle_1|b\rangle_2\).
+
+- State **symmetric**:
+\[
+\boxed{|a,b\rangle_+ = \frac{1}{\sqrt2}\big(|a\rangle_1|b\rangle_2+|b\rangle_1|a\rangle_2\big)}
+\]
+- State **antisymmetric**:
+\[
+\boxed{|a,b\rangle_- = \frac{1}{\sqrt2}\big(|a\rangle_1|b\rangle_2-|b\rangle_1|a\rangle_2\big)}
+\]
+
+(This form is perfect if \(|a\rangle\) and \(|b\rangle\) are orthonormal; otherwise normalization changes slightly, but the idea remains identical.)
+
+---
+
+# 7) Pauli principle and Slater determinant
+## 7A) Pauli in a row (dry demonstration)
+If I take two fermions in **same** state \(|a\rangle\) (i.e. \(a=b\)), then:
+\[
+|a,a\rangle_-=\frac{1}{\sqrt2}(|a\rangle_1|a\rangle_2-|a\rangle_1|a\rangle_2)=0.
+\]
+So an antisymmetric physical state ** does not exist** if two fermions occupy the same state at a particle.
+
+\[
+\boxed{\text{Two fermions cannot occupy the same quantum state.}}
+\]
+
+## 7B) Slater (general form for \(N\) fermions)
+For \(N\) stops in orbital \(\phi_1,\dots,\phi_N\), the antisymmetrical state is the **determinant of Slater**:
+\[
+\boxed{
+\Psi(x_1,\dots,x_N)=\frac{1}{\sqrt{N!}}
+\begin{vmatrix}
+\phi_1(x_1)&\phi_2(x_1)&\cdots&\phi_N(x_1)\\
+\phi_1(x_2)&\phi_2(x_2)&\cdots&\phi_N(x_2)\\
+\vdots&\vdots&\ddots&\vdots\\
+\phi_1(x_N)&\phi_2(x_N)&\cdots&\phi_N(x_N)
+\end{vmatrix}
+}
+\]
+If two orbitals coincide (two equal columns), the determining factor is zero ⇒ Pauli.
+
+---
+
+# 8) Connection to DIM 8: two spin-\(1/2\) particles, singlet/triplet and total symmetry
+For two electrons (fermions, spin \(1/2\)) **total state** must be antisymmetric:
+\[
+\boxed{\Psi_{\text{tot}}=\Psi_{\text{spaz}}(\vec r_1,\vec r_2)\,\chi_{\text{spin}}(\sigma_1,\sigma_2)}
+\]
+and must be:
+\[
+\hat P_{12}\Psi_{\text{tot}} = -\Psi_{\text{tot}}.
+\]
+
+From DIM 8 you know:
+- **Triplet ** (\(S=1\)) is **symmetric** in the spin:
+  \[
+  \chi_{S=1}\ \text{simmetrica}
+  \]
+- **Singulet** (\(S=0\)) is **antisymmetric** in spin:
+  \[
+  \chi_{S=0}\ \text{antisimmetrica}
+  \]
+
+So to have total antisymmetric:
+
+### Case 1: singlet spin (antisymmetric spin)
+Space is **symmetric**:
+\[
+(-)\times(+)=(-)
+\]
+\[
+\boxed{\chi_{S=0}\ \Rightarrow\ \Psi_{\text{spaz}} \ \text{simmetrica}}
+\]
+
+### Case 2: triplet spin (symmetric spin)
+Space Server **antisymmetric**:
+\[
+(+)\times(-)=(-)
+\]
+\[
+\boxed{\chi_{S=1}\ \Rightarrow\ \Psi_{\text{spaz}} \ \text{antisimmetrica}}
+\]
+
+---
+
+# 9) Even/odd \(\ell\) rule (exchange ↔ \(\vec r \to -\vec r\) in relative motion)
+For two particles it is useful to switch to:
+- mass center coordinate \(\vec R\)
+- relative coordinate \(\vec r=\vec r_1-\vec r_2\)
+
+Exchange \(1\leftrightarrow 2\) leaves \(\vec R\) unchanged but sends:
+\[
+\vec r \to -\vec r.
+\]
+
+If the angular part of the relative motion is \(Y_{\ell m}(\hat r)\), the property shall be:
+\[
+Y_{\ell m}(-\hat r)=(-1)^\ell\,Y_{\ell m}(\hat r).
+\]
+
+So:
+- if \(\ell\) is **pari**, the space part is **symmetric** under exchange
+- if \(\ell\) is **odd**, the space part is **antisymmetric** under exchange
+
+Combining point 8:
+
+\[
+\boxed{\text{singoletto }(S=0)\ \Rightarrow\ \Psi_{\text{spaz}} \text{ simmetrica } \Rightarrow\ \ell\ \text{pari}}
+\]
+\[
+\boxed{\text{tripletto }(S=1)\ \Rightarrow\ \Psi_{\text{spaz}} \text{ antisimmetrica } \Rightarrow\ \ell\ \text{dispari}}
+\]
+
+This is a very typical phrase to be examined.
+
+---
+
+# Symbol Dictionary (to know one by one)
+- \(\hat P_{12}\): exchange operator (change labels 1↔2).
+- \(\psi(x_1,x_2)\): two-particle wave function; \(x=(\vec r,\sigma)\) includes position and spin.
+- \(\hat H\): Hamiltonian of the two (or more) particle system.
+- \([H,P]=HP-PH\): switcher; if it is 0 ⇒ compatible operators ⇒ common eigenstates.
+- Symmetrical: \(P|\psi\rangle=+|\psi\rangle\).
+- “antisymmetric”: \(P|\psi\rangle=-|\psi\rangle\).
+- Bosoni: total symmetrical states; fermions: total antisymmetric states.
+- \(\hat S=(1+P)/2\): symmetrical projector.
+- \(\hat A=(1-P)/2\): anti-symmetrizer projector.
+- \(|a\rangle,|b\rangle\): a particle state (orbital/spin-orbital).
+- Slater's determinant: general anti-symmetric construction for \(N\) fermions.
+- \(\chi_{\text{spin}}\): spin part; \(\Psi_{\text{spaz}}\): space part.
+- \(S\): Total spin (for two 1/2 spins: \(S=0,1\)).
+- \(\ell\): orbital angular momentum (typically relative motion).
+
+---
+
+# Physical meaning (to be said well)
+- “Identical particles” means that **there is no observable** that distinguishes “who is the particle 1” e “who is the 2nd”: exchanging them cannot change anything measurable ⇒ \(H\) is invariant ⇒ \([H,P]=0\).
+- This force the structure of the states: only symmetrical or antisymmetric are physical (bosons/fermions).
+- **Pauli** explains:
+  - shell structure of atoms,
+  - stability of matter;
+  - because electrons fill levels instead of collapsing all into the same.
+- The singlet/triplet correlation with spatial symmetry explains rules of selection and properties of two electron states (He, chemical bonds, etc.).
+
+---
+
+# Oral script (two minutes, very linear)
+I define the exchange operator \(P_{12}\) as the one that sends \(\psi(x_1,x_2)\) to \(\psi(x_2,x_1)\). By swapping twice back to the initial state, then \(P_{12}^2=I\). It follows that the eigenvalues satisfy \(\lambda^2=1\), then \(\lambda=\pm1\): symmetrical or antisymmetric states. For identical particles the Hamiltonian is invariant by exchange, i.e. \(P_{12}HP_{12}=H\), equivalent to \([H,P_{12}]=0\). So I can choose common eigenstates of \(H\) and \(P_{12}\). Symmetrisation postulate: bosons have been total symmetrical, antisymmetric fermions. From two states to one particle I build combinations \((|a\rangle_1|b\rangle_2\pm|b\rangle_1|a\rangle_2)/\sqrt2\). For fermions, if \(a=b\) the antisymmetric combination is zero: it's Pauli principle; for many fermions the shape For two electrons, the total state must be antisymmetric: the triplet spin is symmetrical and therefore requires an antisymmetrical spatial part; the singlet spin is antisymmetrical and requires a symmetrical spatial part. In relative coordinates, the manda swap \(\vec r\to-\vec r\) and \(Y_{\ell m}(-\hat r)=(-1)^\ell Y_{\ell m}\), then singlet ↔ \(\ell\) even, triplet ↔ \(\ell\) odd.
+<<<DIM 9 END>>>
+
+<<<DIM 10 START>>>
+# DIM 10 - Hellmann-Feynman Theorem + spectroscopic notation
+
+## where it appears in the notes
+- **Core (Hellmann-Feynman + spectroscopic notation):** P2·27 → `img/236.jpg`-`img/237.jpg` (pages 236-237)
+
+---
+
+# 0) Objectives
+Prove that if a Hamiltonian depends on a \(\lambda\) parameter,
+\[
+\hat H(\lambda)\,|n(\lambda)\rangle = E_n(\lambda)\,|n(\lambda)\rangle,
+\]
+then (for normalized eigenstates and non-degenerate case):
+\[
+\boxed{\;\frac{dE_n}{d\lambda}=\left\langle n(\lambda)\left|\frac{\partial \hat H}{\partial \lambda}\right|n(\lambda)\right\rangle\;}
+\]
+and then be able to read/describe **spectroscopic notation** (type \(n\ell_j\) and/or \(^{2S+1}L_J\), parity, etc.).
+
+---
+
+# 1) Complete demonstration of Hellmann-Feynman's theorem
+
+## 1A) Hypothesis
+- \(\hat H(\lambda)\) is **hermitian** (observable energy).
+- \(E_n(\lambda)\) is an eigenvalues (non-degenerate, for the clean version)
+- \(|n(\lambda)\rangle\) is eigenstates **normalised**:
+  \[
+  \langle n(\lambda)|n(\lambda)\rangle=1.
+  \]
+
+## 1B) Parts from the equation to the values and derivation
+\[
+\hat H(\lambda)|n(\lambda)\rangle = E_n(\lambda)|n(\lambda)\rangle.
+\]
+
+Deviation from \(\lambda\) (total output):
+\[
+\frac{\partial \hat H}{\partial \lambda}|n\rangle + \hat H\,\frac{\partial |n\rangle}{\partial \lambda}
+=
+\frac{dE_n}{d\lambda}|n\rangle + E_n\,\frac{\partial |n\rangle}{\partial \lambda}.
+\]
+(here I abbreviated \(|n\rangle = |n(\lambda)\rangle\), \(E_n=E_n(\lambda)\)).
+
+## 1C) Multiply left by \(\langle n|\)
+\[
+\langle n|\frac{\partial \hat H}{\partial \lambda}|n\rangle
++
+\langle n|\hat H|n'\rangle
+=
+\frac{dE_n}{d\lambda}\langle n|n\rangle
++
+E_n\langle n|n'\rangle
+\]
+where \(|n'\rangle \equiv \frac{\partial |n\rangle}{\partial \lambda}\).
+
+Now I use two facts:
+
+### (i) Normalization
+\[
+\langle n|n\rangle=1.
+\]
+
+### (ii) Hermiticity + eigenvalues
+From \(\hat H|n\rangle = E_n|n\rangle\) and \(\hat H=\hat H^\dagger\) also follows:
+\[
+\langle n|\hat H = E_n \langle n|.
+\]
+So:
+\[
+\langle n|\hat H|n'\rangle = E_n \langle n|n'\rangle.
+\]
+
+Replace: the terms \(E_n\langle n|n'\rangle\) are deleted between LHS and RHS, and remains:
+
+\[
+\boxed{\;\frac{dE_n}{d\lambda}=\langle n|\frac{\partial \hat H}{\partial \lambda}|n\rangle\;}
+\]
+
+The demonstration is over.
+
+---
+
+# 2) Important comments (which often ask)
+## 2A) Normalization doesn't bother you.
+Even if you do not impose \(\langle n|n'\rangle=0\), the theorem remains true: the deletion takes place anyway.
+
+Coming \(\langle n|n\rangle=1\):
+\[
+\frac{d}{d\lambda}\langle n|n\rangle=\langle n'|n\rangle+\langle n|n'\rangle=0
+\]
+⇒ \(\langle n|n'\rangle\) is purely imaginary, but it does not need to be fixed: Hellmann-Feynman does not depend on this phase choice.
+
+## 2B) Degenerate case (what to say without bogged down)
+If \(E_n\) is degenerate, within the degenerate subspace the eigenstates \(|n\rangle\) is not unique: you can mix the eigenstates linearly.
+
+The correct sentence is:
+> If there is degeneracy, to apply Hellmann-Feynman to a single layer you must choose a degenerate subspace base that **diagonalize** the \(\langle i|\partial_\lambda H|j\rangle\) matrix within that subspace.
+
+It is the same spirit as the degenerate perturbation (DIM 7): first diagonalize within the degeneracy, then everything returns to clean.
+
+---
+
+# 3) Physical meaning (the true point of the theorem)
+Hellmann-Feynman says:
+
+- If \(\lambda\) is a physical parameter of the problem (external field, nuclear distance, nuclear charge \(Z\), etc.), then **the energy derivative** compared to that parameter is calculated as **expectation value of the Hamiltonian derivative**.
+
+### Typical examples to say
+1) If \(\lambda = R\) is a nuclear coordinate (molecules, Born-Oppenheimer):
+\[
+F_R = -\frac{dE}{dR} = -\left\langle \frac{\partial \hat H}{\partial R}\right\rangle
+\]
+⇒ is the basis for calculating **forces** on atoms.
+
+2) If \(\hat H(\lambda)=\hat H_0+\lambda \hat V\):
+\[
+\frac{dE_n}{d\lambda}=\langle \hat V\rangle
+\]
+and by \(\lambda\) small leads you immediately to the perturbation of the first order:
+\[
+E_n(\lambda)\approx E_n(0)+\lambda\langle n|\hat V|n\rangle
+\]
+(it is DIM 7 view as derivative)
+
+---
+
+# 4) Spectroscopic notation (the one you need to read on the fly)
+
+Here are **two levels**:  
+1) **hydrogenide / single electron**: \(n\ell_j\)  
+2) **multi-electronic atom (LS coupling)**: \(^{2S+1}L_J\) + parity
+
+## 4A) Notation \(n\ell_j\) (very common)
+- \(n\) = main quantum number.
+- \(\ell\) = angular orbital moment, written by letters:
+  - \(\ell=0 \to s\)
+  - \(\ell=1 \to p\)
+  - \(\ell=2 \to d\)
+  - \(\ell=3 \to f\)
+  - \(\ell=4 \to g\), \(\ell=5 \to h\),...
+- \(j\) = total angular momenta of the electron (spin-orbit):
+\[
+j=\ell \pm \frac12.
+\]
+
+Examples:
+- \(2p_{3/2}\): \(n=2\), \(\ell=1\), \(j=3/2\).
+- \(1s_{1/2}\): \(n=1\), \(\ell=0\), \(j=1/2\).
+
+## 4B) Term symbols \(^{2S+1}L_J\) (LS coupling, multi-electron)
+Here:
+- \(S\) = total electron spin,
+- \(2S+1\) = **multiplicity** (single, double, triple,...),
+- \(L\) = total orbital angular momentum (sum of \(\ell_i\)),
+- \(J\) = total angular momenta \( \vec J=\vec L+\vec S\).
+
+### Letters by \(L\)
+Note: here the letter is **maiuscola** and means \(L\) total:
+- \(L=0 \to S\)
+- \(L=1 \to P\)
+- \(L=2 \to D\)
+- \(L=3 \to F\)
+- \(L=4 \to G\)
+- \(L=5 \to H\)
+- \(L=6 \to I\)
+(... continue)
+
+### Possible values of \(J\)
+\[
+J = L+S,\ L+S-1,\ \dots,\ |L-S|.
+\]
+
+### Equality
+Often you will find a type symbol \(^{2S+1}L_J^{\circ}\) (or \(^{o}\)) for ** odd parity** (odd).  
+The equality of electronic configuration shall be:
+\[
+\Pi = (-1)^{\sum_i \ell_i}.
+\]
+- if \(\sum \ell_i\) is equal → parity **pari** (often nothing is written)
+- if \(\sum \ell_i\) is odd → parity **odd** (does \(^{\circ}\) or \(o\))
+
+### Quick reading example
+\(^{3}P_{2}\):
+- \(2S+1=3 \Rightarrow S=1\) (triplet),
+- \(P \Rightarrow L=1\),
+- \(J=2\).
+
+---
+
+# 5) Dictionary symbols (to be known each by one)
+- \(\lambda\): real parameter on which the Hamiltonian depends (field, distance, charge, etc.).
+- \(\hat H(\lambda)\): Hamiltonian dependent on \(\lambda\).
+- \(|n(\lambda)\rangle\): \(\hat H(\lambda)\) eigenstates.
+- \(E_n(\lambda)\): eigenvalues (energy) associated with \(|n(\lambda)\rangle\).
+- \(\frac{\partial \hat H}{\partial\lambda}\): Hamiltonian operator derivative in relation to the parameter (smooth force operator).
+- \(\frac{dE_n}{d\lambda}\): energy derivative (real number).
+- \(n,\ell,j\): quantum numbers (main, orbital, total single electron).
+- \(S,L,J\): total spin, total orbital, total (multi-electron).
+- \(2S+1\): multiplicity (1 single, 2 double, 3 triplet,...).
+- \(^{\circ}\): odd parity (odd).
+
+---
+
+# 6) Oral script (90-120 sec)
+I consider a Hamiltonian \(H(\lambda)\) Hermitian with normalized eigenstates \(H(\lambda)|n(\lambda)\rangle=E_n(\lambda)|n(\lambda)\rangle\). Devious to \(\lambda\): \((\partial_\lambda H)|n\rangle+H|n'\rangle=E_n'|n\rangle+E_n|n'\rangle\). Multiply left to \(\langle n|\): \(\langle n|\partial_\lambda H|n\rangle+\langle n|H|n'\rangle=E_n'\langle n|n\rangle+E_n\langle n|n'\rangle\). Ma \(\langle n|n\rangle=1\) and, using \(H\) Hermitian, \(\langle n|H=E_n\langle n|\), then \(\langle n|H|n'\rangle=E_n\langle n|n'\rangle\) and the two terms are deleted. Stay \(E_n'=\langle n|\partial_\lambda H|n\rangle\): this is Hellmann-Feynman. Physically means that the energy change over a parameter is calculated as the expectation value of the Hamiltonian derivative; e.g. for a geometric parameter \(R\) the force is \(F=-dE/dR=-\langle\partial_R H\rangle\). Spectroscopic notation: for an electron use \(n\ell_j\) with \(\ell=s,p,d,f,\dots\) and \(j=\ell\pm1/2\); for many electrons use \(^{2S+1}L_J\) where \(2S+1\) is multiplicity, \(L\) is \(S,P,D,F,\dots\) and \(J\) ranges from \(L+S\) to \(|L-S|\), with any symbol \(^{\circ}\) for odd parity.
+<<<DIM 10 END>>>
+
+<<<DIM 11 START>>>
+# DIM 11 - Fine structure (hydrogen/hydrogen-like atoms): \(H_{MV}\), \(H_{SO}\), Darwin \(H_D\) ⇒ levels \(E_{n,j}\)
+
+## Where it's in the clipboard (this is your block at the end of the structure)
+- **Full End Structure (write \(H=H_0+H_{MV}+H_{SO}+H_D\) and do accounts):** `img/228.jpg` → `img/235.jpg`
+- **(Spectroscopic notation \(n\ell_j\) is also at the bottom of `img/235.jpg`)**
+- **Hellmann-Feynman/note:** `img/236.jpg`-`img/237.jpg` (already DIM 10)
+
+> Note: in the folder `boss/` there is no `solbf11_*.jpg`, then DIM 11 is done directly from the clipboard (which are excellent: 228-235).
+
+---
+
+# 0) What you need to prove (target boss)
+For a hydrogen atom with Coulomb potential
+\[
+V(r)= -\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r},
+\]
+Show that the **relativistic correction in the first order** (fine structure) is achieved by treating it as perturbation:
+\[
+\boxed{H' = H_{MV}+H_{SO}+H_D}
+\]
+where
+\[
+\boxed{H_{MV}= -\frac{\hat p^4}{8m^3c^2}}
+\]
+\[
+\boxed{H_{SO}= \frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,\vec L\cdot \vec S}
+\]
+\[
+\boxed{H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V(r)}
+\]
+
+and conclude that the total correction depends only on \(n\) and \(j\):
+\[
+\boxed{
+\Delta E_{fs}(n,j)=
+\frac{mc^2(Z\alpha)^4}{2n^3}\left(\frac{3}{4n}-\frac{1}{j+\tfrac12}\right)
+}
+\]
+equivalent
+\[
+\boxed{
+E_{n,j} \simeq E_n^{(0)}+E_n^{(0)}(Z\alpha)^2\left[\frac{1}{n\left(j+\tfrac12\right)}-\frac{3}{4n^2}\right]
+}
+\]
+(where \(E_n^{(0)}\) are non-relativistic levels).
+
+---
+
+# 1) Setup: non-relativistic Hamiltonian and degeneracies
+Basic Hamiltonian (hydrogenide, not relativistic):
+\[
+\boxed{
+H_0=\frac{\hat p^2}{2m}+V(r)
+=
+\frac{\hat p^2}{2m}-\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r}
+}
+\]
+
+Typical (no spin-orbit) eigenstates:
+\[
+|n\ell m_\ell\rangle\otimes|m_s\rangle
+\]
+with energy:
+\[
+\boxed{E_n^{(0)}=-\frac{mc^2(Z\alpha)^2}{2n^2}}
+\]
+and degeneracy (without spin): \(n^2\). With spin \(1/2\): \(2n^2\).
+
+The fine structure is an effect of order \((v/c)^2\sim (Z\alpha)^2\), so energies change in order \((Z\alpha)^4mc^2\): very small compared to \(E_n^{(0)}\).
+
+---
+
+# 2) Where the three terms \(H_{MV},H_{SO},H_D\) come from
+
+## 2A) Mass-velocity correction \(H_{MV}\)
+Departure from free relativistic energy:
+\[
+E = \sqrt{p^2c^2+m^2c^4}.
+\]
+I remove rest energy \(mc^2\) to obtain relativistic kinetic energy:
+\[
+T_{rel}= \sqrt{p^2c^2+m^2c^4}-mc^2
+= mc^2\left(\sqrt{1+\frac{p^2}{m^2c^2}}-1\right).
+\]
+Development for \(\frac{p^2}{m^2c^2}\ll1\):
+\[
+\sqrt{1+x}\approx 1+\frac{x}{2}-\frac{x^2}{8}+\cdots
+\]
+with \(x=\frac{p^2}{m^2c^2}\).
+\[
+T_{rel}\approx mc^2\left(\frac{1}{2}\frac{p^2}{m^2c^2}-\frac{1}{8}\frac{p^4}{m^4c^4}\right)
+=
+\frac{p^2}{2m}-\frac{p^4}{8m^3c^2}.
+\]
+The first term is already \(H_0\), so the perturbation is:
+\[
+\boxed{H_{MV}=-\frac{\hat p^4}{8m^3c^2}.}
+\]
+
+---
+
+## 2B) Spin-orbit coupling \(H_{SO}\) (with Thomas factor)
+Physical idea (as in your clipboard): In the reference system of the electron, the nucleus in motion generates a magnetic field \(\vec B\) linked to the electric field \(\vec E=-\nabla V/e\). The interaction energy is:
+\[
+H_{int}=-\vec\mu_s\cdot\vec B,
+\qquad
+\vec\mu_s=-g\frac{e}{2m}\vec S \ (g\simeq2).
+\]
+By counting in a central potential and including the **precession of Thomas** (half the semi-classic result), you get:
+\[
+\boxed{H_{SO}= \frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,\vec L\cdot \vec S.}
+\]
+For Coulomb:
+\[
+V(r)=-\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r}
+\Rightarrow
+\frac{1}{r}\frac{dV}{dr}=\frac{Ze^2}{4\pi\varepsilon_0}\frac{1}{r^3},
+\]
+then
+\[
+\boxed{
+H_{SO}=
+\frac{Ze^2}{8\pi\varepsilon_0\,m^2c^2}\frac{1}{r^3}\,\vec L\cdot\vec S.
+}
+\]
+
+**Comment to be stated:** \(H_{SO}\) DO NOT store \(L_z\) and \(S_z\) separately, but store \(J^2\) and \(J_z\). Then you should work on \(|n\ell jm_j\rangle\) base.
+
+---
+
+## 2C) Darwin term \(H_D\)
+In your notes (229-230) it is explained as "non-locality'/smearing on a Compton scale (zitterbewegung): the electron is not "sense' \(V(\vec r)\) punctually but an average on a small region \(\rho\sim \hbar/(mc)\).
+\[
+V(\vec r+\vec\rho)\approx V(\vec r)+\vec\rho\cdot\nabla V(\vec r)+\frac{1}{2}\sum_{i,j}\rho_i\rho_j\,\partial_i\partial_jV(\vec r)+\cdots
+\]
+By means of an isotropic distribution:
+- \(\langle \vec\rho\rangle=0\) ⇒ linear term disappears
+- \(\langle\rho_i\rho_j\rangle=\frac{\langle\rho^2\rangle}{3}\delta_{ij}\) ⇒ the square term becomes \(\propto \nabla^2V\)
+
+The result (from Pauli/Foldy-Wouthuysen) is:
+\[
+\boxed{
+H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V(r).
+}
+\]
+For Coulomb:
+\[
+\nabla^2\left(\frac{1}{r}\right)=-4\pi\,\delta^{(3)}(\vec r)
+\]
+then
+\[
+\nabla^2V(r)= -\frac{Ze^2}{4\pi\varepsilon_0}\nabla^2\left(\frac{1}{r}\right)
+=
+\frac{Ze^2}{\varepsilon_0}\,\delta^{(3)}(\vec r)
+\]
+and therefore:
+\[
+\boxed{
+H_D=
+\frac{\hbar^2}{8m^2c^2}\frac{Ze^2}{\varepsilon_0}\,\delta^{(3)}(\vec r).
+}
+\]
+• Critical consequence: contributes **only** for states with \(\ell=0\) (the only with \(|\psi(0)|\neq0\)).
+
+---
+
+# 3) Perturbative strategy: first-order energy correction
+Use the time-independent perturbations (DIM 7) on the first order:
+\[
+\boxed{
+\Delta E^{(1)}=\langle n\ell jm_j|H'|n\ell jm_j\rangle
+=
+\langle H_{MV}\rangle+\langle H_{SO}\rangle+\langle H_D\rangle
+}
+\]
+(The correction is independent of \(m_j\) because the problem is isotropic: no external field).
+
+---
+
+# 4) Calculation of the three contributions
+
+## 4A) Mass-velocity contribution \(\langle H_{MV}\rangle\)
+\[
+\langle H_{MV}\rangle=-\frac{1}{8m^3c^2}\langle \hat p^4\rangle.
+\]
+
+Key Makeup (in your notes 230): from
+\[
+H_0=\frac{\hat p^2}{2m}+V
+\]
+and \(H_0\): \(H_0|\psi\rangle=E_n^{(0)}|\psi\rangle\),
+Following
+\[
+\frac{\hat p^2}{2m}|\psi\rangle=(E_n^{(0)}-V)|\psi\rangle
+\Rightarrow
+\hat p^2|\psi\rangle=2m(E_n^{(0)}-V)|\psi\rangle.
+\]
+Then
+\[
+\langle \hat p^4\rangle
+=
+\langle \hat p^2\psi|\hat p^2\psi\rangle
+=
+(2m)^2\langle (E_n^{(0)}-V)^2\rangle.
+\]
+So:
+\[
+\langle \hat p^4\rangle=4m^2\left[(E_n^{(0)})^2-2E_n^{(0)}\langle V\rangle+\langle V^2\rangle\right].
+\]
+
+For Coulomb is worth the virial theorem:
+\[
+\boxed{\langle V\rangle=2E_n^{(0)}}
+\]
+and \(V^2=\left(\frac{Ze^2}{4\pi\varepsilon_0}\right)^2\frac{1}{r^2}\), therefore it also serves:
+\[
+\boxed{
+\left\langle \frac{1}{r^2}\right\rangle_{n\ell}
+=\frac{Z^2}{a_0^2}\frac{1}{n^3\left(\ell+\tfrac12\right)}
+}
+\]
+(with \(a_0=\frac{4\pi\varepsilon_0\hbar^2}{me^2}=\frac{\hbar}{mc\alpha}\)).
+
+Replacing (standard result, as in `img/231.jpg`):
+\[
+\boxed{
+\langle H_{MV}\rangle
+=
+mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3(\ell+\tfrac12)}\right].
+}
+\]
+
+---
+
+## 4B) Spin-orbit contribution \(\langle H_{SO}\rangle\)
+\[
+H_{SO}=\frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,\vec L\cdot\vec S
+\]
+and the Coulomb:
+\[
+H_{SO}=\frac{Ze^2}{8\pi\varepsilon_0m^2c^2}\frac{1}{r^3}\,\vec L\cdot\vec S.
+\]
+
+### (i) Angle part: \(\langle \vec L\cdot\vec S\rangle\)
+Use identity:
+\[
+\vec J=\vec L+\vec S
+\Rightarrow
+J^2=L^2+S^2+2\vec L\cdot\vec S
+\]
+then
+\[
+\boxed{
+\vec L\cdot\vec S=\frac{1}{2}\left(J^2-L^2-S^2\right).
+}
+\]
+On eigenstates \(|n\ell jm_j\rangle\):
+\[
+J^2=\hbar^2 j(j+1),\quad L^2=\hbar^2\ell(\ell+1),\quad S^2=\hbar^2 s(s+1),\ s=\tfrac12\Rightarrow s(s+1)=\tfrac34
+\]
+then:
+\[
+\boxed{
+\langle \vec L\cdot\vec S\rangle
+=
+\frac{\hbar^2}{2}\left[j(j+1)-\ell(\ell+1)-\frac34\right].
+}
+\]
+
+### (ii) Radial part: \(\langle 1/r^3\rangle\)
+For \(\ell\neq0\) (formula you have in `img/233.jpg`):
+\[
+\boxed{
+\left\langle\frac{1}{r^3}\right\rangle_{n\ell}
+=
+\frac{Z^3}{a_0^3}\frac{1}{n^3\,\ell\left(\ell+\tfrac12\right)(\ell+1)}
+\qquad (\ell\ge 1).
+}
+\]
+(For \(\ell=0\) it would differ, but there \(L=0\Rightarrow H_{SO}=0\), so it doesn't need to.)
+
+Multiplying everything (the "\(\hbar^2\) simplifies) you get:
+\[
+\boxed{
+\langle H_{SO}\rangle
+=
+\frac{mc^2(Z\alpha)^4}{4n^3}\;
+\frac{j(j+1)-\ell(\ell+1)-\tfrac34}{\ell\left(\ell+\tfrac12\right)(\ell+1)}
+\qquad (\ell\ge1).
+}
+\]
+
+---
+
+## 4C) Contribution of Darwin \(\langle H_D\rangle\)
+\[
+H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V
+=
+\frac{\hbar^2}{8m^2c^2}\frac{Ze^2}{\varepsilon_0}\delta^{(3)}(\vec r).
+\]
+So:
+\[
+\langle H_D\rangle
+=
+\frac{\hbar^2}{8m^2c^2}\frac{Ze^2}{\varepsilon_0}\,|\psi_{n\ell m}(0)|^2.
+\]
+But \(|\psi(0)|\neq0\) **only for \(\ell=0\)**. For \(s\) states:
+\[
+|\psi_{n00}(0)|^2=\frac{1}{\pi}\left(\frac{Z}{a_0}\right)^3\frac{1}{n^3}.
+\]
+Compact result:
+\[
+\boxed{
+\langle H_D\rangle
+=
+\frac{mc^2(Z\alpha)^4}{2n^3}\,\delta_{\ell 0}.
+}
+\]
+
+---
+
+# 5) Final sum and "miracle": depends only on \(j\)
+Put it together:
+\[
+\Delta E_{fs}=\langle H_{MV}\rangle+\langle H_{SO}\rangle+\langle H_D\rangle.
+\]
+
+In your clipboard (`img/234`-`img/235`) you see the key point:
+
+- For \(\ell\ge1\), combining \(\langle H_{MV}\rangle+\langle H_{SO}\rangle\) and using \(j=\ell\pm \tfrac12\), you get:
+\[
+\boxed{
+\langle H_{MV}\rangle+\langle H_{SO}\rangle
+=
+mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3\left(j+\tfrac12\right)}\right].
+}
+\]
+
+- For \(\ell=0\) (i.e. \(j=\tfrac12\)), spin-orbit is zero but Darwin is able to replace the necessary piece and get **the same shape**.
+
+So in general:
+\[
+\boxed{
+\Delta E_{fs}(n,j)=
+mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3\left(j+\tfrac12\right)}\right]
+}
+\]
+which is equivalent to:
+\[
+\boxed{
+\Delta E_{fs}(n,j)=
+\frac{mc^2(Z\alpha)^4}{2n^3}\left(\frac{3}{4n}-\frac{1}{j+\tfrac12}\right).
+}
+\]
+
+It is written as in the clipboard (with \(E_n^{(0)}\) factorised):
+\[
+\boxed{
+E_{n,j}\simeq E_n^{(0)}+E_n^{(0)}(Z\alpha)^2\left[\frac{1}{n\left(j+\tfrac12\right)}-\frac{3}{4n^2}\right].
+}
+\]
+
+---
+
+# 6) Physical consequences that you must know how to say
+1) **The levels depend on \(n\) and \(j\)** (not \(\ell\) separately): then
+   \[
+   2S_{1/2}\ \text{and}\ 2P_{1/2}\ \text{degenerate cases (in Dirac/fine structure).}
+   \]
+   The actual break of this degeneracy is **Lamb shift** (QED), not included here.
+
+2) **Splitting** between \(j=\ell+\tfrac12\) and \(j=\ell-\tfrac12\) is mainly due to **spin-orbit**, but for \(s\) Darwin also enters.
+
+3) Order of magnitude (as in `img/235.jpg`): for H (\(Z=1\)),
+   \[
+   \alpha\simeq \frac{1}{137}\Rightarrow \alpha^2\sim 5\times 10^{-5}
+   \]
+   therefore the fine structure is of the order of
+   \[
+   \alpha^2\times 13.6\text{ eV}\sim 10^{-3}\text{ eV}.
+   \]
+
+---
+
+# Symbols dictionary (to be repeated one by one)
+- \(m\): mass of the electron.
+- \(c\): speed of light.
+- \(\hbar\): Reduced Planck constant.
+- \(e\): Elementary charge.
+- \(\varepsilon_0\): Permitivity of vacuum.
+- \(Z\): atomic number (hydrogen: \(Z=1\)).
+- \(\alpha=\dfrac{e^2}{4\pi\varepsilon_0\hbar c}\): fine structure constant.
+- \(a_0=\dfrac{4\pi\varepsilon_0\hbar^2}{me^2}=\dfrac{\hbar}{mc\alpha}\): Bohr radius.
+- \(\hat p\): operator momentum; \(\hat p^2\) and \(\hat p^4\) enter \(H_{MV}\).
+- \(V(r)\): Coulomb central potential.
+- \(\nabla^2\): Laplaciano; in Darwin appears \(\nabla^2V\).
+- \(\delta^{(3)}(\vec r)\): Dirac 3D delta; select the value of the wave function at source.
+- \(\vec L\): orbital angular momentum.
+- \(\vec S\): electron spin (\(s=\tfrac12\)).
+- \(\vec J=\vec L+\vec S\): total angular momentum.
+- \(n\): main quantum number.
+- \(\ell\): quantum orbital number.
+- \(j\): total quantum number (\(j=\ell\pm\tfrac12\)).
+- \(m_j\): projection of \(J\) (correction does not depend on \(m_j\) in the absence of external fields).
+- \(E_n^{(0)}\): non-relativistic energies of the hydrogenide.
+- \(\Delta E_{fs}\): fine structure correction (order \((Z\alpha)^4 mc^2\)).
+
+---
+
+# Oral script (2-3 minutes)
+For hydrogenide \(H_0=p^2/(2m)+V(r)\) childbirth with \(V=-Ze^2/(4\pi\varepsilon_0r)\) and \(E_n^{(0)}=-mc^2(Z\alpha)^2/(2n^2)\) levels. The fine structure comes from relativistic corrections of order \(1/c^2\): mass-velocity \(H_{MV}=-p^4/(8m^3c^2)\), spin-orbit \(H_{SO}=\frac{1}{2m^2c^2}\frac{1}{r}\frac{dV}{dr}\,L\cdot S\) with Thomas factor, and Darwin \(H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V\). Treatment \(H'=H_{MV}+H_{SO}+H_D\) as perturbation and correction to first order: \(\Delta E=\langle H'\rangle\). \(H_{MV}\) use which on the \(H_0\) eigenstates is \(p^2|\psi\rangle=2m(E-V)|\psi\rangle\), then \(\langle p^4\rangle=4m^2\langle(E-V)^2\rangle\); with the virial \(\langle V\rangle=2E\) and with \(\langle 1/r^2\rangle=\frac{Z^2}{a_0^2}\frac{1}{n^3(\ell+1/2)}\) I get \(\langle H_{MV}\rangle=mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3(\ell+1/2)}\right]\). For \(H_{SO}\) step to the coupled base \(|n\ell jm_j\rangle\) because \(L\cdot S=\frac12(J^2-L^2-S^2)\) and is diagonal: \(\langle L\cdot S\rangle=\frac{\hbar^2}{2}[j(j+1)-\ell(\ell+1)-3/4]\), and with \(\langle 1/r^3\rangle=\frac{Z^3}{a_0^3}\frac{1}{n^3\ell(\ell+1/2)(\ell+1)}\) I get \(\langle H_{SO}\rangle\). Darwin gives \(H_D\propto\delta^{(3)}(r)\), so it only contributes to \(\ell=0\) and is \(\langle H_D\rangle=mc^2(Z\alpha)^4/(2n^3)\delta_{\ell0}\). Adding up the three pieces, the final result depends only on \(n\) and \(j\): \(\Delta E_{fs}=mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3(j+1/2)}\right]=\frac{mc^2(Z\alpha)^4}{2n^3}(\frac{3}{4n}-\frac{1}{j+1/2})\). So the levels with the same \(n\) and \(j\) are degenerate cases, e.g. \(2S_{1/2}\) and \(2P_{1/2}\) in this approximation; the correction is of the order \(10^{-3}\) eV for hydrogen.
+<<<DIM 11 END>>>
+
+<<<DIM 12 START>>>
+# DIM 12 - Time-dependent perturbation theory
+**(variation of constants → equations for \(c_n(t)\) → Bohr resonance and pulse → constant/periodic perturbation → continuous → Fermi gold rule → lifetime \(\tau\) and width \(\Gamma\))**
+
+## where it appears in the notes
+- **Core (set + constant change):** P2·28A `img/237.jpg`-`img/240.jpg`  
+- **Constant/periodic + resonance + Bohr pulse:** P2·28B `img/240.jpg`-`img/243.jpg`  
+- **Continue + conclusion (Fermi Golden Rule, \(\tau,\Gamma\)):** P2·28C `img/244.jpg`-`img/249.jpg`  
+- Useful support (Schr/Int squares): P1·18 `img/165.jpg`-`img/169.jpg`
+
+---
+
+# 0) Objectives
+Starting from:
+\[
+\hat H(t)=\hat H_0+\lambda \hat V(t), \qquad \lambda\ll 1
+\]
+demonstrate:
+
+1) **Equation for coefficients \(c_n(t)\)** (constant variation):
+\[
+\boxed{\, i\hbar\,\dot c_n(t)=\lambda\sum_m V_{nm}(t)\,e^{i\omega_{nm}t}\,c_m(t)\,}
+\]
+with \(V_{nm}(t)=\langle n|\hat V(t)|m\rangle\) and \(\omega_{nm}=(E_n-E_m)/\hbar\).
+
+2) **transition amplitude at first order** \(i\to f\):
+\[
+\boxed{\,c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}\int_0^t V_{fi}(t')\,e^{i\omega_{fi}t'}\,dt'\,}
+\]
+and probability \(P_{i\to f}(t)=|c_f^{(1)}(t)|^2\) (order \(\lambda^2\)).
+
+3) For **Constant perturbation** (access to \(t=0\)):
+\[
+P_{i\to f}(t)=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\,\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}.
+\]
+
+4) For **periodical perturbation** ⇒ **resonance** when \(\omega\simeq\omega_{fi}\) (Bohr pulsation \(\omega_{fi}\)).
+
+5) If the final states form a **continuum**, obtain the **Gold Rule of Fermi**:
+\[
+\boxed{\,W_{i\to f}=\frac{2\pi}{\hbar}\,|V_{fi}|^2\,\rho(E_f)\,}
+\]
+(with preserved energy in the sense of delta).
+
+6) Connect \(W\), **lifetime** \(\tau\) and **width** \(\Gamma\):
+\[
+\boxed{\,\tau=\frac{1}{W}\,,\qquad \Gamma=\frac{\hbar}{\tau}=\hbar W\,}
+\]
+
+---
+
+# 1) Setup: known system + perturbation
+Suppose \(\hat H_0\) is soluble:
+\[
+\hat H_0|n\rangle = E_n|n\rangle,
+\qquad
+\langle n|m\rangle=\delta_{nm}.
+\]
+
+Then add a time dependent perturbation \(\hat V(t)\):
+\[
+\hat H(t)=\hat H_0+\lambda \hat V(t).
+\]
+
+Schrödinger's time dependent equation is:
+\[
+i\hbar \frac{\partial}{\partial t}|\psi(t)\rangle=\hat H(t)|\psi(t)\rangle.
+\]
+
+---
+
+# 2) Change in constants: ansatz with unperturbed phases
+If \(\lambda=0\), a \(|n\rangle\) eigenstates evolves as:
+\[
+|n,t\rangle = e^{-iE_n t/\hbar}|n\rangle.
+\]
+
+With perturbation, I look for the solution as a combination of these modes but with variable coefficients:
+\[
+\boxed{\,|\psi(t)\rangle=\sum_n c_n(t)\,e^{-iE_n t/\hbar}\,|n\rangle\,}
+\]
+This is exactly the **variation of the ** constants: if \(\hat V=0\), then \(c_n(t)\) are constant.
+
+---
+
+# 3) Derivation of the equation for the coefficients \(c_n(t)\)
+Derivo \(|\psi(t)\rangle\):
+\[
+\frac{\partial}{\partial t}|\psi\rangle
+=\sum_n \dot c_n(t)e^{-iE_n t/\hbar}|n\rangle
++\sum_n c_n(t)\left(-\frac{iE_n}{\hbar}\right)e^{-iE_n t/\hbar}|n\rangle.
+\]
+
+Multiply by \(i\hbar\):
+\[
+i\hbar\frac{\partial}{\partial t}|\psi\rangle
+=
+i\hbar\sum_n \dot c_n e^{-iE_n t/\hbar}|n\rangle
++\sum_n c_n E_n e^{-iE_n t/\hbar}|n\rangle.
+\]
+
+Now the right side:
+\[
+\hat H(t)|\psi\rangle=(\hat H_0+\lambda \hat V)\sum_m c_m e^{-iE_m t/\hbar}|m\rangle
+=\sum_m c_m e^{-iE_m t/\hbar}\hat H_0|m\rangle+\lambda\sum_m c_m e^{-iE_m t/\hbar}\hat V|m\rangle.
+\]
+
+But \(\hat H_0|m\rangle=E_m|m\rangle\), then:
+\[
+\hat H(t)|\psi\rangle=\sum_m c_m E_m e^{-iE_m t/\hbar}|m\rangle + \lambda\sum_m c_m e^{-iE_m t/\hbar}\hat V|m\rangle.
+\]
+
+Comparison with the left side: the terms \(\sum c_n E_n e^{-iE_n t/\hbar}|n\rangle\) ** are deleted** (that's why the "ansatz" is intelligent).
+
+\[
+i\hbar\sum_n \dot c_n e^{-iE_n t/\hbar}|n\rangle
+=
+\lambda\sum_m c_m e^{-iE_m t/\hbar}\hat V|m\rangle.
+\]
+
+Project to \(\langle n|\):
+\[
+i\hbar\,\dot c_n(t)\,e^{-iE_n t/\hbar}
+=
+\lambda\sum_m c_m(t)\,e^{-iE_m t/\hbar}\,\langle n|\hat V(t)|m\rangle.
+\]
+
+Multiply by \(e^{+iE_n t/\hbar}\) and define:
+\[
+V_{nm}(t)\equiv \langle n|\hat V(t)|m\rangle,
+\qquad
+\omega_{nm}\equiv \frac{E_n-E_m}{\hbar}.
+\]
+
+I get:
+
+\[
+\boxed{\, i\hbar\,\dot c_n(t)=\lambda\sum_m V_{nm}(t)\,e^{i\omega_{nm}t}\,c_m(t)\,}
+\]
+
+This is the fundamental equation of the TDPT (interaction equation, identical to that of the interaction framework).
+
+---
+
+# 4) First order: transition amplitude \(i\to f\)
+I take initial status:
+\[
+|\psi(0)\rangle=|i\rangle \quad\Rightarrow\quad c_i(0)=1,\; c_{n\neq i}(0)=0.
+\]
+
+At **first order** in \(\lambda\) nearest in the right member:
+\[
+c_i(t)\approx 1,\qquad c_{m\neq i}(t)\approx 0.
+\]
+
+Then for \(f\neq i\):
+\[
+i\hbar\,\dot c_f(t)=\lambda\,V_{fi}(t)\,e^{i\omega_{fi}t}.
+\]
+
+So:
+\[
+\dot c_f(t)= -\frac{i\lambda}{\hbar}V_{fi}(t)\,e^{i\omega_{fi}t}
+\]
+
+Integro 0 to \(t\):
+\[
+\boxed{\,c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}\int_0^t V_{fi}(t')\,e^{i\omega_{fi}t'}\,dt'\,}
+\]
+
+The probability (in order \(\lambda^2\)) is:
+\[
+\boxed{\,P_{i\to f}(t)\simeq |c_f^{(1)}(t)|^2\,}
+\]
+
+---
+
+# 5) Constant perturbation is switched on to \(t=0\)
+Case: \(\hat V(t)=\hat V\) constant (or constant in the \(0<t<T\) stroke).
+
+Then \(V_{fi}(t)=V_{fi}\) constant and:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}V_{fi}\int_0^t e^{i\omega_{fi}t'}dt'
+= -\frac{i\lambda}{\hbar}V_{fi}\,\frac{e^{i\omega_{fi}t}-1}{i\omega_{fi}}.
+\]
+
+Simplify (\(-i/(i)=-1\)):
+\[
+c_f^{(1)}(t)= -\frac{\lambda V_{fi}}{\hbar}\,\frac{e^{i\omega_{fi}t}-1}{\omega_{fi}}.
+\]
+
+Usage \(e^{i\omega t}-1=2ie^{i\omega t/2}\sin(\omega t/2)\):
+\[
+c_f^{(1)}(t)= -\frac{2i\lambda V_{fi}}{\hbar}\,e^{i\omega_{fi}t/2}\,\frac{\sin(\omega_{fi}t/2)}{\omega_{fi}}.
+\]
+
+Probability:
+\[
+\boxed{\,P_{i\to f}(t)=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\,\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}\,}
+\]
+
+### Essential comment
+This is a "bell" type \(\text{sinc}^2\) centered on \(\omega_{fi}=0\) (i.e. \(E_f\simeq E_i\)).  
+For long time it narrows: the more time you observe, the more selective it is in energy.
+
+---
+
+# 6) Periodic perturbation: Bohr resonance and pulse
+I take a typical case (as in the clipboard): harmonic perturbation
+\[
+\hat V(t)=\hat W\cos(\omega t)=\frac{\hat W}{2}\left(e^{i\omega t}+e^{-i\omega t}\right).
+\]
+So:
+\[
+V_{fi}(t)=\frac{W_{fi}}{2}\left(e^{i\omega t}+e^{-i\omega t}\right),
+\qquad W_{fi}=\langle f|\hat W|i\rangle.
+\]
+
+I insert into the width:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda}{\hbar}\int_0^t \frac{W_{fi}}{2}(e^{i\omega t'}+e^{-i\omega t'})e^{i\omega_{fi}t'}dt'.
+\]
+
+I get two integrals:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda W_{fi}}{2\hbar}\left[
+\int_0^t e^{i(\omega_{fi}+\omega)t'}dt'
++
+\int_0^t e^{i(\omega_{fi}-\omega)t'}dt'
+\right].
+\]
+
+So:
+\[
+c_f^{(1)}(t)= -\frac{i\lambda W_{fi}}{2\hbar}\left[
+\frac{e^{i(\omega_{fi}+\omega)t}-1}{i(\omega_{fi}+\omega)}
++
+\frac{e^{i(\omega_{fi}-\omega)t}-1}{i(\omega_{fi}-\omega)}
+\right].
+\]
+
+The physical content is here:
+
+## Resonance
+The second term shall explode when:
+\[
+\boxed{\omega \simeq \omega_{fi}}
+\]
+where
+\[
+\boxed{\omega_{fi}=\frac{E_f-E_i}{\hbar}}
+\]
+is the **pulsation of Bohr**.
+
+- \(\omega \approx \omega_{fi}\): **absorbing** (the field provides energy \(\hbar\omega\)).
+- \(\omega \approx -\omega_{fi}\): **stimulated emission** (in practice \(E_f<E_i\) and the energy goes to the field).
+
+In energy terms:
+\[
+E_f \approx E_i \pm \hbar\omega.
+\]
+
+---
+
+# 7) From the discrete spectrum to the continuum: derivation of Fermi's golden rule
+If the final states \(|f\rangle\) form a **continuum** (or a near-continuous dense), I don't look at the single probability towards a single \(f\), but the **total transition probability** adding up to so many final states.
+
+The key thing (within long time limits) is that an energy delta appears. Formally:
+\[
+\frac{\sin^2(\Delta\omega\,t/2)}{\Delta\omega^2}
+\ \xrightarrow[t\ \text{grande}]{}\ \frac{\pi t}{2}\,\delta(\Delta\omega)
+\]
+where \(\Delta\omega\) is the resonance discharge (e.g. \(\omega_{fi}-\omega\)).
+
+Switching from \(\delta(\Delta\omega)\) to \(\delta(\Delta E)\):
+\[
+\Delta\omega=\frac{\Delta E}{\hbar}\quad\Rightarrow\quad \delta(\Delta\omega)=\hbar\,\delta(\Delta E).
+\]
+
+## Final form (Golden Rule)
+For a transition to a continuous with state density \(\rho(E_f)\), you get a **rate** (probability per unit of time):
+
+\[
+\boxed{\,W_{i\to f}=\frac{2\pi}{\hbar}\,|V_{fi}|^2\,\rho(E_f)\,}
+\]
+
+- If the perturbation is periodic (frequency \(\omega\)), the energy is:
+  \[
+  E_f = E_i \pm \hbar\omega
+  \]
+  then \(\rho(E_f)\) should be evaluated in \(E_i\pm\hbar\omega\).
+
+**Physical translation:** in a continuous, the probability doesn't sway and just squeezes, but ** grows linearly over time**:
+\[
+P(t)\approx W\,t
+\]
+(until \(P\ll 1\), i.e. in the troublesome regime).
+
+---
+
+# 8) Lifetime \(\tau\) and linewidth \(\Gamma\)
+If an initial level \(|i\rangle\) can decay in many continuous states, the Golden Rule provides the total rate:
+\[
+W=\sum_f W_{i\to f}
+\quad\Rightarrow\quad
+\boxed{\tau=\frac{1}{W}}.
+\]
+
+The **energy width** associated (natural linewidth) is:
+\[
+\boxed{\Gamma=\frac{\hbar}{\tau}=\hbar W.}
+\]
+
+### Why is it physical?
+- If the state lives little (\(\tau\) small), its energy is little defined: the spectral line widens (\(\Gamma\) large).
+- Conceptual connection with energy-time uncertainty: \(\Delta E \sim \hbar/\tau\).
+
+---
+
+# Symbol Dictionary (to know one by one)
+- \(\hat H(t)\): Total Hamiltonian time dependent.
+- \(\hat H_0\): Hamiltonian not disturbed (stationary, resolved).
+- \(\hat V(t)\): perturbation (time dependent).
+- \(\lambda\): small parameter (order count); often in the end \(\lambda=1\).
+- \(|n\rangle\): \(\hat H_0\) eigenstates.
+- \(E_n\): eigenvalues of \(\hat H_0\) (unperturbed energy).
+- \(|\psi(t)\rangle\): System status.
+- \(c_n(t)\): Slow coefficients in the base of \(\hat H_0\).
+- \(V_{nm}(t)=\langle n|\hat V(t)|m\rangle\): perturbation matrix elements.
+- \(\omega_{nm}=(E_n-E_m)/\hbar\): Pulsation associated with jump \(m\to n\).
+- \(\omega_{fi}\): **Bohr pulsation** (between \(i\) and \(f\) levels).
+- \(\hat W\): operator multiplying the harmonic part, if \(\hat V(t)=\hat W\cos\omega t\).
+- \(W_{fi}=\langle f|\hat W|i\rangle\): matrix element for harmonic perturbation.
+- \(P_{i\to f}(t)\): Transition probability \(i\to f\) at time \(t\).
+- \(\rho(E)\): continuous state density (states per energy unit).
+- \(W\): transition rate (probability per unit of time).
+- \(\tau\): average life (\(\tau=1/W\)).
+- \(\Gamma\): energy width (\(\Gamma=\hbar/\tau\)).
+- \(\delta(\cdot)\): Dirac delta (energy selector) “in resonance”).
+
+---
+
+# Physical meaning (to be said well, without getting lost in the calculation)
+- The time-dependent perturbations **induces transitions** between \(\hat H_0\) eigenstates.
+- The phases \(e^{i\omega_{fi}t}\) mean that the integral is added only if you are close to resonance: the **pulsation of Bohr** is born.
+- For a continuous of final states, the probability does not remain oscillating: mediating/suming on so many endings becomes a **constant rate** → Golden Rule.
+- \(\tau\) and \(\Gamma\) are experimental translations: "How much lives a layer" and "how wide the spectral line" is.
+
+---
+
+# Oral-exam script (2-3 minutes, super linear)
+"I take \(H(t)=H_0+\lambda V(t)\) with \(H_0|n\rangle=E_n|n\rangle\). I write the solution as a constant variation: \(|\psi(t)\rangle=\sum_n c_n(t)e^{-iE_n t/\hbar}|n\rangle\). I insert in Schrödinger: the terms with \(H_0\) are deleted and I get \(i\hbar \dot c_n=\lambda\sum_m \langle n|V(t)|m\rangle e^{i(E_n-E_m)t/\hbar}c_m\), i.e. \(i\hbar\dot c_n=\lambda\sum_m V_{nm}(t)e^{i\omega_{nm}t}c_m\). If at the beginning they are in \(|i\rangle\), in the first order I put \(c_i\simeq1\) and for \(f\neq i\) I find \(c_f^{(1)}(t)=-(i\lambda/\hbar)\int_0^t V_{fi}(t')e^{i\omega_{fi}t'}dt'\), and \(P_{i\to f}=|c_f^{(1)}|^2\). If \(V\) is constant, I get \(P=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}\). If \(V(t)=W\cos\omega t\), words with \(\omega_{fi}\pm\omega\) appear in the integral and the transition is maximum when \(\omega\simeq\omega_{fi}=(E_f-E_i)/\hbar\), Bohr pulse: that is \(E_f=E_i\pm\hbar\omega\). If the endings are a continuous, for long time \(\text{sinc}^2\) gives a delta and the probability grows linearly: \(P\simeq Wt\) with \(W=\frac{2\pi}{\hbar}|V_{fi}|^2\rho(E_f)\), Fermi's golden rule. From here \(\tau=1/W\) and width \(\Gamma=\hbar/\tau\).
+<<<DIM 12 END>>>

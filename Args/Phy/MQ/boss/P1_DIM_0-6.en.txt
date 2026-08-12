@@ -1,0 +1,2172 @@
+<<<DIM 0 START>>>
+# DIM 0 - Postulates + Schrodinger equation + TDSE/TISE solution
+**(complete, oral-exam-ready version)**
+
+## where it appears in the notes:
+\[
+\boxed{
+\begin{array}{l}
+\textbf{Boss clue:}\ \texttt{boss/solbf0\_1.jpg}\\[3pt]
+\textbf{Postulates written well:}\ \texttt{img/132.jpg}\rightarrow\texttt{img/136.jpg}\\
+\hline\\[-7pt]
+132:\ \text{postulates 1-2 + EqS}\\
+133:\ \text{Born rule: discrete/continuous spectra}\\
+134:\ \text{degeneracy + projectors}\\
+135:\ \text{expectation value}\\
+136:\ \text{symmetrization + wave-packet reduction}\\
+137:\ \text{degenerate case (projector) + measurement repetition}
+\end{array}}
+\]
+
+
+---
+
+## Intro (before postulates, discursive but compact)
+Then, in general: starting from **\(\underline{\text{Maxwell equations}}\)** I get the **\(\underline{\text{wave equation}}\)** and, by imposing a **monochromatic wave**, rewrite it in the form **\(\underline{\text{Helmholtz}}\)** \(\nabla^2\psi+k^2\psi=0\): separate **space part** and **time factor** \(e^{-i\omega t}\), which in the calculation is factored and then eliminated. At this point, within the limit of **geometric optics**, with \(\psi(\vec r)\sim A(\vec r)e^{i\Phi(\vec r)}\) I get the **\(\underline{\text{eikonal equation}}\)** \(|\nabla\Phi|=k\), which is in analogy (historically highlighted by Hamilton) with the **\(\underline{\text{Hamilton-Jacobi equation}}\)**: It's not that **\(L=W\)**, but that *the phase is proportional to the action*. After quantum experiments and the intuition of **\(\underline{\text{de Broglie}}\)** it makes the *key step*: in optics \(\underline{k_{\text{opt}}=\frac{n\omega}{c}}\), in QM \(\underline{k_{\text{QM}}=\frac{p}{\hbar}}\), the analogy naturally emerges: **"\(\underline{n\leftrightarrow p(V)}\)"** (at fixed energy). In fact, from classical mechanics \(E=\frac{p^2}{2m}+V(x)\) I obtain **\(\underline{p(x)=\sqrt{2m(E-V(x))}}\)**; in quantum theory *an \(i\) appears* because the magnitudes become **operators** and, operationally on the plane waves, I identify **\(\underline{E\to i\hbar\partial_t}\)** and **\(\underline{p\to -i\hbar\nabla}\)** (i.e. \(\hat p=-i\hbar\nabla\)). From here I get **\(\underline{\text{TDSE}}\)** \(i\hbar\,\partial_t\psi(\vec r,t)=\hat H(t)\psi(\vec r,t)\) with \(\hat H(t)=-\frac{\hbar^2}{2m}\nabla^2+V(\vec r,t)\). If \(\hat H\) depends on time the solution is written with the **\(\underline{\text{evolution operator}}\)** \(U(t,0)=\mathcal T\exp\!\left[-\frac{i}{\hbar}\int_0^t \hat H(t')dt'\right]\) and \(\psi(\vec r,t)=\langle \vec r|U(t,0)|\psi(0)\rangle\); if **\(\underline{[\hat H(t_1),\hat H(t_2)]=0}\)** *no need* the **time ordering** \(\mathcal T\). If instead **\(\underline{\partial_t\hat H=0}\)**, then I first solve **\(\underline{\text{TISE}}\)** \(\hat H\psi_n(\vec r)=E_n\psi_n(\vec r)\): here I find a **basis of eigenstates** \(\{\psi_n\}\) and a set of **energies** \(\{E_n\}\) (discrete or continuous). The temporal part is managed this way: each **energy component** evolves only with one **phase**, so the fixed energy solution is \(\psi_n(\vec r,t)=\psi_n(\vec r)e^{-iE_nt/\hbar}\) and *the modulus squared remains constant*. For a generic state instead I expand the initial state in **energy eigenbasis**, \( \psi(\vec r,0)=\sum_n c_n\psi_n(\vec r)\) (or \(\int dE\) for a continuous spectrum), and then over time becomes
+\[
+\psi(\vec r,t)=\sum_n c_n\,\psi_n(\vec r)\,e^{-iE_nt/\hbar}\quad(\text{or}\int dE\,c(E)\psi_E(\vec r)e^{-iEt/\hbar}),
+\]
+with coefficients fixed by **\(\underline{c_n=\langle \psi_n|\psi(0)\rangle}\)**. The **phases** are therefore not a detail: they are precisely what generates the **\(\underline{\text{Unitary evolution}}\)** when you add more energies, because in the probability there are terms of **\(\underline{\text{interference}}\)** \(e^{-i(E_n-E_m)t/\hbar}\); if there is only one energy (or an overlap within the same degenerate level) those terms do not change **\(|\psi|^2\)**, otherwise in general the *probability density depends on time* even if \(\hat H\) is constant.
+
+---
+
+
+## Blocks (from slides/clipboard)
+
+\[
+\boxed{
+\begin{gathered}
+\textbf{In the vacuum: Maxwell equations to Helmholtz (monochromatic wave)} \\[4pt]
+\text{Maxwell equations in differential form:}\ \left[\!\left[\ \vec\nabla\!\cdot\!\vec E=0,\ \vec\nabla\!\cdot\!\vec B=0,\ \vec\nabla\!\times\!\vec E=-\partial_t\vec B,\ \vec\nabla\!\times\!\vec B=\mu_0\varepsilon_0\,\partial_t\vec E\ \right]\!\right] \\[4pt]
+\left[\!\left[
+\begin{array}{l}
+\vec E:\ \vec\nabla\times(\vec\nabla\times\vec E)=\vec\nabla(\vec\nabla\cdot\vec E)-\nabla^2\vec E=-\nabla^2\vec E=\vec\nabla\times(-\partial_t\vec B)=-\partial_t(\vec\nabla\times\vec B)=-\mu_0\varepsilon_0\,\partial_t^2\vec E,\ \ \mu_0\varepsilon_0=\frac1{c^2}\\[3pt]
+\vec B:\ \vec\nabla\times(\vec\nabla\times\vec B)=\vec\nabla(\vec\nabla\cdot\vec B)-\nabla^2\vec B=-\nabla^2\vec B=\vec\nabla\times(\mu_0\varepsilon_0\,\partial_t\vec E)=\mu_0\varepsilon_0\,\partial_t(\vec\nabla\times\vec E)=-\mu_0\varepsilon_0\,\partial_t^2\vec B\ \ \boxed{\Rightarrow\
+\nabla^2\begin{matrix}\vec E\\ \vec B\end{matrix}-\frac1{c^2}\partial_t^2\begin{matrix}\vec E\\ \vec B\end{matrix}=0}
+\end{array}
+\right]\!\right] \\[6pt]
+\begin{matrix}\vec E(\vec r,t)\\ \vec B(\vec r,t)\end{matrix}
+=\Re\!\left\{
+\begin{matrix}\vec E_0(\vec r)\\ \vec B_0(\vec r)\end{matrix}
+e^{-i\omega t}
+\right\}
+\ \leadsto\
+\text{(one component / scalar width)}\ \Psi(\vec r,t)=\psi(\vec r)e^{-i\omega t} \\[4pt]
+\left[\ \frac{\partial \Psi}{\partial t}
+=\frac{\partial}{\partial t}\big(\psi(\mathbf r)e^{-i\omega t}\big)
+=\psi(\mathbf r)(-i\omega)e^{-i\omega t}
+=-i\omega\,\Psi\ \right]\ ,\
+\left[\ \frac{\partial^2 \Psi}{\partial t^2}
+=\frac{\partial}{\partial t}(-i\omega\,\Psi)
+=-i\omega\,\frac{\partial\Psi}{\partial t}
+=(-i\omega)^2\Psi
+=-\omega^2\Psi\ \right] \\[6pt]
+\nabla^2\psi+\frac{\omega^2}{c^2}\psi=0\ \equiv\ \boxed{\nabla^2\psi(\mathbf r)+\underbrace{\frac{4\pi^2}{\lambda_0^2}}_{k_0^{\,2}}\,\psi(\mathbf r)=0},\quad
+\lambda_0=\frac{2\pi}{k_0},\ k_0=\frac{\omega}{c},\ \omega=2\pi\nu,\ \nu=\frac{c}{\lambda_0}
+\end{gathered}
+}
+\]
+
+\[
+\boxed{
+\begin{gathered}
+\textbf{In the middle: Maxwell equations to Helmholtz (monochromatic wave)} \\[4pt]
+\text{Maxwell equations in differential form:}\ \left[\!\left[\ \vec\nabla\!\cdot\!\vec D=0,\ \vec\nabla\!\cdot\!\vec B=0,\ \vec\nabla\!\times\!\vec E=-\partial_t\vec B,\ \vec\nabla\!\times\!\vec H=\partial_t\vec D\ \right]\!\right],\
+\vec D=\varepsilon\vec E,\ \vec B=\mu\vec H \\[4pt]
+\left[\!\left[
+\begin{array}{l}
+\vec E:\ \vec\nabla\times(\vec\nabla\times\vec E)=\vec\nabla(\vec\nabla\cdot\vec E)-\nabla^2\vec E
+\ \overset{\substack{\vec\nabla\cdot\vec D=0\\ \varepsilon=\text{const.}}}{\Longrightarrow}\
+-\nabla^2\vec E
+=\vec\nabla\times(-\partial_t\vec B)
+=-\partial_t(\vec\nabla\times\vec B)
+=-\mu\,\partial_t(\vec\nabla\times\vec H)
+=-\mu\,\partial_t^2\vec D
+=-\mu\varepsilon\,\partial_t^2\vec E\\[8pt]
+\vec B:\ \vec\nabla\times(\vec\nabla\times\vec B)=\vec\nabla(\vec\nabla\cdot\vec B)-\nabla^2\vec B
+\ \overset{\vec\nabla\cdot\vec B=0}{\Longrightarrow}\
+-\nabla^2\vec B
+=\vec\nabla\times\!\big(\mu\,\vec\nabla\times\vec H\big)
+=\mu\,\vec\nabla\times(\partial_t\vec D)
+=\mu\varepsilon\,\partial_t(\vec\nabla\times\vec E)
+=-\mu\varepsilon\,\partial_t^2\vec B,\\[4pt]
+c^2=\frac1{\mu_0\varepsilon_0},\ \mu=\mu_0\mu_r,\ \varepsilon=\varepsilon_0\varepsilon_r,\ (\mu_r\simeq1)\Rightarrow
+\mu\varepsilon=\mu_0\varepsilon_0\mu_r\varepsilon_r=\frac{\mu_r\varepsilon_r}{c^2}\simeq\frac{\varepsilon_r}{c^2}\ \overset{\text{non-magnetic}}{=}\ \frac{n^2}{c^2},\ \
+\boxed{\Rightarrow\ \nabla^2\begin{matrix}\vec E\\ \vec B\end{matrix}-\frac{n^2}{c^2}\partial_t^2\begin{matrix}\vec E\\ \vec B\end{matrix}=0}
+\end{array}
+\right]\!\right] \\[6pt]
+\begin{matrix}\vec E(\vec r,t)\\ \vec B(\vec r,t)\end{matrix}
+=\Re\!\left\{
+\begin{matrix}\vec E_0(\vec r)\\ \vec B_0(\vec r)\end{matrix}
+e^{-i\omega t}
+\right\}
+\ \leadsto\
+\text{(one component / scalar width)}\ \Psi(\vec r,t)=\psi(\vec r)e^{-i\omega t} \\[4pt]
+\left[\ \frac{\partial \Psi}{\partial t}
+=\frac{\partial}{\partial t}\big(\psi(\mathbf r)e^{-i\omega t}\big)
+=\psi(\mathbf r)(-i\omega)e^{-i\omega t}
+=-i\omega\,\Psi\ \right]\ ,\
+\left[\ \frac{\partial^2 \Psi}{\partial t^2}
+=\frac{\partial}{\partial t}(-i\omega\,\Psi)
+=-i\omega\,\frac{\partial\Psi}{\partial t}
+=(-i\omega)^2\Psi
+=-\omega^2\Psi\ \right] \\[6pt]
+\nabla^2\psi+\mu\varepsilon\,\omega^2\psi=0\ \equiv\ \boxed{\nabla^2\psi(\mathbf r)+\underbrace{\frac{4\pi^2}{\lambda^2}}_{k^{2}}\,\psi(\mathbf r)=0},\quad
+\lambda=\frac{2\pi}{k},\ k=\frac{n\omega}{c},\ \omega=2\pi\nu,\ \nu=\frac{v_f}{\lambda},\ v_f=\frac{c}{n}
+\end{gathered}
+}
+\]
+
+\[
+\boxed{
+\begin{gathered}
+\textbf{Optical bridge-QM:}k_{\rm opt}\ \boldsymbol{\leftrightarrow}\ k_{\rm QM}\quad\Rightarrow\quad n\ \boldsymbol{\leftrightarrow}\ p(V) \\[6pt]
+\textbf{(A) Helmholtz:}\
+\underbrace{\text{empty:}\nabla^2\psi(\vec r)+k_0^2\psi(\vec r)=0,\ \ k_0=\frac{\omega}{c}}_{\text{monochromatic wave in vacuum}}\qquad
+\underbrace{\text{mezzo: }\nabla^2\psi(\vec r)+k_{\rm opt}^2\psi(\vec r)=0,\ \ k_{\rm opt}=\frac{n\omega}{c}=n\,k_0}_{\text{monochromatic wave in the middle}} \\[10pt]
+\textbf{(B) Geometric optics (phase):}\ \psi(\vec r)\sim A(\vec r)e^{i\Phi(\vec r)} \ \Rightarrow\
+\underbrace{|\vec\nabla\Phi(\vec r)|=k_{\rm opt}(\vec r)}_{\text{eikonal equation}}\quad
+(\text{Hamilton, 1834: HJ-iconal equivalence})\
+\text{Nota: }\text{does not imply}L=W,\ \text{but only}\Phi\propto W\ \text{(optical phase proportional to the action)}. \\[10pt]
+\textbf{(C) QM: mechanical energy and de Broglie:}\
+E=\frac{p^2}{2m}+V(\vec r)=\text{const.}\ \Rightarrow\
+p(\vec r)=\sqrt{2m\big(E-V(\vec r)\big)},\qquad
+\lambda_{dB}=\frac{h}{p},\quad k_{\rm QM}=\frac{p}{\hbar} \\[6pt]
+\textbf{Where did the phase factor (EM) end up?}\ \text{It didn't disappear: it was factored and then erased.} \\[8pt]
+\boxed{\ -\frac{\hbar^2}{2m}\nabla^2\psi(\vec r)+V(\vec r)\psi(\vec r)=E\,\psi(\vec r)\ } \\[10pt]
+\textbf{(D) How to solve / what solutions it gives:}\
+\begin{cases}
+\text{TISE = problem with the values:}\hat H\psi_n=E_n\psi_n\ \text{with boundary/normalization conditions}\\[4pt]
+\text{if discrete spectrum:}E_n\ \text{quantizzati, }\{\psi_n\}\ \text{orthonormal base}\\[4pt]
+\text{if continuous spectrum (scattering):}E\ \text{continuous, flat/combined wave type solutions,}R,T\ \text{from fittings/current}\\[4pt]
+\text{tempo: }\psi(\vec r,t)=\sum_n c_n\psi_n(\vec r)e^{-iE_nt/\hbar}\ \ (\text{or}\int dE),\ \ c_n=\langle \psi_n|\psi(0)\rangle
+\end{cases} \\[10pt]
+\textbf{(E) Mono-energy vs superposition:}\
+\begin{cases}
+\text{if}E\ \text{fixed:}\psi(\vec r,t)=\psi(\vec r)e^{-iEt/\hbar}\ \Rightarrow\ |\psi(\vec r,t)|^2=|\psi(\vec r)|^2 \\[4pt]
+\text{if more than one energy:}\psi(\vec r,t)=\sum_n c_n\psi_n(\vec r)e^{-iE_nt/\hbar}\ (\text{or}\int dE)\ \Rightarrow\ |\psi(\vec r,t)|^2\ \text{depends on}t\ \text{by deadline}e^{-i(E_n-E_m)t/\hbar}
+\end{cases}\
+\text{Eccezione: }\ |\psi(\vec r,t)|^2\ \text{remains constant if there is only one}E\ \text{or an overlap only within the same degenerate level.}
+\end{gathered}
+}
+\]
+
+\[
+\boxed{
+\begin{gathered}
+\textbf{TDSE (}\hat H=\hat H(t)\textbf{)} \\[10pt]
+\text{Note: is an equation of evolution both with} \hat H(t)\ \text{is with} \partial_t\hat H=0,\ \text{while TISE is at the eigenvalues.} \\[6pt]
+\textbf{1) Da onde piane (\(\Rightarrow\)) identificazioni operative (\(\Rightarrow\)) TDSE:} \\[4pt]
+\psi(\vec r,t)=A\,e^{i(\vec k\cdot\vec r-\omega t)}\ \Rightarrow\
+\partial_t\psi=-i\omega\,\psi,\ \ \vec\nabla\psi=i\vec k\,\psi \\[4pt]
+E=\hbar\omega,\ \ \vec p=\hbar\vec k\ \Rightarrow\
+i\hbar\,\partial_t\psi=E\,\psi,\ \ -i\hbar\,\vec\nabla\psi=\vec p\,\psi \\[6pt]
+\textbf{Operational identifications (valid on plane waves):}\qquad
+E\,\psi\ \equiv\ (i\hbar\,\partial_t)\psi,\qquad
+\vec p\,\psi\ \equiv\ (-i\hbar\,\vec\nabla)\psi \\[6pt]
+\boxed{E\ \mapsto\ i\hbar\,\partial_t,\qquad \vec p\ \mapsto\ -i\hbar\,\vec\nabla} \\[6pt]
+\hat H(t)=\frac{\hat p^{\,2}}{2m}+V(\vec r,t),\qquad \hat p=-i\hbar\,\vec\nabla\ \Rightarrow\
+\hat H(t)=-\frac{\hbar^2}{2m}\nabla^2+V(\vec r,t) \\[6pt]
+\boxed{i\hbar\,\partial_t\psi(\vec r,t)=\hat H(t)\,\psi(\vec r,t)} \\[14pt]
+\textbf{2) Se \(\partial_t\hat H=0\): TISE (\(\Rightarrow\)) TDSE (stati a energia fissata):} \\[4pt]
+\hat H\,\psi_n(\vec r)=E_n\,\psi_n(\vec r),\qquad \psi_n(\vec r,t)=\psi_n(\vec r)\,e^{-iE_n t/\hbar} \\[4pt]
+i\hbar\,\partial_t\!\big(\psi_n e^{-iE_nt/\hbar}\big)=E_n\,\psi_n e^{-iE_nt/\hbar},\qquad
+\hat H\!\big(\psi_n e^{-iE_nt/\hbar}\big)=E_n\,\psi_n e^{-iE_nt/\hbar} \\[4pt]
+\text{(fase \(e^{-iE_nt/\hbar}\): valida solo per un singolo \(E_n\); in TISE è fattore comune e “si cancella”)} \\[4pt]
+\boxed{i\hbar\,\partial_t\psi_n(\vec r,t)=\hat H\,\psi_n(\vec r,t)\qquad(\partial_t\hat H=0)} \\[14pt]
+\textbf{3) How to solve (always TDSE):} \\[4pt]
+\hat H(t):\quad |\psi(t)\rangle=\hat U(t,t_0)\,|\psi(t_0)\rangle \\[4pt]
+\partial_t\hat H=0:\quad |\psi(t)\rangle=e^{-i\hat H(t-t_0)/\hbar}|\psi(t_0)\rangle
+=\sum_n c_n e^{-iE_n t/\hbar}|n\rangle\ \ (\text{or}\int dE),\qquad c_n=\langle n|\psi(0)\rangle
+\end{gathered}
+}
+\]
+
+---
+
+# 1) Postulate 1 - Schrodinger equation and superposition principle
+
+Defining the State as
+\[
+|\psi(t)\rangle\in\mathcal S.
+\]
+
+**Evolution (TDSE):**
+\[
+i\hbar\,\frac{d}{dt}|\psi(t)\rangle=\hat H(t)\,|\psi(t)\rangle.
+\]
+Here \(\hat H\) is the Hamiltonian system (the model based on the problem: kinetic + potential, etc.).  
+Note: in general \(|\psi(t)\rangle\) ** is not** a \(\hat H\) eigenstates; it becomes so only in the case of **fixed energy** (Steady state):
+\[
+\hat H|n\rangle=E_n|n\rangle.
+\]
+
+As a first order equation in time, assigned \(|\psi(t_0)\rangle\) the TDSE determines \(|\psi(t)\rangle\) for each \(t\).
+
+### Switching to coordinate representation
+
+Projection based on \(\{|x\rangle\}\) (in 3D \(\{|\vec r\rangle\}\)):
+\[
+\langle x|\Big(i\hbar\,\frac{d}{dt}|\psi(t)\rangle\Big)=\langle x|\hat H|\psi(t)\rangle
+\ \Rightarrow\ 
+i\hbar\,\frac{\partial}{\partial t}\langle x|\psi(t)\rangle=\langle x|\hat H|\psi(t)\rangle.
+\]
+Defining
+\[
+\psi(x,t)\equiv\langle x|\psi(t)\rangle.
+\]
+
+For a non-relativistic particle:
+\[
+\hat H=\frac{\hat p^2}{2m}+V(\hat x)\qquad(\text{in 3D}V(\hat{\vec r})).
+\]
+In representation \(x\):
+\[
+\hat x\to x,\qquad \hat p\to -i\hbar\,\partial_x \quad (\text{in 3D:}-i\hbar\nabla),
+\qquad \hat p^2\to -\hbar^2\,\partial_x^2 \quad (\text{in 3D:}-\hbar^2\nabla^2).
+\]
+I get:
+\[
+\boxed{
+i\hbar\,\partial_t\psi(x,t)=\left[-\frac{\hbar^2}{2m}\partial_x^2+V(x,t)\right]\psi(x,t)
+}
+\qquad(\text{in 3D} \partial_x^2\to\nabla^2).
+\]
+
+### Superposition principle
+
+If \(|\psi_1(t)\rangle\) and \(|\psi_2(t)\rangle\) are solutions, then for \(c_1,c_2\in\mathbb C\):
+\[
+|\psi(t)\rangle=c_1|\psi_1(t)\rangle+c_2|\psi_2(t)\rangle
+\]
+is still solution, because TDSE is linear:
+\[
+i\hbar\,\partial_t(c_1|\psi_1\rangle+c_2|\psi_2\rangle)
+=c_1\hat H|\psi_1\rangle+c_2\hat H|\psi_2\rangle
+=\hat H(c_1|\psi_1\rangle+c_2|\psi_2\rangle).
+\]
+
+---
+
+# 2) Postulate 2 - Measurement: observable, eigenvalues, state update
+
+The measurable physical quantities are **observable** and to each \(A\) associate an operator \(\hat A\) (hermitian).  
+The value equation gives **possible results**:
+
+- discrete spectrum:
+\[
+\hat A|u_n\rangle=a_n|u_n\rangle
+\]
+- Continuous spectrum:
+\[
+\hat A|u_\alpha\rangle=a(\alpha)\,|u_\alpha\rangle.
+\]
+
+**Does not collapse l'observable: collapses system status.**  
+If I explode the state in the base of the eigenstates:
+\[
+|\psi(t)\rangle=\sum_k c_k(t)\,|u_k\rangle,
+\]
+and the measure returns \(a_n\), the status is updated on the eigenspace associated with \(a_n\) (in the non-degenerate: \(|\psi\rangle\to|u_n\rangle\); in the degenerate: projection on the subspace \(S_n\), see Post. 6).
+
+---
+
+# 3) Postulate 3 - Born rule: outcome probabilities (discrete/continuous and degenerate cases)
+
+Given \(|\psi\rangle\), if I measure \(\hat A\) I can get any of its eigenvalues \(\{a_n\}\): The theory is **probabilistic**.
+
+I choose l'observable:
+\[
+\hat A|u_n\rangle=a_n|u_n\rangle,\qquad \{|u_n\rangle\}\ \text{base}.
+\]
+Development:
+\[
+|\psi(t)\rangle=\sum_k c_k(t)\,|u_k\rangle,\qquad c_k(t)=\langle u_k|\psi(t)\rangle.
+\]
+With orthonormality:
+\[
+\langle u_k|u_n\rangle=\delta_{kn}.
+\]
+
+### Discrete spectrum (non-degenerate)
+
+\[
+\boxed{P(a_n)=|\langle u_n|\psi(t)\rangle|^2=|c_n(t)|^2.}
+\]
+If I prepare \(|\psi\rangle=|u_k\rangle\) status:
+\[
+P(a_n)=|\langle u_n|u_k\rangle|^2=|\delta_{nk}|^2=\delta_{nk}.
+\]
+
+Normalization:
+\[
+\langle\psi|\psi\rangle=1=\sum_k |c_k(t)|^2.
+\]
+If not normalised:
+\[
+P(a_n)=\frac{|c_n(t)|^2}{\sum_k|c_k(t)|^2}.
+\]
+
+### Continuous spectrum
+
+\[
+|\psi(t)\rangle=\int c(\alpha,t)\,|u_\alpha\rangle\,d\alpha,
+\qquad
+dP(\alpha,\alpha+d\alpha)=|c(\alpha,t)|^2\,d\alpha
+=\big|\langle u_\alpha|\psi(t)\rangle\big|^2\,d\alpha.
+\]
+
+### Degenerate case (eigenvalue \(a_n\) with degeneracy \(r_n\))
+
+\[
+\hat A|u_n^{(k)}\rangle=a_n|u_n^{(k)}\rangle,\qquad k=1,2,\dots,r_n,\qquad r_n=\dim S_n,
+\]
+\[
+\langle u_n^{(k)}|u_m^{(j)}\rangle=\delta_{nm}\delta_{kj}.
+\]
+Development:
+\[
+|\psi(t)\rangle=\sum_n\sum_{k=1}^{r_n} c_n^{(k)}(t)\,|u_n^{(k)}\rangle.
+\]
+Probability to obtain auto-value \(a_n\):
+\[
+\boxed{
+P(a_n)=\sum_{k=1}^{r_n}\big|\langle u_n^{(k)}|\psi(t)\rangle\big|^2
+=\sum_{k=1}^{r_n}|c_n^{(k)}(t)|^2
+}.
+\]
+If the alternatives are mutually exclusive (distinguishable), the highest is **frames**; if they are indistinguishable, the amplitudes are added first and then the frame module is made.
+
+**Subspace projector \(S_n\):**
+\[
+\hat P_n=\sum_{k=1}^{r_n}|u_n^{(k)}\rangle\langle u_n^{(k)}|
+\]
+\[
+\boxed{P(a_n)=\langle\psi(t)|\hat P_n|\psi(t)\rangle.}
+\]
+Property:
+\[
+\hat P_n^2=\hat P_n,\qquad \hat P_n^\dagger=\hat P_n.
+\]
+So:
+\[
+P(a_n)=\langle\psi|\hat P_n^\dagger\hat P_n|\psi\rangle=\|\hat P_n|\psi\rangle\|^2,
+\qquad
+|\psi_n\rangle\equiv \hat P_n|\psi\rangle\ \Rightarrow\ P(a_n)=\||\psi_n\rangle\|^2.
+\]
+This quantity is invariant for unit transformations within the degenerate subspace (the choice of base within \(S_n\) does not change \(\hat P_n\)).
+
+---
+
+# 4) Postulate 4 - expectation value (expectation value)
+
+Definition:
+\[
+\langle A\rangle=\sum_n a_n\,P(a_n).
+\]
+With Born (discrete spectre non-degenerate):
+\[
+\langle A\rangle=\sum_n a_n\,|\langle u_n|\psi(t)\rangle|^2
+=\sum_n a_n\,\langle\psi(t)|u_n\rangle\langle u_n|\psi(t)\rangle.
+\]
+Use \(\hat A|u_n\rangle=a_n|u_n\rangle\) and closing \(\sum_n|u_n\rangle\langle u_n|=\mathbb I\):
+\[
+\boxed{\langle A\rangle=\langle\psi(t)|\hat A|\psi(t)\rangle.}
+\]
+
+Degenerate case:
+\[
+|\psi(t)\rangle=\sum_n\sum_{k=1}^{r_n} c_n^{(k)}\,|u_n^{(k)}\rangle
+\quad\Rightarrow\quad
+\boxed{\langle A\rangle=\sum_n a_n\sum_{k=1}^{r_n}|c_n^{(k)}|^2}.
+\]
+So:
+\[
+P_n=\sum_{k=1}^{r_n}|c_n^{(k)}|^2,\qquad \langle A\rangle=\sum_n a_n\,P_n.
+\]
+
+Example (position):
+\[
+\langle x\rangle=\langle\psi(t)|\hat x|\psi(t)\rangle=\int d^3x\,x\,|\psi(x,t)|^2.
+\]
+
+---
+
+# 5) Postulate 5 - Symmetrization (products of non-commuting operators)
+
+In general \(\hat x\hat p\neq \hat p\hat x\).  
+To associate with a classic product \(xp\) an observable (hermitian operator) I use symmetrisation:
+\[
+xp\ \longrightarrow\ \boxed{\frac{1}{2}\big(\hat x\hat p+\hat p\hat x\big)}.
+\]
+
+---
+
+# 6) Postulate 6 - Reduction of the wave packet (collapse)
+
+Between two measures the state evolves unitarily with the TDSE.  
+If in \(t_1\) measure \(\hat A\) and I get the result \(a_n\), the state collapses on the eigenspace associated with \(a_n\).
+
+### Non-degenerate case
+\[
+\hat A|u_n\rangle=a_n|u_n\rangle
+\qquad\Rightarrow\qquad
+|\psi(t_1^-)\rangle\ \longrightarrow\ |\psi(t_1^+)\rangle=|u_n\rangle
+\ (\text{then renormalize}).
+\]
+Repeating immediately the same measure I get the same eigenvalues with probability 1.
+
+### Degenerate case
+\[
+\hat A|u_n^{(k)}\rangle=a_n|u_n^{(k)}\rangle,\qquad
+\hat P_n=\sum_k |u_n^{(k)}\rangle\langle u_n^{(k)}|
+\]
+\[
+|\psi(t_1^-)\rangle\ \longrightarrow\ |\psi_n(t_1^+)\rangle=\hat P_n|\psi(t_1^-)\rangle
+\ (\text{then renormalize}).
+\]
+Repeating the measurement after a very small time (before the evolution remescoli), you still get the same eigenvalues \(a_n\).
+
+Example (Polarizer, Law of Malus):
+\[
+I=I_0\cos^2\theta.
+\]
+The polarizer selects the parallel component: a second aligned polarizer lets everything pass, an orthogonal block (projection nothing).
+
+---
+
+# Solving the TDSE/TISE in practice
+
+## A) Hamiltonian independent of time → stationary states
+If \(\hat H\) does not depend on \(t\), I look for separable solutions:
+\[
+\psi(x,t)=\varphi(x)\,T(t).
+\]
+
+I insert into the TDSE and split by \(\varphi T\):
+\[
+i\hbar \frac{1}{T}\frac{dT}{dt}
+=
+\frac{1}{\varphi}\left[-\frac{\hbar^2}{2m}\frac{d^2\varphi}{dx^2}+V(x)\varphi\right].
+\]
+LHS depends only on \(t\), RHS only from \(x\) ⇒ both equal to a real constant \(E\):
+\[
+i\hbar \frac{1}{T}\frac{dT}{dt}=E
+\quad\Rightarrow\quad
+T(t)=e^{-iEt/\hbar}.
+\]
+
+I get **TISE**:
+\[
+\left[-\frac{\hbar^2}{2m}\frac{d^2}{dx^2}+V(x)\right]\varphi(x)=E\varphi(x),
+\]
+in other words, a problem with the value of:
+\[
+\hat H|\varphi\rangle = E|\varphi\rangle.
+\]
+
+## B) General solution (discrete spectrum)
+If \(\{\varphi_n\}\) is an eigenstates base:
+\[
+\psi(x,t)=\sum_n c_n\,\varphi_n(x)\,e^{-iE_n t/\hbar},
+\qquad
+c_n=\langle \varphi_n|\psi(0)\rangle.
+\]
+(If there is also continuous, an integral is added.)
+
+**Physical significance:** Unitary evolution “attacks stages” \(e^{-iE_nt/\hbar}\) the energy components.
+
+---
+
+# Symbols dictionary (to know each by one)
+- \(|\psi(t)\rangle\): System status at time \(t\).
+- \(\psi(x,t)=\langle x|\psi(t)\rangle\): wave function in coordinate representation.
+- \(\mathcal S\): State Hilbert space.
+- \(\langle \phi|\psi\rangle\): internal product (width).
+- \(\hat H\): Hamiltonian.
+- \(\hat A\): operator associated with observable \(A\).
+- \(\hat A^\dagger\): added (married transferred).
+- \(|u_n\rangle\): \(\hat A\) eigenstates.
+- \(a_n\): eigenvalues (possible result of measurement).
+- \(c_n=\langle u_n|\psi\rangle\): width in base of \(\hat A\).
+- \(P(a_n)\): probability of measuring \(a_n\).
+- \(\hat I\): Identity.
+- \(\hat P_n\): Degenerate subspace projector.
+- \(\hbar\): Reduced Planck constant.
+- \(i\): imaginary unit (\(i^2=-1\)).
+- \(m\): mass.
+- \(V(x)\): potential.
+- \(\hat x\): operator position.
+- \(\hat p=-i\hbar \partial_x\): moment operator (in \(x\)).
+- \(\nabla,\nabla^2\): gradient and Laplaciano (in 3D).
+
+---
+
+# Physical meaning in a sentence per piece
+- **State \(|\psi\rangle\):** contains all available information on the system.
+- **Overlap:** high amplitudes → interference.
+- **Hermitian operators:** real measurements + orthogonal eigenstates.
+- **Born:** probability = width modulus squared.
+- **expectation value:** Experimental mean = \(\langle\psi|\hat A|\psi\rangle\).
+- **Symmetrisation:** rule to get real observable from ambiguous classic products.
+- **TDSE:** Unitary evolution between measurements.
+- **Collapse:** projection + renormalization after a result.
+- **TISE:** stationary states and energy quantization.
+
+---
+
+# Ready oral script (90-120 sec)
+Quantum status is a vector \(|\psi(t)\rangle\) in a Hilbert space and overlap is valid. Time evolution is given by \(i\hbar\,\partial_t|\psi\rangle=\hat H|\psi\rangle\). In coordinates, with \(\hat H=\hat p^2/2m+V(\hat x)\) and \(\hat p=-i\hbar\partial_x\), I get \(i\hbar\,\partial_t\psi=[-\hbar^2/(2m)\partial_x^2+V(x)]\psi\). An observable parameter corresponds to a hermitian operator \(\hat A\), and the possible results are eigenvalues \(a_n\). The probability is \(P(a_n)=|\langle u_n|\psi\rangle|^2\); in case of degenerate use the projector \(\hat P_n\) and \(P(a_n)=\langle\psi|\hat P_n|\psi\rangle\). The expectation value is \(\langle A\rangle=\sum_n a_nP(a_n)\) and it is shown to be \(\langle\psi|\hat A|\psi\rangle\). If I have non-commutation products, to make an observable symmetrical, e.g. \(xp\to(\hat x\hat p+\hat p\hat x)/2\). After a measurement, the state collapses into the projection on the measured eigenspace and then resumes the evolution with Schrödinger. If \(\hat H\) does not depend on \(t\), separate \(\psi=\varphi T\), I get \(T=e^{-iEt/\hbar}\) and TISE \([-\hbar^2/(2m)\partial_x^2+V]\varphi=E\varphi\).
+
+<<<DIM 0 END>>>
+
+
+<<<DIM 1 START>>>
+# DIM 1 - Continuity equation + probability current  
+**(preservation of probability)**
+
+## where it appears in the notes
+- **Boss clue:** `boss/solbf1_1.jpg`
+- **Complete deviation (3D) + Gauss theorem:** `img/44.jpg` → `img/46.jpg`
+
+---
+
+In QM the status is \( |\psi\rangle \); in position representation is \( \psi(x,t)=\langle x|\psi(t)\rangle \).
+
+Unlike classical, \( \psi \) does not give a trajectory \(x(t)\): it gives amplitudes of probability (so statistical information on outcomes).
+
+The density \( |\psi(x,t)|^2 \) is the probability per unit length to find the particle in \(x\) at time \(t\) (Born).
+
+**Global storage (hypothesis):**
+\[
+\boxed{\frac{d}{dt}\int_{V}\rho(\vec r,t)\,d^3r=0},\qquad \boxed{\rho=|\psi|^2}.
+\]
+If the system is boxed, \(V\) is just that box. If the system is free in \(\mathbb R^3\): I will use after \(V=V_R\) (end) and then do \(R\to\infty\) as limit.
+
+**TDSE and married** (with \(V(\vec r)\in\mathbb R\)):
+\[
+i\hbar\,\partial_t\psi=\left(-\frac{\hbar^2}{2m}\nabla^{2}+V\right)\psi,\qquad
+-i\hbar\,\partial_t\psi^*=\left(-\frac{\hbar^2}{2m}\nabla^{2}+V\right)\psi^*.
+\]
+I multiply the first by \(\psi^*\), the second by \(\psi\) and subtract (the terms with \(V\) are deleted):
+\[
+\partial_t(\psi^*\psi)=-\frac{\hbar}{2mi}\Big(\psi^*\nabla^{2}\psi-\psi\,\nabla^{2}\psi^*\Big).
+\]
+Use of identity:
+\[
+\psi^*\nabla^{2}\psi-\psi\,\nabla^{2}\psi^*=\vec\nabla\cdot(\psi^*\vec\nabla\psi-\psi\,\vec\nabla\psi^*).
+\]
+
+**Consistence equation (local) and current:**
+\[
+\boxed{\partial_t\rho+\vec\nabla\cdot\vec j=0},\qquad
+\boxed{\vec j=\frac{\hbar}{2mi}\big(\psi^*\vec\nabla\psi-\psi\,\vec\nabla\psi^*\big)}.
+\]
+
+I rewrite Schrödinger as \(i\hbar\,\partial_t\psi=\hat H\psi\) and the married \(-i\hbar\,\partial_t\psi^*=(\hat H\psi)^*\). So:
+\[
+\frac{d}{dt}\int_V\rho\,d^3r
+=\frac{1}{i\hbar}\int_V\Big[\psi^*(\hat H\psi)-(\hat H\psi)^*\psi\Big]\,d^3r.
+\]
+This derivative is zero if
+\[
+\int_V \psi^*(\hat H\psi)\,d^3r=\int_V(\hat H\psi)^*\psi\,d^3r
+\quad\Longleftrightarrow\quad
+\boxed{\hat H=\hat H^\dagger}\ \text{(on its domain)}.
+\]
+In the standard case \(\hat H=-(\hbar^2/2m)\nabla^{2}+V(\vec r)\): enough **\(V(\vec r)\in\mathbb R\)** and **conditions to the border/domain** such that the on-board terms do not contribute (equivalently, **absolute flow**
+\[
+\boxed{\displaystyle \oint_{S=\partial V}\vec j\cdot d\vec S=0},
+\]
+with \(d\vec S=\hat n\,dS\)).
+
+---
+
+# Symbol Dictionary (one by one)
+- \( |\psi\rangle \): Quantum status (vector/ray in Hilbert space).
+- \( \psi(x,t)=\langle x|\psi(t)\rangle \): wave function in position representation.
+- \( \vec r \): vector position in \(\mathbb R^3\).
+- \( \rho(\vec r,t)=|\psi(\vec r,t)|^2 \): probability density.
+- \( V \): Space region on which you integrate (control volume).
+- \( V_R \): finite volume (e.g. radius sphere \(R\)) used before limit \(R\to\infty\).
+- \( S=\partial V \): Volume edge surface \(V\).
+- \( d\vec S=\hat n\,dS \): oriented surface element (normal outgoing \(\hat n\)).
+- \( \vec\nabla \), \( \nabla^2 \): gradient and laplacian.
+- \( \vec j \): probability current.
+- \( \hat H \): Hamiltonian (evolution generator).
+- \( \hat H^\dagger \): added (adjoint) by \(\hat H\).
+- \( m \): particle mass.
+- \( \hbar \): Reduced Planck constant.
+- \( V(\vec r)\in\mathbb R \): real potential (typical condition for probability preservation).
+
+# Physical significance
+- \(\partial_t\rho+\vec\nabla\cdot\vec j=0\): probability is not created or destroyed locally; it can only flow.
+- \(\vec j\): probability flow across surfaces.
+- Integrating on \(V\): The change in the total probability in \(V\) is linked to the flow on \(\partial V\). If the flow on the edge is zero, the total probability in \(V\) remains constant.
+- \(\hat H=\hat H^\dagger\) (with correct domain/border conditions) ⇒ unifying evolution ⇒ standard preserved ⇒ preservation of probability.
+
+# Full dim
+It is exactly the body above: TDSE + married → subtraction → identity divergence → local continuity; then integration on \(V\) + border conditions (or hermiticity of \(\hat H\)) → global preservation.
+
+# Oral script (60-90 sec)
+The state is \(|\psi(t)\rangle\) and in position \(\psi(x,t)=\langle x|\psi(t)\rangle\). For Born, \(\rho=|\psi|^2\) is probability density. I start from Schrödinger and its conjugate: multiply by \(\psi^*\) and \(\psi\) and subtract; the potential erases if \(V\) is real. I get \(\partial_t(\psi^*\psi)\) equals a term that I rewrite as divergence \(\nabla\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)\). From here I read the continuity \(\partial_t\rho+\nabla\cdot j=0\) with \(j=\frac{\hbar}{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)\). Integrating into a volume \(V\), the change in the total probability is the flow of \(j\) to the edge: if the flow is zero (equivalently \(\hat H\) is self-added to the right domain), the norm is retained and the total probability remains 1.
+<<<DIM 1 END>>>
+
+
+<<<DIM 2 START>>>
+# DIM 2 - Heisenberg uncertainty principle
+
+**(from switches + Cauchy-Schwarz, then case \(x\)-\(p\) and minimum uncertainty status = Gaussian)**
+
+## where it appears in the notes
+
+- **Core (uncertainty):** `img/142.jpg` → `img/145.jpg` (P1·15,
+- **Core (useful switches):** `img/146.jpg` → `img/147.jpg` (P1·16,...........................................................
+- **For minimum uncertainty Gaussian:** `img/27.jpg` → `img/43.jpg` (P1·3, Gaussian packages)
+- **Boss clue:** `boss/solbf2_1.jpg`
+
+In MQ, **(postulated 1)** the time system status \(t\) is described by a vector (ray) \( |\psi(t)\rangle \) in a Hilbert space. **The time evolution** is governed by
+\[
+i\hbar\,\frac{d}{dt}|\psi(t)\rangle=\hat H|\psi(t)\rangle
+\]
+(Schrödinger equation). **(postulated 2)** to each real observable \(A\) is associated with an operator **self-added/hermitian** \(\hat A\) (similarly \(B\mapsto \hat B\)). **(postulated 3)** the probability of obtaining an eigenvalues is given by the Born rule. **(postulated 4)** the expectation value of the detectable \(A\) is
+\[
+\boxed{\langle A\rangle=\langle\psi|\hat A|\psi\rangle}
+\]
+n.b.: \(A\) is l'observable (without hat), while \(\hat A\) is l'associated operator (with hat).
+
+\[
+\boxed{\int_{-\infty}^{+\infty}\!|\psi(x,t)|^{2}\,dx=1\ \ \Longrightarrow\ \ \langle\psi|\psi\rangle=1}
+\]
+To make sense in q.m. the total probability must be \(1\), and the continuity equation ensures that if \(\psi\) is normalized to \(t=0\) it remains normalised for each \(t\) (with the usual boundary conditions).
+
+\[
+\boxed{
+\Bigg[\ \int_{-\infty}^{+\infty}\underbrace{|\psi(x,0)|^{2}}_{\psi\ \text{is normalised}}\,dx=1\ \Bigg]\ \xRightarrow{\ \text{eq. continuity}\ }\ \int_{-\infty}^{+\infty}\underbrace{|\psi(x,t)|^{2}}_{\psi\ \text{is still normalized}}\,dx=1
+}
+\]
+
+**Centered operators:**, **Variations / uncertainties:**, **Vectors:**
+\[
+\boxed{
+\begin{array}{c}
+\hat A'=\hat A-\langle A\rangle\\
+\hat B'=\hat B-\langle B\rangle
+\end{array}}
+\qquad
+\boxed{
+\begin{array}{c}
+\Delta A^{2}=\langle(\hat A-\langle A\rangle)^{2}\rangle=\langle(\hat A')^{2}\rangle=\langle f|f\rangle\\
+\Delta B^{2}=\langle(\hat B-\langle B\rangle)^{2}\rangle=\langle(\hat B')^{2}\rangle=\langle g|g\rangle
+\end{array}}
+\qquad
+\boxed{
+\begin{array}{c}
+|f\rangle=\hat A'|\psi\rangle\\
+|g\rangle=\hat B'|\psi\rangle
+\end{array}}
+\]
+\[
+\boxed{z=\langle f|g\rangle=\langle \hat A'\hat B'\rangle}
+\]
+
+**Cauchy-Schwarz:**
+\[
+\boxed{\langle f|f\rangle\,\langle g|g\rangle\ge|\langle f|g\rangle|^{2}}
+\quad\Rightarrow\quad
+\boxed{\Delta A^{2}\Delta B^{2}\ge |z|^{2}}
+\]
+
+**Converter + anti-commuter:**
+\[
+\boxed{[\hat A,\hat B]=\hat A\hat B-\hat B\hat A},\qquad
+\boxed{\{\hat A,\hat B\}=\hat A\hat B+\hat B\hat A}
+\]
+\[
+\boxed{
+[\hat A',\hat B']+\{\hat A',\hat B'\}
+=(\hat A'\hat B'-\hat B'\hat A')+(\hat A'\hat B'+\hat B'\hat A')
+=2\hat A'\hat B'
+}
+\]
+\[
+\hat A'\hat B'=\frac12[\hat A',\hat B']+\frac12\{\hat A',\hat B'\},
+\qquad
+z=\frac12\langle[\hat A',\hat B']\rangle+\frac12\langle\{\hat A',\hat B'\}\rangle
+\]
+
+**Imaginary part (with highlighted substitutions):**
+\[
+|z|^{2}=\underbrace{(\Re z)^2}_{\ge 0}+\underbrace{(\Im z)^2}_{\text{We need it.}}\ \ge\ (\Im z)^2
+\]
+\[
+\Im z=\Im\!\left(\underbrace{\tfrac12\langle\{\hat A',\hat B'\}\rangle}_{\in\mathbb R}\ +\ \underbrace{\tfrac12\langle[\hat A',\hat B']\rangle}_{\in i\mathbb R}\right)
+=\underbrace{\Im\!\left(\tfrac12\langle[\hat A',\hat B']\rangle\right)}_{\text{That's all that's left}}
+=\boxed{\underbrace{\frac{1}{2i}}_{\text{fattore}}\ \underbrace{\langle[\hat A',\hat B']\rangle}_{\text{commutatore}}}
+\]
+\[
+\Rightarrow\quad
+|z|^{2}\ge(\Im z)^2
+=\left|\underbrace{\frac{1}{2i}\langle[\hat A',\hat B']\rangle}_{\Im z}\right|^{2}
+=\frac14\,|\langle[\hat A',\hat B']\rangle|^{2}
+\]
+\[
+[\hat A',\hat B']=[\hat A-\langle A\rangle,\hat B-\langle B\rangle]=[\hat A,\hat B]
+\]
+
+**Result (Heisenberg):**
+\[
+\boxed{\Delta A^{2}\Delta B^{2}\ge\frac14\,|\langle[\hat A,\hat B]\rangle|^{2}}
+\quad\Rightarrow\quad
+\boxed{\Delta A\,\Delta B\ge\frac12\,|\langle[\hat A,\hat B]\rangle|}
+\]
+
+**Case \((x,p)\) (1D):**
+\[
+\boxed{
+\begin{array}{c}
+\hat x\ \leftrightarrow\ x\\
+\hat p\ \leftrightarrow\ -i\hbar\,\partial_x
+\end{array}}
+\]
+\[
+\boxed{
+\begin{aligned}
+[\hat x,\hat p]\psi
+&=x(-i\hbar\,\partial_x\psi)-(-i\hbar\,\partial_x)(x\psi)\\
+&=-i\hbar x\psi' + i\hbar(x\psi'+\psi)=i\hbar\,\psi
+\end{aligned}}
+\qquad\Rightarrow\qquad
+\boxed{[\hat x,\hat p]=i\hbar}
+\]
+\[
+\boxed{\Delta x\,\Delta p\ge\frac12\,|\langle i\hbar\rangle|=\frac{\hbar}{2}}
+\]
+
+**Minimum uncertainty (Gaussian package):** the product \(\Delta x\,\Delta p\) cannot fall below \(\hbar/2\); the case is when it is saturated:
+\[
+\boxed{\Delta x\,\Delta p=\frac{\hbar}{2}}
+\]
+A minimum state example is a **gaussian wave packet**:
+\[
+\boxed{
+\psi(x)=
+\underbrace{N}_{\text{normalizzazione}}\,
+\exp\!\Bigg(
+\underbrace{-\,\frac{\left(\overbrace{x-x_0}^{\text{waste from centre}}\right)^2}{\underbrace{4\sigma^{2}}_{\text{larghezza }(\Delta x=\sigma)}}}_{\text{real term: Gaussian envelope}}
+\;+\;
+\underbrace{i\,\overbrace{\frac{p_0}{\hbar}x}^{\text{fase }(\langle p\rangle=p_0)}}_{\text{imaginary term: phase factor}}
+\Bigg)
+}
+\]
+from which the role of parameters is read:
+\[
+\boxed{\Delta x=\sigma}\quad\text{(Package width)},\qquad
+\boxed{\langle p\rangle=p_0}\quad\text{(average impulse from phase)},\qquad
+\boxed{\Delta p=\frac{\hbar}{2\sigma}}\quad\text{(impulse dispersion)}
+\]
+and then \(\Delta x\,\Delta p=\hbar/2\).
+
+*Note (connection with postulate 5): decomposition \(XY=\tfrac12[X,Y]+\tfrac12\{X,Y\}\) is a simple algebraic identity. However, in quantization (postulate 5, sorting/symmetrisation problem) the symmetrical part \(\tfrac12\{\hat x,\hat p\}\) appears as a natural choice to associate a hermitian operator with the classic product \(xp\), \(xp\mapsto \tfrac12(\hat x\hat p+\hat p\hat x)\).*
+
+**Linking to postulate 6 (measure/collapse):** a measure that reduces much uncertainty on \(x\) leads, after projection, to a more localized state in \(x\); according to \(\Delta x\,\Delta p\ge\hbar/2\), this necessarily involves an increase in uncertainty on \(p\) (and vice versa). achieves the minimum product compatible with the principle of uncertainty.
+
+---
+
+# Symbol Dictionary
+
+- \(|\psi(t)\rangle\): System status at time \(t\); \(\psi(x,t)=\langle x|\psi(t)\rangle\) representation at position
+- \(\hat A,\hat B\): self-adding (observable) operators; \(A,B\) = observable without hat
+- \(\langle A\rangle\): expectation value of \(A\) in \(|\psi\rangle\) state
+- \(\hat A',\hat B'\): centered operators (\(\hat A-\langle A\rangle\), \(\hat B-\langle B\rangle\))
+- \(\Delta A,\Delta B\): uncertainties (standard deviation)
+- \([\cdot,\cdot]\), \(\{\cdot,\cdot\}\): switch and anti-commuter
+- \(\hat x,\hat p\): position and momentum in 1D; \(p_0=\langle p\rangle\), \(x_0\) package center
+- \(\sigma\): Package width (here \(\Delta x=\sigma\))
+- \(N\): normalization constant
+
+# Physical significance
+
+- If two observable **do not switch**, there is no state in which both have arbitrarily small dispersion: the switch fixes a **lower limit** to the product of uncertainties.
+- For \(x\) and \(p\), the limit is \(\hbar/2\).
+- The Gaussian package is the state that makes **possible minimum** of the product \(\Delta x\,\Delta p\).
+
+# Oral script (90-120 sec, super repeatable)
+
+The status is \(|\psi\rangle\); at each observable \(A\) I associate the self-added operator \(\hat A\); the probability is given by Born and the expectation value is \(\langle A\rangle=\langle\psi|\hat A|\psi\rangle\). I take \(\langle\psi|\psi\rangle=1\) and continuity ensures that normalization remains 1 over time.
+I define the centered operators \(\hat A'=\hat A-\langle A\rangle\), \(\hat B'=\hat B-\langle B\rangle\), and the vectors \(|f\rangle=\hat A'|\psi\rangle\), \(|g\rangle=\hat B'|\psi\rangle\). Then \(\Delta A^2=\langle f|f\rangle\), \(\Delta B^2=\langle g|g\rangle\) and for Cauchy-Schwarz I get \(\Delta A^2\Delta B^2\ge|\langle f|g\rangle|^2=|z|^2\).
+I write \( \hat A'\hat B'=\frac12[\hat A',\hat B']+\frac12\{\hat A',\hat B'\}\): the symmetrical part has real expectation value, while the switch gives the imaginary part. From \(|z|^2\ge(\Im z)^2\) Derivation of \(|z|^2\ge\frac14|\langle[\hat A',\hat B']\rangle|^2\). Since \([\hat A',\hat B']=[\hat A,\hat B]\), I end \(\Delta A\,\Delta B\ge\frac12|\langle[\hat A,\hat B]\rangle|\).
+In case \(x,p\), using \(\hat x\leftrightarrow x\), \(\hat p\leftrightarrow -i\hbar\partial_x\), calculate the switch and find \([\hat x,\hat p]=i\hbar\), then \(\Delta x\,\Delta p\ge\hbar/2\). The minimum is obtained by saturate the bound: an example is the Gaussian package, with width \(\Delta x=\sigma\) and \(\Delta p=\hbar/(2\sigma)\), which gives \(\Delta x\,\Delta p=\hbar/2\).
+<<<DIM 2 END>>>
+
+<<<DIM 3 START>>>
+# DIM 3 - Compatible observables \(\Longleftrightarrow\) vanishing commutator
+
+**(sequential measurements, non-degenerate case + degenerate case, and "ICOC'; optical analogy with polarizers \(\Rightarrow\) bridge to DIM 2)**
+
+## where it appears in the notes
+
+- **Compatible \(\Rightarrow\) switch:** `img/137_p1t02.jpg`
+- **Computer \(\Rightarrow\) compatible (non-deg / deg):** `img/138.jpg` → `img/139.jpg`
+- **Residual degeneracy + ICOC:** `img/140.jpg`
+- **Sequence measurements + optical analogy (polarizers):** `img/141.jpg` → `img/142_p1t01.jpg`
+
+In MQ: **(postulated 2)** to each real observable \(A\) associate a hermitian operator \(\hat A\) (similarly \(B\mapsto \hat B\)). **(postulated 6)** after an ideal measurement the state collapses on the operator eigenstates associated with the measured value.
+
+\[
+\boxed{[\hat A,\hat B]=\hat A\hat B-\hat B\hat A}
+\]
+
+---
+
+## Physical definition (what does "compatible" mean)
+
+If I measure \(A\) and get \(a_n\), the state collapses into a \(\hat A\) eigenstates.
+The observable \(A\) and \(B\) are called **compatible** if I can measure \(A\) and then \(B\) (or vice versa) **without destroying the information** obtained from the first measurement: the second measure does not shift me to a state that makes the first result uncertain.
+
+A standard formulation (what you use in the clipboard) is: **there is a common basis of eigenstates** \(\{|u_n\rangle\}\) such that
+\[
+\boxed{
+\begin{array}{c}
+\hat A|u_n\rangle=a_n|u_n\rangle\\[2pt]
+\hat B|u_n\rangle=b_n|u_n\rangle
+\end{array}}
+\qquad\text{(common basis)}
+\]
+
+---
+
+## Compatible observables \(\Rightarrow\) vanishing commutator
+
+If \(\{|u_n\rangle\}\) is a common **base**, then on each \(|u_n\rangle\):
+\[
+\hat A\hat B|u_n\rangle=\hat A\big(b_n|u_n\rangle\big)=b_n\hat A|u_n\rangle=b_na_n|u_n\rangle
+\]
+\[
+\hat B\hat A|u_n\rangle=\hat B\big(a_n|u_n\rangle\big)=a_n\hat B|u_n\rangle=a_nb_n|u_n\rangle
+\]
+then
+\[
+\boxed{[\hat A,\hat B]|u_n\rangle=0\qquad\forall n}
+\]
+
+But this **from only** is not enough: I have to show it on a generic state.
+If \(\{|u_n\rangle\}\) is a base, then \(|\psi\rangle=\sum_n c_n|u_n\rangle\) and
+\[
+[\hat A,\hat B]|\psi\rangle
+=[\hat A,\hat B]\sum_n c_n|u_n\rangle
+=\sum_n c_n[\hat A,\hat B]|u_n\rangle
+=0
+\]
+then
+\[
+\boxed{[\hat A,\hat B]=0}
+\]
+
+---
+
+## Vanishing commutator \(\Rightarrow\) compatible observables
+
+Hire
+\[
+\boxed{[\hat A,\hat B]=0}
+\]
+
+### Case \(A\) **non-degenerate**
+
+Be \(\hat A|u_n\rangle=a_n|u_n\rangle\). So:
+\[
+\hat A(\hat B|u_n\rangle)=\hat A\hat B|u_n\rangle=\hat B\hat A|u_n\rangle
+=\hat B(a_n|u_n\rangle)=a_n(\hat B|u_n\rangle)
+\]
+that is,
+\[
+\boxed{\hat B|u_n\rangle\ \text{is still driver of}\hat A\text{with eigenvalues}a_n}
+\]
+If \(a_n\) is **non-degenerate**, the eigenspace relative to \(a_n\) is 1-dimensional, then necessarily
+\[
+\boxed{\hat B|u_n\rangle=b_n|u_n\rangle}
+\]
+and therefore \(|u_n\rangle\) is eigenstates ** is** of \(\hat A\) and \(\hat B\): there is common base \(\Rightarrow\) compatibility.
+
+---
+
+### Case \(A\) **degenerate**
+
+Both \(a_n\) order degenerate \(r_n\):
+\[
+\boxed{\hat A|u_n^{(i)}\rangle=a_n|u_n^{(i)}\rangle,\qquad i=1,\dots,r_n}
+\]
+I define the degenerate eigenspace:
+\[
+\boxed{S_n(a_n)=\mathrm{span}\Big\{|u_n^{(1)}\rangle,\dots,|u_n^{(r_n)}\rangle\Big\}}
+\]
+From switching:
+\[
+\hat A(\hat B|u_n^{(i)}\rangle)=\hat A\hat B|u_n^{(i)}\rangle=\hat B\hat A|u_n^{(i)}\rangle
+=\hat B(a_n|u_n^{(i)}\rangle)=a_n(\hat B|u_n^{(i)}\rangle)
+\]
+then
+\[
+\boxed{\hat B|u_n^{(i)}\rangle\in S_n(a_n)}
+\]
+and I can develop:
+\[
+\boxed{\hat B|u_n^{(i)}\rangle=\sum_{k=1}^{r_n}c_{ik}\,|u_n^{(k)}\rangle}
+\]
+
+I now look for linear combinations within \(S_n(a_n)\) that are eigenstates of \(\hat B\).
+Whether
+\[
+|v\rangle=\sum_{i=1}^{r_n}d_i\,|u_n^{(i)}\rangle
+\qquad\text{and we impose}\qquad
+\hat B|v\rangle=b_n|v\rangle
+\]
+So:
+\[
+\hat B\sum_{i=1}^{r_n}d_i|u_n^{(i)}\rangle
+=\sum_{i=1}^{r_n}d_i\hat B|u_n^{(i)}\rangle
+=\sum_{i=1}^{r_n}d_i\sum_{k=1}^{r_n}c_{ik}|u_n^{(k)}\rangle
+\]
+Comparing coefficients on the basis \(\{|u_n^{(k)}\rangle\}\) (linearly independent):
+\[
+\boxed{\sum_{i=1}^{r_n}d_i\,(c_{ik}-b_n\delta_{ik})=0,\qquad k=1,\dots,r_n}
+\]
+Homogeneous system with non banal solutions if and only if:
+\[
+\boxed{\det(c_{ik}-b_n\delta_{ik})=0}
+\]
+From here I get (up to \(r_n\)) eigenvalues \(b_n^{(k)}\) and autovectors \(\{d_i^{(k)}\}\), and define
+\[
+\boxed{|v_n^{(k)}\rangle=\sum_{i=1}^{r_n}d_i^{(k)}\,|u_n^{(i)}\rangle}
+\]
+that
+\[
+\boxed{
+\begin{array}{c}
+\hat A|v_n^{(k)}\rangle=a_n|v_n^{(k)}\rangle\\[2pt]
+\hat B|v_n^{(k)}\rangle=b_n^{(k)}|v_n^{(k)}\rangle
+\end{array}}
+\]
+So by diagonalizing \(\hat B\) **in** each degenerate subspace of \(\hat A\), I build a common eigenstates base \(\Rightarrow\) compatibility.
+
+---
+
+## Residual degeneracy \(\Rightarrow\) CSCO (complete set of commuting observables)
+
+It may happen that within \(S_n(a_n)\), the eigenvalues \(b_n^{(k)}\) are not all distinct (degeneracy remains). Then the torque \((a_n,b_n)\) **non** still uniquely identifies the status.
+
+An additional \(\hat C\) operator is introduced, which commutes with \(\hat A\) and \(\hat B\) (and diagonalizes \(\hat C\) into the still degenerate subspace), and continues until the eigenvalues list identifies a state in 1-1 mode.
+A \(\{\hat A,\hat B,\hat C,\dots\}\) set with this property is a **ICOC** (complete set of compatible observables).
+
+---
+
+## Sequence of measurements (reading 6" postulated)
+
+If \([\hat A,\hat B]=0\), then measure \(\hat A\) and then \(\hat B\) does not destroy the \(\hat A\) information: after the first measurement you are in an eigenspace of \(\hat A\); the second measurement (of \(\hat B\)) leaves you in the same eigenspace (non-deg: in the same eigenstates; deg: within the same subspace).
+
+If \([\hat A,\hat B]\neq 0\) instead, the eigenstates bases do not match: a measure of \(\hat B\) after \(\hat A\) generally projects the state on a different direction and **loses** the previous information on \(\hat A\). This is the conceptual bridge to DIM 2 (uncertainty).
+
+---
+
+## Optical analogy (polarizers) - state reduction and probability
+
+Polarization incident \(\hat e_p\). If polarizer selects \(\hat e_x\):
+
+- If \(\hat e_p=\hat e_x\): I'm already in a eigenstates (i.e. \(\Rightarrow\) I'm likely to pass \(1\)).
+- If \(\hat e_p=\hat e_y\) (orthognal): not pass (probability \(0\)).
+
+If the state is generic, I break down:
+\[
+\boxed{\hat e_p=\cos\theta\,\hat e_x+\sin\theta\,\hat e_y}
+\]
+Then
+\[
+\boxed{P(\text{passo})=\big|\hat e_x\cdot \hat e_p\big|^2=\cos^2\theta},
+\qquad
+\boxed{P(\text{do not pass})=\big|\hat e_y\cdot \hat e_p\big|^2=\sin^2\theta}
+\]
+(Classic: Law of Malus \(I'=I_0\cos^2\theta\). With photons: \(\cos^2\theta\) is a **probability**; after passing, the status is projected to the selected polarization.)
+
+In particular: after a first long polarizer \(x\), the passing state is 'collapsed' to \(\hat e_x\); if then measured with another non-aligned polarizer I introduce new probabilities and I no longer have the certainty to keep the previous information: it is the intuitive analogue of non-compatible measures \([\hat A,\hat B]\neq 0\).
+
+---
+
+# Symbol Dictionary
+
+- \(A,B\): observable; \(\hat A,\hat B\): Associated self-addicted operators
+- \(|u_n\rangle\): eigenstates; \(a_n,b_n\): eigenvalues
+- \([\cdot,\cdot]\): switch; \(\{\hat A,\hat B,\hat C,\dots\}\): ICOC = complete set of compatible observables
+- \(r_n\): degree of degeneracy of \(a_n\)
+- \(S_n(a_n)\): degenerate subspace associated with \(a_n\)
+- \(c_{ik}\): \(\hat B\) matrix coefficients restricted to \(S_n(a_n)\)
+- \(|v_n^{(k)}\rangle\): common eigenstates built diagonally \(\hat B\) in degenerate subspace
+- \(\hat e_x,\hat e_y,\hat e_p\): polarization towardss; \(\theta\): polarization angle
+
+# Physical significance
+
+- **Compatible** = measurements in sequence (s) that do not destroy the information of each other: there is a base of common eigenstates.
+- **Commutation** \([\hat A,\hat B]=0\) = mathematical condition that guarantees (and in practice equals a) compatibility.
+- **degeneracy**: They serve more observable compatible (ICOC) to uniquely identify a state by means of Quantum Numbers.
+- If \([\hat A,\hat B]\neq 0\), the order of the measures counts and the connection with the uncertainty arises naturally (DIM 2).
+
+# Oral script (90-120 sec, super repeatable)
+
+*Two observable \(A\) and \(B\) are compatible if I can measure them one after the other without losing the information of the first measurement: in practice they must have a common basis of eigenstates. If there is a base \(|u_n\rangle\) such that \(\hat A|u_n\rangle=a_n|u_n\rangle\) and \(\hat B|u_n\rangle=b_n|u_n\rangle\), then \(AB|u_n\rangle=BA|u_n\rangle\) for each \(n\) and, as any state is combination of \(|u_n\rangle\), follow \([\hat A,\hat B]=0\).
+Conversely, if \([\hat A,\hat B]=0\), I take a \(\hat A\): \(\hat A|u_n\rangle=a_n|u_n\rangle\) eigenstates. From commutation I get that \(\hat B|u_n\rangle\) is still a \(\hat A\) eigenvector with the same eigenvalues. If \(a_n\) is non-degenerate, then \(\hat B|u_n\rangle\) must be proportional to \(|u_n\rangle\), then \(|u_n\rangle\) is also eigenstate of \(\hat B\). If instead there is degeneracy, \(\hat B\) acts within the degenerate subspace \(S_n(a_n)\); I represent it with a matrix \(c_{ik}\) and diagonalize it there: solving \(\det(c_{ik}-b\,\delta_{ik})=0\) I find combinations \(|v_n^{(k)}\rangle\) that are common eigenstates of \(\hat A\) and \(\hat B\). If degeneracy remains I add a third operator \(\hat C\) that commutes with both: so I get a IOC that identifies a state uniquely.
+If instead \([\hat A,\hat B]\neq 0\), the measure of one changes the state from the other: the classical analogy is the polarizer, where the probability of passing is \(\cos^2\theta\) and after the passage the state is projected on the polarization of the filter: this prepares the soil for the uncertainty of Heisenberg.
+
+<<<DIM 3 END>>>
+s
+
+<<<DIM 4 START>>>
+# DIM 4 - expectation values, Ehrenfest theorem, time evolution and symmetries \(\Rightarrow\) quantities preserved
+
+## where it appears in the notes
+- **Ehrenfest / matching principle:** `img/53_p1t02.jpg` → `img/54.jpg`
+- ** Switching stones for \(\langle \hat x\rangle,\langle \hat p\rangle\):** `img/55.jpg` → `img/56.jpg`
+
+---
+
+To demonstrate Ehrenfest's theorem, the basic idea is that in quantum mechanics we do not follow the "trajectoria" of a particle, but the evolution of the expectation values of the observables, which in many cases take a form very similar to the classical laws.
+
+In practice, Ehrenfest's theorem states that the temporal derivative of the expectation value of an observable is given by the expectation value of the switch between the observable and the Hamiltonian, divided by \(i\) and \(\hbar\), plus any additional term if the observable depends explicitly on the time.
+
+To demonstrate this we start from Schrödinger's equation and its conjugation, we take the definition of the expectation value of an operator, we derive from time and then we replace the temporal derivatives using Schrödinger. Reordering the terms we naturally recognize the switch with the Hamiltonian and we get the final formula:
+\[
+\boxed{\ \frac{d}{dt}\langle \hat A\rangle
+=\frac{1}{i\hbar}\,\langle[\hat A,\hat H(t)]\rangle
++\Big\langle\frac{\partial \hat A}{\partial t}\Big\rangle\ }
+\]
+(here \(\hat H(t)\) indicates **generalcase**; if \(\hat H\) does not depend on \(t\), is the undercase \(\hat H(t)\equiv \hat H\).)
+
+---
+
+## Mean value (recall)
+\[
+\boxed{\ \langle \hat A\rangle(t)=\int d^{3}\vec r\;\psi^{*}(\vec r,t)\,\hat A(\vec r,t)\,\psi(\vec r,t)\ }
+\]
+
+### TDSE: case used in demonstration
+We'll use the **more general form** of TDSE, with Hamiltonian possibly dependent on time:
+\[
+\boxed{\ i\hbar\,\frac{\partial}{\partial t}\psi(\vec r,t)=\hat H(t)\,\psi(\vec r,t)\ },\qquad
+\boxed{\ -i\hbar\,\frac{\partial}{\partial t}\psi^{*}(\vec r,t)=\big(\hat H(t)\psi(\vec r,t)\big)^{*}\ }.
+\]
+The \(\hat H\) **independent** from \(t\) is a subcase: \(\hat H(t)\equiv \hat H\).
+
+In correct form (with \(\hat H(t)^\dagger=\hat H(t)\) and standard boundary/domain conditions):
+\[
+\int d^3\vec r\,(\hat H(t)\psi)^*(\vec r,t)\,\phi(\vec r,t)
+=\int d^3\vec r\,\psi^*(\vec r,t)\,(\hat H(t)\phi)(\vec r,t).
+\]
+
+---
+
+## Theorem of Ehrenfest (derived, general form)
+
+### Step - Leibniz: derivative-integral exchange + product derivative
+Write
+\[
+\langle \hat A\rangle(t)=\int d^3\vec r\;f(\vec r,t),
+\qquad
+f(\vec r,t)=\psi^*(\vec r,t)\,\hat A(\vec r,t)\,\psi(\vec r,t).
+\]
+Since the integration domain ** does not depend on \(t\)** and assuming sufficient regularity to exchange derivative and integral,
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\,\frac{\partial}{\partial t}\big(\psi^*\hat A\psi\big).
+\]
+Applying the product derivative:
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+\frac{\partial\psi^{*}}{\partial t}\hat A\psi
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
++\psi^{*}\hat A\frac{\partial\psi}{\partial t}
+\right].
+\]
+
+### Replacement with TDSE (general case \(\hat H(t)\))
+From the TDSE:
+\[
+\frac{\partial\psi}{\partial t}=\frac{1}{i\hbar}\hat H(t)\psi,
+\qquad
+\frac{\partial\psi^{*}}{\partial t}=-\frac{1}{i\hbar}(\hat H(t)\psi)^{*}.
+\]
+I'm replacing:
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+-\frac{1}{i\hbar}(\hat H(t)\psi)^{*}\hat A\psi
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
++\frac{1}{i\hbar}\psi^{*}\hat A\hat H(t)\psi
+\right].
+\]
+Group:
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+\frac{1}{i\hbar}\Big(\psi^{*}\hat A\hat H(t)\psi-(\hat H(t)\psi)^{*}\hat A\psi\Big)
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
+\right].
+\]
+Usage \(\hat H(t)^\dagger=\hat H(t)\) for moving \(\hat H(t)\) in the second term:
+\[
+\int d^3\vec r\,(\hat H(t)\psi)^*\,\hat A\psi=\int d^3\vec r\,\psi^*\,\hat H(t)(\hat A\psi),
+\]
+And I get:
+\[
+\frac{d}{dt}\langle \hat A\rangle
+=\int d^3\vec r\left[
+\frac{1}{i\hbar}\psi^{*}\big(\hat A\hat H(t)-\hat H(t)\hat A\big)\psi
++\psi^{*}\frac{\partial \hat A}{\partial t}\psi
+\right].
+\]
+Conclusion:
+\[
+\boxed{\ \frac{d}{dt}\langle \hat A\rangle
+=\frac{1}{i\hbar}\,\langle[\hat A,\hat H(t)]\rangle
++\left\langle\frac{\partial \hat A}{\partial t}\right\rangle\ },
+\qquad
+[\hat A,\hat H(t)]=\hat A\hat H(t)-\hat H(t)\hat A.
+\]
+
+### Classical recall (correspondence)
+\[
+\boxed{\ \frac{dA}{dt}=\{A,H\}+\frac{\partial A}{\partial t}\ },
+\qquad
+\boxed{\ \{\cdot,\cdot\}\ \longleftrightarrow\ \frac{1}{i\hbar}[\cdot,\cdot]\ }.
+\]
+
+*Note (attention to notation): in **Classical mechanics** \(\{A,H\}\) indicates the **Poisson parenthesis**, i.e. \(\{A,H\}=\sum_i\Big(\frac{\partial A}{\partial q_i}\frac{\partial H}{\partial p_i}-\frac{\partial A}{\partial p_i}\frac{\partial H}{\partial q_i}\Big)\). In **quantistic mechanics**, on the other hand, graffe parentheses indicate the **anti-commutator**: \(\{\hat A,\hat B\}=\hat A\hat B+\hat B\hat A\). Here then \(\{\cdot,\cdot\}\) are **Classic** (Poisson) and should not be confused with \(\{\hat A,\hat B\}\). In the classical-quantistic correspondence we are using the analogue (factor) \(\{\,\cdot,\cdot\,\}\ \leftrightarrow\ \frac{1}{i\hbar}[\cdot,\cdot]\).*
+
+---
+
+## Canonical Switches (3D)
+\[
+\boxed{\ [\hat x,\hat p_x]=[\hat y,\hat p_y]=[\hat z,\hat p_z]=i\hbar\ },\qquad
+\boxed{\ [\hat x_i,\hat p_j]=i\hbar\,\delta_{ij}\ }.
+\]
+
+---
+
+## Application: \(\langle \hat{\vec x}\rangle\) and \(\langle \hat{\vec p}\rangle\)
+
+Here I take the standard Hamiltonian (typically **time-independent** in basic exercises):
+\[
+\boxed{\ \hat H=\frac{\hat{\vec p}^{\,2}}{2M}+V(\hat{\vec x})\ }.
+\]
+(If, on the other hand, \(V=V(\hat{\vec x},t)\), then \(\hat H(t)\) and formulas remain valid, but some quantities may no longer be preserved.)
+
+### Equation for \(\langle \hat x\rangle\)
+As \(\partial_t\hat x=0\):
+\[
+\frac{d}{dt}\langle \hat x\rangle=\frac{1}{i\hbar}\langle[\hat x,\hat H]\rangle.
+\]
+\([\hat x,V(\hat{\vec x})]=0\) and counts only \(p_x^2\):
+\[
+[\hat x,\hat H]=\left[\hat x,\frac{\hat p_x^{2}}{2M}\right].
+\]
+Usage \([X,Y^2]=Y[X,Y]+[X,Y]Y\):
+\[
+\left[\hat x,\frac{\hat p_x^{2}}{2M}\right]
+=\frac{1}{2M}\Big(\hat p_x[\hat x,\hat p_x]+[\hat x,\hat p_x]\hat p_x\Big).
+\]
+With \([\hat x,\hat p_x]=i\hbar\):
+\[
+\left[\hat x,\frac{\hat p_x^{2}}{2M}\right]
+=\frac{1}{2M}\Big(\hat p_x(i\hbar)+(i\hbar)\hat p_x\Big)
+=i\hbar\,\frac{\hat p_x}{M}.
+\]
+So:
+\[
+\boxed{\ \frac{d}{dt}\langle \hat x\rangle=\left\langle\frac{\hat p_x}{M}\right\rangle\ },\qquad
+\boxed{\ \frac{d}{dt}\langle \hat{\vec x}\rangle=\left\langle\frac{\hat{\vec p}}{M}\right\rangle\ }.
+\]
+
+### Equation for \(\langle \hat{\vec p}\rangle\)
+As \(\partial_t\hat{\vec p}=0\):
+\[
+\frac{d}{dt}\langle \hat{\vec p}\rangle=\frac{1}{i\hbar}\langle[\hat{\vec p},\hat H]\rangle,
+\qquad
+[\hat{\vec p},\hat{\vec p}^{\,2}]=0.
+\]
+So:
+\[
+[\hat{\vec p},\hat H]=[\hat{\vec p},V(\hat{\vec x})].
+\]
+In coordinate representation (\(\hat p_x=-i\hbar\,\partial_x\)):
+\[
+[\hat p_x,V(\hat{\vec x})]\psi
+=\hat p_x(V\psi)-V\hat p_x\psi
+=-i\hbar\,\partial_x(V\psi)+i\hbar\,V\,\partial_x\psi
+=-i\hbar\,(\partial_xV)\,\psi.
+\]
+Therefore:
+\[
+\boxed{\ [\hat p_x,V(\hat{\vec x})]=-i\hbar\,\frac{\partial V}{\partial x}(\hat{\vec x})\ },
+\qquad
+\boxed{\ [\hat{\vec p},V(\hat{\vec x})]=-i\hbar\,\vec\nabla V(\hat{\vec x})\ }.
+\]
+So:
+\[
+\boxed{\ \frac{d}{dt}\langle \hat{\vec p}\rangle=-\langle\vec\nabla V(\hat{\vec x})\rangle=\langle \hat{\vec F}(\hat{\vec x})\rangle\ }.
+\]
+
+### Newton's Law for expectation values
+Combined with \(\langle \hat{\vec p}\rangle=M\,\frac{d}{dt}\langle \hat{\vec x}\rangle\):
+\[
+\boxed{\ M\,\frac{d^{2}}{dt^{2}}\langle \hat{\vec x}\rangle=-\langle\vec\nabla V(\hat{\vec x})\rangle\ }.
+\]
+
+---
+
+After applying Ehrenfest to \(\hat x\) and \(\hat p\) and having obtained the equation "newtonian" for the expectation values, the last step serves **to place order in the dynamic**: we introduce the switch of the frame (Schrödinger \(\leftrightarrow\) Heisenberg) and then we use Ehrenfest as a "bridge" to immediately read the **quantities preserved** generated by symmetries. The key point is: the same commutator structure with \(\hat H\)" which governs the evolution of the expectation values is also that which, when the switch is null, leads to preservation.
+
+\[
+\boxed{
+\begin{array}{l}
+\textbf{Setup:}\ \ \hat H=\hat H(t)\ \text{(Hamiltonian, possibly time dependent)},\qquad
+\hat U(\varepsilon)=\exp\!\left(-\dfrac{i}{\hbar}\varepsilon\,\hat G\right)\ \ (\hat G^\dagger=\hat G,\ \text{generatore}).\\[6pt]
+
+\textbf{(1) Cambiare quadro \(\Rightarrow\) equazione di moto (Ehrenfest/Heisenberg):}\qquad
+\hat A_H(t)=\hat U^\dagger(t,t_0)\,\hat A_S(t)\,\hat U(t,t_0)
+\ \xRightarrow[\text{(S}\leftrightarrow\text{H)}]{\text{Ehrenfest / eq. of motion}}
+\ \dfrac{d}{dt}\langle \hat A_H\rangle
+=\dfrac{1}{i\hbar}\langle[\hat A_H,\hat H_H]\rangle
++\Big\langle\dfrac{\partial \hat A_H}{\partial t}\Big\rangle.\\[8pt]
+
+\textbf{(2) Simmetria \(\Rightarrow\) conservazione (via Ehrenfest):}\qquad
+[\hat H,\hat G]=0\ \&\ \partial_t\hat G=0
+\ \xRightarrow[\text{quantity preserved}]{\text{Ehrenfest}}
+\ \dfrac{d}{dt}\langle \hat G\rangle=0
+\ \Rightarrow\ \langle \hat G\rangle=\text{const.}
+\end{array}
+}
+\]
+
+---
+
+# Symbol Dictionary
+- \(\psi(\vec r,t)\): wave function in position representation.
+- \(\langle \hat A\rangle\): expectation value of the undetectable \(\hat A\).
+- \([\hat A,\hat H]\): switch.
+- \(\hat H(t)\): Hamiltonian (possibly time dependent).
+- \(\hat{\vec F}(\hat{\vec x})=-\vec\nabla V(\hat{\vec x})\): force as operator.
+- \(\hat U(t,t_0)\): evolution operator / frame changer.
+- \(\hat G\): generating a continuous symmetry.
+
+---
+
+# Physical significance
+- Ehrenfest: the expectation values \(\langle x\rangle,\langle p\rangle\) follow classical equations (Newton for expectation values).
+- The structure “switch with \(\hat H\)” is the same one that governs: **motion equations** and **storage** (when \([\hat H,\hat G]=0\)).
+
+---
+
+# Oral script (90-120 s)
+I use TDSE in the general case \(i\hbar\,\partial_t\psi=\hat H(t)\psi\). I start from \(\langle \hat A\rangle=\int \psi^*\hat A\psi\): for Leibniz I carry the derivative under the integral and derive the product \(\psi^*\hat A\psi\). I replace \(\partial_t\psi\) and \(\partial_t\psi^*\) with Schrödinger and the conjugate and, using \(\hat H(t)^\dagger=\hat H(t)\), reorder the terms until I get \(\frac{d}{dt}\langle \hat A\rangle=\frac{1}{i\hbar}\langle[\hat A,\hat H(t)]\rangle+\langle\partial_t\hat A\rangle\). Applying it to \(\hat x\) and \(\hat p\) with \(H=\frac{p^2}{2M}+V(x)\) Derivation of \(d\langle x\rangle/dt=\langle p\rangle/M\) and \(d\langle p\rangle/dt=-\langle\nabla V\rangle\), then \(M\,d^2\langle x\rangle/dt^2=\langle F\rangle\). Finally, as the last step, I introduce the change of frame and symmetries: in Heisenberg the equation of motion has the same structure as Ehrenfest, and if a symmetry has generator \(G\) with \([H,G]=0\) and \(\partial_tG=0\), then \(\langle G\rangle\) is preserved.
+
+<<<DIM 4 END>>>
+
+
+<<<DIM 5 START>>>
+# DIM 5 - 1D problems: free particle, step, barrier, well
+**(Solutions of Schrödinger's Eq. in regions at \(V=\) constant + connection conditions + \(R/T\) via current + optical analogy + parity + tied vs diffusion)**
+
+## where it appears in the notes (so repeat it identical)
+- **Core (1D potentials, free particle, well, matching conditions):** P1·8 → `img/67.jpg`-`img/83.jpg`  
+- **Step/barrier + optical analogy:** P1·9 → `img/83.jpg`-`img/93.jpg`  
+- **Probability factor (serve for \(R,T\)):** P1·4 → `img/44.jpg`-`img/46.jpg`  
+- **boss references:** `boss/solbf5_1.jpg`, `solbf5_2.jpg`, `solbf5_3.jpg`, `solbf5_5.jpg`
+
+---
+
+# 0) "Single Schema" solving ALL in 1D
+It always starts from **TISE** (Hamiltonian time independent):
+\[
+-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}+V(x)\psi = E\psi
+\]
+that is,
+\[
+\frac{d^2\psi}{dx^2}+\frac{2m}{\hbar^2}(E-V)\psi=0.
+\]
+
+### In a region where \(V(x)=V_0\) is constant:
+- If \(E>V_0\):
+\[
+\psi(x)=A\,e^{ikx}+B\,e^{-ikx},
+\qquad
+k=\frac{\sqrt{2m(E-V_0)}}{\hbar}.
+\]
+- If \(E<V_0\):
+\[
+\psi(x)=C\,e^{\kappa x}+D\,e^{-\kappa x},
+\qquad
+\kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar}.
+\]
+
+Thus: **oscillant** if the energy is greater than the potential, **exponential** if it is less than the potential.
+
+---
+
+# 1) Connection conditions (this part is "boss")
+For potential **finite** (even stepwise), the wave function shall meet:
+
+\[
+\boxed{\psi \text{ continua}}
+\qquad
+\boxed{\psi' \text{ continua}}
+\]
+
+### Why is \(\psi'\) continued? (mini-demonstration)
+Integro la Schrödinger from \(-\varepsilon\) to \(+\varepsilon\) around the break point:
+\[
+\int_{-\varepsilon}^{+\varepsilon}\left(-\frac{\hbar^2}{2m}\psi'' +V\psi\right)dx=\int_{-\varepsilon}^{+\varepsilon}E\psi\,dx.
+\]
+The first term gives:
+\[
+-\frac{\hbar^2}{2m}\big[\psi'(+\varepsilon)-\psi'(-\varepsilon)\big].
+\]
+The terms with \(\int V\psi\,dx\) and \(\int E\psi\,dx\) go to 0 when \(\varepsilon\to 0\) if \(V\) is finished and \(\psi\) finished.
+So:
+\[
+\psi'(+0)=\psi'(-0).
+\]
+
+> Useful exception to quote: if \(V\) has a **delta** (\(V=\alpha\delta(x)\)), then \(\psi'\) has a jump. But for step/barrier/finite well: it is continuous.
+
+### Infinite wall case
+If \(V=+\infty\) outside a region, then there \(\psi=0\). Then at the border:
+\[
+\boxed{\psi(\text{parete})=0.}
+\]
+
+---
+
+# 2) Current probability and definition of \(R\) and \(T\)
+In 1D the current is:
+\[
+\boxed{j=\frac{\hbar}{2mi}\left(\psi^*\frac{d\psi}{dx}-\psi\frac{d\psi^*}{dx}\right)}.
+\]
+
+For a plane waves \(A e^{ikx}\):
+\[
+j = \frac{\hbar k}{m}|A|^2.
+\]
+For \(A e^{-ikx}\) (to the left):
+\[
+j = -\frac{\hbar k}{m}|A|^2.
+\]
+
+**Operating definitions:**
+- \(R = \dfrac{|j_{\text{riflessa}}|}{|j_{\text{incidente}}|}\)
+- \(T = \dfrac{|j_{\text{trasmessa}}|}{|j_{\text{incidente}}|}\)
+
+If the problem is conservative (same half left and right, real potential):
+\[
+\boxed{R+T=1.}
+\]
+
+---
+
+# 3) Free particle \(V=0\)
+With \(V=0\):
+\[
+\psi'' + k^2\psi=0,\qquad k=\frac{\sqrt{2mE}}{\hbar}.
+\]
+Solution:
+\[
+\boxed{\psi(x)=A e^{ikx}+B e^{-ikx}.}
+\]
+
+If you take a single plane waves \(e^{ikx}\):
+- It is eigenstates of momentum: \(\hat p=-i\hbar\frac{d}{dx}\Rightarrow \hat p\,e^{ikx}=\hbar k\,e^{ikx}\).
+- Energy \(E=\frac{p^2}{2m}=\frac{\hbar^2k^2}{2m}\).
+- Current \(j=\frac{\hbar k}{m}\) (if amplitude 1).
+
+> Physical comment: the realistic physical state is a wave packet, but for scattering use plane waves as a base.
+
+---
+
+# 4) Step potential (STEP)
+\[
+V(x)=\begin{cases}
+0 & x<0\\
+V_0 & x>0
+\end{cases}
+\]
+I consider a wave **accident from the left**.
+
+---
+
+## 4A) Case \(E>V_0\) (transmission with refraction)
+Wave numbers:
+\[
+k_1=\frac{\sqrt{2mE}}{\hbar},\qquad k_2=\frac{\sqrt{2m(E-V_0)}}{\hbar}.
+\]
+
+Ansatz:
+- Region I (\(x<0\)):
+\[
+\psi_I=e^{ik_1x}+r\,e^{-ik_1x}.
+\]
+- Region II (\(x>0\)):
+\[
+\psi_{II}=t\,e^{ik_2x}.
+\]
+
+### Connection to \(x=0\)
+1) Continuity \(\psi\):
+\[
+1+r=t.
+\]
+2) Continuity \(\psi'\):
+\[
+ik_1(1-r)=ik_2 t \quad\Rightarrow\quad k_1(1-r)=k_2 t.
+\]
+
+Replace \(t=1+r\):
+\[
+k_1(1-r)=k_2(1+r)
+\Rightarrow k_1-k_1r=k_2+k_2r
+\Rightarrow (k_1-k_2)=(k_1+k_2)r
+\]
+\[
+\boxed{r=\frac{k_1-k_2}{k_1+k_2}}
+\]
+and then
+\[
+\boxed{t=1+r=\frac{2k_1}{k_1+k_2}}.
+\]
+
+### \(R\) and \(T\) via current
+- \(j_{\text{inc}}=\frac{\hbar k_1}{m}\)
+- \(j_{\text{rif}}=-\frac{\hbar k_1}{m}|r|^2\)
+- \(j_{\text{tras}}=\frac{\hbar k_2}{m}|t|^2\)
+
+So:
+\[
+\boxed{R=|r|^2=\left(\frac{k_1-k_2}{k_1+k_2}\right)^2}
+\]
+\[
+\boxed{T=\frac{k_2}{k_1}|t|^2=\frac{k_2}{k_1}\left(\frac{2k_1}{k_1+k_2}\right)^2=\frac{4k_1k_2}{(k_1+k_2)^2}}
+\]
+and it occurs immediately:
+\[
+R+T=\frac{(k_1-k_2)^2+4k_1k_2}{(k_1+k_2)^2}=\frac{(k_1+k_2)^2}{(k_1+k_2)^2}=1.
+\]
+
+---
+
+## 4B) Case \(E<V_0\) (evanescent wave: penetration but not transmission)
+I define:
+\[
+\kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar},\qquad k_2=i\kappa.
+\]
+Region II:
+\[
+\psi_{II}=t\,e^{-\kappa x}
+\]
+(to avoid divergence at \(+\infty\)).
+
+The current in region II is **zero** (real function at constant factor ⇒ does not carry flow).
+\[
+\boxed{T=0,\quad R=1}
+\]
+but with **penetration length** \(1/\kappa\).
+
+**Optical analogy:** is like a wave that enters a medium where it becomes evanescent (type "total internal reflection"): it does not pass energy to infinity, but penetrates a bit.
+
+---
+
+# 5) Rectangular barrier (TUNNELING)
+\[
+V(x)=\begin{cases}
+0 & x<0\\
+V_0 & 0<x<a\\
+0 & x>a
+\end{cases}
+\]
+Accident from the left.
+
+Region I (\(x<0\)):
+\[
+\psi_I=e^{ikx}+r e^{-ikx},\quad k=\frac{\sqrt{2mE}}{\hbar}.
+\]
+Region III (\(x>a\)):
+\[
+\psi_{III}=t\,e^{ikx}.
+\]
+
+---
+
+## 5A) Case \(E<V_0\) (tunneling)
+Inside the barrier:
+\[
+\psi_{II}=A e^{\kappa x}+B e^{-\kappa x},
+\qquad \kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar}.
+\]
+
+### Fittings (4 equations)
+A \(x=0\):
+\[
+\psi_I(0)=\psi_{II}(0)\Rightarrow 1+r=A+B
+\]
+\[
+\psi_I'(0)=\psi_{II}'(0)\Rightarrow ik(1-r)=\kappa(A-B)
+\]
+A \(x=a\):
+\[
+\psi_{II}(a)=\psi_{III}(a)\Rightarrow A e^{\kappa a}+B e^{-\kappa a}=t e^{ika}
+\]
+\[
+\psi_{II}'(a)=\psi_{III}'(a)\Rightarrow \kappa(A e^{\kappa a}-B e^{-\kappa a})=ik\,t e^{ika}.
+\]
+
+> This linear system resolves (multiplications and substitutions; in the clipboard they often do so with transfer matrix). The clean end result for \(T\) is:
+
+\[
+\boxed{
+T=\frac{1}{1+\dfrac{V_0^2}{4E(V_0-E)}\sinh^2(\kappa a)}
+}
+\]
+
+**Limite barrier (thick/high)** (\(\kappa a\gg 1\)):
+\[
+\sinh^2(\kappa a)\approx \frac{1}{4}e^{2\kappa a}
+\Rightarrow
+T \approx 16\,\frac{E(V_0-E)}{V_0^2}\,e^{-2\kappa a}.
+\]
+This is the law to remember: **Exponential tunneling decay**.
+
+---
+
+## 5B) Case \(E>V_0\) (above barrier, but with interference)
+Inside:
+\[
+k_2=\frac{\sqrt{2m(E-V_0)}}{\hbar},\qquad
+\psi_{II}=A e^{ik_2x}+B e^{-ik_2x}.
+\]
+
+Solving the couplings (same pattern), you get:
+\[
+\boxed{
+T=\frac{1}{1+\dfrac{V_0^2}{4E(E-V_0)}\sin^2(k_2 a)}
+}
+\]
+
+**Resonances:** if \(k_2 a=n\pi\), \(\sin(k_2 a)=0\) ⇒
+\[
+T=1
+\]
+(Perfect transmission for constructive interference in the barrier).
+
+---
+
+# 6) Infinite potential well
+\[
+V(x)=\begin{cases}
+0 & 0<x<L\\
++\infty & \text{altrove}
+\end{cases}
+\]
+
+Inside: \(\psi''+k^2\psi=0\), \(k=\sqrt{2mE}/\hbar\).
+\[
+\psi(x)=A\sin(kx)+B\cos(kx).
+\]
+
+Edge conditions (infinite walls):
+\[
+\psi(0)=0 \Rightarrow B=0.
+\]
+\[
+\psi(L)=0 \Rightarrow \sin(kL)=0 \Rightarrow kL=n\pi.
+\]
+
+So:
+\[
+\boxed{k_n=\frac{n\pi}{L}},\qquad
+\boxed{E_n=\frac{\hbar^2k_n^2}{2m}=\frac{n^2\pi^2\hbar^2}{2mL^2}},\quad n=1,2,\dots
+\]
+
+Normalization:
+\[
+\boxed{\psi_n(x)=\sqrt{\frac{2}{L}}\sin\left(\frac{n\pi x}{L}\right)}.
+\]
+
+**Equality (if the well is centered in 0):** levels alternate equal/odd states (cos and sins).
+
+**Physics:** discrete bound states; zero net current (real global phase steady state).
+
+---
+
+# 7) Finite potential well (bound states) + parity
+Standard symmetrical case:
+\[
+V(x)=\begin{cases}
+-V_0 & |x|<a/2\\
+0 & |x|>a/2
+\end{cases}
+\]
+with \(V_0>0\). Related states have \(E<0\).
+
+I define:
+- Within (\(|x|<a/2\)):
+\[
+k=\frac{\sqrt{2m(E+V_0)}}{\hbar}\quad (\text{oscillatory because}E+V_0>0)
+\]
+- Out (\(|x|>a/2\)):
+\[
+\kappa=\frac{\sqrt{2m(0-E)}}{\hbar}=\frac{\sqrt{-2mE}}{\hbar}\quad (\text{decadente})
+\]
+
+For symmetry use **parity**:
+
+## 7A) Even states
+Inside:
+\[
+\psi_{in}(x)=A\cos(kx)
+\]
+Out (\(x>a/2\)):
+\[
+\psi_{out}(x)=B e^{-\kappa x}
+\]
+(similarly left with \(e^{+\kappa x}\)).
+
+Connection in \(x=a/2\):
+\[
+A\cos(ka/2)=B e^{-\kappa a/2}
+\]
+\[
+-Ak\sin(ka/2)=-\kappa B e^{-\kappa a/2}
+\]
+
+I divide the second for the first (delete \(A,B\)):
+\[
+\boxed{k\tan\left(\frac{ka}{2}\right)=\kappa}
+\]
+This is **quantifying condition** (transcendental): from here you find \(E\).
+
+## 7B) Odd states
+Inside:
+\[
+\psi_{in}(x)=A\sin(kx)
+\]
+Out (\(x>a/2\)):
+\[
+\psi_{out}(x)=B e^{-\kappa x}
+\]
+
+Connection in \(x=a/2\):
+\[
+A\sin(ka/2)=B e^{-\kappa a/2}
+\]
+\[
+Ak\cos(ka/2)=-\kappa B e^{-\kappa a/2}
+\]
+
+Split:
+\[
+\boxed{-k\cot\left(\frac{ka}{2}\right)=\kappa}
+\]
+(or \(k\cot(ka/2)=-\kappa\)).
+
+**Very important physics:** the number of bound-state solutions is **finite** and grows with well depth/width.
+
+---
+
+# 8) Bound states vs scattering states
+- **Related states:** energy below the external level ⇒ \(\psi\) must decline to \(\pm\infty\) ⇒ levels **discrete**, normalizable.
+- **Diffusion states (scattering):** \(E\) above asymptotic ⇒ plane waves at \(\pm\infty\) ⇒ spectrum **continuum**, delta normalization, and we talk about \(R,T\).
+
+---
+
+# 9) Optical analogy (what to say in 2 sentences but well)
+In constant potential sections the problem is a wavelength equation with wavelength number:
+\[
+k=\frac{\sqrt{2m(E-V)}}{\hbar}.
+\]
+A \(V\) jump changes \(k\) as an optical index jump changes \(k\) of the light:  
+\[
+r=\frac{k_1-k_2}{k_1+k_2}
+\]
+is the analogue of Fresnel coefficients (reflection by impedance failure/wave number).  
+In the case \(E<V\) the wavelength becomes **evanescent** as in optics beyond the critical angle.
+
+---
+
+# Symbol Dictionary (to know one by one)
+- \(\psi(x)\): Stationary wave function.
+- \(E\): total energy.
+- \(V(x)\): potential.
+- \(m\): mass.
+- \(\hbar\): Reduced Planck constant.
+- \(k=\sqrt{2m(E-V)}/\hbar\): wave number in region with \(E>V\).
+- \(\kappa=\sqrt{2m(V-E)}/\hbar\): region decay coefficient with \(E<V\).
+- \(A,B,C,D\): stroke constants (sizes).
+- \(r\): Reflection amplitude (complex).
+- \(t\): Transmission amplitude (complex).
+- \(j\): probability current.
+- \(R,T\): Reflection/transmission coefficients (current ratios).
+- \(V_0\): barrier height or well depth (depending on context).
+- \(a\): barrier/well width; \(L\): infinite well width.
+- \(n\): Quantum number (infinite well).
+
+---
+
+# Physical meaning (to be told to the prof without only accounts)
+- In 1D at times, Schrödinger becomes a wave problem with changes in the mean (the medium is \(E-V\)).  
+- The **quantum reflection** also appears without dissipation: it arises from the connections (interference).  
+- The **current** gives you the physically correct way to define \(R,T\) and guarantees \(R+T=1\) for real potentials.  
+- **tunneling** (\(E<V_0\)) is a purely quantum effect: transmission through a classically prohibited region, with exponential law \(e^{-2\kappa a}\).  
+- The **buche** produce quantisation because it imposes conditions on the edge and normalization: the wave must be inside the line.
+
+---
+
+# Oral script (2-3 minutes, ordered)
+1) I write TISE: \(-\hbar^2/(2m)\psi''+V\psi=E\psi\). In each region at \(V\) constant I have waves \(e^{\pm ikx}\) if \(E>V\) or exponential \(e^{\pm\kappa x}\) if \(E<V\).  
+2) At the edges with finite potential I impose \(\psi\) and \(\psi'\) continuous (I derision integrating Schr around the edge).  
+3) I define the current \(j=\frac{\hbar}{2mi}(\psi^*\psi'-\psi\psi'^*)\); for a plane waves \(A e^{ikx}\), \(j=\hbar k|A|^2/m\). Then \(R=|j_r|/|j_i|\), \(T=|j_t|/|j_i|\).  
+4) Step: for \(x<0\) \(\psi=e^{ik_1x}+r e^{-ik_1x}\), for \(x>0\) \(\psi=t e^{ik_2x}\). From the connections I get \(r=(k_1-k_2)/(k_1+k_2)\), \(t=2k_1/(k_1+k_2)\). With current: \(R=|r|^2\), \(T=(k_2/k_1)|t|^2\) and \(R+T=1\). If \(E<V_0\) the tract is evanescent and \(T=0\), \(R=1\) with penetration \(1/\kappa\).  
+5) Barrier \(0<x<a\): imposed solutions in three regions and junction in \(0\) and \(a\). It results \(T=\big[1+\frac{V_0^2}{4E(V_0-E)}\sinh^2(\kappa a)\big]^{-1}\) for tunneling and \(T=\big[1+\frac{V_0^2}{4E(E-V_0)}\sin^2(k_2 a)\big]^{-1}\) above barrier with resonance \(T=1\) if \(k_2a=n\pi\).  
+6) Infinity Well: \(\psi(0)=\psi(L)=0\) ⇒ \(k=n\pi/L\) ⇒ \(E_n=n^2\pi^2\hbar^2/(2mL^2)\).  
+7) symmetric finite well: use parity. Even states: \(k\tan(ka/2)=\kappa\); odd: \(-k\cot(ka/2)=\kappa\). These conditions quantize energies and the number of levels is finite.
+<<<DIM 5 END>>>
+
+<<<DIM 6 START>>>
+
+# DIM 6 - 1D quantum harmonic oscillator: Hermite → (Dirac bridge: \(\delta\) + completeness) → **operator method** → matrices → coordinate representation \((\xi=\alpha x)\) → final comparison
+
+## where it appears in the notes
+
+* Linear OA (dimension variables, Hermite, quantization, CL comparison): `img/100.jpg` → `img/108.jpg`
+* OA + matrix notation + coordinates: `img/126.jpg` → `img/132.jpg`
+
+---
+
+## Introduced (complete, before the operating method)
+
+In the case of egg albumin**linear harmonic oscillator** classically I have an elastic force like Hooke \((F=-kx)\) and therefore a parabolic potential \(\bigl(V(x)=\tfrac12kx^2\bigr)\) with minimum in \((x=0)\). It is also important in QM because **any potential “reasonable” close to a minimum** behaves in first approximation as harmonic: if I take a arbitrary potential \((W(x))\) and development around a equilibrium point \((a)\) (minimum),
+\[
+W(x)=W(a)+(x-a)W'(a)+\frac12(x-a)^2W''(a)+\cdots,\qquad W'(a)=0,
+\]
+and (with reference \((W(a)=0)\)) I get
+\[
+W(x)\simeq \frac12\,W''(a)(x-a)^2\equiv \frac12k(x-a)^2.
+\]
+So if I move... “Close enough.” to the minimum, the upper order terms are negligible and the **Study of quadratic potential** becomes the **first approximation** of many more complex potentials (then, if I want to improve, I add non-square terms as corrections). In QM I promote \((x,p)\) a operators and, in coordinate representation, for a 1D system with Hamiltonian time-independent I have to solve the equation to the eigenvalues (TISE):
+\[
+\hat H\psi(x)=E\psi(x),\qquad
+\hat H=\frac{\hat p^2}{2m}+\frac12kx^2
+\ \Rightarrow\
+\left[-\frac{\hbar^2}{2m}\frac{d^2}{dx^2}+\frac12kx^2\right]\psi(x)=E\psi(x).
+\]
+As \((V(x)\to+\infty)\) for \((|x|\to\infty)\), the physical condition is (\(\psi\to0\)) infinite: I expect **ligated states** and then **quantified energy**. To solve step to dimensional variables:
+\[
+\omega=\sqrt{\frac{k}{m}},\qquad \lambda=\frac{2E}{\hbar\omega},\qquad \xi=\alpha x,\ \ \alpha=\sqrt{\frac{m\omega}{\hbar}},\qquad \tilde\psi(\xi)=\psi(\xi/\alpha),
+\]
+getting
+\[
+\frac{d^2\tilde\psi}{d\xi^2}+(\lambda-\xi^2)\tilde\psi=0.
+\]
+The asymptotic analysis shows that in order to have normalization I have to take the part that smears and then place
+\[
+\tilde\psi(\xi)=e^{-\xi^2/2}H(\xi)\ \Rightarrow\ H''-2\xi H'+(\lambda-1)H=0
+\]
+(Hermite equation). As the potential is equal, I separate in solutions **pari** and **odd** with series developments; but the series, if not truncated, leads to a type growth \((e^{+\xi^2})\) and then to \((\tilde\psi\sim e^{+\xi^2/2})\) (non-physical). I then employ **troncation**: for evens I get \((\lambda=4N+1)\), for odds \((\lambda=4N+3)\), and putting together:
+\[
+\lambda=2n+1,\qquad n=0,1,2,\dots
+\]
+that is,
+\[
+\boxed{E_n=\hbar\omega\left(n+\frac12\right)}.
+\]
+So the eigenvalues are **discrete** (in 1D also **non degenerate cases**) and the levels are **equispated**: \((\Delta E=E_{n+1}-E_n=\hbar\omega)\). This distance is just the "how much" \((h\nu)\) \((\omega=2\pi\nu)\): the harmonic oscillator explains why the energy exchanged for transitions between layers comes into packets, and in fact many physical systems (even normal modes) of cavities/fields) can be traced back to oscillator sets. Another key point is the **fundamental state**: the minimum is not \((E=0)\) but
+\[
+\underline{E_0=\frac12\hbar\omega\neq0},
+\]
+consistent with uncertainty \((\Delta x,\Delta p\gtrsim \hbar/2)\): I can't have simultaneously \((x)\) and \((p)\) “perfectly null”. eigenfunctions \((\psi_n)\) are orthogonal and form a complete set (base): I can represent generic states as combinations. Finally comparison with the classic: for a given energy \((E)\) motion occurs between two points of Inversion \((\pm x_0)\), with \(\bigl(x_0=\sqrt{2E/(m\omega^2)}\bigr)\) and \(\bigl(v^2=\omega^2(x_0^2-x^2)\bigr)\); the probability density (permanence time) is
+\[
+\rho_{\rm cl}(x)=\frac{1}{\pi\sqrt{x_0^2-x^2}},
+\]
+In QM \((|\psi_n|^2)\) for \((n)\) small is very different, but for (n) large envelope of oscillations tends to classic behavior (match principle) and also \((\Delta E/E\sim 1/n\to0)\) makes discretization less and less visible.  
+At this point, we switch from the ODE method to the ODE method to **operator method**: we work with \(|\psi\rangle\) states, operators and switches, and then we return to coordinates to find Hermite. In particular, we switch to **Dirac **notation as *intuitive* preparation to postulates: **state is a vector** and wave functions They're his representations.
+
+---
+
+## Minimal Dirac bridge: \(\delta\), closure and completeness
+
+\[
+\langle x|x'\rangle=\delta(x-x'),\qquad \int_{-\infty}^{+\infty}|x\rangle\langle x|\,dx=\mathbb I,\qquad \psi(x)=\langle x|\psi\rangle.
+\]
+\[
+\langle E_m|E_n\rangle=\delta_{mn},\qquad \sum_{n=0}^{\infty}|E_n\rangle\langle E_n|=\mathbb I.
+\]
+
+---
+
+# Operator method
+
+## 1) Hamiltonian and canonical switch
+
+\[
+\boxed{\ \hat H=\frac{\hat p^{2}}{2m}+\frac12m\omega^2\hat x^{2}\ },\qquad
+\boxed{[\hat x,\hat p]=i\hbar}.
+\]
+
+## 2) Definition of \((a)\), \((a^\dagger)\)
+
+\[
+\boxed{
+\hat a=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x+\frac{i}{m\omega}\hat p\right)},\qquad
+\boxed{
+\hat a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\left(\hat x-\frac{i}{m\omega}\hat p\right)}.
+\]
+
+## 3) Inversion \((\hat x,\hat p)\) as a function of \((a,a^\dagger)\)
+
+\[
+\boxed{\hat x=\sqrt{\frac{\hbar}{2m\omega}}(\hat a+\hat a^\dagger)},\qquad
+\boxed{\hat p=i\sqrt{\frac{\hbar m\omega}{2}}(\hat a^\dagger-\hat a)}.
+\]
+
+## 4) Demonstration of \(([\hat a,\hat a^\dagger]=1)\)
+
+Pongo \(\bigl(c=\sqrt{\tfrac{m\omega}{2\hbar}}\bigr)\), \(\bigl(\alpha=\tfrac{1}{m\omega}\bigr)\):
+\[
+\hat a=c(\hat x+i\alpha\hat p),\qquad \hat a^\dagger=c(\hat x-i\alpha\hat p).
+\]
+\[
+[\hat a,\hat a^\dagger]=c^2[\hat x+i\alpha\hat p,\hat x-i\alpha\hat p]
+=-2ic^2\alpha[\hat x,\hat p]
+=-2ic^2\alpha(i\hbar)=2c^2\alpha\hbar=1.
+\]
+\[
+\boxed{[\hat a,\hat a^\dagger]=1.}
+\]
+
+## 5) Rewrite \((\hat H)\) via \((a^\dagger a)\)
+
+\[
+\hat a^\dagger\hat a=\frac{m\omega}{2\hbar}\left(\hat x-\frac{i}{m\omega}\hat p\right)\left(\hat x+\frac{i}{m\omega}\hat p\right)
+=\frac{\hat H}{\hbar\omega}-\frac12.
+\]
+\[
+\boxed{\ \hat H=\hbar\omega\left(\hat a^\dagger\hat a+\frac12\right)\ }.
+\]
+Defining
+\[
+\boxed{\hat N\equiv \hat a^\dagger\hat a},\qquad \boxed{\hat H=\hbar\omega\left(\hat N+\frac12\right)}.
+\]
+
+## 6) commutes with \((\hat N)\)
+
+\[
+[\hat N,\hat a]=[\hat a^\dagger\hat a,\hat a]=\hat a^\dagger[\hat a,\hat a]+[\hat a^\dagger,\hat a]\hat a=-\hat a,
+\]
+\[
+[\hat N,\hat a^\dagger]=[\hat a^\dagger\hat a,\hat a^\dagger]=\hat a^\dagger[\hat a,\hat a^\dagger]+[\hat a^\dagger,\hat a^\dagger]\hat a=\hat a^\dagger.
+\]
+\[
+\boxed{[\hat N,\hat a]=-\hat a},\qquad \boxed{[\hat N,\hat a^\dagger]=\hat a^\dagger}.
+\]
+Then
+\[
+[\hat H,\hat a]=-\hbar\omega\,\hat a,\qquad [\hat H,\hat a^\dagger]=+\hbar\omega\,\hat a^\dagger.
+\]
+
+---
+
+## 7) Replaced from TISE in Dirac and applied \((a,a^\dagger)\)
+
+\[
+\boxed{\hat H|E\rangle=E|E\rangle}.
+\]
+Usage \(\hat H\hat a^\dagger=\hat a^\dagger\hat H+[\hat H,\hat a^\dagger]\):
+\[
+\hat H(\hat a^\dagger|E\rangle)=(E+\hbar\omega)(\hat a^\dagger|E\rangle)
+\quad\Rightarrow\quad
+\boxed{\hat H(\hat a^\dagger|E\rangle)=(E+\hbar\omega)(\hat a^\dagger|E\rangle)}.
+\]
+Similarly:
+\[
+\boxed{\hat H(\hat a|E\rangle)=(E-\hbar\omega)(\hat a|E\rangle)}.
+\]
+
+## 8) From \((\hat H\ge 0)\) arrival to fundamental \((E_0)\)
+
+As \(\left(\hat H=\frac{\hat p^2}{2m}+\frac12m\omega^2\hat x^2\right)\) is positive:
+\[
+\langle E|\hat H|E\rangle=E\langle E|E\rangle\ge 0\Rightarrow E\ge 0.
+\]
+There is a minimum \((E_0)\). If \((\hat a|E_0\rangle\neq0)\), then \((\hat a|E_0\rangle)\) would have energy \((E_0-\hbar\omega)\), impossible. So:
+\[
+\boxed{\hat a|E_0\rangle=0}.
+\]
+From \(\bigl(\hat H=\hbar\omega(\hat N+\tfrac12)\bigr)\) and \((\hat N=\hat a^\dagger\hat a)\):
+\[
+\hat a|E_0\rangle=0\Rightarrow \hat N|E_0\rangle=0 \Rightarrow \hat H|E_0\rangle=\frac12\hbar\omega|E_0\rangle
+\Rightarrow
+\boxed{E_0=\frac12\hbar\omega}.
+\]
+
+## 9) Normalization (origin of \(1/\sqrt{n+1}\)) + explicit \(\sqrt{n!}\) example
+
+Define the next state as
+\[
+|E_{n+1}\rangle=d_n\,\hat a^\dagger|E_n\rangle,\qquad \langle E_{n+1}|E_{n+1}\rangle=1,\qquad \langle E_n|E_n\rangle=1.
+\]
+So:
+\[
+1=\langle E_{n+1}|E_{n+1}\rangle
+=|d_n|^2\,\langle E_n|\hat a\,\hat a^\dagger|E_n\rangle.
+\]
+Use
+\[
+\hat a\,\hat a^\dagger=\hat a^\dagger\hat a+1=\hat N+1,
+\]
+then
+\[
+1=|d_n|^2\,\langle E_n|(\hat N+1)|E_n\rangle
+=|d_n|^2\,(n+1).
+\]
+Hence (unless in phase):
+\[
+\boxed{d_n=\frac{1}{\sqrt{n+1}}}.
+\]
+So the ascent/descent actions are:
+\[
+\boxed{\hat a^\dagger|E_n\rangle=\sqrt{n+1}\,|E_{n+1}\rangle},\qquad
+\boxed{\hat a|E_n\rangle=\sqrt{n}\,|E_{n-1}\rangle}.
+\]
+
+**Explicit example (because it appears \(\sqrt{n!}\))**: starting from \(|E_0\rangle\),
+\[
+\hat a^\dagger|E_0\rangle=\sqrt1\,|E_1\rangle,
+\]
+\[
+(\hat a^\dagger)^2|E_0\rangle=\hat a^\dagger(\sqrt1\,|E_1\rangle)=\sqrt1\,\sqrt2\,|E_2\rangle,
+\]
+\[
+(\hat a^\dagger)^3|E_0\rangle=\sqrt1\,\sqrt2\,\sqrt3\,|E_3\rangle,
+\]
+and in general
+\[
+(\hat a^\dagger)^n|E_0\rangle=\Bigl(\sqrt1\,\sqrt2\cdots\sqrt n\Bigr)\,|E_n\rangle
+=\sqrt{1\cdot2\cdots n}\,|E_n\rangle
+=\sqrt{n!}\,|E_n\rangle.
+\]
+So:
+\[
+\boxed{|E_n\rangle=\frac{1}{\sqrt{n!}}(\hat a^\dagger)^n|E_0\rangle}.
+\]
+And the spectrum:
+\[
+\boxed{E_n=\hbar\omega\left(n+\frac12\right)},\qquad n=0,1,2,\dots,\qquad \Delta E=\hbar\omega=h\nu.
+\]
+
+---
+
+## 10) Matrimonial representations in the ON base \((\{|E_n\rangle\})\)
+
+\[
+\hat H=\hbar\omega
+\begin{pmatrix}
+\frac12&0&0&0&\cdots\\
+0&\frac32&0&0&\cdots\\
+0&0&\frac52&0&\cdots\\
+0&0&0&\frac72&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix},\qquad
+\hat N=
+\begin{pmatrix}
+0&0&0&0&\cdots\\
+0&1&0&0&\cdots\\
+0&0&2&0&\cdots\\
+0&0&0&3&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix}.
+\]
+Matrix elements:
+\[
+(\hat a^\dagger)_{kn}=\sqrt{n+1}\,\delta_{k,n+1},\qquad (\hat a)_{kn}=\sqrt{n}\,\delta_{k,n-1},
+\]
+then:
+\[
+\hat a^\dagger=
+\begin{pmatrix}
+0&0&0&0&\cdots\\
+\sqrt1&0&0&0&\cdots\\
+0&\sqrt2&0&0&\cdots\\
+0&0&\sqrt3&0&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix},\qquad
+\hat a=
+\begin{pmatrix}
+0&\sqrt1&0&0&\cdots\\
+0&0&\sqrt2&0&\cdots\\
+0&0&0&\sqrt3&\cdots\\
+0&0&0&0&\ddots\\
+\vdots&\vdots&\vdots&\vdots&\ddots
+\end{pmatrix}.
+\]
+
+---
+
+# Coordinated representation and return to \((\xi=\alpha x)\)
+
+## 11) Step to \((\xi=\alpha x)\) and write \((a,a^\dagger)\) as differential operators
+
+\[
+\xi=\alpha x,\qquad \alpha=\sqrt{\frac{m\omega}{\hbar}},\qquad
+\hat p=-i\hbar\frac{d}{dx}=-i\hbar\alpha\frac{d}{d\xi}.
+\]
+\[
+\boxed{\hat a=\frac{1}{\sqrt2}\left(\xi+\frac{d}{d\xi}\right)},\qquad
+\boxed{\hat a^\dagger=\frac{1}{\sqrt2}\left(\xi-\frac{d}{d\xi}\right)}.
+\]
+
+## 12) \((\langle \xi|\hat a|E_0\rangle=0)\) to \((\psi_0)\), Normalization and explicit replacement
+
+\[
+\hat a|E_0\rangle=0\Rightarrow \langle \xi|\hat a|E_0\rangle=0
+\Rightarrow \hat a\,\tilde\psi_0(\xi)=0.
+\]
+\[
+\left(\xi+\frac{d}{d\xi}\right)\tilde\psi_0(\xi)=0
+\Rightarrow \tilde\psi_0(\xi)=N_0e^{-\xi^2/2}.
+\]
+
+**Restitution \(\xi=\alpha x\)**:
+\[
+\psi_0(x)=\tilde\psi_0(\xi)\Big|_{\xi=\alpha x}
+=N_0e^{-(\alpha x)^2/2}
+=N_0e^{-\alpha^2x^2/2}.
+\]
+
+Normalization:
+\[
+1=\int_{-\infty}^{+\infty}|\psi_0(x)|^2\,dx
+=|N_0|^2\int_{-\infty}^{+\infty}e^{-\alpha^2x^2}\,dx
+=|N_0|^2\frac{\sqrt\pi}{\alpha}
+\Rightarrow
+\boxed{N_0=\left(\frac{\alpha}{\sqrt\pi}\right)^{1/2}}.
+\]
+With \(\alpha=\sqrt{\frac{m\omega}{\hbar}}\) I get
+\[
+N_0=\left(\frac{1}{\sqrt\pi}\sqrt{\frac{m\omega}{\hbar}}\right)^{1/2}
+=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}.
+\]
+So:
+\[
+\boxed{\psi_0(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{1/4}\exp\!\left(-\frac{m\omega}{2\hbar}x^2\right)}.
+\]
+
+## 13) Excited States: Final form with Hermite (coincides with the linear method)
+
+\[
+\boxed{\psi_n(x)=\left(\frac{\alpha}{\sqrt\pi\,2^n n!}\right)^{1/2}e^{-\alpha^2x^2/2}\,H_n(\alpha x)}.
+\]
+In the linear method:
+\[
+\tilde\psi''+(\lambda-\xi^2)\tilde\psi=0,\qquad \lambda=\frac{2E}{\hbar\omega}.
+\]
+From the operating agent:
+\[
+E_n=\hbar\omega\left(n+\frac12\right)\Rightarrow \lambda_n=2n+1,\qquad
+\tilde\psi_n(\xi)=e^{-\xi^2/2}H_n(\xi),
+\]
+So the two methods coincide.
+
+---
+
+# Final comparison with the classic
+
+\[
+x(t)=x_0\sin\omega t,\quad v^2=\omega^2(x_0^2-x^2),\quad x_0=\sqrt{\frac{2E}{m\omega^2}}.
+\]
+Classical density (stay time):
+\[
+\boxed{\rho_{\rm cl}(x)=\frac{1}{\pi\sqrt{x_0^2-x^2}}}.
+\]
+With \((\xi=\alpha x)\):
+\[
+\xi_0=\alpha x_0=\sqrt{\frac{2E}{\hbar\omega}}=\sqrt{\lambda},\qquad
+\boxed{\rho_{\rm cl}(\xi)=\frac{1}{\pi\sqrt{\xi_0^2-\xi^2}}}.
+\]
+For \((n)\) large: envelope \((|\psi_n|^2\to\rho_{\rm cl})\) (correspondence) and
+\[
+\frac{\Delta E}{E_n}=\frac{\hbar\omega}{\hbar\omega(n+\tfrac12)}\sim\frac1n\to0.
+\]
+
+---
+
+## Conclusion (to be concluded)
+
+* **Operating method:** \(([\hat a,\hat a^\dagger]=1)\), \((\hat H=\hbar\omega(\hat N+\tfrac12))\), \(\hat a^\dagger\) raise and \(\hat a\) lower.
+* **Spectra and states:** \(\boxed{E_n=\hbar\omega(n+\tfrac12)}\), \(\boxed{|E_n\rangle=\frac{1}{\sqrt{n!}}(\hat a^\dagger)^n|E_0\rangle}\), \(\boxed{E_0=\hbar\omega/2\neq0}\).
+* **Coordinates:** returning to \((\xi=\alpha x)\) I get \(\psi_0\) Gaussian and \(\psi_n\) Gaussian \(\times\) Hermite; in the limit \((n\gg1)\) recovery of classical behavior on average.
+
+---
+
+# Symbol Dictionary (one by one)
+
+* \(x\): Space coordinate (1D).  
+* \(\hat x\): operator position.  
+* \(p\): quantity of classic motion.  
+* \(\hat p\): operator quantity of motion (\(\hat p=-i\hbar\,\frac{d}{dx}\) in coordinates).  
+* \(m\): mass.  
+* \(k\): elastic constant (Hooke).  
+* \(\omega=\sqrt{k/m}\): oscillator pulse.  
+* \(\nu=\omega/2\pi\): Frequency.  
+* \(\hbar\): Reduced Planck constant.  
+* \(V(x)=\tfrac12kx^2\): harmonic potential.  
+* \(W(x)\): generic potential (development close to a minimum).  
+* \(\hat H\): Quantum Hamiltonian.  
+* \(E\): generic energy eigenvalues.  
+* \(E_n\): quantized energy levels.  
+* \(\Delta E\): layer spacing (\(\hbar\omega\)).  
+* \(|\psi\rangle\): Abstract status (Dirac note).  
+* \(\psi(x)=\langle x|\psi\rangle\): wave function (coordinate representation).  
+* \(\psi_n(x)\): autofunction of the layer \(n\).  
+* \(|E_n\rangle\): eigenstates of energy (discrete base).  
+* \(\delta(x-x')\): Dirac delta (\(\langle x|x'\rangle\)).  
+* \(\delta_{mn}\): Kronecker delta (\(\langle E_m|E_n\rangle\)).  
+* \(\mathbb I\): operator identity (closure/completeness).  
+* \(\xi=\alpha x\): Adimensional coordinate.  
+* \(\alpha=\sqrt{\frac{m\omega}{\hbar}}\): Scale factor to make \(x\) adimensional.  
+* \(\tilde\psi(\xi)\): wave function in a dimensional variable.  
+* \(\lambda=\frac{2E}{\hbar\omega}\): adimensional parameter in the ODE.  
+* \(H_n(\xi)\): Hermite polynomials.  
+* \(\hat a,\hat a^\dagger\): Annihilation/creation operators.  
+* \(\hat N=\hat a^\dagger\hat a\): operator number.  
+* \(x_0\): Classical amplitude (inversion point).  
+* \(\xi_0=\alpha x_0\): adimensional amplitude.  
+* \(\rho_{\rm cl}(x)\): Classical probability density (permanence time).
+
+---
+
+# Physical meaning (in a few lines)
+
+* **Histonic approximation:** close to a minimum, so many potentials become square \(\Rightarrow\) The oscillator is a universal model.  
+* **Quantization:** normalization force \(\lambda=2n+1\Rightarrow E_n=\hbar\omega(n+\tfrac12)\): discrete and equispaced levels.  
+* **Basic state (physical vacuum):** The lowest level meets \(\hat a|E_0\rangle=0\) and has no energy \(\underline{E_0=\hbar\omega/2}\) (*zero-point*), linked to uncertainty: I cannot have \(x\) and \(p\) at the same time.  
+* **Operating method:** with \(\hat a,\hat a^\dagger\) I get spectrum and states without solving ODE; then in Gaussian meeting coordinates \(\times\) Hermite.  
+* **Classical limit:** for \(n\gg1\) l-envelope \(|\psi_n|^2\) tends to classical distribution and \(\Delta E/E_n\sim 1/n\to0\).
+
+---
+
+# Complete DIM - Oral-exam script (60-90 s)
+
+Starting from the harmonic oscillator: classically \(F=-kx\) and then \(V(x)=\tfrac12kx^2\). In quantum it is fundamental because any potential near a minimum approximates with a quadratic term. In coordinates I solve the TISE
+\[
+\left[-\frac{\hbar^2}{2m}\frac{d^2}{dx^2}+\frac12kx^2\right]\psi=E\psi,
+\]
+pass to dimensional variables \(\xi=\alpha x\) with \(\alpha=\sqrt{m\omega/\hbar}\) and I get \(\tilde\psi''+(\lambda-\xi^2)\tilde\psi=0\), \(\lambda=2E/(\hbar\omega)\). With l.I.ansatz \(\tilde\psi=e^{-\xi^2/2}H(\xi)\) the series must truncate by normalization: it follows \(\lambda=2n+1\) and then \(E_n=\hbar\omega(n+\tfrac12)\), equispaced levels and *zero-point* \(E_0=\hbar\omega/2\).  
+Then I switch to **operator method**: I introduce Dirac notation and operators \(\hat a,\hat a^\dagger\), I get \([\hat a,\hat a^\dagger]=1\) and \(\hat H=\hbar\omega(\hat N+\tfrac12)\). From here \(\hat a^\dagger\) raises and \(\hat a\) lowers levels, and I build \(|E_n\rangle=\frac{1}{\sqrt{n!}}(\hat a^\dagger)^n|E_0\rangle\). Returning to the coordinate representation \(\psi_0\) Gaussian and \(\psi_n\propto e^{-\alpha^2x^2/2}H_n(\alpha x)\), identical to the linear method. Finally, for \(n\) great recovery the classical behavior.
+
+<<<DIM 6 END>>>
+
