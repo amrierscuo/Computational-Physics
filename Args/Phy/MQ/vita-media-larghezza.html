@@ -1,314 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vita Media e Larghezza di uno Stato</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vita media e larghezza di uno stato</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Vita Media e Larghezza di uno Stato</h1>
-    <p>
-        In fisica quantistica, i concetti di vita media (\( \tau \)) e larghezza (\( \Gamma \)) di uno stato quantistico sono fondamentali per descrivere la stabilità e il decadimento di stati eccitati o instabili. La relazione tra questi due parametri è profondamente radicata nei principi della meccanica quantistica ed è spesso trattata nel contesto della teoria delle perturbazioni temporali.
-    </p>
-    <h2>Descrizione della Vita Media</h2>
-    <p>
-        La vita media di uno stato instabile è il tempo medio che lo stato impiega per decadere verso uno stato finale più stabile. Se la probabilità di sopravvivenza \( P(t) \) dello stato iniziale \( |i\rangle \) segue un decadimento esponenziale:
-    </p>
-    <div class="formula">
-        \( P(t) = e^{-t / \tau} \)
-    </div>
-    <p>
-        allora la vita media è definita come:
-    </p>
-    <div class="formula">
-        \( \tau = \int_0^{\infty} t \, \left(-\frac{dP(t)}{dt}\right) \, dt \).
-    </div>
-    <h2>Connessione con la Larghezza di uno Stato</h2>
-    <p>
-        La larghezza di uno stato \( \Gamma \) è correlata alla vita media attraverso la relazione:
-    </p>
-    <div class="formula">
-        \( \Gamma = \frac{\hbar}{\tau} \),
-    </div>
-    <p>
-        dove \( \hbar \) è la costante di Planck ridotta. Questa relazione emerge dalla teoria perturbativa del decadimento, dove l'incertezza energetica associata a uno stato è inversamente proporzionale al tempo di vita dello stato stesso, in accordo con il principio di indeterminazione di Heisenberg.
-    </p>
-    <h2>Interpretazione Fisica</h2>
-    <p>
-        La larghezza \( \Gamma \) rappresenta la dispersione energetica del livello instabile. Più breve è la vita media (\( \tau \)), maggiore sarà l'incertezza sull'energia dello stato, riflettendo una maggiore instabilità. Al contrario, una vita media lunga implica una larghezza energetica più stretta e uno stato più stabile.
-    </p>
-    <h2>Esempi Applicativi</h2>
-    <ul>
-        <li>
-            <strong>Atomi in stato eccitato:</strong> La larghezza \( \Gamma \) dei livelli eccitati è misurabile attraverso la linea spettrale associata alla transizione. Stati eccitati con vita media breve generano linee spettrali larghe.
-        </li>
-        <li>
-            <strong>Particelle instabili:</strong> Per particelle subatomiche come il mesone \( \pi^0 \), la relazione \( \Gamma = \hbar / \tau \) è utilizzata per calcolare la vita media in esperimenti di alta energia.
-        </li>
-    </ul>
-    <h2>Derivazione della Relazione tra Vita Media e Larghezza</h2>
-<p>
-    Consideriamo uno stato instabile \( |i\rangle \) che decade verso un insieme di stati finali \( |f\rangle \). La probabilità di transizione differenziale per unità di tempo è data dalla regola d’oro di Fermi:
-</p>
-<div class="formula">
-    \( \Gamma = 2\pi \, \frac{|H_{if}|^2}{\hbar} \, \rho(E_f) \),
-</div>
-<p>
-    dove \( H_{if} \) è l’elemento di matrice dell'hamiltoniana perturbativa che collega lo stato iniziale a quello finale, e \( \rho(E_f) \) è la densità di stati finali disponibili all’energia \( E_f \). 
-</p>
-<p>
-    Poiché \( \tau = \hbar / \Gamma \), possiamo scrivere la vita media dello stato in funzione di questi parametri:
-</p>
-<div class="formula">
-    \( \tau = \frac{\hbar}{2\pi} \, \frac{1}{|H_{if}|^2 \, \rho(E_f)} \).
-</div>
-<h2>Linea Spettrale e Ampiezza Lorentziana</h2>
-<p>
-    La larghezza energetica \( \Gamma \) è osservabile in esperimenti spettrali. Le linee di emissione o assorbimento associate a uno stato instabile seguono una distribuzione Lorentziana:
-</p>
-<div class="formula">
-    \( I(E) = \frac{I_0}{(E - E_0)^2 + (\Gamma/2)^2} \),
-</div>
-<p>
-    dove \( I(E) \) è l’intensità a un’energia \( E \), \( E_0 \) è l’energia centrale della transizione, e \( \Gamma \) è la larghezza della linea. L’integrazione di questa funzione su tutte le energie dà l’intensità totale:
-</p>
-<div class="formula">
-    \( \int_{-\infty}^{\infty} I(E) \, dE = I_0 \pi / (\Gamma/2) \).
-</div>
-<p>
-    Questo risultato evidenzia che una maggiore larghezza \( \Gamma \) porta a una distribuzione più larga, ma meno intensa, mentre una larghezza minore concentra l’energia su un intervallo ristretto.
-</p>
-<h2>Applicazioni nella Fisica Moderna</h2>
-<p>
-    La relazione tra vita media e larghezza è centrale in molte aree della fisica moderna, incluse:
-</p>
-<ul>
-    <li>
-        <strong>Fisica delle Particelle:</strong> Per particelle instabili, come il bosone \( W \) o il mesone \( \pi^0 \), la larghezza \( \Gamma \) è determinata sperimentalmente attraverso le distribuzioni energetiche dei decadimenti.
-    </li>
-    <li>
-        <strong>Astrofisica:</strong> Le righe di emissione osservate nelle stelle e nei gas interstellari mostrano larghezze che riflettono le vite medie degli stati eccitati atomici o molecolari.
-    </li>
-    <li>
-        <strong>Fisica Atomica:</strong> La spettroscopia laser sfrutta la relazione \( \Gamma \propto 1/\tau \) per identificare stati atomici con elevata precisione, anche per transizioni otticamente proibite.
-    </li>
-</ul>
-<h2>Limiti della Relazione</h2>
-<p>
-    È importante notare che la relazione \( \Gamma = \hbar / \tau \) è valida solo per stati che decadono esponenzialmente. In alcuni casi, come gli stati che seguono un comportamento a lungo termine non esponenziale (effetto Zeno quantistico), questa relazione può perdere validità, richiedendo un trattamento teorico più sofisticato.
-</p>
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 14</div>
-  <h2>Vita Media e Larghezza di uno Stato: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Collegare decadimento esponenziale, polo complesso e profilo lorentziano.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Uno stato instabile con ampiezza \(e^{-iE_0t/\hbar}e^{-\Gamma t/(2\hbar)}\) ha probabilità esponenziale e trasformata di Fourier lorentziana.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Vita<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Probabilità di sopravvivenza.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P(t)=e^{-t/\tau},\qquad\tau=\hbar/\Gamma"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \dot P=-P/\tau\Rightarrow dP/P=-dt/\tau\Rightarrow P(t)=e^{-t/\tau};\quad A(t)=e^{-iE_0t/\hbar}e^{-\Gamma t/(2\hbar)}\Rightarrow\tau=\hbar/\Gamma\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Riga<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Distribuzione energetica.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|A(E)|^2\propto\frac1{(E-E_0)^2+(\Gamma/2)^2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle A(E)\propto\int_0^\infty e^{i(E-E_0)t/\hbar}e^{-\Gamma t/(2\hbar)}dt=\frac{i\hbar}{E-E_0+i\Gamma/2}\Rightarrow|A(E)|^2\propto\frac1{(E-E_0)^2+(\Gamma/2)^2}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Larghezza 1 microeV</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Usa \(\hbar=6.58\times10^{-16}\,\mathrm{eV,s}\).</p>
-    <p><strong>Calcolo.</strong> \(\tau\simeq6.58\times10^{-10}\,\mathrm{s}\).</p>
-    <p><strong>Risultato e controllo.</strong> Una riga più stretta corrisponde a uno stato più longevo.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 12</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Regime esponenziale intermedio.</li>
-          <li>Deviazioni a tempi molto brevi e molto lunghi.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La relazione vita-larghezza è Fourier e dinamica; non coincide semplicemente con Robertson per due operatori.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Definisci FWHM della Lorentziana.</li>
-          <li>Distingui ampiezza e probabilità di decadimento.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pp. 176-189: decadimento, tempo di vita e risoluzione energetica</a></li>
-          <li><a href="BibbiaAleHD.pdf">BibbiaAleHD.pdf, pp. sezione sulle transizioni: profilo di riga</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-vita-media-larghezza"><div class="lecture-kicker">Lezione approfondita - decadimento, Lorentziana e canali</div><h1>Vita media e larghezza di uno stato</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Passare dal tasso microscopico al decadimento esponenziale, derivare la Lorentziana energetica e la relazione Gamma tau=hbar, includendo larghezze parziali, branching ratios e limiti non esponenziali.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Una sola costante</h3><p>Nel regime di Markov, il tasso totale W determina insieme popolazione, vita media e larghezza naturale.</p></article><article class="lecture-card lecture-warning"><h3>Esponenziale efficace</h3><p>Il decadimento non è esattamente esponenziale a tempi arbitrariamente brevi o lunghi. È il comportamento intermedio ottenuto da un continuo ampio e regolare.</p></article></div><h2>Dal tasso alla dinamica ridotta</h2><div class="lecture-grid"><article class="lecture-card "><h3>Perdita senza ritorno</h3><p>Dopo avere eliminato il continuo, si assume che la probabilità uscita non ritorni coerentemente nello stato iniziale.</p></article><article class="lecture-card "><h3>Tasso totale</h3><p>W è la somma dei tassi di tutti i canali aperti calcolati sul guscio energetico.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Equazione cinetica<span class="lecture-step-boss">MARKOV</span></h4><p>In un intervallo dt, la frazione che decade è W dt volte la popolazione ancora presente.</p><div class="lecture-formula" aria-label="Equazione di decadimento a tasso costante"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{dP_i(t)}{dt}=-W P_i(t),\qquad P_i(0)=1\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Sopravvivenza<span class="lecture-step-boss">SOLUZIONE</span></h4><p>L'integrazione produce la legge esponenziale normalizzata.</p><div class="lecture-formula" aria-label="Probabilità di sopravvivenza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_i(t)=e^{-Wt}=e^{-t/\tau}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Distribuzione dei tempi<span class="lecture-step-boss">PROBABILITÀ</span></h4><p>La densità del tempo di decadimento è meno la derivata della sopravvivenza.</p><div class="lecture-formula" aria-label="Densità normalizzata dei tempi di decadimento"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p(t)=-\frac{dP_i}{dt}=We^{-Wt},\qquad\int_0^\infty p(t)dt=1\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Vita media<span class="lecture-step-boss">DEFINIZIONE</span></h4><p>La media di t rispetto alla distribuzione esponenziale è l'inverso del tasso.</p><div class="lecture-formula" aria-label="Definizione e calcolo della vita media"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \tau=\langle t\rangle=\int_0^\infty tWe^{-Wt}dt=\frac1W\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Ampiezza instabile<span class="lecture-step-boss">AMPIEZZA</span></h4><p>Poiché la probabilità è il modulo quadro, l'ampiezza decade con metà del tasso e ruota alla frequenza E0/hbar.</p><div class="lecture-formula" aria-label="Ampiezza causale di uno stato instabile"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a_i(t)=\Theta(t)e^{-iE_0t/\hbar}e^{-Wt/2}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Energia complessa<span class="lecture-step-boss">POLO</span></h4><p>Il decadimento può essere incorporato in un polo con parte immaginaria negativa.</p><div class="lecture-formula" aria-label="Energia complessa e definizione della larghezza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a_i(t)=e^{-i(E_0-i\Gamma/2)t/\hbar},\qquad\Gamma=\hbar W\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Trasformata energetica<span class="lecture-step-boss">FOURIER</span></h4><p>La trasformata causale dell'esponenziale è il propagatore con denominatore E-E0+iGamma/2.</p><div class="lecture-formula" aria-label="Ampiezza spettrale dello stato instabile"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A(E)\propto\int_0^\infty dt\,e^{iEt/\hbar}a_i(t)=\frac{i\hbar}{E-E_0+i\Gamma/2}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Profilo lorentziano<span class="lecture-step-boss">RIGA</span></h4><p>Il modulo quadro normalizzato fornisce la distribuzione energetica della riga naturale.</p><div class="lecture-formula" aria-label="Lorentziana normalizzata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L(E)=\frac1\pi\frac{\Gamma/2}{(E-E_0)^2+(\Gamma/2)^2},\qquad\int_{-\infty}^{\infty}L(E)dE=1\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Larghezza a metà altezza<span class="lecture-step-boss">FWHM</span></h4><p>A E-E0 uguale più o meno Gamma/2 il profilo vale metà del massimo; la distanza totale è Gamma.</p><div class="lecture-formula" aria-label="Dimostrazione della larghezza lorentziana"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L(E_0\pm\Gamma/2)=\frac12L(E_0)\Rightarrow\mathrm{FWHM}=\Gamma\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Relazione vita-larghezza<span class="lecture-step-boss">RISULTATO</span></h4><p>Un tasso maggiore accorcia la vita e allarga la riga nello stesso rapporto.</p><div class="lecture-formula" aria-label="Relazione tra larghezza naturale e vita media"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \boxed{\Gamma=\hbar W=\frac{\hbar}{\tau}}\qquad\Longleftrightarrow\qquad\Gamma\tau=\hbar\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Canali parziali<span class="lecture-step-boss">CANALI</span></h4><p>Ogni canale contribuisce additivamente al tasso e alla larghezza totale.</p><div class="lecture-formula" aria-label="Somma di tassi e larghezze parziali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W=\sum_aW_a,\qquad\Gamma=\sum_a\Gamma_a,\qquad\Gamma_a=\hbar W_a\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Branching ratios<span class="lecture-step-boss">OSSERVABILE</span></h4><p>La frazione di decadimenti nel canale a è il suo tasso relativo.</p><div class="lecture-formula" aria-label="Rapporti di diramazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle B_a=\frac{W_a}{W}=\frac{\Gamma_a}{\Gamma},\qquad\sum_aB_a=1\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Tempo breve<span class="lecture-step-boss">ZENO</span></h4><p>L'unitarietà esatta impone una sopravvivenza quadratica e pari in t all'origine, incompatibile con un esponenziale esatto fino a t=0.</p><div class="lecture-formula" aria-label="Legge quadratica e regione di Zeno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_i(t)=1-\frac{(\Delta H)^2}{\hbar^2}t^2+O(t^4)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Tempo molto lungo<span class="lecture-step-boss">CODA</span></h4><p>Uno spettro limitato inferiormente produce in generale code a potenza; l'esponenziale domina soltanto la finestra intermedia osservabile.</p><div class="lecture-formula" aria-label="Limiti non esponenziali del decadimento"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_i(t)\not\equiv e^{-t/\tau}\ \text{per }t\to0\text{ o }t\to\infty\)</span></div></article></section><h2>Esempio: due canali con branching</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Uno stato ha W1=3.0 per 10 alla 6 al secondo e W2=1.0 per 10 alla 6 al secondo.</p><p data-i18n-skip="true">\(\displaystyle W=4.0\times10^6\,\mathrm{s}^{-1},\quad\tau=2.5\times10^{-7}\,\mathrm{s},\quad\Gamma=\hbar W,\quad B_1=0.75,\ B_2=0.25\)</p><p><strong>Controllo.</strong> Il 75 percento dei decadimenti finisce nel canale 1. Aprire un nuovo canale aumenta Gamma e riduce tau anche se gli altri tassi restano invariati.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Larghezza naturale</h3><p>Gamma qui è una larghezza energetica FWHM. La larghezza in pulsazione è Gamma/hbar e quella in frequenza ordinaria è Gamma/h, salvo convenzioni di semilarghezza.</p></article><article class="lecture-card "><h3>Non è una relazione di operatori</h3><p>Gamma tau=hbar nasce dalla trasformata di un decadimento esponenziale, non da un commutatore tempo-energia analogo a x-p.</p></article><article class="lecture-card "><h3>Allargamenti aggiuntivi</h3><p>Doppler, collisioni, potenza e strumenti possono produrre larghezze diverse dalla larghezza naturale e profili non puramente lorentziani.</p></article><article class="lecture-card "><h3>Polo e continuo</h3><p>Il polo complesso è una descrizione efficace ottenuta eliminando i canali del continuo; l'Hamiltoniano totale chiuso resta hermitiano.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Far decadere l'ampiezza con e alla meno Wt invece che e alla meno Wt/2; chiamare Gamma una semilarghezza senza dichiararlo; sommare vite invece dei tassi; imporre esponenziale a t=0; confondere larghezza naturale e strumentale.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>P(0)=1; p(t) è normalizzata; tau=1/W; Gamma è FWHM; Gamma tau=hbar; branching ratios sommano a uno.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi l'equazione dP/dt=-WP.</li><li>Deriva esponenziale e vita media.</li><li>Ricava il decadimento dell'ampiezza.</li><li>Trasforma in energia.</li><li>Normalizza la Lorentziana.</li><li>Mostra che FWHM=Gamma.</li><li>Somma larghezze parziali e branching.</li><li>Dichiara i limiti a tempi brevi e lunghi.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1726">DIM 12 - perturbazioni dipendenti dal tempo e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro</a></li><li><a href="set-12-probabilita-transizione.html">Set 12 - esercizi sulle probabilità di transizione</a></li><li><a href="Domanda2025_13.html">Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo</a></li></ul><p class="lecture-note">Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - decadimento, Lorentziana e canali":"In-depth lesson - decay, Lorentzian, and channels","Vita media e larghezza di uno stato":"Lifetime and linewidth of a state","Obiettivo.":"Objective.","Passare dal tasso microscopico al decadimento esponenziale, derivare la Lorentziana energetica e la relazione Gamma tau=hbar, includendo larghezze parziali, branching ratios e limiti non esponenziali.":"Go from the microscopic rate to exponential decay, derive the energy Lorentzian and Gamma tau=hbar, including partial widths, branching ratios, and nonexponential limits.","Una sola costante":"One constant","Nel regime di Markov, il tasso totale W determina insieme popolazione, vita media e larghezza naturale.":"In the Markov regime, total rate W jointly determines population, mean lifetime, and natural linewidth.","Esponenziale efficace":"Effective exponential","Il decadimento non è esattamente esponenziale a tempi arbitrariamente brevi o lunghi. È il comportamento intermedio ottenuto da un continuo ampio e regolare.":"Decay is not exactly exponential at arbitrarily short or long times. It is the intermediate behavior obtained from a broad regular continuum.","Dal tasso alla dinamica ridotta":"From rate to reduced dynamics","Perdita senza ritorno":"Loss without return","Dopo avere eliminato il continuo, si assume che la probabilità uscita non ritorni coerentemente nello stato iniziale.":"After eliminating the continuum, assume that probability that has left does not coherently return to the initial state.","Tasso totale":"Total rate","W è la somma dei tassi di tutti i canali aperti calcolati sul guscio energetico.":"W is the sum of rates of all open channels calculated on the energy shell.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Equazione cinetica":"1. Rate equation","MARKOV":"MARKOV","In un intervallo dt, la frazione che decade è W dt volte la popolazione ancora presente.":"In interval dt, the fraction that decays is W dt times the remaining population.","Passaggio":"Step","2. Sopravvivenza":"2. Survival","SOLUZIONE":"SOLUTION","L'integrazione produce la legge esponenziale normalizzata.":"Integration produces the normalized exponential law.","3. Distribuzione dei tempi":"3. Decay-time distribution","PROBABILITÀ":"PROBABILITY","La densità del tempo di decadimento è meno la derivata della sopravvivenza.":"The decay-time density is minus the derivative of survival.","4. Vita media":"4. Mean lifetime","DEFINIZIONE":"DEFINITION","La media di t rispetto alla distribuzione esponenziale è l'inverso del tasso.":"The mean of t under the exponential distribution is the inverse rate.","5. Ampiezza instabile":"5. Unstable amplitude","AMPIEZZA":"AMPLITUDE","Poiché la probabilità è il modulo quadro, l'ampiezza decade con metà del tasso e ruota alla frequenza E0/hbar.":"Because probability is the squared modulus, amplitude decays at half the rate and rotates at frequency E0/hbar.","6. Energia complessa":"6. Complex energy","POLO":"POLE","Il decadimento può essere incorporato in un polo con parte immaginaria negativa.":"Decay may be incorporated into a pole with negative imaginary part.","7. Trasformata energetica":"7. Energy transform","FOURIER":"FOURIER","La trasformata causale dell'esponenziale è il propagatore con denominatore E-E0+iGamma/2.":"The causal transform of the exponential is the propagator with denominator E-E0+iGamma/2.","8. Profilo lorentziano":"8. Lorentzian profile","RIGA":"LINE","Il modulo quadro normalizzato fornisce la distribuzione energetica della riga naturale.":"The normalized squared modulus gives the energy distribution of the natural line.","9. Larghezza a metà altezza":"9. Full width at half maximum","FWHM":"FWHM","A E-E0 uguale più o meno Gamma/2 il profilo vale metà del massimo; la distanza totale è Gamma.":"At E-E0 equal plus or minus Gamma/2, the profile is half its maximum; the total distance is Gamma.","10. Relazione vita-larghezza":"10. Lifetime-width relation","RISULTATO":"RESULT","Un tasso maggiore accorcia la vita e allarga la riga nello stesso rapporto.":"A larger rate shortens lifetime and broadens the line by the same factor.","11. Canali parziali":"11. Partial channels","CANALI":"CHANNELS","Ogni canale contribuisce additivamente al tasso e alla larghezza totale.":"Each channel contributes additively to total rate and width.","12. Branching ratios":"12. Branching ratios","OSSERVABILE":"OBSERVABLE","La frazione di decadimenti nel canale a è il suo tasso relativo.":"The fraction of decays into channel a is its relative rate.","13. Tempo breve":"13. Short time","ZENO":"ZENO","L'unitarietà esatta impone una sopravvivenza quadratica e pari in t all'origine, incompatibile con un esponenziale esatto fino a t=0.":"Exact unitarity imposes survival that is quadratic and even in t at the origin, incompatible with an exact exponential all the way to t=0.","14. Tempo molto lungo":"14. Very long time","CODA":"TAIL","Uno spettro limitato inferiormente produce in generale code a potenza; l'esponenziale domina soltanto la finestra intermedia osservabile.":"A spectrum bounded below generally produces power-law tails; the exponential dominates only the observable intermediate window.","Esempio: due canali con branching":"Example: two channels with branching","Impostazione.":"Setup.","Uno stato ha W1=3.0 per 10 alla 6 al secondo e W2=1.0 per 10 alla 6 al secondo.":"A state has W1=3.0 times 10 to the 6 per second and W2=1.0 times 10 to the 6 per second.","Controllo.":"Check.","Il 75 percento dei decadimenti finisce nel canale 1. Aprire un nuovo canale aumenta Gamma e riduce tau anche se gli altri tassi restano invariati.":"Seventy-five percent of decays end in channel 1. Opening a new channel increases Gamma and reduces tau even if the other rates remain unchanged.","Interpretazione e limiti":"Interpretation and limits","Larghezza naturale":"Natural linewidth","Gamma qui è una larghezza energetica FWHM. La larghezza in pulsazione è Gamma/hbar e quella in frequenza ordinaria è Gamma/h, salvo convenzioni di semilarghezza.":"Gamma here is an energy FWHM. Angular-frequency width is Gamma/hbar and ordinary-frequency width is Gamma/h, subject to half-width conventions.","Non è una relazione di operatori":"Not an operator relation","Gamma tau=hbar nasce dalla trasformata di un decadimento esponenziale, non da un commutatore tempo-energia analogo a x-p.":"Gamma tau=hbar follows from the transform of exponential decay, not from a time-energy commutator analogous to x-p.","Allargamenti aggiuntivi":"Additional broadening","Doppler, collisioni, potenza e strumenti possono produrre larghezze diverse dalla larghezza naturale e profili non puramente lorentziani.":"Doppler, collisions, power, and instruments may produce widths different from natural linewidth and profiles that are not purely Lorentzian.","Polo e continuo":"Pole and continuum","Il polo complesso è una descrizione efficace ottenuta eliminando i canali del continuo; l'Hamiltoniano totale chiuso resta hermitiano.":"The complex pole is an effective description obtained by eliminating continuum channels; the total closed-system Hamiltonian remains Hermitian.","Errori tipici":"Common errors","Far decadere l'ampiezza con e alla meno Wt invece che e alla meno Wt/2; chiamare Gamma una semilarghezza senza dichiararlo; sommare vite invece dei tassi; imporre esponenziale a t=0; confondere larghezza naturale e strumentale.":"Making amplitude decay as e to minus Wt instead of e to minus Wt/2; calling Gamma a half-width without saying so; adding lifetimes instead of rates; imposing an exponential at t=0; confusing natural and instrumental widths.","Controlli rapidi":"Quick checks","P(0)=1; p(t) è normalizzata; tau=1/W; Gamma è FWHM; Gamma tau=hbar; branching ratios sommano a uno.":"P(0)=1; p(t) is normalized; tau=1/W; Gamma is FWHM; Gamma tau=hbar; branching ratios sum to one.","Controllo da orale":"Oral exam checklist","Scrivi l'equazione dP/dt=-WP.":"Write dP/dt=-WP.","Deriva esponenziale e vita media.":"Derive exponential and mean lifetime.","Ricava il decadimento dell'ampiezza.":"Obtain amplitude decay.","Trasforma in energia.":"Transform to energy.","Normalizza la Lorentziana.":"Normalize the Lorentzian.","Mostra che FWHM=Gamma.":"Show that FWHM=Gamma.","Somma larghezze parziali e branching.":"Sum partial widths and branching ratios.","Dichiara i limiti a tempi brevi e lunghi.":"State short- and long-time limits.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 12 - perturbazioni dipendenti dal tempo e copione orale":"DIM 12 - time-dependent perturbations and oral-exam script","Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro":"Appunti-MQ.pdf, PDF pages 176-184 - theory, resonance, and golden rule","Set 12 - esercizi sulle probabilità di transizione":"Set 12 - transition-probability exercises","Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo":"2025 question 13 - time-dependent perturbations","Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.":"Conventions for angular frequencies, Dirac deltas, and density of states are kept identical across all six pages in this block.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Equazione di decadimento a tasso costante":"Constant-rate decay equation","Probabilità di sopravvivenza":"Survival probability","Densità normalizzata dei tempi di decadimento":"Normalized decay-time density","Definizione e calcolo della vita media":"Definition and calculation of mean lifetime","Ampiezza causale di uno stato instabile":"Causal amplitude of an unstable state","Energia complessa e definizione della larghezza":"Complex energy and linewidth definition","Ampiezza spettrale dello stato instabile":"Spectral amplitude of the unstable state","Lorentziana normalizzata":"Normalized Lorentzian","Dimostrazione della larghezza lorentziana":"Proof of Lorentzian full width","Relazione tra larghezza naturale e vita media":"Natural linewidth-lifetime relation","Somma di tassi e larghezze parziali":"Sum of partial rates and widths","Rapporti di diramazione":"Branching ratios","Legge quadratica e regione di Zeno":"Quadratic law and Zeno region","Limiti non esponenziali del decadimento":"Nonexponential limits of decay"},"title":{"it":"Vita media e larghezza di uno stato","en":"Lifetime and linewidth of a state"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

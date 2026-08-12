@@ -1,284 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Misure di Energia</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misure di energia e proiettori spettrali</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Misure di Energia</h1>
-    <h2>Descrizione generale</h2>
-    In meccanica quantistica, l'energia di un sistema è rappresentata dall'operatore hamiltoniano \( \hat{H} \). Quando si misura l'energia di un sistema, i valori possibili che possono essere ottenuti sono gli autovalori di \( \hat{H} \). L'equazione di Schrödinger indipendente dal tempo:
-    <div class="formula">
-        \[
-        \hat{H} \psi = E \psi
-        \]
-    </div>
-    collega direttamente l'energia \( E \) del sistema agli stati stazionari \( \psi \), che sono le autofunzioni di \( \hat{H} \).
-
-    <h2>Risultati delle misure</h2>
-    Quando si effettua una misura di energia:
-    <ul>
-        <li>Il sistema collassa in uno degli stati stazionari \( \psi_n \), corrispondente a un autovalore \( E_n \).</li>
-        <li>La probabilità di ottenere \( E_n \) è data da:
-            <div class="formula">
-                \[
-                P(E_n) = |c_n|^2
-                \]
-            </div>
-            dove \( c_n \) è il coefficiente della sovrapposizione dello stato iniziale con l'autofunzione \( \psi_n \):
-            <div class="formula">
-                \[
-                c_n = \int \psi_n^*(x) \psi(x) \, dx
-                \]
-            </div>
-        </li>
-    </ul>
-
-    <h2>Valore atteso dell'energia</h2>
-    Il valore atteso dell'energia in uno stato quantistico \( \psi \) è calcolato come:
-    <div class="formula">
-        \[
-        \langle E \rangle = \int \psi^*(x) \hat{H} \psi(x) \, dx
-        \]
-    </div>
-    Questo valore rappresenta la media pesata delle energie associate agli autovalori del sistema.
-
-    <h2>Osservazioni importanti</h2>
-    <ul>
-        <li>Le misure di energia non restituiscono mai un valore intermedio tra gli autovalori; i risultati sono sempre quantizzati.</li>
-        <li>In uno stato stazionario, il valore atteso dell'energia coincide con l'autovalore \( E_n \) associato allo stato \( \psi_n \).</li>
-    </ul>
-
-    <h2>Esempio: Oscillatore armonico</h2>
-    Per un oscillatore armonico quantistico, l'hamiltoniano è dato da:
-    <div class="formula">
-        \[
-        \hat{H} = \frac{\hat{p}^2}{2m} + \frac{1}{2}m \omega^2 \hat{x}^2
-        \]
-    </div>
-    Gli autovalori dell'energia sono:
-    <div class="formula">
-        \[
-        E_n = \left( n + \frac{1}{2} \right) \hbar \omega
-        \]
-    </div>
-    dove \( n = 0, 1, 2, \ldots \). Durante una misura di energia, il sistema collassa in uno stato \( \psi_n \), e l'energia misurata sarà \( E_n \).
-
-    <h2>Ruolo delle misure</h2>
-    Le misure di energia in meccanica quantistica non sono semplici osservazioni ma influenzano attivamente lo stato del sistema, in accordo con l'interpretazione di Copenaghen. Questo effetto, noto come collasso della funzione d'onda, è uno dei principi fondamentali che distinguono la meccanica quantistica dalla fisica classica.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 3</div>
-  <h2>Misure di Energia: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Applicare Born e proiettori allo spettro dell'Hamiltoniana, inclusa la degenerazione.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Misurare l'energia significa decomporre lo stato nei sottospazi spettrali di H. Per un livello degenere il risultato non seleziona un unico vettore, ma il proiettore sull'intero sottospazio.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Probabilità<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>La norma della componente energetica dà la probabilità.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="p(E_n)=\langle\psi|P_n|\psi\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi_n\rangle=P_n|\psi\rangle,\quad p(E_n)=\|\psi_n\|^2=\langle\psi|P_n^\dagger P_n|\psi\rangle=\langle\psi|P_n|\psi\rangle\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Aggiornamento<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Condizionato all'esito n.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|\psi\rangle\mapsto P_n|\psi\rangle/\sqrt{p(E_n)}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi_n\rangle=P_n|\psi\rangle,\quad\|\psi_n\|=\sqrt{p(E_n)}\Rightarrow|\psi\rangle\mapsto\frac{P_n|\psi\rangle}{\sqrt{p(E_n)}}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Tre stati, due energie</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Siano \(|1\rangle,|2\rangle\) degeneri a E e \(|3\rangle\) a È.</p>
-    <p><strong>Calcolo.</strong> Per coefficienti (a,b,c), \(p(E)=|a|^2+|b|^2\).</p>
-    <p><strong>Risultato e controllo.</strong> Dopo l'esito E resta la combinazione normalizzata \(a|1\rangle+b|2\rangle\), non uno dei due a caso.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P1_DIM_0-6.txt">DIM 3</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Misura proiettiva ideale.</li>
-          <li>Per spettro continuo usare la misura spettrale su intervalli.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La degenerazione conserva informazione interna che la sola lettura dell'energia non risolve.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Calcola energia media e varianza.</li>
-          <li>Spiega quando una seconda misura immediata ripete l'esito.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=71">Appunti-MQ.pdf, pp. 71-79 e 107-111: proiettori, probabilità ed energia</a></li>
-          <li><a href="MQ.pdf#page=4">MQ.pdf, pp. capitoli 4 e 10: regola di Born nello spettro di H</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-misure-energia"><div class="lecture-kicker">Lezione approfondita - Born, degenerazione e riduzione</div><h1>Misure di energia e proiettori spettrali</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire le probabilità energetiche dalla decomposizione spettrale di H, trattare correttamente degenerazione e spettro continuo, derivare media, varianza, stato post-misura e ripetibilità.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Misurare H</h3><p>I possibili esiti sono i valori spettrali dell'Hamiltoniano. Lo stato stabilisce le probabilità tramite le sue proiezioni sugli autospazi.</p></article><article class="lecture-card lecture-warning"><h3>Degenerazione</h3><p>Ottenere E_n non identifica un vettore dentro l'autospazio. La regola corretta usa il proiettore P_n e la riduzione di Lüders.</p></article></div><h2>Spettro energetico e preparazione</h2><div class="lecture-grid"><article class="lecture-card "><h3>Hamiltoniano stazionario</h3><p>Si considera prima H autoaggiunto e indipendente dal tempo, con spettro discreto eventualmente degenere.</p></article><article class="lecture-card "><h3>Stato puro normalizzato</h3><p>Lo stato prima della misura è normalizzato. Il caso di matrice densità si ottiene sostituendo i valori medi con tracce.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Autospazi energetici<span class="lecture-step-boss">SPETTRO</span></h4><p>L'indice k distingue gli stati degeneri alla stessa energia.</p><div class="lecture-formula" aria-label="Equazione agli autovalori dell&#x27;energia"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H|E_n,k\rangle=E_n|E_n,k\rangle,\qquad k=1,\ldots,r_n\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Proiettore energetico<span class="lecture-step-boss">DEG</span></h4><p>La somma su una base ortonormale dell'autospazio è invariante per rotazioni interne.</p><div class="lecture-formula" aria-label="Proiettore sul livello E_n"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_n=\sum_{k=1}^{r_n}|E_n,k\rangle\langle E_n,k|\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Spettralità di H<span class="lecture-step-boss">CHIUSURA</span></h4><p>I proiettori risolvono identità e Hamiltoniano.</p><div class="lecture-formula" aria-label="Decomposizione spettrale dell&#x27;Hamiltoniano"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle I=\sum_nP_n,\qquad H=\sum_nE_nP_n,\qquad P_nP_m=\delta_{nm}P_n\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Espansione dello stato<span class="lecture-step-boss">BASE</span></h4><p>Le ampiezze hanno due indici se il livello è degenere.</p><div class="lecture-formula" aria-label="Espansione nella base energetica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_n\sum_{k=1}^{r_n}c_n^{(k)}|E_n,k\rangle,\qquad c_n^{(k)}=\langle E_n,k|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Regola di Born<span class="lecture-step-boss">MISURA</span></h4><p>Le alternative k dentro lo stesso esito energetico sono sommate come probabilità.</p><div class="lecture-formula" aria-label="Probabilità di un livello degenere"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P(E_n)=\langle\psi|P_n|\psi\rangle=\sum_{k=1}^{r_n}|c_n^{(k)}|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Normalizzazione<span class="lecture-step-boss">CHECK</span></h4><p>La chiusura garantisce che la somma di tutti gli esiti sia uno.</p><div class="lecture-formula" aria-label="Normalizzazione delle probabilità energetiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sum_nP(E_n)=\langle\psi|\sum_nP_n|\psi\rangle=1\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Caso non degenere<span class="lecture-step-boss">SEMPLIFICA</span></h4><p>Quando r_n=1, il proiettore ha rango uno e si recupera il modulo quadro di un'ampiezza.</p><div class="lecture-formula" aria-label="Born per un livello semplice"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_n=|E_n\rangle\langle E_n|\Rightarrow P(E_n)=|\langle E_n|\psi\rangle|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Valore medio<span class="lecture-step-boss">MOMENTO 1</span></h4><p>La media sui risultati coincide col valore medio operatoriale.</p><div class="lecture-formula" aria-label="Primo momento della distribuzione energetica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle E\rangle=\sum_nE_nP(E_n)=\langle\psi|H|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Varianza<span class="lecture-step-boss">MOMENTO 2</span></h4><p>La dispersione quantifica l'indeterminatezza dell'energia nello stato preparato.</p><div class="lecture-formula" aria-label="Varianza della misura di energia"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (\Delta E)^2=\langle H^2\rangle-\langle H\rangle^2=\sum_n(E_n-\langle E\rangle)^2P(E_n)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Energia definita<span class="lecture-step-boss">AUTOSTATO</span></h4><p>Varianza nulla equivale, per uno stato normalizzato, ad appartenenza a un singolo autospazio energetico.</p><div class="lecture-formula" aria-label="Criterio di energia esattamente definita"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta E=0\Longleftrightarrow(H-\langle H\rangle)|\psi\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Stato post-misura<span class="lecture-step-boss">LÜDERS</span></h4><p>Condizionando sull'esito E_n si proietta e si rinormalizza senza scegliere una direzione arbitraria nel degenere.</p><div class="lecture-formula" aria-label="Regola di riduzione di Lüders"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle\longrightarrow|\psi_n\rangle=\frac{P_n|\psi\rangle}{\sqrt{\langle\psi|P_n|\psi\rangle}}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Ripetibilità<span class="lecture-step-boss">CHECK</span></h4><p>Il nuovo stato appartiene all'autospazio E_n, quindi una misura immediata successiva restituisce E_n con certezza.</p><div class="lecture-formula" aria-label="Dimostrazione della ripetibilità ideale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_n|\psi_n\rangle=|\psi_n\rangle\Rightarrow\langle\psi_n|P_n|\psi_n\rangle=1\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Evoluzione successiva<span class="lecture-step-boss">STAZIONARIO</span></h4><p>Con H invariato, tutto l'autospazio acquisisce la stessa fase e l'esito energetico resta certo.</p><div class="lecture-formula" aria-label="Evoluzione di un autospazio energetico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle e^{-iHt/\hbar}P_n=e^{-iE_nt/\hbar}P_n\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Spettro continuo<span class="lecture-step-boss">DENSITÀ</span></h4><p>Nel continuo si misura una probabilità su intervalli; il valore puntuale ha probabilità nulla.</p><div class="lecture-formula" aria-label="Misura energetica a spettro continuo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle dP(E)=|c(E)|^2dE,\qquad P(E\in\Delta)=\langle\psi|P_H(\Delta)|\psi\rangle\)</span></div></article></section><h2>Esempio: tre risultati possibili</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Uno stato usa tre livelli non degeneri con coefficienti 1/2, i/2 e 1/sqrt2.</p><p data-i18n-skip="true">\(\displaystyle |\psi\rangle=\frac12|E_1\rangle+\frac i2|E_2\rangle+\frac1{\sqrt2}|E_3\rangle;\quad(P_1,P_2,P_3)=(\tfrac14,\tfrac14,\tfrac12),\quad\langle E\rangle=\frac{E_1+E_2+2E_3}{4}\)</p><p><strong>Controllo.</strong> Le fasi non cambiano le probabilità energetiche, ma influenzano osservabili non diagonali nella base di H. Dopo l'esito E2 lo stato diventa |E2&gt; a meno di una fase.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Misura non selettiva</h3><p>Se l'esito non viene registrato, la matrice densità diventa somma Pn rho Pn e perde le coerenze tra energie diverse.</p></article><article class="lecture-card "><h3>Risoluzione finita</h3><p>Uno strumento reale raggruppa energie vicine in finestre o POVM; la misura proiettiva è il limite ideale di risoluzione perfetta.</p></article><article class="lecture-card "><h3>Conservazione</h3><p>Per H indipendente dal tempo, le probabilità di energia restano costanti tra misure, anche se lo stato non ha energia definita.</p></article><article class="lecture-card "><h3>Misura e degenerazione</h3><p>Una misura della sola energia non risolve i numeri quantici interni al livello. Servono osservabili compatibili aggiuntive.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Sommare ampiezze dei degeneri; collassare su un vettore arbitrario del livello; dimenticare la rinormalizzazione; confondere media con un esito certo; assegnare probabilità a un singolo punto continuo.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Probabilità positive e somma uno; media nelle unità di energia; varianza non negativa; Pn idempotente; seconda misura certa; continuo integrato su intervalli.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi la decomposizione spettrale di H.</li><li>Definisci i proiettori degeneri.</li><li>Deriva Born con Pn.</li><li>Verifica la normalizzazione.</li><li>Calcola media e varianza.</li><li>Applica la riduzione di Lüders.</li><li>Dimostra la ripetibilità.</li><li>Estendi a continuo e risoluzione finita.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, TISE, TDSE, misura e proiettori</a></li><li><a href="PostulatiQM.html">Postulati della meccanica quantistica - quadro generale</a></li><li><a href="set-6-operatori-autofunzioni.html">Set 6 - operatori, autofunzioni e spettro</a></li></ul><p class="lecture-note">La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Born, degenerazione e riduzione":"In-depth lesson - Born rule, degeneracy, and reduction","Misure di energia e proiettori spettrali":"Energy measurements and spectral projectors","Obiettivo.":"Objective.","Costruire le probabilità energetiche dalla decomposizione spettrale di H, trattare correttamente degenerazione e spettro continuo, derivare media, varianza, stato post-misura e ripetibilità.":"Construct energy probabilities from the spectral decomposition of H, correctly treat degeneracy and continuous spectra, and derive mean, variance, post-measurement state, and repeatability.","Misurare H":"Measuring H","I possibili esiti sono i valori spettrali dell'Hamiltoniano. Lo stato stabilisce le probabilità tramite le sue proiezioni sugli autospazi.":"Possible outcomes are spectral values of the Hamiltonian. The state sets probabilities through projections onto eigenspaces.","Degenerazione":"Degeneracy","Ottenere E_n non identifica un vettore dentro l'autospazio. La regola corretta usa il proiettore P_n e la riduzione di Lüders.":"Obtaining E_n does not identify a vector inside the eigenspace. The correct rule uses projector P_n and Lüders reduction.","Spettro energetico e preparazione":"Energy spectrum and preparation","Hamiltoniano stazionario":"Stationary Hamiltonian","Si considera prima H autoaggiunto e indipendente dal tempo, con spettro discreto eventualmente degenere.":"First consider a self-adjoint time-independent H with a possibly degenerate discrete spectrum.","Stato puro normalizzato":"Normalized pure state","Lo stato prima della misura è normalizzato. Il caso di matrice densità si ottiene sostituendo i valori medi con tracce.":"The premeasurement state is normalized. The density-matrix case follows by replacing expectation values with traces.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Autospazi energetici":"1. Energy eigenspaces","SPETTRO":"SPECTRUM","L'indice k distingue gli stati degeneri alla stessa energia.":"Index k distinguishes degenerate states at the same energy.","Passaggio":"Step","2. Proiettore energetico":"2. Energy projector","DEG":"DEG","La somma su una base ortonormale dell'autospazio è invariante per rotazioni interne.":"The sum over an orthonormal eigenspace basis is invariant under internal rotations.","3. Spettralità di H":"3. Spectral form of H","CHIUSURA":"CLOSURE","I proiettori risolvono identità e Hamiltoniano.":"Projectors resolve the identity and Hamiltonian.","4. Espansione dello stato":"4. State expansion","BASE":"BASE","Le ampiezze hanno due indici se il livello è degenere.":"Amplitudes have two indices if the level is degenerate.","5. Regola di Born":"5. Born rule","MISURA":"MEASUREMENT","Le alternative k dentro lo stesso esito energetico sono sommate come probabilità.":"Alternatives k within the same energy outcome are summed as probabilities.","6. Normalizzazione":"6. Normalization","CHECK":"CHECK","La chiusura garantisce che la somma di tutti gli esiti sia uno.":"Closure guarantees that the sum over all outcomes is one.","7. Caso non degenere":"7. Nondegenerate case","SEMPLIFICA":"SIMPLIFY","Quando r_n=1, il proiettore ha rango uno e si recupera il modulo quadro di un'ampiezza.":"When r_n=1, the projector has rank one and the squared magnitude of an amplitude is recovered.","8. Valore medio":"8. Mean value","MOMENTO 1":"MOMENT 1","La media sui risultati coincide col valore medio operatoriale.":"The average over outcomes equals the operator expectation value.","9. Varianza":"9. Variance","MOMENTO 2":"MOMENT 2","La dispersione quantifica l'indeterminatezza dell'energia nello stato preparato.":"The dispersion quantifies energy uncertainty in the prepared state.","10. Energia definita":"10. Definite energy","AUTOSTATO":"EIGENSTATE","Varianza nulla equivale, per uno stato normalizzato, ad appartenenza a un singolo autospazio energetico.":"Zero variance is equivalent, for a normalized state, to belonging to a single energy eigenspace.","11. Stato post-misura":"11. Post-measurement state","LÜDERS":"LÜDERS","Condizionando sull'esito E_n si proietta e si rinormalizza senza scegliere una direzione arbitraria nel degenere.":"Conditioning on outcome E_n, project and renormalize without choosing an arbitrary direction in the degenerate subspace.","12. Ripetibilità":"12. Repeatability","Il nuovo stato appartiene all'autospazio E_n, quindi una misura immediata successiva restituisce E_n con certezza.":"The new state belongs to eigenspace E_n, so an immediate second measurement returns E_n with certainty.","13. Evoluzione successiva":"13. Subsequent evolution","STAZIONARIO":"STATIONARY","Con H invariato, tutto l'autospazio acquisisce la stessa fase e l'esito energetico resta certo.":"With H unchanged, the entire eigenspace acquires the same phase and the energy outcome remains certain.","14. Spettro continuo":"14. Continuous spectrum","DENSITÀ":"DENSITY","Nel continuo si misura una probabilità su intervalli; il valore puntuale ha probabilità nulla.":"In the continuum, probability is measured over intervals; a point value has zero probability.","Esempio: tre risultati possibili":"Example: three possible outcomes","Impostazione.":"Setup.","Uno stato usa tre livelli non degeneri con coefficienti 1/2, i/2 e 1/sqrt2.":"A state uses three nondegenerate levels with coefficients 1/2, i/2, and 1/sqrt2.","Controllo.":"Check.","Le fasi non cambiano le probabilità energetiche, ma influenzano osservabili non diagonali nella base di H. Dopo l'esito E2 lo stato diventa |E2> a meno di una fase.":"Phases do not change energy probabilities, but affect observables nondiagonal in the H basis. After outcome E2 the state becomes |E2> up to a phase.","Interpretazione e limiti":"Interpretation and limits","Misura non selettiva":"Nonselective measurement","Se l'esito non viene registrato, la matrice densità diventa somma Pn rho Pn e perde le coerenze tra energie diverse.":"If the outcome is not recorded, density matrix becomes sum Pn rho Pn and loses coherences between distinct energies.","Risoluzione finita":"Finite resolution","Uno strumento reale raggruppa energie vicine in finestre o POVM; la misura proiettiva è il limite ideale di risoluzione perfetta.":"A real instrument groups nearby energies into windows or a POVM; projective measurement is the ideal perfect-resolution limit.","Conservazione":"Conservation","Per H indipendente dal tempo, le probabilità di energia restano costanti tra misure, anche se lo stato non ha energia definita.":"For time-independent H, energy probabilities remain constant between measurements even if the state lacks definite energy.","Misura e degenerazione":"Measurement and degeneracy","Una misura della sola energia non risolve i numeri quantici interni al livello. Servono osservabili compatibili aggiuntive.":"Energy measurement alone does not resolve quantum numbers inside the level. Additional compatible observables are required.","Errori tipici":"Common errors","Sommare ampiezze dei degeneri; collassare su un vettore arbitrario del livello; dimenticare la rinormalizzazione; confondere media con un esito certo; assegnare probabilità a un singolo punto continuo.":"Summing degenerate amplitudes; collapsing onto an arbitrary vector in the level; forgetting renormalization; confusing the mean with a certain outcome; assigning probability to a single continuum point.","Controlli rapidi":"Quick checks","Probabilità positive e somma uno; media nelle unità di energia; varianza non negativa; Pn idempotente; seconda misura certa; continuo integrato su intervalli.":"Probabilities positive and summing to one; mean in energy units; nonnegative variance; Pn idempotent; second measurement certain; continuum integrated over intervals.","Controllo da orale":"Oral exam checklist","Scrivi la decomposizione spettrale di H.":"Write the spectral decomposition of H.","Definisci i proiettori degeneri.":"Define degenerate projectors.","Deriva Born con Pn.":"Derive Born rule with Pn.","Verifica la normalizzazione.":"Verify normalization.","Calcola media e varianza.":"Compute mean and variance.","Applica la riduzione di Lüders.":"Apply Lüders reduction.","Dimostra la ripetibilità.":"Prove repeatability.","Estendi a continuo e risoluzione finita.":"Extend to continuum and finite resolution.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, TISE, TDSE, misura e proiettori":"DIM 0 - postulates, TISE, TDSE, measurement, and projectors","Postulati della meccanica quantistica - quadro generale":"Quantum mechanics postulates - general framework","Set 6 - operatori, autofunzioni e spettro":"Set 6 - operators, eigenfunctions, and spectrum","La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.":"The Boss source transcribes lecture images 132-137, whose numbering does not match the main PDF; therefore no artificial PDF link is given.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Equazione agli autovalori dell'energia":"Energy eigenvalue equation","Proiettore sul livello E_n":"Projector onto energy level E_n","Decomposizione spettrale dell'Hamiltoniano":"Spectral decomposition of the Hamiltonian","Espansione nella base energetica":"Expansion in the energy basis","Probabilità di un livello degenere":"Probability of a degenerate level","Normalizzazione delle probabilità energetiche":"Normalization of energy probabilities","Born per un livello semplice":"Born rule for a simple level","Primo momento della distribuzione energetica":"First moment of the energy distribution","Varianza della misura di energia":"Variance of energy measurement","Criterio di energia esattamente definita":"Criterion for exactly defined energy","Regola di riduzione di Lüders":"Lüders state-reduction rule","Dimostrazione della ripetibilità ideale":"Proof of ideal repeatability","Evoluzione di un autospazio energetico":"Evolution of an energy eigenspace","Misura energetica a spettro continuo":"Energy measurement with continuous spectrum"},"title":{"it":"Misure di energia e proiettori spettrali","en":"Energy measurements and spectral projectors"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

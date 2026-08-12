@@ -1,197 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evoluzione Temporale degli Operatori</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Evoluzione temporale di stati e operatori</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="evoluzione-operatori.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Evoluzione Temporale degli Operatori</h1>
-
-<p>In meccanica quantistica, esistono diverse rappresentazioni per descrivere l’evoluzione di un sistema. Nella rappresentazione di Schrödinger, gli stati \(|\psi(t)\rangle\) dipendono dal tempo, mentre gli operatori restano costanti. Nella rappresentazione di Heisenberg, sono invece gli operatori a evolvere nel tempo, mentre gli stati rimangono fissi. Questa seconda scelta risulta particolarmente utile quando si vogliono analizzare le relazioni tra osservabili, costanti del moto e simmetrie, come nel caso del momento angolare.</p>
-
-<h2>Dal Punto di Vista di Heisenberg</h2>
-
-<p>Nella rappresentazione di Heisenberg, un operatore \(\hat{A}(t)\) è definito come:</p>
-
-\[
-\hat{A}(t) = e^{i\hat{H}t/\hbar}\hat{A}(0)e^{-i\hat{H}t/\hbar},
-\]
-
-dove \(\hat{H}\) è l’Hamiltoniano del sistema. Questo garantisce che l’equazione di Schrödinger si traduca in un’equazione del moto per gli operatori stessi.</p>
-
-<p>Derivando rispetto al tempo, si ottiene la cosiddetta equazione di Heisenberg:</p>
-
-\[
-\frac{d\hat{A}(t)}{dt} = \frac{i}{\hbar} [\hat{H}, \hat{A}(t)] + \left(\frac{\partial \hat{A}}{\partial t}\right)_{\text{esp}},
-\]
-
-dove \((\partial \hat{A}/\partial t)_{\text{esp}}\) è la derivata esplicita di \(\hat{A}\) nel caso l’operatore dipenda dal tempo in modo esplicito.</p>
-
-<h2>Momento Angolare e Costanti del Moto</h2>
-
-<p>Consideriamo il momento angolare orbitale \(\hat{\mathbf{L}} = (\hat{L}_x, \hat{L}_y, \hat{L}_z)\). Se l’Hamiltoniano è invariante per rotazioni attorno ad un asse (ad esempio l’asse \(z\)), allora \(\hat{L}_z\) commuta con \(\hat{H}\). Ciò implica:</p>
-
-\[
-\frac{d\hat{L}_z(t)}{dt} = \frac{i}{\hbar}[\hat{H}, \hat{L}_z(t)] = 0,
-\]
-
-se \([\hat{H}, \hat{L}_z]=0\). Dunque \(\hat{L}_z\) è una costante del moto, il che significa che il valore medio \(\langle \hat{L}_z \rangle\) rimane costante nel tempo. Lo stesso discorso si applica agli altri componenti del momento angolare se il sistema ha le necessarie simmetrie.</p>
-
-<p>In modo analogo, se consideriamo gli operatori di salita e discesa \(\hat{L}_+\) e \(\hat{L}_-\) (definiti tramite \(\hat{L}_x\) e \(\hat{L}_y\)), la loro evoluzione temporale sarà determinata dalla commutazione con \(\hat{H}\). Un Hamiltoniano indipendente dal tempo che commuta con tutti i componenti del momento angolare rappresenta un sistema con simmetria sferica, in cui i moduli del momento angolare e la sua proiezione su un asse restano invariati.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Inizia scrivendo l’equazione di Heisenberg per un operatore generico \(\hat{A}\):
-\[
-\frac{d\hat{A}(t)}{dt} = \frac{i}{\hbar}[\hat{H},\hat{A}(t)] + \left(\frac{\partial \hat{A}}{\partial t}\right)_{\text{esp}}.
-\]
-2. Se \(\hat{A}\) non dipende esplicitamente dal tempo, resta solo:
-\[
-\frac{d\hat{A}(t)}{dt} = \frac{i}{\hbar}[\hat{H},\hat{A}(t)].
-\]
-3. Considera \(\hat{A} = \hat{L}_z\). Se \([\hat{H}, \hat{L}_z]=0\):
-\[
-\frac{d\hat{L}_z(t)}{dt}=0.
-\]
-4. Questo significa che il momento angolare attorno a \(z\) è costante nel tempo (costante del moto).
-5. Disegna uno schema: Un potenziale sfericamente simmetrico \(\to\) \(\hat{H}\) commuta con \(\hat{\mathbf{L}}^2\) e \(\hat{L}_z\) \(\to\) questi operatori non cambiano nel tempo.
-</div>
-
-<h2>Confronto con la Rappresentazione di Schrödinger</h2>
-
-<p>Nella rappresentazione di Schrödinger, sono gli stati \(|\psi(t)\rangle\) a evolvere con il tempo, mentre gli operatori rimangono fissi. Per ottenere la stessa informazione sulla dinamica degli osservabili, bisogna calcolare i valori medi facendo agire l’operatore invariato sugli stati che cambiano nel tempo:</p>
-
-\[
-\langle \hat{A} \rangle_t = \langle \psi(t)|\hat{A}|\psi(t)\rangle.
-\]
-
-<p>Nella rappresentazione di Heisenberg invece, \(|\psi\rangle\) è costante ed è \(\hat{A}(t)\) a evolvere, ma i valori medi sono gli stessi:</p>
-
-\[
-\langle \hat{A}(t) \rangle = \langle \psi(0)|\hat{A}(t)|\psi(0)\rangle.
-\]
-
-<p>I due approcci sono equivalenti, ma la rappresentazione di Heisenberg rende più immediata l’interpretazione della costanza di certi operatori o la relazione di questi con le simmetrie del problema.</p>
-
-<h2>Conclusione</h2>
-
-<p>L’evoluzione temporale degli operatori in meccanica quantistica, analizzata nella rappresentazione di Heisenberg, illumina la relazione tra simmetrie, commutatori con l’Hamiltoniano e costanti del moto. Nel caso del momento angolare, questa prospettiva mette in evidenza come la presenza di invarianti di simmetria (come la simmetria sferica) renda immutati nel tempo determinati componenti del momento angolare, o i loro combinazioni.</p>
-<h2>Raffinamento dei Passaggi Matematici</h2>
-
-<p><u>Nel caso in cui l’Hamiltoniano non dipenda dal tempo</u>, l’operatore di evoluzione temporale può essere espresso come:</p>
-
-\[
-\hat{U}(t) = e^{-\frac{i}{\hbar}\hat{H} t}.
-\]
-
-<p>Se si intende descrivere la dinamica tramite la rappresentazione di Heisenberg, si definisce l’operatore nel tempo come:</p>
-
-\[
-\hat{A}(t) = \hat{U}^\dagger(t)\hat{A}(0)\hat{U}(t),
-\]
-
-dove \(\hat{A}(0)\) è l’operatore all’istante iniziale. Sostituendo la forma di \(\hat{U}(t)\), si ha:</p>
-
-\[
-\hat{A}(t) = e^{\frac{i}{\hbar}\hat{H} t}\hat{A}(0)e^{-\frac{i}{\hbar}\hat{H} t}.
-\]
-
-<p>Derivando rispetto al tempo:</p>
-
-\[
-\frac{d\hat{A}(t)}{dt} = \frac{i}{\hbar}\hat{H}e^{\frac{i}{\hbar}\hat{H} t}\hat{A}(0)e^{-\frac{i}{\hbar}\hat{H} t} - \frac{i}{\hbar}e^{\frac{i}{\hbar}\hat{H} t}\hat{A}(0)\hat{H}e^{-\frac{i}{\hbar}\hat{H} t}.
-\]
-
-<p>Osservando che gli esponenziali dell’Hamiltoniano costituiscono una trasformazione unitaria, l’espressione si semplifica nel commutatore:</p>
-
-\[
-\frac{d\hat{A}(t)}{dt} = \frac{i}{\hbar}[\hat{H}, \hat{A}(t)].
-\]
-
-<p>Se l’operatore \(\hat{A}\) fosse esplicitamente dipendente dal tempo, allora si dovrebbe aggiungere il termine \(\left(\frac{\partial \hat{A}}{\partial t}\right)_{\text{esp}}\). In generale, se \(\hat{H}\) non dipende dal tempo, la derivata esplicita è nulla per operatori come \(\hat{x}, \hat{p}, \hat{L}_z\), che sono definiti a partire da variabili canoniche indipendenti dal tempo. Resta quindi la forma semplice:</p>
-
-\[
-\frac{d\hat{A}(t)}{dt} = \frac{i}{\hbar}[\hat{H}, \hat{A}(t)].
-\]
-
-<p><b>Considerando il momento angolare attorno a z</b>, \(\hat{L}_z\), se il sistema è isotropo o se esiste una simmetria di rotazione attorno a z, l’Hamiltoniano commuta con \(\hat{L}_z\). Ciò implica:</p>
-
-\[
-\frac{d\hat{L}_z(t)}{dt} = \frac{i}{\hbar}[\hat{H}, \hat{L}_z(t)] = 0.
-\]
-
-<p><i>Interpretando questo risultato</i>, \(\hat{L}_z\) rimane costante nel tempo in senso operatoriale, quindi i suoi autovalori rimangono invariati durante l’evoluzione. Questo significa che se inizialmente uno stato è un autostato di \(\hat{L}_z\), la misura di \(L_z\) dà sempre lo stesso risultato. In un contesto fisico, ciò corrisponde a una situazione con un asse di rotazione ben definito e invariante.</p>
-
-<p>Per mostrare un esempio più dettagliato, prendere un potenziale sfericamente simmetrico, come quello dell’atomo di idrogeno. L’Hamiltoniano è:</p>
-
-\[
-\hat{H} = -\frac{\hbar^2}{2m}\nabla^2 + V(r),
-\]
-
-con \(V(r)\) dipendente solo dalla distanza \(r=\sqrt{x^2+y^2+z^2}\). La commutazione con \(\hat{\mathbf{L}}^2\) e \(\hat{L}_z\) è garantita dalla simmetria sferica. Di conseguenza, la componente \(L_z\) non varia nel tempo e gli stati possono essere etichettati dai numeri quantici associati all’autovalore di \(\hat{L}_z\).
-
-<p><u>Delineando i passaggi alla lavagna</u>:</p>
-
-• Scrivere l’equazione di Heisenberg per \(\hat{A}(t)\).
-
-• Sostituire \(\hat{A}=\hat{L}_z\) e mostrare il commutatore con \(\hat{H}\).
-
-• Se il commutatore è zero, la derivata temporale di \(\hat{L}_z\) è nulla, indicando invariabilità temporale.
-
-• Sottolineare come questa proprietà emerga dal legame tra simmetrie e costanti del moto, concetto fondante per comprendere i vincoli dinamici di un sistema quantistico.
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="evoluzione-operatori2.html" data-mq-shared-lesson="evoluzione-operatori.html" id="lezione-evoluzione-operatori"><div class="lecture-kicker">Lezione approfondita - Argomento 5</div><h1>Evoluzione temporale di stati e operatori</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: evoluzione-operatori2.html. La lezione scientifica verificata è condivisa con evoluzione-operatori.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'evolutore unitario e l'equazione di Schrödinger, distinguere Hamiltoniane dipendenti e indipendenti dal tempo, costruire quadro di Heisenberg ed equazioni del moto e ottenere conservazione, von Neumann ed Ehrenfest con passaggi compatti.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Stessa fisica, quadri diversi</h3><p>Nel quadro di Schrödinger evolvono i ket; in quello di Heisenberg evolvono gli operatori. Gli elementi di matrice coincidono a ogni istante.</p></article><article class="lecture-card lecture-warning"><h3>Ordinamento temporale</h3><p>Se H a tempi diversi non commuta, l'esponenziale ordinario dell'integrale non risolve l'equazione. Serve il prodotto temporalmente ordinato o la serie di Dyson.</p></article></div><h2>Evolutore tra due istanti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Determinismo lineare</h3><p>Il ket a t è ottenuto linearmente dal ket iniziale mediante U(t,t0).</p></article><article class="lecture-card"><h3>Probabilità conservata</h3><p>La norma deve rimanere uno per ogni stato iniziale, imponendo l'unitarietà dell'evolutore.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Definizione di U<span class="lecture-step-boss">BASE</span></h4><p>L'evoluzione collega univocamente i ket a due istanti.</p><div aria-label="Definizione dell'operatore di evoluzione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi(t)\rangle=U(t,t_0)|\psi(t_0)\rangle,\qquad U(t_0,t_0)=I\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Composizione<span class="lecture-step-boss">GRUPPOIDE</span></h4><p>Evolvere passando per un istante intermedio deve equivalere all'evoluzione diretta.</p><div aria-label="Legge di composizione dell'evolutore" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(t_2,t_0)=U(t_2,t_1)U(t_1,t_0),\qquad U(t_0,t)=U(t,t_0)^{-1}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Unitarietà<span class="lecture-step-boss">NORMA</span></h4><p>Conservare tutti i prodotti interni richiede U aggiunto U uguale identità.</p><div aria-label="Derivazione dell'unitarietà" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\phi(t)|\psi(t)\rangle=\langle\phi(t_0)|U^\dagger U|\psi(t_0)\rangle\Rightarrow U^\dagger U=I\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Passo infinitesimo<span class="lecture-step-boss">GENERA</span></h4><p>Continuità e unitarietà impongono un generatore hermitiano, identificato con H per corrispondenza energetica.</p><div aria-label="Evoluzione infinitesima e Hamiltoniana" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(t+dt,t)=I-\frac{i}{\hbar}H(t)dt+O(dt^2),\qquad H=H^\dagger\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Equazione di Schrödinger<span class="lecture-step-boss">LIMITE</span></h4><p>Sottrarre il ket iniziale, dividere per dt e passare al limite produce la TDSE astratta.</p><div aria-label="Equazioni per stato ed evolutore" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\frac{d}{dt}|\psi(t)\rangle=H(t)|\psi(t)\rangle,\qquad i\hbar\partial_tU(t,t_0)=H(t)U(t,t_0)\)</span></div></article><article class="lecture-card lecture-step"><h4>6. H indipendente dal tempo<span class="lecture-step-boss">ESPONENZIALE</span></h4><p>Per H costante l'equazione operatoriale ha soluzione esponenziale e la composizione dipende soltanto dalla differenza temporale.</p><div aria-label="Evolutore per Hamiltoniana stazionaria" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(t,t_0)=e^{-iH(t-t_0)/\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Rappresentazione spettrale<span class="lecture-step-boss">AUTOSTATI</span></h4><p>Applicare la funzione esponenziale alla decomposizione spettrale assegna una fase a ogni autospazio energetico.</p><div aria-label="Evoluzione nella base energetica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=\sum_nE_nP_n\Rightarrow U(t)=\sum_ne^{-iE_nt/\hbar}P_n\)</span></div></article><article class="lecture-card lecture-step"><h4>8. H dipendente dal tempo<span class="lecture-step-boss">DYSON</span></h4><p>L'iterazione dell'equazione integrale ordina gli operatori con i tempi più tardi a sinistra.</p><div aria-label="Esponenziale ordinato e serie di Dyson" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(t,t_0)=\mathcal T\exp\left[-\frac{i}{\hbar}\int_{t_0}^tH(s)ds\right]=I-\frac{i}{\hbar}\int_{t_0}^tdt_1H(t_1)+\left(-\frac{i}{\hbar}\right)^2\int_{t_0}^tdt_1\int_{t_0}^{t_1}dt_2H(t_1)H(t_2)+\cdots\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Quadro di Heisenberg<span class="lecture-step-boss">CAMBIO</span></h4><p>Si fissa il ket all'istante t0 e si coniugano gli operatori con U.</p><div aria-label="Definizione del quadro di Heisenberg" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi_H\rangle=|\psi_S(t_0)\rangle,\qquad A_H(t)=U^\dagger(t,t_0)A_S(t)U(t,t_0)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Equivalenza dei quadri<span class="lecture-step-boss">CHECK</span></h4><p>Inserire le definizioni mostra che ogni elemento di matrice fisico coincide.</p><div aria-label="Invarianza degli elementi di matrice tra quadri" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\phi_S(t)|A_S(t)|\psi_S(t)\rangle=\langle\phi_H|A_H(t)|\psi_H\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Equazione di Heisenberg<span class="lecture-step-boss">DERIVA</span></h4><p>Derivare U aggiunto A U e usare le equazioni per U e U aggiunto produce commutatore e dipendenza esplicita.</p><div aria-label="Equazione del moto di Heisenberg" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{dA_H}{dt}=\frac{i}{\hbar}[H_H,A_H]+U^\dagger\frac{\partial A_S}{\partial t}U\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Valore medio<span class="lecture-step-boss">EHRENFEST GEN</span></h4><p>La stessa derivazione nel quadro di Schrödinger fornisce l'equazione generale per il valore medio.</p><div aria-label="Derivata temporale di un valore medio" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac d{dt}\langle A\rangle=\left\langle\frac{\partial A}{\partial t}\right\rangle+\frac{i}{\hbar}\langle[H,A]\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Matrice densità<span class="lecture-step-boss">VON NEUMANN</span></h4><p>Per rho uguale somma statistica di proiettori, l'evoluzione unitaria porta all'equazione di von Neumann.</p><div aria-label="Evoluzione della matrice densità" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho(t)=U\rho(t_0)U^\dagger,\qquad i\hbar\dot\rho=[H,\rho]\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Ehrenfest canonico<span class="lecture-step-boss">LIMITE CLASSICO</span></h4><p>Per H uguale p quadrato su 2m più V(x), i commutatori canonici riproducono le equazioni medie classiche.</p><div aria-label="Teorema di Ehrenfest per x e p" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac d{dt}\langle x\rangle=\frac{\langle p\rangle}{m},\qquad\frac d{dt}\langle p\rangle=-\langle V'(x)\rangle\)</span></div></article></section><h2>Esempio: sistema a due livelli</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prende H uguale hbar Omega su due volte sigma z e uno stato iniziale più x.</p><p data-i18n-skip="true">\(\displaystyle U(t)=e^{-i\Omega t\sigma_z/2}=\begin{pmatrix}e^{-i\Omega t/2}&amp;0\\0&amp;e^{i\Omega t/2}\end{pmatrix},\quad|\psi(t)\rangle=\frac{e^{-i\Omega t/2}|+z\rangle+e^{i\Omega t/2}|-z\rangle}{\sqrt2},\quad\langle\sigma_x\rangle=\cos\Omega t\)</p><p><strong>Controllo.</strong> La norma resta uno; nel quadro di Heisenberg lo stato resta più x e sigma x di t ruota producendo lo stesso valore medio.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Costante del moto</h3><p>Se A non dipende esplicitamente dal tempo e commuta con H, A_H è costante e tutte le sue probabilità di misura sono conservate.</p></article><article class="lecture-card"><h3>Energia e H(t)</h3><p>H commuta con se stessa, ma se dipende esplicitamente dal tempo il suo valore medio può cambiare: d&lt;H&gt;/dt=&lt;partial H/partial t&gt;.</p></article><article class="lecture-card"><h3>Commutazione a tempi diversi</h3><p>Se [H(t1),H(t2)] vale zero per ogni coppia, l'ordinamento temporale è superfluo e U è l'esponenziale ordinario dell'integrale.</p></article><article class="lecture-card"><h3>Quadro di interazione</h3><p>Separando H0 e V, si possono far evolvere stati con V nel quadro generato da H0. È il punto di partenza della perturbazione dipendente dal tempo.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Scrivere U uguale exp dell'integrale per H non commutanti; perdere l'ordine U aggiunto A U; dimenticare la derivata esplicita di A; concludere energia conservata per ogni H(t); cambiare quadro soltanto agli stati.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>U a t0 vale I; U aggiunto U vale I; il generatore H è hermitiano; la fase energetica ha segno meno; gli elementi di matrice coincidono nei quadri; von Neumann conserva la traccia.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci U e dimostra composizione e unitarietà.</li><li>Deriva la TDSE dal passo infinitesimo.</li><li>Risolvi il caso H costante con lo spettro.</li><li>Spiega quando serve l'ordinamento temporale.</li><li>Definisci il quadro di Heisenberg.</li><li>Deriva l'equazione di Heisenberg.</li><li>Ottieni von Neumann e la condizione di conservazione.</li><li>Ricava Ehrenfest per x e p.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L802">Boss P1 - formalismo, rappresentazioni ed evoluzione</a></li><li><a href="Appunti-MQ.pdf#page=107">Appunti-MQ.pdf, pagine PDF 107-113 - evoluzione temporale ed equazione di Schrödinger</a></li><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, generatori e simmetrie</a></li></ul><p class="lecture-note">La catena segue le pagine verificate 107-113 e collega senza salti evolutore, TDSE, quadri dinamici, von Neumann ed Ehrenfest, includendo l'eccezione essenziale delle Hamiltoniane non commutanti a tempi diversi.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 5":"In-depth lesson - Topic 5","Evoluzione temporale di stati e operatori":"Time evolution of states and operators","Obiettivo.":"Objective.","Derivare l'evolutore unitario e l'equazione di Schrödinger, distinguere Hamiltoniane dipendenti e indipendenti dal tempo, costruire quadro di Heisenberg ed equazioni del moto e ottenere conservazione, von Neumann ed Ehrenfest con passaggi compatti.":"Derive the unitary evolution operator and Schrödinger equation, distinguish time-dependent and time-independent Hamiltonians, construct the Heisenberg picture and equations of motion, and obtain conservation, von Neumann, and Ehrenfest results in compact steps.","Stessa fisica, quadri diversi":"Same physics, different pictures","Nel quadro di Schrödinger evolvono i ket; in quello di Heisenberg evolvono gli operatori. Gli elementi di matrice coincidono a ogni istante.":"In the Schrödinger picture kets evolve; in the Heisenberg picture operators evolve. Matrix elements agree at every time.","Ordinamento temporale":"Time ordering","Se H a tempi diversi non commuta, l'esponenziale ordinario dell'integrale non risolve l'equazione. Serve il prodotto temporalmente ordinato o la serie di Dyson.":"If H at different times does not commute, the ordinary exponential of the integral does not solve the equation. A time-ordered product or Dyson series is required.","Evolutore tra due istanti":"Evolution operator between two times","Determinismo lineare":"Linear determinism","Il ket a t è ottenuto linearmente dal ket iniziale mediante U(t,t0).":"The ket at t is obtained linearly from the initial ket through U(t,t0).","Probabilità conservata":"Conserved probability","La norma deve rimanere uno per ogni stato iniziale, imponendo l'unitarietà dell'evolutore.":"Norm must remain one for every initial state, imposing unitarity of the evolution operator.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Definizione di U":"1. Definition of U","BASE":"BASE","L'evoluzione collega univocamente i ket a due istanti.":"Evolution uniquely connects kets at two times.","Passaggio":"Step","2. Composizione":"2. Composition","GRUPPOIDE":"GROUPOID","Evolvere passando per un istante intermedio deve equivalere all'evoluzione diretta.":"Evolution through an intermediate time must equal direct evolution.","3. Unitarietà":"3. Unitarity","NORMA":"NORM","Conservare tutti i prodotti interni richiede U aggiunto U uguale identità.":"Preserving all inner products requires U dagger U equal identity.","4. Passo infinitesimo":"4. Infinitesimal step","GENERA":"GENERATE","Continuità e unitarietà impongono un generatore hermitiano, identificato con H per corrispondenza energetica.":"Continuity and unitarity impose a Hermitian generator, identified with H by energy correspondence.","5. Equazione di Schrödinger":"5. Schrödinger equation","LIMITE":"LIMIT","Sottrarre il ket iniziale, dividere per dt e passare al limite produce la TDSE astratta.":"Subtract the initial ket, divide by dt, and take the limit to obtain the abstract TDSE.","6. H indipendente dal tempo":"6. Time-independent H","ESPONENZIALE":"EXPONENTIAL","Per H costante l'equazione operatoriale ha soluzione esponenziale e la composizione dipende soltanto dalla differenza temporale.":"For constant H the operator equation has an exponential solution and composition depends only on the time difference.","7. Rappresentazione spettrale":"7. Spectral representation","AUTOSTATI":"EIGENSTATES","Applicare la funzione esponenziale alla decomposizione spettrale assegna una fase a ogni autospazio energetico.":"Applying the exponential function to the spectral decomposition assigns a phase to each energy eigenspace.","8. H dipendente dal tempo":"8. Time-dependent H","DYSON":"DYSON","L'iterazione dell'equazione integrale ordina gli operatori con i tempi più tardi a sinistra.":"Iterating the integral equation orders operators with later times to the left.","9. Quadro di Heisenberg":"9. Heisenberg picture","CAMBIO":"CHANGE","Si fissa il ket all'istante t0 e si coniugano gli operatori con U.":"Fix the ket at time t0 and conjugate operators with U.","10. Equivalenza dei quadri":"10. Picture equivalence","CHECK":"CHECK","Inserire le definizioni mostra che ogni elemento di matrice fisico coincide.":"Insert the definitions to show every physical matrix element agrees.","11. Equazione di Heisenberg":"11. Heisenberg equation","DERIVA":"DERIVE","Derivare U aggiunto A U e usare le equazioni per U e U aggiunto produce commutatore e dipendenza esplicita.":"Differentiate U dagger A U and use equations for U and U dagger to obtain the commutator and explicit dependence.","12. Valore medio":"12. Expectation value","EHRENFEST GEN":"GENERAL EHRENFEST","La stessa derivazione nel quadro di Schrödinger fornisce l'equazione generale per il valore medio.":"The same derivation in the Schrödinger picture gives the general expectation-value equation.","13. Matrice densità":"13. Density matrix","VON NEUMANN":"VON NEUMANN","Per rho uguale somma statistica di proiettori, l'evoluzione unitaria porta all'equazione di von Neumann.":"For rho equal a statistical sum of projectors, unitary evolution leads to the von Neumann equation.","14. Ehrenfest canonico":"14. Canonical Ehrenfest","LIMITE CLASSICO":"CLASSICAL LIMIT","Per H uguale p quadrato su 2m più V(x), i commutatori canonici riproducono le equazioni medie classiche.":"For H equal p squared over 2m plus V(x), canonical commutators reproduce mean classical equations.","Esempio: sistema a due livelli":"Example: two-level system","Impostazione.":"Setup.","Si prende H uguale hbar Omega su due volte sigma z e uno stato iniziale più x.":"Take H equal hbar Omega over two times sigma z and initial state plus x.","Controllo.":"Check.","La norma resta uno; nel quadro di Heisenberg lo stato resta più x e sigma x di t ruota producendo lo stesso valore medio.":"Norm remains one; in the Heisenberg picture the state stays plus x and time-dependent sigma x rotates to produce the same expectation.","Interpretazione e limiti":"Interpretation and limits","Costante del moto":"Constant of motion","Se A non dipende esplicitamente dal tempo e commuta con H, A_H è costante e tutte le sue probabilità di misura sono conservate.":"If A has no explicit time dependence and commutes with H, A_H is constant and all its measurement probabilities are conserved.","Energia e H(t)":"Energy and H(t)","H commuta con se stessa, ma se dipende esplicitamente dal tempo il suo valore medio può cambiare: d<H>/dt=<partial H/partial t>.":"H commutes with itself, but if it explicitly depends on time its expectation may change: d<H>/dt=<partial H/partial t>.","Commutazione a tempi diversi":"Commutation at different times","Se [H(t1),H(t2)] vale zero per ogni coppia, l'ordinamento temporale è superfluo e U è l'esponenziale ordinario dell'integrale.":"If [H(t1),H(t2)] equals zero for every pair, time ordering is unnecessary and U is the ordinary exponential of the integral.","Quadro di interazione":"Interaction picture","Separando H0 e V, si possono far evolvere stati con V nel quadro generato da H0. È il punto di partenza della perturbazione dipendente dal tempo.":"Splitting H0 and V, states can evolve with V in the picture generated by H0. This starts time-dependent perturbation theory.","Errori tipici":"Common errors","Scrivere U uguale exp dell'integrale per H non commutanti; perdere l'ordine U aggiunto A U; dimenticare la derivata esplicita di A; concludere energia conservata per ogni H(t); cambiare quadro soltanto agli stati.":"Writing U as exponential of the integral for noncommuting H; losing the U dagger A U order; forgetting explicit A derivative; concluding energy is conserved for every H(t); changing only states between pictures.","Controlli rapidi":"Quick checks","U a t0 vale I; U aggiunto U vale I; il generatore H è hermitiano; la fase energetica ha segno meno; gli elementi di matrice coincidono nei quadri; von Neumann conserva la traccia.":"U at t0 equals I; U dagger U equals I; generator H is Hermitian; the energy phase has a minus sign; matrix elements agree across pictures; von Neumann preserves trace.","Controllo da orale":"Oral exam checklist","Definisci U e dimostra composizione e unitarietà.":"Define U and prove composition and unitarity.","Deriva la TDSE dal passo infinitesimo.":"Derive the TDSE from the infinitesimal step.","Risolvi il caso H costante con lo spettro.":"Solve the constant-H case spectrally.","Spiega quando serve l'ordinamento temporale.":"Explain when time ordering is needed.","Definisci il quadro di Heisenberg.":"Define the Heisenberg picture.","Deriva l'equazione di Heisenberg.":"Derive the Heisenberg equation.","Ottieni von Neumann e la condizione di conservazione.":"Obtain von Neumann and the conservation condition.","Ricava Ehrenfest per x e p.":"Derive Ehrenfest for x and p.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss P1 - formalismo, rappresentazioni ed evoluzione":"Boss P1 - formalism, representations, and evolution","Appunti-MQ.pdf, pagine PDF 107-113 - evoluzione temporale ed equazione di Schrödinger":"Appunti-MQ.pdf, PDF pages 107-113 - evoluzione temporale ed equazione di Schrödinger","DIM 15 - commutatori, generatori e simmetrie":"DIM 15 - commutators, generators, and symmetries","La catena segue le pagine verificate 107-113 e collega senza salti evolutore, TDSE, quadri dinamici, von Neumann ed Ehrenfest, includendo l'eccezione essenziale delle Hamiltoniane non commutanti a tempi diversi.":"The chain follows verified pages 107-113 and connects propagator, TDSE, dynamical pictures, von Neumann, and Ehrenfest without gaps, including the essential exception of Hamiltonians noncommuting at different times.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: evoluzione-operatori2.html. La lezione scientifica verificata è condivisa con evoluzione-operatori.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: evoluzione-operatori2.html. The verified scientific lesson is shared with evoluzione-operatori.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Definizione dell'operatore di evoluzione":"Definition of the evolution operator","Legge di composizione dell'evolutore":"Composition law of the evolution operator","Derivazione dell'unitarietà":"Derivation of unitarity","Evoluzione infinitesima e Hamiltoniana":"Infinitesimal evolution and Hamiltonian","Equazioni per stato ed evolutore":"Equations for state and propagator","Evolutore per Hamiltoniana stazionaria":"Evolution for a stationary Hamiltonian","Evoluzione nella base energetica":"Evolution in the energy basis","Esponenziale ordinato e serie di Dyson":"Time-ordered exponential and Dyson series","Definizione del quadro di Heisenberg":"Definition of the Heisenberg picture","Invarianza degli elementi di matrice tra quadri":"Matrix-element invariance across pictures","Equazione del moto di Heisenberg":"Heisenberg equation of motion","Derivata temporale di un valore medio":"Time derivative of an expectation value","Evoluzione della matrice densità":"Density-matrix evolution","Teorema di Ehrenfest per x e p":"Ehrenfest theorem for x and p"},"title":{"it":"Evoluzione temporale di stati e operatori","en":"Time evolution of states and operators"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

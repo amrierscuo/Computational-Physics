@@ -1,199 +1,325 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equazione di continuità (nuova)</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Equazione di continuità quantistica - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="equazione-continuita.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Equazione di continuità (nuova)</h1>
-
-<p>L’equazione di continuità è la relazione fondamentale che esprime la conservazione della probabilità nella meccanica quantistica. Deriva direttamente dall’equazione di Schrödinger e serve a mostrare che, se l’operatore Hamiltoniano è hermitiano, la norma totale della funzione d’onda si conserva nel tempo. Essa mette in relazione la variazione temporale della densità di probabilità con la divergenza della corrente di probabilità.</p>
-
-<h2>Definizioni</h2>
-
-<p>Data una funzione d’onda \(\psi(\mathbf{r}, t)\), la densità di probabilità è:</p>
-
-\[
-\rho(\mathbf{r}, t) = |\psi(\mathbf{r}, t)|^2 = \psi^*(\mathbf{r}, t)\psi(\mathbf{r}, t).
-\]
-
-<p>La corrente di probabilità \(\mathbf{j}(\mathbf{r}, t)\) per una particella di massa \(m\) nel potenziale \(V(\mathbf{r}, t)\) è data da:</p>
-
-\[
-\mathbf{j}(\mathbf{r}, t) = \frac{\hbar}{2mi}\left[\psi^*(\mathbf{r}, t)\nabla\psi(\mathbf{r}, t) - \psi(\mathbf{r}, t)\nabla\psi^*(\mathbf{r}, t)\right].
-\]
-
-<h2>L’Equazione di Continuità</h2>
-
-<p>L’equazione di continuità ha la forma:</p>
-
-\[
-\frac{\partial \rho}{\partial t} + \nabla \cdot \mathbf{j} = 0.
-\]
-
-<p>Ciò significa che, se consideriamo un volume dello spazio, la variazione nel tempo della probabilità totale all’interno di quel volume è compensata dal flusso netto di probabilità che attraversa la superficie di quel volume. Questo assicura che la probabilità totale di trovare la particella da qualche parte nello spazio rimanga costante nel tempo.</p>
-
-<h2>Derivazione Sommaria</h2>
-
-<div class="lavagna">
-1. Parti dall’equazione di Schrödinger:
-\[
-i\hbar \frac{\partial \psi}{\partial t} = -\frac{\hbar^2}{2m}\nabla^2 \psi + V(\mathbf{r},t)\psi.
-\]
-
-2. Scrivi l’equazione complessa coniugata:
-\[
--i\hbar \frac{\partial \psi^*}{\partial t} = -\frac{\hbar^2}{2m}\nabla^2 \psi^* + V(\mathbf{r},t)\psi^*.
-\]
-
-3. Moltiplica la prima per \(\psi^*\), la seconda per \(\psi\), e sottrai. Otterrai un’espressione per \(\frac{\partial}{\partial t}(|\psi|^2)\).
-
-4. Manipolando i termini, riconosci la forma \(\nabla \cdot \mathbf{j}\), dove \(\mathbf{j}\) è definita come sopra.
-
-5. Arrivi a:
-\[
-\frac{\partial \rho}{\partial t} + \nabla \cdot \mathbf{j} = 0.
-\]
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
 </div>
-
-<h2>Interpretazione Fisica</h2>
-
-<p>L’equazione di continuità quantistica è l’analogo dell’equazione di continuità in fluidodinamica, dove \(\rho\) gioca il ruolo di densità di massa e \(\mathbf{j}\) di flusso di massa. Qui, però, \(\rho\) è una densità di probabilità e \(\mathbf{j}\) una corrente di probabilità. Il concetto è lo stesso: nessuna probabilità scompare nel nulla, si sposta semplicemente da una regione dello spazio a un’altra.</p>
-
-<p>Questo garantisce l’interpretazione probabilistica della meccanica quantistica: l’ampiezza di probabilità evolve nel tempo in modo coerente, mantenendo costante la probabilità totale e assicurando una descrizione fisicamente sensata del sistema quantistico.</p>
-
-<h2>Derivazione approfondita dell’Equazione di continuità</h2>
-
-<p><i>Consideriamo</i> l’equazione di Schrödinger nella sua forma dipendente dal tempo per una singola particella di massa m:</p>
-
-<p>
-<i>
-\( i \hbar \frac{\partial \psi(\mathbf{r}, t)}{\partial t} = -\frac{\hbar^2}{2m}\nabla^2\psi(\mathbf{r}, t) + V(\mathbf{r}, t)\psi(\mathbf{r}, t) \).
-</i>
-</p>
-
-<p>
-<u>Prendiamo</u> la funzione d’onda \(\psi(\mathbf{r}, t)\) e consideriamo anche la sua complessa coniugata \(\psi^*(\mathbf{r}, t)\). Applicando l’operazione di coniugazione all’intera equazione, otteniamo:
-</p>
-
-<p>
-<u>
-\( -i \hbar \frac{\partial \psi^*(\mathbf{r}, t)}{\partial t} = -\frac{\hbar^2}{2m}\nabla^2\psi^*(\mathbf{r}, t) + V(\mathbf{r}, t)\psi^*(\mathbf{r}, t) \).
-</u>
-</p>
-
-<p>
-<b>A questo punto</b>, moltiplichiamo la prima equazione per \(\psi^*(\mathbf{r}, t)\) e la seconda per \(\psi(\mathbf{r}, t)\), ottenendo due espressioni che andremo a sottrarre tra loro. Questo passaggio è cruciale perché ci permetterà di trovare un’espressione per la derivata temporale della densità di probabilità \(\rho(\mathbf{r}, t) = |\psi(\mathbf{r}, t)|^2 = \psi^*(\mathbf{r}, t)\psi(\mathbf{r}, t)\).
-</p>
-
-<p>
-<i>Dopo la moltiplicazione:</i>
-</p>
-
-<p>
-\(\psi^* (i \hbar \frac{\partial \psi}{\partial t}) = i\hbar \psi^*\frac{\partial \psi}{\partial t}\)
-
-e
-
-\(\psi(-i\hbar \frac{\partial \psi^*}{\partial t}) = -i\hbar \psi\frac{\partial \psi^*}{\partial t}\).
-</p>
-
-<p>
-<u>Sottraendo</u> la seconda espressione dalla prima, si ottiene una forma che contiene \(\psi^*\frac{\partial \psi}{\partial t}\) e \(\psi \frac{\partial \psi^*}{\partial t}\). Il motivo di questo passaggio è che, combinando i termini, emergono derivate temporali di \(\psi\psi^* = |\psi|^2\), vale a dire proprio \(\frac{\partial \rho}{\partial t}\).
-</p>
-
-<p>
-<u>Dopo le opportune semplificazioni</u>, ricordando che \(|\psi|^2 = \psi^*\psi\), si giunge a:
-</p>
-
-<p>
-\( \frac{\partial}{\partial t}(\psi^*\psi) = \frac{\partial \rho}{\partial t} = \frac{\hbar}{2mi}[\psi^*\nabla^2\psi - \psi\nabla^2\psi^*] \).
-</p>
-
-<p>
-<i>A questo punto</i>, occorre manipolare i termini con le derivate seconde, integrando per parti o meglio ancora riconoscendo una forma di divergenza. Infatti, se consideriamo:
-</p>
-
-<p>
-\( \mathbf{j}(\mathbf{r}, t) = \frac{\hbar}{2mi}(\psi^*\nabla\psi - \psi\nabla\psi^*) \),
-</p>
-
-<p>
-ci rendiamo conto che la differenza tra \(\psi^*\nabla^2\psi\) e \(\psi\nabla^2\psi^*\) può essere riscritta come una divergenza di \(\mathbf{j}\). Questo richiede qualche passo intermedio di calcolo vettoriale, ma è un risultato standard: si mostra che
-</p>
-
-<p>
-\( \frac{\partial \rho}{\partial t} = -\nabla \cdot \mathbf{j} \).
-</p>
-
-<p>
-<u>In definitiva</u>, questo è l’enunciato dell’equazione di continuità: la variazione temporale della densità di probabilità è bilanciata dal flusso di probabilità che esce o entra in un volume, garantendo la conservazione della probabilità totale.
-</p>
-
-<p>
-<b>Dal punto di vista fisico</b>, questo significa che se consideriamo uno spazio chiuso, la probabilità non si crea né si distrugge, ma si sposta da una regione all’altra. Se il sistema è isolato e l’Hamiltoniano è hermitiano, la norma totale della funzione d’onda (quindi la probabilità totale) rimane 1 per ogni tempo.
-</p>
-
-<p>
-<i>Alla lavagna</i>, potremmo illustrare i passaggi così:
-
-• Partire dall’equazione di Schrödinger, scriverla e affiancare la sua coniugata.  
-• Moltiplicare e sottrarre le due nuove equazioni per ottenere una relazione tra \(\partial_t |\psi|^2\) e termini contenenti gradienti.  
-• Evidenziare come i termini si riorganizzano in una divergenza della corrente \(\mathbf{j}\).  
-• Mostrare quindi la forma finale \(\frac{\partial \rho}{\partial t} + \nabla \cdot \mathbf{j} = 0\), commentando l’analogia con l’equazione di continuità classica per la densità di carica e corrente elettrica, ma qui applicata alla probabilità quantistica.
-</p>
-
-<p><a href="1mq.html" class="back-link">Ritorna all'Indice</a></p>
-
-
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" data-mq-historical-name="equazione-continuita-nuova.html" data-mq-shared-lesson="equazione-continuita.html" id="lezione-equazione-continuita">
+<div class="lecture-kicker">Lezione approfondita - Argomento 2 - DIM 1</div>
+<h1>Equazione di continuità quantistica</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: equazione-continuita-nuova.html. La lezione scientifica verificata è condivisa con equazione-continuita.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la legge locale dalla TDSE, trasformarla nel bilancio integrale con il teorema della divergenza e saper trattare correttamente orientazione del flusso, condizioni al bordo, stati stazionari, sorgenti efficaci e volumi di controllo mobili.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Legge locale</h3>
+<p>In un sistema chiuso non esistono creazione o distruzione locale di probabilità: una diminuzione della densità è accompagnata da corrente uscente.</p>
+<div aria-label="Forma locale dell'equazione di continuità" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \boxed{\partial_t\rho+\nabla\!\cdot\mathbf j=0}\)</span></div>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Legge integrale</h3>
+<p>La probabilità dentro un volume non è in generale costante. La sua variazione è l'opposto del flusso netto orientato verso l'esterno.</p>
+<div aria-label="Forma integrale dell'equazione di continuità" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \boxed{\frac{dP_\Omega}{dt}=-\oint_{\partial\Omega}\mathbf j\!\cdot\!\hat{\mathbf n}\,dS},\qquad P_\Omega=\int_\Omega\rho\,d^3r\)</span></div>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. TDSE e coniugata<span class="lecture-step-boss">DIM 1</span></h4>
+<p>Per un potenziale reale si scrivono entrambe le equazioni prima di combinarle, così il controllo dei segni resta esplicito.</p>
+<div aria-label="TDSE e sua equazione complessa coniugata" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle i\hbar\partial_t\psi=-\frac{\hbar^2}{2m}\nabla^2\psi+V\psi,\qquad-i\hbar\partial_t\psi^*=-\frac{\hbar^2}{2m}\nabla^2\psi^*+V\psi^*,\quad V\in\mathbb R\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Derivata locale<span class="lecture-step-boss">DIM 1</span></h4>
+<p>La regola del prodotto e la cancellazione del potenziale lasciano una differenza cinetica.</p>
+<div aria-label="Derivata locale della densità di probabilità" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \partial_t\rho=\psi^*\partial_t\psi+\psi\partial_t\psi^*=\frac{i\hbar}{2m}(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Forma di divergenza<span class="lecture-step-boss">DIM 1</span></h4>
+<p>L'identità di prodotto raccoglie la differenza dei Laplaciani nella divergenza della corrente.</p>
+<div aria-label="Passaggio dalla differenza dei Laplaciani alla corrente" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \nabla\!\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)=\psi^*\nabla^2\psi-\psi\nabla^2\psi^*,\quad\mathbf j=\frac{\hbar}{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Equazione locale<span class="lecture-step-boss">DIM 1</span></h4>
+<p>Il fattore <span class="mq-math" data-i18n-skip="true">\(1/i=-i\)</span> produce il segno meno che chiude la continuità.</p>
+<div aria-label="Chiusura della forma locale di continuità" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \nabla\!\cdot\mathbf j=\frac{\hbar}{2mi}(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*)=-\partial_t\rho\Rightarrow\partial_t\rho+\nabla\!\cdot\mathbf j=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Integrazione su un volume<span class="lecture-step-boss">DIM 1</span></h4>
+<p>Per un volume fisso, derivata temporale e integrale spaziale si possono scambiare.</p>
+<div aria-label="Integrazione della continuità su un volume fisso" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \int_\Omega\partial_t\rho\,d^3r+\int_\Omega\nabla\!\cdot\mathbf j\,d^3r=0\Rightarrow\frac d{dt}\int_\Omega\rho\,d^3r=-\int_\Omega\nabla\!\cdot\mathbf j\,d^3r\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Teorema della divergenza<span class="lecture-step-boss">DIM 1</span></h4>
+<p>La normale è orientata verso l'esterno: flusso positivo diminuisce la probabilità interna.</p>
+<div aria-label="Applicazione del teorema della divergenza al bilancio" class="lecture-formula"><span class="lecture-proof-tag">Orale</span><span class="lecture-proof-math">\(\displaystyle \int_\Omega\nabla\!\cdot\mathbf j\,d^3r=\oint_{\partial\Omega}\mathbf j\!\cdot\!\hat{\mathbf n}\,dS\Rightarrow\frac{dP_\Omega}{dt}=-\oint_{\partial\Omega}\mathbf j\!\cdot\!\hat{\mathbf n}\,dS\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Intervallo unidimensionale<span class="lecture-step-boss">ORALE</span></h4>
+<p>Alle due estremità le normali hanno verso opposto; questa è la prova più rapida del segno.</p>
+<div aria-label="Bilancio di continuità in un intervallo unidimensionale" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle P_{[a,b]}=\int_a^b\rho\,dx,\qquad\frac{dP_{[a,b]}}{dt}=-[j(b)-j(a)]=j(a)-j(b)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Spazio intero<span class="lecture-step-boss">DIM 1</span></h4>
+<p>La conservazione globale segue soltanto quando il flusso all'infinito è nullo oppure i contributi periodici si compensano.</p>
+<div aria-label="Conservazione globale ottenuta dalla continuità" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \mathcal N=\int_{\mathbb R^3}\rho\,d^3r,\quad\lim_{R\to\infty}\oint_{S_R}\mathbf j\!\cdot\!d\mathbf S=0\Rightarrow\frac{d\mathcal N}{dt}=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Stato stazionario<span class="lecture-step-boss">ORALE</span></h4>
+<p>Densità indipendente dal tempo impone corrente solenoidale, non necessariamente corrente nulla.</p>
+<div aria-label="Conseguenza della continuità per uno stato stazionario" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \psi(\mathbf r,t)=\phi(\mathbf r)e^{-iEt/\hbar}\Rightarrow\partial_t\rho=0\Rightarrow\nabla\!\cdot\mathbf j=0,\qquad\mathbf j\ \text{può essere non nulla}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Condizioni riflettenti<span class="lecture-step-boss">ORALE</span></h4>
+<p>Dirichlet, Neumann o Robin reale annullano la componente normale della corrente e chiudono il bilancio nella scatola.</p>
+<div aria-label="Corrente normale per condizioni al bordo riflettenti" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \mathbf j\!\cdot\!\hat{\mathbf n}=\frac\hbar m\operatorname{Im}(\psi^*\partial_n\psi)=0:\quad\psi=0\ \text{o}\ \partial_n\psi=0\ \text{o}\ \partial_n\psi=\gamma\psi,\ \gamma\in\mathbb R\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Sorgente complessa<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Un potenziale complesso impedisce la cancellazione locale e produce un termine di sorgente determinato dalla sua parte immaginaria.</p>
+<div aria-label="Equazione di continuità con potenziale complesso" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle V\in\mathbb C:\quad\partial_t\rho+\nabla\!\cdot\mathbf j=\frac{2}{\hbar}\operatorname{Im}V\,\rho\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Assorbitore<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Una parte immaginaria negativa è un pozzo: anche a flusso nullo la probabilità del modello efficace diminuisce.</p>
+<div aria-label="Bilancio integrale con potenziale assorbente" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle V=V_R-iW,\ W\ge0:\quad\frac{dP_\Omega}{dt}=-\oint_{\partial\Omega}\mathbf j\!\cdot\!d\mathbf S-\frac2\hbar\int_\Omega W\rho\,d^3r\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Volume mobile<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Se il bordo si muove con velocità <span class="mq-math" data-i18n-skip="true">\(\mathbf u_b\)</span>, va sottratto il trasporto dovuto al bordo stesso.</p>
+<div aria-label="Continuità in un volume di controllo mobile" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\int_{\Omega(t)}\rho\,d^3r=\int_{\Omega(t)}\partial_t\rho\,d^3r+\oint_{\partial\Omega(t)}\rho\mathbf u_b\!\cdot\!d\mathbf S=-\oint_{\partial\Omega(t)}(\mathbf j-\rho\mathbf u_b)\!\cdot\!d\mathbf S\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Spazio delle configurazioni<span class="lecture-step-boss">ESTENSIONE</span></h4>
+<p>Per più particelle la continuità è una legge in <span class="mq-math" data-i18n-skip="true">\(3N\)</span> dimensioni, con una corrente per ciascuna coordinata.</p>
+<div aria-label="Equazione di continuità per un sistema di più particelle" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \rho=|\Psi|^2,\quad\mathbf j_a=\frac{\hbar}{m_a}\operatorname{Im}(\Psi^*\nabla_a\Psi)\Rightarrow\partial_t\rho+\sum_{a=1}^N\nabla_a\!\cdot\mathbf j_a=0\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: bilancio su un intervallo</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> In un intervallo <span class="mq-math" data-i18n-skip="true">\([a,b]\)</span>, <span class="mq-math" data-i18n-skip="true">\(P(0)=0.400\)</span>, <span class="mq-math" data-i18n-skip="true">\(j(a)=3.20\times10^4\,\mathrm{s^{-1}}\)</span> e <span class="mq-math" data-i18n-skip="true">\(j(b)=5.00\times10^4\,\mathrm{s^{-1}}\)</span>, costanti per <span class="mq-math" data-i18n-skip="true">\(2.00\,\mu\mathrm{s}\)</span>.</p>
+<p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\(\dot P=j(a)-j(b)=-1.80\times10^4\,\mathrm{s^{-1}}\)</span> e <span class="mq-math" data-i18n-skip="true">\(\Delta P=\dot P\,\Delta t=-0.0360\)</span>.</p>
+<p><strong>Risultato.</strong> <span class="mq-math" data-i18n-skip="true">\(P(2.00\,\mu\mathrm{s})=0.364\)</span>. Esce più probabilità da destra di quanta ne entri da sinistra.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Scattering stazionario</h3>
+<p>In una dimensione <span class="mq-math" data-i18n-skip="true">\(\partial_t\rho=0\Rightarrow\partial_xj=0\)</span>. La stessa corrente totale attraversa ogni sezione: <span class="mq-math" data-i18n-skip="true">\(j_i+j_r=j_t\)</span>, quindi <span class="mq-math" data-i18n-skip="true">\(R+T=1\)</span> per un potenziale reale.</p>
+</article>
+<article class="lecture-card">
+<h3>Campo elettromagnetico</h3>
+<p>La legge resta omogenea, ma la corrente corretta è <span class="mq-math" data-i18n-skip="true">\(\mathbf j=(\hbar/m)\operatorname{Im}(\psi^*\nabla\psi)-(q/m)\mathbf A\rho\)</span>. Usare la corrente libera lascerebbe termini spuri e romperebbe l'invarianza di gauge.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Dimenticare il segno meno davanti al flusso uscente.</li>
+<li>Concludere <span class="mq-math" data-i18n-skip="true">\(\mathbf j=0\)</span> da <span class="mq-math" data-i18n-skip="true">\(\partial_t\rho=0\)</span>, invece di <span class="mq-math" data-i18n-skip="true">\(\nabla\!\cdot\mathbf j=0\)</span>.</li>
+<li>Passare alla norma totale senza dichiarare il comportamento al bordo.</li>
+<li>Applicare il bilancio di volume fisso a un rivelatore in moto.</li>
+<li>Chiamare non conservativa una dinamica con flusso uscente ma norma globale costante.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Analogia e limite</h3>
+<p>La struttura è la stessa della conservazione di massa o carica, ma <span class="mq-math" data-i18n-skip="true">\(\rho\)</span> è una densità di probabilità. Moltiplicando per la carica <span class="mq-math" data-i18n-skip="true">\(q\)</span> si ottengono densità e corrente di carica di una particella con carica fissata.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Scrivi TDSE e coniugata e controlla ogni segno.</li>
+<li>Trasforma la differenza dei Laplaciani in una divergenza.</li>
+<li>Deriva la forma locale e poi quella integrale con la normale uscente.</li>
+<li>Verifica il segno sul caso unidimensionale <span class="mq-math" data-i18n-skip="true">\([a,b]\)</span>.</li>
+<li>Enuncia le condizioni necessarie per passare alla conservazione globale.</li>
+<li>Distingui corrente nulla da corrente a divergenza nulla.</li>
+<li>Collega condizioni di Dirichlet, Neumann e Robin al flusso normale.</li>
+<li>Deriva il termine di sorgente per un potenziale complesso.</li>
+<li>Spiega la correzione per un volume mobile e la generalizzazione a più particelle.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 1</a> - derivazione completa, teorema della divergenza e condizioni al bordo</li>
+<li><a href="Appunti-MQ.pdf#page=115">Appunti-MQ.pdf, pagine PDF 115-117</a> - densità, corrente, continuità locale e flusso</li>
+<li><a href="Domanda2025_6.html">Domanda 2025 n. 6</a> - conservazione globale e locale della probabilità</li>
+</ul>
+<p class="lecture-note">Questa pagina concentra la legge di bilancio. Le pagine su conservazione e densità-corrente sviluppano rispettivamente unitarietà globale e significato fisico della corrente.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 2 - DIM 1":"In-depth lesson - Topic 2 - DIM 1","Equazione di continuità quantistica":"Quantum continuity equation","Derivare la legge locale dalla TDSE, trasformarla nel bilancio integrale con il teorema della divergenza e saper trattare correttamente orientazione del flusso, condizioni al bordo, stati stazionari, sorgenti efficaci e volumi di controllo mobili.":"Derive the local law from the TDSE, turn it into an integral balance with the divergence theorem, and correctly handle flux orientation, boundary conditions, stationary states, effective sources, and moving control volumes.","Legge locale":"Local law","In un sistema chiuso non esistono creazione o distruzione locale di probabilità: una diminuzione della densità è accompagnata da corrente uscente.":"In a closed system there is no local creation or destruction of probability: a decrease in density is accompanied by an outward current.","Legge integrale":"Integral law","La probabilità dentro un volume non è in generale costante. La sua variazione è l'opposto del flusso netto orientato verso l'esterno.":"The probability inside a region is not generally constant. Its rate of change is minus the net outward flux.","Dimostrazioni compatte":"Compact derivations","1. TDSE e coniugata":"1. TDSE and its complex conjugate","Per un potenziale reale si scrivono entrambe le equazioni prima di combinarle, così il controllo dei segni resta esplicito.":"For a real potential, write both equations before combining them so that every sign remains explicit.","2. Derivata locale":"2. Local time derivative","La regola del prodotto e la cancellazione del potenziale lasciano una differenza cinetica.":"The product rule and cancellation of the potential leave a kinetic-term difference.","3. Forma di divergenza":"3. Divergence form","L'identità di prodotto raccoglie la differenza dei Laplaciani nella divergenza della corrente.":"The product identity collects the Laplacian difference into the divergence of the current.","4. Equazione locale":"4. Local equation","Il fattore":"The factor","produce il segno meno che chiude la continuità.":"produces the minus sign that completes the continuity equation.","5. Integrazione su un volume":"5. Integration over a region","Per un volume fisso, derivata temporale e integrale spaziale si possono scambiare.":"For a fixed region, the time derivative and spatial integral may be interchanged.","6. Teorema della divergenza":"6. Divergence theorem","La normale è orientata verso l'esterno: flusso positivo diminuisce la probabilità interna.":"The normal points outward: positive flux decreases the probability inside.","7. Intervallo unidimensionale":"7. One-dimensional interval","Alle due estremità le normali hanno verso opposto; questa è la prova più rapida del segno.":"The outward normals at the two endpoints point in opposite directions; this is the quickest sign check.","8. Spazio intero":"8. All space","La conservazione globale segue soltanto quando il flusso all'infinito è nullo oppure i contributi periodici si compensano.":"Global conservation follows only when the flux at infinity vanishes or periodic boundary contributions cancel.","9. Stato stazionario":"9. Stationary state","Densità indipendente dal tempo impone corrente solenoidale, non necessariamente corrente nulla.":"Time-independent density requires a divergence-free current, not necessarily a zero current.","10. Condizioni riflettenti":"10. Reflecting boundary conditions","Dirichlet, Neumann o Robin reale annullano la componente normale della corrente e chiudono il bilancio nella scatola.":"Dirichlet, Neumann, or real Robin boundary conditions set the normal current to zero and close the balance in the box.","11. Sorgente complessa":"11. Complex source term","Un potenziale complesso impedisce la cancellazione locale e produce un termine di sorgente determinato dalla sua parte immaginaria.":"A complex potential prevents local cancellation and produces a source term determined by its imaginary part.","Una parte immaginaria negativa è un pozzo: anche a flusso nullo la probabilità del modello efficace diminuisce.":"A negative imaginary part is a sink: even at zero boundary flux, the probability in the effective model decreases.","13. Volume mobile":"13. Moving region","Se il bordo si muove con velocità":"If the boundary moves with velocity",", va sottratto il trasporto dovuto al bordo stesso.":", the transport caused by the moving boundary itself must be subtracted.","14. Spazio delle configurazioni":"14. Configuration space","Per più particelle la continuità è una legge in":"For several particles, continuity is a law in","dimensioni, con una corrente per ciascuna coordinata.":"dimensions, with one current for each particle coordinate.","Esempio d'esame: bilancio su un intervallo":"Exam example: balance over an interval","In un intervallo":"In an interval",", costanti per":", constant for",". Esce più probabilità da destra di quanta ne entri da sinistra.":". More probability leaves through the right endpoint than enters through the left endpoint.","Scattering stazionario":"Stationary scattering","In una dimensione":"In one dimension",". La stessa corrente totale attraversa ogni sezione:":". The same total current crosses every section:",", quindi":", hence","per un potenziale reale.":"for a real potential.","Campo elettromagnetico":"Electromagnetic field","La legge resta omogenea, ma la corrente corretta è":"The law remains homogeneous, but the correct current is",". Usare la corrente libera lascerebbe termini spuri e romperebbe l'invarianza di gauge.":". Using the free-particle current would leave spurious terms and break gauge invariance.","Errori tipici":"Common errors","Dimenticare il segno meno davanti al flusso uscente.":"Forgetting the minus sign in front of the outward flux.",", invece di":", rather than","Passare alla norma totale senza dichiarare il comportamento al bordo.":"Passing to the total norm without stating the boundary behavior.","Applicare il bilancio di volume fisso a un rivelatore in moto.":"Applying the fixed-region balance to a moving detector.","Chiamare non conservativa una dinamica con flusso uscente ma norma globale costante.":"Calling a dynamics nonconservative merely because there is outward flux while the global norm remains constant.","Analogia e limite":"Analogy and limitation","La struttura è la stessa della conservazione di massa o carica, ma":"The structure is the same as mass or charge conservation, but","è una densità di probabilità. Moltiplicando per la carica":"is a probability density. Multiplying by the charge","si ottengono densità e corrente di carica di una particella con carica fissata.":"gives the charge density and charge current for a particle of fixed charge.","Controllo da orale":"Oral exam checklist","Scrivi TDSE e coniugata e controlla ogni segno.":"Write the TDSE and its conjugate and check every sign.","Trasforma la differenza dei Laplaciani in una divergenza.":"Turn the Laplacian difference into a divergence.","Deriva la forma locale e poi quella integrale con la normale uscente.":"Derive the local form and then the integral form with the outward normal.","Verifica il segno sul caso unidimensionale":"Check the sign in the one-dimensional case","Enuncia le condizioni necessarie per passare alla conservazione globale.":"State the conditions required to infer global conservation.","Distingui corrente nulla da corrente a divergenza nulla.":"Distinguish zero current from divergence-free current.","Collega condizioni di Dirichlet, Neumann e Robin al flusso normale.":"Relate Dirichlet, Neumann, and Robin boundary conditions to the normal flux.","Deriva il termine di sorgente per un potenziale complesso.":"Derive the source term for a complex potential.","Spiega la correzione per un volume mobile e la generalizzazione a più particelle.":"Explain the correction for a moving region and the many-particle generalization.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- derivazione completa, teorema della divergenza e condizioni al bordo":"- complete derivation, divergence theorem, and boundary conditions","Appunti-MQ.pdf, pagine PDF 115-117":"Appunti-MQ.pdf, PDF pages 115-117","- densità, corrente, continuità locale e flusso":"- density, current, local continuity, and flux","Domanda 2025 n. 6":"2025 question no. 6","- conservazione globale e locale della probabilità":"- global and local probability conservation","Questa pagina concentra la legge di bilancio. Le pagine su conservazione e densità-corrente sviluppano rispettivamente unitarietà globale e significato fisico della corrente.":"This page focuses on the balance law. The conservation and density-current pages develop global unitarity and the physical meaning of the current, respectively.","Ritorna all'indice MQ":"Return to the MQ index","12. Assorbitore":"12. Absorber","Obiettivo.":"Goal.","Risultato":"Result","Base":"Core","Orale":"Oral","Check":"Check","Estensione":"Extension","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","Concludere":"Concluding","Nome storico mantenuto: equazione-continuita-nuova.html. La lezione scientifica verificata è condivisa con equazione-continuita.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: equazione-continuita-nuova.html. The verified scientific lesson is shared with equazione-continuita.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Forma locale dell'equazione di continuità":"Local form of the continuity equation","Forma integrale dell'equazione di continuità":"Integral form of the continuity equation","TDSE e sua equazione complessa coniugata":"TDSE and its complex-conjugate equation","Derivata locale della densità di probabilità":"Local time derivative of the probability density","Passaggio dalla differenza dei Laplaciani alla corrente":"From the Laplacian difference to the probability current","Chiusura della forma locale di continuità":"Completion of the local continuity equation","Integrazione della continuità su un volume fisso":"Integration of the continuity equation over a fixed region","Applicazione del teorema della divergenza al bilancio":"Application of the divergence theorem to the balance law","Bilancio di continuità in un intervallo unidimensionale":"Continuity balance on a one-dimensional interval","Conservazione globale ottenuta dalla continuità":"Global conservation obtained from continuity","Conseguenza della continuità per uno stato stazionario":"Consequence of continuity for a stationary state","Corrente normale per condizioni al bordo riflettenti":"Normal current for reflecting boundary conditions","Equazione di continuità con potenziale complesso":"Continuity equation with a complex potential","Bilancio integrale con potenziale assorbente":"Integral balance with an absorbing potential","Continuità in un volume di controllo mobile":"Continuity in a moving control volume","Equazione di continuità per un sistema di più particelle":"Continuity equation for a many-particle system"},"title":{"it":"Equazione di continuità quantistica - Dimostrazioni e ripasso orale","en":"Quantum continuity equation - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

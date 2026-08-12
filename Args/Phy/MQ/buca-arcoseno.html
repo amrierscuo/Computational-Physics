@@ -1,191 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buca di Potenziale con Profilo Arcoseno</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buca finita: quantizzazione in forma arcoseno</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
 </head>
 <body>
-
-<h1>Buca di Potenziale con Profilo Arcoseno</h1>
-
-<p>Nella meccanica quantistica, la risoluzione dell’equazione di Schrödinger per varie forme di potenziale permette di studiare stati legati, scattering, e comportamenti non banali delle funzioni d’onda. Un caso insolito ma istruttivo è considerare una “buca” di potenziale con un profilo particolare, ad esempio una funzione dell’arcoseno. Questo non è un caso standard da manuale, ma serve a illustrare come, con metodi analitici o numerici, si possa affrontare un potenziale generico e ricavare le energie e autofunzioni del sistema.</p>
-
-<p>Supponiamo di avere una particella di massa \(m\) sottoposta a un potenziale monodimensionale \(V(x)\) definito su un intervallo \(x \in [-a,a]\) con la forma:</p>
-
-\[
-V(x) = 
-\begin{cases}
-V_0 \arcsin\left(\frac{x}{a}\right), & |x| \le a, \\
-+\infty & |x| > a.
-\end{cases}
-\]
-
-<p>Qui, la regione \(|x|>a\) è impenetrabile (buca a pareti infinite), e all’interno \(|x|\le a\) il potenziale varia con una legge basata sull’arcoseno, partendo da \(V(-a)=V_0\arcsin(-1)=-V_0\frac{\pi}{2}\) fino a \(V(a)=V_0\arcsin(1)=V_0\frac{\pi}{2}\). Questo crea un profilo non simmetrico rispetto al centro, ma comunque continuo. Senza perdita di generalità, si può anche considerare una versione traslata o scalata di questo potenziale.</p>
-
-<h2>Equazione di Schrödinger</h2>
-
-<p>L’equazione di Schrödinger stazionaria (indipendente dal tempo) per questo sistema è:</p>
-
-\[
--\frac{\hbar^2}{2m}\frac{d^2}{dx^2}\phi(x) + V_0 \arcsin\left(\frac{x}{a}\right)\phi(x) = E \phi(x), \quad \text{con } |x|\le a,
-\]
-
-e \(\phi(x)=0\) per \(|x|>a\). Le condizioni al contorno sono dunque \(\phi(-a)=0\) e \(\phi(a)=0\), dato che la funzione d’onda deve annullarsi ai confini della buca infinita.</p>
-
-<h2>Approccio Numerico</h2>
-
-<p>A differenza dei casi classici (buca infinita con potenziale costante, oscillatore armonico, atomo di idrogeno), qui non esiste una soluzione analitica standard. Il metodo tipico è procedere numericamente:</p>
-
-<ul>
-    <li>Discretizzare l’intervallo \([-a,a]\) in un reticolo di punti \(x_j\).</li>
-    <li>Sostituire le derivate seconde con differenze finite o altri schemi numerici.</li>
-    <li>Rappresentare l’Hamiltoniano come una matrice hermitiana tridiagonale (o quasi) e diagonalizzare numericamente per trovare gli autovalori \(E_n\) e le autofunzioni \(\phi_n(x)\).</li>
-</ul>
-
-<p>In tal modo si ottengono una serie di autovalori discreti (perché la buca è infinita e confinante) corrispondenti agli stati legati del sistema. Le autofunzioni possono presentare forme non banali a causa della presenza del potenziale \(\arcsin(x/a)\) che varia con la posizione.</p>
-
-<h2>Interpretazione Fisica</h2>
-
-<p>Sebbene una “buca di potenziale arcoseno” sia più un esercizio teorico che un potenziale fisico comune, studiarla serve a capire come l’energia degli stati quantici e le forme delle funzioni d’onda dipendano dalla particolare forma del potenziale. A differenza di una buca a pareti infinite con potenziale costante interno (dove gli autostati sono seni e coseni), qui le soluzioni non sono funzioni semplici, ma possono essere approssimate con metodi numerici. L’esistenza di livelli quantizzati e di stati legati resta, ma le funzioni d’onda riflettono la variazione del potenziale, concentrandosi più in regioni dove l’energia potenziale è minore.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Scrivi l’equazione:
-\[
--\frac{\hbar^2}{2m}\frac{d^2\phi(x)}{dx^2} + V_0 \arcsin\left(\frac{x}{a}\right)\phi(x) = E\phi(x),\; |x|\le a.
-\]
-2. Condizioni al contorno: \(\phi(-a)=0,\; \phi(a)=0\).
-<br><br>
-3. Illustra il metodo numerico: discretizza l’intervallo in \(N\) punti, sostituisci le derivate seconde con differenze finite:
-\[
-\frac{d^2\phi(x)}{dx^2} \approx \frac{\phi(x_{j+1})-2\phi(x_j)+\phi(x_{j-1})}{(\Delta x)^2}.
-\]
-4. Costruisci la matrice Hamiltoniana \(\hat{H}\) come operatore su questo vettore discreto. Diagonalizzala numericamente per ottenere \((E_n, \phi_n(x_j))\).
-</div>
-
-<h2>Estensioni e Variazioni</h2>
-
-<p>Lo stesso metodo può essere applicato a potenziali arbitrari: parabolici, scalini, potenziali a gradini, forme più complesse definite numericamente. La mancanza di una soluzione analitica non impedisce di comprendere la fisica del sistema: i metodi numerici offrono uno strumento potente e flessibile per investigare potenziali “esotici” come questo.</p>
-
-
-<h2>Buca di potenziale e condizione quantistica via arcoseno</h2>
-
-<p>
-Consideriamo una buca di potenziale finita unidimensionale, ad esempio centrata fra \( x=0 \) e \( x=a \), con:
-</p>
-
-<p>
-• \( V(x) = -V_0 \) per \( 0 < x < a \)  
-• \( V(x) = 0 \) altrove,
-</p>
-
-<p>
-con \( V_0 > 0 \). Tale configurazione rappresenta una "buca" di profondità \( V_0 \) e larghezza \( a \).
-</p>
-
-<p>
-Appare utile definire l’energia della particella come \( E < 0 \) per gli stati legati. In questo caso, l’energia totale \( E \) è minore del livello di zero dell’energia esterna, cioè la particella è intrappolata nella buca. Introduciamo due parametri:
-</p>
-
-<p>
-\( k = \sqrt{\frac{2m(E+V_0)}{\hbar^2}} \) per la regione interna (dove il potenziale è \( -V_0 \)),  
-e  
-\( \gamma = \sqrt{\frac{2m|E|}{\hbar^2}} \) per la regione esterna, dove l’energia è inferiore al potenziale esterno nullo.
-</p>
-
-<p>
-La soluzione dell’equazione di Schrödinger interna, per una particella di massa m, porta a funzioni d’onda sinusoidali o cosinusoidali a seconda delle parità degli stati. Dato che la funzione d’onda deve decadere esponenzialmente all’esterno (dove \( E < 0 \) e si ottengono soluzioni di tipo evanescente), le condizioni di raccordo ai bordi \( x=0 \) e \( x=a \) definiscono il cosiddetto "problema di quantizzazione". Queste condizioni, combinando l’andamento sinusoidale interno con l’esponenziale esterno, danno luogo a un’equazione trascendentale che lega \( k \), \( \gamma \) e \( a \).
-</p>
-
-<p>
-A seconda del tipo di soluzione (pari o dispari rispetto al centro della buca, o comunque in base alle condizioni al contorno scelte), si ottiene una relazione che può essere invertita per ricavare gli autovalori di energia. Quando si manipolano tali condizioni, è possibile arrivare a espressioni che coinvolgono funzioni inverse trigonometriche, come l’arcoseno. Ciò accade ad esempio quando, partendo dalle condizioni ai limiti:
-</p>
-
-<p>
-• La funzione d’onda deve annullarsi ai confini della buca o essere soggetta a condizioni periodiche modificate.  
-• Le relazioni tra \( \sin(k a) \), \( \cos(k a) \) e i rapporti tra k e γ determinano la quantizzazione.
-</p>
-
-<p>
-Se si isola una delle grandezze (ad esempio \( k a \)) in funzione dei parametri del potenziale e di γ, si può incappare in forme del tipo:
-\[
-k a = \arcsin\left( \frac{\gamma}{\sqrt{\gamma^2 + \dots}}\right)
-\]
-o espressioni simili, dove l’arcoseno emerge naturalmente nel risolvere per \( k \) (o E) a partire da combinazioni trigonometriche delle funzioni d’onda e delle loro derivate. Questo dipende dalla geometria del problema e dal tipo di condizione al contorno imposto.
-</p>
-
-<p>
-In altre parole, la comparsa della funzione arcoseno (o altre funzioni inverse trigonometriche) nei problemi di quantizzazione di una buca di potenziale è legata alla struttura trascendentale delle condizioni ai limiti. Tali condizioni, spesso in forma di equazioni che coinvolgono tangenti o seni e coseni, possono essere invertite in forme inverse come arcoseno per ottenere espressioni più esplicite dell’energia quantizzata.
-</p>
-
-<p>
-Durante la risoluzione alla lavagna, si potrebbe procedere così:
-
-• Scrivere l’equazione di Schrödinger interna ed esterna.  
-• Imporre la continuità della funzione d’onda e della sua derivata ai confini \( x=0 \) e \( x=a \).  
-• Ottenere una relazione tra k e γ, tipicamente in forma di equazione trascendentale (ad esempio qualcosa tipo: \(\frac{k}{\gamma} = \tan(k a)\) o \(\frac{k}{\gamma} = \sin(k a)\) / \(\cos(k a)\)).  
-• Ricavare da queste forme trigonometriche una relazione diretta su k, usando arcus (inversi trigonometrici), da cui scaturisce l’arcoseno.
-</p>
-
-<p>
-Se questa derivazione è condotta con attenzione, si nota come i livelli energetici del sistema finiscano per dipendere da una condizione in cui l’arcoseno lega il rapporto dei parametri caratteristici del problema.
-</p>
-
-<p>
-L’emergere dell’arcoseno è quindi un risultato matematico di una particolare scelta di parametrizzazione del problema o di una manipolazione specifica dell’equazione di quantizzazione, e non un risultato universalmente presente in qualsiasi buca di potenziale. È però un esempio di come, modificando il potenziale o l’approccio risolutivo, si possa arrivare a condizioni di quantizzazione scritte in forme differenti, coinvolgendo funzioni inverse trigonometriche.
-</p>
-
-<p><a href="1mq.html" class="back-link">Ritorna all'Indice</a></p>
-
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-buca-arcoseno"><div class="lecture-kicker">Lezione approfondita - problemi unidimensionali - stati legati</div><h1>Buca finita: quantizzazione in forma arcoseno</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare senza salti le condizioni pari e dispari della buca quadrata finita, riunirle in una sola equazione con l'arcoseno, ricavare energie e numero di livelli e distinguere questa parametrizzazione dal diverso potenziale V(x) proporzionale ad arcsin(x/a).</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Perché compare l'arcoseno</h3><p>L'arcoseno non e il profilo della buca: nasce parametrizzando il cerchio k quadrato più kappa quadrato uguale costante dopo il raccordo ai bordi.</p></article><article class="lecture-card lecture-warning"><h3>Due parità, una formula</h3><p>La simmetria del potenziale separa stati pari e dispari. Numerando i livelli in ordine energetico, le due famiglie confluiscono in una condizione compatta.</p></article></div><h2>Definizione e convenzioni</h2><div class="lecture-grid"><article class="lecture-card "><h3>Buca simmetrica</h3><p>Si pone V uguale meno V0 per modulo x minore di a e zero fuori, con V0 positivo. Gli stati legati hanno energia tra meno V0 e zero.</p></article><article class="lecture-card "><h3>Parametri reali</h3><p>Dentro la buca la soluzione oscilla con k; fuori decade con kappa. Entrambi sono positivi e dipendono dalla stessa energia.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Potenziale e intervallo energetico<span class="lecture-step-boss">BASE</span></h4><p>Il riferimento energetico e fissato all'esterno; il confinamento richiede un ramo oscillante interno e uno evanescente esterno.</p><div class="lecture-formula" aria-label="Definizione della buca finita simmetrica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(x)=\begin{cases}-V_0,&amp;|x|&lt;a\\0,&amp;|x|\ge a\end{cases},\qquad -V_0&lt;E&lt;0\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Numeri d'onda<span class="lecture-step-boss">DEFINISCI</span></h4><p>L'equazione di Schrödinger assume coefficienti costanti in ciascuna regione.</p><div class="lecture-formula" aria-label="Definizione di k e kappa"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle k=\frac{\sqrt{2m(E+V_0)}}{\hbar},\qquad\kappa=\frac{\sqrt{-2mE}}{\hbar},\qquad k,\kappa&gt;0\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Identità energetica<span class="lecture-step-boss">SOMMA</span></h4><p>Sommando i quadrati si elimina E e rimane una scala fissata soltanto dalla buca.</p><div class="lecture-formula" aria-label="Cerchio energetico nel piano k kappa"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle k^2+\kappa^2=\frac{2mV_0}{\hbar^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Soluzioni ammissibili<span class="lecture-step-boss">NORMALIZZABILITA</span></h4><p>Le esponenziali crescenti all'infinito sono escluse; al centro si sceglie coseno per parità pari e seno per parità dispari.</p><div class="lecture-formula" aria-label="Soluzioni pari e dispari normalizzabili"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_+(x)=\begin{cases}A\cos kx,&amp;|x|&lt;a\\B e^{-\kappa|x|},&amp;|x|&gt;a\end{cases},\quad\psi_-(x)=\begin{cases}A\sin kx,&amp;|x|&lt;a\\B\,\operatorname{sgn}(x)e^{-\kappa|x|},&amp;|x|&gt;a\end{cases}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Raccordo pari<span class="lecture-step-boss">CONTINUITA</span></h4><p>Continuita di psi e psi primo in x uguale a produce due equazioni; il rapporto elimina le ampiezze.</p><div class="lecture-formula" aria-label="Derivazione della condizione pari"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A\cos ka=Be^{-\kappa a},\quad-Ak\sin ka=-\kappa Be^{-\kappa a}\Rightarrow k\tan ka=\kappa\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Raccordo dispari<span class="lecture-step-boss">CONTINUITA</span></h4><p>Lo stesso procedimento sul seno cambia la funzione trigonometrica e il segno.</p><div class="lecture-formula" aria-label="Derivazione della condizione dispari"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A\sin ka=Be^{-\kappa a},\quad Ak\cos ka=-\kappa Be^{-\kappa a}\Rightarrow-k\cot ka=\kappa\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Variabili adimensionali<span class="lecture-step-boss">SCALA</span></h4><p>La semilarghezza elimina le dimensioni e z0 misura simultaneamente profondità e larghezza della buca.</p><div class="lecture-formula" aria-label="Riduzione adimensionale del problema"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle z=ka,\qquad y=\kappa a,\qquad z_0=a\frac{\sqrt{2mV_0}}{\hbar},\qquad z^2+y^2=z_0^2\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Angolo sul cerchio<span class="lecture-step-boss">PARAMETRIZZA</span></h4><p>Nel primo quadrante si introduce un angolo alpha; la sua espressione inversa e precisamente l'arcoseno richiesto.</p><div class="lecture-formula" aria-label="Parametrizzazione trigonometrica del cerchio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle z=z_0\cos\alpha,\quad y=z_0\sin\alpha,\quad\alpha=\arcsin\frac{y}{z_0}=\arccos\frac{z}{z_0}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Famiglia pari<span class="lecture-step-boss">RAMI</span></h4><p>Da tangente z uguale tangente alpha si devono mantenere tutti i rami compatibili con z positivo.</p><div class="lecture-formula" aria-label="Rami della condizione pari"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \tan z=\frac yz=\tan\alpha\Rightarrow z=n\pi+\alpha\qquad(n=0,1,2,\ldots)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Famiglia dispari<span class="lecture-step-boss">RAMI</span></h4><p>La condizione sulla cotangente colloca le radici dispari negli intervalli alternati.</p><div class="lecture-formula" aria-label="Rami della condizione dispari"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -\cot z=\frac yz=\tan\alpha\Rightarrow z=\left(n+\frac12\right)\pi+\alpha\qquad(n=0,1,2,\ldots)\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Formula unificata<span class="lecture-step-boss">ARCOSENO</span></h4><p>Numerando i livelli N da uno, con N dispari per stati pari e N pari per stati dispari, i rami diventano una sola equazione.</p><div class="lecture-formula" aria-label="Condizione di quantizzazione tramite arcoseno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle z_N=\frac{N\pi}{2}-\arcsin\left(\frac{z_N}{z_0}\right),\qquad N=1,2,\ldots,\quad0&lt;z_N&lt;z_0\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Energia dalla radice<span class="lecture-step-boss">SPETTRO</span></h4><p>Ogni intersezione ammessa determina k e quindi un unico autovalore legato.</p><div class="lecture-formula" aria-label="Energia associata alla radice zN"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_N=-V_0+\frac{\hbar^2z_N^2}{2ma^2}=V_0\left(\frac{z_N^2}{z_0^2}-1\right)&lt;0\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Conteggio dei livelli<span class="lecture-step-boss">SOGLIE</span></h4><p>Un nuovo livello compare quando una radice raggiunge E uguale zero. In una dimensione resta sempre almeno lo stato fondamentale pari.</p><div class="lecture-formula" aria-label="Numero generico di stati legati"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle N_{\rm bound}=1+\left\lfloor\frac{2z_0}{\pi}\right\rfloor\quad\text{lontano dalle soglie }2z_0/\pi\in\mathbb Z\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Metodo numerico<span class="lecture-step-boss">BISEZIONE</span></h4><p>Ogni radice si cerca nel proprio intervallo; la monotonia del membro destro evita salti di ramo e radici spurie.</p><div class="lecture-formula" aria-label="Funzione monotona per la ricerca delle radici"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle f_N(z)=z+\arcsin(z/z_0)-\frac{N\pi}{2},\quad f_N'(z)=1+\frac1{\sqrt{z_0^2-z^2}}&gt;0\)</span></div></article></section><h2>Esempio: buca con z0 uguale 4</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Le soglie indicano tre stati legati. Si risolve fN uguale zero per N uguale uno, due, tre, alternando parità pari, dispari, pari.</p><p data-i18n-skip="true">\(\displaystyle z_1\simeq1.252,\quad z_2\simeq2.475,\quad z_3\simeq3.596;\qquad E_N/V_0=z_N^2/16-1\)</p><p><strong>Controllo.</strong> Le energie sono circa meno 0.902 V0, meno 0.617 V0 e meno 0.192 V0. A energia crescente aumentano nodi e penetrazione esterna.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Limite di buca profonda</h3><p>Per z0 grande, arcsin(z/z0) e piccolo e zN tende a N pi su due, cioè allo spettro della buca infinita di larghezza 2a.</p></article><article class="lecture-card "><h3>Penetrazione</h3><p>La lunghezza di coda e uno su kappa. Gli stati vicini a zero hanno kappa piccolo e penetrano maggiormente fuori dalla buca.</p></article><article class="lecture-card "><h3>Soglia non normalizzabile</h3><p>Se E e esattamente zero, la coda non decade e lo stato di soglia non e legato in senso stretto; il conteggio va interpretato con questa cautela.</p></article><article class="lecture-card "><h3>Nessuna soluzione chiusa</h3><p>La forma con arcoseno e ancora trascendente perché z compare anche dentro arcsin. Serve un grafico, bisezione o Newton, non un isolamento algebrico finale.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Confondere larghezza a con larghezza 2a; perdere il segno nella famiglia dispari; dimenticare i rami di arcotangente; contare E uguale zero come stato normalizzabile; credere che arcsin sia il potenziale.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>z e y sono positivi; z quadrato più y quadrato vale z0 quadrato; il fondamentale e pari; le parità alternano; ogni EN resta tra meno V0 e zero; nel limite profondo torna la buca infinita.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci potenziale, intervallo energetico, k e kappa.</li><li>Scrivi soluzioni pari e dispari già normalizzabili.</li><li>Imponi continuità di funzione e derivata.</li><li>Ricava k tan ka uguale kappa e meno k cot ka uguale kappa.</li><li>Introduci z, y e z0 e mostra il cerchio.</li><li>Parametrizza con alpha e conserva i rami.</li><li>Unifica le parità nella formula con arcsin.</li><li>Ricava energia, conteggio e limite di buca profonda.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L912">Boss DIM 17 - buca finita simmetrica e raccordo</a></li><li><a href="Appunti-MQ.pdf#page=128">Appunti-MQ.pdf - buche e stati legati</a></li><li><a href="buca-potenziale.html">Buca infinita e finita - quadro generale</a></li><li><a href="stati-legati-diffusione.html">Stati legati e diffusione - spettro e flusso</a></li></ul><p class="lecture-note">La pagina corregge l'ambiguità precedente: il tema indicizzato e la buca quadrata finita riscritta tramite arcoseno, non una parete infinita contenente un potenziale artificiale V0 arcsin(x/a).</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - problemi unidimensionali - stati legati":"In-depth lesson - one-dimensional problems - bound states","Buca finita: quantizzazione in forma arcoseno":"Finite well: quantization in arcsine form","Obiettivo.":"Objective.","Derivare senza salti le condizioni pari e dispari della buca quadrata finita, riunirle in una sola equazione con l'arcoseno, ricavare energie e numero di livelli e distinguere questa parametrizzazione dal diverso potenziale V(x) proporzionale ad arcsin(x/a).":"Derive the even and odd conditions of the finite square well without gaps, combine them into one arcsine equation, obtain energies and the number of levels, and distinguish this parametrization from the different potential V(x) proportional to arcsin(x/a).","Perché compare l'arcoseno":"Why the arcsine appears","L'arcoseno non e il profilo della buca: nasce parametrizzando il cerchio k quadrato più kappa quadrato uguale costante dopo il raccordo ai bordi.":"The arcsine is not the well profile: it arises by parametrizing the circle k squared plus kappa squared equals a constant after boundary matching.","Due parità, una formula":"Two parities, one formula","La simmetria del potenziale separa stati pari e dispari. Numerando i livelli in ordine energetico, le due famiglie confluiscono in una condizione compatta.":"Potential symmetry separates even and odd states. Numbering levels in energy order combines the two families into one compact condition.","Definizione e convenzioni":"Definition and conventions","Buca simmetrica":"Symmetric well","Si pone V uguale meno V0 per modulo x minore di a e zero fuori, con V0 positivo. Gli stati legati hanno energia tra meno V0 e zero.":"Set V equal to minus V0 for modulus x less than a and zero outside, with positive V0. Bound states have energy between minus V0 and zero.","Parametri reali":"Real parameters","Dentro la buca la soluzione oscilla con k; fuori decade con kappa. Entrambi sono positivi e dipendono dalla stessa energia.":"Inside the well the solution oscillates with k; outside it decays with kappa. Both are positive and depend on the same energy.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Potenziale e intervallo energetico":"1. Potential and energy interval","BASE":"BASE","Il riferimento energetico e fissato all'esterno; il confinamento richiede un ramo oscillante interno e uno evanescente esterno.":"The energy reference is fixed outside; confinement requires an oscillatory inner branch and an evanescent outer branch.","Passaggio":"Step","2. Numeri d'onda":"2. Wave numbers","DEFINISCI":"DEFINE","L'equazione di Schrödinger assume coefficienti costanti in ciascuna regione.":"The Schrödinger equation has constant coefficients in each region.","3. Identità energetica":"3. Energy identity","SOMMA":"SUM","Sommando i quadrati si elimina E e rimane una scala fissata soltanto dalla buca.":"Adding the squares eliminates E and leaves a scale fixed only by the well.","4. Soluzioni ammissibili":"4. Admissible solutions","NORMALIZZABILITA":"NORMALIZABILITY","Le esponenziali crescenti all'infinito sono escluse; al centro si sceglie coseno per parità pari e seno per parità dispari.":"Exponentials growing at infinity are excluded; at the center choose cosine for even parity and sine for odd parity.","5. Raccordo pari":"5. Even matching","CONTINUITA":"CONTINUITY","Continuita di psi e psi primo in x uguale a produce due equazioni; il rapporto elimina le ampiezze.":"Continuity of psi and psi prime at x equal a gives two equations; their ratio eliminates amplitudes.","6. Raccordo dispari":"6. Odd matching","Lo stesso procedimento sul seno cambia la funzione trigonometrica e il segno.":"The same procedure for the sine changes the trigonometric function and the sign.","7. Variabili adimensionali":"7. Dimensionless variables","SCALA":"SCALE","La semilarghezza elimina le dimensioni e z0 misura simultaneamente profondità e larghezza della buca.":"The half-width removes dimensions and z0 simultaneously measures well depth and width.","8. Angolo sul cerchio":"8. Angle on the circle","PARAMETRIZZA":"PARAMETRIZE","Nel primo quadrante si introduce un angolo alpha; la sua espressione inversa e precisamente l'arcoseno richiesto.":"In the first quadrant introduce an angle alpha; its inverse expression is precisely the required arcsine.","9. Famiglia pari":"9. Even family","RAMI":"BRANCHES","Da tangente z uguale tangente alpha si devono mantenere tutti i rami compatibili con z positivo.":"From tangent z equal tangent alpha, retain all branches compatible with positive z.","10. Famiglia dispari":"10. Odd family","La condizione sulla cotangente colloca le radici dispari negli intervalli alternati.":"The cotangent condition places odd roots in alternating intervals.","11. Formula unificata":"11. Unified formula","ARCOSENO":"ARCSINE","Numerando i livelli N da uno, con N dispari per stati pari e N pari per stati dispari, i rami diventano una sola equazione.":"Number levels N from one, with odd N for even states and even N for odd states; the branches become a single equation.","12. Energia dalla radice":"12. Energy from the root","SPETTRO":"SPECTRUM","Ogni intersezione ammessa determina k e quindi un unico autovalore legato.":"Each allowed intersection determines k and hence one bound eigenvalue.","13. Conteggio dei livelli":"13. Counting levels","SOGLIE":"THRESHOLDS","Un nuovo livello compare quando una radice raggiunge E uguale zero. In una dimensione resta sempre almeno lo stato fondamentale pari.":"A new level appears when a root reaches E equal zero. In one dimension at least the even ground state always remains.","14. Metodo numerico":"14. Numerical method","BISEZIONE":"BISECTION","Ogni radice si cerca nel proprio intervallo; la monotonia del membro destro evita salti di ramo e radici spurie.":"Search each root in its own interval; monotonicity of the right-hand side avoids branch jumps and spurious roots.","Esempio: buca con z0 uguale 4":"Example: a well with z0 equal to 4","Impostazione.":"Setup.","Le soglie indicano tre stati legati. Si risolve fN uguale zero per N uguale uno, due, tre, alternando parità pari, dispari, pari.":"The thresholds indicate three bound states. Solve fN equal zero for N equal one, two, and three, alternating even, odd, and even parity.","Controllo.":"Check.","Le energie sono circa meno 0.902 V0, meno 0.617 V0 e meno 0.192 V0. A energia crescente aumentano nodi e penetrazione esterna.":"The energies are approximately minus 0.902 V0, minus 0.617 V0, and minus 0.192 V0. As energy increases, nodes and external penetration increase.","Interpretazione e limiti":"Interpretation and limits","Limite di buca profonda":"Deep-well limit","Per z0 grande, arcsin(z/z0) e piccolo e zN tende a N pi su due, cioè allo spettro della buca infinita di larghezza 2a.":"For large z0, arcsin(z/z0) is small and zN approaches N pi over two, the spectrum of the infinite well of width 2a.","Penetrazione":"Penetration","La lunghezza di coda e uno su kappa. Gli stati vicini a zero hanno kappa piccolo e penetrano maggiormente fuori dalla buca.":"The tail length is one over kappa. States close to zero have small kappa and penetrate farther outside the well.","Soglia non normalizzabile":"Nonnormalizable threshold","Se E e esattamente zero, la coda non decade e lo stato di soglia non e legato in senso stretto; il conteggio va interpretato con questa cautela.":"If E is exactly zero, the tail does not decay and the threshold state is not strictly bound; the count must be interpreted with this caveat.","Nessuna soluzione chiusa":"No closed solution","La forma con arcoseno e ancora trascendente perché z compare anche dentro arcsin. Serve un grafico, bisezione o Newton, non un isolamento algebrico finale.":"The arcsine form is still transcendental because z also appears inside arcsin. A graph, bisection, or Newton method is needed, not a final algebraic isolation.","Errori tipici":"Common errors","Confondere larghezza a con larghezza 2a; perdere il segno nella famiglia dispari; dimenticare i rami di arcotangente; contare E uguale zero come stato normalizzabile; credere che arcsin sia il potenziale.":"Confusing width a with width 2a; losing the sign in the odd family; forgetting inverse-tangent branches; counting E equal zero as normalizable; believing arcsin is the potential.","Controlli rapidi":"Quick checks","z e y sono positivi; z quadrato più y quadrato vale z0 quadrato; il fondamentale e pari; le parità alternano; ogni EN resta tra meno V0 e zero; nel limite profondo torna la buca infinita.":"z and y are positive; z squared plus y squared equals z0 squared; the ground state is even; parities alternate; every EN remains between minus V0 and zero; the deep limit returns the infinite well.","Controllo da orale":"Oral exam checklist","Definisci potenziale, intervallo energetico, k e kappa.":"Define the potential, energy interval, k, and kappa.","Scrivi soluzioni pari e dispari già normalizzabili.":"Write even and odd solutions that are already normalizable.","Imponi continuità di funzione e derivata.":"Impose continuity of the function and its derivative.","Ricava k tan ka uguale kappa e meno k cot ka uguale kappa.":"Derive k tan ka equals kappa and minus k cot ka equals kappa.","Introduci z, y e z0 e mostra il cerchio.":"Introduce z, y, and z0 and show the circle.","Parametrizza con alpha e conserva i rami.":"Parametrize with alpha and retain the branches.","Unifica le parità nella formula con arcsin.":"Combine the parities in the formula with arcsin.","Ricava energia, conteggio e limite di buca profonda.":"Derive energy, counting, and the deep-well limit.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss DIM 17 - buca finita simmetrica e raccordo":"Boss DIM 17 - symmetric finite well and matching","Appunti-MQ.pdf - buche e stati legati":"Appunti-MQ.pdf - wells and bound states","Buca infinita e finita - quadro generale":"Infinite and finite wells - general framework","Stati legati e diffusione - spettro e flusso":"Bound states and scattering - spectrum and flux","La pagina corregge l'ambiguità precedente: il tema indicizzato e la buca quadrata finita riscritta tramite arcoseno, non una parete infinita contenente un potenziale artificiale V0 arcsin(x/a).":"This page corrects the previous ambiguity: the indexed topic is the finite square well rewritten through an arcsine, not an infinite box containing an artificial V0 arcsin(x/a) potential.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Definizione della buca finita simmetrica":"Definition of the symmetric finite well","Definizione di k e kappa":"Definition of k and kappa","Cerchio energetico nel piano k kappa":"Energy circle in the k kappa plane","Soluzioni pari e dispari normalizzabili":"Normalizable even and odd solutions","Derivazione della condizione pari":"Derivation of the even condition","Derivazione della condizione dispari":"Derivation of the odd condition","Riduzione adimensionale del problema":"Dimensionless reduction of the problem","Parametrizzazione trigonometrica del cerchio":"Trigonometric parametrization of the circle","Rami della condizione pari":"Branches of the even condition","Rami della condizione dispari":"Branches of the odd condition","Condizione di quantizzazione tramite arcoseno":"Arcsine quantization condition","Energia associata alla radice zN":"Energy associated with root zN","Numero generico di stati legati":"Generic number of bound states","Funzione monotona per la ricerca delle radici":"Monotone function for root finding"},"title":{"it":"Buca finita: quantizzazione in forma arcoseno","en":"Finite well: quantization in arcsine form"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

@@ -1,343 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oscillatore Armonico Tridimensionale</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oscillatore armonico tridimensionale isotropo</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Oscillatore Armonico Tridimensionale</h1>
-    <h2>Descrizione generale</h2>
-    L'oscillatore armonico tridimensionale è un'estensione dell'oscillatore armonico unidimensionale. Il potenziale è dato da:
-    <div class="formula">
-        \[
-        V(x, y, z) = \frac{1}{2} m \omega^2 (x^2 + y^2 + z^2)
-        \]
-    </div>
-    Questo sistema descrive una particella soggetta a un potenziale armonico isotropo in tre dimensioni.
-
-    <h2>Equazione di Schrödinger</h2>
-    L'equazione di Schrödinger stazionaria è:
-    <div class="formula">
-        \[
-        -\frac{\hbar^2}{2m} \nabla^2 \psi + V(x, y, z) \psi = E \psi
-        \]
-    </div>
-    Con il potenziale \( V(x, y, z) \), l'equazione diventa:
-    <div class="formula">
-        \[
-        -\frac{\hbar^2}{2m} \nabla^2 \psi + \frac{1}{2} m \omega^2 (x^2 + y^2 + z^2) \psi = E \psi
-        \]
-    </div>
-
-    <h2>Separazione delle variabili</h2>
-    Per risolvere l'equazione, si utilizza il metodo della separazione delle variabili, scrivendo la funzione d'onda come:
-    <div class="formula">
-        \[
-        \psi(x, y, z) = \psi_x(x) \psi_y(y) \psi_z(z)
-        \]
-    </div>
-    Inserendo questa forma nell'equazione di Schrödinger, si ottengono tre equazioni differenziali indipendenti per \( \psi_x(x) \), \( \psi_y(y) \) e \( \psi_z(z) \), ciascuna delle quali corrisponde all'oscillatore armonico unidimensionale.
-
-    <h2>Soluzioni</h2>
-    Le soluzioni sono date in termini di funzioni di Hermite:
-    <div class="formula">
-        \[
-        \psi_n(x) = \left( \frac{\alpha}{\pi} \right)^{1/4} \frac{1}{\sqrt{2^n n!}} H_n(\sqrt{\alpha} x) e^{-\frac{\alpha x^2}{2}}
-        \]
-    </div>
-    dove:
-    <ul>
-        <li>\( n \): Numero quantico</li>
-        <li>\( H_n \): Polinomi di Hermite</li>
-        <li>\( \alpha = \frac{m \omega}{\hbar} \)</li>
-    </ul>
-
-    <h2>Energia</h2>
-    L'energia totale del sistema è:
-    <div class="formula">
-        \[
-        E_{n_x, n_y, n_z} = \hbar \omega \left( n_x + n_y + n_z + \frac{3}{2} \right)
-        \]
-    </div>
-    dove \( n_x, n_y, n_z \) sono i numeri quantici associati alle tre direzioni.
-
-    <h2>Osservazioni</h2>
-    <ul>
-        <li>L'energia è quantizzata e dipende linearmente dai numeri quantici \( n_x, n_y, n_z \).</li>
-        <li>La densità di probabilità è determinata dal modulo quadro della funzione d'onda, con massimi in corrispondenza delle posizioni più probabili.</li>
-    </ul>
-
-<h2>Calcolo della separazione delle variabili</h2>
-Inserendo la funzione d'onda separata \( \psi(x, y, z) = \psi_x(x) \psi_y(y) \psi_z(z) \) nell'equazione di Schrödinger tridimensionale, si ottiene:
-<div class="formula">
-    \[
-    -\frac{\hbar^2}{2m} \left( \frac{\partial^2 \psi_x}{\partial x^2} + \frac{\partial^2 \psi_y}{\partial y^2} + \frac{\partial^2 \psi_z}{\partial z^2} \right)
-    + \frac{1}{2} m \omega^2 (x^2 + y^2 + z^2) \psi_x \psi_y \psi_z = E \psi_x \psi_y \psi_z
-    \]
-</div>
-Dividendo per \( \psi_x \psi_y \psi_z \), l'equazione si separa in tre componenti indipendenti:
-<div class="formula">
-    \[
-    -\frac{\hbar^2}{2m} \frac{\frac{\partial^2 \psi_x}{\partial x^2}}{\psi_x} + \frac{1}{2} m \omega^2 x^2 =
-    -\frac{\hbar^2}{2m} \frac{\frac{\partial^2 \psi_y}{\partial y^2}}{\psi_y} + \frac{1}{2} m \omega^2 y^2 =
-    -\frac{\hbar^2}{2m} \frac{\frac{\partial^2 \psi_z}{\partial z^2}}{\psi_z} + \frac{1}{2} m \omega^2 z^2 = E
-    \]
-</div>
-Ciascuna delle equazioni rappresenta un oscillatore armonico unidimensionale lungo le coordinate \(x\), \(y\) e \(z\).
-
-<h2>Risoluzione delle equazioni unidimensionali</h2>
-L'equazione differenziale unidimensionale per \( \psi_x(x) \) è:
-<div class="formula">
-    \[
-    -\frac{\hbar^2}{2m} \frac{d^2 \psi_x}{dx^2} + \frac{1}{2} m \omega^2 x^2 \psi_x = E_x \psi_x
-    \]
-</div>
-Questa equazione ha soluzioni in termini delle funzioni di Hermite \( H_n(x) \), definite da:
-<div class="formula">
-    \[
-    \psi_n(x) = \left( \frac{\alpha}{\pi} \right)^{1/4} \frac{1}{\sqrt{2^n n!}} H_n(\sqrt{\alpha} x) e^{-\frac{\alpha x^2}{2}}
-    \]
-</div>
-dove \( \alpha = \frac{m \omega}{\hbar} \) e \( n \) è il numero quantico.
-
-<h2>Energia totale del sistema</h2>
-L'energia totale del sistema tridimensionale è data dalla somma delle energie associate alle tre coordinate:
-<div class="formula">
-    \[
-    E_{n_x, n_y, n_z} = \hbar \omega \left( n_x + n_y + n_z + \frac{3}{2} \right)
-    \]
-</div>
-Qui, \( n_x, n_y, n_z \) sono i numeri quantici associati ai moti lungo \(x\), \(y\) e \(z\).
-
-<h2>Densità di probabilità</h2>
-La densità di probabilità è definita come il modulo quadro della funzione d'onda:
-<div class="formula">
-    \[
-    |\psi(x, y, z)|^2 = |\psi_x(x)|^2 |\psi_y(y)|^2 |\psi_z(z)|^2
-    \]
-</div>
-Ogni componente \( |\psi_x(x)|^2 \), \( |\psi_y(y)|^2 \), \( |\psi_z(z)|^2 \) rappresenta la probabilità di trovare la particella in una determinata regione dello spazio lungo quella direzione.
-
-<h2>Osservazioni conclusive</h2>
-<ul>
-    <li>Il sistema tridimensionale possiede stati quantizzati con energie definite.</li>
-    <li>La separazione delle variabili semplifica notevolmente il problema, riducendolo a tre equazioni unidimensionali.</li>
-    <li>L'oscillatore armonico tridimensionale è un modello fondamentale per la fisica quantistica e ha applicazioni in campi come la spettroscopia molecolare e la fisica dello stato solido.</li>
-</ul>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 8</div>
-  <h2>Oscillatore Armonico Tridimensionale: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare spettro e degenerazione dell'oscillatore isotropo tridimensionale.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Tre oscillatori indipendenti danno un'energia che dipende da \(N=n_x+n_y+n_z\). L'isotropia genera degenerazione maggiore della sola separabilità.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Hamiltoniana<span class="lecture-step-boss">DIM 14</span></h4>
-      <p>Somma di tre numeri.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="H=\hbar\omega(N_x+N_y+N_z+3/2)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H=\sum_{i=x,y,z}\left(p_i^2/(2m)+m\omega^2x_i^2/2\right)=\sum_i\hbar\omega(N_i+1/2)\Rightarrow H=\hbar\omega(N_x+N_y+N_z+3/2)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Conteggio<span class="lecture-step-boss">DIM 14</span></h4>
-      <p>Numero di terne non negative con somma N.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="g_N=\frac{(N+1)(N+2)}2"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle N=n_x+n_y+n_z,\quad n_i\ge0;\quad g_N=\sum_{n_x=0}^N(N-n_x+1)=\sum_{q=1}^{N+1}q=\frac{(N+1)(N+2)}2\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: N=2</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Elenca le terne.</p>
-    <p><strong>Calcolo.</strong> Sono (2,0,0) e permutazioni, più (1,1,0) e permutazioni: sei stati.</p>
-    <p><strong>Risultato e controllo.</strong> La formula dà \(g_2=6\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 14</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Frequenze uguali per isotropia.</li>
-          <li>Senza spin.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La degenerazione è un'impronta della simmetria; frequenze anisotrope la riducono.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Confronta base cartesiana e radiale.</li>
-          <li>Ricava gN combinatoriamente.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=123">Appunti-MQ.pdf, pp. 123-124 e 149-159: prodotto di tre oscillatori e degenerazione</a></li>
-          <li><a href="MQ.pdf#page=12">MQ.pdf, pp. capitolo 12: operatori numero indipendenti</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-oscillatore-armonico-3d"><div class="lecture-kicker">Lezione approfondita - separazione cartesiana e sferica</div><h1>Oscillatore armonico tridimensionale isotropo</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare spettro e degenerazione con tre oscillatori cartesiani, riconciliare la base cartesiana con quella sferica e ottenere le funzioni radiali di Laguerre con N=2n_r+ell.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Due basi, stesso spettro</h3><p>La separazione cartesiana rende immediata l'energia; quella sferica rende manifesti L², Lz e la struttura dei multipleti.</p></article><article class="lecture-card lecture-warning"><h3>Degenerazione elevata</h3><p>L'energia dipende soltanto da N=nx+ny+nz. La simmetria dinamica U(3), più ampia delle sole rotazioni, spiega stati con ell differenti alla stessa energia.</p></article></div><h2>Oscillatore isotropo e scala naturale</h2><div class="lecture-grid"><article class="lecture-card "><h3>Isotropia</h3><p>La stessa omega lungo x,y,z rende V dipendente solo da r². Se le tre frequenze differiscono, la separazione cartesiana resta ma la degenerazione cambia.</p></article><article class="lecture-card "><h3>Lunghezza</h3><p>La scala a=sqrt(hbar/(mu omega)) rende adimensionali coordinate e funzioni radiali.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Hamiltoniano separabile<span class="lecture-step-boss">BASE</span></h4><p>Il potenziale isotropo è somma di tre potenziali armonici indipendenti.</p><div class="lecture-formula" aria-label="Hamiltoniano dell&#x27;oscillatore 3D"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=\frac{p_x^2+p_y^2+p_z^2}{2\mu}+\frac12\mu\omega^2(x^2+y^2+z^2)=H_x+H_y+H_z\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Prodotto cartesiano<span class="lecture-step-boss">SEPARA</span></h4><p>Gli operatori Hx, Hy, Hz commutano e gli autostati sono prodotti di quelli unidimensionali.</p><div class="lecture-formula" aria-label="Autofunzione cartesiana fattorizzata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Psi_{n_xn_yn_z}(x,y,z)=\psi_{n_x}(x)\psi_{n_y}(y)\psi_{n_z}(z)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Somma delle energie<span class="lecture-step-boss">SPETTRO</span></h4><p>Ogni coordinata contribuisce hbar omega(n_i+1/2).</p><div class="lecture-formula" aria-label="Spettro in numeri quantici cartesiani"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_{n_xn_yn_z}=\hbar\omega\left(n_x+n_y+n_z+\frac32\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Numero totale<span class="lecture-step-boss">SPETTRO</span></h4><p>Si raccoglie la dipendenza energetica nel numero intero N.</p><div class="lecture-formula" aria-label="Numero di eccitazione totale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle N=n_x+n_y+n_z=0,1,2,\ldots,\qquad E_N=\hbar\omega(N+\tfrac32)\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Conteggio cartesiano<span class="lecture-step-boss">DEGENERAZIONE</span></h4><p>Le terne non negative con somma N sono combinazioni con ripetizione di tre categorie.</p><div class="lecture-formula" aria-label="Degenerazione del livello N"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle g_N=\#\{n_x+n_y+n_z=N\}=\binom{N+2}{2}=\frac{(N+1)(N+2)}2\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Operatori di scala<span class="lecture-step-boss">ALGEBRA</span></h4><p>Tre coppie indipendenti costruiscono l'intero spazio di Fock.</p><div class="lecture-formula" aria-label="Operatori di annichilazione cartesiani"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a_i=\sqrt{\frac{\mu\omega}{2\hbar}}x_i+\frac{i}{\sqrt{2\mu\hbar\omega}}p_i,\quad H=\hbar\omega\sum_i(a_i^\dagger a_i+\tfrac12)\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Simmetria rotazionale<span class="lecture-step-boss">CENTRALE</span></h4><p>Poiché V dipende solo da r, H commuta con L² e Lz oltre che con N.</p><div class="lecture-formula" aria-label="Commutatori dell&#x27;oscillatore isotropo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H,L^2]=[H,L_z]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Equazione radiale<span class="lecture-step-boss">SFERICA</span></h4><p>Nella base sferica compare la stessa barriera centrifuga di ogni potenziale centrale.</p><div class="lecture-formula" aria-label="Equazione radiale dell&#x27;oscillatore isotropo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -\frac{\hbar^2}{2\mu}u''+\left(\frac12\mu\omega^2r^2+\frac{\hbar^2\ell(\ell+1)}{2\mu r^2}\right)u=Eu\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Comportamenti asintotici<span class="lecture-step-boss">SFERICA</span></h4><p>La regolarità dà r alla ell+1 per u vicino a zero; il confinamento armonico impone la gaussiana all'infinito.</p><div class="lecture-formula" aria-label="Fattori radiali obbligati"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle u(r)\sim r^{\ell+1}\ (r\to0),\qquad u(r)\sim e^{-r^2/(2a^2)}\ (r\to\infty)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Ansatz radiale<span class="lecture-step-boss">LAGUERRE</span></h4><p>Con x=r²/a² si estraggono potenza e gaussiana e resta un polinomio associato.</p><div class="lecture-formula" aria-label="Soluzione radiale con Laguerre associati"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle R_{n_r\ell}(r)=\mathcal N\left(\frac ra\right)^\ell e^{-r^2/(2a^2)}L_{n_r}^{\ell+1/2}\!\left(\frac{r^2}{a^2}\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Terminazione<span class="lecture-step-boss">QUANTIZZA</span></h4><p>La normalizzabilità richiede n_r intero non negativo e fissa l'energia radiale.</p><div class="lecture-formula" aria-label="Spettro nella base sferica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle n_r=0,1,2,\ldots,\qquad E_{n_r\ell}=\hbar\omega\left(2n_r+\ell+\frac32\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Dizionario delle basi<span class="lecture-step-boss">IDENTITÀ</span></h4><p>Confrontando le energie si identifica il numero cartesiano totale con 2n_r+ell.</p><div class="lecture-formula" aria-label="Relazione tra numeri quantici cartesiani e sferici"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle N=n_x+n_y+n_z=2n_r+\ell\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Ell ammessi<span class="lecture-step-boss">MULTIPLETTI</span></h4><p>A N fissato, ell ha la stessa parità di N e scende a passi di due.</p><div class="lecture-formula" aria-label="Momenti orbitali presenti nel livello N"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \ell=N,N-2,N-4,\ldots,\begin{cases}0,&amp;N\ \text{pari}\\1,&amp;N\ \text{dispari}\end{cases}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Conteggio sferico<span class="lecture-step-boss">CHECK</span></h4><p>Sommando le 2ell+1 orientazioni si recupera esattamente la degenerazione cartesiana.</p><div class="lecture-formula" aria-label="Uguaglianza dei conteggi nelle due basi"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sum_{\ell=N,N-2,\ldots}(2\ell+1)=\frac{(N+1)(N+2)}2\)</span></div></article></section><h2>Esempio: guscio N=2</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Il livello E=(7/2)hbar omega contiene tutte le terne cartesiane con somma due.</p><p data-i18n-skip="true">\(\displaystyle g_2=6;\quad(n_xn_yn_z)=(200),(020),(002),(110),(101),(011);\quad( n_r,\ell)=(1,0)\oplus(0,2)\)</p><p><strong>Controllo.</strong> La base sferica contiene un singoletto ell=0 e un quintetto ell=2: 1+5=6. Questa verifica lega degenerazione e momento angolare senza identificare i singoli vettori di base.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Separazione anisotropa</h3><p>Per omega_x, omega_y, omega_z diverse, E è ancora una somma ma N non basta e in generale L² non è conservato.</p></article><article class="lecture-card "><h3>Hermite contro Laguerre</h3><p>Hermite appare nelle tre coordinate cartesiane; Laguerre associati nella coordinata radiale sferica. Sono basi diverse dello stesso eigenspazio.</p></article><article class="lecture-card "><h3>Nodi</h3><p>n_r conta i nodi radiali positivi; ell controlla il comportamento all'origine e la molteplicità magnetica.</p></article><article class="lecture-card "><h3>Simmetria</h3><p>Le rotazioni spiegano la degenerazione in m; la degenerazione tra ell differenti richiede la simmetria dinamica più ampia U(3).</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare E=hbar omega(N+1/2) invece di N+3/2; contare terne ordinate come non ordinate; scrivere Hermite nella soluzione radiale; porre N=n_r+ell; attribuire tutta la degenerazione alle sole rotazioni.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>E0=3hbar omega/2; g0=1; g1=3; N e ell hanno la stessa parità; la somma dei 2ell+1 coincide con gN; R è regolare e gaussiana.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Separa H in Hx+Hy+Hz.</li><li>Somma le tre energie unidimensionali.</li><li>Conta le terne con somma N.</li><li>Dimostra la simmetria rotazionale.</li><li>Scrivi l'equazione radiale.</li><li>Estrai potenza e gaussiana.</li><li>Deriva N=2n_r+ell.</li><li>Verifica la degenerazione nelle due basi.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L248">DIM 14 e DIM 16 - separazione 3D, potenziali centrali e idrogeno</a></li><li><a href="Appunti-MQ.pdf#page=242">Appunti-MQ.pdf, pagine PDF 242-251 - equazione radiale e campo coulombiano</a></li><li><a href="set-9-funzioni-radiali.html">Set 9 - funzioni radiali e stati idrogenoidi</a></li></ul><p class="lecture-note">La numerazione nei collegamenti PDF è quella effettiva del file. Le derivazioni radiali sono state confrontate con DIM 14 e DIM 16.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - separazione cartesiana e sferica":"In-depth lesson - Cartesian and spherical separation","Oscillatore armonico tridimensionale isotropo":"Three-dimensional isotropic harmonic oscillator","Obiettivo.":"Objective.","Derivare spettro e degenerazione con tre oscillatori cartesiani, riconciliare la base cartesiana con quella sferica e ottenere le funzioni radiali di Laguerre con N=2n_r+ell.":"Derive spectrum and degeneracy using three Cartesian oscillators, reconcile the Cartesian and spherical bases, and obtain Laguerre radial functions with N=2n_r+ell.","Due basi, stesso spettro":"Two bases, one spectrum","La separazione cartesiana rende immediata l'energia; quella sferica rende manifesti L², Lz e la struttura dei multipleti.":"Cartesian separation makes energy immediate; spherical separation makes L², Lz, and multiplet structure explicit.","Degenerazione elevata":"Large degeneracy","L'energia dipende soltanto da N=nx+ny+nz. La simmetria dinamica U(3), più ampia delle sole rotazioni, spiega stati con ell differenti alla stessa energia.":"Energy depends only on N=nx+ny+nz. Dynamical U(3) symmetry, larger than rotations alone, explains states with different ell at the same energy.","Oscillatore isotropo e scala naturale":"Isotropic oscillator and natural scale","Isotropia":"Isotropy","La stessa omega lungo x,y,z rende V dipendente solo da r². Se le tre frequenze differiscono, la separazione cartesiana resta ma la degenerazione cambia.":"The same omega along x,y,z makes V depend only on r². If the three frequencies differ, Cartesian separation remains but degeneracy changes.","Lunghezza":"Length scale","La scala a=sqrt(hbar/(mu omega)) rende adimensionali coordinate e funzioni radiali.":"Scale a=sqrt(hbar/(mu omega)) makes coordinates and radial functions dimensionless.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Hamiltoniano separabile":"1. Separable Hamiltonian","BASE":"BASE","Il potenziale isotropo è somma di tre potenziali armonici indipendenti.":"The isotropic potential is a sum of three independent harmonic potentials.","Passaggio":"Step","2. Prodotto cartesiano":"2. Cartesian product","SEPARA":"SEPARATE","Gli operatori Hx, Hy, Hz commutano e gli autostati sono prodotti di quelli unidimensionali.":"Operators Hx, Hy, Hz commute and eigenstates are products of one-dimensional states.","3. Somma delle energie":"3. Energy sum","SPETTRO":"SPECTRUM","Ogni coordinata contribuisce hbar omega(n_i+1/2).":"Each coordinate contributes hbar omega(n_i+1/2).","4. Numero totale":"4. Total number","Si raccoglie la dipendenza energetica nel numero intero N.":"Collect the energy dependence in integer N.","5. Conteggio cartesiano":"5. Cartesian counting","DEGENERAZIONE":"DEGENERACY","Le terne non negative con somma N sono combinazioni con ripetizione di tre categorie.":"Nonnegative triples summing to N are combinations with repetition of three categories.","6. Operatori di scala":"6. Ladder operators","ALGEBRA":"ALGEBRA","Tre coppie indipendenti costruiscono l'intero spazio di Fock.":"Three independent pairs build the entire Fock space.","7. Simmetria rotazionale":"7. Rotational symmetry","CENTRALE":"CENTRAL","Poiché V dipende solo da r, H commuta con L² e Lz oltre che con N.":"Because V depends only on r, H commutes with L² and Lz in addition to N.","8. Equazione radiale":"8. Radial equation","SFERICA":"SPHERICAL","Nella base sferica compare la stessa barriera centrifuga di ogni potenziale centrale.":"In the spherical basis, the same centrifugal barrier as for every central potential appears.","9. Comportamenti asintotici":"9. Asymptotic behaviors","La regolarità dà r alla ell+1 per u vicino a zero; il confinamento armonico impone la gaussiana all'infinito.":"Regularity gives r to ell+1 for u near zero; harmonic confinement imposes the Gaussian at infinity.","10. Ansatz radiale":"10. Radial ansatz","LAGUERRE":"LAGUERRE","Con x=r²/a² si estraggono potenza e gaussiana e resta un polinomio associato.":"With x=r²/a², factor out the power and Gaussian, leaving an associated polynomial.","11. Terminazione":"11. Termination","QUANTIZZA":"QUANTIZE","La normalizzabilità richiede n_r intero non negativo e fissa l'energia radiale.":"Normalizability requires nonnegative integer n_r and fixes radial energy.","12. Dizionario delle basi":"12. Dictionary between bases","IDENTITÀ":"IDENTITY","Confrontando le energie si identifica il numero cartesiano totale con 2n_r+ell.":"Comparing energies identifies the total Cartesian number with 2n_r+ell.","13. Ell ammessi":"13. Allowed ell","MULTIPLETTI":"MULTIPLETS","A N fissato, ell ha la stessa parità di N e scende a passi di due.":"At fixed N, ell has the same parity as N and decreases in steps of two.","14. Conteggio sferico":"14. Spherical counting","CHECK":"CHECK","Sommando le 2ell+1 orientazioni si recupera esattamente la degenerazione cartesiana.":"Summing the 2ell+1 orientations exactly recovers Cartesian degeneracy.","Esempio: guscio N=2":"Example: N=2 shell","Impostazione.":"Setup.","Il livello E=(7/2)hbar omega contiene tutte le terne cartesiane con somma due.":"Level E=(7/2)hbar omega contains every Cartesian triple summing to two.","Controllo.":"Check.","La base sferica contiene un singoletto ell=0 e un quintetto ell=2: 1+5=6. Questa verifica lega degenerazione e momento angolare senza identificare i singoli vettori di base.":"The spherical basis contains an ell=0 singlet and an ell=2 quintet: 1+5=6. This check links degeneracy and angular momentum without identifying individual basis vectors.","Interpretazione e limiti":"Interpretation and limits","Separazione anisotropa":"Anisotropic separation","Per omega_x, omega_y, omega_z diverse, E è ancora una somma ma N non basta e in generale L² non è conservato.":"For distinct omega_x, omega_y, omega_z, E is still a sum but N is insufficient and L² is generally not conserved.","Hermite contro Laguerre":"Hermite versus Laguerre","Hermite appare nelle tre coordinate cartesiane; Laguerre associati nella coordinata radiale sferica. Sono basi diverse dello stesso eigenspazio.":"Hermite appears in the three Cartesian coordinates; associated Laguerre in the spherical radial coordinate. They are different bases of the same eigenspace.","Nodi":"Nodes","n_r conta i nodi radiali positivi; ell controlla il comportamento all'origine e la molteplicità magnetica.":"n_r counts positive radial nodes; ell controls origin behavior and magnetic multiplicity.","Simmetria":"Symmetry","Le rotazioni spiegano la degenerazione in m; la degenerazione tra ell differenti richiede la simmetria dinamica più ampia U(3).":"Rotations explain m degeneracy; degeneracy across different ell values requires the larger dynamical U(3) symmetry.","Errori tipici":"Common errors","Usare E=hbar omega(N+1/2) invece di N+3/2; contare terne ordinate come non ordinate; scrivere Hermite nella soluzione radiale; porre N=n_r+ell; attribuire tutta la degenerazione alle sole rotazioni.":"Using E=hbar omega(N+1/2) instead of N+3/2; counting ordered triples as unordered; writing Hermite in the radial solution; setting N=n_r+ell; attributing all degeneracy to rotations alone.","Controlli rapidi":"Quick checks","E0=3hbar omega/2; g0=1; g1=3; N e ell hanno la stessa parità; la somma dei 2ell+1 coincide con gN; R è regolare e gaussiana.":"E0=3hbar omega/2; g0=1; g1=3; N and ell have the same parity; the sum of 2ell+1 equals gN; R is regular and Gaussian.","Controllo da orale":"Oral exam checklist","Separa H in Hx+Hy+Hz.":"Separate H into Hx+Hy+Hz.","Somma le tre energie unidimensionali.":"Add the three one-dimensional energies.","Conta le terne con somma N.":"Count triples summing to N.","Dimostra la simmetria rotazionale.":"Prove rotational symmetry.","Scrivi l'equazione radiale.":"Write the radial equation.","Estrai potenza e gaussiana.":"Factor out power and Gaussian.","Deriva N=2n_r+ell.":"Derive N=2n_r+ell.","Verifica la degenerazione nelle due basi.":"Verify degeneracy in both bases.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 14 e DIM 16 - separazione 3D, potenziali centrali e idrogeno":"DIM 14 and DIM 16 - 3D separation, central potentials, and hydrogen","Appunti-MQ.pdf, pagine PDF 242-251 - equazione radiale e campo coulombiano":"Appunti-MQ.pdf, PDF pages 242-251 - radial equation and Coulomb field","Set 9 - funzioni radiali e stati idrogenoidi":"Set 9 - radial functions and hydrogen-like states","La numerazione nei collegamenti PDF è quella effettiva del file. Le derivazioni radiali sono state confrontate con DIM 14 e DIM 16.":"PDF links use the file's actual page numbering. Radial derivations were compared against DIM 14 and DIM 16.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Hamiltoniano dell'oscillatore 3D":"Three-dimensional oscillator Hamiltonian","Autofunzione cartesiana fattorizzata":"Factorized Cartesian eigenfunction","Spettro in numeri quantici cartesiani":"Spectrum in Cartesian quantum numbers","Numero di eccitazione totale":"Total excitation number","Degenerazione del livello N":"Degeneracy of level N","Operatori di annichilazione cartesiani":"Cartesian annihilation operators","Commutatori dell'oscillatore isotropo":"Commutators of the isotropic oscillator","Equazione radiale dell'oscillatore isotropo":"Radial equation of the isotropic oscillator","Fattori radiali obbligati":"Required radial factors","Soluzione radiale con Laguerre associati":"Radial solution with associated Laguerre polynomials","Spettro nella base sferica":"Spectrum in the spherical basis","Relazione tra numeri quantici cartesiani e sferici":"Relation between Cartesian and spherical quantum numbers","Momenti orbitali presenti nel livello N":"Orbital angular momenta in level N","Uguaglianza dei conteggi nelle due basi":"Equality of counts in the two bases"},"title":{"it":"Oscillatore armonico tridimensionale isotropo","en":"Three-dimensional isotropic harmonic oscillator"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

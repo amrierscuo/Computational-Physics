@@ -1,121 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buca di Potenziale a Pareti Finite</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Buche di potenziale infinite e finite</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="buca-potenziale.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Buca di Potenziale a Pareti Finite</h1>
-
-<p>La buca di potenziale a pareti finite è un problema quantistico unidimensionale che illustra come, a differenza del caso a pareti infinite, le particelle possano "penetrare" parzialmente nelle regioni in cui l’energia è maggiore dell’energia della particella. A livello classico, una particella con energia inferiore all’altezza delle pareti non potrebbe mai uscire dalla buca. In meccanica quantistica, la localizzazione non è assoluta, e gli stati legati e gli stati di scattering mostrano comportamenti peculiari.</p>
-
-<p>Il potenziale può essere descritto come:</p>
-
-\[
-V(x) = \begin{cases}
-0 & \text{se } |x| < a \\[6pt]
-V_0 & \text{se } |x| \geq a
-\end{cases}
-\]
-
-dove \(V_0 > 0\) e \(a > 0\). Questo definisce una "buca" di larghezza \(2a\) e profondità \(V_0\), non infinita come nel caso di pareti infinite, ma finita.</p>
-
-<h2>Stati Legati</h2>
-
-<p>Se l’energia della particella \(E\) è minore di \(V_0\), la particella può rimanere intrappolata nella buca, formando uno stato legato. A differenza della buca infinita, gli stati legati nella buca finita decadono esponenzialmente all’esterno della regione \(|x|<a\), poiché lì il potenziale è più alto e l’energia non è sufficiente per una propagazione libera.</p>
-
-<p>La condizione quantistica porta alla quantizzazione dei livelli energetici. A differenza della buca infinita, però, la quantizzazione dei livelli non è semplice come un set di seni e coseni puri. L’applicazione delle condizioni al contorno (continuità di funzione d’onda e della sua derivata) porta a relazioni trascendenti per i livelli energetici, risolvibili solo numericamente o graficamente.</p>
-
-<h2>Penetrazione dell’Onda all’Esterno</h2>
-
-<p>All’interno della buca, per \(|x|<a\), la soluzione dell’equazione di Schrödinger si comporta in modo simile alle funzioni sinusoidali della buca infinita, ma all’esterno, dove il potenziale è \(V_0\), la funzione d’onda non si annulla bruscamente come nel caso infinito. Invece, diminuisce esponenzialmente. Ciò significa che la particella "sente" la presenza della barriera, ma non è rigidamente confinata come nel caso infinito. Questo è un fenomeno puramente quantistico legato all’effetto tunnel.</p>
-
-<h2>Stati di Scattering</h2>
-
-<p>Se l’energia della particella supera \(V_0\), la particella non è più confinata: può teoricamente arrivare dalla regione \( x \to -\infty \) ed essere parzialmente trasmessa o riflessa dalla buca. In questo caso, la buca finita funge da potenziale che altera l’ampiezza e la fase dell’onda trasmessa, producendo coefficienti di riflessione e trasmissione non banali. A certe energie è possibile avere risonanze, cioè energie alle quali la trasmissione è massima a causa di condizioni di interferenza costruttiva dentro la buca.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Disegna il potenziale: una buca di larghezza 2a, con profondità V_0. A differenza della buca infinita, qui i "muri" hanno un’altezza finita: da 0 a V_0.
-<br><br>
-2. Mostra qualitativamente la funzione d’onda di uno stato legato: sinusoidale all’interno (|x| < a) ed esponenzialmente decrescente all’esterno (|x| > a).
-<br><br>
-3. Spiega che per trovare i livelli energetici legati si devono applicare le condizioni al contorno di continuità di \(\psi\) e \(\psi'\) a x = ±a, ottenendo equazioni trascendenti.
-<br><br>
-4. Per stati con E > V_0, rappresenta un’onda entrante da sinistra. Alcune porzioni di quest’onda vengono rifratte (transitate) attraverso la buca, altre riflessa. Mostra concettualmente l’andamento dell’onda uscente.
-<br><br>
-5. Sottolinea l’aspetto chiave: non esiste un’annullamento totale della funzione d’onda all’esterno come nel caso a pareti infinite, bensì un decadimento graduale, a testimonianza della penetrazione quantistica.
-</div>
-<h2>Approfondimenti su stati legati e condizioni al contorno</h2>
-
-<p>Considerando la buca a pareti finite, la quantizzazione dei livelli energetici non segue più una formula semplice come nel caso della buca infinita. Qui, la funzione d’onda \(\psi(x)\) deve soddisfare l’equazione di Schrödinger in tre regioni:  
-1. Regione interna, tra \(-a\) e \(a\), dove il potenziale è zero.  
-2. Regione esterna, a sinistra di \(-a\) e a destra di \(a\), dove il potenziale è \(V_0\), un valore finito e positivo (o almeno un potenziale barriera finita).</p>
-
-<p>Nella zona interna, con energia \(E minore di V_0\), la funzione d’onda ha soluzioni simili a onde sinusoidali, mentre all’esterno la soluzione decresce esponenzialmente, poiché la particella non ha abbastanza energia per propagarsi liberamente oltre la barriera. I profili di \(\psi(x)\) in queste due aree vengono accostati imponendo continuità di \(\psi\) e della sua derivata prima in corrispondenza dei punti \(x=\pm a\). Questo genera un sistema di condizioni che, a differenza di situazioni più semplici, non si risolve con una formula elementare. Occorre ricorrere a metodi numerici o a grafici per trovare le energie \(E\) che soddisfano le condizioni di matching.</p>
-
-<p>Alla lavagna si può rappresentare questa situazione come segue:  
-- Sul lato sinistro, nel tratto \(-\infty\) a \(-a\), la soluzione esponenziale decrescente.  
-- Al centro, tra \(-a\) e \(a\), una funzione d’onda oscillante, ad esempio un seno o un coseno opportunamente scelti per soddisfare la parità del problema.  
-- Sul lato destro, da \(a\) a \(+\infty\), di nuovo una soluzione esponenzialmente decrescente.  
-
-Mettendo in evidenza che la forma dell’onda all’interno è “incastrata” tra due muri di potenziale non infiniti, si ottiene un compromesso: non tutte le frequenze d’oscillazione interna vanno bene, soltanto quelle per cui la funzione d’onda e la sua derivata si incontrano senza discontinuità sulle pareti. Scegliendo una certa energia, si prova a verificare le condizioni al contorno: se non si chiudono in modo coerente, si cambia \(E\) fino a trovare valori per cui le equazioni di matching sono soddisfatte. Questo processo, in genere, produce un numero finito di soluzioni legate, ciascuna con una propria energia quantizzata.</p>
-
-<p>Un aspetto interessante è che aumentando la profondità \(V_0\) o la larghezza \(2a\) della buca, diventa possibile supportare più stati legati. Immaginare una buca poco profonda: soltanto il livello fondamentale (un solo stato legato) può esistere. Approfondendo la buca o rendendola più larga, emergono nuovi stati, come posare più e più cicli d’onda all’interno. Alla lavagna, si può mostrare la modifica dei livelli energetici al variare di \(V_0\) o di \(a\). A differenza della buca infinita, dove i livelli sono semplici multipli di una costante, qui si ottengono livelli che dipendono in modo non banale dai parametri del potenziale.</p>
-
-<p>Questo scenario non è soltanto teorico: compare effettivamente in sistemi fisici reali, ad esempio in eterostrutture a semiconduttore o nei pozzi quantici nanometrici, dove gli elettroni sono parzialmente confinati. La ricchezza delle soluzioni e la sensibilità dei livelli energetici alle caratteristiche del potenziale sono uno dei motivi per cui lo studio del pozzo finito è più realistico rispetto all’approssimazione di pozzo a pareti infinite. La transizione tra stati legati (discreti e quantizzati) e stati di scattering (continui, quando l’energia oltrepassa la barriera) permette inoltre di esplorare fenomeni come la risonanza e la trasmissione quantistica attraverso barriere finite.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="buca-finita.html" data-mq-shared-lesson="buca-potenziale.html" id="lezione-buca-potenziale"><div class="lecture-kicker">Lezione approfondita - Argomento 4 - DIM 17</div><h1>Buche di potenziale infinite e finite</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: buca-finita.html. La lezione scientifica verificata è condivisa con buca-potenziale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la quantizzazione nella buca infinita da equazione, bordi e normalizzazione; passare alla buca finita simmetrica, ottenere le equazioni trascendenti pari e dispari e spiegare code, numero di livelli e limite di pareti infinite.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Il bordo crea lo spettro</h3><p>Dentro la buca infinita la particella è libera, ma le condizioni alle pareti selezionano solo numeri d'onda discreti e rimuovono lo stato n uguale zero.</p></article><article class="lecture-card lecture-warning"><h3>Parete finita, coda non nulla</h3><p>Una parete finita non impone psi uguale zero: funzione e derivata si raccordano a code esponenziali. La quantizzazione diventa trascendente.</p></article></div><h2>Dalla buca ideale al confinamento realistico</h2><div class="lecture-grid"><article class="lecture-card"><h3>Buca infinita</h3><p>Ha infiniti livelli discreti, pareti di Dirichlet e autofunzioni sinusoidali esattamente ortonormali.</p></article><article class="lecture-card"><h3>Buca finita</h3><p>Ha un numero finito di livelli legati tra meno V0 e zero, alternati in parità, oltre a un continuo di scattering per E positivo.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. TISE e bordi<span class="lecture-step-boss">BASE</span></h4><p>In una dimensione il dominio dell'Hamiltoniana e le condizioni al bordo fanno parte del problema agli autovalori.</p><div aria-label="Equazione stazionaria unidimensionale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -\frac{\hbar^2}{2m}\psi''+V(x)\psi=E\psi\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Buca infinita<span class="lecture-step-boss">MODELLO</span></h4><p>Il potenziale è nullo nel segmento e infinito fuori; continuità con la regione proibita impone l'annullamento alle pareti.</p><div aria-label="Definizione e condizioni della buca infinita" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(x)=0\ (0&lt;x&lt;L),\quad V=\infty\ \text{fuori},\qquad\psi(0)=\psi(L)=0\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Segno dell'energia<span class="lecture-step-boss">DIMOSTRA</span></h4><p>Il valore medio dell'energia cinetica è non negativo; con V uguale zero nella buca non può esistere un autovalore negativo.</p><div aria-label="Positività dell'energia nella buca" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E=\langle\psi|H|\psi\rangle=\frac{\hbar^2}{2m}\int_0^L|\psi'|^2dx\ge0\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Soluzione interna<span class="lecture-step-boss">E&gt;0</span></h4><p>Per energia positiva l'equazione è armonica; la prima parete elimina il coseno.</p><div aria-label="Soluzione generale e primo bordo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi''+k^2\psi=0,\quad k=\sqrt{2mE}/\hbar,\quad\psi=A\sin kx+B\cos kx,\quad B=0\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Quantizzazione<span class="lecture-step-boss">BORDO</span></h4><p>La seconda parete richiede un numero intero di mezze lunghezze d'onda nel segmento.</p><div aria-label="Spettro della buca infinita" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sin(kL)=0\Rightarrow k_n=\frac{n\pi}{L},\qquad E_n=\frac{\hbar^2\pi^2n^2}{2mL^2},\quad n=1,2,\ldots\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Normalizzazione<span class="lecture-step-boss">NORMA</span></h4><p>L'integrale di seno quadrato fissa il modulo della costante; una fase globale resta irrilevante.</p><div aria-label="Autofunzioni normalizzate" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle 1=|A_n|^2\int_0^L\sin^2(n\pi x/L)dx=|A_n|^2\frac L2\Rightarrow\psi_n=\sqrt{\frac2L}\sin\frac{n\pi x}{L}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Ortonormalità e sviluppo<span class="lecture-step-boss">BASE SPETTRALE</span></h4><p>I seni costituiscono la base completa adatta ai bordi di Dirichlet.</p><div aria-label="Base spettrale della buca" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \int_0^L\psi_n^*\psi_m\,dx=\delta_{nm},\qquad\psi(x,t)=\sum_{n=1}^{\infty}c_n\psi_n(x)e^{-iE_nt/\hbar},\quad c_n=\int_0^L\psi_n^*\psi(x,0)\,dx\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Nodi e scala<span class="lecture-step-boss">FISICA</span></h4><p>Lo stato n ha n meno uno nodi interni; restringere la buca aumenta tutte le energie come uno su L quadrato.</p><div aria-label="Nodi, lunghezza d'onda e scala energetica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle N_{\rm nodi}=n-1,\qquad E_n\propto n^2L^{-2},\qquad\lambda_n=\frac{2L}{n}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Buca finita simmetrica<span class="lecture-step-boss">DIM 17</span></h4><p>Si centra la buca nell'origine per sfruttare la parità e si cercano energie legate tra fondo e continuo.</p><div aria-label="Definizione della buca finita" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(x)=\begin{cases}-V_0,&amp;|x|&lt;a\\0,&amp;|x|\ge a\end{cases},\qquad -V_0&lt;E&lt;0\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Numeri d'onda<span class="lecture-step-boss">REGIONI</span></h4><p>Dentro la soluzione oscilla; fuori deve decadere per normalizzabilità. Energia e profondità legano i due parametri.</p><div aria-label="Parametri della buca finita" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle q=\frac{\sqrt{2m(E+V_0)}}{\hbar},\quad\kappa=\frac{\sqrt{-2mE}}{\hbar},\quad q^2+\kappa^2=\frac{2mV_0}{\hbar^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Settore pari<span class="lecture-step-boss">RACCORDO</span></h4><p>Per uno stato pari si usa coseno dentro ed esponenziale fuori; dividere il raccordo della derivata per quello della funzione elimina le ampiezze.</p><div aria-label="Equazione trascendente degli stati pari" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_{\rm in}=B\cos qx,\quad\psi_{\rm out}=Ce^{-\kappa|x|},\qquad q\tan(qa)=\kappa\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Settore dispari<span class="lecture-step-boss">RACCORDO</span></h4><p>Per uno stato dispari si usa seno dentro e la coda cambia segno tra i due lati.</p><div aria-label="Equazione trascendente degli stati dispari" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_{\rm in}=B\sin qx,\quad\psi_{\rm out}=C\,\operatorname{sgn}(x)e^{-\kappa|x|},\qquad-q\cot(qa)=\kappa\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Forma adimensionale<span class="lecture-step-boss">GRAFICO</span></h4><p>Le intersezioni con un quarto di circonferenza contano i livelli senza risolvere analiticamente le equazioni.</p><div aria-label="Equazioni adimensionali della buca finita" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle z=qa,\quad y=\kappa a,\quad z_0=a\sqrt{2mV_0}/\hbar,\quad z^2+y^2=z_0^2,\quad z\tan z=y\ \text{o}\ -z\cot z=y\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Esistenza e limite<span class="lecture-step-boss">ORALE</span></h4><p>In una dimensione una buca attrattiva finita possiede sempre almeno uno stato pari; nuovi stati appaiono superando soglie e nel limite profondo si recuperano pareti quasi infinite.</p><div aria-label="Esistenza del fondamentale e limite profondo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle z_0&gt;0\Rightarrow N_{\rm legati}\ge1,\qquad z_0\to\infty:\ \kappa\to\infty\Rightarrow\psi(\pm a)\to0\)</span></div></article></section><h2>Esempio dinamico nella buca infinita</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prepara una sovrapposizione equiprobabile dei primi due autostati.</p><p data-i18n-skip="true">\(\displaystyle \psi(x,t)=\frac{\psi_1e^{-iE_1t/\hbar}+\psi_2e^{-iE_2t/\hbar}}{\sqrt2},\quad|\psi|^2=\frac{|\psi_1|^2+|\psi_2|^2}{2}+\psi_1\psi_2\cos\frac{(E_2-E_1)t}{\hbar},\quad\omega_{21}=\frac{3\pi^2\hbar}{2mL^2}\)</p><p><strong>Controllo.</strong> L'energia assume E1 o E2 con probabilità un mezzo, mentre la densità non è stazionaria e oscilla alla frequenza di Bohr.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Bordi ideali</h3><p>La derivata può saltare su una parete infinita, perché la dimostrazione della sua continuità richiede un potenziale finito.</p></article><article class="lecture-card"><h3>Parità e scelta dell'origine</h3><p>La buca tra zero e L non mostra parità rispetto all'origine, ma è simmetrica rispetto a L su due. Centrarla rende esplicita l'alternanza pari-dispari.</p></article><article class="lecture-card"><h3>Numero finito</h3><p>La buca finita ha solo un intervallo energetico limitato per gli stati legati; per questo il numero di intersezioni e livelli è finito.</p></article><article class="lecture-card"><h3>Coda e confinamento</h3><p>La lunghezza uno su kappa misura la penetrazione. Un livello vicino a zero ha coda lunga ed è debolmente legato.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Includere n uguale zero; imporre psi primo continua su una parete infinita; usare seno e coseno senza parità coerente; cambiare segno a q tan qa; dire che una buca finita ha infiniti livelli legati.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>E infinito cresce come n quadrato; psi ha dimensione L alla meno un mezzo; q quadrato più kappa quadrato è fissato; lo stato fondamentale finito è pari e senza nodi; la coda si accorcia aumentando il legame.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Escludi E negativo nella buca infinita.</li><li>Imponi i due bordi e ricava k_n.</li><li>Normalizza e dimostra l'ortogonalità.</li><li>Scrivi lo sviluppo temporale generale.</li><li>Definisci q e kappa nella buca finita.</li><li>Usa la parità per ridurre il raccordo.</li><li>Ricava entrambe le equazioni trascendenti.</li><li>Spiega graficamente numero di livelli e limite profondo.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L833">DIM 17 - buche, stati legati, diffusione e parità</a></li><li><a href="Appunti-MQ.pdf#page=118">Appunti-MQ.pdf, pagine PDF 118-127 - proprietà generali, buca infinita e buca finita</a></li><li><a href="set-7-parita-oscillatore.html">Set 7 - parità e oscillatore armonico</a></li></ul><p class="lecture-note">La catena riproduce le dimostrazioni delle pagine verificate 118-127 e DIM 17, inclusi positività, normalizzazione, parità e soglie, con il minimo numero di passaggi separati compatibile con una risposta orale completa.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 4 - DIM 17":"In-depth lesson - Topic 4 - DIM 17","Buche di potenziale infinite e finite":"Infinite and finite potential wells","Obiettivo.":"Objective.","Derivare la quantizzazione nella buca infinita da equazione, bordi e normalizzazione; passare alla buca finita simmetrica, ottenere le equazioni trascendenti pari e dispari e spiegare code, numero di livelli e limite di pareti infinite.":"Derive quantization in the infinite well from equation, boundaries, and normalization; move to the symmetric finite well, obtain even and odd transcendental equations, and explain tails, level count, and the infinite-wall limit.","Il bordo crea lo spettro":"The boundary creates the spectrum","Dentro la buca infinita la particella è libera, ma le condizioni alle pareti selezionano solo numeri d'onda discreti e rimuovono lo stato n uguale zero.":"Inside the infinite well the particle is free, but wall conditions select only discrete wave numbers and remove the n equals zero state.","Parete finita, coda non nulla":"Finite wall, nonzero tail","Una parete finita non impone psi uguale zero: funzione e derivata si raccordano a code esponenziali. La quantizzazione diventa trascendente.":"A finite wall does not impose psi equal to zero: function and derivative match exponential tails. Quantization becomes transcendental.","Dalla buca ideale al confinamento realistico":"From the ideal well to realistic confinement","Buca infinita":"Infinite well","Ha infiniti livelli discreti, pareti di Dirichlet e autofunzioni sinusoidali esattamente ortonormali.":"It has infinitely many discrete levels, Dirichlet walls, and exactly orthonormal sinusoidal eigenfunctions.","Buca finita":"Finite well","Ha un numero finito di livelli legati tra meno V0 e zero, alternati in parità, oltre a un continuo di scattering per E positivo.":"It has a finite number of bound levels between minus V0 and zero, alternating in parity, plus a scattering continuum for positive E.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. TISE e bordi":"1. TISE and boundaries","BASE":"BASE","In una dimensione il dominio dell'Hamiltoniana e le condizioni al bordo fanno parte del problema agli autovalori.":"In one dimension the Hamiltonian domain and boundary conditions are part of the eigenvalue problem.","Passaggio":"Step","2. Buca infinita":"2. Infinite well","MODELLO":"MODEL","Il potenziale è nullo nel segmento e infinito fuori; continuità con la regione proibita impone l'annullamento alle pareti.":"The potential vanishes in the segment and is infinite outside; continuity with the forbidden region imposes vanishing at the walls.","3. Segno dell'energia":"3. Energy sign","DIMOSTRA":"PROVE","Il valore medio dell'energia cinetica è non negativo; con V uguale zero nella buca non può esistere un autovalore negativo.":"The expectation value of kinetic energy is nonnegative; with V equal to zero in the well there can be no negative eigenvalue.","4. Soluzione interna":"4. Interior solution","E>0":"E>0","Per energia positiva l'equazione è armonica; la prima parete elimina il coseno.":"For positive energy the equation is harmonic; the first wall removes the cosine.","5. Quantizzazione":"5. Quantization","BORDO":"BOUNDARY","La seconda parete richiede un numero intero di mezze lunghezze d'onda nel segmento.":"The second wall requires an integer number of half wavelengths in the segment.","6. Normalizzazione":"6. Normalization","NORMA":"NORM","L'integrale di seno quadrato fissa il modulo della costante; una fase globale resta irrilevante.":"The sine-squared integral fixes the modulus of the constant; a global phase remains irrelevant.","7. Ortonormalità e sviluppo":"7. Orthonormality and expansion","BASE SPETTRALE":"SPECTRAL BASIS","I seni costituiscono la base completa adatta ai bordi di Dirichlet.":"The sines form the complete basis adapted to Dirichlet boundaries.","8. Nodi e scala":"8. Nodes and scale","FISICA":"PHYSICS","Lo stato n ha n meno uno nodi interni; restringere la buca aumenta tutte le energie come uno su L quadrato.":"State n has n minus one interior nodes; narrowing the well raises all energies as one over L squared.","9. Buca finita simmetrica":"9. Symmetric finite well","DIM 17":"DIM 17","Si centra la buca nell'origine per sfruttare la parità e si cercano energie legate tra fondo e continuo.":"Center the well at the origin to exploit parity and seek bound energies between the bottom and continuum.","10. Numeri d'onda":"10. Wave numbers","REGIONI":"REGIONS","Dentro la soluzione oscilla; fuori deve decadere per normalizzabilità. Energia e profondità legano i due parametri.":"Inside the solution oscillates; outside it must decay for normalizability. Energy and depth relate the two parameters.","11. Settore pari":"11. Even sector","RACCORDO":"MATCHING","Per uno stato pari si usa coseno dentro ed esponenziale fuori; dividere il raccordo della derivata per quello della funzione elimina le ampiezze.":"For an even state use cosine inside and an exponential outside; dividing derivative matching by function matching removes amplitudes.","12. Settore dispari":"12. Odd sector","Per uno stato dispari si usa seno dentro e la coda cambia segno tra i due lati.":"For an odd state use sine inside and the tail changes sign between the two sides.","13. Forma adimensionale":"13. Dimensionless form","GRAFICO":"GRAPH","Le intersezioni con un quarto di circonferenza contano i livelli senza risolvere analiticamente le equazioni.":"Intersections with a quarter circle count levels without analytically solving the equations.","14. Esistenza e limite":"14. Existence and limit","ORALE":"ORAL","In una dimensione una buca attrattiva finita possiede sempre almeno uno stato pari; nuovi stati appaiono superando soglie e nel limite profondo si recuperano pareti quasi infinite.":"In one dimension a finite attractive well always has at least one even state; new states appear across thresholds and the deep limit recovers nearly infinite walls.","Esempio dinamico nella buca infinita":"Dynamical example in the infinite well","Impostazione.":"Setup.","Si prepara una sovrapposizione equiprobabile dei primi due autostati.":"Prepare an equal-probability superposition of the first two eigenstates.","Controllo.":"Check.","L'energia assume E1 o E2 con probabilità un mezzo, mentre la densità non è stazionaria e oscilla alla frequenza di Bohr.":"Energy yields E1 or E2 with probability one half, while the density is not stationary and oscillates at the Bohr frequency.","Interpretazione e limiti":"Interpretation and limits","Bordi ideali":"Ideal boundaries","La derivata può saltare su una parete infinita, perché la dimostrazione della sua continuità richiede un potenziale finito.":"The derivative may jump at an infinite wall because the proof of its continuity requires a finite potential.","Parità e scelta dell'origine":"Parity and origin choice","La buca tra zero e L non mostra parità rispetto all'origine, ma è simmetrica rispetto a L su due. Centrarla rende esplicita l'alternanza pari-dispari.":"The well from zero to L does not display parity about the origin but is symmetric about L over two. Centering it makes even-odd alternation explicit.","Numero finito":"Finite number","La buca finita ha solo un intervallo energetico limitato per gli stati legati; per questo il numero di intersezioni e livelli è finito.":"The finite well has only a bounded energy interval for bound states; therefore the number of intersections and levels is finite.","Coda e confinamento":"Tail and confinement","La lunghezza uno su kappa misura la penetrazione. Un livello vicino a zero ha coda lunga ed è debolmente legato.":"Length one over kappa measures penetration. A level near zero has a long tail and is weakly bound.","Errori tipici":"Common errors","Includere n uguale zero; imporre psi primo continua su una parete infinita; usare seno e coseno senza parità coerente; cambiare segno a q tan qa; dire che una buca finita ha infiniti livelli legati.":"Including n equal to zero; imposing derivative continuity at an infinite wall; using sine and cosine without consistent parity; changing the sign of q tan qa; saying a finite well has infinitely many bound levels.","Controlli rapidi":"Quick checks","E infinito cresce come n quadrato; psi ha dimensione L alla meno un mezzo; q quadrato più kappa quadrato è fissato; lo stato fondamentale finito è pari e senza nodi; la coda si accorcia aumentando il legame.":"Infinite-well E grows as n squared; psi has dimension L to minus one half; q squared plus kappa squared is fixed; the finite-well ground state is even and nodeless; the tail shortens as binding increases.","Controllo da orale":"Oral exam checklist","Escludi E negativo nella buca infinita.":"Exclude negative E in the infinite well.","Imponi i due bordi e ricava k_n.":"Impose both boundaries and derive k_n.","Normalizza e dimostra l'ortogonalità.":"Normalize and prove orthogonality.","Scrivi lo sviluppo temporale generale.":"Write the general time expansion.","Definisci q e kappa nella buca finita.":"Define q and kappa in the finite well.","Usa la parità per ridurre il raccordo.":"Use parity to reduce matching.","Ricava entrambe le equazioni trascendenti.":"Derive both transcendental equations.","Spiega graficamente numero di livelli e limite profondo.":"Explain graphically the level count and deep limit.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 17 - buche, stati legati, diffusione e parità":"DIM 17 - wells, bound states, scattering, and parity","Appunti-MQ.pdf, pagine PDF 118-127 - proprietà generali, buca infinita e buca finita":"Appunti-MQ.pdf, PDF pages 118-127 - proprietà generali, buca infinita e buca finita","Set 7 - parità e oscillatore armonico":"Set 7 - parity and harmonic oscillator","La catena riproduce le dimostrazioni delle pagine verificate 118-127 e DIM 17, inclusi positività, normalizzazione, parità e soglie, con il minimo numero di passaggi separati compatibile con una risposta orale completa.":"The chain reproduces the proofs on verified pages 118-127 and DIM 17, including positivity, normalization, parity, and thresholds, with the fewest separate steps compatible with a complete oral answer.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: buca-finita.html. La lezione scientifica verificata è condivisa con buca-potenziale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: buca-finita.html. The verified scientific lesson is shared with buca-potenziale.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Equazione stazionaria unidimensionale":"One-dimensional stationary equation","Definizione e condizioni della buca infinita":"Definition and conditions of the infinite well","Positività dell'energia nella buca":"Energy positivity in the well","Soluzione generale e primo bordo":"General solution and first boundary","Spettro della buca infinita":"Infinite-well spectrum","Autofunzioni normalizzate":"Normalized eigenfunctions","Base spettrale della buca":"Spectral basis of the well","Nodi, lunghezza d'onda e scala energetica":"Nodes, wavelength, and energy scale","Definizione della buca finita":"Definition of the finite well","Parametri della buca finita":"Finite-well parameters","Equazione trascendente degli stati pari":"Transcendental equation for even states","Equazione trascendente degli stati dispari":"Transcendental equation for odd states","Equazioni adimensionali della buca finita":"Dimensionless finite-well equations","Esistenza del fondamentale e limite profondo":"Ground-state existence and deep-well limit"},"title":{"it":"Buche di potenziale infinite e finite","en":"Infinite and finite potential wells"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

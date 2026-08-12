@@ -1,192 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soluzione dell’Equazione di Schrödinger</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sviluppo in serie di autofunzioni</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="sviluppo-serie-autofunzioni.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Soluzione dell’Equazione di Schrödinger</h1>
-
-<p>L’equazione di Schrödinger, il cardine della meccanica quantistica non relativistica, fornisce la dinamica dello stato del sistema tramite la funzione d’onda \( \psi(\mathbf{r},t) \). Risolverla significa trovare \(\psi(\mathbf{r},t)\) che soddisfa:</p>
-
-\[
-i\hbar \frac{\partial}{\partial t}\psi(\mathbf{r}, t) = \left[-\frac{\hbar^2}{2m}\nabla^2 + V(\mathbf{r},t)\right]\psi(\mathbf{r}, t).
-\]
-
-<p>La complessità di questa equazione può variare enormemente a seconda della forma del potenziale \( V(\mathbf{r},t) \). Non esiste una soluzione unica o generale per tutti i casi, ma approcci e metodi che consentono di trattare varie situazioni.</p>
-
-<h2>Separazione delle Variabili e Stati Stazionari</h2>
-
-<p>Se il potenziale non dipende dal tempo, \(V(\mathbf{r}, t)=V(\mathbf{r})\), è possibile cercare soluzioni del tipo:</p>
-
-\[
-\psi(\mathbf{r}, t) = \phi(\mathbf{r})e^{-iE t/\hbar}.
-\]
-
-<p>Sostituendo nell’equazione di Schrödinger si ottiene l’equazione agli autovalori:</p>
-
-\[
--\frac{\hbar^2}{2m}\nabla^2 \phi(\mathbf{r}) + V(\mathbf{r})\phi(\mathbf{r}) = E\phi(\mathbf{r}).
-\]
-
-<p>Questa è l’equazione di Schrödinger indipendente dal tempo, che determina gli stati stazionari con energia \(E\). Le soluzioni \(\phi(\mathbf{r})\) formano una base di stati, e la soluzione generale sarà una sovrapposizione di tali stati:</p>
-
-\[
-\psi(\mathbf{r}, t) = \sum_n c_n \phi_n(\mathbf{r}) e^{-iE_n t/\hbar},
-\]
-
-dove \(\phi_n(\mathbf{r})\) sono le autofunzioni e \(E_n\) i corrispondenti autovalori.</p>
-
-<h2>Potenziali Tempo-Dipendenti e Sviluppo in Autofunzioni</h2>
-
-<p>Se \(V(\mathbf{r},t)\) dipende dal tempo, la separazione delle variabili generalmente non è possibile. Un approccio è espandere la soluzione in una base di autofunzioni dell’Hamiltoniano istantaneo o di un operatore semplice:</p>
-
-\[
-\psi(\mathbf{r},t) = \sum_n c_n(t) \phi_n(\mathbf{r}),
-\]
-
-dove i coefficienti \(c_n(t)\) soddisfano un sistema di equazioni differenziali ordinarie nel tempo. Questa procedura riduce il problema a un sistema di equazioni accoppiate, una strategia frequente nello studio di perturbazioni tempo-dipendenti.</p>
-
-<h2>Approcci Analitici e Metodi Approx</h2>
-
-<p>Le soluzioni esplicite si ottengono raramente in forma chiusa. Ci sono alcuni potenziali classici per i quali le soluzioni analitiche sono note, ad esempio:</p>
-
-<ul>
-    <li>Buca di potenziale infinita: autofunzioni a seni e coseni, stati quantizzati.</li>
-    <li>Oscillatore armonico quantistico: autofunzioni legate a polinomi di Hermite.</li>
-    <li>Atomo di idrogeno: soluzioni in coordinate sferiche, autofunzioni classificate da numeri quantici \(n, l, m\).</li>
-</ul>
-
-<p>In molti altri casi, si ricorre a metodi approssimati:</p>
-
-<ul>
-    <li><strong>Teoria delle perturbazioni:</strong> per potenziali \(V=V_0+V'\) con \(V'\) piccolo.</li>
-    <li><strong>Metodo WKB:</strong> approssimazione semiclassica utile in regime di alte energie.</li>
-    <li><strong>Approcci numerici:</strong> differenze finite, metodi agli elementi finiti, diagonalizzazione numerica dell’Hamiltoniano.</li>
-</ul>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Scrivi l’equazione time-dependent:
-\[
-i\hbar\frac{\partial}{\partial t}\psi(\mathbf{r},t)=\hat{H}\psi(\mathbf{r},t)
-\]
-Dove \(\hat{H} = -\frac{\hbar^2}{2m}\nabla^2 + V(\mathbf{r},t)\).
-<br><br>
-2. Supponi \(V(\mathbf{r}, t)=V(\mathbf{r})\) costante nel tempo, prova \(\psi(\mathbf{r},t)=\phi(\mathbf{r})e^{-iEt/\hbar}\).
-<br><br>
-3. Ottieni l’equazione agli autovalori:
-\[
--\frac{\hbar^2}{2m}\nabla^2\phi(\mathbf{r}) + V(\mathbf{r})\phi(\mathbf{r}) = E\phi(\mathbf{r})
-\]
-<br><br>
-4. Mostra che la soluzione generale è una combinazione lineare degli autofunzioni:
-\[
-\psi(\mathbf{r},t)=\sum_n c_n \phi_n(\mathbf{r})e^{-iE_n t/\hbar}.
-\]
-5. Se \(V(\mathbf{r},t)\) è tempo-dipendente, espandi \(\psi(\mathbf{r},t)\) in una base completa e ottieni equazioni per \(c_n(t)\).
-<br><br>
-6. Rappresenta l’idea di metodi approssimati: ad esempio, mostrare un intervallo spaziale discretizzato per un metodo numerico.
-</div>
-
-<h2>Interpretazione Fisica</h2>
-
-<p>La soluzione dell’equazione di Schrödinger fornisce l’evoluzione completa del sistema. In presenza di stati stazionari, possiamo descrivere stati con energia definita. In situazioni più complesse, la sovrapposizione di molti stati può generare dinamiche ricche, come oscillazioni, fenomeni di interferenza, tunneling e transizioni indotte dal tempo. L’ampia varietà di metodi riflette la natura intricata dei problemi quantistici, dove la soluzione raramente è semplice, ma gli strumenti matematici e numerici disponibili permettono di affrontare una grande varietà di situazioni fisiche.</p>
-    <h2>Approfondimento dei Passaggi Matematici sulla Lavagna</h2>
-
-    <p>Per comprendere con chiarezza la procedura di soluzione dell'equazione di Schrödinger, possiamo mostrare come i vari passaggi vengano visualizzati alla lavagna. Questo aiuta a mettere in evidenza le strategie standard adottate nella risoluzione, sia per problemi a potenziale costante nel tempo, sia per quelli tempo-dipendenti:</p>
-
-    <ol>
-        <li><strong>Partenza dall’equazione completa:</strong><br>
-        Sulla lavagna, scrivi:
-        \[
-        i\hbar \frac{\partial}{\partial t}\psi(\mathbf{r}, t) = \left(-\frac{\hbar^2}{2m}\nabla^2 + V(\mathbf{r}, t)\right)\psi(\mathbf{r}, t).
-        \]
-        Spiega che lo scopo è trovare \(\psi(\mathbf{r},t)\) per un dato \(V(\mathbf{r}, t)\). Se \(V\) è noto e non dipende dal tempo, puoi tentare la separazione delle variabili.</li>
-
-        <li><strong>Separazione delle variabili in caso di potenziale tempo-indipendente:</strong><br>
-        Scrivi il tentativo: \(\psi(\mathbf{r}, t) = \phi(\mathbf{r}) e^{-iEt/\hbar}\).
-        Mostra che inserendo questa ansatz nell’equazione, i termini temporali si separano, lasciando un’equazione agli autovalori spaziale:
-        \[
-        -\frac{\hbar^2}{2m}\nabla^2 \phi(\mathbf{r}) + V(\mathbf{r})\phi(\mathbf{r}) = E \phi(\mathbf{r}).
-        \]
-        Indica come questa sia un’equazione differenziale in \(\mathbf{r}\) che determina le autofunzioni \(\phi_n(\mathbf{r})\) e i livelli energetici \(E_n\). Alla lavagna, potresti ad esempio considerare il caso di una buca di potenziale e mostrare come le condizioni al contorno portino a soluzioni sinusoidali e a un insieme discreto di energie.</li>
-
-        <li><strong>Sovrapposizione e soluzioni generali:</strong><br>
-        Una volta trovate le soluzioni stazionarie \(\phi_n(\mathbf{r})\) con energie \(E_n\), illustra come costruire la soluzione generale:
-        \[
-        \psi(\mathbf{r}, t) = \sum_n c_n \phi_n(\mathbf{r}) e^{-iE_n t/\hbar}.
-        \]
-        Sulla lavagna, evidenzia che i coefficienti \(c_n\) si determinano dalle condizioni iniziali \(\psi(\mathbf{r},0)\). Ciò mostra la linearità dell’equazione e come la combinazione di stati stazionari fornisca pacchetti d’onda complessi e dinamici.</li>
-
-        <li><strong>Potenziali dipendenti dal tempo:</strong><br>
-        Se \(V(\mathbf{r},t)\) varia nel tempo, scrivi:
-        \[
-        \psi(\mathbf{r},t) = \sum_n c_n(t)\phi_n(\mathbf{r})
-        \]
-        dove \(\{\phi_n(\mathbf{r})\}\) sono una base scelta (non necessariamente autostati dell’Hamiltoniano ad ogni istante).  
-        Mostra come inserendo questa espansione nell’equazione di Schrödinger si ottenga un sistema di equazioni differenziali per i \(c_n(t)\). Questo riduce il problema ad un approccio numerico o perturbativo. Alla lavagna puoi mostrare uno schema a blocchi: dallo stato iniziale si evolve nel tempo calcolando come i coefficienti \(c_n(t)\) cambiano a causa del potenziale tempo-dipendente.</li>
-
-        <li><strong>Metodi approssimati e numerici:</strong><br>
-        Non tutti i potenziali consentono soluzioni analitiche. Disegna sulla lavagna un asse spaziale e mostra un potenziale complicato \(V(x)\). Spiega che per questo caso si possono usare:
-        - Metodi perturbativi: se \(V(x)\) può essere considerato come \(V_0(x) + V'(x)\) con \(V'(x)\) piccolo, si sviluppano soluzioni approssimate.
-        - Metodo WKB: per potenziali lenti e variabili, si approssima la funzione d’onda con forme esponenziali o sinusoidali a fase variabile.
-        - Metodi numerici: discretizza lo spazio, approssima le derivate con differenze finite, e risolvi numericamente l’equazione agli autovalori o il sistema differenziale nel tempo.</li>
-    </ol>
-
-    <p>Così, sulla lavagna hai mostrato un quadro completo: dall’equazione generale, alla separazione variabili per potenziali statici, alla costruzione di soluzioni generali come combinazioni lineari di autostati, fino all’affrontare potenziali tempo-dipendenti con metodi più avanzati. Questo panorama spiega perché, nonostante non esista una formula “generale” di soluzione, la meccanica quantistica dispone di una serie di strumenti e stratagemmi matematici e numerici per affrontare una grande varietà di problemi fisici.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="soluzione-equazione-schrodinger.html" data-mq-shared-lesson="sviluppo-serie-autofunzioni.html" id="lezione-sviluppo-serie-autofunzioni"><div class="lecture-kicker">Lezione approfondita - completezza, coefficienti e Parseval</div><h1>Sviluppo in serie di autofunzioni</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: soluzione-equazione-schrodinger.html. La lezione scientifica verificata è condivisa con sviluppo-serie-autofunzioni.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare i coefficienti di espansione da ortonormalità, dimostrare Parseval e ricostruzione, includere degenerazione e continuo, e quantificare l'errore di troncamento.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Coordinate in Hilbert</h3><p>I coefficienti c_n sono le coordinate complesse dello stato in una base ortonormale. Cambiare osservabile significa cambiare base, non cambiare stato.</p></article><article class="lecture-card lecture-warning"><h3>Completezza necessaria</h3><p>Ortonormalità permette di estrarre coefficienti, ma solo la completezza garantisce che la serie ricostruisca ogni stato del sottospazio considerato.</p></article></div><h2>Base ortonormale e chiusura</h2><div class="lecture-grid"><article class="lecture-card"><h3>Spettro discreto</h3><p>Si parte da una famiglia completa |u_n&gt; con prodotti delta di Kronecker. La convergenza è in norma di Hilbert, non necessariamente puntuale.</p></article><article class="lecture-card"><h3>Caso energia</h3><p>Se la base è quella di H, gli stessi coefficienti fissano probabilità di energia ed evoluzione temporale per un Hamiltoniano stazionario.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Ortonormalità<span class="lecture-step-boss">BASE</span></h4><p>Gli elementi della base hanno norma uno e sono mutuamente ortogonali.</p><div aria-label="Relazione di ortonormalità discreta" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_m|u_n\rangle=\delta_{mn}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Chiusura<span class="lecture-step-boss">COMPLETEZZA</span></h4><p>La somma dei proiettori di base agisce come identità su ogni stato.</p><div aria-label="Risoluzione discreta dell'identità" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle I=\sum_n|u_n\rangle\langle u_n|\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Inserimento dell'identità<span class="lecture-step-boss">DERIVA</span></h4><p>Applicando la chiusura a psi si ottiene direttamente lo sviluppo.</p><div aria-label="Derivazione dello sviluppo di uno stato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=I|\psi\rangle=\sum_n|u_n\rangle\langle u_n|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Coefficienti<span class="lecture-step-boss">RISULTATO</span></h4><p>Il prodotto con il bra u_m isola un solo termine grazie alla delta di Kronecker.</p><div aria-label="Formula dei coefficienti di Fourier quantistici" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_nc_n|u_n\rangle,\qquad c_n=\langle u_n|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Rappresentazione x<span class="lecture-step-boss">FUNZIONI</span></h4><p>Proiettando su x, il ket diventa una serie delle autofunzioni u_n(x).</p><div aria-label="Sviluppo funzionale in coordinate" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(x)=\langle x|\psi\rangle=\sum_nc_nu_n(x),\qquad u_n(x)=\langle x|u_n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Norma della serie<span class="lecture-step-boss">PARSEVAL</span></h4><p>Sostituendo bra e ket espansi, i doppi indici collassano sulla diagonale.</p><div aria-label="Identità di Parseval" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\psi|\psi\rangle=\sum_{mn}c_m^*c_n\langle u_m|u_n\rangle=\sum_n|c_n|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Stato normalizzato<span class="lecture-step-boss">BORN</span></h4><p>Se la norma vale uno, i moduli quadri formano una distribuzione discreta.</p><div aria-label="Normalizzazione dei coefficienti e Born" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sum_n|c_n|^2=1,\qquad P(a_n)=|c_n|^2\quad\text{nel caso non degenere}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Prodotto di due stati<span class="lecture-step-boss">PLANCHEREL</span></h4><p>Le coordinate preservano il prodotto interno e quindi tutte le distanze e gli angoli di Hilbert.</p><div aria-label="Identità di Plancherel discreta" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_nc_n|u_n\rangle,\ |\phi\rangle=\sum_nd_n|u_n\rangle\Rightarrow\langle\phi|\psi\rangle=\sum_nd_n^*c_n\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Operatore diagonale<span class="lecture-step-boss">SPETTRALE</span></h4><p>Nella propria base, A moltiplica ogni coefficiente per il corrispondente autovalore.</p><div aria-label="Azione di un operatore nella base spettrale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|\psi\rangle=\sum_na_nc_n|u_n\rangle,\qquad\langle A\rangle=\sum_na_n|c_n|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Degenerazione<span class="lecture-step-boss">DEG</span></h4><p>Un secondo indice risolve una base ortonormale nell'autospazio; la probabilità del valore somma i moduli quadri interni.</p><div aria-label="Sviluppo e probabilità nel caso degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_{n,k}c_n^{(k)}|u_n^{(k)}\rangle,\qquad P(a_n)=\sum_{k=1}^{r_n}|c_n^{(k)}|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Continuo<span class="lecture-step-boss">INTEGRALE</span></h4><p>La delta di Dirac svolge il ruolo della delta di Kronecker e i coefficienti diventano una densità di ampiezza.</p><div aria-label="Sviluppo su uno spettro continuo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_a|u_{a'}\rangle=\delta(a-a'),\quad|\psi\rangle=\int da\,c(a)|u_a\rangle,\quad c(a)=\langle u_a|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Spettro misto<span class="lecture-step-boss">SOMMA+INT</span></h4><p>Se esistono stati legati e scattering, la completezza contiene entrambi senza doppio conteggio.</p><div aria-label="Chiusura per spettro discreto e continuo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle I=\sum_{n\in\rm bound}|n\rangle\langle n|+\int_{\rm cont}dE\sum_\alpha|E,\alpha\rangle\langle E,\alpha|\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Troncamento<span class="lecture-step-boss">ERRORE</span></h4><p>La proiezione sui primi N modi è l'approssimazione di minima distanza nello spazio da essi generato.</p><div aria-label="Errore esatto del troncamento ortogonale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi_N\rangle=\sum_{n=1}^Nc_n|u_n\rangle,\qquad\|\psi-\psi_N\|^2=\sum_{n&gt;N}|c_n|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Cambio di base<span class="lecture-step-boss">UNITARIA</span></h4><p>Le coordinate in due basi ortonormali sono collegate dalla matrice unitaria delle sovrapposizioni.</p><div aria-label="Trasformazione unitaria dei coefficienti" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle d_\alpha=\sum_nU_{\alpha n}c_n,\qquad U_{\alpha n}=\langle v_\alpha|u_n\rangle,\qquad UU^\dagger=I\)</span></div></article></section><h2>Esempio: buca infinita</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Nell'intervallo 0&lt;x&lt;L, le autofunzioni di energia formano la base seno.</p><p data-i18n-skip="true">\(\displaystyle u_n(x)=\sqrt{\frac2L}\sin\frac{n\pi x}{L},\quad c_n=\sqrt{\frac2L}\int_0^Ldx\,\sin\frac{n\pi x}{L}\,\psi(x),\quad\sum_n|c_n|^2=1\)</p><p><strong>Controllo.</strong> Le condizioni al bordo sono incorporate nella base. Una funzione iniziale che non le rispetta puntualmente può comunque avere una rappresentazione in norma, con il consueto significato delle serie di Fourier ai bordi.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Fasi dei coefficienti</h3><p>I moduli quadri fissano le probabilità nella base, ma le fasi relative sono indispensabili per interferenza e misure in basi diverse.</p></article><article class="lecture-card"><h3>Convergenza</h3><p>Convergenza in norma garantisce probabilità totali corrette; proprietà puntuali e derivate richiedono ipotesi di regolarità più forti.</p></article><article class="lecture-card"><h3>Scelta della base</h3><p>Una base adattata a simmetrie o all'Hamiltoniano rende pochi coefficienti rilevanti e migliora l'efficienza dei troncamenti.</p></article><article class="lecture-card"><h3>Densità di probabilità</h3><p>Nel continuo |c(a)|² è densità rispetto alla misura da specificare; una riparametrizzazione introduce il relativo Jacobiano.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dimenticare il complesso coniugato nel coefficiente integrale; confondere ortogonalità con completezza; sommare ampiezze dentro un risultato degenere; trattare |c(E)|² come probabilità puntuale; ignorare l'errore di coda.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Coefficienti adimensionali nel discreto; Parseval; ricostruzione tramite I; probabilità totale uno; cambio di base unitario; errore di troncamento non negativo.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Enuncia ortonormalità e completezza.</li><li>Inserisci I sullo stato.</li><li>Proietta per ricavare c_n.</li><li>Dimostra Parseval.</li><li>Calcola l'azione di A nella sua base.</li><li>Aggiungi degenerazione e continuo.</li><li>Quantifica l'errore del troncamento.</li><li>Mostra il cambio unitario di base.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, TISE, TDSE, misura e proiettori</a></li><li><a href="PostulatiQM.html">Postulati della meccanica quantistica - quadro generale</a></li><li><a href="set-6-operatori-autofunzioni.html">Set 6 - operatori, autofunzioni e spettro</a></li></ul><p class="lecture-note">La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - completezza, coefficienti e Parseval":"In-depth lesson - completeness, coefficients, and Parseval","Sviluppo in serie di autofunzioni":"Expansion in an eigenfunction series","Obiettivo.":"Objective.","Derivare i coefficienti di espansione da ortonormalità, dimostrare Parseval e ricostruzione, includere degenerazione e continuo, e quantificare l'errore di troncamento.":"Derive expansion coefficients from orthonormality, prove Parseval and reconstruction, include degeneracy and continuum, and quantify truncation error.","Coordinate in Hilbert":"Coordinates in Hilbert space","I coefficienti c_n sono le coordinate complesse dello stato in una base ortonormale. Cambiare osservabile significa cambiare base, non cambiare stato.":"Coefficients c_n are complex coordinates of the state in an orthonormal basis. Changing the observable changes the basis, not the state.","Completezza necessaria":"Completeness is required","Ortonormalità permette di estrarre coefficienti, ma solo la completezza garantisce che la serie ricostruisca ogni stato del sottospazio considerato.":"Orthonormality allows coefficient extraction, but only completeness guarantees that the series reconstructs every state in the considered subspace.","Base ortonormale e chiusura":"Orthonormal basis and closure","Spettro discreto":"Discrete spectrum","Si parte da una famiglia completa |u_n> con prodotti delta di Kronecker. La convergenza è in norma di Hilbert, non necessariamente puntuale.":"Start from a complete family |u_n> with Kronecker-delta products. Convergence is in Hilbert norm, not necessarily pointwise.","Caso energia":"Energy case","Se la base è quella di H, gli stessi coefficienti fissano probabilità di energia ed evoluzione temporale per un Hamiltoniano stazionario.":"If the basis is that of H, the same coefficients determine energy probabilities and time evolution for a stationary Hamiltonian.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Ortonormalità":"1. Orthonormality","BASE":"BASE","Gli elementi della base hanno norma uno e sono mutuamente ortogonali.":"Basis elements have unit norm and are mutually orthogonal.","Passaggio":"Step","2. Chiusura":"2. Closure","COMPLETEZZA":"COMPLETENESS","La somma dei proiettori di base agisce come identità su ogni stato.":"The sum of basis projectors acts as the identity on every state.","3. Inserimento dell'identità":"3. Identity insertion","DERIVA":"DERIVE","Applicando la chiusura a psi si ottiene direttamente lo sviluppo.":"Applying closure to psi directly yields the expansion.","4. Coefficienti":"4. Coefficients","RISULTATO":"RESULT","Il prodotto con il bra u_m isola un solo termine grazie alla delta di Kronecker.":"Inner product with bra u_m isolates one term through the Kronecker delta.","5. Rappresentazione x":"5. x representation","FUNZIONI":"FUNCTIONS","Proiettando su x, il ket diventa una serie delle autofunzioni u_n(x).":"Projecting onto x turns the ket into a series of eigenfunctions u_n(x).","6. Norma della serie":"6. Series norm","PARSEVAL":"PARSEVAL","Sostituendo bra e ket espansi, i doppi indici collassano sulla diagonale.":"Substituting expanded bra and ket collapses double indices onto the diagonal.","7. Stato normalizzato":"7. Normalized state","BORN":"BORN","Se la norma vale uno, i moduli quadri formano una distribuzione discreta.":"If norm equals one, squared magnitudes form a discrete distribution.","8. Prodotto di due stati":"8. Inner product of two states","PLANCHEREL":"PLANCHEREL","Le coordinate preservano il prodotto interno e quindi tutte le distanze e gli angoli di Hilbert.":"Coordinates preserve the inner product and thus all Hilbert-space distances and angles.","9. Operatore diagonale":"9. Diagonal operator","SPETTRALE":"SPECTRAL","Nella propria base, A moltiplica ogni coefficiente per il corrispondente autovalore.":"In its eigenbasis, A multiplies each coefficient by the corresponding eigenvalue.","10. Degenerazione":"10. Degeneracy","DEG":"DEG","Un secondo indice risolve una base ortonormale nell'autospazio; la probabilità del valore somma i moduli quadri interni.":"A second index resolves an orthonormal basis in the eigenspace; probability of the value sums internal squared magnitudes.","11. Continuo":"11. Continuum","INTEGRALE":"INTEGRAL","La delta di Dirac svolge il ruolo della delta di Kronecker e i coefficienti diventano una densità di ampiezza.":"The Dirac delta plays the role of the Kronecker delta and coefficients become an amplitude density.","12. Spettro misto":"12. Mixed spectrum","SOMMA+INT":"SUM+INT","Se esistono stati legati e scattering, la completezza contiene entrambi senza doppio conteggio.":"If bound and scattering states coexist, completeness contains both without double counting.","13. Troncamento":"13. Truncation","ERRORE":"ERROR","La proiezione sui primi N modi è l'approssimazione di minima distanza nello spazio da essi generato.":"Projection onto the first N modes is the minimum-distance approximation in their span.","14. Cambio di base":"14. Change of basis","UNITARIA":"UNITARY","Le coordinate in due basi ortonormali sono collegate dalla matrice unitaria delle sovrapposizioni.":"Coordinates in two orthonormal bases are related by the unitary overlap matrix.","Esempio: buca infinita":"Example: infinite well","Impostazione.":"Setup.","Nell'intervallo 0<x<L, le autofunzioni di energia formano la base seno.":"On interval 0<x<L, energy eigenfunctions form the sine basis.","Controllo.":"Check.","Le condizioni al bordo sono incorporate nella base. Una funzione iniziale che non le rispetta puntualmente può comunque avere una rappresentazione in norma, con il consueto significato delle serie di Fourier ai bordi.":"Boundary conditions are built into the basis. An initial function that does not satisfy them pointwise may still have a norm-convergent representation, with the usual Fourier-series meaning at boundaries.","Interpretazione e limiti":"Interpretation and limits","Fasi dei coefficienti":"Coefficient phases","I moduli quadri fissano le probabilità nella base, ma le fasi relative sono indispensabili per interferenza e misure in basi diverse.":"Squared magnitudes fix probabilities in the basis, but relative phases are essential for interference and measurements in other bases.","Convergenza":"Convergence","Convergenza in norma garantisce probabilità totali corrette; proprietà puntuali e derivate richiedono ipotesi di regolarità più forti.":"Norm convergence guarantees correct total probabilities; pointwise properties and derivatives require stronger regularity assumptions.","Scelta della base":"Basis choice","Una base adattata a simmetrie o all'Hamiltoniano rende pochi coefficienti rilevanti e migliora l'efficienza dei troncamenti.":"A basis adapted to symmetries or the Hamiltonian leaves few relevant coefficients and improves truncation efficiency.","Densità di probabilità":"Probability density","Nel continuo |c(a)|² è densità rispetto alla misura da specificare; una riparametrizzazione introduce il relativo Jacobiano.":"In the continuum, |c(a)|² is a density with respect to a specified measure; reparameterization introduces the corresponding Jacobian.","Errori tipici":"Common errors","Dimenticare il complesso coniugato nel coefficiente integrale; confondere ortogonalità con completezza; sommare ampiezze dentro un risultato degenere; trattare |c(E)|² come probabilità puntuale; ignorare l'errore di coda.":"Forgetting complex conjugation in the coefficient integral; confusing orthogonality with completeness; summing amplitudes inside a degenerate outcome; treating |c(E)|² as a point probability; ignoring tail error.","Controlli rapidi":"Quick checks","Coefficienti adimensionali nel discreto; Parseval; ricostruzione tramite I; probabilità totale uno; cambio di base unitario; errore di troncamento non negativo.":"Dimensionless discrete coefficients; Parseval; reconstruction through I; total probability one; unitary basis change; nonnegative truncation error.","Controllo da orale":"Oral exam checklist","Enuncia ortonormalità e completezza.":"State orthonormality and completeness.","Inserisci I sullo stato.":"Insert I on the state.","Proietta per ricavare c_n.":"Project to obtain c_n.","Dimostra Parseval.":"Prove Parseval.","Calcola l'azione di A nella sua base.":"Compute action of A in its basis.","Aggiungi degenerazione e continuo.":"Add degeneracy and continuum.","Quantifica l'errore del troncamento.":"Quantify truncation error.","Mostra il cambio unitario di base.":"Show unitary basis change.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, TISE, TDSE, misura e proiettori":"DIM 0 - postulates, TISE, TDSE, measurement, and projectors","Postulati della meccanica quantistica - quadro generale":"Quantum mechanics postulates - general framework","Set 6 - operatori, autofunzioni e spettro":"Set 6 - operators, eigenfunctions, and spectrum","La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.":"The Boss source transcribes lecture images 132-137, whose numbering does not match the main PDF; therefore no artificial PDF link is given.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: soluzione-equazione-schrodinger.html. La lezione scientifica verificata è condivisa con sviluppo-serie-autofunzioni.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: soluzione-equazione-schrodinger.html. The verified scientific lesson is shared with sviluppo-serie-autofunzioni.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Relazione di ortonormalità discreta":"Discrete orthonormality relation","Risoluzione discreta dell'identità":"Discrete resolution of identity","Derivazione dello sviluppo di uno stato":"Derivation of a state expansion","Formula dei coefficienti di Fourier quantistici":"Formula for quantum Fourier coefficients","Sviluppo funzionale in coordinate":"Coordinate-space function expansion","Identità di Parseval":"Parseval identity","Normalizzazione dei coefficienti e Born":"Coefficient normalization and Born rule","Identità di Plancherel discreta":"Discrete Plancherel identity","Azione di un operatore nella base spettrale":"Action of an operator in its spectral basis","Sviluppo e probabilità nel caso degenere":"Expansion and probability in the degenerate case","Sviluppo su uno spettro continuo":"Expansion over a continuous spectrum","Chiusura per spettro discreto e continuo":"Closure for discrete and continuous spectra","Errore esatto del troncamento ortogonale":"Exact error of orthogonal truncation","Trasformazione unitaria dei coefficienti":"Unitary transformation of coefficients"},"title":{"it":"Sviluppo in serie di autofunzioni","en":"Expansion in an eigenfunction series"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

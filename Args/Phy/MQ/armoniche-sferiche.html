@@ -1,273 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Armoniche Sferiche</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Armoniche sferiche e polinomi associati di Legendre</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Armoniche Sferiche</h1>
-    <h2>Definizione e contesto</h2>
-    Le armoniche sferiche sono funzioni ortonormali definite sulla superficie di una sfera. Esse compaiono naturalmente nella soluzione dell'equazione di Schrödinger per il momento angolare e sono espresse come funzioni delle coordinate angolari \((\theta, \phi)\). Si scrivono come:
-    <div class="formula">
-        \[
-        Y_{\ell}^{m}(\theta, \phi) = \sqrt{\frac{(2\ell+1)}{4\pi} \frac{(\ell-m)!}{(\ell+m)!}} P_{\ell}^{m}(\cos\theta) e^{i m \phi}
-        \]
-    </div>
-    dove \(P_{\ell}^{m}(\cos\theta)\) sono i polinomi associati di Legendre, \(\ell\) è il numero quantico del momento angolare totale e \(m\) è il numero quantico del momento angolare proiettato sull'asse \(z\).
-
-    <h2>Proprietà delle armoniche sferiche</h2>
-    <ul>
-        <li><strong>Ortonormalità:</strong> Le armoniche sferiche soddisfano la relazione di ortonormalità:
-        <div class="formula">
-        \[
-        \int_{0}^{2\pi} \int_{0}^{\pi} Y_{\ell}^{m}(\theta, \phi) Y_{\ell'}^{m'*}(\theta, \phi) \sin\theta \, d\theta \, d\phi = \delta_{\ell \ell'} \delta_{m m'}
-        \]
-        </div>
-        </li>
-        <li><strong>Completeness:</strong> Qualsiasi funzione definita sulla superficie di una sfera può essere espansa come combinazione lineare di armoniche sferiche:
-        <div class="formula">
-        \[
-        f(\theta, \phi) = \sum_{\ell=0}^{\infty} \sum_{m=-\ell}^{\ell} c_{\ell m} Y_{\ell}^{m}(\theta, \phi)
-        \]
-        </div>
-        </li>
-    </ul>
-
-    <h2>Momento angolare in coordinate sferiche</h2>
-    L'operatore momento angolare quadratico \(L^2\) agisce sulle armoniche sferiche come:
-    <div class="formula">
-        \[
-        L^2 Y_{\ell}^{m}(\theta, \phi) = \hbar^2 \ell (\ell+1) Y_{\ell}^{m}(\theta, \phi)
-        \]
-    </div>
-    mentre la componente \(L_z\) soddisfa:
-    <div class="formula">
-        \[
-        L_z Y_{\ell}^{m}(\theta, \phi) = \hbar m Y_{\ell}^{m}(\theta, \phi)
-        \]
-    </div>
-
-    <h2>Importanza nelle soluzioni dell'equazione di Schrödinger</h2>
-    Le armoniche sferiche sono essenziali nella soluzione dell'equazione di Schrödinger in coordinate sferiche per problemi di simmetria centrale, come nel caso dell'atomo di idrogeno. La funzione d'onda totale è espressa come:
-    <div class="formula">
-        \[
-        \psi(r, \theta, \phi) = R(r) Y_{\ell}^{m}(\theta, \phi)
-        \]
-    </div>
-    dove \(R(r)\) è la parte radiale della funzione d'onda.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 7</div>
-  <h2>Armoniche Sferiche: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Costruire e normalizzare la base angolare \(Y_l^m\).</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Le armoniche sono autostati comuni di \(L^2,L_z\), complete sulla sfera e portatrici della rappresentazione l delle rotazioni.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Forma<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>La periodicità quantizza m.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="Y_l^m=N_{lm}P_l^m(\cos\theta)e^{im\phi}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle L_zY=m\hbar Y\Rightarrow-i\hbar\partial_\phi Y=m\hbar Y\Rightarrow Y=\Theta(\theta)e^{im\phi};\quad L^2Y=\hbar^2l(l+1)Y\Rightarrow\Theta=N_{lm}P_l^m(\cos\theta)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Ortonormalità<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>Sul solido angolo.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\int Y_l^{m*}Y_{l&#x27;}^{m&#x27;}d\Omega=\delta_{ll&#x27;}\delta_{mm&#x27;}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle L^2,L_z\ \text{autoaggiunti}\Rightarrow\langle l,m|l',m'\rangle=0\ \text{se }(l,m)\ne(l',m');\quad\|Y_l^m\|=1\Rightarrow\int Y_l^{m*}Y_{l'}^{m'}d\Omega=\delta_{ll'}\delta_{mm'}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: l=1</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Confronta \(Y_1^0\propto\cos\theta\) e \(Y_1^{\pm1}\propto\sin\theta e^{\pm i\phi}\).</p>
-    <p><strong>Calcolo.</strong> Tutti hanno parità negativa; le densità dei due m opposti coincidono.</p>
-    <p><strong>Risultato e controllo.</strong> La fase azimutale distingue però il segno di \(L_z\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 15</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Convenzione di fase di Condon-Shortley.</li>
-          <li>l intero per funzioni monovaluate orbitali.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Densità uguali non implicano stati uguali: la fase codifica corrente e momento angolare.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Dimostra la parità \((-1)^l\).</li>
-          <li>Espandi una funzione assialsimmetrica.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=202">Appunti-MQ.pdf, pp. 202-217: Ylm, Legendre, ortogonalità e parità</a></li>
-          <li><a href="MQ.pdf#page=13">MQ.pdf, pp. capitoli 13-14: base angolare</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-armoniche-sferiche"><div class="lecture-kicker">Lezione approfondita - Argomento 7 - DIM 15</div><h1>Armoniche sferiche e polinomi associati di Legendre</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Risolvere simultaneamente L quadrato e Lz separando phi e theta, derivare periodicità, equazione associata di Legendre, quantizzazione e normalizzazione, e dimostrare ortogonalità, completezza, coniugazione, parità, teorema di addizione e prime armoniche.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Base naturale della sfera</h3><p>Le Y_lm diagonalizzano rotazioni e Laplaciano sferico e costituiscono l'analogo bidimensionale delle onde di Fourier su un cerchio.</p></article><article class="lecture-card lecture-warning"><h3>Due quantizzazioni distinte</h3><p>La periodicità in phi rende m intero; regolarità ai poli e terminazione di Legendre impongono ell intero con modulo m minore o uguale a ell.</p></article></div><h2>Problema agli autovalori sulla sfera</h2><div class="lecture-grid"><article class="lecture-card "><h3>CSCO orbitale</h3><p>Si cercano funzioni simultanee di L quadrato e Lz con norma uno in dOmega.</p></article><article class="lecture-card "><h3>Convenzione</h3><p>Si adotta la fase di Condon-Shortley inclusa nella definizione di P_l^m, che fissa segni di ladder e coniugazione.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Equazioni spettrali<span class="lecture-step-boss">BASE</span></h4><p>Le armoniche sono autostati comuni con autovalori angolari quantizzati.</p><div class="lecture-formula" aria-label="Definizione spettrale delle armoniche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L^2Y_{\ell m}=\hbar^2\ell(\ell+1)Y_{\ell m},\qquad L_zY_{\ell m}=\hbar mY_{\ell m}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Separazione<span class="lecture-step-boss">PRODOTTO</span></h4><p>Poiché Lz contiene soltanto la derivata in phi, si prova un prodotto di parte polare e azimutale.</p><div class="lecture-formula" aria-label="Ansatz separato sulla sfera"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle Y(\theta,\varphi)=\Theta(\theta)\Phi(\varphi)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Parte azimutale<span class="lecture-step-boss">Lz</span></h4><p>L'equazione del primo ordine produce un esponenziale e la monovalenza ne quantizza il numero.</p><div class="lecture-formula" aria-label="Soluzione normalizzata della parte azimutale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -i\hbar\Phi'=\hbar m\Phi\Rightarrow\Phi_m=\frac{e^{im\varphi}}{\sqrt{2\pi}},\qquad m\in\mathbb Z\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Equazione polare<span class="lecture-step-boss">L quadrato</span></h4><p>Sostituire il prodotto nell'equazione di L quadrato lascia un'equazione di Sturm-Liouville in theta.</p><div class="lecture-formula" aria-label="Equazione polare delle armoniche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac1{\sin\theta}\frac d{d\theta}\left(\sin\theta\frac{d\Theta}{d\theta}\right)+\left[\ell(\ell+1)-\frac{m^2}{\sin^2\theta}\right]\Theta=0\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Variabile u<span class="lecture-step-boss">LEGENDRE</span></h4><p>Con u uguale cos theta l'intervallo diventa meno uno,uno e l'equazione assume la forma associata di Legendre.</p><div class="lecture-formula" aria-label="Equazione associata di Legendre"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (1-u^2)\Theta''-2u\Theta'+\left[\ell(\ell+1)-\frac{m^2}{1-u^2}\right]\Theta=0\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Regolarità<span class="lecture-step-boss">POLI</span></h4><p>La soluzione fisica deve restare finita ai poli u uguale più o meno uno; questo elimina il secondo ramo singolare.</p><div class="lecture-formula" aria-label="Soluzioni regolari e valori ammessi"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Theta(u)\propto P_\ell^m(u),\qquad|m|\le\ell,\qquad\ell=0,1,2,\ldots\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Rodrigues<span class="lecture-step-boss">COSTRUISCI</span></h4><p>I polinomi ordinari derivano da una formula differenziale; quelli associati aggiungono m derivate e il fattore ai poli.</p><div class="lecture-formula" aria-label="Formule di Rodrigues e Condon-Shortley"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_\ell(u)=\frac1{2^\ell\ell!}\frac{d^\ell}{du^\ell}(u^2-1)^\ell,\quad P_\ell^m(u)=(-1)^m(1-u^2)^{m/2}\frac{d^mP_\ell}{du^m}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Normalizzazione<span class="lecture-step-boss">COSTANTE</span></h4><p>Poiche la fase di Condon-Shortley e gia inclusa in P_l^m, l'integrale noto dei Legendre associati fissa il solo coefficiente positivo.</p><div class="lecture-formula" aria-label="Armonica sferica normalizzata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle Y_{\ell m}(\theta,\varphi)=\sqrt{\frac{2\ell+1}{4\pi}\frac{(\ell-m)!}{(\ell+m)!}}\,P_\ell^m(\cos\theta)e^{im\varphi}\quad(m\ge0)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. m negativo<span class="lecture-step-boss">CONIUGA</span></h4><p>La convenzione scelta estende la famiglia ai valori negativi con una semplice relazione di coniugazione.</p><div class="lecture-formula" aria-label="Relazione tra armoniche con m opposto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle Y_{\ell,-m}=(-1)^mY_{\ell m}^*\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Ortonormalità<span class="lecture-step-boss">BASE ORTONORMALE</span></h4><p>Ortogonalità Fourier in phi e Sturm-Liouville in theta producono due delta di Kronecker.</p><div class="lecture-formula" aria-label="Ortonormalità sulla sfera"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \int d\Omega\,Y_{\ell m}^*(\Omega)Y_{\ell' m'}(\Omega)=\delta_{\ell\ell'}\delta_{mm'}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Completezza<span class="lecture-step-boss">DELTA SFERA</span></h4><p>Ogni funzione quadrato integrabile sulla sfera si espande nella base completa.</p><div class="lecture-formula" aria-label="Espansione e completezza delle armoniche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle f(\Omega)=\sum_{\ell=0}^{\infty}\sum_{m=-\ell}^{\ell}f_{\ell m}Y_{\ell m}(\Omega),\quad\sum_{\ell m}Y_{\ell m}(\Omega)Y_{\ell m}^*(\Omega')=\delta(\Omega-\Omega')\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Parità<span class="lecture-step-boss">INVERSIONE</span></h4><p>L'inversione manda theta in pi meno theta e phi in phi più pi; il polinomio e la fase producono meno uno alla ell.</p><div class="lecture-formula" aria-label="Parità delle armoniche sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle Y_{\ell m}(\pi-\theta,\varphi+\pi)=(-1)^\ell Y_{\ell m}(\theta,\varphi)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Teorema di addizione<span class="lecture-step-boss">ROTAZIONI</span></h4><p>Sommare sulle proiezioni di un multipletto elimina la scelta dell'asse e lascia soltanto l'angolo gamma tra due direzioni.</p><div class="lecture-formula" aria-label="Teorema di addizione delle armoniche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sum_{m=-\ell}^{\ell}Y_{\ell m}(\Omega)Y_{\ell m}^*(\Omega')=\frac{2\ell+1}{4\pi}P_\ell(\cos\gamma)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Ladder<span class="lecture-step-boss">CHECK</span></h4><p>Gli operatori differenziali L più e L meno cambiano soltanto m dentro lo stesso ell con i coefficienti astratti.</p><div class="lecture-formula" aria-label="Azione ladder sulle armoniche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L_\pm Y_{\ell m}=\hbar\sqrt{\ell(\ell+1)-m(m\pm1)}\,Y_{\ell,m\pm1}\)</span></div></article></section><h2>Esempio: prime armoniche</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Da Rodrigues e normalizzazione si ottengono ell zero e ell uno.</p><p data-i18n-skip="true">\(\displaystyle Y_{00}=\frac1{\sqrt{4\pi}},\quad Y_{10}=\sqrt{\frac3{4\pi}}\cos\theta,\quad Y_{1,\pm1}=\mp\sqrt{\frac3{8\pi}}\sin\theta e^{\pm i\varphi}\)</p><p><strong>Controllo.</strong> Y00 è isotropa e integra in modulo quadro a uno; le tre armoniche ell uno hanno parità dispari e sono collegate dai ladder con coefficienti hbar radice due.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Armoniche reali</h3><p>Combinazioni reali di m e meno m sono spesso usate in chimica e grafica. Sono un cambio di base unitario dentro il multipletto ell e non diagonalizzano in generale Lz.</p></article><article class="lecture-card "><h3>Fase convenzionale</h3><p>Alcuni testi collocano il fattore meno uno alla m nella definizione di P_l^m anziché davanti a Y_lm. Le identità vanno confrontate come insieme coerente.</p></article><article class="lecture-card "><h3>Funzioni scalari</h3><p>Le Y_lm descrivono campi scalari sulla sfera. Spinori e campi vettoriali richiedono armoniche spinoriali o vettoriali con struttura aggiuntiva.</p></article><article class="lecture-card "><h3>Espansione multipolare</h3><p>ell ordina i multipoli: zero monopolo, uno dipolo, due quadrupolo. Simmetrie e parità eliminano interi settori dei coefficienti.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dimenticare la normalizzazione azimutale; permettere modulo m maggiore di ell; perdere il fattore Condon-Shortley; confondere delta sulla sfera con delta(theta-theta')delta(phi-phi') senza uno su seno theta; assegnare parità meno uno alla m.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Ci sono 2ell+1 valori di m; Y00 quadrato integra a uno; Y_l,-m segue dal coniugio; la parità dipende solo da ell; la somma dei moduli quadri a Omega uguale Omega primo vale (2ell+1)/(4pi).</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Separa Y in Theta e Phi.</li><li>Ricava m intero dalla periodicità.</li><li>Trasforma in equazione associata di Legendre.</li><li>Imponi regolarità e modulo m minore o uguale a ell.</li><li>Normalizza con Condon-Shortley.</li><li>Dimostra coniugazione, ortogonalità e completezza.</li><li>Ricava parità e teorema di addizione.</li><li>Calcola le prime armoniche e controlla i ladder.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, rotazioni e momento angolare</a></li><li><a href="boss/P2_DIM_7-12.txt#L385">DIM 8 - algebra, ladder e composizione</a></li><li><a href="Appunti-MQ.pdf#page=202">Appunti-MQ.pdf, pagine PDF 202-210 - armoniche sferiche e Legendre associati</a></li></ul><p class="lecture-note">La catena è stata confrontata con le pagine PDF verificate 202-210 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 7 - DIM 15":"In-depth lesson - Topic 7 - DIM 15","Armoniche sferiche e polinomi associati di Legendre":"Spherical harmonics and associated Legendre polynomials","Obiettivo.":"Objective.","Risolvere simultaneamente L quadrato e Lz separando phi e theta, derivare periodicità, equazione associata di Legendre, quantizzazione e normalizzazione, e dimostrare ortogonalità, completezza, coniugazione, parità, teorema di addizione e prime armoniche.":"Solve L squared and Lz simultaneously by separating phi and theta, derive periodicity, the associated Legendre equation, quantization, and normalization, and prove orthogonality, completeness, conjugation, parity, the addition theorem, and the first harmonics.","Base naturale della sfera":"Natural basis on the sphere","Le Y_lm diagonalizzano rotazioni e Laplaciano sferico e costituiscono l'analogo bidimensionale delle onde di Fourier su un cerchio.":"Y_lm diagonalize rotations and the spherical Laplacian and form the two-dimensional analogue of Fourier waves on a circle.","Due quantizzazioni distinte":"Two distinct quantizations","La periodicità in phi rende m intero; regolarità ai poli e terminazione di Legendre impongono ell intero con modulo m minore o uguale a ell.":"Periodicity in phi makes m integer; regularity at the poles and Legendre termination impose integer ell with modulus m no greater than ell.","Problema agli autovalori sulla sfera":"Eigenvalue problem on the sphere","CSCO orbitale":"Orbital CSCO","Si cercano funzioni simultanee di L quadrato e Lz con norma uno in dOmega.":"Seek simultaneous L squared and Lz functions with unit norm in dOmega.","Convenzione":"Convention","Si adotta la fase di Condon-Shortley inclusa nella definizione di P_l^m, che fissa segni di ladder e coniugazione.":"Adopt the Condon-Shortley phase included in the definition of P_l^m, fixing ladder and conjugation signs.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Equazioni spettrali":"1. Spectral equations","BASE":"BASE","Le armoniche sono autostati comuni con autovalori angolari quantizzati.":"Harmonics are common eigenstates with quantized angular eigenvalues.","Passaggio":"Step","2. Separazione":"2. Separation","PRODOTTO":"PRODUCT","Poiché Lz contiene soltanto la derivata in phi, si prova un prodotto di parte polare e azimutale.":"Because Lz contains only the phi derivative, try a product of polar and azimuthal parts.","3. Parte azimutale":"3. Azimuthal part","Lz":"Lz","L'equazione del primo ordine produce un esponenziale e la monovalenza ne quantizza il numero.":"The first-order equation produces an exponential and single-valuedness quantizes its number.","4. Equazione polare":"4. Polar equation","L quadrato":"L squared","Sostituire il prodotto nell'equazione di L quadrato lascia un'equazione di Sturm-Liouville in theta.":"Substitute the product into the L squared equation to leave a Sturm-Liouville equation in theta.","5. Variabile u":"5. Variable u","LEGENDRE":"LEGENDRE","Con u uguale cos theta l'intervallo diventa meno uno,uno e l'equazione assume la forma associata di Legendre.":"With u equal cosine theta the interval becomes minus one,one and the equation takes associated Legendre form.","6. Regolarità":"6. Regularity","POLI":"POLES","La soluzione fisica deve restare finita ai poli u uguale più o meno uno; questo elimina il secondo ramo singolare.":"The physical solution must remain finite at poles u equal plus or minus one; this removes the singular second branch.","7. Rodrigues":"7. Rodrigues","COSTRUISCI":"CONSTRUCT","I polinomi ordinari derivano da una formula differenziale; quelli associati aggiungono m derivate e il fattore ai poli.":"Ordinary polynomials follow from a differential formula; associated ones add m derivatives and the polar factor.","8. Normalizzazione":"8. Normalization","COSTANTE":"CONSTANT","Poiche la fase di Condon-Shortley e gia inclusa in P_l^m, l'integrale noto dei Legendre associati fissa il solo coefficiente positivo.":"Because the Condon-Shortley phase is already included in P_l^m, the known associated-Legendre integral fixes only the positive coefficient.","9. m negativo":"9. Negative m","CONIUGA":"CONJUGATE","La convenzione scelta estende la famiglia ai valori negativi con una semplice relazione di coniugazione.":"The chosen convention extends the family to negative values through a simple conjugation relation.","10. Ortonormalità":"10. Orthonormality","BASE ORTONORMALE":"ORTHONORMAL BASIS","Ortogonalità Fourier in phi e Sturm-Liouville in theta producono due delta di Kronecker.":"Fourier orthogonality in phi and Sturm-Liouville orthogonality in theta produce two Kronecker deltas.","11. Completezza":"11. Completeness","DELTA SFERA":"SPHERE DELTA","Ogni funzione quadrato integrabile sulla sfera si espande nella base completa.":"Every square-integrable function on the sphere expands in the complete basis.","12. Parità":"12. Parity","INVERSIONE":"INVERSION","L'inversione manda theta in pi meno theta e phi in phi più pi; il polinomio e la fase producono meno uno alla ell.":"Inversion maps theta to pi minus theta and phi to phi plus pi; polynomial and phase produce minus one to ell.","13. Teorema di addizione":"13. Addition theorem","ROTAZIONI":"ROTATIONS","Sommare sulle proiezioni di un multipletto elimina la scelta dell'asse e lascia soltanto l'angolo gamma tra due direzioni.":"Summing over projections in a multiplet removes the axis choice and leaves only angle gamma between two directions.","14. Ladder":"14. Ladders","CHECK":"CHECK","Gli operatori differenziali L più e L meno cambiano soltanto m dentro lo stesso ell con i coefficienti astratti.":"Differential L plus and L minus change only m within the same ell with abstract coefficients.","Esempio: prime armoniche":"Example: first harmonics","Impostazione.":"Setup.","Da Rodrigues e normalizzazione si ottengono ell zero e ell uno.":"Rodrigues and normalization give ell zero and ell one.","Controllo.":"Check.","Y00 è isotropa e integra in modulo quadro a uno; le tre armoniche ell uno hanno parità dispari e sono collegate dai ladder con coefficienti hbar radice due.":"Y00 is isotropic and its squared modulus integrates to one; the three ell-one harmonics have odd parity and are linked by ladders with coefficients hbar square root two.","Interpretazione e limiti":"Interpretation and limits","Armoniche reali":"Real harmonics","Combinazioni reali di m e meno m sono spesso usate in chimica e grafica. Sono un cambio di base unitario dentro il multipletto ell e non diagonalizzano in generale Lz.":"Real combinations of m and minus m are often used in chemistry and graphics. They are a unitary basis change inside the ell multiplet and generally do not diagonalize Lz.","Fase convenzionale":"Phase convention","Alcuni testi collocano il fattore meno uno alla m nella definizione di P_l^m anziché davanti a Y_lm. Le identità vanno confrontate come insieme coerente.":"Some texts place factor minus one to m in the definition of P_l^m rather than before Y_lm. Identities must be compared as one consistent set.","Funzioni scalari":"Scalar functions","Le Y_lm descrivono campi scalari sulla sfera. Spinori e campi vettoriali richiedono armoniche spinoriali o vettoriali con struttura aggiuntiva.":"Y_lm describe scalar fields on the sphere. Spinors and vector fields require spinor or vector harmonics with additional structure.","Espansione multipolare":"Multipole expansion","ell ordina i multipoli: zero monopolo, uno dipolo, due quadrupolo. Simmetrie e parità eliminano interi settori dei coefficienti.":"ell orders multipoles: zero monopole, one dipole, two quadrupole. Symmetries and parity eliminate whole coefficient sectors.","Errori tipici":"Common errors","Dimenticare la normalizzazione azimutale; permettere modulo m maggiore di ell; perdere il fattore Condon-Shortley; confondere delta sulla sfera con delta(theta-theta')delta(phi-phi') senza uno su seno theta; assegnare parità meno uno alla m.":"Forgetting azimuthal normalization; allowing modulus m greater than ell; losing the Condon-Shortley factor; confusing the sphere delta with delta(theta-theta')delta(phi-phi') without one over sine theta; assigning parity minus one to m.","Controlli rapidi":"Quick checks","Ci sono 2ell+1 valori di m; Y00 quadrato integra a uno; Y_l,-m segue dal coniugio; la parità dipende solo da ell; la somma dei moduli quadri a Omega uguale Omega primo vale (2ell+1)/(4pi).":"There are 2ell+1 m values; Y00 squared integrates to one; Y_l,-m follows by conjugation; parity depends only on ell; the sum of squared moduli at Omega equal Omega prime is (2ell+1)/(4pi).","Controllo da orale":"Oral exam checklist","Separa Y in Theta e Phi.":"Separate Y into Theta and Phi.","Ricava m intero dalla periodicità.":"Derive integer m from periodicity.","Trasforma in equazione associata di Legendre.":"Transform into the associated Legendre equation.","Imponi regolarità e modulo m minore o uguale a ell.":"Impose regularity and modulus m no greater than ell.","Normalizza con Condon-Shortley.":"Normalize with Condon-Shortley.","Dimostra coniugazione, ortogonalità e completezza.":"Prove conjugation, orthogonality, and completeness.","Ricava parità e teorema di addizione.":"Derive parity and the addition theorem.","Calcola le prime armoniche e controlla i ladder.":"Compute the first harmonics and check ladders.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 15 - commutatori, rotazioni e momento angolare":"DIM 15 - commutators, rotations, and angular momentum","DIM 8 - algebra, ladder e composizione":"DIM 8 - algebra, ladders, and composition","Appunti-MQ.pdf, pagine PDF 202-210 - armoniche sferiche e Legendre associati":"Appunti-MQ.pdf, PDF pages 202-210 - armoniche sferiche e Legendre associati","La catena è stata confrontata con le pagine PDF verificate 202-210 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.":"The chain was compared with verified PDF pages 202-210 and DIM 15; phase conventions, signs, and normalizations are kept consistent.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Definizione spettrale delle armoniche":"Spectral definition of harmonics","Ansatz separato sulla sfera":"Separated ansatz on the sphere","Soluzione normalizzata della parte azimutale":"Normalized azimuthal solution","Equazione polare delle armoniche":"Polar equation for harmonics","Equazione associata di Legendre":"Associated Legendre equation","Soluzioni regolari e valori ammessi":"Regular solutions and allowed values","Formule di Rodrigues e Condon-Shortley":"Rodrigues and Condon-Shortley formulas","Armonica sferica normalizzata":"Normalized spherical harmonic","Relazione tra armoniche con m opposto":"Relation between opposite-m harmonics","Ortonormalità sulla sfera":"Orthonormality on the sphere","Espansione e completezza delle armoniche":"Harmonic expansion and completeness","Parità delle armoniche sferiche":"Parity of spherical harmonics","Teorema di addizione delle armoniche":"Spherical-harmonic addition theorem","Azione ladder sulle armoniche":"Ladder action on harmonics"},"title":{"it":"Armoniche sferiche e polinomi associati di Legendre","en":"Spherical harmonics and associated Legendre polynomials"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

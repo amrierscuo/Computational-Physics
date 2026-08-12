@@ -1,313 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notazione di Dirac</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notazione di Dirac e algebra degli stati</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Notazione di Dirac</h1>
-    <h2>Introduzione</h2>
-    La notazione di Dirac, o notazione bra-ket, è un linguaggio matematico introdotto per descrivere in modo compatto e generale lo spazio degli stati quantistici. 
-    Gli stati di un sistema quantistico sono rappresentati da vettori in uno spazio di Hilbert.
-
-    <h2>Definizione</h2>
-    Un vettore nello spazio di Hilbert è rappresentato da un "ket":
-    <div class="formula">
-        \[
-        |\psi\rangle
-        \]
-    </div>
-    Il corrispondente vettore duale, che rappresenta l'operazione di coniugazione hermitiana, è indicato con un "bra":
-    <div class="formula">
-        \[
-        \langle\psi|
-        \]
-    </div>
-    L'elemento di sovrapposizione tra due stati \( |\psi\rangle \) e \( |\phi\rangle \) è il prodotto scalare:
-    <div class="formula">
-        \[
-        \langle\phi|\psi\rangle
-        \]
-    </div>
-
-    <h2>Operatori lineari</h2>
-    Gli operatori lineari \( \hat{A} \) agiscono sugli stati nello spazio di Hilbert trasformando un ket in un altro ket:
-    <div class="formula">
-        \[
-        \hat{A}|\psi\rangle = |\psi'\rangle
-        \]
-    </div>
-    Il valore atteso di un osservabile associato all'operatore \( \hat{A} \) nello stato \( |\psi\rangle \) è:
-    <div class="formula">
-        \[
-        \langle\psi|\hat{A}|\psi\rangle
-        \]
-    </div>
-
-    <h2>Rappresentazioni: coordinate e impulsi</h2>
-    La rappresentazione nelle coordinate è data da:
-    <div class="formula">
-        \[
-        \psi(x) = \langle x|\psi\rangle
-        \]
-    </div>
-    mentre la rappresentazione nello spazio degli impulsi è:
-    <div class="formula">
-        \[
-        \psi(p) = \langle p|\psi\rangle
-        \]
-    </div>
-    Le due rappresentazioni sono legate attraverso la trasformata di Fourier.
-
-    <h2>Trasformazioni unitarie</h2>
-    Gli operatori unitari preservano la norma dei vettori e rappresentano simmetrie dello spazio di Hilbert. Un esempio fondamentale è l'evoluzione temporale, descritta dall'operatore di evoluzione temporale \( \hat{U}(t) \):
-    <div class="formula">
-        \[
-        \hat{U}(t) = e^{-\frac{i}{\hbar}\hat{H}t}
-        \]
-    </div>
-    dove \( \hat{H} \) è l'hamiltoniano del sistema.
-
-    <h2>Simmetrie e leggi di conservazione</h2>
-    Le simmetrie di un sistema sono associate a leggi di conservazione. Secondo il teorema di Noether:
-    <ul>
-        <li>La simmetria delle traslazioni genera la conservazione della quantità di moto.</li>
-        <li>La simmetria delle rotazioni genera la conservazione del momento angolare.</li>
-    </ul>
-    Gli operatori associati a queste quantità conservate sono:
-    <div class="formula">
-        \[
-        \hat{p} = -i\hbar\frac{\partial}{\partial x}, \quad \hat{L} = \vec{r} \times \hat{p}
-        \]
-    </div>
-
-    <h2>Oscillatore armonico con metodi operatoriali</h2>
-    Nell'oscillatore armonico quantistico, gli operatori di creazione \( \hat{a}^\dagger \) e annichilazione \( \hat{a} \) soddisfano le relazioni di commutazione:
-    <div class="formula">
-        \[
-        [\hat{a}, \hat{a}^\dagger] = 1
-        \]
-    </div>
-    L'energia degli stati stazionari è data da:
-    <div class="formula">
-        \[
-        E_n = \hbar\omega\left(n + \frac{1}{2}\right)
-        \]
-    </div>
-    dove \( n \) è un numero quantico intero non negativo.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 5</div>
-  <h2>Notazione di Dirac: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Usare bra, ket e completezza come linguaggio indipendente dalla rappresentazione.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Il ket è lo stato astratto, il bra il funzionale aggiunto. Le funzioni d'onda sono componenti \(\langle x|\psi\rangle\), non lo stato stesso. I proiettori \(|a\rangle\langle a|\) estraggono componenti.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Completezza<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>In una base discreta.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="I=\sum_n|n\rangle\langle n|"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi\rangle=\sum_nc_n|n\rangle,\quad c_n=\langle n|\psi\rangle\Rightarrow|\psi\rangle=\left(\sum_n|n\rangle\langle n|\right)|\psi\rangle\ \forall\psi\Rightarrow I=\sum_n|n\rangle\langle n|\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Elemento di matrice<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>La matrice dipende dalla base, l'operatore no.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="A_{mn}=\langle m|A|n\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle A|n\rangle=\sum_m|m\rangle\langle m|A|n\rangle\Rightarrow A_{mn}:=\langle m|A|n\rangle\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Cambio base</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Inserisci I tra A e un ket.</p>
-    <p><strong>Calcolo.</strong> \(A|\psi\rangle=\sum_{mn}|m\rangle A_{mn}\langle n|\psi\rangle\).</p>
-    <p><strong>Risultato e controllo.</strong> Il prodotto matrice-vettore emerge dalla completezza.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P1_DIM_0-6.txt">DIM 3</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Basi continue richiedono integrali e delta.</li>
-          <li>La coniugazione inverte l'ordine: \((AB)^\dagger=B^\dagger A^\dagger\).</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Dirac separa struttura fisica e coordinate, rendendo trasparenti cambi di base e misure.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Distingui \(langle a|b\rangle\) e \(|a\rangle\langle b|\).</li>
-          <li>Ricostruisci un operatore dalla sua matrice.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=53">Appunti-MQ.pdf, pp. 53-60: bra, ket, proiettori e completezza</a></li>
-          <li><a href="MQ.pdf#page=1">MQ.pdf, pp. capitoli 1-3: spazi complessi e prodotto scalare</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-notazione-dirac"><div class="lecture-kicker">Lezione approfondita - Argomento 5</div><h1>Notazione di Dirac e algebra degli stati</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire ket, bra, operatori e proiettori in uno spazio di Hilbert, passare tra componenti e oggetti astratti, derivare prodotto di matrici e valori medi e formulare correttamente decomposizione spettrale e basi continue.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Il ket non è una colonna assoluta</h3><p>Il ket è lo stato astratto; una colonna appare soltanto dopo aver scelto una base. Cambiare base cambia le componenti, non lo stato fisico.</p></article><article class="lecture-card lecture-warning"><h3>Ordine non commutativo</h3><p>AB significa prima B e poi A. Nei prodotti esterni e nelle matrici invertire l'ordine cambia dominio, codominio e risultato.</p></article></div><h2>Oggetti e rappresentazioni</h2><div class="lecture-grid"><article class="lecture-card "><h3>Spazio di Hilbert</h3><p>Gli stati sono raggi di vettori normalizzati: una fase globale non cambia probabilità o valori medi.</p></article><article class="lecture-card "><h3>Dualità</h3><p>A ogni ket corrisponde un bra antilineare; coniugare una combinazione complessa coniuga i coefficienti e inverte l'ordine dei prodotti.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Ket e sovrapposizione<span class="lecture-step-boss">BASE</span></h4><p>Lo spazio degli stati è lineare: combinazioni complesse di ket sono ancora ket.</p><div class="lecture-formula" aria-label="Sovrapposizione lineare di stati"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_n c_n|n\rangle,\qquad c_n\in\mathbb C\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Bra e aggiunto<span class="lecture-step-boss">DUALE</span></h4><p>L'operazione aggiunto è antilineare e trasforma un ket nel funzionale duale.</p><div class="lecture-formula" aria-label="Antilinearità del passaggio da ket a bra"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (|\psi\rangle)^\dagger=\langle\psi|,\qquad(a|u\rangle+b|v\rangle)^\dagger=a^*\langle u|+b^*\langle v|\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Prodotto interno<span class="lecture-step-boss">ASSIOMI</span></h4><p>Il prodotto è antilineare nel primo argomento, lineare nel secondo, hermitiano e positivo.</p><div class="lecture-formula" aria-label="Proprietà del prodotto interno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\phi|\psi\rangle=\langle\psi|\phi\rangle^*,\qquad\langle\psi|\psi\rangle\ge0,\quad\langle\psi|\psi\rangle=0\Leftrightarrow|\psi\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Norma e fase<span class="lecture-step-boss">STATI</span></h4><p>Uno stato puro si normalizza a uno e la moltiplicazione per una fase non cambia il raggio fisico.</p><div class="lecture-formula" aria-label="Normalizzazione ed equivalenza di fase"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\psi|\psi\rangle=1,\qquad|\psi\rangle\sim e^{i\alpha}|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Operatore lineare<span class="lecture-step-boss">AZIONE</span></h4><p>Un operatore associa ket a ket e rispetta le combinazioni lineari.</p><div class="lecture-formula" aria-label="Linearità di un operatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A(a|u\rangle+b|v\rangle)=aA|u\rangle+bA|v\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Operatore aggiunto<span class="lecture-step-boss">DEFINISCI</span></h4><p>L'aggiunto è definito spostando A da destra a sinistra nel prodotto interno.</p><div class="lecture-formula" aria-label="Definizione e ordine dell&#x27;aggiunto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\phi|A\psi\rangle=\langle A^\dagger\phi|\psi\rangle,\qquad(AB)^\dagger=B^\dagger A^\dagger\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Osservabile<span class="lecture-step-boss">HERMITIANO</span></h4><p>Un'osservabile è rappresentata da un operatore autoaggiunto; in dimensione finita coincide con una matrice hermitiana.</p><div class="lecture-formula" aria-label="Realtà e ortogonalità spettrali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=A^\dagger\Rightarrow a_n\in\mathbb R,\qquad\langle a_m|a_n\rangle=\delta_{mn}\ \text{se }a_m\ne a_n\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Prodotto esterno<span class="lecture-step-boss">RANGO 1</span></h4><p>Ket per bra produce un operatore di rango uno, non uno scalare.</p><div class="lecture-formula" aria-label="Azione di un prodotto esterno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (|u\rangle\langle v|)|\psi\rangle=|u\rangle\langle v|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Proiettore<span class="lecture-step-boss">MISURA</span></h4><p>Da un ket normalizzato si costruisce il proiettore ortogonale sul suo raggio.</p><div class="lecture-formula" aria-label="Proiettore su uno stato normalizzato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_n=|n\rangle\langle n|,\qquad P_n^2=P_n=P_n^\dagger\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Completezza discreta<span class="lecture-step-boss">IDENTITÀ</span></h4><p>Una base ortonormale risolve l'identità e permette di ricostruire ogni ket dalle sue ampiezze.</p><div class="lecture-formula" aria-label="Risoluzione discreta dell&#x27;identità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle I=\sum_n|n\rangle\langle n|,\qquad|\psi\rangle=\sum_n|n\rangle\langle n|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Componenti e matrici<span class="lecture-step-boss">RAPPRESENTA</span></h4><p>Scelta la base, le componenti del ket e dell'operatore sono ampiezze e elementi di matrice.</p><div class="lecture-formula" aria-label="Componenti di stati e operatori"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_n=\langle n|\psi\rangle,\qquad A_{mn}=\langle m|A|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Prodotto di operatori<span class="lecture-step-boss">DERIVA</span></h4><p>Inserire l'identità tra A e B produce il prodotto righe per colonne.</p><div class="lecture-formula" aria-label="Derivazione del prodotto matriciale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (AB)_{mn}=\langle m|AB|n\rangle=\sum_k\langle m|A|k\rangle\langle k|B|n\rangle=\sum_kA_{mk}B_{kn}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Valore medio<span class="lecture-step-boss">BORN</span></h4><p>Il valore medio è uno scalare indipendente dalla base e, per A hermitiano, è reale.</p><div class="lecture-formula" aria-label="Valore medio in forma astratta e matriciale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle A\rangle_\psi=\langle\psi|A|\psi\rangle=\sum_{mn}\psi_m^*A_{mn}\psi_n\in\mathbb R\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Decomposizione spettrale<span class="lecture-step-boss">SPETTRO</span></h4><p>Per uno spettro discreto si sommano proiettori sugli autospazi; la degenerazione richiede un proiettore di rango maggiore.</p><div class="lecture-formula" aria-label="Teorema spettrale con degenerazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=\sum_a aP_a,\qquad P_a=\sum_{\mu=1}^{g_a}|a,\mu\rangle\langle a,\mu|,\qquad\sum_aP_a=I\)</span></div></article></section><h2>Esempio: spin un mezzo in una base ruotata</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Nella base z si definiscono gli autostati x come sovrapposizioni normalizzate.</p><p data-i18n-skip="true">\(\displaystyle |+x\rangle=\frac{|+z\rangle+|-z\rangle}{\sqrt2},\quad|-x\rangle=\frac{|+z\rangle-|-z\rangle}{\sqrt2},\quad P_{+x}=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix},\quad|+z\rangle=\frac{|+x\rangle+|-x\rangle}{\sqrt2}\)</p><p><strong>Controllo.</strong> Il proiettore è hermitiano e idempotente; una misura di Sx nello stato più z produce i due risultati con probabilità un mezzo.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Raggi e vettori</h3><p>Normalizzazione e fase scelgono un rappresentante del raggio. Le fasi relative tra componenti restano invece osservabili tramite interferenza.</p></article><article class="lecture-card "><h3>Autoaggiuntezza e dominio</h3><p>Per operatori differenziali non limitati, hermiticità formale non basta: dominio e condizioni al bordo devono rendere A uguale al suo aggiunto.</p></article><article class="lecture-card "><h3>Base non ortonormale</h3><p>Le formule semplici con somma di ket-bra assumono ortonormalità. In una base obliqua compare la base duale o la matrice di Gram.</p></article><article class="lecture-card "><h3>Spettro continuo</h3><p>Somme e Kronecker diventano integrali e delta di Dirac. Gli autoket generalizzati non hanno norma finita.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Confondere bra con ket trasposto senza coniugio; scambiare prodotto interno ed esterno; invertire l'ordine di AB; dimenticare la degenerazione nella decomposizione; attribuire significato fisico alla fase globale.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Un bra per ket è scalare, un ket per bra è operatore; P quadrato vale P; le componenti dipendono dalla base; traccia e valori medi fisici no; A hermitiano ha valori medi reali.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Distingui stato astratto e colonna.</li><li>Definisci bra, prodotto interno e aggiunto.</li><li>Costruisci prodotto esterno e proiettore.</li><li>Inserisci la completezza in un ket.</li><li>Deriva il prodotto righe per colonne.</li><li>Scrivi valore medio e probabilità di proiezione.</li><li>Formula il teorema spettrale degenere.</li><li>Spiega come cambia il continuo.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L802">Boss P1 - formalismo, rappresentazioni ed evoluzione</a></li><li><a href="Appunti-MQ.pdf#page=46">Appunti-MQ.pdf, pagine PDF 46-64 - vettori di stato, operatori e cambi di base</a></li><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, generatori e simmetrie</a></li></ul><p class="lecture-note">La pagina segue il formalismo verificato nelle pagine 46-64 e rende espliciti i passaggi di algebra che collegano notazione astratta, matrici, proiettori e teorema spettrale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 5":"In-depth lesson - Topic 5","Notazione di Dirac e algebra degli stati":"Dirac notation and state algebra","Obiettivo.":"Objective.","Costruire ket, bra, operatori e proiettori in uno spazio di Hilbert, passare tra componenti e oggetti astratti, derivare prodotto di matrici e valori medi e formulare correttamente decomposizione spettrale e basi continue.":"Construct kets, bras, operators, and projectors in a Hilbert space, move between components and abstract objects, derive matrix products and expectation values, and correctly formulate spectral decomposition and continuous bases.","Il ket non è una colonna assoluta":"A ket is not an absolute column","Il ket è lo stato astratto; una colonna appare soltanto dopo aver scelto una base. Cambiare base cambia le componenti, non lo stato fisico.":"A ket is the abstract state; a column appears only after choosing a basis. Changing basis changes components, not the physical state.","Ordine non commutativo":"Noncommutative order","AB significa prima B e poi A. Nei prodotti esterni e nelle matrici invertire l'ordine cambia dominio, codominio e risultato.":"AB means B first and then A. In outer products and matrices, reversing order changes domain, codomain, and result.","Oggetti e rappresentazioni":"Objects and representations","Spazio di Hilbert":"Hilbert space","Gli stati sono raggi di vettori normalizzati: una fase globale non cambia probabilità o valori medi.":"States are rays of normalized vectors: a global phase changes neither probabilities nor expectation values.","Dualità":"Duality","A ogni ket corrisponde un bra antilineare; coniugare una combinazione complessa coniuga i coefficienti e inverte l'ordine dei prodotti.":"Each ket has an antilinear bra; adjointing a complex combination conjugates coefficients and reverses product order.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Ket e sovrapposizione":"1. Kets and superposition","BASE":"BASE","Lo spazio degli stati è lineare: combinazioni complesse di ket sono ancora ket.":"State space is linear: complex combinations of kets are still kets.","Passaggio":"Step","2. Bra e aggiunto":"2. Bras and adjoints","DUALE":"DUAL","L'operazione aggiunto è antilineare e trasforma un ket nel funzionale duale.":"The adjoint operation is antilinear and turns a ket into its dual functional.","3. Prodotto interno":"3. Inner product","ASSIOMI":"AXIOMS","Il prodotto è antilineare nel primo argomento, lineare nel secondo, hermitiano e positivo.":"The product is antilinear in its first argument, linear in its second, Hermitian, and positive.","4. Norma e fase":"4. Norm and phase","STATI":"STATES","Uno stato puro si normalizza a uno e la moltiplicazione per una fase non cambia il raggio fisico.":"A pure state is normalized to one and multiplication by a phase does not change the physical ray.","5. Operatore lineare":"5. Linear operator","AZIONE":"ACTION","Un operatore associa ket a ket e rispetta le combinazioni lineari.":"An operator maps kets to kets and respects linear combinations.","6. Operatore aggiunto":"6. Adjoint operator","DEFINISCI":"DEFINE","L'aggiunto è definito spostando A da destra a sinistra nel prodotto interno.":"The adjoint is defined by moving A from right to left in the inner product.","7. Osservabile":"7. Observable","HERMITIANO":"HERMITIAN","Un'osservabile è rappresentata da un operatore autoaggiunto; in dimensione finita coincide con una matrice hermitiana.":"An observable is represented by a self-adjoint operator; in finite dimension it is a Hermitian matrix.","8. Prodotto esterno":"8. Outer product","RANGO 1":"RANK 1","Ket per bra produce un operatore di rango uno, non uno scalare.":"Ket times bra produces a rank-one operator, not a scalar.","9. Proiettore":"9. Projector","MISURA":"MEASUREMENT","Da un ket normalizzato si costruisce il proiettore ortogonale sul suo raggio.":"A normalized ket defines the orthogonal projector onto its ray.","10. Completezza discreta":"10. Discrete completeness","IDENTITÀ":"IDENTITY","Una base ortonormale risolve l'identità e permette di ricostruire ogni ket dalle sue ampiezze.":"An orthonormal basis resolves the identity and reconstructs every ket from its amplitudes.","11. Componenti e matrici":"11. Components and matrices","RAPPRESENTA":"REPRESENT","Scelta la base, le componenti del ket e dell'operatore sono ampiezze e elementi di matrice.":"Once a basis is chosen, ket and operator components are amplitudes and matrix elements.","12. Prodotto di operatori":"12. Operator product","DERIVA":"DERIVE","Inserire l'identità tra A e B produce il prodotto righe per colonne.":"Inserting the identity between A and B produces row-by-column multiplication.","13. Valore medio":"13. Expectation value","BORN":"BORN","Il valore medio è uno scalare indipendente dalla base e, per A hermitiano, è reale.":"The expectation value is a basis-independent scalar and is real for Hermitian A.","14. Decomposizione spettrale":"14. Spectral decomposition","SPETTRO":"SPECTRUM","Per uno spettro discreto si sommano proiettori sugli autospazi; la degenerazione richiede un proiettore di rango maggiore.":"For a discrete spectrum sum projectors onto eigenspaces; degeneracy requires a higher-rank projector.","Esempio: spin un mezzo in una base ruotata":"Example: spin one half in a rotated basis","Impostazione.":"Setup.","Nella base z si definiscono gli autostati x come sovrapposizioni normalizzate.":"In the z basis define x eigenstates as normalized superpositions.","Controllo.":"Check.","Il proiettore è hermitiano e idempotente; una misura di Sx nello stato più z produce i due risultati con probabilità un mezzo.":"The projector is Hermitian and idempotent; measuring Sx in the plus-z state produces both results with probability one half.","Interpretazione e limiti":"Interpretation and limits","Raggi e vettori":"Rays and vectors","Normalizzazione e fase scelgono un rappresentante del raggio. Le fasi relative tra componenti restano invece osservabili tramite interferenza.":"Normalization and phase choose a representative of the ray. Relative phases between components remain observable through interference.","Autoaggiuntezza e dominio":"Self-adjointness and domain","Per operatori differenziali non limitati, hermiticità formale non basta: dominio e condizioni al bordo devono rendere A uguale al suo aggiunto.":"For unbounded differential operators, formal Hermiticity is not enough: domain and boundary conditions must make A equal to its adjoint.","Base non ortonormale":"Nonorthonormal basis","Le formule semplici con somma di ket-bra assumono ortonormalità. In una base obliqua compare la base duale o la matrice di Gram.":"Simple ket-bra sums assume orthonormality. In an oblique basis the dual basis or Gram matrix appears.","Spettro continuo":"Continuous spectrum","Somme e Kronecker diventano integrali e delta di Dirac. Gli autoket generalizzati non hanno norma finita.":"Sums and Kronecker deltas become integrals and Dirac deltas. Generalized eigenkets have no finite norm.","Errori tipici":"Common errors","Confondere bra con ket trasposto senza coniugio; scambiare prodotto interno ed esterno; invertire l'ordine di AB; dimenticare la degenerazione nella decomposizione; attribuire significato fisico alla fase globale.":"Confusing a bra with an unconjugated ket transpose; interchanging inner and outer products; reversing AB order; forgetting degeneracy in the decomposition; assigning physical meaning to global phase.","Controlli rapidi":"Quick checks","Un bra per ket è scalare, un ket per bra è operatore; P quadrato vale P; le componenti dipendono dalla base; traccia e valori medi fisici no; A hermitiano ha valori medi reali.":"A bra times ket is a scalar, a ket times bra is an operator; P squared equals P; components depend on basis; physical traces and expectations do not; Hermitian A has real expectations.","Controllo da orale":"Oral exam checklist","Distingui stato astratto e colonna.":"Distinguish an abstract state from a column.","Definisci bra, prodotto interno e aggiunto.":"Define bras, inner products, and adjoints.","Costruisci prodotto esterno e proiettore.":"Construct an outer product and a projector.","Inserisci la completezza in un ket.":"Insert completeness into a ket.","Deriva il prodotto righe per colonne.":"Derive row-by-column multiplication.","Scrivi valore medio e probabilità di proiezione.":"Write an expectation value and projection probability.","Formula il teorema spettrale degenere.":"State the degenerate spectral theorem.","Spiega come cambia il continuo.":"Explain what changes in the continuum.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss P1 - formalismo, rappresentazioni ed evoluzione":"Boss P1 - formalism, representations, and evolution","Appunti-MQ.pdf, pagine PDF 46-64 - vettori di stato, operatori e cambi di base":"Appunti-MQ.pdf, PDF pages 46-64 - vettori di stato, operatori e cambi di base","DIM 15 - commutatori, generatori e simmetrie":"DIM 15 - commutators, generators, and symmetries","La pagina segue il formalismo verificato nelle pagine 46-64 e rende espliciti i passaggi di algebra che collegano notazione astratta, matrici, proiettori e teorema spettrale.":"The page follows the formalism verified on pages 46-64 and makes explicit the algebraic steps connecting abstract notation, matrices, projectors, and the spectral theorem.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Sovrapposizione lineare di stati":"Linear superposition of states","Antilinearità del passaggio da ket a bra":"Antilinearity from ket to bra","Proprietà del prodotto interno":"Inner-product properties","Normalizzazione ed equivalenza di fase":"Normalization and phase equivalence","Linearità di un operatore":"Operator linearity","Definizione e ordine dell'aggiunto":"Definition and order of the adjoint","Realtà e ortogonalità spettrali":"Spectral reality and orthogonality","Azione di un prodotto esterno":"Action of an outer product","Proiettore su uno stato normalizzato":"Projector onto a normalized state","Risoluzione discreta dell'identità":"Discrete resolution of identity","Componenti di stati e operatori":"State and operator components","Derivazione del prodotto matriciale":"Derivation of matrix multiplication","Valore medio in forma astratta e matriciale":"Expectation value in abstract and matrix form","Teorema spettrale con degenerazione":"Spectral theorem with degeneracy"},"title":{"it":"Notazione di Dirac e algebra degli stati","en":"Dirac notation and state algebra"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

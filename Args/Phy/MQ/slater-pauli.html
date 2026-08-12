@@ -1,148 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N Particelle non Interagenti, Determinante di Slater e Principio di Pauli</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Determinante di Slater</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="determinante-slater.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>N Particelle non Interagenti, Determinante di Slater e Principio di Pauli</h1>
-
-<p>Quando si considera un sistema di più particelle quantistiche, la statistica di queste particelle diventa centrale nella costruzione dello stato d’insieme. In meccanica quantistica le particelle identiche si distinguono in due grandi famiglie: bosoni e fermioni. I fermioni, come gli elettroni, obbediscono al principio di esclusione di Pauli e richiedono una funzione d’onda complessiva antisimmetrica rispetto allo scambio di qualsiasi coppia di particelle identiche.</p>
-
-<p>Per N fermioni non interagenti (ad esempio N elettroni in un potenziale esterno), i singoli autostati monoelettronici possono essere noti. La funzione d’onda totale del sistema si costruisce combinando questi autostati in modo coerente con l’antisimmetria richiesta. Lo strumento matematico per farlo è il determinante di Slater.</p>
-
-<h2>Determinante di Slater</h2>
-
-<p>Supponiamo di avere N autofunzioni monoelettroniche ortonormali \(\{\phi_1(\mathbf{r}), \phi_2(\mathbf{r}), \dots, \phi_N(\mathbf{r})\}\), ognuna corrispondente a un orbitale quantistico. Una funzione d’onda antisimmetrica per N fermioni identici (ad esempio N elettroni) è data da:</p>
-
-\[
-\Psi(\mathbf{r}_1, \mathbf{r}_2, \dots, \mathbf{r}_N) = \frac{1}{\sqrt{N!}}
-\begin{vmatrix}
-\phi_1(\mathbf{r}_1) & \phi_2(\mathbf{r}_1) & \cdots & \phi_N(\mathbf{r}_1) \\
-\phi_1(\mathbf{r}_2) & \phi_2(\mathbf{r}_2) & \cdots & \phi_N(\mathbf{r}_2) \\
-\vdots & \vdots & \ddots & \vdots \\
-\phi_1(\mathbf{r}_N) & \phi_2(\mathbf{r}_N) & \cdots & \phi_N(\mathbf{r}_N)
-\end{vmatrix}.
-\]
-
-<p>Questa matrice, di cui si prende il determinante, è nota come determinante di Slater. La presenza del determinante assicura che scambiare due righe (che corrispondono allo scambio di due particelle identiche) introduca un segno meno nella funzione d’onda, garantendo l’antisimmetria.</p>
-
-<h2>Antisimmetria e Principio di Esclusione di Pauli</h2>
-
-<p>L’antisimmetria implica il principio di esclusione di Pauli: non esiste alcuno stato quantistico in cui due fermioni identici occupino esattamente lo stesso stato monoelettronico. Infatti, se \(\phi_i = \phi_j\) per due righe (o due colonne), il determinante ha due righe (o colonne) identiche e quindi il determinante è zero. Questo significa che la funzione d’onda svanisce se due fermioni tentano di occupare lo stesso stato, dunque è proibito.</p>
-
-<h2>N Particelle non Interagenti</h2>
-
-<p>Nel caso di N fermioni non interagenti soggetti a un potenziale esterno, gli autostati del sistema monoelettronico sono relativamente semplici da trovare. La soluzione totale si costruisce riempiendo i livelli energetici monoelettronici più bassi, seguendo il principio di esclusione di Pauli. Ciò permette di descrivere sistemi come l’atomo di elio, l’atomo di litio, e così via, semplicemente con un determinante di Slater (eventualmente con le spin-orbitali se si considera anche lo spin).</p>
-
-<p>Allo stesso modo, questo formalismo è la base per la teoria del modello a shell in fisica nucleare o per la teoria di Hartree-Fock nella chimica quantistica, dove si approssima lo stato fondamentale di un sistema elettronico attraverso un determinante di Slater costruito a partire da un insieme di orbitali monoelettronici.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Considera N spin-1/2 fermioni identici (elettroni) e un set di N orbitali monoelettronici \(\{\phi_1, \phi_2, ..., \phi_N\}\).
-<br><br>
-2. Scrivi la funzione d’onda come un determinante:
-\[
-\Psi(\mathbf{r}_1,\ldots,\mathbf{r}_N) = \frac{1}{\sqrt{N!}}
-\begin{vmatrix}
-\phi_1(\mathbf{r}_1) & \phi_2(\mathbf{r}_1) & \cdots & \phi_N(\mathbf{r}_1) \\
-\phi_1(\mathbf{r}_2) & \phi_2(\mathbf{r}_2) & \cdots & \phi_N(\mathbf{r}_2) \\
-\vdots & \vdots & \ddots & \vdots \\
-\phi_1(\mathbf{r}_N) & \phi_2(\mathbf{r}_N) & \cdots & \phi_N(\mathbf{r}_N)
-\end{vmatrix}.
-\]
-3. Spiega che lo scambio di due particelle (ad esempio \(\mathbf{r}_1 \leftrightarrow \mathbf{r}_2\)) corrisponde allo scambio di due righe nel determinante, introducendo un segno “-”.
-<br><br>
-4. Mostra che se due colonne (orbitali) sono uguali, il determinante è zero → nessun doppio occupazione identica dello stesso stato, principio di Pauli.
-</div>
-
-<h2>Significato Fisico</h2>
-
-<p>Il determinante di Slater è uno strumento potente che incarna la natura antisimmmetrica delle funzioni d’onda dei fermioni. Il principio di esclusione di Pauli emergente da questa costruzione spiega la struttura elettronica degli atomi, la chimica degli elementi, e molte proprietà fondamentali della materia. Per i fermioni non interagenti, l’energia del sistema è semplicemente la somma delle energie dei singoli stati monoelettronici occupati secondo la configurazione dettata dal principio di Pauli.</p>
-
-<h2>Completamento ed Esplicitazione dei Passaggi</h2>
-
-<p><i>L'obiettivo</i> è mostrare in modo più chiaro il passaggio matematico che porta alla costruzione del determinante di Slater e come l'antisimmetria si riflette sul principio di Pauli. Consideriamo dunque N fermioni non interagenti, ciascuno descritto da una funzione d’onda monoelettronica ortonormale (un orbitale). Indichiamo gli orbitali come \(\phi_1, \phi_2, \ldots, \phi_N\). Ogni particella i-esima ha coordinate spaziali (e di spin, se presenti) \(\mathbf{r}_i\).</p>
-
-<p>La funzione d’onda totale, che chiameremo \(\Psi(\mathbf{r}_1,\mathbf{r}_2,\ldots,\mathbf{r}_N)\), deve cambiare segno se scambiamo due particelle qualsiasi. Questo requisito è una conseguenza del fatto che i fermioni sono indistinguibili e dotati di spin semi-intero. L'antisimmetria impedisce a due fermioni di occupare esattamente lo stesso stato quantico.</p>
-
-<p>La costruzione esplicita di \(\Psi\) antisimmetrica, a partire dalle singole orbitali \(\phi_k(\mathbf{r})\), procede come segue:</p>
-
-<ol>
-    <li>Si consideri una matrice quadrata \(N \times N\) in cui l'indice di riga i corrisponde alla particella i-esima e l'indice di colonna k all'orbitale k-esimo. L’elemento della matrice è \(\phi_k(\mathbf{r}_i)\).</li>
-    <li>La funzione d'onda totale è il determinante di questa matrice, normalizzato con il fattore \(\frac{1}{\sqrt{N!}}\) per avere una funzione antisimmetrica ben definita. Scrivendo:
-    <div class="lavagna">
-    \[
-    \Psi(\mathbf{r}_1,\mathbf{r}_2,\ldots,\mathbf{r}_N) = \frac{1}{\sqrt{N!}}
-    \begin{vmatrix}
-    \phi_1(\mathbf{r}_1) & \phi_2(\mathbf{r}_1) & \cdots & \phi_N(\mathbf{r}_1) \\
-    \phi_1(\mathbf{r}_2) & \phi_2(\mathbf{r}_2) & \cdots & \phi_N(\mathbf{r}_2) \\
-    \vdots & \vdots & \ddots & \vdots \\
-    \phi_1(\mathbf{r}_N) & \phi_2(\mathbf{r}_N) & \cdots & \phi_N(\mathbf{r}_N)
-    \end{vmatrix}.
-    \]
-    </div>
-    Questo oggetto è chiamato *Determinante di Slater*.</li>
-    <li><u>La proprietà chiave:</u> se si scambiano due particelle, ad esempio \(\mathbf{r}_i \leftrightarrow \mathbf{r}_j\), si scambiano le righe i-esima e j-esima nella matrice. Uno scambio di righe in un determinante introduce un segno meno, dunque \(\Psi(\mathbf{r}_1,\ldots,\mathbf{r}_j,\ldots,\mathbf{r}_i,\ldots,\mathbf{r}_N) = -\Psi(\mathbf{r}_1,\ldots,\mathbf{r}_i,\ldots,\mathbf{r}_j,\ldots,\mathbf{r}_N)\). Questo mostra l'antisimmetria richiesta.</li>
-    <li>Se due particelle tentano di occupare lo stesso stato quantico, cioè se due orbitali sono identici, allora due colonne del determinante di Slater diventano uguali, il determinante si annulla, rendendo \(\Psi=0\). Questo implica che tale configurazione è fisicamente impossibile, incarnando il principio di Pauli: non possono esistere due fermioni nello stesso stato quantico.</li>
-</ol>
-
-<p>Le conseguenze fisiche di questa costruzione sono molteplici. Ad esempio, nello studio della struttura elettronica di atomi e molecole si utilizzano i determinanti di Slater per descrivere gli stati fondamentali e gli stati eccitati. In contesti come la teoria di Hartree-Fock, si sceglie un insieme di orbitali monoelettronici (spesso chiamati spin-orbitals se si include lo spin) e si forma un determinante di Slater per approssimare la funzione d’onda del sistema a molti elettroni. Il risultato è che la struttura a livelli energetici, la disposizione degli elettroni negli orbitali e la geometria molecolare emergono in modo coerente con il principio di Pauli, determinando quali stati sono permessi o proibiti.</p>
-
-<p><b>In sintesi</b>, il determinante di Slater è una costruzione matematica che garantisce automaticamente l’antisimmetria della funzione d’onda dei fermioni e dunque la validità del principio di Pauli. Ogni tentativo di porre due fermioni identici nello stesso stato provoca l’annullamento della funzione d’onda, bloccando così quella configurazione. La semplicità di questa costruzione si rivela uno strumento potente nell’affrontare problemi complessi di struttura elettronica, fisica atomica, nucleare e delle particelle.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="slater-pauli.html" data-mq-shared-lesson="determinante-slater.html" id="lezione-determinante-slater"><div class="lecture-kicker">Lezione approfondita - Argomento 10 - DIM 9</div><h1>Determinante di Slater</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: slater-pauli.html. La lezione scientifica verificata è condivisa con determinante-slater.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire lo stato antisimmetrico di N fermioni a partire dagli spin-orbitali, dimostrarne segno, norma e principio di esclusione, quindi ricavare matrice densità e valori medi a uno e due corpi usati nei calcoli di struttura elettronica.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Che cosa entra nel determinante</h3><p>Ogni colonna contiene uno spin-orbitale completo, funzione della coordinata composta x uguale a posizione e spin. Le righe corrispondono invece alle coordinate convenzionali delle particelle.</p></article><article class="lecture-card lecture-warning"><h3>Esatto nella simmetria, approssimato nella correlazione</h3><p>Un singolo determinante soddisfa esattamente l'antisimmetria. È però soltanto un ansatz per la dipendenza dinamica tra fermioni interagenti: una funzione correlata richiede in generale una combinazione di determinanti.</p></article></div><h2>Dall'antisimmetrizzatore alla matrice</h2><div class="lecture-grid"><article class="lecture-card"><h3>Convenzione di indici</h3><p>Useremo righe i per le coordinate x_i e colonne a per gli spin-orbitali φ_a. Lo scambio di due particelle scambia righe; lo scambio di due orbitali scambia colonne. Entrambe le operazioni cambiano segno.</p></article><article class="lecture-card"><h3>Prerequisito di norma</h3><p>Il prefattore semplice uno su radice di N fattoriale produce norma uno soltanto se gli spin-orbitali sono ortonormali. Con orbitali non ortogonali compare il determinante della matrice di sovrapposizione.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Prodotto di riferimento<span class="lecture-step-boss">BASE</span></h4><p>Si parte da N spin-orbitali assegnati in un ordine convenzionale alle N coordinate. Il prodotto non è ancora antisimmetrico.</p><div aria-label="Prodotto di spin-orbitali di riferimento" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Phi(x_1,\ldots,x_N)=\phi_1(x_1)\phi_2(x_2)\cdots\phi_N(x_N),\qquad x_i=(\mathbf r_i,\sigma_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Antisimmetrizzazione<span class="lecture-step-boss">DIM 9</span></h4><p>Si sommano tutte le assegnazioni degli orbitali alle coordinate, pesando ogni permutazione con il suo segno.</p><div aria-label="Azione dell'antisimmetrizzatore sul prodotto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal A\Phi=\frac1{N!}\sum_{P\in S_N}\operatorname{sgn}(P)\,U(P)\Phi\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Relazione con il determinante<span class="lecture-step-boss">DIM 9</span></h4><p>La formula di Leibniz del determinante coincide termine per termine con la somma alternata.</p><div aria-label="Formula di Leibniz del determinante di Slater" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \det[\phi_a(x_i)]=\sum_{P\in S_N}\operatorname{sgn}(P)\prod_{i=1}^{N}\phi_{P(i)}(x_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Norma ortonormale<span class="lecture-step-boss">BOSS</span></h4><p>Con spin-orbitali ortonormali, assegnazioni diverse sono ortogonali. Restano N fattoriale contributi unitari nella norma.</p><div aria-label="Normalizzazione del determinante con orbitali ortonormali" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\det\phi|\det\phi\rangle=N!,\qquad \Psi_D=\frac1{\sqrt{N!}}\det[\phi_a(x_i)]=\sqrt{N!}\,\mathcal A\Phi\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Scambio di particelle<span class="lecture-step-boss">DIM 9</span></h4><p>Permutare x_i e x_j scambia due righe della matrice. Una trasposizione cambia il segno del determinante.</p><div aria-label="Antisimmetria sotto scambio di due particelle" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{ij}\Psi_D=\frac1{\sqrt{N!}}\det[\ldots,R_j,\ldots,R_i,\ldots]=-\Psi_D\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Esclusione di Pauli<span class="lecture-step-boss">PAULI</span></h4><p>Due fermioni nello stesso spin-orbitale producono due colonne identiche. Il determinante è uguale al proprio opposto e si annulla.</p><div aria-label="Principio di Pauli da due colonne uguali" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \phi_a=\phi_b\Rightarrow C_a=C_b\Rightarrow \det[\phi_a(x_i)]=-\det[\phi_a(x_i)]\Rightarrow\Psi_D=0\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Orbitali non ortogonali<span class="lecture-step-boss">ESTENSIONE</span></h4><p>La norma è controllata dalla matrice di Gram. Dipendenza lineare equivale a determinante di sovrapposizione nullo.</p><div aria-label="Norma del determinante per orbitali non ortogonali" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S_{ab}=\langle\phi_a|\phi_b\rangle,\qquad\langle\det\phi|\det\phi\rangle=N!\det S,\qquad\Psi=\frac{\det[\phi_a(x_i)]}{\sqrt{N!\det S}}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Sovrapposizione tra determinanti<span class="lecture-step-boss">CHECK</span></h4><p>L'integrale sulle N coordinate riduce il problema al determinante dei sovrapposizioni a una particella.</p><div aria-label="Sovrapposizione tra due determinanti normalizzati" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle M_{ab}=\langle\phi_a|\chi_b\rangle,\qquad\langle\Psi_D[\phi]|\Psi_D[\chi]\rangle=\det M\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Rotazione degli occupati<span class="lecture-step-boss">ORALE</span></h4><p>Una trasformazione unitaria tra gli orbitali occupati non cambia lo stato fisico: moltiplica il determinante soltanto per una fase globale.</p><div aria-label="Invarianza sotto rotazione unitaria degli orbitali occupati" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \phi'_a=\sum_b\phi_bU_{ba}\Rightarrow\Psi_D[\phi']=\det(U)\Psi_D[\phi],\qquad|\det U|=1\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Densità a un corpo<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Tracciando N meno una coordinate si ottiene il proiettore sul sottospazio occupato, con traccia N e autovalori zero o uno.</p><div aria-label="Matrice densità a un corpo di un determinante" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \gamma(x,x')=\sum_{a=1}^{N}\phi_a(x)\phi_a^*(x'),\qquad\gamma^2=\gamma,\qquad\operatorname{Tr}\gamma=N\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Operatore a un corpo<span class="lecture-step-boss">SLATER-CONDON</span></h4><p>Per una somma di operatori identici, il valore medio è la somma dei contributi diagonali sugli orbitali occupati.</p><div aria-label="Regola di Slater-Condon per un operatore a un corpo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \hat H_1=\sum_i h(i),\qquad\langle\Psi_D|\hat H_1|\Psi_D\rangle=\sum_{a=1}^{N}\langle\phi_a|h|\phi_a\rangle=\operatorname{Tr}(\gamma h)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Operatore a due corpi<span class="lecture-step-boss">SLATER-CONDON</span></h4><p>L'antisimmetria genera un termine diretto e uno di scambio. Il secondo non è una nuova forza e dipende dalla sovrapposizione degli spin-orbitali.</p><div aria-label="Termini diretto e di scambio per un operatore a due corpi" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \hat V=\sum_{i&lt;j}v(i,j),\quad\langle\hat V\rangle=\frac12\sum_{a,b}(J_{ab}-K_{ab}),\quad J_{ab}=\langle ab|v|ab\rangle,\ K_{ab}=\langle ab|v|ba\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Costo della valutazione<span class="lecture-step-boss">NUMERICO</span></h4><p>La definizione contiene N fattoriale termini, ma non si espande in pratica: eliminazione di Gauss o decomposizione LU valutano il determinante in costo cubico.</p><div aria-label="Confronto tra espansione fattoriale e valutazione cubica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \text{somma di Leibniz}:N!\ \text{termini},\qquad\text{LU}:\ O(N^3),\qquad \det A=\operatorname{sgn}(P)\prod_iU_{ii}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Correlazione oltre Slater<span class="lecture-step-boss">LIMITE</span></h4><p>Una combinazione lineare di determinanti preserva l'antisimmetria e può descrivere correlazioni che un solo determinante non rappresenta.</p><div aria-label="Espansione multideterminantale della funzione d'onda" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\Psi\rangle=\sum_I c_I|D_I\rangle,\qquad\sum_{I,J}c_I^*c_J\langle D_I|D_J\rangle=1\)</span></div></article></section><h2>Esempio d'esame: due elettroni nello stesso orbitale spaziale</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Spin-orbitali.</strong> I due elettroni possono condividere l'orbitale spaziale u solo se occupano spin-orbitali diversi, uα e uβ, ortogonali per la parte di spin.</p><p data-i18n-skip="true">\(\displaystyle \Psi_D=\frac{u(1)u(2)}{\sqrt2}[\alpha(1)\beta(2)-\beta(1)\alpha(2)]=u(1)u(2)\chi_{00}\)</p><p><strong>Conclusione.</strong> La parte spaziale è simmetrica e la parte di spin è il singoletto antisimmetrico; il prodotto totale resta fermionico. Due copie di uα darebbero invece un determinante nullo.</p></article><h2>Interpretazione, uso e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Scambio senza forza</h3><p>Il termine di scambio nasce dall'interferenza tra assegnazioni indistinguibili e dal segno fermionico. Non corrisponde a un potenziale aggiunto all'Hamiltoniana.</p></article><article class="lecture-card"><h3>Hartree-Fock</h3><p>Il metodo varia gli orbitali di un singolo determinante per minimizzare l'energia. Tratta esattamente lo scambio entro quell'ansatz, ma trascura la correlazione elettronica oltre il campo medio.</p></article><article class="lecture-card"><h3>Determinanti non ortogonali</h3><p>Le formule det S e det M impediscono di usare automaticamente uno su radice di N fattoriale. Se det S è zero, gli orbitali sono linearmente dipendenti e lo stato fermionico non esiste.</p></article><article class="lecture-card"><h3>Prima e seconda quantizzazione</h3><p>Il determinante è la rappresentazione in coordinate del ket di occupazione ottenuto applicando operatori di creazione fermionici in un ordine fissato. Cambiarne l'ordine cambia il segno.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Confondere righe e colonne; omettere lo spin da x; usare il prefattore ortonormale con orbitali sovrapposti; interpretare lo scambio come forza; affermare che un singolo determinante descriva ogni correlazione.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Scambiare due righe, rendere uguali due colonne, calcolare det S, verificare traccia e idempotenza di γ, separare J e K e controllare che una rotazione unitaria degli occupati dia soltanto det U.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci la coordinata completa x e la matrice degli spin-orbitali.</li><li>Passa dall'antisimmetrizzatore alla formula di Leibniz.</li><li>Dimostra la norma per orbitali ortonormali.</li><li>Dimostra antisimmetria e principio di Pauli con righe e colonne.</li><li>Ricava det S per orbitali non ortogonali e det M tra due determinanti.</li><li>Spiega l'invarianza per rotazioni unitarie degli occupati.</li><li>Scrivi matrice densità e regole a uno e due corpi.</li><li>Distingui antisimmetria esatta, scambio e correlazione dinamica.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L979">DIM 9 - costruzione fermionica, determinante e principio di esclusione</a></li><li><a href="Appunti-MQ.pdf#page=233">Appunti-MQ.pdf, pagine PDF 233-236 - determinante, Pauli e simmetria spazio-spin</a></li><li><a href="MQ.pdf#page=72">MQ.pdf, pagina PDF 72 - stato antisimmetrico e generalizzazione a N particelle</a></li><li><a href="Domanda2025_7.html">Domanda 2025 n. 7 - sistemi di particelle identiche</a></li><li><a href="postulato-simmetrizzazione.html">Postulato di simmetrizzazione - proiettore fermionico a N particelle</a></li><li><a href="principio-esclusione-pauli.html">Principio di esclusione di Pauli - conseguenze fisiche e occupazioni</a></li></ul><p class="lecture-note">La derivazione segue le convenzioni del corso e aggiunge le formule di sovrapposizione e Slater-Condon necessarie per collegare il formalismo ai calcoli reali, senza riprodurre letteralmente le dispense.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 10 - DIM 9":"In-depth lesson - Topic 10 - DIM 9","Determinante di Slater":"Slater determinant","Obiettivo.":"Objective.","Costruire lo stato antisimmetrico di N fermioni a partire dagli spin-orbitali, dimostrarne segno, norma e principio di esclusione, quindi ricavare matrice densità e valori medi a uno e due corpi usati nei calcoli di struttura elettronica.":"Construct the antisymmetric state of N fermions from spin orbitals, prove its sign, norm, and exclusion principle, then derive the one-body density matrix and one- and two-body expectation values used in electronic-structure calculations.","Che cosa entra nel determinante":"What enters the determinant","Ogni colonna contiene uno spin-orbitale completo, funzione della coordinata composta x uguale a posizione e spin. Le righe corrispondono invece alle coordinate convenzionali delle particelle.":"Each column contains a complete spin orbital, a function of the composite coordinate x consisting of position and spin. Rows instead correspond to the conventional particle coordinates.","Esatto nella simmetria, approssimato nella correlazione":"Exact symmetry, approximate correlation","Un singolo determinante soddisfa esattamente l'antisimmetria. È però soltanto un ansatz per la dipendenza dinamica tra fermioni interagenti: una funzione correlata richiede in generale una combinazione di determinanti.":"A single determinant satisfies antisymmetry exactly. It is only an ansatz for the dynamical dependence among interacting fermions: a correlated wavefunction generally requires a combination of determinants.","Dall'antisimmetrizzatore alla matrice":"From the antisymmetrizer to the matrix","Convenzione di indici":"Index convention","Useremo righe i per le coordinate x_i e colonne a per gli spin-orbitali φ_a. Lo scambio di due particelle scambia righe; lo scambio di due orbitali scambia colonne. Entrambe le operazioni cambiano segno.":"We use rows i for coordinates x_i and columns a for spin orbitals φ_a. Exchanging two particles swaps rows; exchanging two orbitals swaps columns. Both operations change the sign.","Prerequisito di norma":"Normalization prerequisite","Il prefattore semplice uno su radice di N fattoriale produce norma uno soltanto se gli spin-orbitali sono ortonormali. Con orbitali non ortogonali compare il determinante della matrice di sovrapposizione.":"The simple one-over-square-root-of-N-factorial prefactor gives unit norm only when the spin orbitals are orthonormal. For nonorthogonal orbitals the determinant of the overlap matrix appears.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Prodotto di riferimento":"1. Reference product","BASE":"BASE","Si parte da N spin-orbitali assegnati in un ordine convenzionale alle N coordinate. Il prodotto non è ancora antisimmetrico.":"Start from N spin orbitals assigned in a conventional order to the N coordinates. The product is not yet antisymmetric.","Passaggio":"Step","2. Antisimmetrizzazione":"2. Antisymmetrization","DIM 9":"DIM 9","Si sommano tutte le assegnazioni degli orbitali alle coordinate, pesando ogni permutazione con il suo segno.":"Sum all assignments of orbitals to coordinates, weighting each permutation by its sign.","3. Relazione con il determinante":"3. Relation to the determinant","La formula di Leibniz del determinante coincide termine per termine con la somma alternata.":"The Leibniz formula for the determinant coincides term by term with the alternating sum.","4. Norma ortonormale":"4. Orthonormal norm","BOSS":"BOSS","Con spin-orbitali ortonormali, assegnazioni diverse sono ortogonali. Restano N fattoriale contributi unitari nella norma.":"For orthonormal spin orbitals, different assignments are orthogonal. N factorial unit contributions remain in the norm.","5. Scambio di particelle":"5. Particle exchange","Permutare x_i e x_j scambia due righe della matrice. Una trasposizione cambia il segno del determinante.":"Permuting x_i and x_j swaps two matrix rows. A transposition changes the sign of the determinant.","6. Esclusione di Pauli":"6. Pauli exclusion","PAULI":"PAULI","Due fermioni nello stesso spin-orbitale producono due colonne identiche. Il determinante è uguale al proprio opposto e si annulla.":"Two fermions in the same spin orbital produce two identical columns. The determinant equals its negative and vanishes.","7. Orbitali non ortogonali":"7. Nonorthogonal orbitals","ESTENSIONE":"EXTENSION","La norma è controllata dalla matrice di Gram. Dipendenza lineare equivale a determinante di sovrapposizione nullo.":"The norm is controlled by the Gram matrix. Linear dependence is equivalent to a vanishing overlap determinant.","8. Sovrapposizione tra determinanti":"8. Overlap between determinants","CHECK":"CHECK","L'integrale sulle N coordinate riduce il problema al determinante dei sovrapposizioni a una particella.":"Integration over the N coordinates reduces the problem to the determinant of one-particle overlaps.","9. Rotazione degli occupati":"9. Rotation of occupied orbitals","ORALE":"ORAL","Una trasformazione unitaria tra gli orbitali occupati non cambia lo stato fisico: moltiplica il determinante soltanto per una fase globale.":"A unitary transformation among occupied orbitals does not change the physical state: it multiplies the determinant only by a global phase.","10. Densità a un corpo":"10. One-body density","Tracciando N meno una coordinate si ottiene il proiettore sul sottospazio occupato, con traccia N e autovalori zero o uno.":"Tracing out N minus one coordinates gives the projector onto the occupied subspace, with trace N and eigenvalues zero or one.","11. Operatore a un corpo":"11. One-body operator","SLATER-CONDON":"SLATER-CONDON","Per una somma di operatori identici, il valore medio è la somma dei contributi diagonali sugli orbitali occupati.":"For a sum of identical operators, the expectation value is the sum of diagonal contributions over occupied orbitals.","12. Operatore a due corpi":"12. Two-body operator","L'antisimmetria genera un termine diretto e uno di scambio. Il secondo non è una nuova forza e dipende dalla sovrapposizione degli spin-orbitali.":"Antisymmetry generates a direct and an exchange term. The latter is not a new force and depends on spin-orbital overlap.","13. Costo della valutazione":"13. Evaluation cost","NUMERICO":"NUMERICAL","La definizione contiene N fattoriale termini, ma non si espande in pratica: eliminazione di Gauss o decomposizione LU valutano il determinante in costo cubico.":"The definition contains N factorial terms, but it is not expanded in practice: Gaussian elimination or LU decomposition evaluates the determinant at cubic cost.","14. Correlazione oltre Slater":"14. Correlation beyond Slater","LIMITE":"LIMIT","Una combinazione lineare di determinanti preserva l'antisimmetria e può descrivere correlazioni che un solo determinante non rappresenta.":"A linear combination of determinants preserves antisymmetry and can describe correlations absent from a single determinant.","Esempio d'esame: due elettroni nello stesso orbitale spaziale":"Exam example: two electrons in the same spatial orbital","Spin-orbitali.":"Spin orbitals.","I due elettroni possono condividere l'orbitale spaziale u solo se occupano spin-orbitali diversi, uα e uβ, ortogonali per la parte di spin.":"The two electrons may share spatial orbital u only if they occupy different spin orbitals, uα and uβ, orthogonal in their spin parts.","Conclusione.":"Conclusion.","La parte spaziale è simmetrica e la parte di spin è il singoletto antisimmetrico; il prodotto totale resta fermionico. Due copie di uα darebbero invece un determinante nullo.":"The spatial part is symmetric and the spin part is the antisymmetric singlet; the total product remains fermionic. Two copies of uα would instead give a zero determinant.","Interpretazione, uso e limiti":"Interpretation, use, and limits","Scambio senza forza":"Exchange without a force","Il termine di scambio nasce dall'interferenza tra assegnazioni indistinguibili e dal segno fermionico. Non corrisponde a un potenziale aggiunto all'Hamiltoniana.":"The exchange term arises from interference between indistinguishable assignments and the fermionic sign. It does not correspond to an added potential in the Hamiltonian.","Hartree-Fock":"Hartree-Fock","Il metodo varia gli orbitali di un singolo determinante per minimizzare l'energia. Tratta esattamente lo scambio entro quell'ansatz, ma trascura la correlazione elettronica oltre il campo medio.":"The method varies the orbitals of a single determinant to minimize the energy. It treats exchange exactly within that ansatz but neglects electronic correlation beyond mean field.","Determinanti non ortogonali":"Nonorthogonal determinants","Le formule det S e det M impediscono di usare automaticamente uno su radice di N fattoriale. Se det S è zero, gli orbitali sono linearmente dipendenti e lo stato fermionico non esiste.":"The det S and det M formulas prevent automatic use of one over square root of N factorial. If det S is zero, the orbitals are linearly dependent and the fermionic state does not exist.","Prima e seconda quantizzazione":"First and second quantization","Il determinante è la rappresentazione in coordinate del ket di occupazione ottenuto applicando operatori di creazione fermionici in un ordine fissato. Cambiarne l'ordine cambia il segno.":"The determinant is the coordinate representation of the occupation ket obtained by applying fermionic creation operators in a fixed order. Changing their order changes the sign.","Errori tipici":"Common errors","Confondere righe e colonne; omettere lo spin da x; usare il prefattore ortonormale con orbitali sovrapposti; interpretare lo scambio come forza; affermare che un singolo determinante descriva ogni correlazione.":"Confusing rows and columns; omitting spin from x; using the orthonormal prefactor with overlapping orbitals; interpreting exchange as a force; claiming that one determinant describes every correlation.","Controlli rapidi":"Quick checks","Scambiare due righe, rendere uguali due colonne, calcolare det S, verificare traccia e idempotenza di γ, separare J e K e controllare che una rotazione unitaria degli occupati dia soltanto det U.":"Swap two rows, make two columns equal, compute det S, verify the trace and idempotence of γ, separate J and K, and check that a unitary occupied-orbital rotation gives only det U.","Controllo da orale":"Oral exam checklist","Definisci la coordinata completa x e la matrice degli spin-orbitali.":"Define the complete coordinate x and the spin-orbital matrix.","Passa dall'antisimmetrizzatore alla formula di Leibniz.":"Go from the antisymmetrizer to the Leibniz formula.","Dimostra la norma per orbitali ortonormali.":"Prove the norm for orthonormal orbitals.","Dimostra antisimmetria e principio di Pauli con righe e colonne.":"Prove antisymmetry and the Pauli principle using rows and columns.","Ricava det S per orbitali non ortogonali e det M tra due determinanti.":"Derive det S for nonorthogonal orbitals and det M between two determinants.","Spiega l'invarianza per rotazioni unitarie degli occupati.":"Explain invariance under unitary rotations of occupied orbitals.","Scrivi matrice densità e regole a uno e due corpi.":"Write the density matrix and the one- and two-body rules.","Distingui antisimmetria esatta, scambio e correlazione dinamica.":"Distinguish exact antisymmetry, exchange, and dynamical correlation.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 9 - costruzione fermionica, determinante e principio di esclusione":"DIM 9 - fermionic construction, determinant, and exclusion principle","Appunti-MQ.pdf, pagine PDF 233-236 - determinante, Pauli e simmetria spazio-spin":"Appunti-MQ.pdf, PDF pages 233-236 - determinant, Pauli, and space-spin symmetry","MQ.pdf, pagina PDF 72 - stato antisimmetrico e generalizzazione a N particelle":"MQ.pdf, PDF page 72 - antisymmetric state and N-particle generalization","Domanda 2025 n. 7 - sistemi di particelle identiche":"2025 question 7 - systems of identical particles","Postulato di simmetrizzazione - proiettore fermionico a N particelle":"Symmetrization postulate - N-particle fermionic projector","Principio di esclusione di Pauli - conseguenze fisiche e occupazioni":"Pauli exclusion principle - physical consequences and occupations","La derivazione segue le convenzioni del corso e aggiunge le formule di sovrapposizione e Slater-Condon necessarie per collegare il formalismo ai calcoli reali, senza riprodurre letteralmente le dispense.":"The derivation follows the course conventions and adds the overlap and Slater-Condon formulas needed to connect the formalism to practical calculations, without reproducing the notes verbatim.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: slater-pauli.html. La lezione scientifica verificata è condivisa con determinante-slater.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: slater-pauli.html. The verified scientific lesson is shared with determinante-slater.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Prodotto di spin-orbitali di riferimento":"Reference product of spin orbitals","Azione dell'antisimmetrizzatore sul prodotto":"Action of the antisymmetrizer on the product","Formula di Leibniz del determinante di Slater":"Leibniz formula for the Slater determinant","Normalizzazione del determinante con orbitali ortonormali":"Normalization of the determinant with orthonormal orbitals","Antisimmetria sotto scambio di due particelle":"Antisymmetry under exchange of two particles","Principio di Pauli da due colonne uguali":"Pauli principle from two identical columns","Norma del determinante per orbitali non ortogonali":"Determinant norm for nonorthogonal orbitals","Sovrapposizione tra due determinanti normalizzati":"Overlap between two normalized determinants","Invarianza sotto rotazione unitaria degli orbitali occupati":"Invariance under unitary rotation of occupied orbitals","Matrice densità a un corpo di un determinante":"One-body density matrix of a determinant","Regola di Slater-Condon per un operatore a un corpo":"Slater-Condon rule for a one-body operator","Termini diretto e di scambio per un operatore a due corpi":"Direct and exchange terms for a two-body operator","Confronto tra espansione fattoriale e valutazione cubica":"Comparison of factorial expansion and cubic evaluation","Espansione multideterminantale della funzione d'onda":"Multideterminant expansion of the wavefunction"},"title":{"it":"Determinante di Slater","en":"Slater determinant"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

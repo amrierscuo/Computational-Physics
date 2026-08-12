@@ -1,190 +1,347 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Effetto Zeeman Normale</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Effetto Zeeman Normale</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Effetto Zeeman normale - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="effetto-zeeman-normale.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Effetto Zeeman Normale</h1>
-
-<p>L’effetto Zeeman normale è l’effetto di splitting di una riga spettrale atomica quando un atomo è posto in un campo magnetico statico esterno. Questo fenomeno si manifesta come una separazione uniforme della riga iniziale in tre componenti: una centrale non spostata (chiamata componente \(\pi\)) e due laterali simmetriche (\(\sigma^+\) e \(\sigma^-\)), a frequenza rispettivamente maggiore e minore rispetto alla linea originale.</p>
-
-<p>Questo effetto si verifica nei casi in cui l’atomo possa essere trattato come un dipolo classico in presenza di un campo magnetico \(\mathbf{B}\). L’analisi quantistica, nella versione più semplice (normale), considera la parte orbitale del momento angolare dell’elettrone: la degenerazione dei livelli energetici viene rimossa dall’interazione con il campo, producendo livelli con energia diversa a seconda dell’orientamento del momento angolare orbitale rispetto a \(\mathbf{B}\).</p>
-
-<h2>Formula Energetica di Base</h2>
-
-<p>Considerando un elettrone orbitante con momento angolare \(\mathbf{L}\), in un campo magnetico uniforme \(\mathbf{B}\) applicato lungo l’asse \(z\), l’energia addizionale introdotta dal campo è data dall’interazione tra il momento magnetico orbitale \(\mu_L\) e il campo \(\mathbf{B}\). Il momento magnetico orbitale è legato al momento angolare da:</p>
-
-\[
-\boldsymbol{\mu}_L = -\frac{e}{2m}\mathbf{L},
-\]
-
-dove \(e\) è la carica dell’elettrone e \(m\) la sua massa. Con \(\mathbf{B} = B \hat{z}\), l’energia perturbativa è:</p>
-
-\[
-\Delta E = -\boldsymbol{\mu}_L \cdot \mathbf{B} = \frac{e}{2m} B L_z,
-\]
-
-poiché \(\mu_L\) ha il segno negativo. In termini del numero quantico \(m_l\) associato a \(L_z\), dove \(L_z \hbar m_l\), si ottiene:</p>
-
-\[
-\Delta E = \frac{e\hbar}{2m} B m_l.
-\]
-
-<p>Questo produce i livelli energetici \(\Delta E\) linearmente dipendenti da \(m_l\), generando lo splitting uniforme.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Considera un livello energetico degenerato con numero quantico orbitale \(l\). Esso ha \(2l+1\) sottolivelli caratterizzati da \(m_l = -l, -l+1, \dots, l-1, l\).
-<br><br>
-2. Applica un campo magnetico \(\mathbf{B}\) lungo \(z\). L’interazione Hamiltoniana di perturbazione:
-\[
-\hat{H}' = -\boldsymbol{\mu}_L \cdot \mathbf{B} = \frac{e}{2m} \hat{L}_z B.
-\]
-<br><br>
-3. Poiché \(\hat{L}_z \phi_{l,m_l} = \hbar m_l \phi_{l,m_l}\), ogni sottolivello ottiene uno shift:
-\[
-\Delta E_{m_l} = \frac{e\hbar}{2m} B m_l.
-\]
-<br><br>
-4. Disegna su un asse verticale (energia) la linea senza campo: un singolo livello. Poi, con il campo, mostra i tre livelli per un caso semplice con \(l=1\): \(m_l=-1,0,1\), con l’energia shiftata simmetricamente.
-<br><br>
-5. Spiega che le differenze di energia tra i sottolivelli inducono la comparsa di nuove righe spettrali quando l’atomo emette o assorbe fotoni. Da una singola linea, emergono tre componenti.
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
 </div>
-
-<h2>Struttura a Tre Componenti e Interpretazione</h2>
-
-<p>La componente \(\pi\) corrisponde a transizioni che non modificano \(m_l\) (\(\Delta m_l=0\)), e rimane alla stessa frequenza della linea in assenza di campo. Le due componenti \(\sigma^{\pm}\) corrispondono a transizioni con \(\Delta m_l = \pm 1\) e risultano spostate verso frequenze più alte (per \(\sigma^+\)) o più basse (per \(\sigma^-\)), determinando il caratteristico tripletto Zeeman.</p>
-
-<p>Nell’effetto Zeeman normale, non viene considerato lo spin dell’elettrone. Questo regime è tipico di sistemi con momento angolare orbitale non nullo, ma spin trascurabile o accoppiato in modo tale da non influenzare lo splitting semplice. Quando si include lo spin, si ottiene il più complesso effetto Zeeman anomalo.</p>
-
-<h2>Significato Fisico</h2>
-
-<p>L’effetto Zeeman normale fornisce un test diretto della quantizzazione del momento angolare orbitale e della presenza di momenti magnetici intrinseci negli atomi. Misurando il pattern di splitting, si ottengono informazioni su \(l\), \(m_l\) e sulla struttura interna dell’atomo. Inoltre, la linearità dell’effetto (con l’energia proporzionale a \(B\)) ne facilita l’interpretazione classica come conseguenza della precessione di Larmor di un dipolo magnetico in un campo esterno.</p>
-
-<h2>Analisi dei termini energetici e selezione delle transizioni</h2>
-
-<p>Per rendere più esplicito il calcolo della separazione in frequenza delle righe, si parte dal fatto che ciascun sottolivello energetico subisce uno shift proporzionale a <i>m_l</i>:</p>
-
-\[
-\Delta E_{m_l} = \frac{e \hbar}{2 m} B m_l
-\]
-
-<p>Dato che la frequenza della radiazione emessa o assorbita si collega alla differenza tra livelli energetici, se il livello iniziale aveva un'energia non perturbata \(E_0\), i sottolivelli in presenza del campo magnetico divengono \(E_0 + \Delta E_{m_l}\). Considerando una transizione tra un livello con numero quantico orbitale \(l\) e uno superiore (o inferiore) con numero quantico orbitale \(l'\), i possibili valori di <i>m_l</i> e <i>m_{l'}\i> determinano quali differenze di energia si presentano.</p>
-
-<p>Le regole di selezione per le transizioni elettriche dipolari in campo magnetico non cambiano significativamente per l'effetto Zeeman normale: 
-\[
-\Delta m_l = 0, \pm 1
-\]
-Queste regole portano all'emissione o all'assorbimento di tre possibili frequenze.  
-• Con \(\Delta m_l = 0\) si ha la componente <b>\(\pi\)</b>, emessa in direzione perpendicolare al campo e polarizzata linearmente lungo l'asse del campo.  
-• Con \(\Delta m_l = +1\) si ha la componente <i>\(\sigma^+\)</i>, spostata verso energia (o frequenza) maggiore, corrispondente a una radiazione circolarmente polarizzata.  
-• Con \(\Delta m_l = -1\) si ottiene la componente <u>\(\sigma^-\)</u>, spostata verso energia (o frequenza) minore, anch'essa circolarmente polarizzata ma con elicit&agrave; opposta.</p>
-
-<p>Inoltre, l'entit&agrave; dello spostamento in frequenza può essere stimata dividendo la variazione di energia per \(\hbar\):
-\[
-\Delta \omega = \frac{\Delta E}{\hbar} = \frac{e B}{2 m} m_l
-\]
-oppure in termini di frequenza lineare \(\nu = \omega/(2\pi)\):
-\[
-\Delta \nu = \frac{e B}{4 \pi m} m_l.
-\]
-Queste espressioni mostrano come all'aumentare del campo \(B\) la separazione tra le righe diventi pi&ugrave; ampia, offrendo un modo pratico per determinare i momenti magnetici orbitale e la struttura dei livelli energetici attraverso misure spettroscopiche.</p>
-
-<div class="lavagna">
-Considera di disegnare sul piano energia-frequenza:  
-1. Senza campo: un solo livello con una singola transizione a frequenza \(\nu_0\).  
-2. Con campo: la linea si separa in tre.  
-   - La centrale \(\pi\) resta a \(\nu_0\).  
-   - Le due laterali \(\sigma^{\pm}\) si spostano a \(\nu_0 \pm \Delta \nu\).
-
-Rappresentare tale schema aiuta a visualizzare direttamente come il campo magnetico scompone il livello degenerato in pi&ugrave; sottolivelli con differente valore di \(m_l\), e come da una singola riga spettrale si generi un tripletto Zeeman ben definito.
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" data-mq-historical-name="effetto-zeeman-normale2.html" data-mq-shared-lesson="effetto-zeeman-normale.html" id="lezione-zeeman-normale">
+<div class="lecture-kicker">Lezione approfondita - DIM 13 - Campo magnetico</div>
+<h1>Effetto Zeeman normale</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: effetto-zeeman-normale2.html. La lezione scientifica verificata è condivisa con effetto-zeeman-normale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Partire dall'accoppiamento minimo, ricavare momento magnetico orbitale e scissione dei livelli, passare dai sottolivelli alle tre componenti spettrali con le regole di selezione e distinguere senza ambiguità Zeeman normale, Zeeman anomalo, Paschen-Back e Stern-Gerlach.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Risultato energetico</h3>
+<p>Per un termine di singoletto <span class="mq-math" data-i18n-skip="true">\(S=0\)</span>, nel campo uniforme <span class="mq-math" data-i18n-skip="true">\(\mathbf B=B\hat{\mathbf z}\)</span>, il campo rompe la degenerazione rispetto al numero quantico magnetico.</p>
+<div aria-label="Spostamento energetico del normale effetto Zeeman" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \boxed{\Delta E_{Jm_J}^{(1)}=\mu_BBm_J},\qquad \mu_B=\frac{e\hbar}{2m_e}\)</span></div>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Sottolivelli e righe non coincidono</h3>
+<p>Un livello con dato <span class="mq-math" data-i18n-skip="true">\(J\)</span> ha <span class="mq-math" data-i18n-skip="true">\(2J+1\)</span> sottolivelli. Lo spettro normale mostra invece tre frequenze, perché le transizioni di dipolo elettrico ammettono soltanto <span class="mq-math" data-i18n-skip="true">\(\Delta m=0,\pm1\)</span>.</p>
+</article>
 </div>
-
-<p>Questa descrizione del regime normale dell'effetto Zeeman, che trascura la presenza dello spin elettronico e considera solo il momento angolare orbitale, permette di comprendere la struttura di base del fenomeno. L'aggiunta dello spin, o di interazioni pi&ugrave; complesse, conduce a effetti pi&ugrave; intricati (come l'effetto Zeeman anomalo), ma il caso normale resta un punto di partenza concettuale chiaro per interpretare l'impatto di un campo magnetico esterno sui livelli energetici atomici.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
-
+<h2>Ipotesi, segni e regime fisico</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Convenzione SI</h3>
+<p>Si scrive <span class="mq-math" data-i18n-skip="true">\(e&gt;0\)</span> per il modulo della carica elementare, quindi l'elettrone ha <span class="mq-math" data-i18n-skip="true">\(q=-e\)</span>. In questa pagina non compaiono fattori <span class="mq-math" data-i18n-skip="true">\(c\)</span>: essi appartengono alla convenzione gaussiana usata in alcuni appunti.</p>
+<div aria-label="Momento magnetico orbitale elettronico" class="lecture-formula"><span class="lecture-proof-tag">Segno</span><span class="lecture-proof-math">\(\displaystyle \boldsymbol\mu_L=\frac{q}{2m_e}\mathbf L=-\frac{e}{2m_e}\mathbf L=-\mu_B\frac{\mathbf L}{\hbar}\)</span></div>
+</article>
+<article class="lecture-card">
+<h3>Quando è normale</h3>
+<p>La condizione pulita è un termine atomico di singoletto, <span class="mq-math" data-i18n-skip="true">\(S=0\)</span>, per cui <span class="mq-math" data-i18n-skip="true">\(J=L\)</span> e il fattore di Landé vale uno. Un numero pari di elettroni, da solo, non garantisce il caso normale.</p>
+</article>
+</div>
+<h2>Dimostrazione compatta, senza salti</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Accoppiamento minimo<span class="lecture-step-boss">BASE</span></h4>
+<p>Per una particella di carica <span class="mq-math" data-i18n-skip="true">\(q=-e\)</span>, il momento cinetico è <span class="mq-math" data-i18n-skip="true">\(\mathbf p+e\mathbf A\)</span>. Si usa la gauge simmetrica per un campo uniforme.</p>
+<div aria-label="Hamiltoniana ottenuta per accoppiamento minimo" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H=\frac{(\mathbf p+e\mathbf A)^2}{2m_e}+V(r),\qquad \mathbf A=\frac12\mathbf B\times\mathbf r,\qquad \nabla\cdot\mathbf A=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Termine lineare e termine quadratico<span class="lecture-step-boss">BASE</span></h4>
+<p>Poiché <span class="mq-math" data-i18n-skip="true">\(\mathbf p\cdot\mathbf A=\mathbf A\cdot\mathbf p\)</span> in questa gauge e <span class="mq-math" data-i18n-skip="true">\((\mathbf B\times\mathbf r)\cdot\mathbf p=\mathbf B\cdot\mathbf L\)</span>, l'espansione separa Zeeman orbitale e diamagnetismo.</p>
+<div aria-label="Espansione dell'Hamiltoniana in campo magnetico uniforme" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H=H_0+\frac{e}{2m_e}\mathbf B\cdot\mathbf L+\frac{e^2}{8m_e}|\mathbf B\times\mathbf r|^2,\qquad H_0=\frac{\mathbf p^2}{2m_e}+V(r)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Interazione dipolare e controllo del segno<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Il segno positivo dell'energia orbitale non contraddice la carica negativa: il momento magnetico dell'elettrone è antiparallelo a <span class="mq-math" data-i18n-skip="true">\(\mathbf L\)</span>.</p>
+<div aria-label="Equivalenza tra interazione dipolare e termine Zeeman orbitale" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H_Z=-\boldsymbol\mu_L\cdot\mathbf B=\mu_B\frac{\mathbf L\cdot\mathbf B}{\hbar}\xrightarrow{\mathbf B=B\hat{\mathbf z}}\mu_BB\frac{L_z}{\hbar}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Base che diagonalizza la perturbazione<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Per un potenziale centrale, <span class="mq-math" data-i18n-skip="true">\(H_0,L^2,L_z\)</span> commutano. La base <span class="mq-math" data-i18n-skip="true">\(|n\ell m\rangle\)</span> diagonalizza già <span class="mq-math" data-i18n-skip="true">\(H_Z\)</span> dentro il sottospazio degenere.</p>
+<div aria-label="Autovalori simultanei dell'Hamiltoniana centrale e del momento angolare" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H_0|n\ell m\rangle=E_{n\ell}^{(0)}|n\ell m\rangle,\quad L^2|n\ell m\rangle=\hbar^2\ell(\ell+1)|n\ell m\rangle,\quad L_z|n\ell m\rangle=\hbar m|n\ell m\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Correzione al primo ordine<span class="lecture-step-boss">DIM 13</span></h4>
+<p>La teoria perturbativa degenere non richiede una nuova diagonalizzazione: gli elementi fuori diagonale in <span class="mq-math" data-i18n-skip="true">\(m\)</span> sono già nulli.</p>
+<div aria-label="Matrice e autovalori della perturbazione Zeeman" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \langle n\ell m'|H_Z|n\ell m\rangle=\mu_BBm\,\delta_{m'm}\Rightarrow E_{n\ell m}=E_{n\ell}^{(0)}+\mu_BBm+O(B^2)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Scissione del livello<span class="lecture-step-boss">DIM 13</span></h4>
+<p>I valori <span class="mq-math" data-i18n-skip="true">\(m=-\ell,\ldots,\ell\)</span> producono <span class="mq-math" data-i18n-skip="true">\(2\ell+1\)</span> sottolivelli equidistanti. Il baricentro non si sposta al primo ordine.</p>
+<div aria-label="Distanza tra sottolivelli e posizione del baricentro" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle E_{m+1}-E_m=\mu_BB=\hbar\omega_L,\qquad \frac1{2\ell+1}\sum_{m=-\ell}^{\ell}\Delta E_m=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Dalle energie alle frequenze<span class="lecture-step-boss">ORALE</span></h4>
+<p>Una riga misura la differenza tra un sottolivello superiore e uno inferiore, non lo spostamento di un livello isolato.</p>
+<div aria-label="Spostamento della frequenza di transizione" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle h\nu_{m_um_l}=E_u-E_l=h\nu_0+\mu_BB(m_u-m_l)\Rightarrow\Delta\nu=\frac{\mu_BB}{h}\Delta m\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Regole di selezione dipolari<span class="lecture-step-boss">ORALE</span></h4>
+<p>Le componenti sferiche dell'operatore dipolo hanno rango uno e indice <span class="mq-math" data-i18n-skip="true">\(q=0,\pm1\)</span>. Da qui nasce il tripletto osservato.</p>
+<div aria-label="Regole di selezione per transizioni di dipolo elettrico" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \Delta L=\pm1,\qquad \Delta m=0,\pm1,\qquad \Delta S=0;\quad \Delta m=0:\pi,\quad \Delta m=\pm1:\sigma^{\pm}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Le tre componenti normali<span class="lecture-step-boss">ORALE</span></h4>
+<p>Quando entrambi i termini hanno <span class="mq-math" data-i18n-skip="true">\(g=1\)</span>, tutte le molte transizioni consentite si raggruppano in tre sole frequenze.</p>
+<div aria-label="Frequenze delle componenti pi e sigma del tripletto Zeeman normale" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \boxed{\nu_{\pi}=\nu_0,\qquad \nu_{\sigma^\pm}=\nu_0\pm\frac{\mu_BB}{h}}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Polarizzazione e direzione di osservazione<span class="lecture-step-boss">ORALE</span></h4>
+<p>La geometria non cambia le frequenze, ma decide quali componenti e polarizzazioni sono visibili.</p>
+<div aria-label="Polarizzazioni del tripletto Zeeman osservato lungo o trasversalmente al campo" class="lecture-formula"><span class="lecture-proof-tag">Fisica</span><span class="lecture-proof-math">\(\displaystyle \mathbf k\parallel\mathbf B:\ I_\pi=0,\ \boldsymbol\epsilon_{\sigma^\pm}=\frac{\hat{\mathbf x}\pm i\hat{\mathbf y}}{\sqrt2};\qquad \mathbf k\perp\mathbf B:\ \boldsymbol\epsilon_\pi\parallel\mathbf B,\ \boldsymbol\epsilon_{\sigma^\pm}\perp\mathbf B\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Caso generale e fattore di Landé<span class="lecture-step-boss">APPUNTI</span></h4>
+<p>Se lo spin non è nullo e il campo è debole rispetto allo spin-orbita, sono buoni <span class="mq-math" data-i18n-skip="true">\(J,m_J,L,S\)</span>; si proietta il momento magnetico lungo <span class="mq-math" data-i18n-skip="true">\(\mathbf J\)</span>.</p>
+<div aria-label="Fattore di Landé e spostamento Zeeman debole" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \begin{gathered}\langle L_z+2S_z\rangle=\frac{m_J\langle(\mathbf L+2\mathbf S)\cdot\mathbf J\rangle}{J(J+1)\hbar}=g_J\hbar m_J,\qquad \Delta E=\mu_BBg_Jm_J,\\[-2pt]g_J=\frac{\langle(\mathbf L+2\mathbf S)\cdot\mathbf J\rangle}{\hbar^2J(J+1)}=1+\frac{J(J+1)+S(S+1)-L(L+1)}{2J(J+1)}\quad(g_s\simeq2)\end{gathered}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Perché il singoletto è normale<span class="lecture-step-boss">ORALE</span></h4>
+<p>Nel termine di singoletto lo spin totale si annulla, quindi non contribuisce né al momento totale né alla molteplicità magnetica.</p>
+<div aria-label="Riduzione del fattore di Landé per un termine di singoletto" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle S=0\Rightarrow J=L\Rightarrow g_J=1+\frac{J(J+1)-L(L+1)}{2J(J+1)}=1\Rightarrow\Delta E=\mu_BBm_J\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Limite forte di Paschen-Back<span class="lecture-step-boss">APPUNTI</span></h4>
+<p>Se l'interazione col campo domina lo spin-orbita, <span class="mq-math" data-i18n-skip="true">\(L\)</span> e <span class="mq-math" data-i18n-skip="true">\(S\)</span> si disaccoppiano; diventano buoni <span class="mq-math" data-i18n-skip="true">\(m_L,m_S\)</span>.</p>
+<div aria-label="Spostamento energetico nel regime di Paschen-Back" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \begin{gathered}\mu_BB\gg\Delta E_{LS}\Rightarrow\Delta E_B\simeq\mu_BB(m_L+2m_S),\\[-2pt]H_{LS}=\xi(r)\mathbf L\cdot\mathbf S\Rightarrow\Delta E_{LS}^{(1)}=\langle\xi(r)\rangle\hbar^2m_Lm_S\end{gathered}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>14. Precessione di Larmor<span class="lecture-step-boss">DIM 13</span></h4>
+<p>Lo stesso termine che separa i livelli genera la precessione del momento angolare attorno al campo.</p>
+<div aria-label="Equazioni di Heisenberg per la precessione di Larmor" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \omega_L=\frac{\mu_BB}{\hbar}=\frac{eB}{2m_e},\quad \dot L_x=\frac{[L_x,H_Z]}{i\hbar}=-\omega_LL_y,\quad \dot L_y=\omega_LL_x,\quad \dot L_z=0\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: scissione energetica e in lunghezza d'onda</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> Tripletto normale con <span class="mq-math" data-i18n-skip="true">\(B=1.50\,\mathrm T\)</span> e riga non perturbata <span class="mq-math" data-i18n-skip="true">\(\lambda_0=500\,\mathrm{nm}\)</span>; <span class="mq-math" data-i18n-skip="true">\(\mu_B=5.78838\times10^{-5}\,\mathrm{eV/T}\)</span> e <span class="mq-math" data-i18n-skip="true">\(\mu_B/h=13.9962\,\mathrm{GHz/T}\)</span>.</p>
+<p><strong>Energia e frequenza.</strong> Ogni componente laterale dista dalla componente centrale <span class="mq-math" data-i18n-skip="true">\(|\Delta E|=\mu_BB=8.68\times10^{-5}\,\mathrm{eV}\)</span> e <span class="mq-math" data-i18n-skip="true">\(|\Delta\nu|=20.99\,\mathrm{GHz}\)</span>.</p>
+<p><strong>Lunghezza d'onda.</strong> Per piccoli spostamenti, <span class="mq-math" data-i18n-skip="true">\(\Delta\lambda\simeq-(\lambda_0^2/c)\Delta\nu\)</span>: ciascuna componente <span class="mq-math" data-i18n-skip="true">\(\sigma\)</span> dista <span class="mq-math" data-i18n-skip="true">\(0.0175\,\mathrm{nm}\)</span> dalla <span class="mq-math" data-i18n-skip="true">\(\pi\)</span>, mentre la separazione totale <span class="mq-math" data-i18n-skip="true">\(\sigma^+-\sigma^-\)</span> è <span class="mq-math" data-i18n-skip="true">\(0.0350\,\mathrm{nm}\)</span>.</p>
+</article>
+<h2>Regimi e confronti da non confondere</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Zeeman normale</h3>
+<p>Termini di singoletto <span class="mq-math" data-i18n-skip="true">\(S=0\)</span>, <span class="mq-math" data-i18n-skip="true">\(g_J=1\)</span>. Le componenti sono equidistanti e formano il tripletto <span class="mq-math" data-i18n-skip="true">\(\sigma^-,\pi,\sigma^+\)</span>.</p>
+</article>
+<article class="lecture-card">
+<h3>Zeeman anomalo debole</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(\mu_BB\ll\Delta E_{LS}\)</span>, ma <span class="mq-math" data-i18n-skip="true">\(S\ne0\)</span>. La scissione dipende da <span class="mq-math" data-i18n-skip="true">\(g_Jm_J\)</span> e il multipletto può avere più di tre componenti.</p>
+</article>
+<article class="lecture-card">
+<h3>Paschen-Back forte</h3>
+<p><span class="mq-math" data-i18n-skip="true">\(\mu_BB\gg\Delta E_{LS}\)</span>. L'accoppiamento <span class="mq-math" data-i18n-skip="true">\(LS\)</span> non definisce più la base dominante e si usano <span class="mq-math" data-i18n-skip="true">\(m_L,m_S\)</span>.</p>
+</article>
+<article class="lecture-card">
+<h3>Correzione quadratica</h3>
+<p>Il termine <span class="mq-math" data-i18n-skip="true">\(H_{\mathrm{dia}}=e^2B^2(x^2+y^2)/(8m_e)\)</span> è di ordine <span class="mq-math" data-i18n-skip="true">\(B^2\)</span>. La trattazione lineare richiede che sia piccolo rispetto alle scale energetiche e alle separazioni considerate.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Zeeman non è Stern-Gerlach</h3>
+<p>Lo Zeeman usa tipicamente un campo uniforme e legge una scissione spettrale. Stern-Gerlach richiede un gradiente e trasforma la quantizzazione magnetica in separazione spaziale.</p>
+<div aria-label="Forza di Stern-Gerlach in un campo magnetico non uniforme" class="lecture-formula"><span class="lecture-proof-tag">Confronto</span><span class="lecture-proof-math">\(\displaystyle U=-\boldsymbol\mu\cdot\mathbf B,\qquad \mathbf F=-\nabla U=\nabla(\boldsymbol\mu\cdot\mathbf B),\qquad F_z\simeq\mu_z\frac{\partial B_z}{\partial z}\)</span></div>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Dimenticare che <span class="mq-math" data-i18n-skip="true">\(q=-e\)</span> e assegnare il segno sbagliato a <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\mu_L\)</span> o a <span class="mq-math" data-i18n-skip="true">\(H_Z\)</span>.</li>
+<li>Chiamare <span class="mq-math" data-i18n-skip="true">\(2J+1\)</span> il numero delle righe invece che dei sottolivelli.</li>
+<li>Dire che ogni sistema con numero pari di elettroni dà effetto normale: serve <span class="mq-math" data-i18n-skip="true">\(S=0\)</span> per il termine coinvolto.</li>
+<li>Usare <span class="mq-math" data-i18n-skip="true">\(g_J=1\)</span> quando lo spin contribuisce o usare la base <span class="mq-math" data-i18n-skip="true">\(|Jm_J\rangle\)</span> nel limite Paschen-Back.</li>
+<li>Mescolare formule SI e gaussiane introducendo o togliendo <span class="mq-math" data-i18n-skip="true">\(c\)</span> senza cambiare convenzione.</li>
+</ul>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Fissa <span class="mq-math" data-i18n-skip="true">\(q=-e\)</span>, deriva <span class="mq-math" data-i18n-skip="true">\(\boldsymbol\mu_L\)</span> e controlla il segno di <span class="mq-math" data-i18n-skip="true">\(H_Z\)</span>.</li>
+<li>Espandi l'accoppiamento minimo e identifica i termini lineare e quadratico in <span class="mq-math" data-i18n-skip="true">\(B\)</span>.</li>
+<li>Spiega perché <span class="mq-math" data-i18n-skip="true">\(|n\ell m\rangle\)</span> diagonalizza la perturbazione degenere.</li>
+<li>Ricava <span class="mq-math" data-i18n-skip="true">\(\Delta E=\mu_BBm\)</span>, equidistanza e baricentro.</li>
+<li>Passa dagli spostamenti dei livelli a <span class="mq-math" data-i18n-skip="true">\(h\Delta\nu=\mu_BB\Delta m\)</span>.</li>
+<li>Usa <span class="mq-math" data-i18n-skip="true">\(\Delta m=0,\pm1\)</span> per ottenere <span class="mq-math" data-i18n-skip="true">\(\pi,\sigma^\pm\)</span> e descriverne le polarizzazioni.</li>
+<li>Deriva o almeno giustifica il fattore di Landé e verifica <span class="mq-math" data-i18n-skip="true">\(S=0\Rightarrow g_J=1\)</span>.</li>
+<li>Confronta le gerarchie energetiche dei regimi Zeeman debole e Paschen-Back.</li>
+<li>Ricava la frequenza di Larmor dai commutatori di <span class="mq-math" data-i18n-skip="true">\(\mathbf L\)</span>.</li>
+<li>Distingui campo uniforme per lo spettro Zeeman e gradiente per la forza di Stern-Gerlach.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P3_DIM_13-18.txt#L23">DIM 13</a> - momento orbitale, interazione magnetica, scissione in <span class="mq-math" data-i18n-skip="true">\(m\)</span>, Larmor e confronto con Stern-Gerlach</li>
+<li><a href="Appunti-MQ.pdf#page=279">Appunti-MQ.pdf, pagine PDF 279-282</a> - Zeeman debole con spin, formula di Landé e regime di Paschen-Back</li>
+<li><a href="BibbiaAleHD.pdf#page=54">BibbiaAleHD.pdf, pagina PDF 54</a> - derivazione manoscritta del caso orbitale e precessione di Larmor</li>
+</ul>
+<p class="lecture-note">La pagina usa unità SI. Le formule degli appunti con il fattore <span class="mq-math" data-i18n-skip="true">\(1/c\)</span> sono nella convenzione gaussiana e non vanno mescolate con quelle SI.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - DIM 13 - Campo magnetico":"In-depth lesson - DIM 13 - Magnetic field","Effetto Zeeman normale":"Normal Zeeman effect","Partire dall'accoppiamento minimo, ricavare momento magnetico orbitale e scissione dei livelli, passare dai sottolivelli alle tre componenti spettrali con le regole di selezione e distinguere senza ambiguità Zeeman normale, Zeeman anomalo, Paschen-Back e Stern-Gerlach.":"Start from minimal coupling, derive the orbital magnetic moment and level splitting, use the selection rules to pass from sublevels to the three spectral components, and clearly distinguish the normal Zeeman, anomalous Zeeman, Paschen-Back, and Stern-Gerlach effects.","Risultato energetico":"Energy shift","Per un termine di singoletto":"For a singlet term",", nel campo uniforme":", in the uniform field",", il campo rompe la degenerazione rispetto al numero quantico magnetico.":", the field lifts the degeneracy with respect to the magnetic quantum number.","Sottolivelli e righe non coincidono":"Sublevels are not spectral lines","Un livello con dato":"A level with a given","sottolivelli. Lo spettro normale mostra invece tre frequenze, perché le transizioni di dipolo elettrico ammettono soltanto":"sublevels. The normal spectrum instead contains three frequencies because electric-dipole transitions allow only","Ipotesi, segni e regime fisico":"Assumptions, signs, and physical regime","Convenzione SI":"SI convention","Si scrive":"We write","per il modulo della carica elementare, quindi l'elettrone ha":"for the magnitude of the elementary charge, so the electron has",". In questa pagina non compaiono fattori":". No factors of",": essi appartengono alla convenzione gaussiana usata in alcuni appunti.":"appear on this page: they belong to the Gaussian-unit convention used in some of the notes.","Quando è normale":"When the effect is normal","La condizione pulita è un termine atomico di singoletto,":"The precise condition is an atomic singlet term,",", per cui":", so that","e il fattore di Landé vale uno. Un numero pari di elettroni, da solo, non garantisce il caso normale.":"and the Landé factor equals one. An even number of electrons alone does not guarantee the normal case.","Dimostrazione compatta, senza salti":"Compact derivation, with no skipped steps","1. Accoppiamento minimo":"1. Minimal coupling","Per una particella di carica":"For a particle of charge",", il momento cinetico è":", the kinetic momentum is",". Si usa la gauge simmetrica per un campo uniforme.":". We use the symmetric gauge for a uniform field.","2. Termine lineare e termine quadratico":"2. Linear and quadratic terms","in questa gauge e":"in this gauge and",", l'espansione separa Zeeman orbitale e diamagnetismo.":", the expansion separates the orbital Zeeman and diamagnetic terms.","3. Interazione dipolare e controllo del segno":"3. Dipole interaction and sign check","Il segno positivo dell'energia orbitale non contraddice la carica negativa: il momento magnetico dell'elettrone è antiparallelo a":"The positive sign of the orbital energy does not contradict the negative charge: the electron's magnetic moment is antiparallel to","4. Base che diagonalizza la perturbazione":"4. Basis that diagonalizes the perturbation","Per un potenziale centrale,":"For a central potential,","commutano. La base":"commute. The basis","diagonalizza già":"already diagonalizes","dentro il sottospazio degenere.":"within the degenerate subspace.","5. Correzione al primo ordine":"5. First-order correction","La teoria perturbativa degenere non richiede una nuova diagonalizzazione: gli elementi fuori diagonale in":"Degenerate perturbation theory requires no further diagonalization: the off-diagonal matrix elements in","sono già nulli.":"already vanish.","6. Scissione del livello":"6. Level splitting","sottolivelli equidistanti. Il baricentro non si sposta al primo ordine.":"equally spaced sublevels. The level centroid does not shift at first order.","7. Dalle energie alle frequenze":"7. From energies to frequencies","Una riga misura la differenza tra un sottolivello superiore e uno inferiore, non lo spostamento di un livello isolato.":"A spectral line measures the difference between an upper and a lower sublevel, not the shift of an isolated level.","8. Regole di selezione dipolari":"8. Dipole selection rules","Le componenti sferiche dell'operatore dipolo hanno rango uno e indice":"The spherical components of the dipole operator have rank one and index",". Da qui nasce il tripletto osservato.":". This is the origin of the observed triplet.","9. Le tre componenti normali":"9. The three normal components","Quando entrambi i termini hanno":"When both terms have",", tutte le molte transizioni consentite si raggruppano in tre sole frequenze.":", all the allowed transitions group into only three frequencies.","10. Polarizzazione e direzione di osservazione":"10. Polarization and observation direction","La geometria non cambia le frequenze, ma decide quali componenti e polarizzazioni sono visibili.":"The geometry does not change the frequencies, but it determines which components and polarizations are visible.","11. Caso generale e fattore di Landé":"11. General case and Landé factor","Se lo spin non è nullo e il campo è debole rispetto allo spin-orbita, sono buoni":"If the spin is nonzero and the magnetic interaction is weak relative to spin-orbit coupling, the good quantum numbers are","; si proietta il momento magnetico lungo":"; the magnetic moment is projected along","12. Perché il singoletto è normale":"12. Why a singlet gives the normal effect","Nel termine di singoletto lo spin totale si annulla, quindi non contribuisce né al momento totale né alla molteplicità magnetica.":"In a singlet term the total spin vanishes, so it contributes neither to the total angular momentum nor to the magnetic multiplicity.","13. Limite forte di Paschen-Back":"13. Strong-field Paschen-Back limit","Se l'interazione col campo domina lo spin-orbita,":"If the interaction with the field dominates spin-orbit coupling,","si disaccoppiano; diventano buoni":"decouple; the good quantum numbers become","14. Precessione di Larmor":"14. Larmor precession","Lo stesso termine che separa i livelli genera la precessione del momento angolare attorno al campo.":"The same term that splits the levels generates angular-momentum precession about the field.","Esempio d'esame: scissione energetica e in lunghezza d'onda":"Exam example: energy and wavelength splitting","Tripletto normale con":"A normal triplet with","e riga non perturbata":"and unperturbed line","Energia e frequenza.":"Energy and frequency.","Ogni componente laterale dista dalla componente centrale":"Each side component is separated from the central component by","Lunghezza d'onda.":"Wavelength.","Per piccoli spostamenti,":"For small shifts,",": ciascuna componente":": each",", mentre la separazione totale":", while the total","Regimi e confronti da non confondere":"Regimes and comparisons not to confuse","Zeeman normale":"Normal Zeeman effect","Termini di singoletto":"Singlet terms",". Le componenti sono equidistanti e formano il tripletto":". The components are equally spaced and form the triplet","Zeeman anomalo debole":"Weak-field anomalous Zeeman effect",". La scissione dipende da":". The splitting depends on","e il multipletto può avere più di tre componenti.":"and the multiplet may contain more than three components.","Paschen-Back forte":"Strong-field Paschen-Back effect","non definisce più la base dominante e si usano":"no longer defines the dominant basis, and one uses","Correzione quadratica":"Quadratic correction","Il termine":"The term","è di ordine":"is of order",". La trattazione lineare richiede che sia piccolo rispetto alle scale energetiche e alle separazioni considerate.":". The linear treatment requires it to be small relative to the relevant energy scales and separations.","Zeeman non è Stern-Gerlach":"Zeeman is not Stern-Gerlach","Lo Zeeman usa tipicamente un campo uniforme e legge una scissione spettrale. Stern-Gerlach richiede un gradiente e trasforma la quantizzazione magnetica in separazione spaziale.":"The Zeeman effect typically uses a uniform field and measures a spectral splitting. Stern-Gerlach requires a field gradient and turns magnetic quantization into spatial beam separation.","Errori tipici":"Common errors","Dimenticare che":"Forgetting that","e assegnare il segno sbagliato a":"and assigning the wrong sign to","il numero delle righe invece che dei sottolivelli.":"the number of spectral lines instead of the number of sublevels.","Dire che ogni sistema con numero pari di elettroni dà effetto normale: serve":"Claiming that every system with an even number of electrons gives the normal effect: one needs","per il termine coinvolto.":"for the term involved.","quando lo spin contribuisce o usare la base":"when spin contributes, or using the basis","nel limite Paschen-Back.":"in the Paschen-Back limit.","Mescolare formule SI e gaussiane introducendo o togliendo":"Mixing SI and Gaussian-unit formulas by inserting or removing","senza cambiare convenzione.":"without changing conventions consistently.","Controllo da orale":"Oral exam checklist","e controlla il segno di":"and check the sign of","Espandi l'accoppiamento minimo e identifica i termini lineare e quadratico in":"Expand the minimal-coupling Hamiltonian and identify the terms linear and quadratic in","Spiega perché":"Explain why","diagonalizza la perturbazione degenere.":"diagonalizes the perturbation within the degenerate subspace.",", equidistanza e baricentro.":", equal spacing, and the unchanged centroid.","Passa dagli spostamenti dei livelli a":"Pass from level shifts to","per ottenere":"to obtain","e descriverne le polarizzazioni.":"and describe their polarizations.","Deriva o almeno giustifica il fattore di Landé e verifica":"Derive, or at least justify, the Landé factor and verify","Confronta le gerarchie energetiche dei regimi Zeeman debole e Paschen-Back.":"Compare the energy hierarchies of the weak-field Zeeman and Paschen-Back regimes.","Ricava la frequenza di Larmor dai commutatori di":"Derive the Larmor frequency from the commutators of","Distingui campo uniforme per lo spettro Zeeman e gradiente per la forza di Stern-Gerlach.":"Distinguish the uniform field used for a Zeeman spectrum from the field gradient required for the Stern-Gerlach force.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- momento orbitale, interazione magnetica, scissione in":"- orbital moment, magnetic interaction, splitting in",", Larmor e confronto con Stern-Gerlach":", Larmor precession, and comparison with Stern-Gerlach","Appunti-MQ.pdf, pagine PDF 279-282":"Appunti-MQ.pdf, PDF pages 279-282","- Zeeman debole con spin, formula di Landé e regime di Paschen-Back":"- weak-field Zeeman effect with spin, Landé formula, and Paschen-Back regime","BibbiaAleHD.pdf, pagina PDF 54":"BibbiaAleHD.pdf, PDF page 54","- derivazione manoscritta del caso orbitale e precessione di Larmor":"- handwritten derivation of the orbital case and Larmor precession","La pagina usa unità SI. Le formule degli appunti con il fattore":"This page uses SI units. Formulas in the notes containing a factor of","sono nella convenzione gaussiana e non vanno mescolate con quelle SI.":"use Gaussian units and must not be mixed with SI formulas.","Ritorna all'indice MQ":"Return to the MQ index","APPUNTI":"NOTES","BASE":"CORE","Base":"Core","Check":"Check","Chiamare":"Calling","Confronto":"Comparison","DIM 13":"DIM 13","Dati.":"Given.","Estensione":"Extension","Fisica":"Physics","Fissa":"Set","I valori":"The values","ORALE":"ORAL","Obiettivo.":"Goal.","Poiché":"Because","Ricava":"Derive","Risultato":"Result","Segno":"Sign","Usa":"Use","Usare":"Using",", deriva":", derive",", ma":", but",". L'accoppiamento":". The coupling","dalla":"from the","dista":"is separated by","e":"and","ha":"has","o a":"or to","producono":"produce","è":"is","Nome storico mantenuto: effetto-zeeman-normale2.html. La lezione scientifica verificata è condivisa con effetto-zeeman-normale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: effetto-zeeman-normale2.html. The verified scientific lesson is shared with effetto-zeeman-normale.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Spostamento energetico del normale effetto Zeeman":"Energy shift in the normal Zeeman effect","Momento magnetico orbitale elettronico":"Electron orbital magnetic moment","Hamiltoniana ottenuta per accoppiamento minimo":"Hamiltonian obtained from minimal coupling","Espansione dell'Hamiltoniana in campo magnetico uniforme":"Expansion of the Hamiltonian in a uniform magnetic field","Equivalenza tra interazione dipolare e termine Zeeman orbitale":"Equivalence of the dipole interaction and orbital Zeeman term","Autovalori simultanei dell'Hamiltoniana centrale e del momento angolare":"Simultaneous eigenvalues of the central Hamiltonian and angular momentum","Matrice e autovalori della perturbazione Zeeman":"Matrix and eigenvalues of the Zeeman perturbation","Distanza tra sottolivelli e posizione del baricentro":"Sublevel spacing and level centroid","Spostamento della frequenza di transizione":"Transition-frequency shift","Regole di selezione per transizioni di dipolo elettrico":"Selection rules for electric-dipole transitions","Frequenze delle componenti pi e sigma del tripletto Zeeman normale":"Frequencies of the pi and sigma components of the normal Zeeman triplet","Polarizzazioni del tripletto Zeeman osservato lungo o trasversalmente al campo":"Polarizations of the Zeeman triplet observed parallel or perpendicular to the field","Fattore di Landé e spostamento Zeeman debole":"Landé factor and weak-field Zeeman shift","Riduzione del fattore di Landé per un termine di singoletto":"Reduction of the Landé factor for a singlet term","Spostamento energetico nel regime di Paschen-Back":"Energy shift in the Paschen-Back regime","Equazioni di Heisenberg per la precessione di Larmor":"Heisenberg equations for Larmor precession","Forza di Stern-Gerlach in un campo magnetico non uniforme":"Stern-Gerlach force in a nonuniform magnetic field"},"title":{"it":"Effetto Zeeman normale - Dimostrazioni e ripasso orale","en":"Normal Zeeman effect - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

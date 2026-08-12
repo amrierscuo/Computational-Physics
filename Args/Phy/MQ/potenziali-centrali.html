@@ -1,333 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Potenziali Centrali</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Potenziali centrali e problema radiale</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Potenziali Centrali</h1>
-    <h2>Introduzione</h2>
-    Un potenziale centrale è un campo di forze in cui l'energia potenziale dipende unicamente dalla distanza \( r \) dal centro del potenziale. 
-    Esempi comuni includono il potenziale gravitazionale \( V(r) \propto -\frac{1}{r} \) e il potenziale coulombiano.
-
-    <h2>Separazione delle variabili nell'equazione di Schrödinger</h2>
-    L'equazione di Schrödinger indipendente dal tempo per un potenziale centrale è:
-    <div class="formula">
-        \[
-        -\frac{\hbar^2}{2m} \nabla^2 \psi + V(r) \psi = E \psi
-        \]
-    </div>
-    In coordinate sferiche, il laplaciano assume la forma:
-    <div class="formula">
-        \[
-        \nabla^2 = \frac{1}{r^2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial}{\partial r} \right) + \frac{1}{r^2 \sin \theta} \frac{\partial}{\partial \theta} \left( \sin \theta \frac{\partial}{\partial \theta} \right) + \frac{1}{r^2 \sin^2 \theta} \frac{\partial^2}{\partial \phi^2}
-        \]
-    </div>
-    Separando la funzione d'onda come \( \psi(r, \theta, \phi) = R(r) Y(\theta, \phi) \), si ottiene:
-    <div class="formula">
-        \[
-        -\frac{\hbar^2}{2m} \left( \frac{1}{r^2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial R}{\partial r} \right) - \frac{\ell (\ell + 1)}{r^2} R \right) + V(r) R = E R
-        \]
-    </div>
-    La parte angolare è descritta dagli armonici sferici \( Y_\ell^m(\theta, \phi) \), soluzioni dell'equazione:
-    <div class="formula">
-        \[
-        \frac{1}{\sin \theta} \frac{\partial}{\partial \theta} \left( \sin \theta \frac{\partial Y}{\partial \theta} \right) + \frac{1}{\sin^2 \theta} \frac{\partial^2 Y}{\partial \phi^2} + \ell (\ell + 1) Y = 0
-        \]
-    </div>
-
-    <h2>Esempi di potenziali centrali</h2>
-    <ul>
-        <li><strong>Potenziale coulombiano:</strong> \( V(r) = -\frac{e^2}{4 \pi \epsilon_0 r} \), utilizzato per descrivere l'interazione elettrica tra protoni ed elettroni nell'atomo di idrogeno.</li>
-        <li><strong>Oscillatore armonico tridimensionale:</strong> \( V(r) = \frac{1}{2} k r^2 \), utilizzato per modellare vibrazioni molecolari o potenziali confinanti in fisica quantistica.</li>
-    </ul>
-
-    <h2>Soluzioni nel caso di potenziale coulombiano</h2>
-    Per il potenziale coulombiano, le soluzioni radiali \( R(r) \) sono descritte da:
-    <div class="formula">
-        \[
-        R_{n\ell}(r) = N_{n\ell} \, e^{-\frac{r}{n a_0}} \left( \frac{2r}{n a_0} \right)^\ell L_{n-\ell-1}^{2\ell+1} \left( \frac{2r}{n a_0} \right)
-        \]
-    </div>
-    dove \( N_{n\ell} \) è un fattore di normalizzazione, \( L_{n-\ell-1}^{2\ell+1} \) sono i polinomi di Laguerre associati e \( a_0 \) è il raggio di Bohr.
-
-    <h2>Proprietà generali</h2>
-    <ul>
-        <li>La quantizzazione dei livelli energetici emerge naturalmente dalla separazione delle variabili.</li>
-        <li>La simmetria sferica implica che le soluzioni angolari siano descritte dagli armonici sferici \( Y_\ell^m(\theta, \phi) \).</li>
-    </ul>
-
-    <h2>Soluzione completa per il potenziale coulombiano</h2>
-Il potenziale coulombiano \( V(r) = -\frac{e^2}{4 \pi \epsilon_0 r} \) porta a livelli energetici discreti e soluzioni radiali ottenute risolvendo l'equazione radiale:
-<div class="formula">
-    \[
-    \frac{d^2 u(r)}{dr^2} + \left( \frac{2m}{\hbar^2} \left[ E + \frac{e^2}{4\pi \epsilon_0 r} \right] - \frac{\ell(\ell + 1)}{r^2} \right) u(r) = 0
-    \]
-</div>
-dove \( u(r) = r R(r) \). Questa trasformazione semplifica l'equazione eliminando il termine \( \frac{1}{r} \frac{du}{dr} \).
-
-<h2>Passaggi per ottenere le soluzioni radiali</h2>
-1. Si introduce il parametro adimensionale \( \rho = \frac{r}{n a_0} \), con \( a_0 = \frac{\hbar^2}{me^2} \) (raggio di Bohr). Sostituendo nell'equazione radiale, si ottiene:
-<div class="formula">
-    \[
-    \frac{d^2 u}{d\rho^2} + \left( -\frac{1}{n^2} + \frac{2}{\rho} - \frac{\ell (\ell + 1)}{\rho^2} \right) u = 0
-    \]
-</div>
-2. La soluzione generale è scritta come \( u(\rho) = \rho^\ell e^{-\rho} v(\rho) \), dove \( v(\rho) \) è un polinomio di grado \( n - \ell - 1 \). Questo porta ai polinomi di Laguerre associati:
-<div class="formula">
-    \[
-    v(\rho) = L_{n-\ell-1}^{2\ell+1}(2\rho)
-    \]
-</div>
-3. La funzione radiale normalizzata è quindi:
-<div class="formula">
-    \[
-    R_{n\ell}(r) = N_{n\ell} \, e^{-\frac{r}{n a_0}} \left( \frac{2r}{n a_0} \right)^\ell L_{n-\ell-1}^{2\ell+1} \left( \frac{2r}{n a_0} \right)
-    \]
-</div>
-
-<h2>Energia quantizzata</h2>
-I livelli energetici risultano quantizzati e dipendono solo dal numero quantico principale \( n \):
-<div class="formula">
-    \[
-    E_n = -\frac{m e^4}{2 \hbar^2 n^2}
-    \]
-</div>
-Questo risultato spiega gli spettri discreti osservati negli atomi e si applica perfettamente al caso dell'atomo di idrogeno.
-
-<h2>Soluzioni angolari</h2>
-Le soluzioni angolari sono descritte dagli armonici sferici \( Y_\ell^m(\theta, \phi) \), che soddisfano:
-<div class="formula">
-    \[
-    \frac{1}{\sin \theta} \frac{\partial}{\partial \theta} \left( \sin \theta \frac{\partial Y}{\partial \theta} \right) + \frac{1}{\sin^2 \theta} \frac{\partial^2 Y}{\partial \phi^2} + \ell (\ell + 1) Y = 0
-    \]
-</div>
-Gli armonici sferici sono definiti come:
-<div class="formula">
-    \[
-    Y_\ell^m(\theta, \phi) = N_\ell^m P_\ell^m(\cos \theta) e^{im\phi}
-    \]
-</div>
-dove \( P_\ell^m \) sono i polinomi associati di Legendre e \( N_\ell^m \) è un fattore di normalizzazione.
-
-<h2>Osservazioni</h2>
-- La simmetria sferica del potenziale centrale semplifica il problema in coordinate sferiche, portando a soluzioni ben definite.
-- La separazione delle variabili evidenzia il contributo indipendente delle componenti radiali e angolari.
-- Il risultato finale spiega perché gli spettri atomici siano costituiti da righe discrete, in perfetto accordo con le osservazioni sperimentali.
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 8</div>
-  <h2>Potenziali Centrali: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Ridurre il problema a un'equazione radiale con potenziale efficace.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Per (V\(r\)), H commuta con \(L^2,L_z\). Ponendo \(u=rR\) si elimina la derivata prima e si ottiene un problema unidimensionale sul semiasse.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Radiale<span class="lecture-step-boss">DIM 16</span></h4>
-      <p>Dopo separazione.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="-\frac{\hbar^2}{2\mu}u&#x27;&#x27;+\left[V(r)+\frac{\hbar^2l(l+1)}{2\mu r^2}\right]u=Eu"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=R(r)Y_l^m,\quad L^2Y_l^m=\hbar^2l(l+1)Y_l^m,\quad R=u/r\Rightarrow\frac1{r^2}\partial_r(r^2R')=u''/r\Rightarrow-\frac{\hbar^2}{2\mu}u''+\left[V+\frac{\hbar^2l(l+1)}{2\mu r^2}\right]u=Eu\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Bordo<span class="lecture-step-boss">DIM 16</span></h4>
-      <p>Regolarità dell'onda.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="u(0)=0"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle R(r)=u(r)/r,\quad\psi\ \text{finita in }r=0\Rightarrow\lim_{r\to0}u(r)/r\ \text{finito}\Rightarrow u(0)=0\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Comportamento all'origine</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Se V è meno singolare di \(1/r^2\).</p>
-    <p><strong>Calcolo.</strong> Le soluzioni sono \(u\sim r^{l+1}\) e \(r^{-l}\); si scarta la seconda.</p>
-    <p><strong>Risultato e controllo.</strong> La barriera centrifuga sopprime gli stati con l alto vicino all'origine.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 16</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Massa ridotta per due corpi.</li>
-          <li>Attenzione a potenziali singolari.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La dinamica 3D diventa una famiglia di problemi 1D etichettati da l, ciascuno con un proprio potenziale efficace.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Deriva la normalizzazione di u.</li>
-          <li>Interpreta il termine centrifugo.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=238">Appunti-MQ.pdf, pp. 238-244: massa ridotta, equazione radiale e potenziale efficace</a></li>
-          <li><a href="MQ.pdf#page=14">MQ.pdf, pp. capitolo 14: simmetria centrale</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-potenziali-centrali"><div class="lecture-kicker">Lezione approfondita - simmetria, barriera e spettro</div><h1>Potenziali centrali e problema radiale</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la riduzione a un problema sul semiasse, interpretare barriera centrifuga, condizioni all'origine, degenerazione magnetica, nodi e distinzione tra stati legati e diffusione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Rotazioni esatte</h3><p>Un potenziale V(r) è invariante sotto ogni rotazione. Il momento angolare orbitale è quindi conservato e organizza lo spazio in settori ell indipendenti.</p></article><article class="lecture-card lecture-warning"><h3>Problema uno-dimensionale speciale</h3><p>La funzione u obbedisce a una TISE 1D, ma sul semiasse e con u(0)=0. Il termine centrifugo dipende dal settore ell.</p></article></div><h2>Hamiltoniano e insieme completo di osservabili</h2><div class="lecture-grid"><article class="lecture-card "><h3>Massa ridotta</h3><p>Per un problema a due corpi centrale, il moto relativo usa la massa ridotta mu; il centro di massa si separa.</p></article><article class="lecture-card "><h3>CSCO</h3><p>Una base naturale è |E ell m&gt;, eventualmente completata da un indice radiale o di canale quando E,ell,m non bastano.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Hamiltoniano centrale<span class="lecture-step-boss">BASE</span></h4><p>Il modulo r è invariato dalle rotazioni generate da L.</p><div class="lecture-formula" aria-label="Hamiltoniano del moto relativo centrale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=\frac{p^2}{2\mu}+V(r),\qquad r=|\mathbf r|\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Commutatori<span class="lecture-step-boss">SIMMETRIA</span></h4><p>L'invarianza rotazionale implica conservazione di L² e di ogni componente di L.</p><div class="lecture-formula" aria-label="Commutatori del campo centrale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H,L_i]=0,\qquad[H,L^2]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Base angolare<span class="lecture-step-boss">CSCO</span></h4><p>Si diagonalizzano simultaneamente H, L² e una componente convenzionale Lz.</p><div class="lecture-formula" aria-label="Fattorizzazione degli autostati centrali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_{E\ell m}(\mathbf r)=R_{E\ell}(r)Y_{\ell m}(\Omega)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Identità cinetica<span class="lecture-step-boss">LAPLACIANO</span></h4><p>La quantità di moto al quadrato si divide in derivata radiale e momento angolare.</p><div class="lecture-formula" aria-label="Decomposizione di p² in coordinate sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p^2=-\hbar^2\left[\frac1{r^2}\frac d{dr}\left(r^2\frac d{dr}\right)-\frac{L^2}{\hbar^2r^2}\right]\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Equazione radiale<span class="lecture-step-boss">DIM 16</span></h4><p>L'autovalore hbar²ell(ell+1) produce il termine angolare repulsivo.</p><div class="lecture-formula" aria-label="Equazione per la funzione R"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -\frac{\hbar^2}{2\mu r^2}(r^2R')'+\left[V(r)+\frac{\hbar^2\ell(\ell+1)}{2\mu r^2}\right]R=ER\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Riduzione<span class="lecture-step-boss">u=rR</span></h4><p>Si verifica direttamente che (r²R')'=ru'' quando R=u/r.</p><div class="lecture-formula" aria-label="Cancellazione della derivata prima"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle R=\frac ur,\quad R'=\frac{u'}r-\frac u{r^2},\quad\frac1{r^2}(r^2R')'=\frac{u''}r\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Potenziale efficace<span class="lecture-step-boss">RISULTATO</span></h4><p>Ogni ell definisce un problema indipendente con un potenziale efficace diverso.</p><div class="lecture-formula" aria-label="Equazione unidimensionale efficace"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -\frac{\hbar^2}{2\mu}u''+V_{\rm eff}^{(\ell)}(r)u=Eu,\qquad V_{\rm eff}^{(\ell)}=V(r)+\frac{\hbar^2\ell(\ell+1)}{2\mu r^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Barriera centrifuga<span class="lecture-step-boss">FISICA</span></h4><p>Per ell positivo il termine diverge come più uno su r² e sopprime la penetrazione verso l'origine.</p><div class="lecture-formula" aria-label="Energia centrifuga quantistica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V_{\rm cent}(r)=\frac{\hbar^2\ell(\ell+1)}{2\mu r^2}\ge0\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Origine regolare<span class="lecture-step-boss">BORDO</span></h4><p>Se V è meno singolare di 1/r², l'equazione dominante dà due potenze; si conserva quella finita.</p><div class="lecture-formula" aria-label="Analisi indiciale presso l&#x27;origine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle u\sim r^s:\quad s(s-1)=\ell(\ell+1)\Rightarrow s=\ell+1\ \text{o }-\ell\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Condizione fisica<span class="lecture-step-boss">BORDO</span></h4><p>La soluzione u circa r alla meno ell rende R divergente e viene scartata; resta u circa r alla ell+1.</p><div class="lecture-formula" aria-label="Soluzione regolare all&#x27;origine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle u(0)=0,\qquad R(r)\sim r^\ell\quad(r\to0)\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Normalizzazione<span class="lecture-step-boss">NORMA</span></h4><p>Il prodotto scalare radiale usa dr per u e r²dr per R.</p><div class="lecture-formula" aria-label="Norma del modo radiale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \int_0^\infty dr|u_{n\ell}|^2=1\Longleftrightarrow\int_0^\infty dr\,r^2|R_{n\ell}|^2=1\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Stati legati<span class="lecture-step-boss">DISCRETO</span></h4><p>Se E è sotto il limite asintotico di V, u decade e la doppia condizione al bordo quantizza l'energia.</p><div class="lecture-formula" aria-label="Condizioni per lo spettro legato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E&lt;V(\infty),\qquad u(0)=0,\quad u(\infty)=0\Rightarrow E=E_{n_r\ell}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Diffusione<span class="lecture-step-boss">CONTINUO</span></h4><p>Sopra la soglia, u è oscillante e ogni ell definisce un'onda parziale con uno sfasamento.</p><div class="lecture-formula" aria-label="Forma asintotica di un&#x27;onda parziale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle u_{k\ell}(r)\xrightarrow{r\to\infty}\sin\!\left(kr-\frac{\ell\pi}{2}+\delta_\ell(k)\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Degenerazione magnetica<span class="lecture-step-boss">ROTAZIONI</span></h4><p>Poiché Veff non contiene m, tutti i 2ell+1 valori magnetici condividono la stessa energia radiale.</p><div class="lecture-formula" aria-label="Degenerazione imposta dalle rotazioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_{n_r\ell m}=E_{n_r\ell},\qquad g_m=2\ell+1\)</span></div></article></section><h2>Esempio: buca sferica infinita</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> V=0 per r&lt;a e infinito per r maggiore o uguale ad a. Per ell=0, u obbedisce a un'equazione libera con u(0)=u(a)=0.</p><p data-i18n-skip="true">\(\displaystyle u_n(r)=\sqrt{\frac2a}\sin\frac{n\pi r}{a},\quad E_{n,\ell=0}=\frac{\hbar^2\pi^2n^2}{2\mu a^2},\quad R_n(r)=\frac{u_n(r)}r\)</p><p><strong>Controllo.</strong> R resta finita perché sin(n pi r/a) circa n pi r/a all'origine. Per ell positivo, gli zeri delle Bessel sferiche sostituiscono n pi.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Nodi radiali</h3><p>Per molti potenziali regolari, n_r conta i nodi di u su r&gt;0. Stati successivi nello stesso settore ell alternano il numero di nodi.</p></article><article class="lecture-card "><h3>Degenerazioni accidentali</h3><p>Le rotazioni garantiscono soltanto la degenerazione in m. Uguaglianze tra ell differenti, come nel Coulomb, richiedono simmetrie aggiuntive.</p></article><article class="lecture-card "><h3>Potenziali singolari</h3><p>Se V è tanto singolare quanto meno uno su r² o più, l'analisi all'origine e l'autoaggiuntezza richiedono cure ulteriori.</p></article><article class="lecture-card "><h3>Massa ridotta</h3><p>Nel problema elettrone-nucleo, mu=m_eM/(m_e+M) produce lo spostamento isotopico principale rispetto all'approssimazione di nucleo fisso.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Risolvere su tutta la retta; dimenticare u(0)=0; chiamare centrifugo un termine attrattivo; attribuire energia dipendente da m; usare R e u con la stessa misura.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Vcent è zero per ell=0 e positivo altrimenti; R circa r^ell; u ha dimensione lunghezza alla meno un mezzo; m non compare; bound e scattering hanno bordi diversi.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Dimostra i commutatori rotazionali.</li><li>Separa R e Y.</li><li>Deriva la decomposizione di p².</li><li>Mostra il passaggio R=u/r.</li><li>Definisci Veff e la barriera.</li><li>Analizza le due potenze all'origine.</li><li>Distingui bordi legati e scattering.</li><li>Spiega degenerazione in m e accidentale.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L248">DIM 14 e DIM 16 - separazione 3D, potenziali centrali e idrogeno</a></li><li><a href="Appunti-MQ.pdf#page=242">Appunti-MQ.pdf, pagine PDF 242-251 - equazione radiale e campo coulombiano</a></li><li><a href="set-9-funzioni-radiali.html">Set 9 - funzioni radiali e stati idrogenoidi</a></li></ul><p class="lecture-note">La numerazione nei collegamenti PDF è quella effettiva del file. Le derivazioni radiali sono state confrontate con DIM 14 e DIM 16.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - simmetria, barriera e spettro":"In-depth lesson - symmetry, barrier, and spectrum","Potenziali centrali e problema radiale":"Central potentials and the radial problem","Obiettivo.":"Objective.","Derivare la riduzione a un problema sul semiasse, interpretare barriera centrifuga, condizioni all'origine, degenerazione magnetica, nodi e distinzione tra stati legati e diffusione.":"Derive reduction to a half-line problem, interpreting the centrifugal barrier, origin conditions, magnetic degeneracy, nodes, and the distinction between bound and scattering states.","Rotazioni esatte":"Exact rotations","Un potenziale V(r) è invariante sotto ogni rotazione. Il momento angolare orbitale è quindi conservato e organizza lo spazio in settori ell indipendenti.":"A potential V(r) is invariant under every rotation. Orbital angular momentum is therefore conserved and organizes the space into independent ell sectors.","Problema uno-dimensionale speciale":"A special one-dimensional problem","La funzione u obbedisce a una TISE 1D, ma sul semiasse e con u(0)=0. Il termine centrifugo dipende dal settore ell.":"Function u obeys a 1D TISE, but on the half-line and with u(0)=0. The centrifugal term depends on sector ell.","Hamiltoniano e insieme completo di osservabili":"Hamiltonian and complete set of observables","Massa ridotta":"Reduced mass","Per un problema a due corpi centrale, il moto relativo usa la massa ridotta mu; il centro di massa si separa.":"For a central two-body problem, relative motion uses reduced mass mu; center-of-mass motion separates.","CSCO":"CSCO","Una base naturale è |E ell m>, eventualmente completata da un indice radiale o di canale quando E,ell,m non bastano.":"A natural basis is |E ell m>, possibly completed by a radial or channel label when E,ell,m are insufficient.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Hamiltoniano centrale":"1. Central Hamiltonian","BASE":"BASE","Il modulo r è invariato dalle rotazioni generate da L.":"Magnitude r is invariant under rotations generated by L.","Passaggio":"Step","2. Commutatori":"2. Commutators","SIMMETRIA":"SYMMETRY","L'invarianza rotazionale implica conservazione di L² e di ogni componente di L.":"Rotational invariance implies conservation of L² and every component of L.","3. Base angolare":"3. Angular basis","Si diagonalizzano simultaneamente H, L² e una componente convenzionale Lz.":"Simultaneously diagonalize H, L², and one conventional component Lz.","4. Identità cinetica":"4. Kinetic identity","LAPLACIANO":"LAPLACIAN","La quantità di moto al quadrato si divide in derivata radiale e momento angolare.":"Momentum squared splits into a radial derivative and angular momentum.","5. Equazione radiale":"5. Radial equation","DIM 16":"DIM 16","L'autovalore hbar²ell(ell+1) produce il termine angolare repulsivo.":"Eigenvalue hbar²ell(ell+1) produces the repulsive angular term.","6. Riduzione":"6. Reduction","u=rR":"u=rR","Si verifica direttamente che (r²R')'=ru'' quando R=u/r.":"Directly verify that (r²R')'=r u'' when R=u/r.","7. Potenziale efficace":"7. Effective potential","RISULTATO":"RESULT","Ogni ell definisce un problema indipendente con un potenziale efficace diverso.":"Each ell defines an independent problem with a different effective potential.","8. Barriera centrifuga":"8. Centrifugal barrier","FISICA":"PHYSICS","Per ell positivo il termine diverge come più uno su r² e sopprime la penetrazione verso l'origine.":"For positive ell, the term diverges as plus one over r² and suppresses penetration toward the origin.","9. Origine regolare":"9. Regular origin","BORDO":"BOUNDARY","Se V è meno singolare di 1/r², l'equazione dominante dà due potenze; si conserva quella finita.":"If V is less singular than 1/r², the dominant equation gives two powers; retain the finite one.","10. Condizione fisica":"10. Physical condition","La soluzione u circa r alla meno ell rende R divergente e viene scartata; resta u circa r alla ell+1.":"Solution u approximately r to minus ell makes R divergent and is discarded; u approximately r to ell+1 remains.","11. Normalizzazione":"11. Normalization","NORMA":"NORM","Il prodotto scalare radiale usa dr per u e r²dr per R.":"The radial inner product uses dr for u and r²dr for R.","12. Stati legati":"12. Bound states","DISCRETO":"DISCRETE","Se E è sotto il limite asintotico di V, u decade e la doppia condizione al bordo quantizza l'energia.":"If E lies below the asymptotic value of V, u decays and the two boundary conditions quantize energy.","13. Diffusione":"13. Scattering","CONTINUO":"CONTINUUM","Sopra la soglia, u è oscillante e ogni ell definisce un'onda parziale con uno sfasamento.":"Above threshold, u oscillates and each ell defines a partial wave with a phase shift.","14. Degenerazione magnetica":"14. Magnetic degeneracy","ROTAZIONI":"ROTATIONS","Poiché Veff non contiene m, tutti i 2ell+1 valori magnetici condividono la stessa energia radiale.":"Because Veff contains no m, all 2ell+1 magnetic values share the same radial energy.","Esempio: buca sferica infinita":"Example: infinite spherical well","Impostazione.":"Setup.","V=0 per r<a e infinito per r maggiore o uguale ad a. Per ell=0, u obbedisce a un'equazione libera con u(0)=u(a)=0.":"V=0 for r<a and infinite for r at least a. For ell=0, u obeys a free equation with u(0)=u(a)=0.","Controllo.":"Check.","R resta finita perché sin(n pi r/a) circa n pi r/a all'origine. Per ell positivo, gli zeri delle Bessel sferiche sostituiscono n pi.":"R remains finite because sin(n pi r/a) is approximately n pi r/a at the origin. For positive ell, zeros of spherical Bessel functions replace n pi.","Interpretazione e limiti":"Interpretation and limits","Nodi radiali":"Radial nodes","Per molti potenziali regolari, n_r conta i nodi di u su r>0. Stati successivi nello stesso settore ell alternano il numero di nodi.":"For many regular potentials, n_r counts nodes of u on r>0. Successive states in the same ell sector alternate node count.","Degenerazioni accidentali":"Accidental degeneracies","Le rotazioni garantiscono soltanto la degenerazione in m. Uguaglianze tra ell differenti, come nel Coulomb, richiedono simmetrie aggiuntive.":"Rotations guarantee only m degeneracy. Equalities across different ell values, as in Coulomb, require extra symmetries.","Potenziali singolari":"Singular potentials","Se V è tanto singolare quanto meno uno su r² o più, l'analisi all'origine e l'autoaggiuntezza richiedono cure ulteriori.":"If V is as singular as minus one over r² or more, origin analysis and self-adjointness require additional care.","Nel problema elettrone-nucleo, mu=m_eM/(m_e+M) produce lo spostamento isotopico principale rispetto all'approssimazione di nucleo fisso.":"In the electron-nucleus problem, mu=m_eM/(m_e+M) produces the leading isotope shift relative to the fixed-nucleus approximation.","Errori tipici":"Common errors","Risolvere su tutta la retta; dimenticare u(0)=0; chiamare centrifugo un termine attrattivo; attribuire energia dipendente da m; usare R e u con la stessa misura.":"Solving on the full line; forgetting u(0)=0; calling the centrifugal term attractive; assigning m-dependent energy; using the same measure for R and u.","Controlli rapidi":"Quick checks","Vcent è zero per ell=0 e positivo altrimenti; R circa r^ell; u ha dimensione lunghezza alla meno un mezzo; m non compare; bound e scattering hanno bordi diversi.":"Vcent is zero for ell=0 and positive otherwise; R is approximately r^ell; u has dimensions inverse square root of length; m does not appear; bound and scattering states have different boundaries.","Controllo da orale":"Oral exam checklist","Dimostra i commutatori rotazionali.":"Prove rotational commutators.","Separa R e Y.":"Separate R and Y.","Deriva la decomposizione di p².":"Derive decomposition of p².","Mostra il passaggio R=u/r.":"Show the R=u/r step.","Definisci Veff e la barriera.":"Define Veff and the barrier.","Analizza le due potenze all'origine.":"Analyze the two powers at the origin.","Distingui bordi legati e scattering.":"Distinguish bound and scattering boundaries.","Spiega degenerazione in m e accidentale.":"Explain m and accidental degeneracy.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 14 e DIM 16 - separazione 3D, potenziali centrali e idrogeno":"DIM 14 and DIM 16 - 3D separation, central potentials, and hydrogen","Appunti-MQ.pdf, pagine PDF 242-251 - equazione radiale e campo coulombiano":"Appunti-MQ.pdf, PDF pages 242-251 - radial equation and Coulomb field","Set 9 - funzioni radiali e stati idrogenoidi":"Set 9 - radial functions and hydrogen-like states","La numerazione nei collegamenti PDF è quella effettiva del file. Le derivazioni radiali sono state confrontate con DIM 14 e DIM 16.":"PDF links use the file's actual page numbering. Radial derivations were compared against DIM 14 and DIM 16.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Hamiltoniano del moto relativo centrale":"Hamiltonian of central relative motion","Commutatori del campo centrale":"Central-field commutators","Fattorizzazione degli autostati centrali":"Factorization of central eigenstates","Decomposizione di p² in coordinate sferiche":"Decomposition of p² in spherical coordinates","Equazione per la funzione R":"Equation for function R","Cancellazione della derivata prima":"Cancellation of the first derivative","Equazione unidimensionale efficace":"Effective one-dimensional equation","Energia centrifuga quantistica":"Quantum centrifugal energy","Analisi indiciale presso l'origine":"Indicial analysis near the origin","Soluzione regolare all'origine":"Regular solution at the origin","Norma del modo radiale":"Norm of the radial mode","Condizioni per lo spettro legato":"Conditions for the bound spectrum","Forma asintotica di un'onda parziale":"Asymptotic form of a partial wave","Degenerazione imposta dalle rotazioni":"Degeneracy imposed by rotations"},"title":{"it":"Potenziali centrali e problema radiale","en":"Central potentials and the radial problem"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

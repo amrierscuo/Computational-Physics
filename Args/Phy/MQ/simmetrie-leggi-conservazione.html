@@ -1,282 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simmetrie e Leggi di Conservazione</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simmetrie e leggi di conservazione</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Simmetrie e Leggi di Conservazione</h1>
-    <h2>Introduzione</h2>
-    Le simmetrie giocano un ruolo fondamentale in fisica teorica, poiché ogni simmetria continua è associata a una legge di conservazione attraverso il teorema di Noether. Queste connessioni sono fondamentali per la descrizione delle interazioni fondamentali e dei principi fisici.
-
-    <h2>Teorema di Noether</h2>
-    Per ogni simmetria continua di un sistema, esiste una quantità conservata. Questo principio si basa sull'invarianza dell'azione \( S \) rispetto a una trasformazione continua:
-    <div class="formula">
-        \[
-        S = \int L \, dt
-        \]
-    </div>
-    dove \( L \) è il lagrangiano del sistema. Se \( L \) rimane invariato sotto una trasformazione, esiste una quantità conservata.
-
-    <h2>Simmetrie Traslazionali</h2>
-    L'invarianza rispetto alle traslazioni nello spazio implica la conservazione della quantità di moto. L'operatore associato è:
-    <div class="formula">
-        \[
-        \hat{p} = -i\hbar \nabla
-        \]
-    </div>
-
-    <h2>Simmetrie Rotazionali</h2>
-    L'invarianza rispetto alle rotazioni implica la conservazione del momento angolare. Le componenti del momento angolare soddisfano le relazioni di commutazione:
-    <div class="formula">
-        \[
-        [\hat{L}_x, \hat{L}_y] = i\hbar \hat{L}_z
-        \]
-    </div>
-    Il momento angolare totale è dato da:
-    <div class="formula">
-        \[
-        \hat{L}^2 = \hat{L}_x^2 + \hat{L}_y^2 + \hat{L}_z^2
-        \]
-    </div>
-
-    <h2>Simmetrie Temporali</h2>
-    L'invarianza rispetto alle traslazioni temporali implica la conservazione dell'energia. Questa simmetria è associata all'operatore hamiltoniano:
-    <div class="formula">
-        \[
-        \hat{H} = \frac{\hat{p}^2}{2m} + V(\hat{r})
-        \]
-    </div>
-
-    <h2>Trasformazioni e Generatori</h2>
-    I generatori delle trasformazioni di simmetria sono operatori che agiscono sugli stati quantistici per implementare le trasformazioni. Ad esempio:
-    <ul>
-        <li>\( \hat{p} \): generatore delle traslazioni spaziali.</li>
-        <li>\( \hat{L} \): generatore delle rotazioni.</li>
-        <li>\( \hat{H} \): generatore delle traslazioni temporali.</li>
-    </ul>
-    Questi operatori sono fondamentali per descrivere le evoluzioni temporali e spaziali in meccanica quantistica.
-
-    <h2>Applicazioni</h2>
-    Le simmetrie e le leggi di conservazione sono essenziali per:
-    <ul>
-        <li>Prevedere l'evoluzione di sistemi isolati.</li>
-        <li>Descrivere le interazioni fondamentali della natura.</li>
-        <li>Sviluppare teorie unificate come la teoria delle stringhe o i modelli standard delle particelle.</li>
-    </ul>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 5</div>
-  <h2>Simmetrie e Leggi di Conservazione: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la conservazione da un generatore che commuta con H.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Una simmetria continua è rappresentata da un unitario \(U(\epsilon)=e^{-i\epsilon G/\hbar}\). Se H è invariata, il generatore G è costante del moto. La simmetria dello stato non è necessaria.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Invarianza<span class="lecture-step-boss">DIM 4</span></h4>
-      <p>Espandendo all'ordine lineare.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="UHU^\dagger=H\ \Longleftrightarrow\ [G,H]=0"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle U(\epsilon)=I-i\epsilon G/\hbar+O(\epsilon^2),\quad UHU^\dagger=H-\frac{i\epsilon}{\hbar}[G,H]+O(\epsilon^2)\Rightarrow UHU^\dagger=H\Longleftrightarrow[G,H]=0\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Conservazione<span class="lecture-step-boss">DIM 4</span></h4>
-      <p>Se G non dipende esplicitamente dal tempo.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="d\langle G\rangle/dt=(i/\hbar)\langle[H,G]\rangle=0"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\langle G\rangle=\frac i\hbar\langle[H,G]\rangle+\langle\partial_tG\rangle,\quad[H,G]=0,\ \partial_tG=0\Rightarrow d\langle G\rangle/dt=0\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Traslazioni</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Se V non dipende da x.</p>
-    <p><strong>Calcolo.</strong> \([p_x,H]=0\), quindi \(p_x\) si conserva.</p>
-    <p><strong>Risultato e controllo.</strong> Non serve che lo stato sia autostato di impulso.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 4</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Simmetria del dominio e delle condizioni al bordo.</li>
-          <li>Per simmetrie discrete non esiste sempre un generatore infinitesimo.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Noether quantistico collega algebra e dinamica: il commutatore nullo è la forma operativa della simmetria.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Applica il criterio a rotazioni centrali.</li>
-          <li>Distingui conservazione del valore medio e distribuzione completa.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=159">Appunti-MQ.pdf, pp. 159-165: generatori, commutatori e costanti del moto</a></li>
-          <li><a href="MQ.pdf#page=10">MQ.pdf, pp. capitoli 10 e 29: simmetrie continue</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-simmetrie-leggi-conservazione"><div class="lecture-kicker">Lezione approfondita - Argomento 5</div><h1>Simmetrie e leggi di conservazione</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Formulare una simmetria quantistica come trasformazione unitaria dell'Hamiltoniana, derivare per una famiglia continua il commutatore con il generatore e la quantità conservata, trattare simmetrie discrete, numeri quantici, multipleti e rottura di simmetria con esempi spaziali.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Simmetria come commutatore</h3><p>Per una trasformazione continua, l'invarianza di H al primo ordine equivale a [H,G]=0. La stessa equazione rende G costante nel tempo.</p></article><article class="lecture-card lecture-warning"><h3>Discreto non ha generatore infinitesimo</h3><p>Parità può commutare con H e conservarsi, ma non deriva da un parametro reale vicino all'identità. Si conserva l'operatore P stesso.</p></article></div><h2>Trasformazioni attive e dinamica</h2><div class="lecture-grid"><article class="lecture-card "><h3>Stati</h3><p>Una trasformazione fisica manda |psi&gt; in U|psi&gt;; le ampiezze possono essere lette equivalentemente con operatori coniugati.</p></article><article class="lecture-card "><h3>Hamiltoniana</h3><p>La trasformazione è simmetria se il sistema trasformato ha la stessa Hamiltoniana, non soltanto lo stesso spettro per caso.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Trasformazione unitaria<span class="lecture-step-boss">BASE</span></h4><p>Le simmetrie preservano probabilità e quindi sono rappresentate, nel caso unitario, da U con U aggiunto U uguale I.</p><div class="lecture-formula" aria-label="Azione unitaria sugli stati"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle\to U|\psi\rangle,\qquad U^\dagger U=I\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Invarianza di H<span class="lecture-step-boss">SIMMETRIA</span></h4><p>La forma attiva richiede che la coniugazione lasci H invariata.</p><div class="lecture-formula" aria-label="Condizione esatta di simmetria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger H U=H\Longleftrightarrow[H,U]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Famiglia continua<span class="lecture-step-boss">GENERA</span></h4><p>Vicino all'identità una famiglia a un parametro è generata da un operatore hermitiano G.</p><div class="lecture-formula" aria-label="Trasformazione continua e generatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(\epsilon)=e^{-i\epsilon G/\hbar}=I-\frac{i\epsilon}{\hbar}G+O(\epsilon^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Espansione di H<span class="lecture-step-boss">DIMOSTRA</span></h4><p>Coniugare H ed espandere al primo ordine isola il commutatore.</p><div class="lecture-formula" aria-label="Variazione infinitesima dell&#x27;Hamiltoniana"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger H U=H+\frac{i\epsilon}{\hbar}[G,H]+O(\epsilon^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Criterio del generatore<span class="lecture-step-boss">RISULTATO</span></h4><p>L'invarianza per ogni epsilon richiede e, per la famiglia esponenziale, segue da un commutatore nullo.</p><div class="lecture-formula" aria-label="Equivalenza tra simmetria continua e commutatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger H U=H\ \forall\epsilon\Longleftrightarrow[H,G]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Quantità conservata<span class="lecture-step-boss">HEISENBERG</span></h4><p>Se G non dipende esplicitamente dal tempo, l'equazione di Heisenberg trasforma il commutatore nullo in derivata nulla.</p><div class="lecture-formula" aria-label="Conservazione del generatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{dG_H}{dt}=\frac{i}{\hbar}[H,G]_H=0\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Numeri quantici<span class="lecture-step-boss">CSCO</span></h4><p>H e G hermitiani commutanti ammettono autostati comuni e il valore g etichetta i settori dinamicamente disaccoppiati.</p><div class="lecture-formula" aria-label="Autostati simultanei di energia e carica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H|E,g\rangle=E|E,g\rangle,\qquad G|E,g\rangle=g|E,g\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Traslazioni<span class="lecture-step-boss">SPAZIO</span></h4><p>L'omogeneità lungo x implica invarianza per T(a) e quindi conservazione della componente p_x.</p><div class="lecture-formula" aria-label="Traslazioni e conservazione dell&#x27;impulso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T(a)=e^{-iap_x/\hbar},\quad[H,T(a)]=0\ \forall a\Longleftrightarrow[H,p_x]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Rotazioni<span class="lecture-step-boss">ISOTROPIA</span></h4><p>L'isotropia implica invarianza sotto rotazioni e conservazione del momento angolare totale.</p><div class="lecture-formula" aria-label="Rotazioni e conservazione del momento angolare"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle R_{\hat n}(\theta)=e^{-i\theta J_{\hat n}/\hbar},\qquad[H,\mathbf J]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Traslazioni temporali<span class="lecture-step-boss">ENERGIA</span></h4><p>Per H senza dipendenza esplicita dal tempo, lo stesso H genera le traslazioni temporali e il suo valore medio si conserva.</p><div class="lecture-formula" aria-label="Omogeneità temporale e conservazione dell&#x27;energia"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(t)=e^{-iHt/\hbar},\qquad\frac d{dt}\langle H\rangle=\left\langle\frac{\partial H}{\partial t}\right\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Simmetria discreta<span class="lecture-step-boss">PARITÀ</span></h4><p>Per V pari, P commuta con H; gli autostati possono essere organizzati nei settori più e meno senza un generatore continuo.</p><div class="lecture-formula" aria-label="Parità come simmetria discreta conservata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P^2=I,\quad V(-x)=V(x)\Rightarrow[H,P]=0,\quad P|n,\eta\rangle=\eta|n,\eta\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Multipleti e degenerazione<span class="lecture-step-boss">RAPPRESENTAZIONI</span></h4><p>Se operatori di simmetria collegano stati distinti alla stessa energia, l'autospazio porta una rappresentazione e forma un multipletto.</p><div class="lecture-formula" aria-label="Azione della simmetria su un autospazio"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H|E,a\rangle=E|E,a\rangle\Rightarrow H(U|E,a\rangle)=EU|E,a\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Regola di selezione<span class="lecture-step-boss">OPERATORE</span></h4><p>Se Q è conservato, un operatore O con carica definita q collega soltanto autostati i cui numeri quantici differiscono di q.</p><div class="lecture-formula" aria-label="Regola di selezione da un commutatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [Q,O]=qO\Rightarrow(q_f-q_i-q)\langle f|O|i\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Rottura di simmetria<span class="lecture-step-boss">PERTURBA</span></h4><p>Un termine delta H non invariante rende il commutatore non nullo, mescola settori e può scindere livelli degeneri.</p><div class="lecture-formula" aria-label="Rottura esplicita e non conservazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=H_0+\lambda V,\quad[H_0,G]=0,\ [V,G]\ne0\Rightarrow\dot G=\frac{i\lambda}{\hbar}[V,G]\)</span></div></article></section><h2>Esempio: particella in un potenziale centrale</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Per H uguale p quadrato su 2m più V(r), ogni rotazione lascia invariati p quadrato e r.</p><p data-i18n-skip="true">\(\displaystyle [H,L_i]=0\quad(i=x,y,z),\qquad[H,L^2]=[H,L_z]=0,\qquad E_{n\ell m}=E_{n\ell}\)</p><p><strong>Controllo.</strong> L conserva tutte le componenti come generatore della simmetria; scegliere L quadrato e Lz classifica gli stati, mentre l'indipendenza da m produce il multipletto di dimensione 2ell più uno.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Simmetria e stato</h3><p>H può essere simmetrica mentre uno stato particolare non lo è. La dinamica conserva l'orbita del gruppo e i numeri quantici, non obbliga ogni ket a essere invariante.</p></article><article class="lecture-card "><h3>Degenerazione non automatica</h3><p>Una simmetria abeliana può soltanto etichettare stati. La degenerazione è obbligata quando una rappresentazione irriducibile ha dimensione maggiore di uno o altri operatori collegano stati distinti.</p></article><article class="lecture-card "><h3>Teorema di Wigner</h3><p>Le trasformazioni che preservano probabilità di transizione sono unitarie o antiunitarie. Qui si trattano le simmetrie unitarie continue e discrete; inversione temporale richiede il caso antiunitario.</p></article><article class="lecture-card "><h3>Rottura spontanea</h3><p>Nei sistemi con infiniti gradi di libertà, H può essere simmetrica ma il vuoto non esserlo. È distinto dalla rottura esplicita di un termine dell'Hamiltoniana.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Confondere U che commuta con H con uno stato invariante; chiamare G conservato se dipende esplicitamente dal tempo; cercare un generatore infinitesimo per la parità; dedurre sempre degenerazione; ignorare la rottura da perturbazione.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>U è unitario; G è hermitiano; espandere U aggiunto H U produce [G,H]; G si conserva solo se non ha dipendenza esplicita; traslazioni, rotazioni e tempo corrispondono a p, J e H.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci la simmetria con U aggiunto H U.</li><li>Espandi una famiglia continua al primo ordine.</li><li>Ricava [H,G] uguale zero.</li><li>Usa Heisenberg per dimostrare la conservazione.</li><li>Associa p, J e H alle tre omogeneità.</li><li>Distingui parità e generatori continui.</li><li>Spiega multipleti e regole di selezione.</li><li>Mostra come una perturbazione rompe la simmetria.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L802">Boss P1 - formalismo, rappresentazioni ed evoluzione</a></li><li><a href="Appunti-MQ.pdf#page=159">Appunti-MQ.pdf, pagine PDF 159-165 - simmetrie e leggi di conservazione</a></li><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, generatori e simmetrie</a></li></ul><p class="lecture-note">La derivazione segue le pagine verificate 159-165 e DIM 15, separando chiaramente trasformazione, invarianza, generatore e conservazione e includendo le eccezioni discrete e antiunitarie.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 5":"In-depth lesson - Topic 5","Simmetrie e leggi di conservazione":"Symmetries and conservation laws","Obiettivo.":"Objective.","Formulare una simmetria quantistica come trasformazione unitaria dell'Hamiltoniana, derivare per una famiglia continua il commutatore con il generatore e la quantità conservata, trattare simmetrie discrete, numeri quantici, multipleti e rottura di simmetria con esempi spaziali.":"Formulate a quantum symmetry as a unitary transformation of the Hamiltonian, derive for a continuous family the commutator with its generator and conserved quantity, and treat discrete symmetries, quantum numbers, multiplets, and symmetry breaking with spatial examples.","Simmetria come commutatore":"Symmetry as a commutator","Per una trasformazione continua, l'invarianza di H al primo ordine equivale a [H,G]=0. La stessa equazione rende G costante nel tempo.":"For a continuous transformation, invariance of H to first order is equivalent to [H,G]=0. The same equation makes G constant in time.","Discreto non ha generatore infinitesimo":"A discrete symmetry has no infinitesimal generator","Parità può commutare con H e conservarsi, ma non deriva da un parametro reale vicino all'identità. Si conserva l'operatore P stesso.":"Parity may commute with H and be conserved, but it does not arise from a real parameter near the identity. The operator P itself is conserved.","Trasformazioni attive e dinamica":"Active transformations and dynamics","Stati":"States","Una trasformazione fisica manda |psi> in U|psi>; le ampiezze possono essere lette equivalentemente con operatori coniugati.":"A physical transformation maps |psi> to U|psi>; amplitudes can equivalently be read with conjugated operators.","Hamiltoniana":"Hamiltonian","La trasformazione è simmetria se il sistema trasformato ha la stessa Hamiltoniana, non soltanto lo stesso spettro per caso.":"The transformation is a symmetry if the transformed system has the same Hamiltonian, not merely the same spectrum by accident.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Trasformazione unitaria":"1. Unitary transformation","BASE":"BASE","Le simmetrie preservano probabilità e quindi sono rappresentate, nel caso unitario, da U con U aggiunto U uguale I.":"Symmetries preserve probabilities and are therefore represented, in the unitary case, by U with U dagger U equal I.","Passaggio":"Step","2. Invarianza di H":"2. Invariance of H","SIMMETRIA":"SYMMETRY","La forma attiva richiede che la coniugazione lasci H invariata.":"The active form requires conjugation to leave H unchanged.","3. Famiglia continua":"3. Continuous family","GENERA":"GENERATE","Vicino all'identità una famiglia a un parametro è generata da un operatore hermitiano G.":"Near identity, a one-parameter family is generated by a Hermitian operator G.","4. Espansione di H":"4. Expansion of H","DIMOSTRA":"PROVE","Coniugare H ed espandere al primo ordine isola il commutatore.":"Conjugate H and expand to first order to isolate the commutator.","5. Criterio del generatore":"5. Generator criterion","RISULTATO":"RESULT","L'invarianza per ogni epsilon richiede e, per la famiglia esponenziale, segue da un commutatore nullo.":"Invariance for every epsilon requires and, for the exponential family, follows from a zero commutator.","6. Quantità conservata":"6. Conserved quantity","HEISENBERG":"HEISENBERG","Se G non dipende esplicitamente dal tempo, l'equazione di Heisenberg trasforma il commutatore nullo in derivata nulla.":"If G has no explicit time dependence, the Heisenberg equation turns the zero commutator into a zero derivative.","7. Numeri quantici":"7. Quantum numbers","CSCO":"CSCO","H e G hermitiani commutanti ammettono autostati comuni e il valore g etichetta i settori dinamicamente disaccoppiati.":"Commuting Hermitian H and G admit common eigenstates and value g labels dynamically decoupled sectors.","8. Traslazioni":"8. Translations","SPAZIO":"SPACE","L'omogeneità lungo x implica invarianza per T(a) e quindi conservazione della componente p_x.":"Homogeneity along x implies invariance under T(a) and therefore conservation of p_x.","9. Rotazioni":"9. Rotations","ISOTROPIA":"ISOTROPY","L'isotropia implica invarianza sotto rotazioni e conservazione del momento angolare totale.":"Isotropy implies rotational invariance and conservation of total angular momentum.","10. Traslazioni temporali":"10. Time translations","ENERGIA":"ENERGY","Per H senza dipendenza esplicita dal tempo, lo stesso H genera le traslazioni temporali e il suo valore medio si conserva.":"For H without explicit time dependence, H itself generates time translations and its expectation is conserved.","11. Simmetria discreta":"11. Discrete symmetry","PARITÀ":"PARITY","Per V pari, P commuta con H; gli autostati possono essere organizzati nei settori più e meno senza un generatore continuo.":"For even V, P commutes with H; eigenstates can be organized into plus and minus sectors without a continuous generator.","12. Multipleti e degenerazione":"12. Multiplets and degeneracy","RAPPRESENTAZIONI":"REPRESENTATIONS","Se operatori di simmetria collegano stati distinti alla stessa energia, l'autospazio porta una rappresentazione e forma un multipletto.":"If symmetry operators connect distinct states at the same energy, the eigenspace carries a representation and forms a multiplet.","13. Regola di selezione":"13. Selection rule","OPERATORE":"OPERATOR","Se Q è conservato, un operatore O con carica definita q collega soltanto autostati i cui numeri quantici differiscono di q.":"If Q is conserved, an operator O with definite charge q connects only eigenstates whose quantum numbers differ by q.","14. Rottura di simmetria":"14. Symmetry breaking","PERTURBA":"PERTURB","Un termine delta H non invariante rende il commutatore non nullo, mescola settori e può scindere livelli degeneri.":"A noninvariant delta H term makes the commutator nonzero, mixes sectors, and may split degenerate levels.","Esempio: particella in un potenziale centrale":"Example: particle in a central potential","Impostazione.":"Setup.","Per H uguale p quadrato su 2m più V(r), ogni rotazione lascia invariati p quadrato e r.":"For H equal p squared over 2m plus V(r), every rotation leaves p squared and r invariant.","Controllo.":"Check.","L conserva tutte le componenti come generatore della simmetria; scegliere L quadrato e Lz classifica gli stati, mentre l'indipendenza da m produce il multipletto di dimensione 2ell più uno.":"L conserves all components as symmetry generators; choosing L squared and Lz classifies states, while m independence produces the multiplet of dimension 2ell plus one.","Interpretazione e limiti":"Interpretation and limits","Simmetria e stato":"Symmetry and state","H può essere simmetrica mentre uno stato particolare non lo è. La dinamica conserva l'orbita del gruppo e i numeri quantici, non obbliga ogni ket a essere invariante.":"H may be symmetric while a particular state is not. Dynamics preserves the group orbit and quantum numbers; it does not force every ket to be invariant.","Degenerazione non automatica":"Degeneracy is not automatic","Una simmetria abeliana può soltanto etichettare stati. La degenerazione è obbligata quando una rappresentazione irriducibile ha dimensione maggiore di uno o altri operatori collegano stati distinti.":"An Abelian symmetry may only label states. Degeneracy is enforced when an irreducible representation has dimension greater than one or other operators connect distinct states.","Teorema di Wigner":"Wigner's theorem","Le trasformazioni che preservano probabilità di transizione sono unitarie o antiunitarie. Qui si trattano le simmetrie unitarie continue e discrete; inversione temporale richiede il caso antiunitario.":"Transformations preserving transition probabilities are unitary or antiunitary. Here we treat continuous and discrete unitary symmetries; time reversal requires the antiunitary case.","Rottura spontanea":"Spontaneous breaking","Nei sistemi con infiniti gradi di libertà, H può essere simmetrica ma il vuoto non esserlo. È distinto dalla rottura esplicita di un termine dell'Hamiltoniana.":"In systems with infinitely many degrees of freedom, H may be symmetric while the vacuum is not. This differs from explicit breaking by a Hamiltonian term.","Errori tipici":"Common errors","Confondere U che commuta con H con uno stato invariante; chiamare G conservato se dipende esplicitamente dal tempo; cercare un generatore infinitesimo per la parità; dedurre sempre degenerazione; ignorare la rottura da perturbazione.":"Confusing U commuting with H with an invariant state; calling G conserved when it explicitly depends on time; seeking an infinitesimal parity generator; always inferring degeneracy; ignoring perturbative breaking.","Controlli rapidi":"Quick checks","U è unitario; G è hermitiano; espandere U aggiunto H U produce [G,H]; G si conserva solo se non ha dipendenza esplicita; traslazioni, rotazioni e tempo corrispondono a p, J e H.":"U is unitary; G is Hermitian; expanding U dagger H U produces [G,H]; G is conserved only without explicit dependence; translations, rotations, and time correspond to p, J, and H.","Controllo da orale":"Oral exam checklist","Definisci la simmetria con U aggiunto H U.":"Define symmetry with U dagger H U.","Espandi una famiglia continua al primo ordine.":"Expand a continuous family to first order.","Ricava [H,G] uguale zero.":"Derive [H,G] equal zero.","Usa Heisenberg per dimostrare la conservazione.":"Use Heisenberg to prove conservation.","Associa p, J e H alle tre omogeneità.":"Associate p, J, and H with the three homogeneities.","Distingui parità e generatori continui.":"Distinguish parity from continuous generators.","Spiega multipleti e regole di selezione.":"Explain multiplets and selection rules.","Mostra come una perturbazione rompe la simmetria.":"Show how a perturbation breaks symmetry.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss P1 - formalismo, rappresentazioni ed evoluzione":"Boss P1 - formalism, representations, and evolution","Appunti-MQ.pdf, pagine PDF 159-165 - simmetrie e leggi di conservazione":"Appunti-MQ.pdf, PDF pages 159-165 - simmetrie e leggi di conservazione","DIM 15 - commutatori, generatori e simmetrie":"DIM 15 - commutators, generators, and symmetries","La derivazione segue le pagine verificate 159-165 e DIM 15, separando chiaramente trasformazione, invarianza, generatore e conservazione e includendo le eccezioni discrete e antiunitarie.":"The derivation follows verified pages 159-165 and DIM 15, clearly separating transformation, invariance, generator, and conservation while including discrete and antiunitary exceptions.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Azione unitaria sugli stati":"Unitary action on states","Condizione esatta di simmetria":"Exact symmetry condition","Trasformazione continua e generatore":"Continuous transformation and generator","Variazione infinitesima dell'Hamiltoniana":"Infinitesimal Hamiltonian variation","Equivalenza tra simmetria continua e commutatore":"Equivalence of continuous symmetry and commutator","Conservazione del generatore":"Conservation of the generator","Autostati simultanei di energia e carica":"Simultaneous energy and charge eigenstates","Traslazioni e conservazione dell'impulso":"Translations and momentum conservation","Rotazioni e conservazione del momento angolare":"Rotations and angular-momentum conservation","Omogeneità temporale e conservazione dell'energia":"Time homogeneity and energy conservation","Parità come simmetria discreta conservata":"Parity as a conserved discrete symmetry","Azione della simmetria su un autospazio":"Symmetry action on an eigenspace","Regola di selezione da un commutatore":"Selection rule from a commutator","Rottura esplicita e non conservazione":"Explicit breaking and nonconservation"},"title":{"it":"Simmetrie e leggi di conservazione","en":"Symmetries and conservation laws"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

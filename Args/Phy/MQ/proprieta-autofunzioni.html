@@ -1,222 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proprietà delle Autofunzioni</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Autofunzioni, autovalori e teorema spettrale</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="autofunzioni-autovalori.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Proprietà delle Autofunzioni</h1>
-
-<p>Nella meccanica quantistica, gli stati stazionari di un sistema con potenziale tempo-indipendente sono descritti da autofunzioni dell’operatore Hamiltoniano. Le autofunzioni (o autostati) \(\phi_n(\mathbf{r})\) associate agli autovalori di energia \(E_n\) presentano una serie di proprietà matematiche e fisiche fondamentali, che ne garantiscono la consistenza come base di espansione per soluzioni più generali dell’equazione di Schrödinger.</p>
-
-<h2>Hermiticità ed Ortogonalità</h2>
-
-<p>L’Hamiltoniano \(\hat{H}\) è un operatore hermitiano. Questo assicura che i suoi autovalori (le energie) siano reali e che le autofunzioni corrispondenti a autovalori diversi siano ortogonali tra loro. In pratica, se:</p>
-
-\[
-\hat{H}\phi_m(\mathbf{r}) = E_m\phi_m(\mathbf{r}), \quad \hat{H}\phi_n(\mathbf{r}) = E_n\phi_n(\mathbf{r}),
-\]
-
-con \(E_m \neq E_n\), allora:</p>
-
-\[
-\int \phi_m^*(\mathbf{r})\phi_n(\mathbf{r})\, d^3r = 0.
-\]
-
-<p>Questa ortogonalità è cruciale per costruire una base di stati che siano linearmente indipendenti.</p>
-
-<h2>Completezza e Normalizzazione</h2>
-
-<p>Le autofunzioni formano una base completa dello spazio degli stati fisicamente accessibili. Questo significa che qualsiasi funzione d’onda \(\psi(\mathbf{r}, t)\) può essere espansa come combinazione lineare (o integrale, se lo spettro è continuo) di autofunzioni:</p>
-
-\[
-\psi(\mathbf{r},t) = \sum_n c_n(t)\phi_n(\mathbf{r}),
-\]
-
-oppure, per uno spettro continuo:
-
-\[
-\psi(\mathbf{r},t) = \int c(E,t)\phi_E(\mathbf{r})\, dE.
-\]
-
-<p>Inoltre, le autofunzioni possono sempre essere scelte normalizzate, cioè:</p>
-
-\[
-\int \phi_n^*(\mathbf{r})\phi_n(\mathbf{r})\, d^3r = 1.
-\]
-
-<p>La normalizzazione garantisce che i coefficienti \(\{c_n(t)\}\) abbiano un’interpretazione probabilistica coerente.</p>
-
-<h2>Ortonormalità</h2>
-
-<p>L’ortogonalità e la normalizzazione insieme si condensano nel concetto di ortonormalità:</p>
-
-\[
-\int \phi_m^*(\mathbf{r})\phi_n(\mathbf{r})\, d^3r = \delta_{mn},
-\]
-
-dove \(\delta_{mn}\) è il delta di Kronecker, pari a 1 se \(m=n\) e 0 altrimenti. Questa condizione rende le autofunzioni simili a vettori base in uno spazio vettoriale, che permettono di trattare i problemi quantistici con la familiarità dell’algebra lineare.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Scrivi l’equazione di autovalore:
-\[
-\hat{H}\phi_n(\mathbf{r}) = E_n \phi_n(\mathbf{r}).
-\]
-<br><br>
-2. Sottolinea che \(\hat{H}\) è hermitiano, quindi \(E_n \in \mathbb{R}\).
-<br><br>
-3. Considera due autofunzioni \(\phi_m\) e \(\phi_n\) con \(E_m \neq E_n\). Mostra l’ortogonalità:
-\[
-\int \phi_m^*(\mathbf{r}) \phi_n(\mathbf{r}) d^3r = 0.
-\]
-<br><br>
-4. Rendi unitari questi vettori normalizzandoli:
-\[
-\int \phi_n^*(\mathbf{r}) \phi_n(\mathbf{r}) d^3r = 1.
-\]
-5. Ora hai un set di funzioni ortonormali che può fungere da base. Qualsiasi \(\psi(\mathbf{r},t)\) si scrive come combinazione delle \(\{\phi_n\}\).
-</div>
-
-<h2>Degenerazione e Unitarietà delle Trasformazioni</h2>
-
-<p>Se un dato autovalore \(E_n\) è associato a più di un’autofunzione linearmente indipendente (degenerazione), è possibile formare una combinazione lineare di queste autofunzioni degenerate per ottenere nuove autofunzioni che restano autofunzioni di \(\hat{H}\) con la stessa energia. Questo permette una libertà di scelta nella base degli stati degeneri, ed è spesso sfruttato per ottenere autofunzioni con altre simmetrie o proprietà desiderate.</p>
-
-<h2>Significato Fisico</h2>
-
-<p>Le autofunzioni dell’Hamiltoniano rappresentano gli stati stazionari del sistema, ciascuno con una specifica energia. Poiché costituiscono una base ortonormale completa, l’intera evoluzione temporale di qualsiasi stato quantistico può essere compresa analizzando la sua decomposizione in queste autofunzioni. La loro ortonormalità e completezza sono quindi alla base della struttura matematica della meccanica quantistica, consentendo di trattare problemi complessi in modo sistematico e coerente.</p>
-    <h2>Degenerazione e Scelta della Base nelle Sub-spazi Degeneri</h2>
-
-    <p>Quando un autovalore \(E_n\) dell’Hamiltoniano è degenero, significa che esistono più autofunzioni corrispondenti a quello stesso valore di energia. Supponiamo di avere due o più funzioni \(\phi_{n,1}(\mathbf{r}), \phi_{n,2}(\mathbf{r}), \dots\) tutte soddisfacenti:</p>
-
-    \[
-    \hat{H}\phi_{n,k}(\mathbf{r}) = E_n \phi_{n,k}(\mathbf{r}), \quad k=1,2,\dots,d
-    \]
-
-    dove \(d\) è il grado di degenerazione. Queste funzioni sono tra loro ortonormali o possono essere resi tali con un processo di ortonormalizzazione (ad esempio, il metodo di Gram-Schmidt). Tuttavia, poiché appartengono tutte allo stesso autovalore, è possibile formare combinazioni lineari di queste autofunzioni che restano autofunzioni con lo stesso valore di energia. Questo introduce una libertà nella scelta della base nel sottospazio degenerato.
-
-    <ol>
-        <li><strong>Alla lavagna: scelta della base degenerata</strong><br>
-        Disegna un diagramma che rappresenti uno “spazio” degli stati degeneri associati all’energia \(E_n\). Questo sottospazio di dimensione \(d\) è come un piccolo spazio vettoriale all’interno dello spazio di Hilbert.  
-        Mostra che se \(\{\phi_{n,1}, \phi_{n,2}, \dots, \phi_{n,d}\}\) è un insieme di autofunzioni degeneri, qualunque combinazione lineare:
-        \[
-        \tilde{\phi}_{n,j}(\mathbf{r}) = \sum_{k=1}^d U_{jk}\phi_{n,k}(\mathbf{r})
-        \]
-        con \(U_{jk}\) elementi di una matrice unitaria, fornirà un nuovo insieme di autofunzioni degeneri.  
-        Sulla lavagna, spiega che poiché \(\hat{H}\) agisce con lo stesso autovalore \(E_n\) su ciascuna \(\phi_{n,k}\), agirà allo stesso modo sulla loro combinazione, lasciandone invariata l’energia.</li>
-
-        <li><strong>Interpretazione fisica della degenerazione</strong><br>
-        La degenerazione riflette la presenza di simmetrie nel sistema. Se il potenziale è simmetrico, diverse funzioni d’onda possono avere la stessa energia.  
-        Ad esempio, nell’atomo di idrogeno, l’energia dipende solo dal numero quantico principale \(n\), non da \(l\) o \(m\). Questo genera degenerazione, e significa che si può scegliere linearmente come combinare gli stati degeneri per ottenere funzioni con diverse proprietà di simmetria o convenienti per descrivere determinati fenomeni (ad esempio, stati con momenti angolari definiti in una certa direzione, oppure stati misti che riflettono certe invarianti del problema).</li>
-
-        <li><strong>Unità delle Trasformazioni nel sottospazio degenerato</strong><br>
-        La libertà di scelta della base degenerata è descritta da un gruppo unitario di trasformazioni all’interno di questo sottospazio. Questo significa che se due ricercatori scelgono due insiemi diversi di autofunzioni degeneri, questi insiemi saranno legati da una trasformazione unitaria.  
-        Sulla lavagna, sottolinea che:
-        \[
-        \tilde{\phi}_{n,j}(\mathbf{r}) = \sum_{k=1}^d U_{jk}\phi_{n,k}(\mathbf{r})
-        \]
-        dove \(U\) è una matrice unitaria (\(U^\dagger U = I\)).  
-        Ciò garantisce che le proprietà fisiche non dipendono dalla scelta della base nel sottospazio degenerato, rendendo la teoria coerente e indipendente da arbitrarie scelte matematiche.</li>
-
-        <li><strong>Conseguenze sulla completezza:</strong><br>
-        Poiché le autofunzioni (degeneri o non degeneri) formano una base completa, qualunque soluzione \(\psi(\mathbf{r},t)\) dell’equazione di Schrödinger può essere espansa in tale base. La degenerazione non compromette la completezza: significa solo che lo stesso autovalore energetico è “riempito” da più funzioni indipendenti.  
-        Alla lavagna, rappresenta lo spazio degli stati come un grande vettore: la presenza di degenerazione significa che più vettori base puntano nella stessa “direzione energetica” ma in dimensioni diverse di quel sottospazio. Questa ricchezza interna consente di rappresentare lo stato quantistico in modi diversi, a seconda delle esigenze del problema da risolvere (ad esempio, stati con definite componenti di momento angolare oppure stati ibridi più convenienti per certi calcoli).</li>
-    </ol>
-
-     <h2>Chiarimenti sui Concetti: Ortogonalità, Base Ortonormale, Caso Degenere, Dipendenza Temporale dei Coefficienti e Soluzione Generale</h2>
-
-    <p>Quando si introducono le autofunzioni dell’Hamiltoniano, ci si ritrova con una serie di concetti matematici (ortogonalità, normalizzazione, degenerazione, sviluppo in autofunzioni) che non sono meramente formali, ma hanno un significato fisico ben preciso. Alla lavagna, possiamo riorganizzare questi concetti per comprendere a fondo perché sono essenziali nella meccanica quantistica.</p>
-
-    <ol>
-        <li><strong>Ortogonalità e Base Ortonormale:</strong><br>
-        Sappiamo che le autofunzioni \(\{\phi_n(\mathbf{r})\}\) corrispondenti ad autovalori di energia differenti \((E_n \neq E_m)\) sono ortogonali:
-        \[
-        \int \phi_m^*(\mathbf{r})\phi_n(\mathbf{r})\, d^3r = 0 \quad (m \neq n).
-        \]
-        Non solo, possiamo sempre scegliere queste funzioni in modo che siano anche normalizzate a 1:
-        \[
-        \int \phi_n^*(\mathbf{r}) \phi_n(\mathbf{r})\, d^3r = 1.
-        \]
-        Questo rende l’insieme \(\{\phi_n\}\) una base ortonormale.  
-        Alla lavagna, sottolinea l’importanza dell’ortonormalità: come i vettori ortonormali in uno spazio vettoriale, queste autofunzioni consentono di rappresentare qualunque stato quantistico come una combinazione lineare di stati base semplici da maneggiare. I coefficienti di questa combinazione hanno interpretazioni probabilistiche (le probabilità di trovare il sistema in uno degli autostati, se misurassimo l’energia).</li>
-
-        <li><strong>Caso Degenere:</strong><br>
-        Se un dato valore di energia \(E_n\) è condiviso da più autofunzioni linearmente indipendenti, diciamo \(\phi_{n,1}(\mathbf{r}), \phi_{n,2}(\mathbf{r}), \dots\), allora si parla di degenerazione.  
-        Spiega che la degenerazione significa che non c’è un’unica funzione d’onda associata a quell’energia, bensì un intero sottospazio di dimensione pari al grado di degenerazione. Puoi scegliere come preferisci la base all’interno di questo sottospazio, poiché qualsiasi combinazione lineare tra queste autofunzioni degeneri rimane un’autofunzione dell’Hamiltoniano con la stessa energia.  
-        Questo è importante, perché permette di scegliere funzioni con certe simmetrie o proprietà aggiuntive, oppure di semplificare calcoli. Il sistema mantiene la stessa fisica, ma la rappresentazione matematica può essere adattata al problema specifico.</li>
-
-        <li><strong>Dipendenza Temporale dei Coefficienti:</strong><br>
-        Considera uno stato quantistico arbitrario \(\psi(\mathbf{r},t)\). Poiché le autofunzioni \(\{\phi_n(\mathbf{r})\}\) formano una base completa, possiamo scrivere:
-        \[
-        \psi(\mathbf{r},t) = \sum_n c_n(t)\phi_n(\mathbf{r}).
-        \]
-        Quando il potenziale non dipende dal tempo, gli stati stazionari hanno una semplice dipendenza temporale \(\phi_n(\mathbf{r})e^{-iE_n t/\hbar}\). In tal caso, i coefficienti \(c_n(t)\) diventano costanti nel tempo se \(\psi(\mathbf{r},0)\) è data, poiché tutto il tempo è raccolto nei fattori di fase \(e^{-iE_n t/\hbar}\).  
-        Se invece il potenziale è tempo-dipendente, i coefficienti \(c_n(t)\) devono soddisfare equazioni differenziali più complicate. Dal punto di vista concettuale, significa che l’energia non è più una costante e lo stato si evolve in modo non banale.</li>
-
-        <li><strong>Soluzione Generale e Significato Fisico:</strong><br>
-        Metti alla lavagna la formula generale della soluzione:
-        \[
-        \psi(\mathbf{r},t) = \sum_n c_n \phi_n(\mathbf{r})e^{-iE_n t/\hbar} \quad (\text{potenziale tempo-indipendente}).
-        \]
-        Questa è la soluzione generale dell’equazione di Schrödinger in un caso semplice.  
-        Evidenzia come, conoscendo gli autostati e gli autovalori dell’Hamiltoniano, qualsiasi stato iniziale può essere sviluppato in questa base. Il tempo entra in modo trasparente come fattore di fase \(-iE_n t/\hbar\). Ciò permette di comprendere ogni fenomeno quantistico in termini di combinazioni e sfasamenti nel tempo di questi autostati fondamentali.
-        
-        Se il potenziale è tempo-dipendente, la formula diventa più complessa, i \(\phi_n(\mathbf{r})\) possono cambiare nel tempo o si possono introdurre basi istantanee, e i coefficienti \(c_n(t)\) diventano funzioni del tempo che devono essere determinate caso per caso.</li>
-    </ol>
-
-    <p>In sintesi, i concetti di ortogonalità e normalizzazione garantiscono la solidità matematica della base di autostati. La degenerazione introduce una flessibilità nella scelta della base, mentre la dipendenza temporale dei coefficienti (e quindi della funzione d’onda generale) consente di descrivere un’ampia gamma di evoluzioni del sistema. Queste proprietà combinano rigore matematico con interpretazioni fisiche profonde, rendendo le autofunzioni e i loro autovalori di energia strumenti indispensabili per analizzare e prevedere il comportamento quantistico di un sistema.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="proprieta-autofunzioni.html" data-mq-shared-lesson="autofunzioni-autovalori.html" id="lezione-autofunzioni-autovalori"><div class="lecture-kicker">Lezione approfondita - Argomento 3 - postulati</div><h1>Autofunzioni, autovalori e teorema spettrale</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: proprieta-autofunzioni.html. La lezione scientifica verificata è condivisa con autofunzioni-autovalori.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Dimostrare realtà dello spettro e ortogonalità per operatori autoaggiunti, trattare degenerazione, spettro continuo, proiettori, domini e insieme completo di osservabili compatibili.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Dall'operatore agli esiti</h3><p>Un'osservabile è rappresentata da un operatore autoaggiunto. I suoi valori spettrali sono i possibili risultati ideali di misura.</p></article><article class="lecture-card lecture-warning"><h3>Hermitiano non basta come parola</h3><p>Per operatori differenziali contano dominio e condizioni al bordo. Simmetria formale e autoaggiuntezza completa non sono sempre equivalenti.</p></article></div><h2>Definizioni e ipotesi matematiche</h2><div class="lecture-grid"><article class="lecture-card"><h3>Problema agli autovalori</h3><p>Un autovettore non nullo viene moltiplicato per uno scalare dall'operatore. La sua fase e normalizzazione non cambiano l'autovalore.</p></article><article class="lecture-card"><h3>Prodotto interno</h3><p>La convenzione usata è lineare nel ket e antilineare nel bra. L'aggiunto è definito attraverso il prodotto interno sul dominio corretto.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Equazione agli autovalori<span class="lecture-step-boss">BASE</span></h4><p>Lo stato u deve essere diverso dal vettore nullo.</p><div aria-label="Definizione di autovettore e autovalore" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|u_n\rangle=a_n|u_n\rangle,\qquad|u_n\rangle\ne0\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Autoaggiuntezza<span class="lecture-step-boss">IPOTESI</span></h4><p>Un'osservabile ideale soddisfa uguaglianza con il proprio aggiunto, incluso il dominio.</p><div aria-label="Definizione operativa di autoaggiuntezza" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=A^\dagger,\qquad\langle\phi|A\psi\rangle=\langle A\phi|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Valore medio su un autostato<span class="lecture-step-boss">PROVA</span></h4><p>Moltiplicando l'equazione per il bra u si porta a_n fuori dal prodotto.</p><div aria-label="Prima forma del valore medio" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_n|A|u_n\rangle=a_n\langle u_n|u_n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Coniugazione<span class="lecture-step-boss">PROVA</span></h4><p>Usando A aggiunto=A, lo stesso scalare compare coniugato quando A agisce sul bra.</p><div aria-label="Seconda forma del valore medio" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_n|A|u_n\rangle=\langle Au_n|u_n\rangle=a_n^*\langle u_n|u_n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Realtà degli autovalori<span class="lecture-step-boss">RISULTATO</span></h4><p>La norma è positiva, quindi le due espressioni implicano a_n=a_n coniugato.</p><div aria-label="Dimostrazione della realtà dello spettro puntuale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (a_n-a_n^*)\langle u_n|u_n\rangle=0\Rightarrow a_n\in\mathbb R\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Due autostati<span class="lecture-step-boss">PROVA</span></h4><p>Si confrontano gli elementi di matrice di A tra u_m e u_n nei due ordini.</p><div aria-label="Relazione tra autovalori e sovrapposizione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_m|A|u_n\rangle=a_n\langle u_m|u_n\rangle=a_m\langle u_m|u_n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Ortogonalità<span class="lecture-step-boss">RISULTATO</span></h4><p>Se gli autovalori reali sono distinti, la sovrapposizione deve annullarsi.</p><div aria-label="Ortogonalità di autostati con autovalori distinti" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (a_n-a_m)\langle u_m|u_n\rangle=0,\quad a_n\ne a_m\Rightarrow\langle u_m|u_n\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Degenerazione<span class="lecture-step-boss">SOTTOSPAZIO</span></h4><p>Se più vettori condividono a_n, ogni loro combinazione resta nello stesso autospazio.</p><div aria-label="Autospazio degenere e molteplicità" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S_n=\ker(A-a_nI),\qquad\dim S_n=r_n&gt;1\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Base nel degenere<span class="lecture-step-boss">GRAM-SCHMIDT</span></h4><p>Dentro S_n si sceglie una base ortonormale senza modificare l'azione di A.</p><div aria-label="Ortonormalità con indice di degenerazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_n^{(k)}|u_m^{(j)}\rangle=\delta_{nm}\delta_{kj}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Proiettore spettrale<span class="lecture-step-boss">DEG</span></h4><p>La somma dei proiettori di rango uno è indipendente dalla base scelta dentro S_n.</p><div aria-label="Proiettore sull'autospazio degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_n=\sum_{k=1}^{r_n}|u_n^{(k)}\rangle\langle u_n^{(k)}|,\quad P_n^2=P_n=P_n^\dagger\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Decomposizione spettrale<span class="lecture-step-boss">DISCRETO</span></h4><p>Per spettro discreto completo, l'operatore è la somma degli autovalori pesati dai proiettori.</p><div aria-label="Teorema spettrale in forma discreta" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=\sum_na_nP_n,\qquad I=\sum_nP_n,\qquad P_nP_m=\delta_{nm}P_n\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Spettro continuo<span class="lecture-step-boss">CONTINUO</span></h4><p>Gli autoket generalizzati non appartengono allo spazio di Hilbert e sono normalizzati a delta.</p><div aria-label="Risoluzione formale nel continuo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|a\rangle=a|a\rangle,\quad\langle a|a'\rangle=\delta(a-a'),\quad I=\int da\,|a\rangle\langle a|\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Dominio e bordo<span class="lecture-step-boss">CAUTELA</span></h4><p>L'integrazione per parti produce termini di bordo: soltanto condizioni che li annullano rendono l'operatore autoaggiunto.</p><div aria-label="Termine di bordo dell'operatore impulso" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\phi|p\psi\rangle-\langle p\phi|\psi\rangle=-i\hbar[\phi^*(x)\psi(x)]_{\partial\Omega}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Osservabili compatibili<span class="lecture-step-boss">CSCO</span></h4><p>Un operatore che commuta con A può risolverne la degenerazione diagonalizzandosi in ciascun S_n.</p><div aria-label="Insieme completo di osservabili compatibili" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [A,B]=0\Rightarrow\text{base comune }|a_n,b_{nq}\rangle\ \text{se gli operatori sono simultaneamente diagonalizzabili}\)</span></div></article></section><h2>Esempio: matrice hermitiana due per due</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Consideriamo A con diagonali reali a,d e fuori diagonale z e z coniugato.</p><p data-i18n-skip="true">\(\displaystyle A=\begin{pmatrix}a&amp;z\\z^*&amp;d\end{pmatrix},\quad a_\pm=\frac{a+d}{2}\pm\sqrt{\left(\frac{a-d}{2}\right)^2+|z|^2}\)</p><p><strong>Controllo.</strong> Gli autovalori sono manifestamente reali. Se coincidono, la radice è zero e A è proporzionale all'identità: ogni base ortonormale è una base di autovettori.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Autofunzione</h3><p>In rappresentazione x, u_n(x)=&lt;x|u_n&gt; è la funzione che soddisfa l'equazione differenziale A(x,-i hbar d/dx)u_n=a_nu_n.</p></article><article class="lecture-card"><h3>Spettro misto</h3><p>Un operatore può avere insieme componenti discrete e continue; la risoluzione dell'identità contiene allora somma e integrale.</p></article><article class="lecture-card"><h3>Degenerazione</h3><p>L'autovalore identifica un sottospazio, non necessariamente un singolo stato. La fisica della misura dipende dal proiettore totale.</p></article><article class="lecture-card"><h3>Non normalità</h3><p>Per un operatore generico non hermitiano autovalori e ortogonalità possono fallire; le prove usano esplicitamente A=A aggiunto.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare il vettore nullo come autovettore; dire che autostati degeneri sono automaticamente ortogonali; ignorare il dominio; normalizzare a uno gli stati del continuo; confondere hermitiano e unitario.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Autovalori con unità dell'osservabile; proiettori idempotenti; PnPm=0 per valori distinti; chiusura uguale I; condizioni al bordo coerenti.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci autovalore e autoaggiuntezza.</li><li>Dimostra che a_n è reale.</li><li>Dimostra l'ortogonalità per valori distinti.</li><li>Costruisci una base nel sottospazio degenere.</li><li>Definisci Pn e la decomposizione spettrale.</li><li>Distingui discreto e continuo.</li><li>Spiega il ruolo del dominio.</li><li>Completa la base con osservabili compatibili.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, TISE, TDSE, misura e proiettori</a></li><li><a href="PostulatiQM.html">Postulati della meccanica quantistica - quadro generale</a></li><li><a href="set-6-operatori-autofunzioni.html">Set 6 - operatori, autofunzioni e spettro</a></li></ul><p class="lecture-note">La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 3 - postulati":"In-depth lesson - Topic 3 - postulates","Autofunzioni, autovalori e teorema spettrale":"Eigenfunctions, eigenvalues, and the spectral theorem","Obiettivo.":"Objective.","Dimostrare realtà dello spettro e ortogonalità per operatori autoaggiunti, trattare degenerazione, spettro continuo, proiettori, domini e insieme completo di osservabili compatibili.":"Prove spectral reality and orthogonality for self-adjoint operators, treating degeneracy, continuous spectra, projectors, domains, and complete sets of compatible observables.","Dall'operatore agli esiti":"From operator to outcomes","Un'osservabile è rappresentata da un operatore autoaggiunto. I suoi valori spettrali sono i possibili risultati ideali di misura.":"An observable is represented by a self-adjoint operator. Its spectral values are the possible ideal measurement outcomes.","Hermitiano non basta come parola":"Hermitian is not just a label","Per operatori differenziali contano dominio e condizioni al bordo. Simmetria formale e autoaggiuntezza completa non sono sempre equivalenti.":"For differential operators, domain and boundary conditions matter. Formal symmetry and full self-adjointness are not always equivalent.","Definizioni e ipotesi matematiche":"Definitions and mathematical assumptions","Problema agli autovalori":"Eigenvalue problem","Un autovettore non nullo viene moltiplicato per uno scalare dall'operatore. La sua fase e normalizzazione non cambiano l'autovalore.":"A nonzero eigenvector is multiplied by a scalar by the operator. Its phase and normalization do not change the eigenvalue.","Prodotto interno":"Inner product","La convenzione usata è lineare nel ket e antilineare nel bra. L'aggiunto è definito attraverso il prodotto interno sul dominio corretto.":"The convention used is linear in the ket and antilinear in the bra. The adjoint is defined through the inner product on the correct domain.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Equazione agli autovalori":"1. Eigenvalue equation","BASE":"BASE","Lo stato u deve essere diverso dal vettore nullo.":"State u must differ from the zero vector.","Passaggio":"Step","2. Autoaggiuntezza":"2. Self-adjointness","IPOTESI":"ASSUMPTION","Un'osservabile ideale soddisfa uguaglianza con il proprio aggiunto, incluso il dominio.":"An ideal observable equals its adjoint, including the domain.","3. Valore medio su un autostato":"3. Expectation in an eigenstate","PROVA":"PROOF","Moltiplicando l'equazione per il bra u si porta a_n fuori dal prodotto.":"Multiplying the equation by bra u takes a_n outside the inner product.","4. Coniugazione":"4. Conjugation","Usando A aggiunto=A, lo stesso scalare compare coniugato quando A agisce sul bra.":"Using A adjoint=A, the same scalar appears conjugated when A acts on the bra.","5. Realtà degli autovalori":"5. Reality of eigenvalues","RISULTATO":"RESULT","La norma è positiva, quindi le due espressioni implicano a_n=a_n coniugato.":"The norm is positive, so the two expressions imply a_n equals its conjugate.","6. Due autostati":"6. Two eigenstates","Si confrontano gli elementi di matrice di A tra u_m e u_n nei due ordini.":"Compare matrix elements of A between u_m and u_n in both orders.","7. Ortogonalità":"7. Orthogonality","Se gli autovalori reali sono distinti, la sovrapposizione deve annullarsi.":"If the real eigenvalues are distinct, the overlap must vanish.","8. Degenerazione":"8. Degeneracy","SOTTOSPAZIO":"SUBSPACE","Se più vettori condividono a_n, ogni loro combinazione resta nello stesso autospazio.":"If several vectors share a_n, any combination remains in the same eigenspace.","9. Base nel degenere":"9. Basis in a degenerate space","GRAM-SCHMIDT":"GRAM-SCHMIDT","Dentro S_n si sceglie una base ortonormale senza modificare l'azione di A.":"Inside S_n choose an orthonormal basis without changing the action of A.","10. Proiettore spettrale":"10. Spectral projector","DEG":"DEG","La somma dei proiettori di rango uno è indipendente dalla base scelta dentro S_n.":"The sum of rank-one projectors is independent of the basis chosen within S_n.","11. Decomposizione spettrale":"11. Spectral decomposition","DISCRETO":"DISCRETE","Per spettro discreto completo, l'operatore è la somma degli autovalori pesati dai proiettori.":"For a complete discrete spectrum, the operator is the sum of eigenvalues weighted by projectors.","12. Spettro continuo":"12. Continuous spectrum","CONTINUO":"CONTINUUM","Gli autoket generalizzati non appartengono allo spazio di Hilbert e sono normalizzati a delta.":"Generalized eigenkets do not belong to the Hilbert space and are delta normalized.","13. Dominio e bordo":"13. Domain and boundary","CAUTELA":"CAUTION","L'integrazione per parti produce termini di bordo: soltanto condizioni che li annullano rendono l'operatore autoaggiunto.":"Integration by parts produces boundary terms: only conditions that cancel them make the operator self-adjoint.","14. Osservabili compatibili":"14. Compatible observables","CSCO":"CSCO","Un operatore che commuta con A può risolverne la degenerazione diagonalizzandosi in ciascun S_n.":"An operator commuting with A may resolve its degeneracy by diagonalizing within each S_n.","Esempio: matrice hermitiana due per due":"Example: two-by-two Hermitian matrix","Impostazione.":"Setup.","Consideriamo A con diagonali reali a,d e fuori diagonale z e z coniugato.":"Consider A with real diagonal entries a,d and off-diagonal entries z and its conjugate.","Controllo.":"Check.","Gli autovalori sono manifestamente reali. Se coincidono, la radice è zero e A è proporzionale all'identità: ogni base ortonormale è una base di autovettori.":"The eigenvalues are manifestly real. If they coincide, the square root vanishes and A is proportional to the identity: every orthonormal basis is an eigenbasis.","Interpretazione e limiti":"Interpretation and limits","Autofunzione":"Eigenfunction","In rappresentazione x, u_n(x)=<x|u_n> è la funzione che soddisfa l'equazione differenziale A(x,-i hbar d/dx)u_n=a_nu_n.":"In x representation, u_n(x)=<x|u_n> is the function satisfying differential equation A(x,-i hbar d/dx)u_n=a_nu_n.","Spettro misto":"Mixed spectrum","Un operatore può avere insieme componenti discrete e continue; la risoluzione dell'identità contiene allora somma e integrale.":"An operator may have both discrete and continuous components; the identity resolution then contains a sum and an integral.","Degenerazione":"Degeneracy","L'autovalore identifica un sottospazio, non necessariamente un singolo stato. La fisica della misura dipende dal proiettore totale.":"An eigenvalue identifies a subspace, not necessarily a single state. Measurement physics depends on the total projector.","Non normalità":"Nonnormal operators","Per un operatore generico non hermitiano autovalori e ortogonalità possono fallire; le prove usano esplicitamente A=A aggiunto.":"For a generic non-Hermitian operator, reality and orthogonality may fail; the proofs explicitly use A=A adjoint.","Errori tipici":"Common errors","Usare il vettore nullo come autovettore; dire che autostati degeneri sono automaticamente ortogonali; ignorare il dominio; normalizzare a uno gli stati del continuo; confondere hermitiano e unitario.":"Using the zero vector as an eigenvector; saying degenerate eigenstates are automatically orthogonal; ignoring the domain; unit-normalizing continuum states; confusing Hermitian and unitary.","Controlli rapidi":"Quick checks","Autovalori con unità dell'osservabile; proiettori idempotenti; PnPm=0 per valori distinti; chiusura uguale I; condizioni al bordo coerenti.":"Eigenvalues have observable units; projectors are idempotent; PnPm=0 for distinct values; closure equals I; boundary conditions are consistent.","Controllo da orale":"Oral exam checklist","Definisci autovalore e autoaggiuntezza.":"Define eigenvalue and self-adjointness.","Dimostra che a_n è reale.":"Prove a_n is real.","Dimostra l'ortogonalità per valori distinti.":"Prove orthogonality for distinct values.","Costruisci una base nel sottospazio degenere.":"Build a basis in the degenerate subspace.","Definisci Pn e la decomposizione spettrale.":"Define Pn and the spectral decomposition.","Distingui discreto e continuo.":"Distinguish discrete and continuous spectra.","Spiega il ruolo del dominio.":"Explain the role of the domain.","Completa la base con osservabili compatibili.":"Complete the basis with compatible observables.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, TISE, TDSE, misura e proiettori":"DIM 0 - postulates, TISE, TDSE, measurement, and projectors","Postulati della meccanica quantistica - quadro generale":"Quantum mechanics postulates - general framework","Set 6 - operatori, autofunzioni e spettro":"Set 6 - operators, eigenfunctions, and spectrum","La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.":"The Boss source transcribes lecture images 132-137, whose numbering does not match the main PDF; therefore no artificial PDF link is given.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: proprieta-autofunzioni.html. La lezione scientifica verificata è condivisa con autofunzioni-autovalori.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: proprieta-autofunzioni.html. The verified scientific lesson is shared with autofunzioni-autovalori.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Definizione di autovettore e autovalore":"Definition of eigenvector and eigenvalue","Definizione operativa di autoaggiuntezza":"Operational definition of self-adjointness","Prima forma del valore medio":"First form of the expectation value","Seconda forma del valore medio":"Second form of the expectation value","Dimostrazione della realtà dello spettro puntuale":"Proof of reality of the point spectrum","Relazione tra autovalori e sovrapposizione":"Relation between eigenvalues and overlap","Ortogonalità di autostati con autovalori distinti":"Orthogonality of eigenstates with distinct eigenvalues","Autospazio degenere e molteplicità":"Degenerate eigenspace and multiplicity","Ortonormalità con indice di degenerazione":"Orthonormality with degeneracy index","Proiettore sull'autospazio degenere":"Projector onto a degenerate eigenspace","Teorema spettrale in forma discreta":"Spectral theorem in discrete form","Risoluzione formale nel continuo":"Formal resolution in the continuum","Termine di bordo dell'operatore impulso":"Boundary term of the momentum operator","Insieme completo di osservabili compatibili":"Complete set of compatible observables"},"title":{"it":"Autofunzioni, autovalori e teorema spettrale","en":"Eigenfunctions, eigenvalues, and the spectral theorem"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

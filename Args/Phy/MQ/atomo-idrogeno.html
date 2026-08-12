@@ -1,340 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atomo di Idrogeno</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atomo di idrogeno: soluzione radiale completa</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Atomo di Idrogeno</h1>
-    <h2>Introduzione</h2>
-    L'atomo di idrogeno è il sistema quantistico più semplice e uno dei modelli fondamentali per la comprensione della meccanica quantistica. La descrizione teorica si basa sull'equazione di Schrödinger indipendente dal tempo per un potenziale centrale.
-
-    <h2>Equazione di Schrödinger in coordinate sferiche</h2>
-    L'equazione di Schrödinger per un elettrone in un potenziale coulombiano è:
-    <div class="formula">
-        \[
-        -\frac{\hbar^2}{2m} \nabla^2 \psi + V(r)\psi = E\psi
-        \]
-    </div>
-    dove il potenziale \( V(r) \) è dato da:
-    <div class="formula">
-        \[
-        V(r) = -\frac{Ze^2}{4\pi \epsilon_0 r}
-        \]
-    </div>
-    In coordinate sferiche, l'equazione si separa in tre parti: radiale, angolare e azimutale.
-
-    <h2>Separazione delle variabili</h2>
-    La funzione d'onda totale è espressa come:
-    <div class="formula">
-        \[
-        \psi(r, \theta, \phi) = R(r) Y(\theta, \phi)
-        \]
-    </div>
-    dove:
-    <ul>
-        <li>\( R(r) \): Parte radiale</li>
-        <li>\( Y(\theta, \phi) \): Armoniche sferiche, che dipendono dagli angoli \(\theta\) e \(\phi\)</li>
-    </ul>
-
-    <h2>Parte radiale</h2>
-    La parte radiale è descritta da:
-    <div class="formula">
-        \[
-        \frac{d^2 u}{dr^2} + \left[ 2m \left( E + \frac{Ze^2}{4\pi \epsilon_0 r} \right) - \frac{l(l+1)}{r^2} \right] u = 0
-        \]
-    </div>
-    dove \( u(r) = r R(r) \) e \( l \) è il numero quantico angolare.
-
-    <h2>Armoniche sferiche</h2>
-    Le soluzioni angolari sono le armoniche sferiche:
-    <div class="formula">
-        \[
-        Y_l^m(\theta, \phi) = \sqrt{\frac{(2l+1)}{4\pi} \frac{(l-m)!}{(l+m)!}} P_l^m(\cos\theta) e^{im\phi}
-        \]
-    </div>
-    dove:
-    <ul>
-        <li>\( l \): Numero quantico angolare (\( l = 0, 1, 2, \ldots \))</li>
-        <li>\( m \): Numero quantico magnetico (\( -l \leq m \leq l \))</li>
-        <li>\( P_l^m \): Polinomi associati di Legendre</li>
-    </ul>
-
-    <h2>Livelli energetici</h2>
-    I livelli energetici dell'atomo di idrogeno sono dati da:
-    <div class="formula">
-        \[
-        E_n = -\frac{Z^2 e^4 m}{8 \epsilon_0^2 h^2 n^2}
-        \]
-    </div>
-    dove \( n = 1, 2, 3, \ldots \) è il numero quantico principale. Questo risultato predice con precisione lo spettro dell'atomo di idrogeno.
-
-    <h2>Osservazioni</h2>
-    La separazione delle variabili consente di trattare il problema con una complessità ridotta, isolando i contributi radiali e angolari. I livelli energetici discreti riflettono la quantizzazione della natura.
-
-    <h2>Parte radiale</h2>
-    La parte radiale deriva dall'equazione di Schrödinger separata. Introducendo \( u(r) = r R(r) \), l'equazione radiale assume la forma:
-    <div class="formula">
-        \[
-        \frac{d^2 u}{dr^2} + \left[ \frac{2mE}{\hbar^2} + \frac{2mZe^2}{4\pi \epsilon_0 \hbar^2 r} - \frac{l(l+1)}{r^2} \right] u = 0
-        \]
-    </div>
-    Questo è un problema agli autovalori, con \( E \) che rappresenta gli autovalori energetici. Per risolverlo:
-    <ul>
-        <li>Si considera un cambiamento di variabile: \( \rho = \frac{2Zr}{na_0} \), dove \( a_0 \) è il raggio di Bohr.</li>
-        <li>Si scrive \( u(\rho) = \rho^l e^{-\rho/2} v(\rho) \), separando il comportamento asintotico e il termine polinomiale.</li>
-    </ul>
-    L'equazione diventa:
-    <div class="formula">
-        \[
-        \rho \frac{d^2 v}{d\rho^2} + (2l+1 - \rho) \frac{dv}{d\rho} + \left( n - l - 1 \right) v = 0
-        \]
-    </div>
-    Le soluzioni \( v(\rho) \) sono polinomi generalizzati di Laguerre \( L_{n-l-1}^{2l+1}(\rho) \), dove il numero quantico principale \( n \) è intero e \( n > l \).
-
-    <h2>Livelli energetici</h2>
-    Gli autovalori dell'energia sono discreti e dati da:
-    <div class="formula">
-        \[
-        E_n = -\frac{Z^2 e^4 m}{8 \epsilon_0^2 h^2 n^2}
-        \]
-    </div>
-    Questo risultato mostra che l'energia dipende unicamente dal numero quantico principale \( n \), rendendo gli altri numeri quantici irrilevanti per il valore dell'energia.
-
-    <h2>Probabilità radiale</h2>
-    La densità di probabilità radiale \( P(r) \) è definita come:
-    <div class="formula">
-        \[
-        P(r) = r^2 |R(r)|^2
-        \]
-    </div>
-    Questo termine tiene conto del volume sferico e indica dove è più probabile trovare l'elettrone. Per il livello fondamentale (\( n = 1, l = 0 \)), la probabilità massima si verifica a \( r = a_0 \), che è il raggio di Bohr.
-
-    <h2>Armoniche sferiche</h2>
-    Le soluzioni angolari dell'equazione di Schrödinger sono armoniche sferiche \( Y_l^m(\theta, \phi) \), che dipendono dai numeri quantici \( l \) (momento angolare orbitale) e \( m \) (momento angolare magnetico). La funzione generale è data da:
-    <div class="formula">
-        \[
-        Y_l^m(\theta, \phi) = \sqrt{\frac{(2l+1)}{4\pi} \frac{(l-m)!}{(l+m)!}} P_l^m(\cos\theta) e^{im\phi}
-        \]
-    </div>
-    dove \( P_l^m(\cos\theta) \) sono i polinomi associati di Legendre.
-
-    <h2>Considerazioni finali</h2>
-    La separazione delle variabili e la natura discreta degli autovalori energetici riflettono la quantizzazione dell'energia nell'atomo di idrogeno. Questo modello non solo predice con precisione gli spettri atomici, ma fornisce una base per comprendere sistemi atomici più complessi.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 8</div>
-  <h2>Atomo di Idrogeno: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Ricavare spettro e numeri quantici dall'equazione radiale coulombiana.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Dopo la riduzione a due corpi, gli asintotici fissano una potenza all'origine e un esponenziale all'infinito. La terminazione della serie di Laguerre produce \(n=n_r+l+1\).</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Spettro<span class="lecture-step-boss">DIM 16</span></h4>
-      <p>Con massa ridotta mu.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="E_n=-\frac{\mu Z^2e^4}{2(4\pi\varepsilon_0)^2\hbar^2n^2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle V=-Ze^2/(4\pi\varepsilon_0r),\quad u=r^{l+1}e^{-r/(na_\mu/Z)}L(2Zr/(na_\mu));\quad\text{terminazione della serie}\Rightarrow E_n=-\frac{\mu Z^2e^4}{2(4\pi\varepsilon_0)^2\hbar^2n^2}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Stati<span class="lecture-step-boss">DIM 16</span></h4>
-      <p>Separazione completa.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\psi_{nlm}=R_{nl}(r)Y_l^m,\quad l=0,\ldots,n-1"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [H,L^2]=[H,L_z]=0\Rightarrow\psi_{nlm}=R_{nl}Y_l^m;\quad n=n_r+l+1,\ n_r\ge0\Rightarrow l=0,\ldots,n-1\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: 1s</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per \(R_{10}=2a_0^{-3/2}e^{-r/a_0}\).</p>
-    <p><strong>Calcolo.</strong> La densità radiale \(4r^2e^{-2r/a_0}/a_0^3\) ha massimo a \(r=a_0\).</p>
-    <p><strong>Risultato e controllo.</strong> La densità tridimensionale è massima all'origine: sono distribuzioni diverse.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 16</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Atomo idrogenoide non relativistico.</li>
-          <li>Trascurate struttura fine e Lamb shift.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La degenerazione in l rivela una simmetria coulombiana aggiuntiva, oltre alle rotazioni.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Conta gli n² stati orbitali.</li>
-          <li>Distingui R, u e densità radiale.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=238">Appunti-MQ.pdf, pp. 238-259: soluzione radiale coulombiana e spettro</a></li>
-          <li><a href="MQ.pdf#page=14">MQ.pdf, pp. capitolo 14: autofunzioni idrogenoidi</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-atomo-idrogeno"><div class="lecture-kicker">Lezione approfondita - Argomento 8 - DIM 16</div><h1>Atomo di idrogeno: soluzione radiale completa</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Risolvere il campo coulombiano con comportamento all'origine e all'infinito, equazione di Kummer, terminazione in Laguerre, spettro 1/n², funzioni normalizzate e degenerazione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Quantizzazione da normalizzabilità</h3><p>La serie ipergeometrica generica cresce come e alla rho. Per non cancellare il fattore decrescente deve terminare, imponendo n intero.</p></article><article class="lecture-card lecture-warning"><h3>Degenerazione speciale</h3><p>L'energia coulombiana dipende soltanto da n, non da ell. Questa degenerazione oltre m riflette il vettore di Runge-Lenz ed è rotta da struttura fine e Lamb shift.</p></article></div><h2>Moto relativo e convenzioni</h2><div class="lecture-grid"><article class="lecture-card "><h3>Sistema idrogenoide</h3><p>Un elettrone di carica meno e lega un nucleo di carica più Ze. Si usa la massa ridotta mu e a0 definito con mu.</p></article><article class="lecture-card "><h3>Stati legati</h3><p>Si cerca E&lt;0. Lo spettro continuo E maggiore o uguale a zero richiede funzioni coulombiane di scattering, non polinomi normalizzabili.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Hamiltoniano coulombiano<span class="lecture-step-boss">BASE</span></h4><p>K raccoglie le costanti elettrostatiche e mu include il rinculo principale.</p><div class="lecture-formula" aria-label="Hamiltoniano idrogenoide del moto relativo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=\frac{p^2}{2\mu}-\frac{K}{r},\qquad K=\frac{Ze^2}{4\pi\varepsilon_0},\qquad\mu=\frac{m_eM}{m_e+M}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Equazione ridotta<span class="lecture-step-boss">RADIALE</span></h4><p>Dopo la separazione angolare si inserisce il potenziale attrattivo nell'equazione per u.</p><div class="lecture-formula" aria-label="Equazione radiale coulombiana"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -\frac{\hbar^2}{2\mu}u''+\left[\frac{\hbar^2\ell(\ell+1)}{2\mu r^2}-\frac Kr\right]u=Eu\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Parametro di decadimento<span class="lecture-step-boss">E&lt;0</span></h4><p>Per uno stato legato si scrive l'energia negativa tramite kappa positivo.</p><div class="lecture-formula" aria-label="Parametrizzazione dell&#x27;energia legata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E=-\frac{\hbar^2\kappa^2}{2\mu},\qquad\kappa&gt;0\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Comportamento all'origine<span class="lecture-step-boss">ASINTOTICO</span></h4><p>Il termine 1/r² domina sul Coulomb 1/r e seleziona u circa r alla ell+1.</p><div class="lecture-formula" aria-label="Soluzione regolare vicino al nucleo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle r\to0:\quad u''-\frac{\ell(\ell+1)}{r^2}u\simeq0\Rightarrow u\sim r^{\ell+1}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Comportamento all'infinito<span class="lecture-step-boss">ASINTOTICO</span></h4><p>A grandi r i termini di potenziale svaniscono e resta l'esponenziale decrescente.</p><div class="lecture-formula" aria-label="Coda dello stato legato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle r\to\infty:\quad u''-\kappa^2u\simeq0\Rightarrow u\sim e^{-\kappa r}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Variabile adimensionale<span class="lecture-step-boss">KUMMER</span></h4><p>Si estrae la scala di decadimento con rho=2kappa r e si definisce eta proporzionale alla forza coulombiana.</p><div class="lecture-formula" aria-label="Variabili adimensionali coulombiane"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho=2\kappa r,\qquad\eta=\frac{\mu K}{\hbar^2\kappa}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Ansatz completo<span class="lecture-step-boss">KUMMER</span></h4><p>Si fattorizzano esattamente la potenza all'origine e l'esponenziale all'infinito.</p><div class="lecture-formula" aria-label="Fattorizzazione asintotica della funzione radiale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle u(\rho)=\rho^{\ell+1}e^{-\rho/2}v(\rho)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Equazione di Kummer<span class="lecture-step-boss">DIM 16</span></h4><p>La funzione residua soddisfa l'ipergeometrica confluente con a=ell+1-eta e b=2ell+2.</p><div class="lecture-formula" aria-label="Equazione ipergeometrica confluente radiale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho v''+(2\ell+2-\rho)v'+(\eta-\ell-1)v=0\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Serie e crescita<span class="lecture-step-boss">KUMMER</span></h4><p>La soluzione regolare M(a,b,rho) contiene in generale un termine e alla rho che renderebbe u crescente come e alla rho/2.</p><div class="lecture-formula" aria-label="Parametri della soluzione di Kummer"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle v(\rho)=M(a,b,\rho),\qquad a=\ell+1-\eta,\quad b=2\ell+2\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Terminazione<span class="lecture-step-boss">QUANTIZZA</span></h4><p>La normalizzabilità impone a=-n_r, così la serie diventa un polinomio di grado n_r.</p><div class="lecture-formula" aria-label="Condizione di terminazione della serie"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \ell+1-\eta=-n_r,\qquad n_r=0,1,2,\ldots\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Numero principale<span class="lecture-step-boss">QUANTIZZA</span></h4><p>Definendo n=n_r+ell+1 si ottiene eta=n e kappa=Z/(na0).</p><div class="lecture-formula" aria-label="Relazione tra numeri quantici e scala radiale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle n=n_r+\ell+1,\qquad a_0=\frac{4\pi\varepsilon_0\hbar^2}{\mu e^2},\qquad\kappa=\frac Z{na_0}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Spettro energetico<span class="lecture-step-boss">RISULTATO</span></h4><p>Sostituendo kappa nell'energia negativa emerge la legge 1/n².</p><div class="lecture-formula" aria-label="Livelli energetici idrogenoidi"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n=-\frac{\mu K^2}{2\hbar^2n^2}=-\frac{\mu c^2(Z\alpha)^2}{2n^2},\qquad n=1,2,\ldots\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Funzioni radiali<span class="lecture-step-boss">LAGUERRE</span></h4><p>La Kummer terminata è proporzionale a un Laguerre associato; il prefattore seguente normalizza R con r²dr.</p><div class="lecture-formula" aria-label="Funzione radiale idrogenoide normalizzata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle R_{n\ell}(r)=\left(\frac{2Z}{na_0}\right)^{3/2}\sqrt{\frac{(n-\ell-1)!}{2n(n+\ell)!}}e^{-\rho/2}\rho^\ell L_{n-\ell-1}^{2\ell+1}(\rho),\quad\rho=\frac{2Zr}{na_0}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Numeri e degenerazione<span class="lecture-step-boss">CONTA</span></h4><p>Per n fissato, ell va da zero a n-1 e m da meno ell a ell; la somma dà n² stati spaziali.</p><div class="lecture-formula" aria-label="Conteggio degli stati di un livello coulombiano"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \ell=0,\ldots,n-1,\quad m=-\ell,\ldots,\ell,\quad\sum_{\ell=0}^{n-1}(2\ell+1)=n^2\quad(2n^2\ \text{con spin})\)</span></div></article></section><h2>Esempio: stato fondamentale 1s</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Per n=1, ell=0, n_r=0 e il Laguerre vale uno. Per Z=1 si ottiene l'orbitale senza nodi.</p><p data-i18n-skip="true">\(\displaystyle R_{10}(r)=2a_0^{-3/2}e^{-r/a_0},\qquad Y_{00}=\frac1{\sqrt{4\pi}},\qquad\psi_{100}=\frac{e^{-r/a_0}}{\sqrt{\pi a_0^3}},\qquad E_1=-\frac{\mu e^4}{2(4\pi\varepsilon_0)^2\hbar^2}\)</p><p><strong>Controllo.</strong> L'integrale 4pi per integrale r²|psi|²dr vale uno. La densità è massima all'origine, mentre la probabilità radiale 4pi r²|psi|² ha massimo a r=a0.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Nodi</h3><p>Il numero di nodi radiali è n_r=n-ell-1; i nodi angolari dipendono dalle armoniche e il totale caratterizza la forma orbitale.</p></article><article class="lecture-card "><h3>Degenerazione accidentale</h3><p>L'indipendenza da ell non è generica per un campo centrale. È associata alla simmetria del vettore di Runge-Lenz del potenziale 1/r.</p></article><article class="lecture-card "><h3>Correzioni fisiche</h3><p>Massa ridotta, struttura fine, Lamb shift, dimensione nucleare e iperfine aggiungono scale successive e rompono parte delle degenerazioni.</p></article><article class="lecture-card "><h3>Continuo</h3><p>Per E positivo non si impone la terminazione: le funzioni coulombiane sono normalizzate a delta e descrivono diffusione con fase logaritmica a lungo raggio.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare m_e invece della massa ridotta senza dichiararlo; scegliere e alla più kappa r; dimenticare il fattore due in rho; imporre n=n_r+ell; normalizzare R con dr anziché r²dr.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>n minimo è ell+1; E è negativo e tende a zero dal basso; R circa r^ell; la scala radiale cresce come n a0/Z nell'esponenziale; la somma delle degenerazioni dà n².</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi l'equazione radiale coulombiana.</li><li>Definisci kappa per E negativo.</li><li>Trova i due comportamenti asintotici.</li><li>Introduci rho e l'ansatz.</li><li>Deriva l'equazione di Kummer.</li><li>Imponi la terminazione a=-n_r.</li><li>Ricava energia e Laguerre normalizzati.</li><li>Conta stati, nodi e degenerazioni.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L248">DIM 14 e DIM 16 - separazione 3D, potenziali centrali e idrogeno</a></li><li><a href="Appunti-MQ.pdf#page=242">Appunti-MQ.pdf, pagine PDF 242-251 - equazione radiale e campo coulombiano</a></li><li><a href="set-9-funzioni-radiali.html">Set 9 - funzioni radiali e stati idrogenoidi</a></li></ul><p class="lecture-note">La numerazione nei collegamenti PDF è quella effettiva del file. Le derivazioni radiali sono state confrontate con DIM 14 e DIM 16.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 8 - DIM 16":"In-depth lesson - Topic 8 - DIM 16","Atomo di idrogeno: soluzione radiale completa":"Hydrogen atom: complete radial solution","Obiettivo.":"Objective.","Risolvere il campo coulombiano con comportamento all'origine e all'infinito, equazione di Kummer, terminazione in Laguerre, spettro 1/n², funzioni normalizzate e degenerazione.":"Solve the Coulomb field using origin and infinity behavior, the Kummer equation, termination into Laguerre polynomials, the 1/n² spectrum, normalized functions, and degeneracy.","Quantizzazione da normalizzabilità":"Quantization from normalizability","La serie ipergeometrica generica cresce come e alla rho. Per non cancellare il fattore decrescente deve terminare, imponendo n intero.":"The generic hypergeometric series grows as e to rho. To avoid canceling the decaying factor, it must terminate, imposing integer n.","Degenerazione speciale":"Special degeneracy","L'energia coulombiana dipende soltanto da n, non da ell. Questa degenerazione oltre m riflette il vettore di Runge-Lenz ed è rotta da struttura fine e Lamb shift.":"Coulomb energy depends only on n, not ell. This beyond-m degeneracy reflects the Runge-Lenz vector and is broken by fine structure and the Lamb shift.","Moto relativo e convenzioni":"Relative motion and conventions","Sistema idrogenoide":"Hydrogen-like system","Un elettrone di carica meno e lega un nucleo di carica più Ze. Si usa la massa ridotta mu e a0 definito con mu.":"An electron of charge minus e binds a nucleus of charge plus Ze. Use reduced mass mu and define a0 with mu.","Stati legati":"Bound states","Si cerca E<0. Lo spettro continuo E maggiore o uguale a zero richiede funzioni coulombiane di scattering, non polinomi normalizzabili.":"Seek E<0. The E at least zero continuum requires Coulomb scattering functions, not normalizable polynomials.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Hamiltoniano coulombiano":"1. Coulomb Hamiltonian","BASE":"BASE","K raccoglie le costanti elettrostatiche e mu include il rinculo principale.":"K collects electrostatic constants and mu includes leading recoil.","Passaggio":"Step","2. Equazione ridotta":"2. Reduced equation","RADIALE":"RADIAL","Dopo la separazione angolare si inserisce il potenziale attrattivo nell'equazione per u.":"After angular separation, insert the attractive potential into the u equation.","3. Parametro di decadimento":"3. Decay parameter","E<0":"E<0","Per uno stato legato si scrive l'energia negativa tramite kappa positivo.":"For a bound state, write negative energy using positive kappa.","4. Comportamento all'origine":"4. Origin behavior","ASINTOTICO":"ASYMPTOTIC","Il termine 1/r² domina sul Coulomb 1/r e seleziona u circa r alla ell+1.":"The 1/r² term dominates Coulomb 1/r and selects u approximately r to ell+1.","5. Comportamento all'infinito":"5. Infinity behavior","A grandi r i termini di potenziale svaniscono e resta l'esponenziale decrescente.":"At large r the potential terms vanish and the decaying exponential remains.","6. Variabile adimensionale":"6. Dimensionless variable","KUMMER":"KUMMER","Si estrae la scala di decadimento con rho=2kappa r e si definisce eta proporzionale alla forza coulombiana.":"Extract the decay scale with rho=2kappa r and define eta proportional to Coulomb strength.","7. Ansatz completo":"7. Complete ansatz","Si fattorizzano esattamente la potenza all'origine e l'esponenziale all'infinito.":"Factor out exactly the origin power and infinity exponential.","8. Equazione di Kummer":"8. Kummer equation","DIM 16":"DIM 16","La funzione residua soddisfa l'ipergeometrica confluente con a=ell+1-eta e b=2ell+2.":"The residual function satisfies the confluent hypergeometric equation with a=ell+1-eta and b=2ell+2.","9. Serie e crescita":"9. Series and growth","La soluzione regolare M(a,b,rho) contiene in generale un termine e alla rho che renderebbe u crescente come e alla rho/2.":"The regular solution M(a,b,rho) generally contains an e to rho term that would make u grow as e to rho/2.","10. Terminazione":"10. Termination","QUANTIZZA":"QUANTIZE","La normalizzabilità impone a=-n_r, così la serie diventa un polinomio di grado n_r.":"Normalizability imposes a=-n_r, so the series becomes a polynomial of degree n_r.","11. Numero principale":"11. Principal number","Definendo n=n_r+ell+1 si ottiene eta=n e kappa=Z/(na0).":"Defining n=n_r+ell+1 gives eta=n and kappa=Z/(na0).","12. Spettro energetico":"12. Energy spectrum","RISULTATO":"RESULT","Sostituendo kappa nell'energia negativa emerge la legge 1/n².":"Substituting kappa into negative energy yields the 1/n² law.","13. Funzioni radiali":"13. Radial functions","LAGUERRE":"LAGUERRE","La Kummer terminata è proporzionale a un Laguerre associato; il prefattore seguente normalizza R con r²dr.":"The terminated Kummer function is proportional to an associated Laguerre polynomial; the following prefactor normalizes R with r²dr.","14. Numeri e degenerazione":"14. Numbers and degeneracy","CONTA":"COUNT","Per n fissato, ell va da zero a n-1 e m da meno ell a ell; la somma dà n² stati spaziali.":"For fixed n, ell runs from zero to n-1 and m from minus ell to ell; the sum gives n² spatial states.","Esempio: stato fondamentale 1s":"Example: 1s ground state","Impostazione.":"Setup.","Per n=1, ell=0, n_r=0 e il Laguerre vale uno. Per Z=1 si ottiene l'orbitale senza nodi.":"For n=1, ell=0, n_r=0 and the Laguerre polynomial equals one. For Z=1 this gives the nodeless orbital.","Controllo.":"Check.","L'integrale 4pi per integrale r²|psi|²dr vale uno. La densità è massima all'origine, mentre la probabilità radiale 4pi r²|psi|² ha massimo a r=a0.":"The integral 4pi times integral r²|psi|²dr equals one. Density is maximal at the origin, whereas radial probability 4pi r²|psi|² is maximal at r=a0.","Interpretazione e limiti":"Interpretation and limits","Nodi":"Nodes","Il numero di nodi radiali è n_r=n-ell-1; i nodi angolari dipendono dalle armoniche e il totale caratterizza la forma orbitale.":"The number of radial nodes is n_r=n-ell-1; angular nodes depend on the harmonics and together characterize orbital shape.","Degenerazione accidentale":"Accidental degeneracy","L'indipendenza da ell non è generica per un campo centrale. È associata alla simmetria del vettore di Runge-Lenz del potenziale 1/r.":"Independence from ell is not generic for a central field. It is associated with the Runge-Lenz-vector symmetry of the 1/r potential.","Correzioni fisiche":"Physical corrections","Massa ridotta, struttura fine, Lamb shift, dimensione nucleare e iperfine aggiungono scale successive e rompono parte delle degenerazioni.":"Reduced mass, fine structure, Lamb shift, nuclear size, and hyperfine effects add successive scales and break some degeneracies.","Continuo":"Continuum","Per E positivo non si impone la terminazione: le funzioni coulombiane sono normalizzate a delta e descrivono diffusione con fase logaritmica a lungo raggio.":"For positive E, termination is not imposed: Coulomb functions are delta normalized and describe scattering with a long-range logarithmic phase.","Errori tipici":"Common errors","Usare m_e invece della massa ridotta senza dichiararlo; scegliere e alla più kappa r; dimenticare il fattore due in rho; imporre n=n_r+ell; normalizzare R con dr anziché r²dr.":"Using m_e instead of reduced mass without saying so; choosing e to plus kappa r; forgetting the factor two in rho; imposing n=n_r+ell; normalizing R with dr rather than r²dr.","Controlli rapidi":"Quick checks","n minimo è ell+1; E è negativo e tende a zero dal basso; R circa r^ell; la scala radiale cresce come n a0/Z nell'esponenziale; la somma delle degenerazioni dà n².":"Minimum n is ell+1; E is negative and approaches zero from below; R is approximately r^ell; the exponential radial scale grows as n a0/Z; degeneracies sum to n².","Controllo da orale":"Oral exam checklist","Scrivi l'equazione radiale coulombiana.":"Write the Coulomb radial equation.","Definisci kappa per E negativo.":"Define kappa for negative E.","Trova i due comportamenti asintotici.":"Find both asymptotic behaviors.","Introduci rho e l'ansatz.":"Introduce rho and the ansatz.","Deriva l'equazione di Kummer.":"Derive the Kummer equation.","Imponi la terminazione a=-n_r.":"Impose termination a=-n_r.","Ricava energia e Laguerre normalizzati.":"Obtain energy and normalized Laguerre functions.","Conta stati, nodi e degenerazioni.":"Count states, nodes, and degeneracies.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 14 e DIM 16 - separazione 3D, potenziali centrali e idrogeno":"DIM 14 and DIM 16 - 3D separation, central potentials, and hydrogen","Appunti-MQ.pdf, pagine PDF 242-251 - equazione radiale e campo coulombiano":"Appunti-MQ.pdf, PDF pages 242-251 - radial equation and Coulomb field","Set 9 - funzioni radiali e stati idrogenoidi":"Set 9 - radial functions and hydrogen-like states","La numerazione nei collegamenti PDF è quella effettiva del file. Le derivazioni radiali sono state confrontate con DIM 14 e DIM 16.":"PDF links use the file's actual page numbering. Radial derivations were compared against DIM 14 and DIM 16.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Hamiltoniano idrogenoide del moto relativo":"Hydrogen-like relative-motion Hamiltonian","Equazione radiale coulombiana":"Coulomb radial equation","Parametrizzazione dell'energia legata":"Bound-energy parametrization","Soluzione regolare vicino al nucleo":"Regular solution near the nucleus","Coda dello stato legato":"Bound-state tail","Variabili adimensionali coulombiane":"Dimensionless Coulomb variables","Fattorizzazione asintotica della funzione radiale":"Asymptotic factorization of the radial function","Equazione ipergeometrica confluente radiale":"Radial confluent hypergeometric equation","Parametri della soluzione di Kummer":"Parameters of the Kummer solution","Condizione di terminazione della serie":"Series termination condition","Relazione tra numeri quantici e scala radiale":"Relation between quantum numbers and radial scale","Livelli energetici idrogenoidi":"Hydrogen-like energy levels","Funzione radiale idrogenoide normalizzata":"Normalized hydrogen-like radial function","Conteggio degli stati di un livello coulombiano":"Counting states in a Coulomb level"},"title":{"it":"Atomo di idrogeno: soluzione radiale completa","en":"Hydrogen atom: complete radial solution"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

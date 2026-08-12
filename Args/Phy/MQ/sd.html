@@ -1,397 +1,139 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Riassunto Perturbazioni Meccanica Quantistica</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Teorie perturbative: mappa stazionaria e dinamica</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f6f8fa;
-      color: #222;
-      line-height: 1.7;
       margin: 0;
-      padding: 32px 10vw;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
     }
-    h1, h2, h3 {
-      color: #124076;
-    }
-    h1 {
-      border-bottom: 2px solid #124076;
-      padding-bottom: 0.3em;
-    }
-    .box {
-      background: #e3eefd;
-      border-radius: 1em;
-      margin: 28px 0;
-      padding: 24px 20px 20px 24px;
-      border-left: 8px solid #2854b4;
-      box-shadow: 0 2px 8px #b6c9f18a;
-    }
-    code, pre {
-      font-family: 'Fira Mono', 'Consolas', monospace;
-      background: #e7f3ff;
-      border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 1.05em;
-      color: #23366a;
-    }
-    .formula {
-      font-family: 'Cambria Math', 'Latin Modern Math', serif;
-      background: none;
-      color: #155e3f;
-      font-size: 1.12em;
-      padding: 0;
-    }
-    ul, ol { margin-bottom: 12px; }
-    .legend { font-size: 0.97em; color: #506484; }
-    .center { text-align: center; }
-  
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
-</style>
 
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+.lecture-gallery{margin:18px 0}.lecture-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}.lecture-gallery figure{margin:0;padding:10px;background:#fff;border:1px solid #c8d8ea;border-radius:12px}.lecture-gallery img{display:block;width:100%;height:auto;border-radius:8px}.lecture-gallery figcaption{margin-top:7px;color:#40556d;font:.86rem/1.35 system-ui,sans-serif}
+</style>
 </head>
 <body>
-  <h1 class="center">Riassunto Perturbazioni<br>Meccanica Quantistica</h1>
-
-  <h2>1. Teoria delle Perturbazioni Stazionarie</h2>
-
-  <div class="box">
-    <h3>1.1 Caso Non Degenere</h3>
-    <pre><code class="formula">
-H = H₀ + λH'
-Eₙ(λ) = Eₙ⁽⁰⁾ + λEₙ⁽¹⁾ + λ²Eₙ⁽²⁾ + …
-|ψₙ(λ)⟩ = |φₙ⟩ + λ|ψₙ⁽¹⁾⟩ + λ²|ψₙ⁽²⁾⟩ + …
-Eₙ⁽¹⁾ = ⟨φₙ|H'|φₙ⟩
-Eₙ⁽²⁾ = Σₖ≠ₙ |⟨φₖ|H'|φₙ⟩|² / (Eₙ⁽⁰⁾ - Eₖ⁽⁰⁾)
-|ψₙ⁽¹⁾⟩ = Σₖ≠ₙ ⟨φₖ|H'|φₙ⟩ / (Eₙ⁽⁰⁾ - Eₖ⁽⁰⁾) |φₖ⟩
-    </code></pre>
-    <ul>
-      <li>Si usa quando gli autostati di <b>H₀</b> non sono degeneri.</li>
-      <li>Esempio: Effetto Stark non degenere, piccole correzioni a sistemi semplici.</li>
-    </ul>
-  </div>
-
-  <div class="box">
-    <h3>1.2 Caso Degenere</h3>
-    <pre><code class="formula">
-H = H₀ + λH'
-H₀ |φₙ,a⁽⁰⁾⟩ = Eₙ⁽⁰⁾ |φₙ,a⁽⁰⁾⟩ &nbsp; a=1,…,g
-H'ₐb = ⟨φₙ,a⁽⁰⁾|H'|φₙ,b⁽⁰⁾⟩
-Diagonalizza H'ₐb nel sottospazio degenere:
-Σ_b H'ₐb c_b = E⁽¹⁾ cₐ
-Eₙ(λ) = Eₙ⁽⁰⁾ + λE⁽¹⁾ + λ²Eₙ⁽²⁾ + …
-|ψₙ(λ)⟩ = Σₐ cₐ|φₙ,a⁽⁰⁾⟩ + λ|ψₙ⁽¹⁾⟩ + …
-    </code></pre>
-    <ul>
-      <li>Si usa quando il livello iniziale è degenere.</li>
-      <li>La perturbazione rimuove (in parte o del tutto) la degenerazione.</li>
-      <li>Esempio: Zeeman, Stark degenere, struttura fine con degenerazione residua.</li>
-    </ul>
-  </div>
-
-  <div class="box">
-    <h3>1.3 Esempi Fisici di Correzioni</h3>
-    <ul>
-      <li><b>Cinetica relativistica:</b> <code class="formula">H'_rel = -p⁴/(8m³c²)</code></li>
-      <li><b>Spin-orbita:</b> <code class="formula">H'ₗₛ = [1/(2m²c²)] [1/r] [dV/dr] L⋅S</code></li>
-      <li><b>Darwin:</b> <code class="formula">H'_Darwin = [ħ²/(8m²c²)] ∇²V(r)</code> (solo per l=0)</li>
-      <li><b>Zeeman normale:</b> <code class="formula">H'_Zeeman = μ_B L_z B</code></li>
-      <li><b>Zeeman anomalo:</b> <code class="formula">H'_Zeeman,an = μ_B g_J J_z B</code></li>
-      <li><b>Stark:</b> <code class="formula">H'_Stark = -e E z</code></li>
-    </ul>
-  </div>
-
-  <div class="box">
-    <h3>1.4 Teorema di Feynman-Hellmann</h3>
-    <pre><code class="formula">
-dEₙ/dλ = ⟨ψₙ | dH/dλ | ψₙ⟩
-    </code></pre>
-    <ul>
-      <li>Utile per calcolare valori medi (es: ⟨1/r⟩, ⟨1/r²⟩) senza fare integrali espliciti.</li>
-    </ul>
-  </div>
-
-  <h2>2. Perturbazioni Dipendenti dal Tempo</h2>
-  <div class="box">
-    <pre><code class="formula">
-H(t) = H₀ + V(t)
-iħ ∂/∂t |Ψ(t)⟩ = H(t)|Ψ(t)⟩
-|Ψ(t)⟩ = Σₙ cₙ(t) e^(−iEₙ t/ħ) |n⟩
-iħ d/dt cₘ(t) = Σₙ Vₘₙ(t) e^{iωₘₙ t} cₙ(t)
-Vₘₙ(t) = ⟨m|V(t)|n⟩
-ωₘₙ = (Eₘ − Eₙ)/ħ
-Primo ordine: c_f^(1)(t) = (1/iħ) ∫₀^t V_{fi}(t') e^{iω_{fi}t'} dt'
-P_{i→f}(t) = |c_f^(1)(t)|²
-    </code></pre>
-    <ul>
-      <li>Studia le probabilità di transizione tra stati indotta da una perturbazione tempo-dipendente.</li>
-      <li>Formula chiave: <code>P_{i→f}(t) = |c_f^{(1)}(t)|²</code></li>
-      <li>Esempi: impulso, campo oscillante, assorbimento/emissione radiazione.</li>
-    </ul>
-  </div>
-  <div class="box">
-    <h3>2.1 Casi particolari</h3>
-    <ul>
-      <li><b>Perturbazione costante:</b><br>
-        <code class="formula">P_{i→f}(t) = (|V_{fi}|²/ħ²) [sin²(ω_{fi}t/2)/(ω_{fi}/2)²]</code>
-      </li>
-      <li><b>Perturbazione periodica:</b> <code>V(t) = V₀ cos(ω t)</code> (risonanza per ω ≈ ω_{fi})</li>
-    </ul>
-  </div>
-  <div class="box">
-    <h3>2.2 Regola d’oro di Fermi (transizioni verso il continuo)</h3>
-    <pre><code class="formula">
-Π_{i→f} = (2π/ħ) |⟨f|V|i⟩|² ρ(E_f)
-    </code></pre>
-    <ul>
-      <li><code>ρ(E_f)</code> = densità di stati finali.</li>
-      <li>Fornisce il tasso di transizione per unità di tempo per processi verso il continuo.</li>
-    </ul>
-  </div>
-  <div class="box">
-    <h3>2.3 Vita media e larghezza di riga</h3>
-    <pre><code class="formula">
-τ = 1 / Σ_{f ≠ i} Π_{i→f}
-Γ = ħ / τ
-    </code></pre>
-    <ul>
-      <li>Vita media (<code>τ</code>) e larghezza di riga (<code>Γ</code>) sono collegate: <code>Γ τ ≈ ħ</code>.</li>
-    </ul>
-  </div>
-
-  <h2>3. Attenzioni e Differenze</h2>
-  <div class="box">
-    <ul>
-      <li><b>Perturbazioni stazionarie:</b> correzioni all’energia, \(H'\), anche correzioni relativistiche.</li>
-      <li><b>Perturbazioni dipendenti dal tempo:</b> probabilità di transizione, \(V(t)\), mai correzioni relativistiche.</li>
-      <li><b>Degenerazione:</b> va trattata con cura (diagonalizzazione).</li>
-      <li><b>Feynman-Hellmann:</b> calcolo valori medi senza integrali.</li>
-    </ul>
-  </div>
-  <h2>Legenda simboli</h2>
-  <div class="legend">
-    <ul>
-      <li><b>H₀</b>: Hamiltoniana non perturbata</li>
-      <li><b>H'</b>, <b>V(t)</b>: perturbazione (stazionaria, tempo-dipendente)</li>
-      <li><b>|n⟩</b>: autostato di H₀</li>
-      <li><b>Eₙ</b>: energia dell’autostato</li>
-      <li><b>λ</b>: parametro formale piccolo</li>
-      <li><b>cₙ(t)</b>: ampiezza di probabilità dello stato n al tempo t</li>
-      <li><b>ρ(E_f)</b>: densità di stati finali</li>
-      <li><b>τ</b>: vita media &nbsp; <b>Γ</b>: larghezza di riga</li>
-	  <div>
-	   <a href="https://it.wikipedia.org/wiki/Teoria_perturbativa_(meccanica_quantistica)" target="_blank">Wiki</a>
-	   </div>
-	    
-    </ul>
-  </div>
-<div class="img-gallery" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px;">
-    <div class="img-block">
-        <img src="img/photo_6046618344615954121_y.jpg" alt="Foto 121" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/121</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954122_y.jpg" alt="Foto 122" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/122</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954123_y.jpg" alt="Foto 123" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/123</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954125_y.jpg" alt="Foto 124" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/124</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954126_y.jpg" alt="Foto 125" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/125</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954127_y.jpg" alt="Foto 126" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/126</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954128_y.jpg" alt="Foto 127" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/127</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954129_y.jpg" alt="Foto 128" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/128</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954130_y.jpg" alt="Foto 129" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/129</div>
-    </div>
-    <div class="img-block">
-        <img src="img/photo_6046618344615954131_y.jpg" alt="Foto 130" style="width: 250px; border-radius: 8px;">
-        <div class="caption">img/130</div>
-    </div>
-</div>
-
-	
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 14</div>
-  <h2>Riassunto PerturbazioniMeccanica Quantistica: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Costruire una guida decisionale tra perturbazioni stazionarie, degeneri e dipendenti dal tempo.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Prima di scegliere una formula bisogna chiedere: H dipende dal tempo? il livello è isolato? quale simmetria annulla elementi? qual è il rapporto tra accoppiamento, gap e durata? Il formulario è corretto solo dopo questa diagnosi.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Stazionaria<span class="lecture-step-boss">DIM 7</span><span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Piccolo parametro energetico.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\epsilon_{mn}=|V_{mn}|/|E_n^0-E_m^0|\ll1"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle m|n^{(1)}\rangle=V_{mn}/(E_n^0-E_m^0),\quad\text{serie controllata se }|\lambda\langle m|n^{(1)}\rangle|\ll1\Rightarrow\epsilon_{mn}=|V_{mn}|/|E_n^0-E_m^0|\ll1\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Dinamica<span class="lecture-step-boss">DIM 7</span><span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Piccola ampiezza integrata.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\left|\hbar^{-1}\int V_{fi}(t)e^{i\omega_{fi}t}dt\right|\ll1"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle c_f^{(1)}=-\frac i\hbar\int V_{fi}(t)e^{i\omega_{fi}t}dt,\quad P_f\simeq|c_f^{(1)}|^2\ \text{e svuotamento iniziale trascurabile se }|c_f^{(1)}|\ll1\Rightarrow\left|\hbar^{-1}\int V_{fi}(t)e^{i\omega_{fi}t}dt\right|\ll1\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Quasi degenerazione</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Due livelli hanno gap comparabile a V.</p>
-    <p><strong>Calcolo.</strong> La formula non degenere diverge o diventa grande; si diagonalizza esattamente il blocco 2x2 e si tratta il resto perturbativamente.</p>
-    <p><strong>Risultato e controllo.</strong> La scelta della base è parte dell'approssimazione.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 7</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P2_DIM_7-12.txt">DIM 12</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Dichiarare ordine e parametro di controllo.</li>
-          <li>Verificare normalizzazione e dimensioni a ogni passaggio.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Un buon riassunto non è un elenco di formule ma un albero di decisione che segnala dove ciascuna formula fallisce.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Classifica tre esempi diversi.</li>
-          <li>Indica un controllo indipendente per ogni regime.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pp. 169-189: confronto tra perturbazioni stazionarie e dinamiche</a></li>
-          <li><a href="MQ.pdf#page=20">MQ.pdf, pp. capitoli 20 e 27: formulario e condizioni di validità</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-sd"><div class="lecture-kicker">Sintesi comparativa - Blocchi 13 e 14 - DIM 7 e DIM 12</div><h1>Teorie perturbative: mappa stazionaria e dinamica</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire un albero decisionale che scelga tra perturbazione stazionaria non degenere, degenere e quasi degenere e perturbazione dinamica discreta o continua, mettendo a confronto parametri piccoli, denominatori, osservabili, condizioni di validità e risultati misurabili.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Prima domanda: cambia il tempo?</h3><p>Se H è stazionaria si cercano autovalori e autostati corretti. Se V dipende dal tempo si cercano ampiezze, probabilità e tassi di transizione.</p></article><article class="lecture-card lecture-warning"><h3>Seconda domanda: c'è degenerazione?</h3><p>Un denominatore piccolo segnala che la base non perturbata non è stabile. Nel caso esatto o quasi degenere si diagonalizza prima il blocco vicino.</p></article></div><h2>Albero decisionale minimo</h2><div class="lecture-grid"><article class="lecture-card"><h3>Stazionaria</h3><p>Input: H0 più lambda W senza tempo. Output: livelli, autostati e valori medi corretti a ordine controllato.</p></article><article class="lecture-card"><h3>Dinamica</h3><p>Input: H0 più lambda V(t) e stato iniziale. Output: distribuzione temporale degli esiti e, nel continuo lungo, tassi.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Separazione comune<span class="lecture-step-boss">BASE</span></h4><p>Entrambe le teorie partono da un problema risolto e da un parametro di controllo esplicito.</p><div aria-label="Separazione perturbativa dell'Hamiltoniana" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=H_0+\lambda W\quad\text{o}\quad H(t)=H_0+\lambda V(t),\qquad|\lambda|\ll1\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Ansatz stazionario<span class="lecture-step-boss">SERIE</span></h4><p>Per un livello isolato si espandono energia e ket con normalizzazione intermedia.</p><div aria-label="Serie stazionarie di Rayleigh-Schrödinger" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}+\cdots,\quad|n\rangle=|n^{(0)}\rangle+\lambda|n^{(1)}\rangle+\cdots\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Energia al primo ordine<span class="lecture-step-boss">DIAGONALE</span></h4><p>Proiettare l'equazione di ordine uno sullo stato iniziale elimina la correzione al ket.</p><div aria-label="Correzione energetica diagonale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n^{(1)}=\langle n^{(0)}|W|n^{(0)}\rangle=W_{nn}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Stato al primo ordine<span class="lecture-step-boss">MESCOLAMENTO</span></h4><p>Proiettare sugli altri livelli produce ampiezze di mescolamento divise per i gap.</p><div aria-label="Correzione non degenere all'autostato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n^{(1)}\rangle=\sum_{m\ne n}\frac{W_{mn}}{E_n^{(0)}-E_m^{(0)}}|m^{(0)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Energia al secondo ordine<span class="lecture-step-boss">VIRTUALI</span></h4><p>Reinserire il ket corretto restituisce una somma su stati intermedi virtuali.</p><div aria-label="Correzione energetica quadratica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n^{(2)}=\sum_{m\ne n}\frac{|W_{mn}|^2}{E_n^{(0)}-E_m^{(0)}}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Test non degenere<span class="lecture-step-boss">VALIDITÀ</span></h4><p>Ogni rapporto di elemento fuori diagonale e gap deve essere piccolo; un solo gap piccolo invalida la base.</p><div aria-label="Parametro di mescolamento stazionario" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \left|\lambda\frac{W_{mn}}{E_n^{(0)}-E_m^{(0)}}\right|\ll1\quad\forall m\ne n\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Caso degenere<span class="lecture-step-boss">BLOCCO</span></h4><p>Nel sottospazio S_n si diagonalizza W prima di usare formule esterne.</p><div aria-label="Problema secolare degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_nWP_n|u_a\rangle=w_a|u_a\rangle,\qquad E_{n,a}=E_n^{(0)}+\lambda w_a+O(\lambda^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Quasi degenerazione<span class="lecture-step-boss">EFFICACE</span></h4><p>Livelli separati quanto l'accoppiamento vanno inclusi nello stesso blocco efficace e diagonalizzati esattamente.</p><div aria-label="Hamiltoniana efficace a due livelli" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_{\rm eff}=\begin{pmatrix}E_1^{(0)}+\lambda W_{11}&amp;\lambda W_{12}\\\lambda W_{21}&amp;E_2^{(0)}+\lambda W_{22}\end{pmatrix}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Ansatz dinamico<span class="lecture-step-boss">FASI</span></h4><p>Per V(t) si estraggono le fasi libere e si lasciano evolvere i coefficienti.</p><div aria-label="Espansione dinamica nella base non perturbata" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi(t)\rangle=\sum_nc_n(t)e^{-iE_nt/\hbar}|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Ampiezza dinamica<span class="lecture-step-boss">PRIMO ORDINE</span></h4><p>Lo stato iniziale i alimenta f attraverso la trasformata temporale dell'elemento di matrice alla frequenza di Bohr.</p><div aria-label="Ampiezza di transizione al primo ordine" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_f^{(1)}(t)=\frac{\lambda}{i\hbar}\int_0^tdt'\,V_{fi}(t')e^{i\omega_{fi}t'}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Test dinamico<span class="lecture-step-boss">PROBABILITÀ</span></h4><p>La somma delle probabilità trasferite deve restare piccola; a risonanza il tempo entra nel parametro di controllo.</p><div aria-label="Condizione perturbativa dinamica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sum_{f\ne i}|c_f^{(1)}(t)|^2\ll1,\qquad\text{a risonanza: }|\lambda V_{fi}|t/\hbar\ll1\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Discreto o continuo<span class="lecture-step-boss">BIVIO</span></h4><p>Nel discreto si conserva il profilo a tempo finito; nel continuo lungo si integra con rho e si estrae un tasso.</p><div aria-label="Due output della teoria dinamica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to f}(t)=|c_f(t)|^2\quad\text{discreto},\qquad\Gamma=\frac{2\pi}{\hbar}|V_{fi}|^2\rho(E_f)\quad\text{continuo lungo}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Feynman-Hellmann<span class="lecture-step-boss">DERIVATA</span></h4><p>Per una famiglia stazionaria, la derivata esatta di un livello non degenere è un valore medio della derivata di H.</p><div aria-label="Teorema di Feynman-Hellmann" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{dE_n}{d\lambda}=\left\langle n(\lambda)\left|\frac{\partial H}{\partial\lambda}\right|n(\lambda)\right\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Osservabili finali<span class="lecture-step-boss">CONFRONTO</span></h4><p>La teoria stazionaria modifica poli e autovettori; quella dinamica redistribuisce popolazioni e genera linee con risoluzione temporale o larghezza di vita.</p><div aria-label="Confronto degli output fisici" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \text{stazionaria}:\ \Delta E_n,|n\rangle;\qquad\text{dinamica}:\ P_{i\to f}(t),\Gamma,\tau,\Delta E_{\rm linea}\)</span></div></article></section><h2>Esempio: attraversamento evitato a due livelli</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prende il blocco con energie medie E0 più o meno delta su due e accoppiamento lambda v reale.</p><p data-i18n-skip="true">\(\displaystyle H=E_0I+\begin{pmatrix}\delta/2&amp;\lambda v\\\lambda v&amp;-\delta/2\end{pmatrix},\quad E_\pm=E_0\pm\sqrt{(\delta/2)^2+\lambda^2v^2},\quad\tan2\theta=\frac{2\lambda v}{\delta}\)</p><p><strong>Controllo.</strong> Per modulo delta molto maggiore dell'accoppiamento si recupera l'espansione non degenere; per delta vicino a zero il mescolamento è massimo e la scissione è 2 modulo lambda v.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Non sommare teorie</h3><p>Le correzioni stazionarie possono essere incorporate in un nuovo H0 prima di studiare una guida temporale, ma bisogna evitare di contare due volte lo stesso accoppiamento.</p></article><article class="lecture-card"><h3>Base adattata</h3><p>La teoria perturbativa funziona quando la base cattura già la dinamica dominante. Degenerazioni, risonanze e forti accoppiamenti indicano quale blocco va risolto esattamente.</p></article><article class="lecture-card"><h3>Ordine e norma</h3><p>Un ket troncato richiede correzione di normalizzazione al secondo ordine; un valore medio va espanso coerentemente sia nell'operatore sia nello stato.</p></article><article class="lecture-card"><h3>Controllo numerico</h3><p>Diagonalizzare un piccolo blocco e confrontare con le serie è un controllo potente di segni, gap e regione di validità prima di applicare il risultato a spazi grandi.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare formule non degeneri con gap piccoli; confondere correzione di autostato con transizione temporale; omettere lambda negli ordini; applicare regola d'oro a un solo livello; trascurare la normalizzazione del ket corretto.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Dichiarare dipendenza temporale; identificare gap o detuning; scegliere il blocco esatto; verificare parametri adimensionali piccoli; conservare unità; controllare che probabilità e norme restino fisiche.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Chiedi se H dipende dal tempo.</li><li>Nel caso stazionario controlla degenerazione e gap.</li><li>Ricava E primo, ket primo ed E secondo.</li><li>Diagonalizza blocchi degeneri o quasi degeneri.</li><li>Nel caso dinamico scrivi l'ampiezza integrale.</li><li>Distingui spettro discreto e continuo.</li><li>Verifica il parametro di controllo corretto.</li><li>Dichiara quale osservabile finale stai calcolando.</li></ul></article><details class="lecture-gallery boss-ref"><summary>Apri la galleria delle tavole originali</summary><div class="lecture-gallery-grid"><figure><img alt="Tavola 1 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954121_y.jpg"/><figcaption>Tavola 1 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 2 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954122_y.jpg"/><figcaption>Tavola 2 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 3 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954123_y.jpg"/><figcaption>Tavola 3 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 4 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954125_y.jpg"/><figcaption>Tavola 4 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 5 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954126_y.jpg"/><figcaption>Tavola 5 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 6 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954127_y.jpg"/><figcaption>Tavola 6 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 7 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954128_y.jpg"/><figcaption>Tavola 7 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 8 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954129_y.jpg"/><figcaption>Tavola 8 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 9 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954130_y.jpg"/><figcaption>Tavola 9 del riepilogo perturbativo</figcaption></figure><figure><img alt="Tavola 10 del riepilogo perturbativo" decoding="async" loading="lazy" src="img/photo_6046618344615954131_y.jpg"/><figcaption>Tavola 10 del riepilogo perturbativo</figcaption></figure></div></details><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1">DIM 7 - perturbazioni stazionarie</a></li><li><a href="boss/P2_DIM_7-12.txt#L1738">DIM 12 - perturbazioni dipendenti dal tempo</a></li><li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pagine PDF 169-187 - teorie perturbative</a></li></ul><p class="lecture-note">Le dieci immagini originali restano in una galleria richiudibile. La mappa confronta le due teorie senza sostituire le pagine di derivazione dedicate.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Sintesi comparativa - Blocchi 13 e 14 - DIM 7 e DIM 12":"Comparative summary - Blocks 13 and 14 - DIM 7 and DIM 12","Teorie perturbative: mappa stazionaria e dinamica":"Perturbation theories: stationary and dynamical map","Obiettivo.":"Objective.","Costruire un albero decisionale che scelga tra perturbazione stazionaria non degenere, degenere e quasi degenere e perturbazione dinamica discreta o continua, mettendo a confronto parametri piccoli, denominatori, osservabili, condizioni di validità e risultati misurabili.":"Build a decision tree choosing among nondegenerate, degenerate, and nearly degenerate stationary perturbation theory and discrete or continuum dynamical perturbation theory, comparing small parameters, denominators, observables, validity conditions, and measurable results.","Prima domanda: cambia il tempo?":"First question: does it change in time?","Se H è stazionaria si cercano autovalori e autostati corretti. Se V dipende dal tempo si cercano ampiezze, probabilità e tassi di transizione.":"If H is stationary seek corrected eigenvalues and eigenstates. If V depends on time seek transition amplitudes, probabilities, and rates.","Seconda domanda: c'è degenerazione?":"Second question: is there degeneracy?","Un denominatore piccolo segnala che la base non perturbata non è stabile. Nel caso esatto o quasi degenere si diagonalizza prima il blocco vicino.":"A small denominator signals that the unperturbed basis is unstable. In the exactly or nearly degenerate case diagonalize the nearby block first.","Albero decisionale minimo":"Minimal decision tree","Stazionaria":"Stationary","Input: H0 più lambda W senza tempo. Output: livelli, autostati e valori medi corretti a ordine controllato.":"Input: H0 plus lambda W without time. Output: levels, eigenstates, and expectation values corrected to controlled order.","Dinamica":"Dynamical","Input: H0 più lambda V(t) e stato iniziale. Output: distribuzione temporale degli esiti e, nel continuo lungo, tassi.":"Input: H0 plus lambda V(t) and initial state. Output: time-dependent outcome distribution and, in the long-time continuum, rates.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Separazione comune":"1. Common split","BASE":"BASE","Entrambe le teorie partono da un problema risolto e da un parametro di controllo esplicito.":"Both theories start from a solved problem and an explicit control parameter.","Passaggio":"Step","2. Ansatz stazionario":"2. Stationary ansatz","SERIE":"SERIES","Per un livello isolato si espandono energia e ket con normalizzazione intermedia.":"For an isolated level expand energy and ket with intermediate normalization.","3. Energia al primo ordine":"3. First-order energy","DIAGONALE":"DIAGONAL","Proiettare l'equazione di ordine uno sullo stato iniziale elimina la correzione al ket.":"Project the first-order equation onto the initial state to eliminate the ket correction.","4. Stato al primo ordine":"4. First-order state","MESCOLAMENTO":"MIXING","Proiettare sugli altri livelli produce ampiezze di mescolamento divise per i gap.":"Project onto other levels to obtain mixing amplitudes divided by gaps.","5. Energia al secondo ordine":"5. Second-order energy","VIRTUALI":"VIRTUAL","Reinserire il ket corretto restituisce una somma su stati intermedi virtuali.":"Reinsert the corrected ket to obtain a sum over virtual intermediate states.","6. Test non degenere":"6. Nondegenerate test","VALIDITÀ":"VALIDITY","Ogni rapporto di elemento fuori diagonale e gap deve essere piccolo; un solo gap piccolo invalida la base.":"Every off-diagonal-element to gap ratio must be small; one small gap invalidates the basis.","7. Caso degenere":"7. Degenerate case","BLOCCO":"BLOCK","Nel sottospazio S_n si diagonalizza W prima di usare formule esterne.":"Inside subspace S_n diagonalize W before using external-state formulas.","8. Quasi degenerazione":"8. Near degeneracy","EFFICACE":"EFFECTIVE","Livelli separati quanto l'accoppiamento vanno inclusi nello stesso blocco efficace e diagonalizzati esattamente.":"Levels separated by an amount comparable to coupling must be included in the same effective block and diagonalized exactly.","9. Ansatz dinamico":"9. Dynamical ansatz","FASI":"PHASES","Per V(t) si estraggono le fasi libere e si lasciano evolvere i coefficienti.":"For V(t), extract free phases and let coefficients evolve.","10. Ampiezza dinamica":"10. Dynamical amplitude","PRIMO ORDINE":"FIRST ORDER","Lo stato iniziale i alimenta f attraverso la trasformata temporale dell'elemento di matrice alla frequenza di Bohr.":"Initial state i feeds f through the temporal transform of the matrix element at the Bohr frequency.","11. Test dinamico":"11. Dynamical test","PROBABILITÀ":"PROBABILITY","La somma delle probabilità trasferite deve restare piccola; a risonanza il tempo entra nel parametro di controllo.":"The sum of transferred probabilities must remain small; at resonance time enters the control parameter.","12. Discreto o continuo":"12. Discrete or continuum","BIVIO":"BRANCH","Nel discreto si conserva il profilo a tempo finito; nel continuo lungo si integra con rho e si estrae un tasso.":"In a discrete spectrum keep the finite-time profile; in a long-time continuum integrate with rho and extract a rate.","13. Feynman-Hellmann":"13. Feynman-Hellmann","DERIVATA":"DERIVATIVE","Per una famiglia stazionaria, la derivata esatta di un livello non degenere è un valore medio della derivata di H.":"For a stationary family, the exact derivative of a nondegenerate level is an expectation of the H derivative.","14. Osservabili finali":"14. Final observables","CONFRONTO":"COMPARISON","La teoria stazionaria modifica poli e autovettori; quella dinamica redistribuisce popolazioni e genera linee con risoluzione temporale o larghezza di vita.":"Stationary theory modifies poles and eigenvectors; dynamical theory redistributes populations and generates lines with time resolution or lifetime width.","Esempio: attraversamento evitato a due livelli":"Example: two-level avoided crossing","Impostazione.":"Setup.","Si prende il blocco con energie medie E0 più o meno delta su due e accoppiamento lambda v reale.":"Take a block with mean energies E0 plus or minus delta over two and real coupling lambda v.","Controllo.":"Check.","Per modulo delta molto maggiore dell'accoppiamento si recupera l'espansione non degenere; per delta vicino a zero il mescolamento è massimo e la scissione è 2 modulo lambda v.":"For modulus delta much greater than coupling recover the nondegenerate expansion; near zero delta mixing is maximal and splitting is 2 modulus lambda v.","Interpretazione e limiti":"Interpretation and limits","Non sommare teorie":"Do not add theories","Le correzioni stazionarie possono essere incorporate in un nuovo H0 prima di studiare una guida temporale, ma bisogna evitare di contare due volte lo stesso accoppiamento.":"Stationary corrections may be incorporated into a new H0 before studying a time-dependent drive, but double-counting the same coupling must be avoided.","Base adattata":"Adapted basis","La teoria perturbativa funziona quando la base cattura già la dinamica dominante. Degenerazioni, risonanze e forti accoppiamenti indicano quale blocco va risolto esattamente.":"Perturbation theory works when the basis already captures dominant dynamics. Degeneracies, resonances, and strong couplings identify the block to solve exactly.","Ordine e norma":"Order and normalization","Un ket troncato richiede correzione di normalizzazione al secondo ordine; un valore medio va espanso coerentemente sia nell'operatore sia nello stato.":"A truncated ket requires a second-order normalization correction; an expectation must be expanded consistently in both operator and state.","Controllo numerico":"Numerical control","Diagonalizzare un piccolo blocco e confrontare con le serie è un controllo potente di segni, gap e regione di validità prima di applicare il risultato a spazi grandi.":"Diagonalizing a small block and comparing with series is a powerful check of signs, gaps, and validity range before applying results to large spaces.","Errori tipici":"Common errors","Usare formule non degeneri con gap piccoli; confondere correzione di autostato con transizione temporale; omettere lambda negli ordini; applicare regola d'oro a un solo livello; trascurare la normalizzazione del ket corretto.":"Using nondegenerate formulas with small gaps; confusing eigenstate correction with a time transition; omitting lambda in orders; applying the golden rule to a single level; neglecting corrected-ket normalization.","Controlli rapidi":"Quick checks","Dichiarare dipendenza temporale; identificare gap o detuning; scegliere il blocco esatto; verificare parametri adimensionali piccoli; conservare unità; controllare che probabilità e norme restino fisiche.":"State time dependence; identify gaps or detuning; choose the exact block; verify small dimensionless parameters; preserve units; check probabilities and norms remain physical.","Controllo da orale":"Oral exam checklist","Chiedi se H dipende dal tempo.":"Ask whether H depends on time.","Nel caso stazionario controlla degenerazione e gap.":"In the stationary case check degeneracy and gaps.","Ricava E primo, ket primo ed E secondo.":"Derive first energy, first ket, and second energy.","Diagonalizza blocchi degeneri o quasi degeneri.":"Diagonalize degenerate or nearly degenerate blocks.","Nel caso dinamico scrivi l'ampiezza integrale.":"In the dynamical case write the integral amplitude.","Distingui spettro discreto e continuo.":"Distinguish discrete and continuous spectra.","Verifica il parametro di controllo corretto.":"Verify the correct control parameter.","Dichiara quale osservabile finale stai calcolando.":"State which final observable you are calculating.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 7 - perturbazioni stazionarie":"DIM 7 - stationary perturbation theory","DIM 12 - perturbazioni dipendenti dal tempo":"DIM 12 - time-dependent perturbation theory","Appunti-MQ.pdf, pagine PDF 169-187 - teorie perturbative":"Appunti-MQ.pdf, PDF pages 169-187 - perturbation theories","Le dieci immagini originali restano in una galleria richiudibile. La mappa confronta le due teorie senza sostituire le pagine di derivazione dedicate.":"The ten original images remain in a collapsible gallery. The map compares both theories without replacing the dedicated derivation pages.","Ritorna all'indice MQ":"Return to the MQ index","Apri la galleria delle tavole originali":"Open the original-plate gallery","Tavola 1 del riepilogo perturbativo":"Plate 1 of the perturbation summary","Tavola 2 del riepilogo perturbativo":"Plate 2 of the perturbation summary","Tavola 3 del riepilogo perturbativo":"Plate 3 of the perturbation summary","Tavola 4 del riepilogo perturbativo":"Plate 4 of the perturbation summary","Tavola 5 del riepilogo perturbativo":"Plate 5 of the perturbation summary","Tavola 6 del riepilogo perturbativo":"Plate 6 of the perturbation summary","Tavola 7 del riepilogo perturbativo":"Plate 7 of the perturbation summary","Tavola 8 del riepilogo perturbativo":"Plate 8 of the perturbation summary","Tavola 9 del riepilogo perturbativo":"Plate 9 of the perturbation summary","Tavola 10 del riepilogo perturbativo":"Plate 10 of the perturbation summary"},"attrs":{"Separazione perturbativa dell'Hamiltoniana":"Perturbative Hamiltonian split","Serie stazionarie di Rayleigh-Schrödinger":"Stationary Rayleigh-Schrödinger series","Correzione energetica diagonale":"Diagonal energy correction","Correzione non degenere all'autostato":"Nondegenerate eigenstate correction","Correzione energetica quadratica":"Quadratic energy correction","Parametro di mescolamento stazionario":"Stationary mixing parameter","Problema secolare degenere":"Degenerate secular problem","Hamiltoniana efficace a due livelli":"Two-level effective Hamiltonian","Espansione dinamica nella base non perturbata":"Dynamical expansion in the unperturbed basis","Ampiezza di transizione al primo ordine":"First-order transition amplitude","Condizione perturbativa dinamica":"Dynamical perturbative condition","Due output della teoria dinamica":"Two outputs of dynamical theory","Teorema di Feynman-Hellmann":"Feynman-Hellmann theorem","Confronto degli output fisici":"Comparison of physical outputs","Tavola 1 del riepilogo perturbativo":"Plate 1 of the perturbation summary","Tavola 2 del riepilogo perturbativo":"Plate 2 of the perturbation summary","Tavola 3 del riepilogo perturbativo":"Plate 3 of the perturbation summary","Tavola 4 del riepilogo perturbativo":"Plate 4 of the perturbation summary","Tavola 5 del riepilogo perturbativo":"Plate 5 of the perturbation summary","Tavola 6 del riepilogo perturbativo":"Plate 6 of the perturbation summary","Tavola 7 del riepilogo perturbativo":"Plate 7 of the perturbation summary","Tavola 8 del riepilogo perturbativo":"Plate 8 of the perturbation summary","Tavola 9 del riepilogo perturbativo":"Plate 9 of the perturbation summary","Tavola 10 del riepilogo perturbativo":"Plate 10 of the perturbation summary"},"title":{"it":"Teorie perturbative: mappa stazionaria e dinamica","en":"Perturbation theories: stationary and dynamical map"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

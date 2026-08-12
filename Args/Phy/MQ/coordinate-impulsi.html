@@ -1,293 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rappresentazione delle Coordinate e degli Impulsi</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappresentazioni delle coordinate e degli impulsi</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Rappresentazione delle Coordinate e degli Impulsi</h1>
-    <h2>Concetti fondamentali</h2>
-    Nella meccanica quantistica, la rappresentazione delle coordinate e degli impulsi costituisce il ponte tra lo spazio reale e lo spazio degli impulsi. Ogni stato quantistico può essere descritto in entrambi gli spazi, con una relazione diretta attraverso la trasformata di Fourier.
-
-    <h2>Rappresentazione nello spazio delle coordinate</h2>
-    La rappresentazione nello spazio delle coordinate descrive la funzione d'onda come una dipendenza dalla posizione:
-    <div class="formula">
-        \[
-        \psi(x) = \langle x|\psi\rangle
-        \]
-    </div>
-    Qui, \( |x\rangle \) è l'autostato dell'operatore posizione \( \hat{x} \), che soddisfa:
-    <div class="formula">
-        \[
-        \hat{x}|x\rangle = x|x\rangle
-        \]
-    </div>
-    Gli operatori posizione e impulso nella rappresentazione delle coordinate sono rispettivamente:
-    <div class="formula">
-        \[
-        \hat{x} = x, \quad \hat{p} = -i\hbar\frac{\partial}{\partial x}
-        \]
-
-    <h2>Rappresentazione nello spazio degli impulsi</h2>
-    La rappresentazione nello spazio degli impulsi esprime la funzione d'onda in termini della quantità di moto:
-    <div class="formula">
-        \[
-        \psi(p) = \langle p|\psi\rangle
-        \]
-    </div>
-    Dove \( |p\rangle \) è l'autostato dell'operatore impulso \( \hat{p} \), con:
-    <div class="formula">
-        \[
-        \hat{p}|p\rangle = p|p\rangle
-        \]
-    </div>
-    Gli operatori impulso e posizione nella rappresentazione degli impulsi sono:
-    <div class="formula">
-        \[
-        \hat{p} = p, \quad \hat{x} = i\hbar\frac{\partial}{\partial p}
-        \]
-
-    <h2>Relazione tra coordinate e impulsi</h2>
-    Le due rappresentazioni sono collegate attraverso la trasformata di Fourier:
-    <div class="formula">
-        \[
-        \psi(p) = \frac{1}{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty e^{-\frac{i}{\hbar}px} \psi(x) \, dx
-        \]
-    </div>
-    La trasformazione inversa è:
-    <div class="formula">
-        \[
-        \psi(x) = \frac{1}{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty e^{\frac{i}{\hbar}px} \psi(p) \, dp
-        \]
-
-    <h2>Commutazione e relazioni di incertezza</h2>
-    Gli operatori posizione e impulso soddisfano la relazione di commutazione fondamentale:
-    <div class="formula">
-        \[
-        [\hat{x}, \hat{p}] = i\hbar
-        \]
-    </div>
-    Questa relazione implica il principio di indeterminazione di Heisenberg:
-    <div class="formula">
-        \[
-        \Delta x \Delta p \geq \frac{\hbar}{2}
-        \]
-
-    <h2>Interpretazione fisica</h2>
-    Nello spazio delle coordinate, la densità di probabilità è data da \( |\psi(x)|^2 \), che rappresenta la probabilità di trovare la particella in una determinata posizione. Nello spazio degli impulsi, \( |\psi(p)|^2 \) rappresenta la probabilità che la particella abbia una determinata quantità di moto.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 5</div>
-  <h2>Rappresentazione delle Coordinate e degli Impulsi: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare le rappresentazioni x e p e il loro kernel di trasformazione.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Gli autostati continui soddisfano completezza delta. Il commutatore canonico fissa \(p=-i\hbar\partial_x\) in coordinate e \(x=i\hbar\partial_p\) in impulsi.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Kernel<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Dall'equazione agli autovalori di p.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\langle x|p\rangle=\frac{1}{\sqrt{2\pi\hbar}}e^{ipx/\hbar}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle -i\hbar\partial_x\langle x|p\rangle=p\langle x|p\rangle\Rightarrow\langle x|p\rangle=Ce^{ipx/\hbar};\quad\langle p|p'\rangle=\delta(p-p')\Rightarrow C=(2\pi\hbar)^{-1/2}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Fourier<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Inserendo la completezza.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\psi(x)=\frac1{\sqrt{2\pi\hbar}}\int e^{ipx/\hbar}\phi(p)dp"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi(x)=\langle x|\psi\rangle=\int dp\,\langle x|p\rangle\langle p|\psi\rangle=\frac1{\sqrt{2\pi\hbar}}\int e^{ipx/\hbar}\phi(p)dp\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Operatore posizione in p</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Integra x contro il kernel esponenziale.</p>
-    <p><strong>Calcolo.</strong> Poiché \(x e^{ipx/\hbar}=-i\hbar\partial_p e^{ipx/\hbar}\), integrazione per parti dà \(x\to i\hbar\partial_p\).</p>
-    <p><strong>Risultato e controllo.</strong> Le due rappresentazioni sono perfettamente simmetriche.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P1_DIM_0-6.txt">DIM 3</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Condizioni al bordo per integrazione per parti.</li>
-          <li>Scelta coerente dei fattori \(2\pi\hbar\).</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Posizione e impulso non sono due stati diversi, ma due descrizioni complete dello stesso ket.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Verifica ([x,p]) in entrambe le rappresentazioni.</li>
-          <li>Controlla le dimensioni di \(\langle x|p\rangle\).</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=86">Appunti-MQ.pdf, pp. 86-106: basi continue e trasformata di Fourier</a></li>
-          <li><a href="MQ.pdf#page=6">MQ.pdf, pp. capitoli 6-8: rappresentazioni x e p</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-coordinate-impulsi"><div class="lecture-kicker">Lezione approfondita - Argomento 5</div><h1>Rappresentazioni delle coordinate e degli impulsi</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare normalizzazione continua, nuclei di trasformazione di Fourier e forme differenziali di x e p, provare Parseval e commutatore canonico e tradurre operatori, valori medi ed equazione di Schrödinger tra le due rappresentazioni.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Una sola realtà, due basi</h3><p>psi di x e phi di p sono componenti dello stesso ket in due basi continue; nessuna delle due è più fondamentale.</p></article><article class="lecture-card lecture-warning"><h3>Le derivate dipendono dalla rappresentazione</h3><p>In x, p deriva e x moltiplica; in p avviene il contrario. I segni sono fissati dal nucleo di Fourier scelto.</p></article></div><h2>Basi continue e convenzione di Fourier</h2><div class="lecture-grid"><article class="lecture-card "><h3>Normalizzazione</h3><p>Si usa x e p normalizzati a delta con completezze integrali; le funzioni d'onda hanno dimensioni diverse nelle due basi.</p></article><article class="lecture-card "><h3>Convenzione</h3><p>Il nucleo più exp(ipx/hbar) in posizione fissa i fattori uno su radice di 2 pi hbar e i segni delle trasformate inverse.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Base delle posizioni<span class="lecture-step-boss">CONTINUO</span></h4><p>Gli autoket generalizzati di x sono ortogonali a delta e risolvono l'identità.</p><div class="lecture-formula" aria-label="Normalizzazione e completezza in posizione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle x|x'\rangle=\delta(x-x'),\qquad\int_{-\infty}^{\infty}dx\,|x\rangle\langle x|=I\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Funzione in posizione<span class="lecture-step-boss">COMPONENTE</span></h4><p>La funzione d'onda è l'ampiezza del ket sulla base x e la sua norma segue dalla completezza.</p><div class="lecture-formula" aria-label="Funzione d&#x27;onda e normalizzazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(x)=\langle x|\psi\rangle,\qquad1=\langle\psi|\psi\rangle=\int dx\,|\psi(x)|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Azione di x<span class="lecture-step-boss">MOLTIPLICA</span></h4><p>Inserire l'equazione agli autovalori mostra che x agisce moltiplicando la funzione.</p><div class="lecture-formula" aria-label="Operatore posizione nella base x"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle x|\hat x|\psi\rangle=x\langle x|\psi\rangle=x\psi(x)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Base degli impulsi<span class="lecture-step-boss">CONTINUO p</span></h4><p>Anche gli autoket di impulso hanno normalizzazione e completezza continue.</p><div class="lecture-formula" aria-label="Base e funzione d&#x27;onda in impulso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle p|p'\rangle=\delta(p-p'),\qquad\int dp\,|p\rangle\langle p|=I,\qquad\phi(p)=\langle p|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Nucleo x-p<span class="lecture-step-boss">ONDA PIANA</span></h4><p>L'equazione agli autovalori di p in coordinate produce l'onda piana normalizzata a delta.</p><div class="lecture-formula" aria-label="Nucleo del cambio tra basi continue"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle x|p\rangle=\frac{e^{ipx/\hbar}}{\sqrt{2\pi\hbar}}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Trasformata verso x<span class="lecture-step-boss">FOURIER</span></h4><p>Inserire la completezza in p ricostruisce psi come trasformata inversa dell'ampiezza di impulso.</p><div class="lecture-formula" aria-label="Trasformata da impulso a posizione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(x)=\int dp\,\langle x|p\rangle\phi(p)=\frac1{\sqrt{2\pi\hbar}}\int dp\,e^{ipx/\hbar}\phi(p)\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Trasformata verso p<span class="lecture-step-boss">FOURIER INV</span></h4><p>Coniugare il nucleo e inserire la completezza in x fornisce la trasformata opposta.</p><div class="lecture-formula" aria-label="Trasformata da posizione a impulso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \phi(p)=\frac1{\sqrt{2\pi\hbar}}\int dx\,e^{-ipx/\hbar}\psi(x)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Impulso in x<span class="lecture-step-boss">DERIVA</span></h4><p>Applicare p al nucleo e integrare sulle componenti mostra l'azione differenziale.</p><div class="lecture-formula" aria-label="Operatore impulso nella base x"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle x|\hat p|\psi\rangle=\int dp\,p\langle x|p\rangle\phi(p)=-i\hbar\frac{d\psi}{dx}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Posizione in p<span class="lecture-step-boss">DUALE</span></h4><p>Derivare il nucleo rispetto a p produce l'azione duale con segno positivo.</p><div class="lecture-formula" aria-label="Operatore posizione nella base p"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle p|\hat x|\psi\rangle=i\hbar\frac{d\phi}{dp}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Commutatore canonico<span class="lecture-step-boss">CHECK</span></h4><p>Agire su una funzione arbitraria evita ambiguità di ordine e restituisce i hbar.</p><div class="lecture-formula" aria-label="Verifica del commutatore in coordinate"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [x,p]\psi=x(-i\hbar\psi')+i\hbar(x\psi)'=i\hbar\psi\Rightarrow[x,p]=i\hbar\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Parseval<span class="lecture-step-boss">UNITARIETÀ</span></h4><p>La trasformata di Fourier è un cambio di base unitario e conserva prodotto interno e norma.</p><div class="lecture-formula" aria-label="Identità di Parseval quantistica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \int dx\,\psi^*(x)\chi(x)=\int dp\,\phi_\psi^*(p)\phi_\chi(p),\qquad\int dx|\psi|^2=\int dp|\phi|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Valori medi<span class="lecture-step-boss">OSSERVABILI</span></h4><p>La stessa osservabile si calcola nella base più conveniente usando l'operatore rappresentato correttamente.</p><div class="lecture-formula" aria-label="Valori medi nelle due rappresentazioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle x\rangle=\int dx\,x|\psi|^2=\int dp\,\phi^*i\hbar\partial_p\phi,\quad\langle p\rangle=\int dp\,p|\phi|^2=\int dx\,\psi^*(-i\hbar\partial_x)\psi\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Nucleo di un operatore<span class="lecture-step-boss">INTEGRALE</span></h4><p>Un operatore generale è rappresentato da un nucleo che agisce per integrazione; gli operatori locali sono casi con delta.</p><div class="lecture-formula" aria-label="Rappresentazione integrale di un operatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (A\psi)(x)=\int dx'\,\langle x|A|x'\rangle\psi(x'),\qquad\langle x|V(\hat x)|x'\rangle=V(x)\delta(x-x')\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Schrödinger nelle due basi<span class="lecture-step-boss">DINAMICA</span></h4><p>Per H=p quadrato su 2m più V(x), cinetica e potenziale scambiano tra forma moltiplicativa e nucleo integrale.</p><div class="lecture-formula" aria-label="Equazione di Schrödinger in x e p"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\partial_t\psi=\left[-\frac{\hbar^2}{2m}\partial_x^2+V(x)\right]\psi,\quad i\hbar\partial_t\phi=\frac{p^2}{2m}\phi+\int dp'\,V_{pp'}\phi(p'),\quad V_{pp'}\equiv\langle p|V(\hat x)|p'\rangle\)</span></div></article></section><h2>Esempio: gaussiana e indeterminazione minima</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si usa una gaussiana normalizzata centrata in x0 con fase di impulso p0.</p><p data-i18n-skip="true">\(\displaystyle \psi(x)=\frac{e^{-(x-x_0)^2/(4\sigma_x^2)+ip_0x/\hbar}}{(2\pi\sigma_x^2)^{1/4}}\Rightarrow\phi(p)=\left(\frac{2\sigma_x^2}{\pi\hbar^2}\right)^{1/4}e^{-\sigma_x^2(p-p_0)^2/\hbar^2-i(p-p_0)x_0/\hbar},\quad\sigma_p=\frac{\hbar}{2\sigma_x}\)</p><p><strong>Controllo.</strong> Le medie sono x0 e p0, Parseval conserva la norma e sigma x sigma p vale hbar su due.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Dimensioni</h3><p>psi ha dimensione lunghezza alla meno un mezzo, phi impulso alla meno un mezzo e il nucleo x-p impulso alla meno un mezzo.</p></article><article class="lecture-card "><h3>Bordi e autoaggiuntezza</h3><p>L'integrazione per parti che rende p hermitiano richiede che il termine di bordo si annulli sul dominio scelto.</p></article><article class="lecture-card "><h3>Convenzioni Fourier</h3><p>Spostare i fattori 2 pi hbar è lecito se trasformata, inversa e delta restano coerenti. Non si possono combinare convenzioni diverse.</p></article><article class="lecture-card "><h3>Più dimensioni</h3><p>Si sostituiscono x e p con vettori, derivate con gradiente e il fattore con (2 pi hbar) alla meno d su due.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Perdere hbar nell'esponenziale; usare lo stesso segno nelle due trasformate; scrivere x uguale meno i hbar derivata in p; normalizzare autoket continui a uno; dimenticare i termini al bordo.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Il prodotto px su hbar è adimensionale; le due trasformate sono inverse; p in x è meno i hbar derivata; x in p è più i hbar derivata; Parseval conserva la norma.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi delta e completezza per x e p.</li><li>Definisci psi e phi come componenti.</li><li>Ricava il nucleo onda piana.</li><li>Deriva entrambe le trasformate.</li><li>Ottieni p in x e x in p.</li><li>Verifica il commutatore su una funzione.</li><li>Dimostra Parseval inserendo una completezza.</li><li>Controlla l'esempio gaussiano e le dimensioni.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L802">Boss P1 - formalismo, rappresentazioni ed evoluzione</a></li><li><a href="Appunti-MQ.pdf#page=88">Appunti-MQ.pdf, pagine PDF 88-106 - basi continue e rappresentazioni x-p</a></li><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, generatori e simmetrie</a></li></ul><p class="lecture-note">Le formule sono state confrontate con le pagine verificate 88-106; segni, fattori di 2 pi hbar, operatori differenziali e normalizzazioni sono mantenuti nella stessa convenzione dall'inizio alla fine.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 5":"In-depth lesson - Topic 5","Rappresentazioni delle coordinate e degli impulsi":"Coordinate and momentum representations","Obiettivo.":"Objective.","Derivare normalizzazione continua, nuclei di trasformazione di Fourier e forme differenziali di x e p, provare Parseval e commutatore canonico e tradurre operatori, valori medi ed equazione di Schrödinger tra le due rappresentazioni.":"Derive continuous normalization, Fourier-transform kernels, and differential forms of x and p, prove Parseval and the canonical commutator, and translate operators, expectation values, and the Schrödinger equation between the two representations.","Una sola realtà, due basi":"One reality, two bases","psi di x e phi di p sono componenti dello stesso ket in due basi continue; nessuna delle due è più fondamentale.":"psi of x and phi of p are components of the same ket in two continuous bases; neither is more fundamental.","Le derivate dipendono dalla rappresentazione":"Derivatives depend on representation","In x, p deriva e x moltiplica; in p avviene il contrario. I segni sono fissati dal nucleo di Fourier scelto.":"In x, p differentiates and x multiplies; in p the roles reverse. Signs are fixed by the chosen Fourier kernel.","Basi continue e convenzione di Fourier":"Continuous bases and Fourier convention","Normalizzazione":"Normalization","Si usa x e p normalizzati a delta con completezze integrali; le funzioni d'onda hanno dimensioni diverse nelle due basi.":"Use delta-normalized x and p with integral completeness; wavefunctions have different dimensions in the two bases.","Convenzione":"Convention","Il nucleo più exp(ipx/hbar) in posizione fissa i fattori uno su radice di 2 pi hbar e i segni delle trasformate inverse.":"The plus exp(ipx/hbar) position kernel fixes factors one over square root of 2 pi hbar and signs of inverse transforms.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Base delle posizioni":"1. Position basis","CONTINUO":"CONTINUUM","Gli autoket generalizzati di x sono ortogonali a delta e risolvono l'identità.":"Generalized x eigenkets are delta-orthogonal and resolve the identity.","Passaggio":"Step","2. Funzione in posizione":"2. Position wavefunction","COMPONENTE":"COMPONENT","La funzione d'onda è l'ampiezza del ket sulla base x e la sua norma segue dalla completezza.":"The wavefunction is the ket amplitude in the x basis and its norm follows from completeness.","3. Azione di x":"3. Action of x","MOLTIPLICA":"MULTIPLY","Inserire l'equazione agli autovalori mostra che x agisce moltiplicando la funzione.":"Insert the eigenvalue equation to show that x acts by multiplying the wavefunction.","4. Base degli impulsi":"4. Momentum basis","CONTINUO p":"p CONTINUUM","Anche gli autoket di impulso hanno normalizzazione e completezza continue.":"Momentum eigenkets also have continuous normalization and completeness.","5. Nucleo x-p":"5. x-p kernel","ONDA PIANA":"PLANE WAVE","L'equazione agli autovalori di p in coordinate produce l'onda piana normalizzata a delta.":"The momentum eigenvalue equation in coordinates produces the delta-normalized plane wave.","6. Trasformata verso x":"6. Transform to x","FOURIER":"FOURIER","Inserire la completezza in p ricostruisce psi come trasformata inversa dell'ampiezza di impulso.":"Insert momentum completeness to reconstruct psi as the inverse transform of the momentum amplitude.","7. Trasformata verso p":"7. Transform to p","FOURIER INV":"FOURIER INV","Coniugare il nucleo e inserire la completezza in x fornisce la trasformata opposta.":"Conjugate the kernel and insert position completeness to obtain the opposite transform.","8. Impulso in x":"8. Momentum in x","DERIVA":"DERIVE","Applicare p al nucleo e integrare sulle componenti mostra l'azione differenziale.":"Apply p to the kernel and integrate over components to show the differential action.","9. Posizione in p":"9. Position in p","DUALE":"DUAL","Derivare il nucleo rispetto a p produce l'azione duale con segno positivo.":"Differentiate the kernel with respect to p to obtain the dual action with positive sign.","10. Commutatore canonico":"10. Canonical commutator","CHECK":"CHECK","Agire su una funzione arbitraria evita ambiguità di ordine e restituisce i hbar.":"Acting on an arbitrary function avoids ordering ambiguity and returns i hbar.","11. Parseval":"11. Parseval","UNITARIETÀ":"UNITARITY","La trasformata di Fourier è un cambio di base unitario e conserva prodotto interno e norma.":"The Fourier transform is a unitary change of basis and preserves inner products and norm.","12. Valori medi":"12. Expectation values","OSSERVABILI":"OBSERVABLES","La stessa osservabile si calcola nella base più conveniente usando l'operatore rappresentato correttamente.":"The same observable is computed in the most convenient basis using the correctly represented operator.","13. Nucleo di un operatore":"13. Operator kernel","INTEGRALE":"INTEGRAL","Un operatore generale è rappresentato da un nucleo che agisce per integrazione; gli operatori locali sono casi con delta.":"A general operator is represented by a kernel acting by integration; local operators are delta-function cases.","14. Schrödinger nelle due basi":"14. Schrödinger in both bases","DINAMICA":"DYNAMICS","Per H=p quadrato su 2m più V(x), cinetica e potenziale scambiano tra forma moltiplicativa e nucleo integrale.":"For H=p squared over 2m plus V(x), kinetic and potential terms exchange multiplication and integral-kernel forms.","Esempio: gaussiana e indeterminazione minima":"Example: Gaussian and minimum uncertainty","Impostazione.":"Setup.","Si usa una gaussiana normalizzata centrata in x0 con fase di impulso p0.":"Use a normalized Gaussian centered at x0 with momentum phase p0.","Controllo.":"Check.","Le medie sono x0 e p0, Parseval conserva la norma e sigma x sigma p vale hbar su due.":"Means are x0 and p0, Parseval preserves normalization, and sigma x sigma p equals hbar over two.","Interpretazione e limiti":"Interpretation and limits","Dimensioni":"Dimensions","psi ha dimensione lunghezza alla meno un mezzo, phi impulso alla meno un mezzo e il nucleo x-p impulso alla meno un mezzo.":"psi has dimension length to minus one half, phi momentum to minus one half, and the x-p kernel momentum to minus one half.","Bordi e autoaggiuntezza":"Boundaries and self-adjointness","L'integrazione per parti che rende p hermitiano richiede che il termine di bordo si annulli sul dominio scelto.":"Integration by parts making p Hermitian requires the boundary term to vanish on the chosen domain.","Convenzioni Fourier":"Fourier conventions","Spostare i fattori 2 pi hbar è lecito se trasformata, inversa e delta restano coerenti. Non si possono combinare convenzioni diverse.":"Moving factors 2 pi hbar is allowed if transform, inverse, and delta remain consistent. Different conventions cannot be mixed.","Più dimensioni":"Higher dimensions","Si sostituiscono x e p con vettori, derivate con gradiente e il fattore con (2 pi hbar) alla meno d su due.":"Replace x and p by vectors, derivatives by gradients, and the factor by (2 pi hbar) to minus d over two.","Errori tipici":"Common errors","Perdere hbar nell'esponenziale; usare lo stesso segno nelle due trasformate; scrivere x uguale meno i hbar derivata in p; normalizzare autoket continui a uno; dimenticare i termini al bordo.":"Losing hbar in the exponential; using the same sign in both transforms; writing x equal minus i hbar derivative in p; unit-normalizing continuous eigenkets; forgetting boundary terms.","Controlli rapidi":"Quick checks","Il prodotto px su hbar è adimensionale; le due trasformate sono inverse; p in x è meno i hbar derivata; x in p è più i hbar derivata; Parseval conserva la norma.":"px over hbar is dimensionless; the two transforms are inverses; p in x is minus i hbar derivative; x in p is plus i hbar derivative; Parseval preserves norm.","Controllo da orale":"Oral exam checklist","Scrivi delta e completezza per x e p.":"Write delta normalization and completeness for x and p.","Definisci psi e phi come componenti.":"Define psi and phi as components.","Ricava il nucleo onda piana.":"Derive the plane-wave kernel.","Deriva entrambe le trasformate.":"Derive both transforms.","Ottieni p in x e x in p.":"Obtain p in x and x in p.","Verifica il commutatore su una funzione.":"Verify the commutator on a function.","Dimostra Parseval inserendo una completezza.":"Prove Parseval by inserting completeness.","Controlla l'esempio gaussiano e le dimensioni.":"Check the Gaussian example and dimensions.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss P1 - formalismo, rappresentazioni ed evoluzione":"Boss P1 - formalism, representations, and evolution","Appunti-MQ.pdf, pagine PDF 88-106 - basi continue e rappresentazioni x-p":"Appunti-MQ.pdf, PDF pages 88-106 - basi continue e rappresentazioni x-p","DIM 15 - commutatori, generatori e simmetrie":"DIM 15 - commutators, generators, and symmetries","Le formule sono state confrontate con le pagine verificate 88-106; segni, fattori di 2 pi hbar, operatori differenziali e normalizzazioni sono mantenuti nella stessa convenzione dall'inizio alla fine.":"Formulas were compared with verified pages 88-106; signs, 2 pi hbar factors, differential operators, and normalizations use one consistent convention throughout.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Normalizzazione e completezza in posizione":"Position normalization and completeness","Funzione d'onda e normalizzazione":"Wavefunction and normalization","Operatore posizione nella base x":"Position operator in the x basis","Base e funzione d'onda in impulso":"Momentum basis and wavefunction","Nucleo del cambio tra basi continue":"Kernel changing between continuous bases","Trasformata da impulso a posizione":"Transform from momentum to position","Trasformata da posizione a impulso":"Transform from position to momentum","Operatore impulso nella base x":"Momentum operator in the x basis","Operatore posizione nella base p":"Position operator in the p basis","Verifica del commutatore in coordinate":"Coordinate check of the commutator","Identità di Parseval quantistica":"Quantum Parseval identity","Valori medi nelle due rappresentazioni":"Expectation values in both representations","Rappresentazione integrale di un operatore":"Integral representation of an operator","Equazione di Schrödinger in x e p":"Schrödinger equation in x and p"},"title":{"it":"Rappresentazioni delle coordinate e degli impulsi","en":"Coordinate and momentum representations"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

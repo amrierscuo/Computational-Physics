@@ -1,326 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perturbazione Costante e Periodica</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perturbazione costante e periodica</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Perturbazione Costante e Periodica</h1>
-
-    <h2>Introduzione</h2>
-    <p>
-        Le perturbazioni costanti e periodiche sono fondamentali nello studio delle transizioni quantistiche tra stati energetici discreti. 
-        Analizzando questi casi con l'approccio della meccanica quantistica, è possibile comprendere come un sistema risponde a stimoli esterni.
-    </p>
-
-    <h2>Perturbazione Costante</h2>
-    <p>
-        Consideriamo una perturbazione del tipo costante, descritta dall'Hamiltoniana perturbativa:
-    </p>
-    <div class="formula">
-        \( H'(t) = V \)
-    </div>
-    <p>
-        Questo caso conduce a una transizione tra gli stati iniziale \( \lvert i \rangle \) e finale \( \lvert f \rangle \) con una probabilità 
-        di transizione data da:
-    </p>
-    <div class="formula">
-        \( P_{i \to f}(t) = \frac{\lvert \langle f \lvert V \rvert i \rangle \rvert^2}{\hbar^2} \frac{\sin^2(\Delta \omega t / 2)}{(\Delta \omega / 2)^2} \)
-    </div>
-    <p>
-        Qui \( \Delta \omega = \omega_f - \omega_i \) è la differenza di frequenze tra lo stato finale e lo stato iniziale. La funzione sinusoidale 
-        mostra un comportamento di risonanza quando \( \Delta \omega \to 0 \), il che implica che le transizioni sono più probabili per energie vicine.
-    </p>
-
-    <h2>Perturbazione Periodica</h2>
-    <p>
-        Una perturbazione periodica è invece descritta come:
-    </p>
-    <div class="formula">
-        \( H'(t) = V \cos(\omega t) \)
-    </div>
-    <p>
-        In questo caso, si osservano due frequenze di transizione, corrispondenti a \( \omega_f = \omega_i \pm \omega \). La probabilità di transizione è:
-    </p>
-    <div class="formula">
-        \( P_{i \to f}(t) = \frac{\lvert \langle f \lvert V \rvert i \rangle \rvert^2}{\hbar^2} \left[ \frac{\sin^2((\Delta \omega + \omega)t / 2)}{((\Delta \omega + \omega)/2)^2} + \frac{\sin^2((\Delta \omega - \omega)t / 2)}{((\Delta \omega - \omega)/2)^2} \right] \)
-    </div>
-    <p>
-        Questo comportamento è essenziale per descrivere fenomeni come l'emissione e l'assorbimento di energia da parte di un sistema, in risonanza con una perturbazione esterna.
-    </p>
-
-    <h2>Applicazioni</h2>
-    <ul>
-        <li>Transizioni elettroniche in atomi e molecole</li>
-        <li>Interazione radiazione-materia</li>
-        <li>Spettroscopia quantistica</li>
-    </ul>
-
-    <h2>Analisi dei Passaggi Matematici</h2>
-<p>
-    Per comprendere meglio le probabilità di transizione, analizziamo le formule derivanti dalle perturbazioni costanti e periodiche.
-</p>
-
-<h3>Perturbazione Costante</h3>
-<p>
-    La probabilità di transizione \( P_{i \to f}(t) \) per una perturbazione costante deriva dall'integrazione nel tempo dell'interazione tra lo stato iniziale \( \lvert i \rangle \) e finale \( \lvert f \rangle \). 
-    La funzione seno-squared riflette l'interferenza delle onde di probabilità e raggiunge un massimo quando \( \Delta \omega \to 0 \). 
-    Questa situazione è nota come <em>risonanza</em>, in cui:
-</p>
-<div class="formula">
-    \( P_{i \to f}(t) \approx \frac{t^2 \lvert \langle f \lvert V \rvert i \rangle \rvert^2}{\hbar^2} \)
-</div>
-<p>
-    In risonanza, la probabilità cresce quadraticamente con il tempo, riflettendo un'accumulazione costante di probabilità di transizione. 
-    Questo comportamento evidenzia come una perturbazione costante possa essere efficace solo per tempi relativamente brevi o in condizioni di vicinanza energetica.
-</p>
-
-<h3>Perturbazione Periodica</h3>
-<p>
-    Per una perturbazione periodica \( H'(t) = V \cos(\omega t) \), si considera lo sviluppo della soluzione nell'approssimazione perturbativa:
-</p>
-<div class="formula">
-    \( c_f(t) \approx -\frac{i}{\hbar} \int_0^t \langle f \lvert H'(t') \rvert i \rangle e^{i\omega_{fi}t'} dt' \)
-</div>
-<p>
-    Qui, \( \omega_{fi} = \frac{E_f - E_i}{\hbar} \) rappresenta la frequenza corrispondente alla differenza energetica tra gli stati. Sostituendo \( H'(t) \) nella forma periodica, otteniamo:
-</p>
-<div class="formula">
-    \( P_{i \to f}(t) = \frac{\lvert \langle f \lvert V \rvert i \rangle \rvert^2}{\hbar^2} \left[ \frac{\sin^2((\Delta \omega + \omega)t / 2)}{((\Delta \omega + \omega)/2)^2} + \frac{\sin^2((\Delta \omega - \omega)t / 2)}{((\Delta \omega - \omega)/2)^2} \right] \)
-</div>
-<p>
-    Questo risultato mostra la presenza di due frequenze di risonanza, \( \Delta \omega = \pm \omega \), che corrispondono rispettivamente all'assorbimento e all'emissione di energia da parte del sistema.
-</p>
-
-<h3>Considerazioni sulla Risonanza</h3>
-<p>
-    La risonanza è un concetto chiave: quando l'energia della perturbazione esterna coincide con una differenza energetica tra gli stati del sistema, il trasferimento di energia è massimizzato. 
-    Questo principio è alla base di tecniche come la spettroscopia Raman e l'assorbimento ottico.
-</p>
-
-<h2>Connessione con la Regola d'Oro di Fermi</h2>
-<p>
-    La Regola d’Oro di Fermi estende questi risultati per descrivere la probabilità di transizione in sistemi con un continuo di stati finali. La sua espressione generale è:
-</p>
-<div class="formula">
-    \( \Gamma_{i \to f} = \frac{2\pi}{\hbar} \lvert \langle f \lvert H' \rvert i \rangle \rvert^2 \rho(E_f) \)
-</div>
-<p>
-    Qui, \( \Gamma_{i \to f} \) rappresenta la velocità di transizione e \( \rho(E_f) \) è la densità degli stati finali. La Regola d’Oro di Fermi trova applicazione diretta nei processi di emissione spontanea e assorbimento stimolato.
-</p>
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 14</div>
-  <h2>Perturbazione Costante e Periodica: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Confrontare accensione costante e forzante armonica tramite i rispettivi profili spettrali.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Una perturbazione costante accesa bruscamente contiene molte frequenze per il transiente; una sinusoidale contiene componenti ±omega e produce assorbimento o emissione risonante.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Costante<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Integrale elementare.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P\propto\frac{4|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle V_{fi}(t)=V_{fi}:\quad c_f^{(1)}=-\frac{iV_{fi}}\hbar\int_0^te^{i\omega_{fi}t'}dt'=\frac{V_{fi}}{\hbar\omega_{fi}}(1-e^{i\omega_{fi}t})\Rightarrow P=\frac{4|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Periodica<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Due denominatori.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="c_f\sim\frac{e^{i(\omega_{fi}-\omega)t}-1}{\omega_{fi}-\omega}+\frac{e^{i(\omega_{fi}+\omega)t}-1}{\omega_{fi}+\omega}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \cos\omega t=(e^{i\omega t}+e^{-i\omega t})/2;\quad\int_0^te^{i(\omega_{fi}\pm\omega)t'}dt'=\frac{e^{i(\omega_{fi}\pm\omega)t}-1}{i(\omega_{fi}\pm\omega)}\Rightarrow c_f\sim\frac{e^{i(\omega_{fi}-\omega)t}-1}{\omega_{fi}-\omega}+\frac{e^{i(\omega_{fi}+\omega)t}-1}{\omega_{fi}+\omega}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Larghezza risonante</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Il primo zero del sinc avviene per detuning \(2\pi/t\).</p>
-    <p><strong>Calcolo.</strong> Aumentando il tempo la riga si restringe come \(1/t\).</p>
-    <p><strong>Risultato e controllo.</strong> Area e altezza si combinano per dare un tasso finito nel continuo.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 12</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_13.html">Domanda 2025 n. 13</a> - Perturbazioni dipendenti dal tempo</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Accensione specificata.</li>
-          <li>Approssimazione perturbativa prima della saturazione.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Il tempo di osservazione è parte della risoluzione energetica, non un dettaglio tecnico.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Distingui i due segni di frequenza.</li>
-          <li>Ricava la larghezza del massimo centrale.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=179">Appunti-MQ.pdf, pp. 179-186: accensione costante, forzante periodica e risonanza</a></li>
-          <li><a href="MQ.pdf#page=27">MQ.pdf, pp. capitolo 27: approssimazione risonante</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-perturbazione-costante-periodica"><div class="lecture-kicker">Lezione approfondita - impulsi, sinc e risonanza</div><h1>Perturbazione costante e periodica</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Calcolare le risposte finite nel tempo per accensione costante e guida armonica, derivare larghezza della risonanza, pulsazione di Bohr e condizioni di validità della prima approssimazione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Una formula madre</h3><p>Ogni caso nasce dall'integrale dell'elemento di matrice moltiplicato per la fase di Bohr. La forma temporale del campo determina il profilo spettrale.</p></article><article class="lecture-card lecture-warning"><h3>Accensione non adiabatica</h3><p>Una perturbazione costante dopo t=0 non è stazionaria globalmente: l'accensione improvvisa contiene molte frequenze ed è ciò che induce le transizioni.</p></article></div><h2>Convenzioni per durata e detuning</h2><div class="lecture-grid"><article class="lecture-card "><h3>Finestra finita</h3><p>Si osserva l'evoluzione tra 0 e T. La larghezza spettrale è quindi finita e scala come 1/T.</p></article><article class="lecture-card "><h3>Detuning</h3><p>Per assorbimento si usa Delta=omega_fi-omega. Un segno coerente rende immediata la condizione Delta=0.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Ampiezza generale<span class="lecture-step-boss">BASE</span></h4><p>Si parte dal risultato al primo ordine per f diverso da i.</p><div class="lecture-formula" aria-label="Ampiezza generale su una finestra finita"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_f^{(1)}(T)=-\frac{i\lambda}{\hbar}\int_0^Tdt\,V_{fi}(t)e^{i\omega_{fi}t}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Accensione a gradino<span class="lecture-step-boss">COSTANTE</span></h4><p>V è costante soltanto nell'intervallo osservato e nulla prima dell'accensione.</p><div class="lecture-formula" aria-label="Perturbazione rettangolare costante"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(t)=V\,\Theta(t)\Theta(T-t),\qquad V_{fi}(t)=V_{fi}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Integrale elementare<span class="lecture-step-boss">COSTANTE</span></h4><p>L'integrale della fase produce un denominatore omega_fi e una differenza di esponenziali.</p><div class="lecture-formula" aria-label="Integrale della fase di Bohr"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \int_0^T e^{i\omega_{fi}t}dt=\frac{e^{i\omega_{fi}T}-1}{i\omega_{fi}}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Forma sinc<span class="lecture-step-boss">COSTANTE</span></h4><p>Separare la fase centrale rende manifesto il seno su detuning.</p><div class="lecture-formula" aria-label="Ampiezza per una perturbazione costante finita"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_f^{(1)}(T)=-\frac{2i\lambda V_{fi}}{\hbar}e^{i\omega_{fi}T/2}\frac{\sin(\omega_{fi}T/2)}{\omega_{fi}}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Probabilità costante<span class="lecture-step-boss">RISULTATO</span></h4><p>La fase globale scompare nel modulo quadro.</p><div class="lecture-formula" aria-label="Profilo sinc quadro della probabilità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to f}(T)=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}T/2)}{\omega_{fi}^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Limite di tempi brevi<span class="lecture-step-boss">CHECK</span></h4><p>Poiché sin x circa x, la probabilità cresce universalmente come T² vicino all'origine.</p><div class="lecture-formula" aria-label="Legge quadratica a tempi brevi"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\omega_{fi}|T\ll1\Rightarrow P_{i\to f}(T)\simeq\frac{\lambda^2|V_{fi}|^2T^2}{\hbar^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Larghezza energetica<span class="lecture-step-boss">TEMPO-ENERGIA</span></h4><p>Il primo zero del lobo centrale fissa una risoluzione di ordine hbar/T, non un'incertezza tra due operatori.</p><div class="lecture-formula" aria-label="Primo zero e risoluzione spettrale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\omega_{fi}|\frac T2=\pi\Rightarrow|E_f-E_i|=\frac{2\pi\hbar}{T}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Guida hermitiana<span class="lecture-step-boss">PERIODICA</span></h4><p>La forma complessa più generale a una frequenza contiene un operatore F e il suo aggiunto.</p><div class="lecture-formula" aria-label="Decomposizione hermitiana della perturbazione periodica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(t)=Fe^{-i\omega t}+F^\dagger e^{i\omega t}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Due frequenze<span class="lecture-step-boss">PERIODICA</span></h4><p>Moltiplicando per la fase di Bohr compaiono i detuning omega_fi meno omega e omega_fi più omega.</p><div class="lecture-formula" aria-label="Separazione dei due canali armonici"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V_{fi}(t)e^{i\omega_{fi}t}=F_{fi}e^{i(\omega_{fi}-\omega)t}+(F^\dagger)_{fi}e^{i(\omega_{fi}+\omega)t}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Ampiezza periodica<span class="lecture-step-boss">DIM 12</span></h4><p>Ogni canale produce la stessa funzione di finestra centrata sul proprio detuning.</p><div class="lecture-formula" aria-label="Ampiezza con detuning Delta meno e Delta più"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_f^{(1)}=-\frac{2i\lambda}{\hbar}\left[F_{fi}e^{i\Delta_-T/2}\frac{\sin(\Delta_-T/2)}{\Delta_-}+(F^\dagger)_{fi}e^{i\Delta_+T/2}\frac{\sin(\Delta_+T/2)}{\Delta_+}\right]\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Pulsazione di Bohr<span class="lecture-step-boss">RISONANZA</span></h4><p>Per una transizione verso energia maggiore, il primo canale è risonante quando l'energia del quanto uguaglia il gap.</p><div class="lecture-formula" aria-label="Condizione di risonanza per assorbimento"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta_-=\omega_{fi}-\omega=0\Rightarrow\omega=\omega_{fi}=\frac{E_f-E_i}{\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Canale di emissione<span class="lecture-step-boss">RISONANZA</span></h4><p>Se E_f è minore di E_i, omega_fi è negativo e il canale Delta più può annullarsi.</p><div class="lecture-formula" aria-label="Condizione energetica di emissione stimolata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta_+=\omega_{fi}+\omega=0\Rightarrow E_f=E_i-\hbar\omega\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Approssimazione rotante<span class="lecture-step-boss">RWA</span></h4><p>Vicino a una sola risonanza si conserva il termine lento e si trascura quello che oscilla circa a 2 omega.</p><div class="lecture-formula" aria-label="Ampiezza risonante nell&#x27;approssimazione rotante"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\Delta_-|\ll\omega\Rightarrow c_f^{(1)}\simeq-\frac{2i\lambda F_{fi}}{\hbar}e^{i\Delta_-T/2}\frac{\sin(\Delta_-T/2)}{\Delta_-}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Limite della prima approssimazione<span class="lecture-step-boss">VALIDITÀ</span></h4><p>Esattamente in risonanza l'ampiezza cresce come T; quando diventa di ordine uno occorre la dinamica di Rabi non perturbativa.</p><div class="lecture-formula" aria-label="Condizione temporale di validità in risonanza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |c_f^{(1)}|\simeq\frac{\lambda|F_{fi}|T}{\hbar}\ll1\)</span></div></article></section><h2>Esempio: due livelli guidati</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Un sistema con gap hbar omega0 è guidato da W cos(omega t), con W_fi=g reale.</p><p data-i18n-skip="true">\(\displaystyle P_{i\to f}^{(1)}(T)\simeq\frac{g^2}{\hbar^2}\frac{\sin^2[(\omega_0-\omega)T/2]}{(\omega_0-\omega)^2}\quad\text{vicino a }\omega_0\)</p><p><strong>Controllo.</strong> Il massimo cresce come g²T²/(4hbar²) e la larghezza si restringe come 1/T. Quando il massimo non è più piccolo di uno, la formula va sostituita dalle oscillazioni di Rabi.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Accensione e spettro</h3><p>Un segnale infinito e perfettamente armonico avrebbe righe delta; una durata finita le convolge con una sinc.</p></article><article class="lecture-card "><h3>Conservazione dell'energia</h3><p>A tempo finito l'energia è risolta entro circa hbar/T; il delta esatto emerge soltanto nel limite lungo insieme a un continuo.</p></article><article class="lecture-card "><h3>Risonanza non basta</h3><p>Serve anche un elemento di matrice non nullo: frequenza corretta e regola di selezione sono condizioni indipendenti.</p></article><article class="lecture-card "><h3>Oltre il primo ordine</h3><p>Il termine secolare in risonanza è il segnale matematico della necessità di risommare la serie mediante un modello a due livelli.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Trattare una costante eterna come capace di transizioni; perdere il fattore un mezzo passando da coseno agli esponenziali; confondere omega con frequenza ordinaria; usare soltanto un canale senza dichiarare RWA; estrapolare P oltre uno.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Il profilo è pari nel detuning; il limite Delta a zero è finito; la larghezza scala 1/T; assorbimento aumenta l'energia di hbar omega; emissione la diminuisce.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Integra il gradino e ottieni la sinc.</li><li>Calcola limite breve e primo zero.</li><li>Scrivi la guida come F più F aggiunto.</li><li>Definisci i due detuning.</li><li>Identifica la pulsazione di Bohr.</li><li>Distingui assorbimento ed emissione.</li><li>Motiva la RWA vicino a risonanza.</li><li>Controlla quando fallisce il primo ordine.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1726">DIM 12 - perturbazioni dipendenti dal tempo e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro</a></li><li><a href="set-12-probabilita-transizione.html">Set 12 - esercizi sulle probabilità di transizione</a></li><li><a href="Domanda2025_13.html">Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo</a></li></ul><p class="lecture-note">Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - impulsi, sinc e risonanza":"In-depth lesson - pulses, sinc, and resonance","Perturbazione costante e periodica":"Constant and periodic perturbations","Obiettivo.":"Objective.","Calcolare le risposte finite nel tempo per accensione costante e guida armonica, derivare larghezza della risonanza, pulsazione di Bohr e condizioni di validità della prima approssimazione.":"Compute finite-time responses for constant switching and harmonic driving, deriving resonance width, Bohr frequency, and validity conditions of the first approximation.","Una formula madre":"One master formula","Ogni caso nasce dall'integrale dell'elemento di matrice moltiplicato per la fase di Bohr. La forma temporale del campo determina il profilo spettrale.":"Every case follows from integrating the matrix element times the Bohr phase. The time profile of the field determines the spectral profile.","Accensione non adiabatica":"Nonadiabatic switching","Una perturbazione costante dopo t=0 non è stazionaria globalmente: l'accensione improvvisa contiene molte frequenze ed è ciò che induce le transizioni.":"A perturbation constant after t=0 is not globally stationary: sudden switching contains many frequencies and is what induces transitions.","Convenzioni per durata e detuning":"Conventions for duration and detuning","Finestra finita":"Finite window","Si osserva l'evoluzione tra 0 e T. La larghezza spettrale è quindi finita e scala come 1/T.":"Evolution is observed between 0 and T. The spectral width is therefore finite and scales as 1/T.","Detuning":"Detuning","Per assorbimento si usa Delta=omega_fi-omega. Un segno coerente rende immediata la condizione Delta=0.":"For absorption use Delta=omega_fi-omega. A consistent sign makes the condition Delta=0 immediate.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Ampiezza generale":"1. General amplitude","BASE":"BASE","Si parte dal risultato al primo ordine per f diverso da i.":"Start from the first-order result for f different from i.","Passaggio":"Step","2. Accensione a gradino":"2. Step switching","COSTANTE":"CONSTANT","V è costante soltanto nell'intervallo osservato e nulla prima dell'accensione.":"V is constant only during the observed interval and zero before switching.","3. Integrale elementare":"3. Elementary integral","L'integrale della fase produce un denominatore omega_fi e una differenza di esponenziali.":"Integrating the phase produces an omega_fi denominator and a difference of exponentials.","4. Forma sinc":"4. Sinc form","Separare la fase centrale rende manifesto il seno su detuning.":"Separating the central phase makes the sine-over-detuning form explicit.","5. Probabilità costante":"5. Constant-drive probability","RISULTATO":"RESULT","La fase globale scompare nel modulo quadro.":"The global phase disappears in the squared modulus.","6. Limite di tempi brevi":"6. Short-time limit","CHECK":"CHECK","Poiché sin x circa x, la probabilità cresce universalmente come T² vicino all'origine.":"Since sin x is approximately x, probability grows universally as T² near the origin.","7. Larghezza energetica":"7. Energy width","TEMPO-ENERGIA":"TIME-ENERGY","Il primo zero del lobo centrale fissa una risoluzione di ordine hbar/T, non un'incertezza tra due operatori.":"The first zero of the central lobe sets a resolution of order hbar/T, not an uncertainty between two operators.","8. Guida hermitiana":"8. Hermitian drive","PERIODICA":"PERIODIC","La forma complessa più generale a una frequenza contiene un operatore F e il suo aggiunto.":"The most general one-frequency complex form contains an operator F and its adjoint.","9. Due frequenze":"9. Two frequencies","Moltiplicando per la fase di Bohr compaiono i detuning omega_fi meno omega e omega_fi più omega.":"Multiplying by the Bohr phase produces detunings omega_fi minus omega and omega_fi plus omega.","10. Ampiezza periodica":"10. Periodic amplitude","DIM 12":"DIM 12","Ogni canale produce la stessa funzione di finestra centrata sul proprio detuning.":"Each channel produces the same window function centered on its own detuning.","11. Pulsazione di Bohr":"11. Bohr frequency","RISONANZA":"RESONANCE","Per una transizione verso energia maggiore, il primo canale è risonante quando l'energia del quanto uguaglia il gap.":"For a transition to higher energy, the first channel is resonant when the quantum energy equals the gap.","12. Canale di emissione":"12. Emission channel","Se E_f è minore di E_i, omega_fi è negativo e il canale Delta più può annullarsi.":"If E_f is below E_i, omega_fi is negative and the Delta-plus channel can vanish.","13. Approssimazione rotante":"13. Rotating-wave approximation","RWA":"RWA","Vicino a una sola risonanza si conserva il termine lento e si trascura quello che oscilla circa a 2 omega.":"Near a single resonance, retain the slow term and neglect the one oscillating at approximately 2 omega.","14. Limite della prima approssimazione":"14. Limit of first order","VALIDITÀ":"VALIDITY","Esattamente in risonanza l'ampiezza cresce come T; quando diventa di ordine uno occorre la dinamica di Rabi non perturbativa.":"Exactly at resonance the amplitude grows as T; when it becomes order one, nonperturbative Rabi dynamics is required.","Esempio: due livelli guidati":"Example: driven two-level system","Impostazione.":"Setup.","Un sistema con gap hbar omega0 è guidato da W cos(omega t), con W_fi=g reale.":"A system with gap hbar omega0 is driven by W cos(omega t), with real W_fi=g.","Controllo.":"Check.","Il massimo cresce come g²T²/(4hbar²) e la larghezza si restringe come 1/T. Quando il massimo non è più piccolo di uno, la formula va sostituita dalle oscillazioni di Rabi.":"The maximum grows as g²T²/(4hbar²) and the width narrows as 1/T. Once the maximum is no longer small compared with one, Rabi oscillations must replace this formula.","Interpretazione e limiti":"Interpretation and limits","Accensione e spettro":"Switching and spectrum","Un segnale infinito e perfettamente armonico avrebbe righe delta; una durata finita le convolge con una sinc.":"An infinite perfectly harmonic signal would have delta lines; finite duration convolves them with a sinc.","Conservazione dell'energia":"Energy conservation","A tempo finito l'energia è risolta entro circa hbar/T; il delta esatto emerge soltanto nel limite lungo insieme a un continuo.":"At finite time energy is resolved within approximately hbar/T; the exact delta emerges only in the long-time limit together with a continuum.","Risonanza non basta":"Resonance is not enough","Serve anche un elemento di matrice non nullo: frequenza corretta e regola di selezione sono condizioni indipendenti.":"A nonzero matrix element is also required: correct frequency and selection rule are independent conditions.","Oltre il primo ordine":"Beyond first order","Il termine secolare in risonanza è il segnale matematico della necessità di risommare la serie mediante un modello a due livelli.":"The resonant secular term mathematically signals the need to resum the series through a two-level model.","Errori tipici":"Common errors","Trattare una costante eterna come capace di transizioni; perdere il fattore un mezzo passando da coseno agli esponenziali; confondere omega con frequenza ordinaria; usare soltanto un canale senza dichiarare RWA; estrapolare P oltre uno.":"Treating an eternal constant as transition-inducing; losing the factor one half when converting cosine to exponentials; confusing angular and ordinary frequency; using only one channel without declaring RWA; extrapolating P beyond one.","Controlli rapidi":"Quick checks","Il profilo è pari nel detuning; il limite Delta a zero è finito; la larghezza scala 1/T; assorbimento aumenta l'energia di hbar omega; emissione la diminuisce.":"The profile is even in detuning; the Delta-to-zero limit is finite; width scales as 1/T; absorption raises energy by hbar omega; emission lowers it.","Controllo da orale":"Oral exam checklist","Integra il gradino e ottieni la sinc.":"Integrate the step and obtain the sinc.","Calcola limite breve e primo zero.":"Compute the short-time limit and first zero.","Scrivi la guida come F più F aggiunto.":"Write the drive as F plus F adjoint.","Definisci i due detuning.":"Define the two detunings.","Identifica la pulsazione di Bohr.":"Identify the Bohr frequency.","Distingui assorbimento ed emissione.":"Distinguish absorption and emission.","Motiva la RWA vicino a risonanza.":"Justify RWA near resonance.","Controlla quando fallisce il primo ordine.":"Check when first order fails.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 12 - perturbazioni dipendenti dal tempo e copione orale":"DIM 12 - time-dependent perturbations and oral-exam script","Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro":"Appunti-MQ.pdf, PDF pages 176-184 - theory, resonance, and golden rule","Set 12 - esercizi sulle probabilità di transizione":"Set 12 - transition-probability exercises","Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo":"2025 question 13 - time-dependent perturbations","Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.":"Conventions for angular frequencies, Dirac deltas, and density of states are kept identical across all six pages in this block.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Ampiezza generale su una finestra finita":"General amplitude over a finite window","Perturbazione rettangolare costante":"Constant rectangular perturbation","Integrale della fase di Bohr":"Integral of the Bohr phase","Ampiezza per una perturbazione costante finita":"Amplitude for a finite constant perturbation","Profilo sinc quadro della probabilità":"Squared-sinc probability profile","Legge quadratica a tempi brevi":"Short-time quadratic law","Primo zero e risoluzione spettrale":"First zero and spectral resolution","Decomposizione hermitiana della perturbazione periodica":"Hermitian decomposition of the periodic perturbation","Separazione dei due canali armonici":"Separation of the two harmonic channels","Ampiezza con detuning Delta meno e Delta più":"Amplitude with Delta-minus and Delta-plus detunings","Condizione di risonanza per assorbimento":"Absorption resonance condition","Condizione energetica di emissione stimolata":"Energy condition for stimulated emission","Ampiezza risonante nell'approssimazione rotante":"Resonant amplitude in the rotating-wave approximation","Condizione temporale di validità in risonanza":"Time-domain validity condition at resonance"},"title":{"it":"Perturbazione costante e periodica","en":"Constant and periodic perturbations"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

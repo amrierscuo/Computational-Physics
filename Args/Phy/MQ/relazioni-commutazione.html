@@ -1,281 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relazioni di Commutazione</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relazioni di commutazione del momento angolare</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Relazioni di Commutazione</h1>
-    <h2>Operatori di momento angolare</h2>
-    Il momento angolare è descritto da un operatore vettoriale \( \vec{L} = (L_x, L_y, L_z) \). Le componenti soddisfano le seguenti relazioni di commutazione fondamentali:
-    <div class="formula">
-        \[
-        [L_x, L_y] = i \hbar L_z, \quad [L_y, L_z] = i \hbar L_x, \quad [L_z, L_x] = i \hbar L_y
-        \]
-    </div>
-    dove \( [A, B] = AB - BA \) è il commutatore tra due operatori \( A \) e \( B \).
-
-    <h2>Modulo quadrato del momento angolare</h2>
-    L'operatore modulo quadrato \( L^2 = L_x^2 + L_y^2 + L_z^2 \) commuta con ciascuna delle componenti:
-    <div class="formula">
-        \[
-        [L^2, L_x] = [L^2, L_y] = [L^2, L_z] = 0
-        \]
-    </div>
-    Questo implica che \( L^2 \) e \( L_z \) possono essere simultaneamente diagonalizzati, fornendo i numeri quantici \( l \) (momento angolare totale) e \( m \) (proiezione lungo l'asse \( z \)).
-
-    <h2>Autovalori di \( L^2 \) e \( L_z \)</h2>
-    Gli autovalori degli operatori \( L^2 \) e \( L_z \) sono:
-    <div class="formula">
-        \[
-        L^2 |l, m\rangle = \hbar^2 l(l+1) |l, m\rangle, \quad L_z |l, m\rangle = \hbar m |l, m\rangle
-        \]
-    </div>
-    dove \( l \) è un numero intero o semi-intero (\( l = 0, \frac{1}{2}, 1, \ldots \)), e \( m \) assume valori discreti (\( m = -l, -l+1, \ldots, l \)).
-
-    <h2>Momento angolare in coordinate sferiche</h2>
-    In coordinate sferiche \((r, \theta, \phi)\), l'operatore \( L_z \) è espresso come:
-    <div class="formula">
-        \[
-        L_z = -i \hbar \frac{\partial}{\partial \phi}
-        \]
-    </div>
-    L'operatore \( L^2 \) in coordinate sferiche è:
-    <div class="formula">
-        \[
-        L^2 = -\hbar^2 \left( \frac{1}{\sin \theta} \frac{\partial}{\partial \theta} \left( \sin \theta \frac{\partial}{\partial \theta} \right) + \frac{1}{\sin^2 \theta} \frac{\partial^2}{\partial \phi^2} \right)
-        \]
-    </div>
-
-    <h2>Armoniche sferiche</h2>
-    Le armoniche sferiche \( Y_l^m(\theta, \phi) \) sono autovettori simultanei di \( L^2 \) e \( L_z \), con autovalori \( \hbar^2 l(l+1) \) e \( \hbar m \), rispettivamente. Sono espresse come:
-    <div class="formula">
-        \[
-        Y_l^m(\theta, \phi) = N_l^m P_l^m(\cos \theta) e^{i m \phi}
-        \]
-    </div>
-    dove \( P_l^m \) sono i polinomi associati di Legendre e \( N_l^m \) è una costante di normalizzazione.
-
-    <h2>Rappresentazioni matriciali</h2>
-    In una base di autostati \( |l, m\rangle \), le componenti \( L_x \), \( L_y \), e \( L_z \) del momento angolare sono rappresentate come matrici. Ad esempio, \( L_z \) è diagonale, mentre \( L_+ = L_x + iL_y \) e \( L_- = L_x - iL_y \) sono matrici di innalzamento e abbassamento:
-    <div class="formula">
-        \[
-        L_\pm |l, m\rangle = \hbar \sqrt{l(l+1) - m(m \pm 1)} |l, m \pm 1\rangle
-        \]
-    </div>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 7</div>
-  <h2>Relazioni di Commutazione: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'algebra del momento angolare dalle rotazioni.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>I generatori delle rotazioni non commutano perché rotazioni attorno ad assi diversi dipendono dall'ordine. L'algebra fissa lo spettro prima di scegliere una rappresentazione orbitale o di spin.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Algebra<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>La struttura ciclica conserva \(J^2\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="[J_i,J_j]=i\hbar\epsilon_{ijk}J_k,\quad[J^2,J_i]=0"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle L_i=\epsilon_{iab}x_ap_b,\quad[x_a,p_b]=i\hbar\delta_{ab}\Rightarrow[L_i,L_j]=i\hbar\epsilon_{ijk}L_k;\quad J^2=\sum_jJ_j^2\Rightarrow[J^2,J_i]=\sum_j(J_j[J_j,J_i]+[J_j,J_i]J_j)=0\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Scala<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>Con \(J_\pm=J_x\pm iJ_y\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="[J_z,J_\pm]=\pm\hbar J_\pm"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle J_\pm=J_x\pm iJ_y,\quad[J_z,J_x]=i\hbar J_y,\quad[J_z,J_y]=-i\hbar J_x\Rightarrow[J_z,J_\pm]=\pm\hbar J_\pm\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Norma dello stato alzato</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Calcola \(\|J_+|j,m\rangle\|^2\).</p>
-    <p><strong>Calcolo.</strong> Vale \(\hbar^2[j(j+1)-m(m+1)]\).</p>
-    <p><strong>Risultato e controllo.</strong> La positività impone \(m=-j,\ldots,j\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 15</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Generatori autoaggiunti.</li>
-          <li>Convenzione destrorsa degli assi.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La finitezza del multipletto nasce dalla positività delle norme, non da un postulato separato.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Dimostra \([J^2,J_z]=0\).</li>
-          <li>Ricava gli estremi di m.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=190">Appunti-MQ.pdf, pp. 190-200: algebra di rotazione e operatori scala</a></li>
-          <li><a href="MQ.pdf#page=13">MQ.pdf, pp. capitolo 13: commutatori di J</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-relazioni-commutazione"><div class="lecture-kicker">Lezione approfondita - Argomento 7 - DIM 15</div><h1>Relazioni di commutazione del momento angolare</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'algebra delle rotazioni da generatori infinitesimi e, per il caso orbitale, dai commutatori canonici; provare che J quadrato è un Casimir, ottenere trasformazione degli operatori vettoriali, compatibilità e indeterminazioni tra componenti.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Rotazioni non abeliane</h3><p>Rotazioni infinitesime su assi diversi non commutano. Il difetto d'ordine è una rotazione sul terzo asse e determina il commutatore dei generatori.</p></article><article class="lecture-card lecture-warning"><h3>Una componente più il modulo</h3><p>Jx, Jy e Jz non sono simultaneamente determinabili; J quadrato commuta però con tutte e consente il CSCO J quadrato, Jz.</p></article></div><h2>Generatori e convenzione di rotazione</h2><div class="lecture-grid"><article class="lecture-card "><h3>Rotazione attiva</h3><p>Si usa U_n(theta)=exp(-i theta n dot J/hbar) sugli stati. La coniugazione U aggiunto A U restituisce la trasformazione delle osservabili.</p></article><article class="lecture-card "><h3>Algebra universale</h3><p>La stessa algebra vale per momento orbitale, spin e momento totale; la realizzazione concreta dello spazio può cambiare.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Generatore infinitesimo<span class="lecture-step-boss">ROTAZIONE</span></h4><p>Un asse unitario n e un angolo piccolo definiscono una famiglia unitaria generata dalla componente J_n.</p><div class="lecture-formula" aria-label="Rotazione infinitesima e generatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U_{\hat n}(d\theta)=I-\frac{i}{\hbar}d\theta\,\hat n\cdot\mathbf J+O(d\theta^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Commutatore di rotazioni<span class="lecture-step-boss">GEOMETRIA</span></h4><p>Comporre il rettangolo x,y,meno x,meno y lascia al secondo ordine una rotazione z di area d alpha d beta.</p><div class="lecture-formula" aria-label="Commutatore geometrico di rotazioni infinitesime"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U_x(d\alpha)U_y(d\beta)U_x(-d\alpha)U_y(-d\beta)=I-\frac{i}{\hbar}d\alpha d\beta\,J_z+O(d^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Espansione operatoriale<span class="lecture-step-boss">BCH</span></h4><p>Espandere lo stesso prodotto con U uguale I meno i dtheta J su hbar produce il commutatore Jx,Jy.</p><div class="lecture-formula" aria-label="Espansione algebrica del commutatore di gruppo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U_xU_yU_x^{-1}U_y^{-1}=I-\frac{d\alpha d\beta}{\hbar^2}[J_x,J_y]+O(d^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Algebra di so(3)<span class="lecture-step-boss">RISULTATO</span></h4><p>Confrontare i due sviluppi e usare permutazioni cicliche fissa le tre relazioni fondamentali.</p><div class="lecture-formula" aria-label="Relazioni di commutazione del momento angolare"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [J_i,J_j]=i\hbar\epsilon_{ijk}J_k,\quad[J_x,J_y]=i\hbar J_z\ \text{e cicliche}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Realizzazione orbitale<span class="lecture-step-boss">CANONICA</span></h4><p>Per L uguale r vettor p, l'algebra segue direttamente da [x_i,p_j]=i hbar delta ij.</p><div class="lecture-formula" aria-label="Definizione canonica del momento orbitale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L_i=\epsilon_{iab}x_ap_b,\qquad[x_a,p_b]=i\hbar\delta_{ab}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Esempio Lx,Ly<span class="lecture-step-boss">DERIVA</span></h4><p>Sviluppare i quattro prodotti, usare Leibniz e cancellare i termini commutanti lascia i hbar volte Lz.</p><div class="lecture-formula" aria-label="Verifica orbitale di un commutatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [yp_z-zp_y,zp_x-xp_z]=i\hbar(xp_y-yp_x)=i\hbar L_z\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Operatore quadratico<span class="lecture-step-boss">CASIMIR</span></h4><p>Si definisce la somma simmetrica dei quadrati delle tre componenti.</p><div class="lecture-formula" aria-label="Definizione del Casimir quadratico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J^2=J_x^2+J_y^2+J_z^2\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Commutatore con Jz<span class="lecture-step-boss">DIMOSTRA</span></h4><p>Leibniz trasforma il commutatore dei quadrati; i termini x e y si cancellano a coppie.</p><div class="lecture-formula" aria-label="Prova che J quadrato commuta con Jz"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [J^2,J_z]=J_x[J_x,J_z]+[J_x,J_z]J_x+J_y[J_y,J_z]+[J_y,J_z]J_y=0\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Casimir completo<span class="lecture-step-boss">CICLICHE</span></h4><p>Per permutazione ciclica la stessa cancellazione vale per ogni componente.</p><div class="lecture-formula" aria-label="Centralità del Casimir nell&#x27;algebra"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [J^2,J_i]=0\qquad(i=x,y,z)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Compatibilità<span class="lecture-step-boss">CSCO</span></h4><p>J quadrato e una componente ammettono autostati comuni; due componenti distinte no in generale.</p><div class="lecture-formula" aria-label="Osservabili compatibili del momento angolare"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [J^2,J_z]=0,\qquad[J_x,J_y]=i\hbar J_z\ne0\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Indeterminazione<span class="lecture-step-boss">ROBERTSON</span></h4><p>Applicare Robertson a due componenti lega le loro dispersioni al valor medio della terza.</p><div class="lecture-formula" aria-label="Indeterminazione tra componenti angolari"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta J_x\Delta J_y\ge\frac\hbar2|\langle J_z\rangle|\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Operatore vettoriale<span class="lecture-step-boss">TRASFORMA</span></h4><p>Un vettore V è definito dal modo in cui le sue componenti commutano con i generatori.</p><div class="lecture-formula" aria-label="Criterio di operatore vettoriale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [J_i,V_j]=i\hbar\epsilon_{ijk}V_k\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Rotazione infinitesima di V<span class="lecture-step-boss">CONIUGA</span></h4><p>La coniugazione con U e il commutatore precedente riproducono la legge vettoriale classica.</p><div class="lecture-formula" aria-label="Trasformazione infinitesima di un vettore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger V_jU=V_j+\frac{i}{\hbar}d\boldsymbol\theta\cdot[\mathbf J,V_j]=V_j+(d\boldsymbol\theta\times\mathbf V)_j\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Invarianza rotazionale<span class="lecture-step-boss">CONSERVA</span></h4><p>Se H è scalare rispetto alle rotazioni, commuta con tutti i generatori e J si conserva.</p><div class="lecture-formula" aria-label="Simmetria rotazionale e conservazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger(R)HU(R)=H\ \forall R\Rightarrow[H,J_i]=0\Rightarrow\dot J_i=0\)</span></div></article></section><h2>Esempio: stato |j,m&gt; e componenti trasverse</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> In un autostato comune di J quadrato e Jz, la simmetria attorno a z rende nulle le medie trasverse.</p><p data-i18n-skip="true">\(\displaystyle \langle J_x\rangle=\langle J_y\rangle=0,\quad\langle J_x^2\rangle=\langle J_y^2\rangle=\frac{\hbar^2}{2}[j(j+1)-m^2],\quad\Delta J_x\Delta J_y=\frac{\hbar^2}{2}[j(j+1)-m^2]\ge\frac{\hbar^2}{2}|m|\)</p><p><strong>Controllo.</strong> L'ultimo confronto equivale a j(j+1)-m quadrato maggiore o uguale al modulo di m, con uguaglianza negli stati estremi m uguale più o meno j.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>so(3) e SU(2)</h3><p>L'algebra locale è la stessa, ma le rappresentazioni quantistiche includono j seminteri tramite il ricoprimento SU(2). Per il solo moto orbitale le funzioni monovalue impongono ell intero.</p></article><article class="lecture-card "><h3>Commutatore medio</h3><p>Un limite di Robertson può annullarsi se &lt;Jz&gt;=0 pur con operatori incompatibili. Ciò non crea una base completa comune di Jx e Jy.</p></article><article class="lecture-card "><h3>Scalari</h3><p>Un operatore scalare S soddisfa [J_i,S]=0. Funzioni di J quadrato sono scalari; una componente Jz non lo è.</p></article><article class="lecture-card "><h3>Campi esterni</h3><p>Un campo lungo z rompe la simmetria completa ma può lasciare [H,Jz]=0, conservando soltanto la proiezione.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Cambiare segno a epsilon ijk; trattare le rotazioni come abeliane; credere che J quadrato sia il quadrato di una componente; concludere che tutte le componenti sono compatibili; usare L=r cross p per lo spin.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Le dimensioni sono hbar quadrato nei commutatori; cicliche positive, scambi negative; J quadrato commuta con ogni Ji; V vettore ruota con prodotto vettoriale; simmetria completa conserva tre componenti.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci la rotazione infinitesima.</li><li>Confronta commutatore geometrico e BCH.</li><li>Ricava [Ji,Jj].</li><li>Verifica l'algebra per L=r cross p.</li><li>Dimostra [J quadrato,Ji]=0.</li><li>Spiega il CSCO J quadrato,Jz.</li><li>Ottieni l'indeterminazione tra componenti.</li><li>Collega operatori vettoriali e conservazione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, rotazioni e momento angolare</a></li><li><a href="boss/P2_DIM_7-12.txt#L385">DIM 8 - algebra, ladder e composizione</a></li><li><a href="Appunti-MQ.pdf#page=190">Appunti-MQ.pdf, pagine PDF 190-194 - rotazioni, algebra e Casimir</a></li></ul><p class="lecture-note">La catena è stata confrontata con le pagine PDF verificate 190-194 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 7 - DIM 15":"In-depth lesson - Topic 7 - DIM 15","Relazioni di commutazione del momento angolare":"Angular-momentum commutation relations","Obiettivo.":"Objective.","Derivare l'algebra delle rotazioni da generatori infinitesimi e, per il caso orbitale, dai commutatori canonici; provare che J quadrato è un Casimir, ottenere trasformazione degli operatori vettoriali, compatibilità e indeterminazioni tra componenti.":"Derive the rotation algebra from infinitesimal generators and, for the orbital case, from canonical commutators; prove that J squared is a Casimir and obtain vector-operator transformations, compatibility, and component uncertainty relations.","Rotazioni non abeliane":"Non-Abelian rotations","Rotazioni infinitesime su assi diversi non commutano. Il difetto d'ordine è una rotazione sul terzo asse e determina il commutatore dei generatori.":"Infinitesimal rotations about different axes do not commute. The ordering defect is a rotation about the third axis and determines the generator commutator.","Una componente più il modulo":"One component plus magnitude","Jx, Jy e Jz non sono simultaneamente determinabili; J quadrato commuta però con tutte e consente il CSCO J quadrato, Jz.":"Jx, Jy, and Jz cannot be simultaneously sharp; J squared commutes with all of them and permits CSCO J squared, Jz.","Generatori e convenzione di rotazione":"Generators and rotation convention","Rotazione attiva":"Active rotation","Si usa U_n(theta)=exp(-i theta n dot J/hbar) sugli stati. La coniugazione U aggiunto A U restituisce la trasformazione delle osservabili.":"Use U_n(theta)=exp(-i theta n dot J/hbar) on states. Conjugation U dagger A U gives the observable transformation.","Algebra universale":"Universal algebra","La stessa algebra vale per momento orbitale, spin e momento totale; la realizzazione concreta dello spazio può cambiare.":"The same algebra holds for orbital, spin, and total angular momentum; the concrete realization of the space may differ.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Generatore infinitesimo":"1. Infinitesimal generator","ROTAZIONE":"ROTATION","Un asse unitario n e un angolo piccolo definiscono una famiglia unitaria generata dalla componente J_n.":"A unit axis n and small angle define a unitary family generated by component J_n.","Passaggio":"Step","2. Commutatore di rotazioni":"2. Rotation commutator","GEOMETRIA":"GEOMETRY","Comporre il rettangolo x,y,meno x,meno y lascia al secondo ordine una rotazione z di area d alpha d beta.":"Compose the rectangle x,y,minus x,minus y; at second order it leaves a z rotation of area d alpha d beta.","3. Espansione operatoriale":"3. Operator expansion","BCH":"BCH","Espandere lo stesso prodotto con U uguale I meno i dtheta J su hbar produce il commutatore Jx,Jy.":"Expand the same product with U equal I minus i dtheta J over hbar to produce commutator Jx,Jy.","4. Algebra di so(3)":"4. so(3) algebra","RISULTATO":"RESULT","Confrontare i due sviluppi e usare permutazioni cicliche fissa le tre relazioni fondamentali.":"Compare the two expansions and use cyclic permutations to fix the three fundamental relations.","5. Realizzazione orbitale":"5. Orbital realization","CANONICA":"CANONICAL","Per L uguale r vettor p, l'algebra segue direttamente da [x_i,p_j]=i hbar delta ij.":"For L equal r cross p, the algebra follows directly from [x_i,p_j]=i hbar delta ij.","6. Esempio Lx,Ly":"6. Example Lx,Ly","DERIVA":"DERIVE","Sviluppare i quattro prodotti, usare Leibniz e cancellare i termini commutanti lascia i hbar volte Lz.":"Expand the four products, use Leibniz, and cancel commuting terms to leave i hbar times Lz.","7. Operatore quadratico":"7. Quadratic operator","CASIMIR":"CASIMIR","Si definisce la somma simmetrica dei quadrati delle tre componenti.":"Define the symmetric sum of squares of the three components.","8. Commutatore con Jz":"8. Commutator with Jz","DIMOSTRA":"PROVE","Leibniz trasforma il commutatore dei quadrati; i termini x e y si cancellano a coppie.":"Leibniz transforms the commutator of squares; x and y terms cancel pairwise.","9. Casimir completo":"9. Full Casimir","CICLICHE":"CYCLIC","Per permutazione ciclica la stessa cancellazione vale per ogni componente.":"By cyclic permutation the same cancellation holds for every component.","10. Compatibilità":"10. Compatibility","CSCO":"CSCO","J quadrato e una componente ammettono autostati comuni; due componenti distinte no in generale.":"J squared and one component admit common eigenstates; two distinct components generally do not.","11. Indeterminazione":"11. Uncertainty","ROBERTSON":"ROBERTSON","Applicare Robertson a due componenti lega le loro dispersioni al valor medio della terza.":"Apply Robertson to two components to relate their spreads to the expectation of the third.","12. Operatore vettoriale":"12. Vector operator","TRASFORMA":"TRANSFORM","Un vettore V è definito dal modo in cui le sue componenti commutano con i generatori.":"A vector V is defined by how its components commute with generators.","13. Rotazione infinitesima di V":"13. Infinitesimal rotation of V","CONIUGA":"CONJUGATE","La coniugazione con U e il commutatore precedente riproducono la legge vettoriale classica.":"Conjugation with U and the previous commutator reproduces the classical vector law.","14. Invarianza rotazionale":"14. Rotational invariance","CONSERVA":"CONSERVE","Se H è scalare rispetto alle rotazioni, commuta con tutti i generatori e J si conserva.":"If H is rotationally scalar, it commutes with all generators and J is conserved.","Esempio: stato |j,m> e componenti trasverse":"Example: |j,m> state and transverse components","Impostazione.":"Setup.","In un autostato comune di J quadrato e Jz, la simmetria attorno a z rende nulle le medie trasverse.":"In a common J squared and Jz eigenstate, symmetry about z makes transverse means vanish.","Controllo.":"Check.","L'ultimo confronto equivale a j(j+1)-m quadrato maggiore o uguale al modulo di m, con uguaglianza negli stati estremi m uguale più o meno j.":"The last comparison is equivalent to j(j+1)-m squared at least modulus m, with equality in extreme states m equal plus or minus j.","Interpretazione e limiti":"Interpretation and limits","so(3) e SU(2)":"so(3) and SU(2)","L'algebra locale è la stessa, ma le rappresentazioni quantistiche includono j seminteri tramite il ricoprimento SU(2). Per il solo moto orbitale le funzioni monovalue impongono ell intero.":"The local algebra is the same, but quantum representations include half-integer j through the SU(2) covering. For orbital motion alone, single-valued functions impose integer ell.","Commutatore medio":"Mean commutator","Un limite di Robertson può annullarsi se <Jz>=0 pur con operatori incompatibili. Ciò non crea una base completa comune di Jx e Jy.":"A Robertson bound may vanish when <Jz>=0 even though operators are incompatible. This does not create a complete common basis of Jx and Jy.","Scalari":"Scalars","Un operatore scalare S soddisfa [J_i,S]=0. Funzioni di J quadrato sono scalari; una componente Jz non lo è.":"A scalar operator S satisfies [J_i,S]=0. Functions of J squared are scalars; component Jz is not.","Campi esterni":"External fields","Un campo lungo z rompe la simmetria completa ma può lasciare [H,Jz]=0, conservando soltanto la proiezione.":"A field along z breaks full symmetry but may retain [H,Jz]=0, conserving only the projection.","Errori tipici":"Common errors","Cambiare segno a epsilon ijk; trattare le rotazioni come abeliane; credere che J quadrato sia il quadrato di una componente; concludere che tutte le componenti sono compatibili; usare L=r cross p per lo spin.":"Changing the sign of epsilon ijk; treating rotations as Abelian; thinking J squared is the square of one component; concluding all components are compatible; using L=r cross p for spin.","Controlli rapidi":"Quick checks","Le dimensioni sono hbar quadrato nei commutatori; cicliche positive, scambi negative; J quadrato commuta con ogni Ji; V vettore ruota con prodotto vettoriale; simmetria completa conserva tre componenti.":"Dimensions are hbar squared in commutators; cyclic orders are positive and swaps negative; J squared commutes with every Ji; vector V rotates through a cross product; full symmetry conserves three components.","Controllo da orale":"Oral exam checklist","Definisci la rotazione infinitesima.":"Define infinitesimal rotation.","Confronta commutatore geometrico e BCH.":"Compare geometric commutator and BCH.","Ricava [Ji,Jj].":"Derive [Ji,Jj].","Verifica l'algebra per L=r cross p.":"Verify the algebra for L=r cross p.","Dimostra [J quadrato,Ji]=0.":"Prove [J squared,Ji]=0.","Spiega il CSCO J quadrato,Jz.":"Explain the CSCO J squared,Jz.","Ottieni l'indeterminazione tra componenti.":"Obtain component uncertainty.","Collega operatori vettoriali e conservazione.":"Connect vector operators and conservation.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 15 - commutatori, rotazioni e momento angolare":"DIM 15 - commutators, rotations, and angular momentum","DIM 8 - algebra, ladder e composizione":"DIM 8 - algebra, ladders, and composition","Appunti-MQ.pdf, pagine PDF 190-194 - rotazioni, algebra e Casimir":"Appunti-MQ.pdf, PDF pages 190-194 - rotazioni, algebra e Casimir","La catena è stata confrontata con le pagine PDF verificate 190-194 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.":"The chain was compared with verified PDF pages 190-194 and DIM 15; phase conventions, signs, and normalizations are kept consistent.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Rotazione infinitesima e generatore":"Infinitesimal rotation and generator","Commutatore geometrico di rotazioni infinitesime":"Geometric commutator of infinitesimal rotations","Espansione algebrica del commutatore di gruppo":"Algebraic expansion of the group commutator","Relazioni di commutazione del momento angolare":"Angular-momentum commutation relations","Definizione canonica del momento orbitale":"Canonical definition of orbital momentum","Verifica orbitale di un commutatore":"Orbital verification of one commutator","Definizione del Casimir quadratico":"Definition of the quadratic Casimir","Prova che J quadrato commuta con Jz":"Proof that J squared commutes with Jz","Centralità del Casimir nell'algebra":"Centrality of the Casimir in the algebra","Osservabili compatibili del momento angolare":"Compatible angular-momentum observables","Indeterminazione tra componenti angolari":"Uncertainty between angular components","Criterio di operatore vettoriale":"Vector-operator criterion","Trasformazione infinitesima di un vettore":"Infinitesimal transformation of a vector","Simmetria rotazionale e conservazione":"Rotational symmetry and conservation"},"title":{"it":"Relazioni di commutazione del momento angolare","en":"Angular-momentum commutation relations"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

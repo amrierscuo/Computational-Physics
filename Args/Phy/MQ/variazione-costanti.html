@@ -1,207 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metodo della Variazione delle Costanti</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Probabilità di transizione e variazione delle costanti</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="probabilita-transizione.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Metodo della Variazione delle Costanti</h1>
-
-<p>Nello studio delle perturbazioni dipendenti dal tempo in meccanica quantistica, uno strumento fondamentale è il metodo della variazione delle costanti. Questo approccio permette di ottenere equazioni differenziali per i coefficienti di espansione di uno stato quantistico su una base di autostati non perturbati, facilitando il calcolo di probabilità di transizione tra stati iniziale e finale a causa della perturbazione tempo-dipendente.</p>
-
-<p>L’idea di base è semplice: si parte da una base di autostati dell’Hamiltoniano non perturbato, \(\{\phi_n(\mathbf{r})\}\), con energie \(E_n\). Lo stato \(\psi(\mathbf{r},t)\) del sistema, in presenza di una perturbazione \(\hat{H}'(t)\), si espande come:</p>
-
-\[
-\psi(\mathbf{r},t) = \sum_n c_n(t)\, \phi_n(\mathbf{r}) e^{-iE_n t/\hbar}.
-\]
-
-<p>Se la perturbazione è piccola, si cerca di determinare le equazioni per i coefficienti \( c_n(t) \) utilizzando la tecnica della variazione delle costanti.</p>
-
-<h2>Formulazione</h2>
-
-<p>In assenza di perturbazione, i coefficienti \( c_n(t) \) sarebbero costanti nel tempo (se lo stato iniziale è una sovrapposizione di autostati). Con la perturbazione, \(\hat{H}'(t)\), i coefficienti diventano funzioni del tempo. Sostituendo l’espansione di \(\psi(\mathbf{r},t)\) nell’equazione di Schrödinger dipendente dal tempo:</p>
-
-\[
-i\hbar \frac{\partial}{\partial t}\psi(\mathbf{r},t) = \left(\hat{H}_0 + \hat{H}'(t)\right)\psi(\mathbf{r},t),
-\]
-
-e proiettando su uno stato \(\phi_m(\mathbf{r})\), si ottiene un’equazione per \(c_m(t)\).</p>
-
-<h2>Equazioni per i Coefficienti \( c_n(t) \)</h2>
-
-<p>Moltiplicando scalarmente l’equazione per \(\phi_m^*(\mathbf{r})\) ed integrando nello spazio, ricordando che \(\phi_m(\mathbf{r})\) sono autostati di \(\hat{H}_0\) e ortonormali, si trova:</p>
-
-\[
-i\hbar \frac{d c_m(t)}{d t} = \sum_n c_n(t) e^{i(E_m - E_n)t/\hbar} \langle \phi_m|\hat{H}'(t)|\phi_n \rangle.
-\]
-
-<p>Queste sono equazioni accoppiate per i coefficienti \( c_n(t) \). Se la perturbazione è debole, si può procedere per approssimazioni successive.</p>
-
-<h2>Probabilità di Transizione \((i \to f)\)</h2>
-
-<p>Se il sistema è inizialmente nello stato \(\phi_i\) con \(c_i(0)=1\) e tutti gli altri \(c_n(0)=0\), la probabilità di trovare il sistema nello stato \(\phi_f\) dopo un certo tempo \(t\) è semplicemente:</p>
-
-\[
-P_{i\to f}(t) = |c_f(t)|^2.
-\]
-
-<p>Il metodo della variazione delle costanti fornisce, in prima approssimazione, un’espressione per \( c_f(t) \) in termini dell’integrale nel tempo della perturbazione. Ad esempio, se \(\hat{H}'(t)\) è piccolo, si può considerare:</p>
-
-\[
-c_f^{(1)}(t) \approx \frac{-i}{\hbar}\int_0^t dt' e^{i(E_f - E_i)t'/\hbar}\langle \phi_f|\hat{H}'(t')|\phi_i\rangle.
-\]
-
-In questo modo, si ottiene una formula perturbativa per la probabilità di transizione.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Scrivi lo stato come:
-\[
-\psi(\mathbf{r},t) = \sum_n c_n(t)\phi_n(\mathbf{r})e^{-iE_n t/\hbar}.
-\]
-<br><br>
-2. Inserisci nell’equazione di Schrödinger:
-\[
-i\hbar \frac{d}{dt} \sum_n c_n(t)\phi_n(\mathbf{r})e^{-iE_n t/\hbar} = (\hat{H}_0+\hat{H}'(t)) \sum_n c_n(t)\phi_n(\mathbf{r})e^{-iE_n t/\hbar}.
-\]
-<br><br>
-3. Proietta su \(\phi_m(\mathbf{r})\):
-\[
-i\hbar \frac{d c_m(t)}{dt} = \sum_n c_n(t)e^{i(E_m - E_n)t/\hbar}\langle \phi_m|\hat{H}'(t)|\phi_n \rangle.
-\]
-4. Spiega che \(\hat{H}_0\) non contribuisce poiché \(\phi_m\) sono i suoi autostati.
-<br><br>
-5. Se inizialmente \(c_i(0)=1\) e \(c_{n\neq i}(0)=0\), in prima approssimazione (teoria delle perturbazioni a primo ordine) ottieni un’espressione integrale per \(c_f(t)\).
-</div>
-
-<h2>Significato Fisico</h2>
-
-<p>Il metodo della variazione delle costanti traduce il problema della dinamica di stati quantistici, in presenza di un potenziale tempo-dipendente, in un sistema di equazioni differenziali per i coefficienti dell’espansione. È un metodo centrale per derivare formule di transizione, come la regola d’oro di Fermi o la probabilità di passare dallo stato \(i\) allo stato \(f\) a causa di una perturbazione esterna.</p>
-
-<p>Inoltre, fornisce la base formale per discutere l’emissione, l’assorbimento stimolato o spontaneo di radiazione, i processi di scattering in presenza di campi variabili e molte altre situazioni di interesse fisico in cui le condizioni cambiano nel tempo.</p>
-
-<h2>Ulteriori Dettagli Matematici sul Metodo della Variazione delle Costanti</h2>
-
-<p>
-Dopo aver introdotto le equazioni accoppiate per i coefficienti \( c_n(t) \), è istruttivo mostrare qualche passaggio intermedio in modo più esplicito. Consideriamo il caso in cui il sistema all’istante iniziale \( t=0 \) si trovi in uno stato ben definito, ad esempio l’autostato <b>\(\phi_i\)</b> con energia \( E_i \). Questo significa che \( c_i(0)=1 \) e tutti gli altri \( c_n(0)=0 \). L’obiettivo è comprendere come una perturbazione tempo-dipendente <b>\(\hat{H}'(t)\)</b> possa indurre transizioni verso altri autostati <b>\(\phi_f\)</b>, modificando nel tempo i coefficienti \( c_f(t) \).
-</p>
-
-<p>
-Il punto di partenza è l’equazione:
-</p>
-
-<p>
-\[
-i\hbar \frac{d c_m(t)}{dt} = \sum_n c_n(t) e^{i(E_m - E_n)t/\hbar} \langle \phi_m|\hat{H}'(t)|\phi_n\rangle.
-\]
-</p>
-
-<p>
-Se la perturbazione <i>non</i> è debole, si devono risolvere direttamente queste equazioni accoppiate, spesso ricorrendo a metodi numerici. Se invece la perturbazione è debole, si applica una teoria delle perturbazioni a ordini successivi in \(\hat{H}'(t)\).
-</p>
-
-<p>
-All’ordine più basso (il primo ordine), si assume che \( c_f(t) \) resti piccolo se \( f \neq i \), mentre \( c_i(t) \approx 1 \). Questo permette di linearizzare il problema. Per il canale di transizione \( i \to f \):
-</p>
-
-<p>
-\[
-i\hbar \frac{d c_f(t)}{dt} \approx e^{i(E_f - E_i)t/\hbar}\langle \phi_f|\hat{H}'(t)|\phi_i\rangle,
-\]
-\</p>
-
-<p>
-usando il fatto che \( c_i(t) \approx 1 \) e \( c_{n\neq i}(t)\approx 0 \). Questa è un’equazione differenziale ordinaria per \( c_f(t) \) che si può integrare direttamente nel tempo.
-</p>
-
-<p>
-L’integrazione dal tempo iniziale \(0\) a un tempo \( t \) restituisce:
-</p>
-
-<p>
-\[
-c_f^{(1)}(t) \approx \frac{-i}{\hbar}\int_0^t e^{i(E_f - E_i)t'/\hbar}\langle \phi_f|\hat{H}'(t')|\phi_i\rangle \, dt'.
-\]
-</p>
-
-<p>
-Questo risultato fornisce al primo ordine la dinamica del coefficiente \( c_f(t) \). Da questo coefficiente si ottiene la probabilità di transizione:
-</p>
-
-<p>
-\[
-P_{i\to f}(t) = |c_f^{(1)}(t)|^2,
-\]
-</p>
-
-<p>
-la quale, se la perturbazione è abbastanza piccola e il tempo non eccessivamente lungo, può essere approssimata come \( P_{i\to f}(t) \approx |c_f^{(1)}(t)|^2 \) senza includere ordini superiori.
-</p>
-
-<p>
-Alla lavagna si potrebbe chiarire questo integrale disegnando un diagramma temporale: sull’asse orizzontale il tempo \( t' \), e indicare come la perturbazione \(\hat{H}'(t')\) agisce sull’integrando. La fase \( e^{i(E_f - E_i)t'/\hbar} \) genera un’oscillazione rapida se la differenza di energia è grande, oppure una variazione lenta se i livelli energetici sono quasi risonanti.
-</p>
-
-<p>
-Un esempio: se <u>\(\hat{H}'(t)\)</u> è del tipo \( \hat{H}'(t)=\hat{V}e^{-i\omega t} \) (perturbazione armonica), allora l’integrale assume una forma più regolare e permette di identificare condizioni di risonanza quando \( \hbar \omega \approx E_f - E_i \). Il metodo della variazione delle costanti diventa allora uno strumento per ricavare formule che conducono, nel limite appropriato, alla <i>regola d’oro di Fermi</i>.
-</p>
-
-<p>
-In definitiva, il metodo della variazione delle costanti e il conseguente approccio perturbativo in prima approssimazione offrono una chiara interpretazione fisica: <b>se il sistema parte in uno stato iniziale definito, la probabilità di trovarlo in uno stato finale a causa di una perturbazione dipende dall’integrale nel tempo dell’accoppiamento matriciale tra i due stati, modulato dal fattore di fase</b>.
-</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="variazione-costanti.html" data-mq-shared-lesson="probabilita-transizione.html" id="lezione-probabilita-transizione"><div class="lecture-kicker">Lezione approfondita - Argomento 14 - DIM 12</div><h1>Probabilità di transizione e variazione delle costanti</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: variazione-costanti.html. La lezione scientifica verificata è condivisa con probabilita-transizione.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare senza salti l'equazione esatta per i coefficienti nel quadro di interazione, costruire l'ampiezza al primo ordine e distinguere ordine dell'ampiezza, ordine della probabilità e conservazione della norma.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Idea centrale</h3><p>Le fasi dovute a H0 vengono estratte esattamente. Tutta la dinamica indotta dalla perturbazione resta nei coefficienti c_n(t), costanti quando V è nulla.</p></article><article class="lecture-card lecture-warning"><h3>Ordini diversi</h3><p>L'ampiezza verso uno stato finale diverso è lineare in V, mentre la probabilità è quadratica. La probabilità di sopravvivenza richiede anche il secondo ordine dell'ampiezza iniziale.</p></article></div><h2>Sistema risolto e condizioni iniziali</h2><div class="lecture-grid"><article class="lecture-card"><h3>Base imperturbata</h3><p>H0 è indipendente dal tempo e possiede una base ortonormale completa. Eventuali degenerazioni richiedono una base adatta alla perturbazione.</p></article><article class="lecture-card"><h3>Preparazione</h3><p>All'istante iniziale il sistema è preparato nell'autostato i: c_i(0)=1 e tutti gli altri coefficienti sono nulli.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Hamiltoniano<span class="lecture-step-boss">BASE</span></h4><p>Lambda organizza gli ordini e può essere posto uguale a uno al termine del calcolo.</p><div aria-label="Hamiltoniano imperturbato e perturbazione temporale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H(t)=H_0+\lambda V(t),\qquad H_0|n\rangle=E_n|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Variazione delle costanti<span class="lecture-step-boss">ANSATZ</span></h4><p>Si espande lo stato nei modi stazionari completi, lasciando variare soltanto le ampiezze.</p><div aria-label="Espansione dello stato con fasi imperturbate" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi(t)\rangle=\sum_m c_m(t)e^{-iE_mt/\hbar}|m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Derivata temporale<span class="lecture-step-boss">DIM 12</span></h4><p>La regola del prodotto genera un termine con c punto e uno con E_m.</p><div aria-label="Derivata completa dell'ansatz" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\partial_t|\psi\rangle=\sum_m\left(i\hbar\dot c_m+E_mc_m\right)e^{-iE_mt/\hbar}|m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Azione di H<span class="lecture-step-boss">DIM 12</span></h4><p>H0 agisce diagonalmente, mentre V mescola gli stati della base.</p><div aria-label="Azione separata di H0 e V" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H|\psi\rangle=\sum_mE_mc_me^{-iE_mt/\hbar}|m\rangle+\lambda\sum_mc_me^{-iE_mt/\hbar}V(t)|m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Cancellazione di H0<span class="lecture-step-boss">PASSAGGIO</span></h4><p>I termini diagonali con E_m sono identici sui due membri e si cancellano esattamente.</p><div aria-label="Equazione dopo la cancellazione delle fasi libere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\sum_m\dot c_me^{-iE_mt/\hbar}|m\rangle=\lambda\sum_mc_me^{-iE_mt/\hbar}V(t)|m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Proiezione su n<span class="lecture-step-boss">DIM 12</span></h4><p>Moltiplicando per e alla i E_n t su hbar compare la frequenza di Bohr orientata n meno m.</p><div aria-label="Sistema esatto per i coefficienti" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\dot c_n(t)=\lambda\sum_mV_{nm}(t)e^{i\omega_{nm}t}c_m(t),\quad\omega_{nm}=\frac{E_n-E_m}{\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Quadro di interazione<span class="lecture-step-boss">FORMA</span></h4><p>La matrice efficace è V_I(t); l'equazione coincide con Schrödinger nel quadro di interazione.</p><div aria-label="Definizione dell'operatore di interazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V_I(t)=e^{iH_0t/\hbar}V(t)e^{-iH_0t/\hbar},\qquad(V_I)_{nm}=V_{nm}e^{i\omega_{nm}t}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Serie perturbativa<span class="lecture-step-boss">ORDINI</span></h4><p>Ogni c_n viene sviluppato nello stesso parametro lambda.</p><div aria-label="Espansione dei coefficienti di interazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_n(t)=c_n^{(0)}(t)+\lambda c_n^{(1)}(t)+\lambda^2c_n^{(2)}(t)+\cdots\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Ordine zero<span class="lecture-step-boss">CHECK</span></h4><p>Senza perturbazione le ampiezze sono costanti e coincidono con la preparazione iniziale.</p><div aria-label="Soluzione all'ordine zero" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\dot c_n^{(0)}=0\Rightarrow c_n^{(0)}(t)=c_n(0)=\delta_{ni}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Equazione al primo ordine<span class="lecture-step-boss">DIM 12</span></h4><p>Nel membro destro si inserisce soltanto il coefficiente di ordine zero.</p><div aria-label="Equazione dell'ampiezza finale al primo ordine" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\dot c_f^{(1)}(t)=V_{fi}(t)e^{i\omega_{fi}t}\qquad(f\ne i)\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Ampiezza integrata<span class="lecture-step-boss">RISULTATO</span></h4><p>La condizione c_f(0)=0 fissa la costante di integrazione.</p><div aria-label="Ampiezza di transizione al primo ordine" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_f(t)=-\frac{i\lambda}{\hbar}\int_0^tV_{fi}(t')e^{i\omega_{fi}t'}dt'+O(\lambda^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Probabilità<span class="lecture-step-boss">MISURA</span></h4><p>Per f diverso da i il modulo quadro inizia all'ordine lambda².</p><div aria-label="Probabilità di transizione al primo ordine non nullo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to f}(t)=|\langle f|\psi(t)\rangle|^2=|c_f(t)|^2=\frac{\lambda^2}{\hbar^2}\left|\int_0^tV_{fi}(t')e^{i\omega_{fi}t'}dt'\right|^2+O(\lambda^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Norma e sopravvivenza<span class="lecture-step-boss">UNITARIETÀ</span></h4><p>A ordine lambda², la probabilità persa dallo stato iniziale uguaglia la somma di quelle acquistate dagli altri stati.</p><div aria-label="Conservazione perturbativa della probabilità totale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to i}(t)=1-\sum_{f\ne i}P_{i\to f}(t)+O(\lambda^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Lettura spettrale<span class="lecture-step-boss">FOURIER</span></h4><p>L'ampiezza campiona la trasformata temporale di V alla pulsazione meno omega_fi: frequenze assenti non producono transizioni al primo ordine.</p><div aria-label="Interpretazione di Fourier dell'ampiezza" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_f^{(1)}(t)\propto\widetilde V_{fi}^{[0,t]}(-\omega_{fi})\)</span></div></article></section><h2>Esempio: impulso rettangolare</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Una perturbazione V0 agisce soltanto tra t=0 e t=T. L'elemento V_fi è costante nella finestra.</p><p data-i18n-skip="true">\(\displaystyle c_f^{(1)}(T)=-\frac{2i\lambda V_{fi}}{\hbar}e^{i\omega_{fi}T/2}\frac{\sin(\omega_{fi}T/2)}{\omega_{fi}},\quad P_{i\to f}=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}T/2)}{\omega_{fi}^2}\)</p><p><strong>Controllo.</strong> Nel limite T piccolo, P circa lambda²|V_fi|²T²/hbar². A T grande la risposta diventa stretta in energia, ma per un singolo finale discreto resta oscillante.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Ampiezza contro probabilità</h3><p>Chiamare primo ordine la probabilità significa primo ordine non nullo nella teoria, ma matematicamente essa è di ordine V².</p></article><article class="lecture-card"><h3>Regole di selezione</h3><p>Se V_fi è nullo per simmetria, la transizione è vietata a questo ordine anche in risonanza.</p></article><article class="lecture-card"><h3>Fasi orientate</h3><p>La convenzione omega_fi=(E_f-E_i)/hbar deve essere mantenuta in ogni integrale per distinguere assorbimento ed emissione.</p></article><article class="lecture-card"><h3>Regime perturbativo</h3><p>Il risultato è affidabile finché la probabilità trasferita totale resta molto minore di uno e non si accumulano dinamiche risonanti secolari.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Non derivare la fase; perdere il fattore i; usare omega_if al posto di omega_fi a metà calcolo; confondere c_f con P; calcolare P_ii soltanto da c_i al primo ordine.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>c è adimensionale; V dt/hbar è adimensionale; V=0 rende c costante; P è positivo; la somma delle probabilità resta uno all'ordine coerente.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi l'ansatz con le fasi di H0.</li><li>Deriva e cancella i termini E_m.</li><li>Proietta e definisci omega_nm.</li><li>Espandi c_n per ordini.</li><li>Imponi la preparazione nello stato i.</li><li>Integra l'ampiezza finale.</li><li>Eleva al quadrato soltanto all'ordine coerente.</li><li>Controlla norma e regole di selezione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1726">DIM 12 - perturbazioni dipendenti dal tempo e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro</a></li><li><a href="set-12-probabilita-transizione.html">Set 12 - esercizi sulle probabilità di transizione</a></li><li><a href="Domanda2025_13.html">Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo</a></li></ul><p class="lecture-note">Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 14 - DIM 12":"In-depth lesson - Topic 14 - DIM 12","Probabilità di transizione e variazione delle costanti":"Transition probability and variation of constants","Obiettivo.":"Objective.","Derivare senza salti l'equazione esatta per i coefficienti nel quadro di interazione, costruire l'ampiezza al primo ordine e distinguere ordine dell'ampiezza, ordine della probabilità e conservazione della norma.":"Derive the exact interaction-picture coefficient equation without gaps, construct the first-order amplitude, and distinguish the order of the amplitude, the order of the probability, and norm conservation.","Idea centrale":"Central idea","Le fasi dovute a H0 vengono estratte esattamente. Tutta la dinamica indotta dalla perturbazione resta nei coefficienti c_n(t), costanti quando V è nulla.":"The phases due to H0 are extracted exactly. All dynamics induced by the perturbation remains in coefficients c_n(t), which are constant when V vanishes.","Ordini diversi":"Different orders","L'ampiezza verso uno stato finale diverso è lineare in V, mentre la probabilità è quadratica. La probabilità di sopravvivenza richiede anche il secondo ordine dell'ampiezza iniziale.":"The amplitude into a different final state is linear in V, whereas probability is quadratic. Survival probability also requires the second-order amplitude of the initial state.","Sistema risolto e condizioni iniziali":"Solved system and initial conditions","Base imperturbata":"Unperturbed basis","H0 è indipendente dal tempo e possiede una base ortonormale completa. Eventuali degenerazioni richiedono una base adatta alla perturbazione.":"H0 is time independent and has a complete orthonormal basis. Any degeneracies require a basis adapted to the perturbation.","Preparazione":"Preparation","All'istante iniziale il sistema è preparato nell'autostato i: c_i(0)=1 e tutti gli altri coefficienti sono nulli.":"At the initial time the system is prepared in eigenstate i: c_i(0)=1 and all other coefficients vanish.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Hamiltoniano":"1. Hamiltonian","BASE":"BASE","Lambda organizza gli ordini e può essere posto uguale a uno al termine del calcolo.":"Lambda organizes orders and may be set equal to one at the end of the calculation.","Passaggio":"Step","2. Variazione delle costanti":"2. Variation of constants","ANSATZ":"ANSATZ","Si espande lo stato nei modi stazionari completi, lasciando variare soltanto le ampiezze.":"Expand the state in complete stationary modes, allowing only the amplitudes to vary.","3. Derivata temporale":"3. Time derivative","DIM 12":"DIM 12","La regola del prodotto genera un termine con c punto e uno con E_m.":"The product rule generates one term with c dot and one with E_m.","4. Azione di H":"4. Action of H","H0 agisce diagonalmente, mentre V mescola gli stati della base.":"H0 acts diagonally, whereas V mixes the basis states.","5. Cancellazione di H0":"5. Cancellation of H0","PASSAGGIO":"STEP","I termini diagonali con E_m sono identici sui due membri e si cancellano esattamente.":"The diagonal E_m terms are identical on both sides and cancel exactly.","6. Proiezione su n":"6. Projection onto n","Moltiplicando per e alla i E_n t su hbar compare la frequenza di Bohr orientata n meno m.":"Multiplying by e to i E_n t over hbar produces the oriented Bohr frequency n minus m.","7. Quadro di interazione":"7. Interaction picture","FORMA":"FORM","La matrice efficace è V_I(t); l'equazione coincide con Schrödinger nel quadro di interazione.":"The effective matrix is V_I(t); the equation is Schrödinger's equation in the interaction picture.","8. Serie perturbativa":"8. Perturbative series","ORDINI":"ORDERS","Ogni c_n viene sviluppato nello stesso parametro lambda.":"Each c_n is expanded in the same parameter lambda.","9. Ordine zero":"9. Zeroth order","CHECK":"CHECK","Senza perturbazione le ampiezze sono costanti e coincidono con la preparazione iniziale.":"Without the perturbation, amplitudes are constant and equal the initial preparation.","10. Equazione al primo ordine":"10. First-order equation","Nel membro destro si inserisce soltanto il coefficiente di ordine zero.":"Only the zeroth-order coefficient is inserted on the right-hand side.","11. Ampiezza integrata":"11. Integrated amplitude","RISULTATO":"RESULT","La condizione c_f(0)=0 fissa la costante di integrazione.":"The condition c_f(0)=0 fixes the integration constant.","12. Probabilità":"12. Probability","MISURA":"MEASUREMENT","Per f diverso da i il modulo quadro inizia all'ordine lambda².":"For f different from i, the squared modulus starts at order lambda².","13. Norma e sopravvivenza":"13. Norm and survival","UNITARIETÀ":"UNITARITY","A ordine lambda², la probabilità persa dallo stato iniziale uguaglia la somma di quelle acquistate dagli altri stati.":"At order lambda², probability lost by the initial state equals the sum gained by all other states.","14. Lettura spettrale":"14. Spectral reading","FOURIER":"FOURIER","L'ampiezza campiona la trasformata temporale di V alla pulsazione meno omega_fi: frequenze assenti non producono transizioni al primo ordine.":"The amplitude samples the temporal transform of V at angular frequency minus omega_fi: absent frequencies produce no first-order transitions.","Esempio: impulso rettangolare":"Example: rectangular pulse","Impostazione.":"Setup.","Una perturbazione V0 agisce soltanto tra t=0 e t=T. L'elemento V_fi è costante nella finestra.":"A perturbation V0 acts only between t=0 and t=T. The matrix element V_fi is constant in the window.","Controllo.":"Check.","Nel limite T piccolo, P circa lambda²|V_fi|²T²/hbar². A T grande la risposta diventa stretta in energia, ma per un singolo finale discreto resta oscillante.":"For small T, P is approximately lambda²|V_fi|²T²/hbar². At large T the response becomes narrow in energy, but for a single discrete final state it remains oscillatory.","Interpretazione e limiti":"Interpretation and limits","Ampiezza contro probabilità":"Amplitude versus probability","Chiamare primo ordine la probabilità significa primo ordine non nullo nella teoria, ma matematicamente essa è di ordine V².":"Calling the probability first order means the first nonzero perturbative result, but mathematically it is order V².","Regole di selezione":"Selection rules","Se V_fi è nullo per simmetria, la transizione è vietata a questo ordine anche in risonanza.":"If V_fi vanishes by symmetry, the transition is forbidden at this order even at resonance.","Fasi orientate":"Oriented phases","La convenzione omega_fi=(E_f-E_i)/hbar deve essere mantenuta in ogni integrale per distinguere assorbimento ed emissione.":"The convention omega_fi=(E_f-E_i)/hbar must be retained in every integral to distinguish absorption and emission.","Regime perturbativo":"Perturbative regime","Il risultato è affidabile finché la probabilità trasferita totale resta molto minore di uno e non si accumulano dinamiche risonanti secolari.":"The result is reliable while total transferred probability remains much smaller than one and resonant secular dynamics does not accumulate.","Errori tipici":"Common errors","Non derivare la fase; perdere il fattore i; usare omega_if al posto di omega_fi a metà calcolo; confondere c_f con P; calcolare P_ii soltanto da c_i al primo ordine.":"Not differentiating the phase; losing the factor i; switching from omega_fi to omega_if mid-calculation; confusing c_f with P; computing P_ii only from first-order c_i.","Controlli rapidi":"Quick checks","c è adimensionale; V dt/hbar è adimensionale; V=0 rende c costante; P è positivo; la somma delle probabilità resta uno all'ordine coerente.":"c is dimensionless; V dt/hbar is dimensionless; V=0 makes c constant; P is positive; the probability sum remains one at consistent order.","Controllo da orale":"Oral exam checklist","Scrivi l'ansatz con le fasi di H0.":"Write the ansatz with H0 phases.","Deriva e cancella i termini E_m.":"Differentiate and cancel E_m terms.","Proietta e definisci omega_nm.":"Project and define omega_nm.","Espandi c_n per ordini.":"Expand c_n by orders.","Imponi la preparazione nello stato i.":"Impose preparation in state i.","Integra l'ampiezza finale.":"Integrate the final amplitude.","Eleva al quadrato soltanto all'ordine coerente.":"Square only at consistent order.","Controlla norma e regole di selezione.":"Check norm and selection rules.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 12 - perturbazioni dipendenti dal tempo e copione orale":"DIM 12 - time-dependent perturbations and oral-exam script","Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro":"Appunti-MQ.pdf, PDF pages 176-184 - theory, resonance, and golden rule","Set 12 - esercizi sulle probabilità di transizione":"Set 12 - transition-probability exercises","Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo":"2025 question 13 - time-dependent perturbations","Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.":"Conventions for angular frequencies, Dirac deltas, and density of states are kept identical across all six pages in this block.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: variazione-costanti.html. La lezione scientifica verificata è condivisa con probabilita-transizione.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: variazione-costanti.html. The verified scientific lesson is shared with probabilita-transizione.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Hamiltoniano imperturbato e perturbazione temporale":"Unperturbed Hamiltonian and time-dependent perturbation","Espansione dello stato con fasi imperturbate":"State expansion with unperturbed phases","Derivata completa dell'ansatz":"Full derivative of the ansatz","Azione separata di H0 e V":"Separate action of H0 and V","Equazione dopo la cancellazione delle fasi libere":"Equation after cancellation of free phases","Sistema esatto per i coefficienti":"Exact coefficient system","Definizione dell'operatore di interazione":"Definition of the interaction-picture operator","Espansione dei coefficienti di interazione":"Expansion of interaction-picture coefficients","Soluzione all'ordine zero":"Zeroth-order solution","Equazione dell'ampiezza finale al primo ordine":"First-order final-amplitude equation","Ampiezza di transizione al primo ordine":"First-order transition amplitude","Probabilità di transizione al primo ordine non nullo":"Transition probability at the first nonzero order","Conservazione perturbativa della probabilità totale":"Perturbative conservation of total probability","Interpretazione di Fourier dell'ampiezza":"Fourier interpretation of the amplitude"},"title":{"it":"Probabilità di transizione e variazione delle costanti","en":"Transition probability and variation of constants"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

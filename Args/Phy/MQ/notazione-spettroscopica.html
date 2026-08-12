@@ -1,336 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notazione Spettroscopica</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notazione spettroscopica e simboli di termine</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Notazione Spettroscopica</h1>
-    <p>
-        La notazione spettroscopica è un sistema utilizzato per descrivere gli stati quantistici di un elettrone in un atomo. 
-        È particolarmente utile per classificare gli stati energetici legati alla struttura fine dell'atomo, includendo 
-        effetti relativistici e accoppiamenti spin-orbita.
-    </p>
-    <h2>Struttura della Notazione</h2>
-    <p>
-        La notazione spettroscopica di uno stato quantistico è composta da tre elementi principali:
-    </p>
-    <ul>
-        <li><strong>Numero quantico principale</strong> (\(n\)): Indica il livello energetico principale, con \(n = 1, 2, 3, \ldots\).</li>
-        <li><strong>Simbolo della sottostruttura</strong>: Rappresenta il numero quantico orbitale \(l\) con simboli specifici:
-            <ul>
-                <li>\(l = 0 \rightarrow \text{S}\)</li>
-                <li>\(l = 1 \rightarrow \text{P}\)</li>
-                <li>\(l = 2 \rightarrow \text{D}\)</li>
-                <li>\(l = 3 \rightarrow \text{F}\)</li>
-            </ul>
-        </li>
-        <li><strong>Molteplicità</strong> (\(2S+1\)): Indica lo spin totale del sistema e determina il numero di stati degeneri associati al valore totale del momento angolare \(J\).</li>
-    </ul>
-    <h2>Forma Generale</h2>
-    <p>
-        La notazione completa ha la forma:
-        <div class="formula">
-            \( n \, ^{2S+1}L_J \)
-        </div>
-        dove:
-    </p>
-    <ul>
-        <li>\(n\): Numero quantico principale</li>
-        <li>\(L\): Simbolo che rappresenta \(l\) (S, P, D, F...)</li>
-        <li>\(J\): Momento angolare totale, somma dei contributi di \(L\) e dello spin \(S\): \(J = |L \pm S|\).</li>
-    </ul>
-    <h2>Esempi</h2>
-    <p>
-        Consideriamo alcuni esempi per chiarire l'uso della notazione spettroscopica:
-    </p>
-    <ul>
-        <li><strong>\(1s^1\):</strong> Uno stato con \(n=1\), \(l=0\) (S), e un solo elettrone.</li>
-        <li><strong>\(2P_{3/2}\):</strong> Uno stato con \(n=2\), \(l=1\) (P), molteplicità \(2S+1 = 2\), e \(J=3/2\).</li>
-    </ul>
-    <h2>Relazione con la Struttura Fine</h2>
-    <p>
-        La struttura fine di un atomo deriva dall'accoppiamento tra momento angolare orbitale (\(L\)) e spin (\(S\)), 
-        producendo un momento angolare totale \(J\). Le correzioni relativistiche e lo splitting spin-orbita 
-        introducono differenze energetiche tra stati con lo stesso \(n\) e \(l\), ma valori differenti di \(J\).
-    </p>
-    <h2>Importanza Fisica</h2>
-    <p>
-        La notazione spettroscopica è essenziale per analizzare i livelli energetici degli atomi, interpretare gli 
-        spettri atomici e comprendere gli effetti della struttura fine e iperfine nei fenomeni di interazione luce-materia.
-    </p>
-    <h2>Descrizione Matematica della Notazione</h2>
-<p>
-    Per comprendere appieno la notazione spettroscopica, è essenziale analizzare le relazioni matematiche tra i numeri quantici \(n\), \(l\), \(s\), \(j\) e le loro implicazioni sui livelli energetici.
-</p>
-<p>
-    Il momento angolare orbitale \(L\) e il momento angolare di spin \(S\) si combinano attraverso l'accoppiamento spin-orbita, generando il momento angolare totale \(J\). Matematicamente:
-    <div class="formula">
-        \( J = |L - S|, |L - S| + 1, \ldots, L + S \)
-    </div>
-</p>
-<p>
-    Per un dato \(L\) e \(S\), il numero totale di valori possibili di \(J\) è dato da:
-    <div class="formula">
-        \(\text{Numero di valori di } J = 2S + 1\)
-    </div>
-    Questo numero coincide con la molteplicità dello stato e giustifica il termine \(^{2S+1}L_J\).
-</p>
-<h2>Struttura Fine e Splitting Energetico</h2>
-<p>
-    La struttura fine è causata dall'interazione relativistica spin-orbita, descritta dal termine di accoppiamento:
-    <div class="formula">
-        \( H_{\text{SO}} = \zeta(L \cdot S) \)
-    </div>
-    dove \(\zeta\) è una costante che dipende dal tipo di atomo e dallo stato quantistico specifico. Poiché \(L \cdot S\) può essere espresso come:
-    <div class="formula">
-        \( L \cdot S = \frac{1}{2}(J^2 - L^2 - S^2) \),
-    </div>
-    l'energia associata a ciascun livello è:
-    <div class="formula">
-        \( E_{\text{SO}} = \zeta \frac{1}{2}(J(J+1) - L(L+1) - S(S+1)) \)
-    </div>
-</p>
-<p>
-    Questa espressione mostra come i livelli energetici vengano separati in base ai diversi valori di \(J\). Ad esempio, per \(L = 1\) (P) e \(S = 1/2\), otteniamo \(J = 1/2\) e \(J = 3/2\), con un'energia relativa determinata da \(E_{\text{SO}}\).
-</p>
-<h2>Esempio Dettagliato: Livello \(2P\)</h2>
-<p>
-    Per un elettrone nello stato \(2P\), abbiamo \(n = 2\), \(l = 1\) (P), e \(s = 1/2\). I possibili valori di \(J\) sono:
-    <div class="formula">
-        \( J = |L - S| = 1 - 1/2 = 1/2, \quad J = L + S = 1 + 1/2 = 3/2 \)
-    </div>
-</p>
-<p>
-    I due stati risultanti, \(2P_{1/2}\) e \(2P_{3/2}\), sono energeticamente distinti a causa dello splitting spin-orbita. L'energia relativa dei due livelli è calcolata usando:
-    <div class="formula">
-        \( E_{\text{SO}}(2P_{1/2}) = \zeta \frac{1}{2}(1/2(1/2 + 1) - 1(1 + 1) - 1/2(1/2 + 1)) \)
-    </div>
-    e
-    <div class="formula">
-        \( E_{\text{SO}}(2P_{3/2}) = \zeta \frac{1}{2}(3/2(3/2 + 1) - 1(1 + 1) - 1/2(1/2 + 1)) \)
-    </div>
-</p>
-<p>
-    Il risultato fornisce una separazione energetica proporzionale a \(\zeta\), che può essere misurata sperimentalmente nei fenomeni spettroscopici.
-</p>
-<h2>Conclusione Applicativa</h2>
-<p>
-    La notazione spettroscopica, combinata con la teoria della struttura fine, permette non solo di classificare gli stati quantistici, ma anche di prevedere i livelli energetici e i dettagli degli spettri atomici. Essa è uno strumento essenziale per interpretare le osservazioni sperimentali in spettroscopia e nella fisica atomica.
-</p>
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 13</div>
-  <h2>Notazione Spettroscopica: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Decodificare simboli di termine e collegarli a molteplicità, L, J e parità.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Un termine \(^{2S+1}L_J\) riassume l'accoppiamento LS. Le lettere S,P,D,F corrispondono a L=0,1,2,3; la molteplicità conta le proiezioni di spin.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Simbolo<span class="lecture-step-boss">DIM 10</span></h4>
-      <p>Contenuto.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="{}^{2S+1}L_J"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle S\Rightarrow2S+1\ \text{valori di }M_S,\quad L=0,1,2,\ldots\Rightarrow L=S,P,D,\ldots,\quad\mathbf J=\mathbf L+\mathbf S\Rightarrow{}^{2S+1}L_J\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Valori J<span class="lecture-step-boss">DIM 10</span></h4>
-      <p>Regola triangolare.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="J=|L-S|,\ldots,L+S"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf J=\mathbf L+\mathbf S,\quad\text{regola triangolare}\Rightarrow|L-S|\le J\le L+S,\quad J=|L-S|,|L-S|+1,\ldots,L+S\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Termine \(^{3}P\)</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> S=1,L=1.</p>
-    <p><strong>Calcolo.</strong> Sono ammessi J=0,1,2 con degenerazioni 1,3,5.</p>
-    <p><strong>Risultato e controllo.</strong> Il totale di nove stati coincide con \((2S+1)(2L+1)\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 10</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Regime di accoppiamento LS.</li>
-          <li>Parità indicata separatamente quando necessario.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La notazione è un inventario di simmetrie e degenerazioni, non un semplice nome storico.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Decodifica \(^{2}D_{5/2}\).</li>
-          <li>Conta gli stati di un termine.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=260">Appunti-MQ.pdf, pp. 260-267 e 282-286: numeri quantici L, S, J e multiplette</a></li>
-          <li><a href="BibbiaAleHD.pdf">BibbiaAleHD.pdf, pp. sezione sulla struttura fine: simboli di termine</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-notazione-spettroscopica"><div class="lecture-kicker">DIM 10 - lettura completa di n ell j e 2S+1 L J</div><h1>Notazione spettroscopica e simboli di termine</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Dai livelli a un elettrone ai termini LS multi-elettronici: molteplicità, valori di J, parità, degenerazione e regole di selezione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Un elettrone</h3><p>Minuscola ell descrive il momento orbitale del singolo elettrone.</p></article><article class="lecture-card lecture-warning"><h3>Molti elettroni</h3><p>Maiuscola L descrive il momento orbitale totale nell'accoppiamento LS.</p></article></div><h2>Impostazione, ipotesi e convenzioni</h2><div class="lecture-grid"><article class="lecture-card "><h3>Due linguaggi</h3><p>n ell j etichetta un livello idrogenoide o una sottoguscio a un elettrone; il simbolo di termine raccoglie i momenti totali di una configurazione multi-elettronica.</p></article><article class="lecture-card "><h3>Convenzione</h3><p>Le lettere s,p,d,f sono minuscole per ell; S,P,D,F sono maiuscole per L. La stessa lettera cambia quindi significato con il contesto.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Numero principale<span class="lecture-step-boss">1e</span></h4><p>n determina il guscio e, nel Coulomb non relativistico, l'energia principale.</p><div class="lecture-formula" aria-label="Intervalli dei numeri quantici idrogenoidi"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle n=1,2,\ldots,\qquad \ell=0,1,\ldots,n-1\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Alfabeto orbitale<span class="lecture-step-boss">1e</span></h4><p>La sequenza storica prosegue oltre f in ordine alfabetico, saltando j.</p><div class="lecture-formula" aria-label="Mappa tra ell e lettera spettroscopica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \ell=0,1,2,3,4,5,6\ \longleftrightarrow\ s,p,d,f,g,h,i\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Spin elettronico<span class="lecture-step-boss">1e</span></h4><p>Per un elettrone s è un mezzo; la regola triangolare lascia due j, salvo ell zero.</p><div class="lecture-formula" aria-label="Composizione del momento orbitale con lo spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle j=\ell\pm\frac12\quad(\ell&gt;0),\qquad j=\frac12\quad(\ell=0)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Lettura di n ell j<span class="lecture-step-boss">1e</span></h4><p>Il pedice è j, non mj; le 2j+1 orientazioni restano implicite.</p><div class="lecture-formula" aria-label="Decodifica di un livello a un elettrone"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle 2p_{3/2}:\quad n=2,\ \ell=1,\ j=\frac32,\quad m_j=-\frac32,\ldots,\frac32\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Momenti totali<span class="lecture-step-boss">LS</span></h4><p>In un atomo multi-elettronico si sommano prima tutti gli orbitali e tutti gli spin.</p><div class="lecture-formula" aria-label="Definizione dei momenti totali in accoppiamento LS"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf L=\sum_i\boldsymbol\ell_i,\qquad\mathbf S=\sum_i\mathbf s_i,\qquad\mathbf J=\mathbf L+\mathbf S\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Molteplicità<span class="lecture-step-boss">LS</span></h4><p>L'apice sinistro conta i possibili valori di MS per uno spin totale S.</p><div class="lecture-formula" aria-label="Molteplicità di spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \text{molteplicità}=2S+1:\quad1,2,3,4\leftrightarrow\text{singoletto, doppietto, tripletto, quartetto}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Alfabeto di L<span class="lecture-step-boss">LS</span></h4><p>La lettera maiuscola codifica L totale con la stessa corrispondenza numerica della minuscola.</p><div class="lecture-formula" aria-label="Mappa tra L e simbolo di termine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L=0,1,2,3,4,5,6\ \longleftrightarrow\ S,P,D,F,G,H,I\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Valori di J<span class="lecture-step-boss">LS</span></h4><p>La somma di due momenti dà tutti i valori interi a passi di uno tra gli estremi triangolari.</p><div class="lecture-formula" aria-label="Regola triangolare per il momento totale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J=|L-S|,|L-S|+1,\ldots,L+S\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Simbolo completo<span class="lecture-step-boss">LS</span></h4><p>Apice sinistro, lettera e pedice forniscono rispettivamente S, L e J.</p><div class="lecture-formula" aria-label="Esempio di simbolo di termine LS"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle {}^{3}P_2:\quad S=1,\quad L=1,\quad J=2\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Parità di configurazione<span class="lecture-step-boss">PARITÀ</span></h4><p>Le parità individuali si moltiplicano; gli elettroni nello stesso sottoguscio contribuiscono con la potenza della loro occupazione.</p><div class="lecture-formula" aria-label="Parità totale di una configurazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Pi=\prod_i(-1)^{\ell_i}=(-1)^{\sum_i\ell_i},\qquad\Pi[(n\ell)^N]=(-1)^{N\ell}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Circoletto dispari<span class="lecture-step-boss">PARITÀ</span></h4><p>Un apice o oppure un piccolo circolo a destra indica parità dispari. L'assenza del simbolo normalmente significa pari.</p><div class="lecture-formula" aria-label="Convenzione grafica della parità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle {}^{2S+1}L_J^{\circ}\Rightarrow\Pi=-1,\qquad{}^{2S+1}L_J\Rightarrow\Pi=+1\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Degenerazione magnetica<span class="lecture-step-boss">CONTA</span></h4><p>Un livello con J fissato contiene 2J+1 stati mj in assenza di campi che scelgano un asse.</p><div class="lecture-formula" aria-label="Molteplicità orientazionale di un livello"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle m_J=-J,-J+1,\ldots,J,\qquad g_J=2J+1\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Regole E1<span class="lecture-step-boss">TRANSIZIONI</span></h4><p>Per un dipolo elettrico la parità deve cambiare; le regole in LS ideale limitano anche J, L e S.</p><div class="lecture-formula" aria-label="Regole di selezione dipolari elettriche essenziali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta J=0,\pm1\ (0\not\leftrightarrow0),\quad\Delta S=0,\quad\Delta L=0,\pm1\ (0\not\leftrightarrow0),\quad\Pi_f=-\Pi_i\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Limite dell'etichetta LS<span class="lecture-step-boss">CAUTELA</span></h4><p>Se spin-orbita domina sulle interazioni residue, i singoli ji vengono composti prima e il simbolo LS diventa solo approssimato.</p><div class="lecture-formula" aria-label="Schema alternativo di accoppiamento jj"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf j_i=\boldsymbol\ell_i+\mathbf s_i,\qquad\mathbf J=\sum_i\mathbf j_i\quad\text{(accoppiamento jj)}\)</span></div></article></section><h2>Esempio guidato e controllo fisico</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Per la configurazione 2p¹: ell=1, s=1/2, quindi L=1 e S=1/2. La composizione fornisce due livelli di struttura fine.</p><p data-i18n-skip="true">\(\displaystyle 2p^1:\quad{}^2P_{1/2}^{\circ},\ {}^2P_{3/2}^{\circ};\qquad\Pi=(-1)^1=-1\)</p><p><strong>Controllo.</strong> È un doppietto perché 2S+1=2, P perché L=1, dispari perché c'è un elettrone p. Le degenerazioni magnetiche sono rispettivamente 2 e 4.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Parità</h3><p>Il simbolo apicale circoletto indica parità dispari; la parità pari è spesso sottintesa.</p></article><article class="lecture-card "><h3>Ambito</h3><p>Il simbolo LS presuppone che L e S siano approssimativamente buoni numeri quantici. In accoppiamento jj serve una notazione diversa.</p></article><article class="lecture-card "><h3>Elettrone idrogenoide</h3><p>La struttura fine dipende da n e j e può lasciare degeneri livelli con ell diverso.</p></article><article class="lecture-card "><h3>Termine LS</h3><p>Il simbolo non specifica n né la configurazione completa: questi dati devono essere aggiunti quando necessari.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Confondere s minuscola con S totale; leggere il pedice come mj; dimenticare che L maiuscolo è totale; calcolare la parità dal valore di L invece che dalla configurazione; usare sempre LS anche in accoppiamento forte jj.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>2S+1 deve essere intero positivo; J rispetta la regola triangolare; 2J+1 è intero; la parità è il prodotto delle parità orbitali; il circoletto compare solo per parità dispari.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Distingui n ell j dal simbolo LS.</li><li>Memorizza le mappe s-p-d-f e S-P-D-F.</li><li>Ricava j da ell più spin un mezzo.</li><li>Leggi molteplicità, L e J.</li><li>Applica la regola triangolare.</li><li>Calcola la parità dalla configurazione.</li><li>Conta i 2J+1 stati magnetici.</li><li>Dichiara quando LS è soltanto approssimato.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1104">DIM 10 - dimostrazione di Hellmann-Feynman e notazione</a></li><li><a href="Appunti-MQ.pdf#page=237">Appunti-MQ.pdf, pagina PDF 237 - scala relativistica e costante alpha</a></li><li><a href="correzioni-autovalori.html">Correzioni agli autovalori - collegamento perturbativo</a></li></ul><p class="lecture-note">Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"DIM 10 - lettura completa di n ell j e 2S+1 L J":"DIM 10 - complete reading of n ell j and 2S+1 L J","Notazione spettroscopica e simboli di termine":"Spectroscopic notation and term symbols","Obiettivo.":"Objective.","Dai livelli a un elettrone ai termini LS multi-elettronici: molteplicità, valori di J, parità, degenerazione e regole di selezione.":"From one-electron levels to many-electron LS terms: multiplicity, J values, parity, degeneracy, and selection rules.","Un elettrone":"One electron","Minuscola ell descrive il momento orbitale del singolo elettrone.":"Lowercase ell describes the orbital angular momentum of a single electron.","Molti elettroni":"Many electrons","Maiuscola L descrive il momento orbitale totale nell'accoppiamento LS.":"Uppercase L describes total orbital angular momentum in LS coupling.","Impostazione, ipotesi e convenzioni":"Setup, assumptions, and conventions","Due linguaggi":"Two languages","n ell j etichetta un livello idrogenoide o una sottoguscio a un elettrone; il simbolo di termine raccoglie i momenti totali di una configurazione multi-elettronica.":"n ell j labels a hydrogen-like level or a one-electron subshell; a term symbol collects total angular momenta of a many-electron configuration.","Convenzione":"Convention","Le lettere s,p,d,f sono minuscole per ell; S,P,D,F sono maiuscole per L. La stessa lettera cambia quindi significato con il contesto.":"The letters s,p,d,f are lowercase for ell; S,P,D,F are uppercase for L. Thus, the same letter changes meaning with context.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Numero principale":"1. Principal number","1e":"1e","n determina il guscio e, nel Coulomb non relativistico, l'energia principale.":"n determines the shell and, in the nonrelativistic Coulomb problem, the principal energy.","Passaggio":"Step","2. Alfabeto orbitale":"2. Orbital alphabet","La sequenza storica prosegue oltre f in ordine alfabetico, saltando j.":"The historical sequence continues alphabetically beyond f, skipping j.","3. Spin elettronico":"3. Electron spin","Per un elettrone s è un mezzo; la regola triangolare lascia due j, salvo ell zero.":"For one electron s is one half; the triangle rule leaves two j values, except at ell zero.","4. Lettura di n ell j":"4. Reading n ell j","Il pedice è j, non mj; le 2j+1 orientazioni restano implicite.":"The subscript is j, not mj; the 2j+1 orientations remain implicit.","5. Momenti totali":"5. Total angular momenta","LS":"LS","In un atomo multi-elettronico si sommano prima tutti gli orbitali e tutti gli spin.":"In a many-electron atom, first add all orbital angular momenta and all spins.","6. Molteplicità":"6. Multiplicity","L'apice sinistro conta i possibili valori di MS per uno spin totale S.":"The left superscript counts the possible MS values for total spin S.","7. Alfabeto di L":"7. L alphabet","La lettera maiuscola codifica L totale con la stessa corrispondenza numerica della minuscola.":"The uppercase letter encodes total L with the same numerical correspondence as the lowercase letter.","8. Valori di J":"8. J values","La somma di due momenti dà tutti i valori interi a passi di uno tra gli estremi triangolari.":"Adding two angular momenta gives every value in unit steps between the triangle endpoints.","9. Simbolo completo":"9. Complete symbol","Apice sinistro, lettera e pedice forniscono rispettivamente S, L e J.":"Left superscript, letter, and subscript give S, L, and J, respectively.","10. Parità di configurazione":"10. Configuration parity","PARITÀ":"PARITY","Le parità individuali si moltiplicano; gli elettroni nello stesso sottoguscio contribuiscono con la potenza della loro occupazione.":"Individual parities multiply; electrons in the same subshell contribute with the power of their occupation.","11. Circoletto dispari":"11. Odd-parity circle","Un apice o oppure un piccolo circolo a destra indica parità dispari. L'assenza del simbolo normalmente significa pari.":"A right superscript o or a small circle denotes odd parity. Its absence normally means even parity.","12. Degenerazione magnetica":"12. Magnetic degeneracy","CONTA":"COUNT","Un livello con J fissato contiene 2J+1 stati mj in assenza di campi che scelgano un asse.":"A level with fixed J contains 2J+1 mj states in the absence of fields selecting an axis.","13. Regole E1":"13. E1 rules","TRANSIZIONI":"TRANSITIONS","Per un dipolo elettrico la parità deve cambiare; le regole in LS ideale limitano anche J, L e S.":"For an electric dipole, parity must change; ideal LS-coupling rules also constrain J, L, and S.","14. Limite dell'etichetta LS":"14. Limit of the LS label","CAUTELA":"CAUTION","Se spin-orbita domina sulle interazioni residue, i singoli ji vengono composti prima e il simbolo LS diventa solo approssimato.":"If spin-orbit coupling dominates residual interactions, individual ji values are coupled first and the LS symbol becomes only approximate.","Esempio guidato e controllo fisico":"Guided example and physical check","Impostazione.":"Setup.","Per la configurazione 2p¹: ell=1, s=1/2, quindi L=1 e S=1/2. La composizione fornisce due livelli di struttura fine.":"For configuration 2p¹: ell=1, s=1/2, hence L=1 and S=1/2. Coupling gives two fine-structure levels.","Controllo.":"Check.","È un doppietto perché 2S+1=2, P perché L=1, dispari perché c'è un elettrone p. Le degenerazioni magnetiche sono rispettivamente 2 e 4.":"It is a doublet because 2S+1=2, P because L=1, and odd because there is one p electron. The magnetic degeneracies are 2 and 4, respectively.","Interpretazione e limiti":"Interpretation and limits","Parità":"Parity","Il simbolo apicale circoletto indica parità dispari; la parità pari è spesso sottintesa.":"A superscript small circle indicates odd parity; even parity is often implicit.","Ambito":"Scope","Il simbolo LS presuppone che L e S siano approssimativamente buoni numeri quantici. In accoppiamento jj serve una notazione diversa.":"The LS symbol assumes L and S are approximately good quantum numbers. In jj coupling a different notation is needed.","Elettrone idrogenoide":"Hydrogen-like electron","La struttura fine dipende da n e j e può lasciare degeneri livelli con ell diverso.":"Fine structure depends on n and j and may leave levels with different ell degenerate.","Termine LS":"LS term","Il simbolo non specifica n né la configurazione completa: questi dati devono essere aggiunti quando necessari.":"The symbol does not specify n or the complete configuration: those data must be added when needed.","Errori tipici":"Common errors","Confondere s minuscola con S totale; leggere il pedice come mj; dimenticare che L maiuscolo è totale; calcolare la parità dal valore di L invece che dalla configurazione; usare sempre LS anche in accoppiamento forte jj.":"Confusing lowercase s with total S; reading the subscript as mj; forgetting that uppercase L is total; computing parity from L rather than from the configuration; always using LS even in strong jj coupling.","Controlli rapidi":"Quick checks","2S+1 deve essere intero positivo; J rispetta la regola triangolare; 2J+1 è intero; la parità è il prodotto delle parità orbitali; il circoletto compare solo per parità dispari.":"2S+1 must be a positive integer; J satisfies the triangle rule; 2J+1 is an integer; parity is the product of orbital parities; the circle appears only for odd parity.","Controllo da orale":"Oral exam checklist","Distingui n ell j dal simbolo LS.":"Distinguish n ell j from the LS symbol.","Memorizza le mappe s-p-d-f e S-P-D-F.":"Memorize the s-p-d-f and S-P-D-F maps.","Ricava j da ell più spin un mezzo.":"Obtain j from ell plus spin one half.","Leggi molteplicità, L e J.":"Read multiplicity, L, and J.","Applica la regola triangolare.":"Apply the triangle rule.","Calcola la parità dalla configurazione.":"Compute parity from the configuration.","Conta i 2J+1 stati magnetici.":"Count the 2J+1 magnetic states.","Dichiara quando LS è soltanto approssimato.":"State when LS is only approximate.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 10 - dimostrazione di Hellmann-Feynman e notazione":"DIM 10 - Hellmann-Feynman proof and notation","Appunti-MQ.pdf, pagina PDF 237 - scala relativistica e costante alpha":"Appunti-MQ.pdf, PDF page 237 - relativistic scale and alpha constant","Correzioni agli autovalori - collegamento perturbativo":"Eigenvalue corrections - perturbative connection","Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.":"The formulas were checked against the listed PDF pages and compared with the Boss oral-exam outline; PDF references use the file's actual page numbering.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Intervalli dei numeri quantici idrogenoidi":"Ranges of hydrogen-like quantum numbers","Mappa tra ell e lettera spettroscopica":"Map between ell and spectroscopic letter","Composizione del momento orbitale con lo spin":"Coupling orbital angular momentum to spin","Decodifica di un livello a un elettrone":"Decoding a one-electron level","Definizione dei momenti totali in accoppiamento LS":"Definition of total angular momenta in LS coupling","Molteplicità di spin":"Spin multiplicity","Mappa tra L e simbolo di termine":"Map between L and term-symbol letter","Regola triangolare per il momento totale":"Triangle rule for total angular momentum","Esempio di simbolo di termine LS":"Example of an LS term symbol","Parità totale di una configurazione":"Total parity of a configuration","Convenzione grafica della parità":"Graphical parity convention","Molteplicità orientazionale di un livello":"Orientational multiplicity of a level","Regole di selezione dipolari elettriche essenziali":"Essential electric-dipole selection rules","Schema alternativo di accoppiamento jj":"Alternative jj-coupling scheme"},"title":{"it":"Notazione spettroscopica e simboli di termine","en":"Spectroscopic notation and term symbols"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

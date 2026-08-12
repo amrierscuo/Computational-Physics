@@ -1,318 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rimozione della degenerazione</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rimozione della degenerazione</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Rimozione della degenerazione</h1>
-    <p>
-        La degenerazione si verifica quando più stati quantistici condividono lo stesso autovalore di energia. Questo fenomeno è comune nei sistemi con simmetrie intrinseche, ma può essere perturbato da effetti esterni, come un campo elettrico o magnetico, che modificano le energie associate agli stati.
-    </p>
-    <p>
-        Quando il sistema è perturbato da un'interazione aggiuntiva descritta dall'Hamiltoniana perturbativa \( H' \), la degenerazione può essere rimossa e gli autovalori si separano. Consideriamo una degenerazione di ordine \( n \), ovvero \( n \) stati degenerati inizialmente.
-    </p>
-    <h2>Formalismo Matematico</h2>
-    <p>
-        Partiamo dall'Hamiltoniana totale, che include la perturbazione:
-    </p>
-    <div class="formula">
-        \( H = H_0 + \lambda H' \)
-    </div>
-    <p>
-        Dove \( H_0 \) rappresenta l'Hamiltoniana del sistema non perturbato e \( H' \) è la perturbazione. Per un sistema degenerato, è necessario risolvere l'equazione agli autovalori limitandoci allo spazio degenerato:
-    </p>
-    <div class="formula">
-        \( H'_{\text{eff}} = \langle \psi_i | H' | \psi_j \rangle \)
-    </div>
-    <p>
-        Qui \( H'_{\text{eff}} \) è l'Hamiltoniana efficace nell'ambito dello spazio degenerato, e i termini diagonali e fuori-diagonali determinano il modo in cui gli autovalori si separano.
-    </p>
-    <h2>Esempio: L'effetto Stark in un atomo di idrogeno</h2>
-    <p>
-        Un esempio classico è l'effetto Stark negli atomi. In presenza di un campo elettrico esterno \( \mathbf{E} \), i livelli degenerati del secondo livello energetico (\( n=2 \)) si separano in quattro livelli distinti a causa della perturbazione:
-    </p>
-    <div class="formula">
-        \( H' = -\mathbf{d} \cdot \mathbf{E} \)
-    </div>
-    <p>
-        Dove \( \mathbf{d} \) è il momento di dipolo elettrico. La matrice efficace dell'Hamiltoniana perturbata è calcolata nello spazio degli stati degenerati \( | 2, l, m \rangle \), risultando in una matrice simmetrica che può essere diagonalizzata.
-    </p>
-    <h2>Concetti Chiave</h2>
-    <ul>
-        <li>La degenerazione viene rimossa solo quando la simmetria del sistema viene rotta.</li>
-        <li>Gli autovalori risultanti dipendono dall'intensità della perturbazione \( \lambda \) e dalla struttura di \( H' \).</li>
-        <li>La diagonalizzazione di \( H'_{\text{eff}} \) nello spazio degenerato fornisce le nuove energie corrette al primo ordine.</li>
-    </ul>
-    <p>
-        Questo metodo si estende anche a casi più complessi, come degenerazioni di ordine superiore o perturbazioni che introducono accoppiamenti tra stati non degenerati.
-    </p>
-    <h2>Calcolo degli Autovalori e Autovettori</h2>
-<p>
-    La rimozione della degenerazione richiede di risolvere l'equazione agli autovalori per l'Hamiltoniana efficace \( H'_{\text{eff}} \) nello spazio degli stati degenerati. Data una base degenerata \( \{ | \psi_1 \rangle, | \psi_2 \rangle, \dots, | \psi_n \rangle \} \), la matrice efficace è costruita come:
-</p>
-<div class="formula">
-    \( H'_{\text{eff}} = \begin{pmatrix}
-        \langle \psi_1 | H' | \psi_1 \rangle & \langle \psi_1 | H' | \psi_2 \rangle & \cdots & \langle \psi_1 | H' | \psi_n \rangle \\
-        \langle \psi_2 | H' | \psi_1 \rangle & \langle \psi_2 | H' | \psi_2 \rangle & \cdots & \langle \psi_2 | H' | \psi_n \rangle \\
-        \vdots & \vdots & \ddots & \vdots \\
-        \langle \psi_n | H' | \psi_1 \rangle & \langle \psi_n | H' | \psi_2 \rangle & \cdots & \langle \psi_n | H' | \psi_n \rangle
-    \end{pmatrix} \)
-</div>
-<p>
-    Questa matrice, una volta diagonalizzata, fornisce gli autovalori \( E_i \) corretti al primo ordine e i corrispondenti autovettori perturbati. Gli autovalori separati riflettono la rimozione della degenerazione.
-</p>
-
-<h2>Effetti delle Perturbazioni Fuori-diagonali</h2>
-<p>
-    Quando \( H' \) ha termini fuori-diagonali significativi, questi accoppiamenti introducono mescolamenti tra gli stati degenerati. Supponiamo di avere due stati inizialmente degenerati \( | \psi_1 \rangle \) e \( | \psi_2 \rangle \). L'Hamiltoniana efficace assume la forma:
-</p>
-<div class="formula">
-    \( H'_{\text{eff}} = \begin{pmatrix}
-        \langle \psi_1 | H' | \psi_1 \rangle & \langle \psi_1 | H' | \psi_2 \rangle \\
-        \langle \psi_2 | H' | \psi_1 \rangle & \langle \psi_2 | H' | \psi_2 \rangle
-    \end{pmatrix} \)
-</div>
-<p>
-    La diagonalizzazione di questa matrice genera nuovi autovalori:
-</p>
-<div class="formula">
-    \( E_{\pm} = \frac{\langle \psi_1 | H' | \psi_1 \rangle + \langle \psi_2 | H' | \psi_2 \rangle}{2} \pm \sqrt{\left( \frac{\langle \psi_1 | H' | \psi_1 \rangle - \langle \psi_2 | H' | \psi_2 \rangle}{2} \right)^2 + |\langle \psi_1 | H' | \psi_2 \rangle|^2} \)
-</div>
-<p>
-    Dove il termine sotto radice quantifica l'effetto del mescolamento tra gli stati.
-</p>
-
-<h2>Rimozione Completa della Degenerazione</h2>
-<p>
-    Nel caso generale, la rimozione della degenerazione può essere descritta da un'espansione perturbativa agli ordini superiori. I contributi agli autovalori al secondo ordine sono dati da:
-</p>
-<div class="formula">
-    \( E_i^{(2)} = \sum_{k \notin D} \frac{|\langle \psi_k | H' | \psi_i \rangle|^2}{E_i^{(0)} - E_k^{(0)}} \)
-</div>
-<p>
-    Qui, \( D \) rappresenta lo spazio degenerato, e la somma viene eseguita sugli stati esterni. Questi termini al secondo ordine rappresentano correzioni più piccole che possono ulteriormente influenzare la separazione degli autovalori.
-</p>
-
-<h2>Applicazioni e Importanza</h2>
-<p>
-    La rimozione della degenerazione è fondamentale per comprendere fenomeni come l'effetto Stark, l'effetto Zeeman e molte interazioni tra stati in sistemi complessi. È anche uno strumento essenziale per prevedere e interpretare spettri di energia in presenza di perturbazioni esterne.
-</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 12</div>
-  <h2>Rimozione della degenerazione: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Interpretare splitting, degenerazione residua e simmetrie protettive.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La degenerazione si rimuove solo se (PVP) non è proporzionale all'identità nei settori considerati. Simmetrie rimaste possono obbligare alcuni livelli a restare uguali.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Splitting<span class="lecture-step-boss">DIM 7</span></h4>
-      <p>Differenze degli autovalori di PVP.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\Delta E_{\alpha\beta}^{(1)}=\lambda(v_\alpha-v_\beta)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle PVP|\alpha\rangle=v_\alpha|\alpha\rangle\Rightarrow E_\alpha=E_0+\lambda v_\alpha+O(\lambda^2)\Rightarrow\Delta E_{\alpha\beta}^{(1)}=E_\alpha-E_\beta=\lambda(v_\alpha-v_\beta)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Residua<span class="lecture-step-boss">DIM 7</span></h4>
-      <p>Se PVP=cP.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="E_\alpha^{(1)}=c\quad\forall\alpha"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle PVP=cP\Rightarrow PVP|\alpha\rangle=c|\alpha\rangle\ \forall\alpha\Rightarrow E_\alpha^{(1)}=c\ \forall\alpha\Rightarrow\text{degenerazione residua al primo ordine}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Perturbazione diagonale</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per tripletto con valori (v,-v,0).</p>
-    <p><strong>Calcolo.</strong> Il livello si separa in tre con distanze lineari in lambda.</p>
-    <p><strong>Risultato e controllo.</strong> Se una simmetria scambia due stati, i relativi shift possono restare uguali.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 7</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_4.html">Domanda 2025 n. 4</a> - Perturbazioni stazionarie degeneri</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Conoscere la simmetria del perturbatore.</li>
-          <li>Ordinare i livelli oltre il primo ordine se necessario.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Lo splitting osservato è una sonda della simmetria che il perturbatore rompe.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Distingui base e spettro.</li>
-          <li>Fornisci un caso protetto da simmetria.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=173">Appunti-MQ.pdf, pp. 173-176: splitting e base corretta</a></li>
-          <li><a href="MQ.pdf#page=20">MQ.pdf, pp. capitolo 20: autovalori di PVP</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
-
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-rimozione-degenerazione"><div class="lecture-kicker">Lezione approfondita - Argomento 12 - DIM 7</div><h1>Rimozione della degenerazione</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Interpretare lo splitting come spettro della perturbazione ristretta, distinguere rimozione completa, parziale e protetta, usare simmetrie e invarianti del blocco, descrivere crossing evitati e applicare il metodo a un doppietto controllabile.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Lo splitting misura la simmetria rotta</h3><p>Un livello è degenere perché H0 non distingue più stati. La perturbazione rimuove la degenerazione soltanto nella misura in cui distingue quelle direzioni nel sottospazio.</p></article><article class="lecture-card lecture-warning"><h3>Non ogni perturbazione rimuove tutto</h3><p>Se PVP è proporzionale all'identità, il primo ordine sposta l'intero multipletto senza dividerlo. Se possiede autovalori ripetuti, resta una degenerazione parziale da trattare agli ordini successivi o protetta da simmetria.</p></article></div><h2>Tre esiti possibili al primo ordine</h2><div class="lecture-grid"><article class="lecture-card "><h3>Completa, parziale, nulla</h3><p>Rimozione completa significa r autovalori distinti di W; parziale significa molteplicità inferiori; nulla significa W uguale wI nel multipletto.</p></article><article class="lecture-card "><h3>Stati selezionati</h3><p>Gli autovettori di W sono gli stati che la perturbazione rende distinguibili. Il solo elenco degli shift è incompleto: occorre sempre fornire anche le combinazioni lineari corrispondenti.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Operatore ristretto<span class="lecture-step-boss">DIM 7</span></h4><p>L'intera informazione di primo ordine è contenuta nella compressione di V al sottospazio degenere.</p><div class="lecture-formula" aria-label="Perturbazione ristretta al multipletto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W=PVP,\qquad W_{ij}=\langle n,i|V|n,j\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Spettro dello splitting<span class="lecture-step-boss">BOSS</span></h4><p>Gli autovalori w_a sono gli shift; le loro molteplicità sono le degenerazioni residue.</p><div class="lecture-formula" aria-label="Shift e degenerazioni residue"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \operatorname{spec}H=\{E_n^{(0)}+\lambda w_a+O(\lambda^2)\},\qquad g_a=\dim\ker(W-w_aI)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Criterio completo<span class="lecture-step-boss">CHECK</span></h4><p>La degenerazione è completamente rimossa al primo ordine se e solo se W ha spettro semplice.</p><div class="lecture-formula" aria-label="Criterio discriminante per splitting completo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle g_a=1\ \forall a\Longleftrightarrow\prod_{a&lt;b}(w_a-w_b)\ne0\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Nessuno splitting<span class="lecture-step-boss">CHECK</span></h4><p>Un blocco scalare commuta con ogni rotazione interna e non seleziona alcuna base.</p><div class="lecture-formula" aria-label="Condizione di assenza di splitting"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W=wI_r\Rightarrow E_{n,a}^{(1)}=w\ \forall a,\qquad\text{degenerazione invariata al primo ordine}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Baricentro<span class="lecture-step-boss">INVARIANTE</span></h4><p>La traccia fissa lo shift medio del multipletto indipendentemente dalla base.</p><div class="lecture-formula" aria-label="Baricentro degli shift del multipletto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \bar w=\frac1r\operatorname{Tr}W,\qquad\sum_a g_aw_a=\operatorname{Tr}W\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Ampiezza dello splitting<span class="lecture-step-boss">INVARIANTE</span></h4><p>La parte traceless misura la dispersione degli shift intorno al baricentro.</p><div class="lecture-formula" aria-label="Varianza invariante dello splitting"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_0=W-\bar wI,\qquad\frac1r\operatorname{Tr}(W_0^2)=\frac1r\sum_ag_a(w_a-\bar w)^2\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Simmetria conservata<span class="lecture-step-boss">SIMMETRIA</span></h4><p>Se V commuta con un gruppo G, W è a blocchi nelle rappresentazioni irriducibili di G e non mescola settori inequivalenti.</p><div class="lecture-formula" aria-label="Decomposizione del perturbatore per simmetria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [V,U(g)]=0\ \forall g\in G\Rightarrow W=\bigoplus_\Gamma W_\Gamma\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Lemma di Schur<span class="lecture-step-boss">PROTEZIONE</span></h4><p>Dentro una rappresentazione irriducibile non ripetuta, un perturbatore completamente simmetrico è proporzionale all'identità e non scinde il multipletto.</p><div class="lecture-formula" aria-label="Protezione della degenerazione mediante il lemma di Schur"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [W,U_\Gamma(g)]=0\ \forall g,\ \Gamma\ \text{irriducibile}\Rightarrow W|_\Gamma=w_\Gamma I\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Regole di selezione<span class="lecture-step-boss">SIMMETRIA</span></h4><p>Gli elementi fuori diagonale vietati impediscono il mixing, ma diagonali diverse possono comunque separare i livelli.</p><div class="lecture-formula" aria-label="Distinzione tra assenza di mixing e assenza di splitting"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle i|V|j\rangle=0\ \text{per simmetria}\not\Rightarrow W_{ii}=W_{jj}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Doppietto universale<span class="lecture-step-boss">CALCOLO</span></h4><p>Tolto il baricentro, ogni matrice hermitiana due per due è un vettore reale moltiplicato per le matrici di Pauli.</p><div class="lecture-formula" aria-label="Forma universale dello splitting di un doppietto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W=\bar wI+\mathbf d\cdot\boldsymbol\sigma\Rightarrow w_\pm=\bar w\pm|\mathbf d|,\qquad\Delta w=2|\mathbf d|\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Crossing evitato<span class="lecture-step-boss">FISICA</span></h4><p>Se un parametro controlla la differenza diagonale e un coupling g resta non nullo, i rami non si incrociano.</p><div class="lecture-formula" aria-label="Gap minimo di un avoided crossing"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W(x)=\begin{pmatrix}x&amp;g\\g^*&amp;-x\end{pmatrix}\Rightarrow w_\pm=\pm\sqrt{x^2+|g|^2},\qquad\min(w_+-w_-)=2|g|\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Crossing vero<span class="lecture-step-boss">SIMMETRIA</span></h4><p>Un incrocio può persistere se la simmetria impone g uguale zero; gli stati appartengono allora a settori che non comunicano.</p><div class="lecture-formula" aria-label="Incrocio protetto dall&#x27;assenza di accoppiamento"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle g=0\ \text{protetto}\Rightarrow w_\pm=\pm|x|\ \text{con crossing a }x=0\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Ordine successivo<span class="lecture-step-boss">RESIDUA</span></h4><p>Se il primo ordine lascia un sottospazio R degenere, si restringe a R la matrice efficace di secondo ordine.</p><div class="lecture-formula" aria-label="Rimozione della degenerazione residua al secondo ordine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_R^{(2)}=R\,VQ(E_n^{(0)}-QH_0Q)^{-1}QVR,\qquad R\le P\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Protezione di Kramers<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Per spin semintero con simmetria di inversione temporale e T² uguale meno uno, ogni livello resta almeno doppio; un perturbatore che conserva T non può rimuovere il doppietto.</p><div class="lecture-formula" aria-label="Teorema di Kramers e degenerazione protetta"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H,T]=0,\quad T^2=-I\Rightarrow\langle\psi|T\psi\rangle=0,\quad E_\psi=E_{T\psi}\)</span></div></article></section><h2>Esempio d'esame: doppietto controllato</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Un parametro x rompe una simmetria diagonale e g mescola i due stati. Il blocco è x sigma z più g sigma x.</p><p data-i18n-skip="true">\(\displaystyle w_\pm=\pm\sqrt{x^2+g^2},\qquad\tan2\theta=g/x,\qquad|\pm\rangle=\text{rotazioni di }|1\rangle,|2\rangle\)</p><p><strong>Controllo.</strong> Per g diverso da zero la degenerazione è rimossa completamente e il gap minimo vale 2|g|. Per g uguale zero un crossing rimane, ma è stabile soltanto se una simmetria continua a vietare il coupling.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Sonda spettroscopica</h3><p>Pattern, molteplicità e baricentro dello splitting rivelano quali simmetrie il perturbatore rompe e quali conserva. Non basta osservare che i livelli si separano.</p></article><article class="lecture-card "><h3>Mixing e splitting</h3><p>Diagonali diverse possono separare senza mescolare; un termine fuori diagonale può separare e ruotare la base anche con diagonali uguali. Sono effetti logicamente distinti.</p></article><article class="lecture-card "><h3>Accidentale o protetta</h3><p>Una molteplicità può sopravvivere per coincidenza numerica oppure perché una simmetria forza W a essere scalare su un settore. Solo nel secondo caso è robusta rispetto a perturbazioni compatibili.</p></article><article class="lecture-card "><h3>Oltre il primo ordine</h3><p>Dire che una degenerazione non è rimossa al primo ordine non significa che sia esatta. Occorre controllare l'Hamiltoniana efficace successiva e le simmetrie dell'intero problema.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Confondere assenza di mixing con assenza di splitting; ignorare molteplicità residue; dedurre protezione da una coincidenza; dimenticare il baricentro; chiamare crossing ogni piccolo gap; applicare Kramers senza T² uguale meno uno.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Diagonalizzare W, calcolare traccia e parte traceless, classificare gli autovettori per simmetria, distinguere g zero imposto o accidentale, controllare il gap minimo e costruire W2 nel sottospazio residuo.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci completa, parziale e nessuna rimozione.</li><li>Collega shift e molteplicità allo spettro di PVP.</li><li>Usa traccia e varianza come invarianti.</li><li>Spiega il ruolo delle simmetrie e del lemma di Schur.</li><li>Distingui selezione, mixing e splitting.</li><li>Risolvi il doppietto con matrice di Pauli.</li><li>Confronta crossing vero e avoided crossing.</li><li>Spiega ordine successivo e protezione di Kramers.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1">DIM 7 - perturbazioni stazionarie non degeneri e degeneri</a></li><li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo</a></li><li><a href="Domanda2025_8.html">Domanda 2025 n. 8 - perturbazioni stazionarie</a></li><li><a href="Domanda2025_4.html">Domanda 2025 n. 4 - perturbazioni degeneri e splitting</a></li><li><a href="perturbazioni-degenere.html">Caso degenere - problema secolare e Hamiltoniana efficace</a></li></ul><p class="lecture-note">La pagina distingue matematicamente splitting, mixing e protezione di simmetria, evitando l'affermazione troppo generica secondo cui ogni perturbazione eliminerebbe ogni degenerazione.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 12 - DIM 7":"In-depth lesson - Topic 12 - DIM 7","Rimozione della degenerazione":"Lifting degeneracy","Obiettivo.":"Objective.","Interpretare lo splitting come spettro della perturbazione ristretta, distinguere rimozione completa, parziale e protetta, usare simmetrie e invarianti del blocco, descrivere crossing evitati e applicare il metodo a un doppietto controllabile.":"Interpret splitting as the spectrum of the restricted perturbation, distinguish complete, partial, and protected lifting, use block symmetries and invariants, describe avoided crossings, and apply the method to a controllable doublet.","Lo splitting misura la simmetria rotta":"Splitting measures broken symmetry","Un livello è degenere perché H0 non distingue più stati. La perturbazione rimuove la degenerazione soltanto nella misura in cui distingue quelle direzioni nel sottospazio.":"A level is degenerate because H0 does not distinguish several states. The perturbation lifts degeneracy only to the extent that it distinguishes those directions in the subspace.","Non ogni perturbazione rimuove tutto":"Not every perturbation lifts everything","Se PVP è proporzionale all'identità, il primo ordine sposta l'intero multipletto senza dividerlo. Se possiede autovalori ripetuti, resta una degenerazione parziale da trattare agli ordini successivi o protetta da simmetria.":"If PVP is proportional to the identity, first order shifts the whole multiplet without splitting it. If it has repeated eigenvalues, partial degeneracy remains for higher orders or is symmetry protected.","Tre esiti possibili al primo ordine":"Three possible first-order outcomes","Completa, parziale, nulla":"Complete, partial, none","Rimozione completa significa r autovalori distinti di W; parziale significa molteplicità inferiori; nulla significa W uguale wI nel multipletto.":"Complete lifting means r distinct W eigenvalues; partial lifting means smaller multiplicities; no lifting means W equals wI in the multiplet.","Stati selezionati":"Selected states","Gli autovettori di W sono gli stati che la perturbazione rende distinguibili. Il solo elenco degli shift è incompleto: occorre sempre fornire anche le combinazioni lineari corrispondenti.":"W eigenvectors are the states made distinguishable by the perturbation. Listing shifts alone is incomplete: the corresponding linear combinations must always be given.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Operatore ristretto":"1. Restricted operator","DIM 7":"DIM 7","L'intera informazione di primo ordine è contenuta nella compressione di V al sottospazio degenere.":"All first-order information is contained in the compression of V to the degenerate subspace.","Passaggio":"Step","2. Spettro dello splitting":"2. Splitting spectrum","BOSS":"BOSS","Gli autovalori w_a sono gli shift; le loro molteplicità sono le degenerazioni residue.":"Eigenvalues w_a are the shifts; their multiplicities are residual degeneracies.","3. Criterio completo":"3. Complete-lifting criterion","CHECK":"CHECK","La degenerazione è completamente rimossa al primo ordine se e solo se W ha spettro semplice.":"Degeneracy is completely lifted at first order if and only if W has a simple spectrum.","4. Nessuno splitting":"4. No splitting","Un blocco scalare commuta con ogni rotazione interna e non seleziona alcuna base.":"A scalar block commutes with every internal rotation and selects no basis.","5. Baricentro":"5. Centroid","INVARIANTE":"INVARIANT","La traccia fissa lo shift medio del multipletto indipendentemente dalla base.":"The trace fixes the average multiplet shift independently of basis.","6. Ampiezza dello splitting":"6. Splitting width","La parte traceless misura la dispersione degli shift intorno al baricentro.":"The traceless part measures shift dispersion around the centroid.","7. Simmetria conservata":"7. Preserved symmetry","SIMMETRIA":"SYMMETRY","Se V commuta con un gruppo G, W è a blocchi nelle rappresentazioni irriducibili di G e non mescola settori inequivalenti.":"If V commutes with a group G, W is block diagonal in irreducible representations of G and does not mix inequivalent sectors.","8. Lemma di Schur":"8. Schur's lemma","PROTEZIONE":"PROTECTION","Dentro una rappresentazione irriducibile non ripetuta, un perturbatore completamente simmetrico è proporzionale all'identità e non scinde il multipletto.":"Within a nonrepeated irreducible representation, a fully symmetric perturbation is proportional to the identity and does not split the multiplet.","9. Regole di selezione":"9. Selection rules","Gli elementi fuori diagonale vietati impediscono il mixing, ma diagonali diverse possono comunque separare i livelli.":"Forbidden off-diagonal elements prevent mixing, but different diagonal elements may still split levels.","10. Doppietto universale":"10. Universal doublet","CALCOLO":"CALCULATION","Tolto il baricentro, ogni matrice hermitiana due per due è un vettore reale moltiplicato per le matrici di Pauli.":"After removing the centroid, every two-by-two Hermitian matrix is a real vector times the Pauli matrices.","11. Crossing evitato":"11. Avoided crossing","FISICA":"PHYSICS","Se un parametro controlla la differenza diagonale e un coupling g resta non nullo, i rami non si incrociano.":"If a parameter controls the diagonal difference and a nonzero coupling g remains, the branches do not cross.","12. Crossing vero":"12. True crossing","Un incrocio può persistere se la simmetria impone g uguale zero; gli stati appartengono allora a settori che non comunicano.":"A crossing may persist if symmetry enforces g equals zero; the states then belong to sectors that do not communicate.","13. Ordine successivo":"13. Next order","RESIDUA":"RESIDUAL","Se il primo ordine lascia un sottospazio R degenere, si restringe a R la matrice efficace di secondo ordine.":"If first order leaves a degenerate subspace R, restrict the second-order effective matrix to R.","14. Protezione di Kramers":"14. Kramers protection","ESTENSIONE":"EXTENSION","Per spin semintero con simmetria di inversione temporale e T² uguale meno uno, ogni livello resta almeno doppio; un perturbatore che conserva T non può rimuovere il doppietto.":"For half-integer spin with time-reversal symmetry and T² equal to minus one, every level remains at least double; a T-preserving perturbation cannot lift the doublet.","Esempio d'esame: doppietto controllato":"Exam example: controlled doublet","Impostazione.":"Setup.","Un parametro x rompe una simmetria diagonale e g mescola i due stati. Il blocco è x sigma z più g sigma x.":"A parameter x breaks a diagonal symmetry and g mixes the two states. The block is x sigma z plus g sigma x.","Controllo.":"Check.","Per g diverso da zero la degenerazione è rimossa completamente e il gap minimo vale 2|g|. Per g uguale zero un crossing rimane, ma è stabile soltanto se una simmetria continua a vietare il coupling.":"For nonzero g the degeneracy is completely lifted and the minimum gap is 2|g|. For g equals zero a crossing remains, but it is stable only if a symmetry continues to forbid coupling.","Interpretazione e limiti":"Interpretation and limits","Sonda spettroscopica":"Spectroscopic probe","Pattern, molteplicità e baricentro dello splitting rivelano quali simmetrie il perturbatore rompe e quali conserva. Non basta osservare che i livelli si separano.":"The splitting pattern, multiplicities, and centroid reveal which symmetries the perturbation breaks and preserves. Observing that levels separate is not enough.","Mixing e splitting":"Mixing and splitting","Diagonali diverse possono separare senza mescolare; un termine fuori diagonale può separare e ruotare la base anche con diagonali uguali. Sono effetti logicamente distinti.":"Different diagonals may split without mixing; an off-diagonal term may split and rotate the basis even with equal diagonals. These are logically distinct effects.","Accidentale o protetta":"Accidental or protected","Una molteplicità può sopravvivere per coincidenza numerica oppure perché una simmetria forza W a essere scalare su un settore. Solo nel secondo caso è robusta rispetto a perturbazioni compatibili.":"A multiplicity may survive by numerical coincidence or because symmetry forces W to be scalar in a sector. Only the latter is robust against compatible perturbations.","Oltre il primo ordine":"Beyond first order","Dire che una degenerazione non è rimossa al primo ordine non significa che sia esatta. Occorre controllare l'Hamiltoniana efficace successiva e le simmetrie dell'intero problema.":"Saying degeneracy is not lifted at first order does not mean it is exact. One must check the next effective Hamiltonian and the symmetries of the full problem.","Errori tipici":"Common errors","Confondere assenza di mixing con assenza di splitting; ignorare molteplicità residue; dedurre protezione da una coincidenza; dimenticare il baricentro; chiamare crossing ogni piccolo gap; applicare Kramers senza T² uguale meno uno.":"Confusing absence of mixing with absence of splitting; ignoring residual multiplicities; inferring protection from a coincidence; forgetting the centroid; calling every small gap a crossing; applying Kramers without T² equal to minus one.","Controlli rapidi":"Quick checks","Diagonalizzare W, calcolare traccia e parte traceless, classificare gli autovettori per simmetria, distinguere g zero imposto o accidentale, controllare il gap minimo e costruire W2 nel sottospazio residuo.":"Diagonalize W, compute trace and traceless part, classify eigenvectors by symmetry, distinguish enforced from accidental g equals zero, check the minimum gap, and construct W2 in the residual subspace.","Controllo da orale":"Oral exam checklist","Definisci completa, parziale e nessuna rimozione.":"Define complete, partial, and no lifting.","Collega shift e molteplicità allo spettro di PVP.":"Relate shifts and multiplicities to the spectrum of PVP.","Usa traccia e varianza come invarianti.":"Use trace and variance as invariants.","Spiega il ruolo delle simmetrie e del lemma di Schur.":"Explain the role of symmetries and Schur's lemma.","Distingui selezione, mixing e splitting.":"Distinguish selection, mixing, and splitting.","Risolvi il doppietto con matrice di Pauli.":"Solve the doublet using Pauli matrices.","Confronta crossing vero e avoided crossing.":"Compare a true crossing and an avoided crossing.","Spiega ordine successivo e protezione di Kramers.":"Explain the next order and Kramers protection.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 7 - perturbazioni stazionarie non degeneri e degeneri":"DIM 7 - nondegenerate and degenerate stationary perturbation theory","Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo":"Appunti-MQ.pdf, PDF pages 169-175 - time-independent theory","Domanda 2025 n. 8 - perturbazioni stazionarie":"2025 question 8 - stationary perturbations","Domanda 2025 n. 4 - perturbazioni degeneri e splitting":"2025 question 4 - degenerate perturbations and splitting","Caso degenere - problema secolare e Hamiltoniana efficace":"Degenerate case - secular problem and effective Hamiltonian","La pagina distingue matematicamente splitting, mixing e protezione di simmetria, evitando l'affermazione troppo generica secondo cui ogni perturbazione eliminerebbe ogni degenerazione.":"The page mathematically distinguishes splitting, mixing, and symmetry protection, avoiding the overly generic claim that every perturbation removes every degeneracy.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Perturbazione ristretta al multipletto":"Perturbation restricted to the multiplet","Shift e degenerazioni residue":"Shifts and residual degeneracies","Criterio discriminante per splitting completo":"Discriminant criterion for complete splitting","Condizione di assenza di splitting":"Condition for absence of splitting","Baricentro degli shift del multipletto":"Centroid of multiplet shifts","Varianza invariante dello splitting":"Invariant variance of the splitting","Decomposizione del perturbatore per simmetria":"Symmetry decomposition of the perturbation","Protezione della degenerazione mediante il lemma di Schur":"Degeneracy protection by Schur's lemma","Distinzione tra assenza di mixing e assenza di splitting":"Distinction between no mixing and no splitting","Forma universale dello splitting di un doppietto":"Universal form of doublet splitting","Gap minimo di un avoided crossing":"Minimum gap of an avoided crossing","Incrocio protetto dall'assenza di accoppiamento":"Crossing protected by absence of coupling","Rimozione della degenerazione residua al secondo ordine":"Second-order lifting of residual degeneracy","Teorema di Kramers e degenerazione protetta":"Kramers theorem and protected degeneracy"},"title":{"it":"Rimozione della degenerazione","en":"Lifting degeneracy"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

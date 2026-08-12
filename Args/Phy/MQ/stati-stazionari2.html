@@ -1,158 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stati Stazionari</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stati stazionari ed evoluzione delle fasi</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="stati-stazionari.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Stati Stazionari</h1>
-
-<p>In meccanica quantistica, uno stato stazionario è uno stato con energia definita, i cui moduli quadro delle funzioni d’onda non variano nel tempo. Se il potenziale non dipende dal tempo, l’equazione di Schrödinger si separa in una parte spaziale e una temporale, portando a soluzioni del tipo:</p>
-
-\[
-\psi(\mathbf{r}, t) = \phi(\mathbf{r})e^{-iE t/\hbar},
-\]
-
-dove \(\phi(\mathbf{r})\) è un’autofunzione dell’operatore Hamiltoniano, con autovalore \(E\) (l’energia). Queste soluzioni sono dette stati stazionari poiché la probabilità \(|\psi(\mathbf{r}, t)|^2 = |\phi(\mathbf{r})|^2\) non dipende dal tempo.</p>
-
-<h2>Equazione di Schrödinger Indipendente dal Tempo</h2>
-
-<p>Nel caso di potenziale statico \(V(\mathbf{r})\), cercando soluzioni di forma \(\psi(\mathbf{r}, t) = \phi(\mathbf{r})e^{-iE t/\hbar}\), si arriva all’equazione di Schrödinger indipendente dal tempo:</p>
-
-\[
--\frac{\hbar^2}{2m}\nabla^2 \phi(\mathbf{r}) + V(\mathbf{r})\phi(\mathbf{r}) = E \phi(\mathbf{r}).
-\]
-
-Questa è un’equazione agli autovalori per \(\phi(\mathbf{r})\). Gli autovalori \(E\) determinano i livelli energetici del sistema, e le autofunzioni \(\phi(\mathbf{r})\) i modi stazionari associati a ciascun livello.</p>
-
-<h2>Interpretazione degli Stati Stazionari</h2>
-
-<p>Gli stati stazionari non cambiano forma nel tempo, a parte per un fattore di fase complesso \(e^{-iE t/\hbar}\). Poiché la densità di probabilità \(|\psi(\mathbf{r},t)|^2\) è costante nel tempo, questi stati descrivono situazioni in cui il sistema ha una distribuzione di probabilità per la posizione immutabile. Tuttavia, non sempre questi stati corrispondono a situazioni realistiche. Un sistema reale può trovarsi in una sovrapposizione di stati stazionari, e in tal caso la forma della funzione d’onda può variare nel tempo, sebbene ciascun componente individuale sia stazionario.</p>
-
-<h2>Combinazioni Lineari di Stati Stazionari</h2>
-
-<p>La generalità dell’equazione di Schrödinger lineare permette di formare combinazioni lineari di stati stazionari per ottenere nuove soluzioni. Se \(\phi_n(\mathbf{r})\) sono autofunzioni con energia \(E_n\), uno stato arbitrario può essere scritto come:</p>
-
-\[
-\psi(\mathbf{r},t) = \sum_n c_n \phi_n(\mathbf{r}) e^{-iE_n t/\hbar}.
-\]
-
-In generale, questa superposizione non sarà stazionaria, poiché le diverse componenti oscillano con frequenze diverse. Il risultato è una funzione d’onda con densità di probabilità dipendente dal tempo, che può esibire fenomeni di interferenza e oscillazioni.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Parti dall’equazione di Schrödinger dipendente dal tempo:
-\[
-i\hbar \frac{\partial}{\partial t}\psi(\mathbf{r},t) = \hat{H}\psi(\mathbf{r},t).
-\]
-<br><br>
-2. Prova una separazione di variabili \(\psi(\mathbf{r},t)=\phi(\mathbf{r})f(t)\). Otterrai due equazioni, una dipendente da \(\mathbf{r}\) e l’altra da \(t\).
-<br><br>
-3. La parte temporale porta a \(f(t)=e^{-iE t/\hbar}\).
-<br><br>
-4. La parte spaziale è l’equazione agli autovalori:
-\[
-\hat{H}\phi(\mathbf{r}) = E\phi(\mathbf{r}).
-\]
-5. Disegna un potenziale semplice, come una buca di potenziale, e mostra graficamente uno degli autostati con energia definita, la sua funzione d’onda non cambia forma nel tempo se non per un fattore di fase globale.
-</div>
-
-<h2>Esempi di Stati Stazionari</h2>
-
-<p>Nei sistemi semplici con soluzioni note, ogni autofunzione dell’Hamiltoniano rappresenta uno stato stazionario. Ad esempio:</p>
-
-<ul>
-    <li>Nella buca di potenziale infinita, gli stati stazionari sono onde stazionarie con nodi fissi alle pareti.</li>
-    <li>Nell’oscillatore armonico, gli stati stazionari sono gli autostati di energia legati ai polinomi di Hermite.</li>
-    <li>Nell’atomo di idrogeno, gli stati stazionari sono le funzioni d’onda caratterizzate dai numeri quantici \(n, l, m\) e descrivono orbitali con forme e simmetrie caratteristiche.</li>
-</ul>
-
-<p>Se consideriamo uno stato stazionario come base per descrivere la dinamica, la comprensione delle autofunzioni e dei corrispondenti livelli energetici diventa il primo passo per analizzare qualsiasi evoluzione temporale complessa.</p>
-    <h2>Ulteriore Chiarimento sul Ruolo dei Fattori di Fase e della Sovrapposizione</h2>
-
-    <p>Alla lavagna, dopo aver mostrato come si ottengono gli stati stazionari e aver spiegato che la densità di probabilità non cambia nel tempo per questi stati, si può sottolineare il significato del fattore di fase \( e^{-iE t/\hbar} \). Questo fattore, pur non influenzando la probabilità \(|\psi(\mathbf{r},t)|^2\), è cruciale nella combinazione di più stati stazionari. Ecco come spiegare i passaggi matematici o concettuali per chiarire la situazione:</p>
-
-    <ol>
-        <li><strong>Visualizzazione di un singolo stato stazionario:</strong><br>
-        Disegna un potenziale semplice, come una buca infinita tra \(0\) e \(L\).  
-        Mostra una funzione d’onda stazionaria, ad esempio il primo autostato \(\phi_1(x)\) che è una sinusoide all’interno della buca e zero fuori.  
-        Spiega che \(\psi(x,t)=\phi_1(x)e^{-iE_1 t/\hbar}\) ha \(|\psi(x,t)|^2=|\phi_1(x)|^2\) costante nel tempo. Se si effettuasse una misura di posizione, la distribuzione dei risultati rimarrebbe la stessa a qualunque istante \(t\).</li>
-
-        <li><strong>Sovrapposizione di due stati stazionari:</strong><br>
-        Ora, considera due autofunzioni \(\phi_1(x)\) e \(\phi_2(x)\) con energie \(E_1\) ed \(E_2\).  
-        Scrivi:
-        \[
-        \psi(x,t) = c_1 \phi_1(x)e^{-iE_1 t/\hbar} + c_2 \phi_2(x)e^{-iE_2 t/\hbar}.
-        \]
-        Sulla lavagna, evidenzia la presenza dei due fattori di fase con frequenze diverse \(E_1/\hbar\) ed \(E_2/\hbar\).  
-        Mostra che la densità di probabilità è:
-        \[
-        |\psi(x,t)|^2 = |c_1|^2|\phi_1(x)|^2 + |c_2|^2|\phi_2(x)|^2 + 2\text{Re}\{ c_1^* c_2 \phi_1^*(x)\phi_2(x) e^{-i(E_1 - E_2)t/\hbar}\}.
-        \]
-
-        Osserva come il termine d’interferenza \(\phi_1^*(x)\phi_2(x)e^{-i(E_1 - E_2)t/\hbar}\) introduca una dipendenza temporale in \(|\psi(x,t)|^2\).  
-        Così, anche se singolarmente gli stati stazionari non cambiano nel tempo (nel senso della distribuzione di probabilità), la loro combinazione può mostrare oscillazioni e variazioni temporali della probabilità, a causa delle diverse fasi acquisite dai fattori \(e^{-iE_nt/\hbar}\).</li>
-
-        <li><strong>Interpretazione fisica:</strong><br>
-        Spiega che questa è la ragione per cui gli stati stazionari sono “fondamentali” come base, ma uno stato generale del sistema (che può non essere stazionario) si costruisce come sovrapposizione di stati stazionari diversi. Da questa sovrapposizione nasce la ricchezza della dinamica quantistica, con fenomeni come oscillazioni di probabilità tra due configurazioni, battimenti quantistici e interferenza.  
-        Sulla lavagna, puoi tracciare due funzioni d’onda \(\phi_1\) e \(\phi_2\) e mostrare come la loro combinazione porti a una funzione d’onda che varia nel tempo anche nella densità di probabilità, evidenziando i termini di interferenza temporali.</li>
-
-        <li><strong>Conclusione sul metodo:</strong><br>
-        Infine, sottolinea che la capacità di risolvere l’equazione indipendente dal tempo per trovare \(\phi_n(\mathbf{r})\) e \(E_n\) è il primo passo. In seguito, conoscendo questi autostati, si possono costruire soluzioni più generali combinandoli con opportuni coefficienti \(c_n\). Ciò permette di descrivere qualsiasi evoluzione temporale del sistema, sia stazionaria che non.  
-        Ogni soluzione particolare di interesse fisico può essere compresa in termini di questa base di stati stazionari, rendendo il formalismo degli autostati uno strumento potente e flessibile per la meccanica quantistica.</li>
-    </ol>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="stati-stazionari2.html" data-mq-shared-lesson="stati-stazionari.html" id="lezione-stati-stazionari"><div class="lecture-kicker">Lezione approfondita - TISE, densità e interferenza</div><h1>Stati stazionari ed evoluzione delle fasi</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: stati-stazionari2.html. La lezione scientifica verificata è condivisa con stati-stazionari.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la separazione temporale, mostrare perché un autostato energetico ha densità stazionaria, classificare il caso degenere e dimostrare come le differenze di energia producano battimenti nelle sovrapposizioni.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Stazionario non significa fermo</h3><p>Il ket accumula una fase e la corrente può essere non nulla. Sono stazionarie le probabilità e i valori medi di operatori senza dipendenza esplicita dal tempo.</p></article><article class="lecture-card lecture-warning"><h3>Criterio corretto</h3><p>Ogni stato interamente contenuto in un singolo autospazio energetico è stazionario, anche se è una combinazione di autovettori degeneri.</p></article></div><h2>Hamiltoniano indipendente dal tempo</h2><div class="lecture-grid"><article class="lecture-card"><h3>Separabilità</h3><p>La forma phi(x)T(t) risolve soltanto i modi a energia definita. La soluzione generale è una loro sovrapposizione.</p></article><article class="lecture-card"><h3>Autoaggiuntezza</h3><p>E è reale, quindi il fattore temporale ha modulo uno e non cambia la normalizzazione.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. TDSE stazionaria<span class="lecture-step-boss">BASE</span></h4><p>H non dipende esplicitamente dal tempo.</p><div aria-label="Equazione di evoluzione con Hamiltoniano stazionario" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\partial_t\psi(x,t)=H\psi(x,t),\qquad\partial_tH=0\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Ansatz separabile<span class="lecture-step-boss">SEPARA</span></h4><p>Si prova un prodotto di parte spaziale e temporale.</p><div aria-label="Separazione di tempo e coordinata" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(x,t)=\phi(x)T(t)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Costante E<span class="lecture-step-boss">DERIVA</span></h4><p>Dopo divisione, una funzione solo di t uguaglia una funzione solo di x.</p><div aria-label="Introduzione dell'energia come costante di separazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\frac{\dot T}{T}=\frac{H\phi}{\phi}=E\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Problema spaziale<span class="lecture-step-boss">TISE</span></h4><p>La parte spaziale è un autostato dell'Hamiltoniano.</p><div aria-label="Equazione di Schrödinger indipendente dal tempo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H|n\rangle=E_n|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Fattore temporale<span class="lecture-step-boss">FASE</span></h4><p>L'equazione scalare al primo ordine produce una fase di modulo uno.</p><div aria-label="Evoluzione temporale di energia definita" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\dot T=E_nT\Rightarrow T(t)=e^{-iE_nt/\hbar}T(0)\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Stato stazionario<span class="lecture-step-boss">RISULTATO</span></h4><p>Il ket cambia soltanto per una fase globale.</p><div aria-label="Forma di uno stato energetico stazionario" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n,t\rangle=e^{-iE_nt/\hbar}|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Densità invariata<span class="lecture-step-boss">BORN</span></h4><p>La fase e la sua coniugata si cancellano nel modulo quadro.</p><div aria-label="Stazionarietà della densità di posizione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi_n(x,t)|^2=|\phi_n(x)|^2|e^{-iE_nt/\hbar}|^2=|\phi_n(x)|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Valori medi<span class="lecture-step-boss">OSSERVABILI</span></h4><p>Per A privo di dipendenza esplicita, le fasi globali si cancellano anche nel valore medio.</p><div aria-label="Valore medio costante in un autostato energetico" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle A\rangle_n(t)=\langle n|e^{iE_nt/\hbar}Ae^{-iE_nt/\hbar}|n\rangle=\langle n|A|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Corrente possibile<span class="lecture-step-boss">CAUTELA</span></h4><p>Una densità costante può sostenere un flusso senza divergenza, come un'onda piana o uno stato su anello.</p><div aria-label="Continuità per uno stato stazionario" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \partial_t\rho=0\Rightarrow\nabla\cdot\mathbf j=0\quad\text{ma non necessariamente }\mathbf j=0\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Autospazio degenere<span class="lecture-step-boss">DEG</span></h4><p>Ogni combinazione di stati con la stessa E riceve la stessa fase globale.</p><div aria-label="Stazionarietà dentro una degenerazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi(0)\rangle=\sum_{k=1}^{r_E}c_k|E,k\rangle\Rightarrow|\psi(t)\rangle=e^{-iEt/\hbar}|\psi(0)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Sovrapposizione energetica<span class="lecture-step-boss">GENERALE</span></h4><p>Componenti con energie differenti ruotano a velocità differenti.</p><div aria-label="Soluzione generale nello spettro discreto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi(t)\rangle=\sum_nc_ne^{-iE_nt/\hbar}|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Termini di interferenza<span class="lecture-step-boss">BATTIMENTI</span></h4><p>Il modulo quadro contiene fasi relative con pulsazioni di Bohr.</p><div aria-label="Densità di una sovrapposizione energetica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi(x,t)|^2=\sum_{mn}c_m^*c_n\phi_m^*(x)\phi_n(x)e^{-i(E_n-E_m)t/\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Criterio con densità<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Uno stato, puro o misto, è stazionario esattamente quando la sua matrice densità commuta con H.</p><div aria-label="Criterio operatoriale di stazionarietà" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho(t)=e^{-iHt/\hbar}\rho(0)e^{iHt/\hbar},\qquad[H,\rho(0)]=0\Rightarrow\rho(t)=\rho(0)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Energia conservata<span class="lecture-step-boss">CHECK</span></h4><p>Anche una sovrapposizione non stazionaria conserva la distribuzione di energia quando H è costante.</p><div aria-label="Conservazione delle probabilità energetiche" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P(E_n,t)=|c_ne^{-iE_nt/\hbar}|^2=|c_n|^2,\qquad\langle H\rangle=\sum_nE_n|c_n|^2\)</span></div></article></section><h2>Esempio: battimento a due livelli</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Lo stato iniziale è una sovrapposizione normalizzata di due energie distinte.</p><p data-i18n-skip="true">\(\displaystyle |\psi(t)\rangle=\frac1{\sqrt2}(e^{-iE_1t/\hbar}|1\rangle+e^{-iE_2t/\hbar}|2\rangle),\quad\langle A\rangle(t)=\frac{A_{11}+A_{22}}2+\operatorname{Re}[A_{12}e^{-i(E_2-E_1)t/\hbar}]\)</p><p><strong>Controllo.</strong> Se A12 non è nullo, il valore medio oscilla alla pulsazione |E2-E1|/hbar. Se A commuta con H ed E1,E2 sono non degeneri, A12=0 e il battimento non appare in A.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Fase globale</h3><p>Una fase comune non modifica alcuna probabilità; le fasi relative tra energie diverse sono invece osservabili tramite interferenza.</p></article><article class="lecture-card"><h3>Distribuzione energetica</h3><p>Stazionarietà della misura di energia non implica stazionarietà di tutte le altre osservabili.</p></article><article class="lecture-card"><h3>Corrente</h3><p>Stato stazionario e corrente nulla coincidono per molte funzioni legate reali non degeneri, ma non come teorema generale.</p></article><article class="lecture-card"><h3>Hamiltoniano variabile</h3><p>Se H dipende dal tempo, i suoi autostati istantanei non acquisiscono in generale soltanto la fase dinamica; compaiono transizioni e fase geometrica.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dire che il ket è costante; imporre j=0; chiamare stazionaria ogni soluzione di H costante; dimenticare le sovrapposizioni degeneri; pensare che una distribuzione energetica costante renda costante la densità spaziale.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Fase di modulo uno; densità indipendente dal tempo; osservabili senza t costanti nell'autostato; corrente solo a divergenza nulla; battimenti a differenze di energia.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Separa TISE e parte temporale.</li><li>Ricava e alla meno iEt/hbar.</li><li>Cancella la fase nel modulo quadro.</li><li>Dimostra i valori medi costanti.</li><li>Distingui densità e corrente.</li><li>Estendi a un autospazio degenere.</li><li>Espandi una sovrapposizione generale.</li><li>Identifica le pulsazioni di battimento.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, TISE, TDSE, misura e proiettori</a></li><li><a href="PostulatiQM.html">Postulati della meccanica quantistica - quadro generale</a></li><li><a href="set-6-operatori-autofunzioni.html">Set 6 - operatori, autofunzioni e spettro</a></li></ul><p class="lecture-note">La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - TISE, densità e interferenza":"In-depth lesson - TISE, density, and interference","Stati stazionari ed evoluzione delle fasi":"Stationary states and phase evolution","Obiettivo.":"Objective.","Derivare la separazione temporale, mostrare perché un autostato energetico ha densità stazionaria, classificare il caso degenere e dimostrare come le differenze di energia producano battimenti nelle sovrapposizioni.":"Derive temporal separation, show why an energy eigenstate has stationary density, classify the degenerate case, and prove how energy differences produce beats in superpositions.","Stazionario non significa fermo":"Stationary does not mean motionless","Il ket accumula una fase e la corrente può essere non nulla. Sono stazionarie le probabilità e i valori medi di operatori senza dipendenza esplicita dal tempo.":"The ket accumulates a phase and current may be nonzero. Probabilities and expectation values of operators without explicit time dependence are stationary.","Criterio corretto":"Correct criterion","Ogni stato interamente contenuto in un singolo autospazio energetico è stazionario, anche se è una combinazione di autovettori degeneri.":"Every state entirely contained in a single energy eigenspace is stationary, even if it is a combination of degenerate eigenvectors.","Hamiltoniano indipendente dal tempo":"Time-independent Hamiltonian","Separabilità":"Separability","La forma phi(x)T(t) risolve soltanto i modi a energia definita. La soluzione generale è una loro sovrapposizione.":"Form phi(x)T(t) solves only definite-energy modes. The general solution is their superposition.","Autoaggiuntezza":"Self-adjointness","E è reale, quindi il fattore temporale ha modulo uno e non cambia la normalizzazione.":"E is real, so the time factor has unit modulus and does not change normalization.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. TDSE stazionaria":"1. Stationary TDSE","BASE":"BASE","H non dipende esplicitamente dal tempo.":"H has no explicit time dependence.","Passaggio":"Step","2. Ansatz separabile":"2. Separable ansatz","SEPARA":"SEPARATE","Si prova un prodotto di parte spaziale e temporale.":"Try a product of spatial and temporal parts.","3. Costante E":"3. Constant E","DERIVA":"DERIVE","Dopo divisione, una funzione solo di t uguaglia una funzione solo di x.":"After division, a function only of t equals a function only of x.","4. Problema spaziale":"4. Spatial problem","TISE":"TISE","La parte spaziale è un autostato dell'Hamiltoniano.":"The spatial part is an eigenstate of the Hamiltonian.","5. Fattore temporale":"5. Time factor","FASE":"PHASE","L'equazione scalare al primo ordine produce una fase di modulo uno.":"The scalar first-order equation produces a unit-modulus phase.","6. Stato stazionario":"6. Stationary state","RISULTATO":"RESULT","Il ket cambia soltanto per una fase globale.":"The ket changes only by a global phase.","7. Densità invariata":"7. Invariant density","BORN":"BORN","La fase e la sua coniugata si cancellano nel modulo quadro.":"The phase and its conjugate cancel in the squared modulus.","8. Valori medi":"8. Expectation values","OSSERVABILI":"OBSERVABLES","Per A privo di dipendenza esplicita, le fasi globali si cancellano anche nel valore medio.":"For A without explicit dependence, global phases also cancel in expectation values.","9. Corrente possibile":"9. Possible current","CAUTELA":"CAUTION","Una densità costante può sostenere un flusso senza divergenza, come un'onda piana o uno stato su anello.":"A constant density may sustain divergence-free flow, such as a plane wave or a state on a ring.","10. Autospazio degenere":"10. Degenerate eigenspace","DEG":"DEG","Ogni combinazione di stati con la stessa E riceve la stessa fase globale.":"Every combination of states with the same E receives the same global phase.","11. Sovrapposizione energetica":"11. Energy superposition","GENERALE":"GENERAL","Componenti con energie differenti ruotano a velocità differenti.":"Components with different energies rotate at different rates.","12. Termini di interferenza":"12. Interference terms","BATTIMENTI":"BEATS","Il modulo quadro contiene fasi relative con pulsazioni di Bohr.":"The squared modulus contains relative phases at Bohr angular frequencies.","13. Criterio con densità":"13. Density-matrix criterion","ESTENSIONE":"EXTENSION","Uno stato, puro o misto, è stazionario esattamente quando la sua matrice densità commuta con H.":"A pure or mixed state is stationary exactly when its density matrix commutes with H.","14. Energia conservata":"14. Conserved energy","CHECK":"CHECK","Anche una sovrapposizione non stazionaria conserva la distribuzione di energia quando H è costante.":"Even a nonstationary superposition conserves its energy distribution when H is constant.","Esempio: battimento a due livelli":"Example: two-level beat","Impostazione.":"Setup.","Lo stato iniziale è una sovrapposizione normalizzata di due energie distinte.":"The initial state is a normalized superposition of two distinct energies.","Controllo.":"Check.","Se A12 non è nullo, il valore medio oscilla alla pulsazione |E2-E1|/hbar. Se A commuta con H ed E1,E2 sono non degeneri, A12=0 e il battimento non appare in A.":"If A12 is nonzero, the expectation oscillates at angular frequency |E2-E1|/hbar. If A commutes with H and E1,E2 are nondegenerate, A12=0 and no beat appears in A.","Interpretazione e limiti":"Interpretation and limits","Fase globale":"Global phase","Una fase comune non modifica alcuna probabilità; le fasi relative tra energie diverse sono invece osservabili tramite interferenza.":"A common phase changes no probability; relative phases between different energies are observable through interference.","Distribuzione energetica":"Energy distribution","Stazionarietà della misura di energia non implica stazionarietà di tutte le altre osservabili.":"Stationarity of energy measurement does not imply stationarity of every other observable.","Corrente":"Current","Stato stazionario e corrente nulla coincidono per molte funzioni legate reali non degeneri, ma non come teorema generale.":"Stationary state and zero current coincide for many real nondegenerate bound functions, but not as a general theorem.","Hamiltoniano variabile":"Time-dependent Hamiltonian","Se H dipende dal tempo, i suoi autostati istantanei non acquisiscono in generale soltanto la fase dinamica; compaiono transizioni e fase geometrica.":"If H depends on time, its instantaneous eigenstates generally do not acquire only the dynamical phase; transitions and geometric phase appear.","Errori tipici":"Common errors","Dire che il ket è costante; imporre j=0; chiamare stazionaria ogni soluzione di H costante; dimenticare le sovrapposizioni degeneri; pensare che una distribuzione energetica costante renda costante la densità spaziale.":"Saying the ket is constant; imposing j=0; calling every solution with constant H stationary; forgetting degenerate superpositions; thinking a constant energy distribution makes spatial density constant.","Controlli rapidi":"Quick checks","Fase di modulo uno; densità indipendente dal tempo; osservabili senza t costanti nell'autostato; corrente solo a divergenza nulla; battimenti a differenze di energia.":"Unit-modulus phase; time-independent density; time-independent observables constant in the eigenstate; current only divergence free; beats at energy differences.","Controllo da orale":"Oral exam checklist","Separa TISE e parte temporale.":"Separate TISE and time part.","Ricava e alla meno iEt/hbar.":"Obtain e to minus iEt/hbar.","Cancella la fase nel modulo quadro.":"Cancel the phase in the squared modulus.","Dimostra i valori medi costanti.":"Prove constant expectation values.","Distingui densità e corrente.":"Distinguish density and current.","Estendi a un autospazio degenere.":"Extend to a degenerate eigenspace.","Espandi una sovrapposizione generale.":"Expand a general superposition.","Identifica le pulsazioni di battimento.":"Identify beat angular frequencies.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, TISE, TDSE, misura e proiettori":"DIM 0 - postulates, TISE, TDSE, measurement, and projectors","Postulati della meccanica quantistica - quadro generale":"Quantum mechanics postulates - general framework","Set 6 - operatori, autofunzioni e spettro":"Set 6 - operators, eigenfunctions, and spectrum","La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.":"The Boss source transcribes lecture images 132-137, whose numbering does not match the main PDF; therefore no artificial PDF link is given.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: stati-stazionari2.html. La lezione scientifica verificata è condivisa con stati-stazionari.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: stati-stazionari2.html. The verified scientific lesson is shared with stati-stazionari.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Equazione di evoluzione con Hamiltoniano stazionario":"Evolution equation with stationary Hamiltonian","Separazione di tempo e coordinata":"Separation of time and coordinate","Introduzione dell'energia come costante di separazione":"Introduction of energy as separation constant","Equazione di Schrödinger indipendente dal tempo":"Time-independent Schrödinger equation","Evoluzione temporale di energia definita":"Time evolution at definite energy","Forma di uno stato energetico stazionario":"Form of a stationary energy state","Stazionarietà della densità di posizione":"Stationarity of position density","Valore medio costante in un autostato energetico":"Constant expectation in an energy eigenstate","Continuità per uno stato stazionario":"Continuity equation for a stationary state","Stazionarietà dentro una degenerazione":"Stationarity within a degeneracy","Soluzione generale nello spettro discreto":"General solution in the discrete spectrum","Densità di una sovrapposizione energetica":"Density of an energy superposition","Criterio operatoriale di stazionarietà":"Operator criterion for stationarity","Conservazione delle probabilità energetiche":"Conservation of energy probabilities"},"title":{"it":"Stati stazionari ed evoluzione delle fasi","en":"Stationary states and phase evolution"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

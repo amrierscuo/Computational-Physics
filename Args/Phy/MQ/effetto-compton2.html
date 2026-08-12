@@ -1,1184 +1,319 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Effetto Compton</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 800px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Effetto Compton - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
 
-        h1, h2, h3 {
-            color: #1e90ff;
-        }
-
-        .note {
-            font-size: 0.9em;
-            color: #555;
-            background: #ffffff;
-            border-left: 3px solid #1e90ff;
-            padding: 10px;
-            margin: 10px 0;
-        }
-
-        p, li {
-            text-align: justify;
-        }
-
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-
-        .lavagna .high {
-            color: #ffd700;
-        }
-    </style>
-</head>
+</style>
+<meta content="effetto-compton.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Effetto Compton</h1>
-
-<p>L’effetto Compton (scoperto da A.H. Compton nel 1923) è un fenomeno fondamentale che dimostra la natura corpuscolare della radiazione elettromagnetica. In questo effetto, un fotone ad alta energia (raggi X o gamma) urta un elettrone praticamente libero, provocando la diffusione del fotone con lunghezza d’onda aumentata rispetto a quella iniziale.</p>
-
-<p>Questa variazione di lunghezza d’onda non è spiegabile tramite la sola teoria ondulatoria classica della luce, bensì richiede l’ipotesi che la luce sia composta da quanti (fotoni) con energia \( E = h f \) e quantità di moto \( p = \frac{h f}{c} \).</p>
-
-<h2>Situazione Sperimentale</h2>
-
-<p>Compton utilizzò sorgenti di raggi X molto energetici (ad esempio dal Molibdeno) con lunghezze d’onda molto piccole (dell’ordine di picometri, \( 1 \, \text{pm} = 10^{-12} \, \text{m} \)). Bersagliando un reticolo di grafite, i fotoni potevano interagire con gli elettroni quasi liberi del carbonio. Il fotone incidente, dopo l’urto, emergeva deviato di un angolo \(\theta\) rispetto alla direzione iniziale, e misurando la lunghezza d’onda del fotone diffuso Compton notò l’aumento sistematico di \(\lambda'\) rispetto a \(\lambda\).</p>
-
-<h2>Analisi Teorica sulla Lavagna</h2>
-
-<p>Alla lavagna, immaginiamo di disegnare:</p>
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
+</div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" data-mq-historical-name="effetto-compton2.html" data-mq-shared-lesson="effetto-compton.html" id="lezione-compton">
+<div class="lecture-kicker">Lezione approfondita - Argomento 1 - DIM 18</div>
+<h1>Effetto Compton</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: effetto-compton2.html. La lezione scientifica verificata è condivisa con effetto-compton.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Dall'esperimento di diffusione dei raggi X, derivare senza salti lo spostamento Compton usando il quadrimpulso, ricavare energia e direzione del rinculo e chiarire quali osservazioni richiedono energia e impulso corpuscolari del fotone.</p>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Schema sperimentale</h3>
+<p>Un fascio quasi monocromatico di raggi X, di lunghezza d'onda \(\lambda\), incide su un bersaglio leggero. Uno spettrometro misura a un angolo \(\theta\) la radiazione diffusa. Oltre alla componente non spostata, associata soprattutto allo scattering coerente su sistemi legati, compare una componente con \(\lambda'&gt;\lambda\).</p>
+<p class="lecture-note">Lo spostamento della componente Compton dipende dall'angolo, non dal materiale del bersaglio.</p>
+</article>
+<article class="lecture-card">
+<h3>Tre osservazioni decisive</h3>
+<ul class="observation-list">
+<li>La frequenza diffusa è minore: il fotone cede energia all'elettrone.</li>
+<li>Lo spostamento cresce con \(1-\cos\theta\) ed è massimo in retrodiffusione.</li>
+<li>Il valore è fissato dalla massa dell'elettrone attraverso \(h/(m_ec)\).</li>
+<li>Il bilancio richiede una quantità di moto fotonica \(p_\gamma=h/\lambda\).</li>
+</ul>
+</article>
+</div>
+<h2>Perché Thomson non basta</h2>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Previsione ondulatoria classica</h3>
+<p>Nel modello di Thomson il campo incidente forza un elettrone a oscillare alla stessa frequenza. L'elettrone riemette quindi radiazione con frequenza uguale a quella incidente: cambia la direzione e l'intensità angolare, ma non compare una nuova lunghezza d'onda dipendente da \(\theta\).</p>
+</article>
+<article class="lecture-card lecture-result">
+<h3>Interpretazione corpuscolare</h3>
+<p>Compton tratta il processo come un urto relativistico tra un fotone e un elettrone quasi libero. Il fotone porta \(E_\gamma=h\nu\) e \(\mathbf p_\gamma=\hbar\mathbf k\), con \(|\mathbf p_\gamma|=E_\gamma/c=h/\lambda\). La dipendenza angolare nasce dalla conservazione vettoriale dell'impulso.</p>
+</article>
+</div>
+<h2>Dimostrazione covariante compatta</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Convenzioni<span class="lecture-step-boss">DIM 18</span></h4>
+<p>Con metrica \((+,-,-,-)\), un quadrimpulso è \(P=(E/c,\mathbf p)\) e soddisfa \(P^2=m^2c^2\). Per il fotone la massa è nulla.</p>
+<div aria-label="Quadrimpulso del fotone" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle K=\left(\frac Ec,\mathbf p_\gamma\right),\quad K^2=0\Rightarrow |\mathbf p_\gamma|=\frac Ec=\frac h\lambda,\qquad E=h\nu=\frac{hc}{\lambda}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Stato iniziale<span class="lecture-step-boss">DIM 18</span></h4>
+<p>L'elettrone bersaglio è assunto libero e fermo. Indichiamo con \(K,K'\) i fotoni iniziale e finale, con \(P,P'\) l'elettrone iniziale e quello di rinculo.</p>
+<div aria-label="Quadrimpulsi iniziali e finali" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P=(m_ec,\mathbf0),\quad P^2=P'^2=m_e^2c^2,\quad K^2=K'^2=0,\quad P+K=P'+K'\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Isolamento di \(P'\)<span class="lecture-step-boss">DIM 18</span></h4>
+<p>La conservazione del quadrimpulso dà \(P'=P+K-K'\). Elevare al quadrato elimina direttamente l'impulso ignoto dell'elettrone finale.</p>
+<div aria-label="Sviluppo dell'invariante" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle m_e^2c^2=P'^2=(P+K-K')^2=P^2+K^2+K'^2+2P{\cdot}K-2P{\cdot}K'-2K{\cdot}K'\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Prodotti scalari<span class="lecture-step-boss">DIM 18</span></h4>
+<p>Nel sistema di laboratorio \(P\) non ha parte spaziale. L'angolo tra i fotoni è \(\theta\), quindi il loro prodotto contiene \(1-\cos\theta\).</p>
+<div aria-label="Calcolo dei prodotti scalari" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P{\cdot}K=m_eE,\quad P{\cdot}K'=m_eE',\quad K{\cdot}K'=\frac{EE'}{c^2}-\frac{EE'}{c^2}\cos\theta=\frac{EE'}{c^2}(1-\cos\theta)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Relazione energetica<span class="lecture-step-boss">DIM 18</span></h4>
+<p>I termini di massa ai due membri si cancellano. Dividendo per \(m_eEE'\) si ottiene la forma più utile per passare alle lunghezze d'onda.</p>
+<div aria-label="Relazione tra energie dei fotoni" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle 0=2m_e(E-E')-\frac{2EE'}{c^2}(1-\cos\theta)\Rightarrow \frac1{E'}-\frac1E=\frac{1-\cos\theta}{m_ec^2}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. Formula di Compton<span class="lecture-step-boss">DIM 18</span></h4>
+<p>Poiché \(1/E=\lambda/(hc)\), la relazione precedente diventa uno spostamento di lunghezza d'onda. La costante \(\lambda_C\) usa \(h\), non \(\hbar\).</p>
+<div aria-label="Derivazione dello spostamento Compton" class="lecture-formula"><span class="lecture-proof-tag">Esito</span><span class="lecture-proof-math">\(\displaystyle \frac{\lambda'-\lambda}{hc}=\frac{1-\cos\theta}{m_ec^2}\Rightarrow\boxed{\Delta\lambda=\lambda'-\lambda=\lambda_C(1-\cos\theta)},\quad \lambda_C=\frac h{m_ec}=2.426\,\mathrm{pm}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Energia diffusa<span class="lecture-step-boss">ORALE</span></h4>
+<p>Invertendo la relazione energetica si legge quanto il fotone perde in funzione dell'angolo. Il parametro naturale è \(\alpha=E/(m_ec^2)\).</p>
+<div aria-label="Energia finale del fotone" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle E'=\frac{E}{1+\alpha(1-\cos\theta)},\qquad \alpha=\frac{E}{m_ec^2},\qquad T_e=E-E'\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Rinculo elettronico<span class="lecture-step-boss">ORALE</span></h4>
+<p>Dalla conservazione tridimensionale \(\mathbf p_e=\mathbf p_\gamma-\mathbf p'_\gamma\). Se \(\varphi\) è l'angolo di rinculo rispetto al fascio incidente, componenti e modulo seguono dal triangolo degli impulsi.</p>
+<div aria-label="Impulso e angolo di rinculo" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle p_e^2=p_\gamma^2+p_\gamma'^2-2p_\gamma p_\gamma'\cos\theta,\qquad \tan\varphi=\frac{p_\gamma'\sin\theta}{p_\gamma-p_\gamma'\cos\theta}\)</span></div>
+</article>
+</div>
+<h2>Limiti che devono tornare</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Controlli angolari</h3>
 <ul>
-    <li>L’asse x orizzontale: il fotone arriva da sinistra con quantità di moto \( p = \frac{h f}{c} \) e si muove verso destra.</li>
-    <li>Dopo l’urto: il fotone viene deviato di un angolo \(\theta\), avrà frequenza \( f' \) e quantità di moto \( p' = \frac{h f'}{c} \).</li>
-    <li>L’elettrone inizialmente quasi fermo, dopo l’urto, si muove con un certo angolo \(\phi\) ed ha massa \(m_e\) e velocità \(v\) acquisita.</li>
+<li>Diffusione in avanti: \(\theta=0\Rightarrow\Delta\lambda=0\) e \(E'=E\).</li>
+<li>Retrodiffusione: \(\theta=\pi\Rightarrow\Delta\lambda_{\max}=2\lambda_C\).</li>
+<li>A \(\theta=90^\circ\): \(\Delta\lambda=\lambda_C\).</li>
 </ul>
-
-<div class="lavagna">
-Prima dell’urto:
-<br> 
-Quantità di moto fotone lungo x: \(p_x = \frac{h f}{c}\)  
-Nessuna componente lungo y: \(p_y=0\)
-
-Dopo l’urto:
-<br>
-- Fotone:  
-\(p_{fot,x} = \frac{h f'}{c} \cos \theta\)  
-\(p_{fot,y} = \frac{h f'}{c} \sin \theta\)
-
-- Elettrone:  
-\(p_{e,x} = m_e v \cos \phi\)  
-\(p_{e,y} = m_e v \sin \phi\)
+</article>
+<article class="lecture-card">
+<h3>Regime Thomson</h3>
+<p>Se \(E\ll m_ec^2\), allora \(\alpha\ll1\) ed \(E'/E\simeq1-\alpha(1-\cos\theta)\). Lo spostamento assoluto resta \(\lambda_C(1-\cos\theta)\), ma quello relativo \(\Delta\lambda/\lambda\) è piccolo: il limite classico diventa una buona approssimazione.</p>
+<p class="lecture-note">La formula di Compton determina la cinematica; la probabilità angolare richiede la sezione d'urto di Klein-Nishina.</p>
+</article>
 </div>
-
-<p>La conservazione della quantità di moto lungo x e y impone le seguenti equazioni:</p>
-
-\[ \text{Lungo x: } \frac{h f}{c} = \frac{h f'}{c} \cos\theta + m_e v \cos\phi \]
-
-\[ \text{Lungo y: } 0 = \frac{h f'}{c} \sin\theta - m_e v \sin\phi \]
-
-<p>Da queste due equazioni possiamo, con opportune manipolazioni, eliminare \(\phi\) e trovare una relazione che leghi \(f\) e \(f'\) all’angolo \(\theta\). L’idea è trattare il problema come un urto elastico tra due particelle, fotone ed elettrone, e richiedere inoltre la conservazione dell’energia.</p>
-
-<h2>Formula di Compton</h2>
-
-<p>Combinando la conservazione dell’energia e quella della quantità di moto, si ottiene la celebre formula di Compton per la variazione di lunghezza d’onda:</p>
-
-\[
-\lambda' - \lambda = \frac{h}{m_e c}(1 - \cos \theta).
-\]
-
-<p>Dove \(\lambda = \frac{c}{f}\) e \(\lambda' = \frac{c}{f'}\). Notate che \(\Delta \lambda = \lambda' - \lambda\) dipende solo da \(\theta\) e dalla costante \( \frac{h}{m_e c} \), detta lunghezza d’onda Compton dell’elettrone (\(\approx 2.43 \times 10^{-12}\) m), e non dalla lunghezza d’onda iniziale \(\lambda\). Questo è un aspetto chiave che conferma il comportamento corpuscolare del fotone.</p>
-
-<h2>Significato Fisico</h2>
-
-<p>L’effetto Compton conferma che la radiazione elettromagnetica non può essere spiegata solo come onda classica. Il fotone si comporta come una particella con energia ed impulso ben definiti, in grado di trasferire quantità di moto a un elettrone. L’accordo tra teoria e sperimentazione su questo fenomeno fu uno degli elementi decisivi per l’accettazione della natura quantistica della luce.</p>
-
-<h2>Ricapitolazione</h2>
-
-<p>Dovendo mostrare questa derivazione alla lavagna, faresti così:</p>
-
-<ol>
-    <li>Disegni l’asse x, il fotone in arrivo da sinistra con \( p = \frac{h f}{c} \).</li>
-    <li>Dopo l’urto, il fotone è deviato: disegni un vettore inclinato con angolo \(\theta\), di lunghezza proporzionale a \(\frac{h f'}{c}\).</li>
-    <li>L’elettrone esce in un’altra direzione, con velocità \(v\) e massa \(m_e\).</li>
-    <li>Scrivi le equazioni di conservazione di energia e quantità di moto. Mostri come, tramite manipolazioni algebriche, si ottiene la formula di Compton.</li>
-    <li>Sottolinei il fatto che \(\Delta \lambda\) non dipende da \(\lambda\) iniziale, ma solo da \(\theta\) e costanti fondamentali, evidenziando la natura corpuscolare del fotone.</li>
-</ol>
-
-<p>In assenza di immagini reali, puoi immaginare questo scenario: sulla lavagna tracci un asse orizzontale, un vettore verso destra per il fotone incidente, poi dopo l’urto disegni un triangolo con un angolo \(\theta\) per il fotone diffuso e un vettore in altra direzione per l’elettrone, mostrando come le componenti di questi vettori “chiudono” il bilancio della quantità di moto.</p>
-    <h2>Approfondimento Matematico: Dalla Conservazione dell’Energia e della Quantità di Moto alla Formula di Compton</h2>
-
-    <p>Per giungere alla formula di Compton, occorre mettere insieme le due grandi leggi di conservazione: quella dell’energia e quella della quantità di moto, applicate a un urto tra due particelle: il fotone incidente (che prima dell’urto viaggia in una sola direzione) e l’elettrone praticamente fermo (almeno rispetto all’energia del fotone).</p>
-
-    <p><strong>1. Definizione delle grandezze iniziali:</strong>  
-    Prima dell’urto, il fotone ha energia \( E = h f \) e quantità di moto \( p = \frac{h f}{c} \). L’elettrone è considerato inizialmente fermo, quindi energia cinetica \(\approx 0\) e quantità di moto nulla. L’energia totale iniziale è dunque \(E_i = h f + m_e c^2\) (contando anche l’energia a riposo dell’elettrone). La quantità di moto totale iniziale è tutta del fotone lungo l’asse x: \(p_x = \frac{h f}{c}, p_y=0.\)</p>
-
-    <p><strong>2. Grandezze finali dopo l’urto:</strong>  
-    Dopo l’urto, il fotone ha energia ridotta \(E' = h f'\), e quindi quantità di moto \(\frac{h f'}{c}\) nella nuova direzione. L’elettrone si muove con una certa velocità \(v\) e avrà energia cinetica aggiuntiva, oltre alla sua energia a riposo \(m_e c^2\).  
-    La conservazione dell’energia implica:
-    \[
-    h f + m_e c^2 = h f' + \sqrt{(m_e c^2)^2 + (m_e v c)^2} \approx h f' + m_e c^2 + \frac{1}{2}m_e v^2 \quad \text{(per energia cinetica dell’elettrone)}.
-    \]
-
-    Tuttavia, è più corretto usare la relazione relativistica completa:
-    \[
-    h f + m_e c^2 = h f' + \sqrt{(m_e c^2)^2 + (p_e c)^2}.
-    \]
-
-    Qui \(p_e\) è la quantità di moto dell’elettrone dopo l’urto.</p>
-
-    <p><strong>3. Conservazione della quantità di moto in due dimensioni:</strong>  
-    Come già mostrato, lungo l’asse x:
-    \[
-    \frac{h f}{c} = \frac{h f'}{c}\cos\theta + p_{e,x},
-    \]
-    e lungo l’asse y:
-    \[
-    0 = \frac{h f'}{c}\sin\theta - p_{e,y}.
-    \]
-
-    Da qui si ricavano le componenti del momento dell’elettrone in termini di \(f\), \(f'\), e \(\theta\).</p>
-
-    <p><strong>4. Eliminazione dell’angolo \(\phi\) dell’elettrone e passaggio dalla frequenza alle lunghezze d’onda:</strong>  
-    L’obiettivo è ottenere una relazione tra \(\lambda\) e \(\lambda'\). Sappiamo che \(\lambda = \frac{c}{f}\) e \(\lambda' = \frac{c}{f'}\). Il passaggio chiave è combinare le due leggi di conservazione per isolare \(\lambda' - \lambda\).
-
-    Dalla conservazione dell’energia relativistica e della quantità di moto, si arriva a un’espressione che, dopo algebra non banale, porta al risultato semplice e elegante:
-
-    \[
-    \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos\theta).
-    \]
-
-    Questo risultato mostra che la variazione \(\Delta \lambda\) è indipendente dall’energia iniziale del fotone, dipende solo dall’angolo di scattering \(\theta\) e dalle costanti fondamentali \(\frac{h}{m_e c}\). Questa quantità \(\frac{h}{m_e c}\) è la lunghezza d’onda Compton dell’elettrone.</p>
-
-    <p><strong>5. Interpretazione della formula:</strong>  
-    L’aumento di lunghezza d’onda \(\Delta \lambda\) è dovuto al trasferimento di energia (e quantità di moto) dal fotone all’elettrone. Maggiore è \(\theta\) (fotone diffuso “indietro”), più grande è la variazione di lunghezza d’onda.  
-    Il fotone esce con energia minore (quindi frequenza minore, lunghezza d’onda maggiore) rispetto a prima, e l’elettrone acquisisce l’energia mancante. Questo scambio conferma la natura particellare della luce: solo trattando il fotone come un quanto d’energia e di quantità di moto si ottiene un accordo perfetto con i dati sperimentali.</p>
-
-    <p>Così, i passaggi matematici, per quanto omessi qui nei dettagli integrali, prevedono di:
-
-    <ul>
-        <li>Scrivere la conservazione dell’energia usando la relazione relativistica per l’elettrone (\(E_e = \sqrt{(m_e c^2)^2+(p_e c)^2}\)).</li>
-        <li>Scrivere la conservazione della quantità di moto in componenti x e y.</li>
-        <li>Eliminare le variabili \(p_e\) e \(\phi\), la direzione dell’elettrone.</li>
-        <li>Dopo manipolazioni, ottenere una relazione tra \(\lambda'\), \(\lambda\) e \(\theta\).</li>
-    </ul>
-
-    Queste manipolazioni dimostrano che il fotone deve essere considerato una particella con energia e quantità di moto ben definite e danno origine alla formula di Compton, segno distintivo della natura quantistica della radiazione.</p>
-<p><strong>Appunti:</strong></p>
-
-<p><strong>1ª fase (C.N.)</strong></p>
-<p style="color:green;">
-    All'inizio del '900, una delle prime evidenze sperimentali a essere approfonditamente studiate fu la <u>radiazione di corpo nero</u>.  
-    Questa portò Planck a sviluppare una formulazione teorica in cui gli atomi sulle pareti della cavità (il cubo con il foro del modello C.N.) venivano modellizzati come oscillatori, capaci di assorbire o emettere energia sotto forma di <u>pacchetti discreti (quanti)</u>, la cui energia è proporzionale alla frequenza della radiazione:  
-    <u>\( E_0 = h \nu \)</u>
-</p>
-
-<p><strong>2ª fase (E.F.)</strong></p>
-<p style="color:#003366;">
-    Quanto visto prima ci introduce a una costante fondamentale. Noi ne avevamo già incontrata un'altra: la <u>velocità della luce</u>, dalla trattazione della Relatività Ristretta.  
-    Negli stessi anni, Einstein si preoccupa di un altro fenomeno: l'<u>effetto fotoelettrico</u>. Questo rappresenta un passo ulteriore. Planck non era intervenuto sulla natura della radiazione all'interno della cavità, ma solo sui meccanismi di assorbimento ed emissione.  
-    Einstein invece afferma che è la stessa radiazione a propagarsi in <u>pacchetti discreti</u>, estendendo l'idea quantistica alla luce stessa. Si tratta, sostanzialmente, della stessa relazione:  
-    <u>\( E = h \nu \)</u>
-</p>
-
-<p><strong>3ª fase (E.C.)</strong></p>
-<p style="color:#800000;">
-    Verso il 1923, Compton formula una nuova ipotesi e indaga la diffusione della radiazione su vari materiali, concentrandosi sulla grafite. La radiazione impiegata è a frequenza elevatissima (<u>raggi X</u>): soltanto grazie ai recenti progressi strumentali era ormai possibile misurarne con precisione frequenza e lunghezza d’onda.  
-    Questo chiarisce perché fenomeni analoghi non fossero stati osservati in precedenza. Ma perché scegliere frequenze così alte? Perché, come evidenziato da Einstein e Planck, un’onda di frequenza maggiore corrisponde a un <u>fotone di energia più grande</u>.  
-    Quando tali fotoni interagiscono con gli elettroni legati in un cristallo, l’energia coinvolta è sufficiente a trattare quegli <u>elettroni quasi liberi</u>: se li considerassimo ancora fortemente vincolati al reticolo, non riusciremmo a conciliare le leggi di conservazione di energia e quantità di moto con i dati sperimentali, né a spiegare lo <u>grande spostamento in lunghezza d’onda</u> osservato nello <u>scattering</u> di Compton.
-</p>
-
-<p><strong>4ª fase (Dubbi sulla trattazione classica - Thomson)</strong></p>
-<p>
-    A questo punto, è utile confrontare il risultato di Compton con la trattazione classica del fenomeno, nota come <u>diffusione Thomson</u>.  
-    In quel modello pre-quantistico, un'onda elettromagnetica incide su un atomo e mette in oscillazione un elettrone legato, che a sua volta <u>riemette radiazione alla stessa frequenza</u> dell’onda incidente.  
-    La luce diffusa, quindi, dovrebbe avere <u>la stessa lunghezza d’onda e frequenza</u> della radiazione inviata sul cristallo, indipendentemente dall’angolo con cui viene osservata.
-</p>
-<p>
-    Tuttavia, gli esperimenti di Compton mostrarono qualcosa di diverso: oltre al picco atteso alla stessa lunghezza d’onda dell’onda incidente, si osservava un <u>secondo picco spostato verso lunghezze d’onda maggiori</u>, il cui valore variava al variare dell’angolo di scattering.  
-    Questo <u>spostamento dipendente dall’angolo</u> non era prevedibile dalla teoria classica.  
-    Il modello di Thomson non era più sufficiente: la luce non poteva più essere descritta come una semplice onda continua.  
-    Serviva una nuova interpretazione, che includeva la natura corpuscolare della luce e il trasferimento di energia e q.d.m. quantizzate tra fotoni ed elettroni. Quindi sempre studiata come ondulatorio ma si inizia a vedere che la radiazione ha anche aspetto corpuscolare dualismo onda-particella.
-</p>
-<p><strong>5ª fase (Come si calcola esplicitamente lo spostamento Compton?)</strong></p>
-<p>
-    Lo spostamento Compton si calcola applicando le <u>leggi di conservazione dell’energia</u> e della <u>quantità di moto</u> a un urto tra un <u>fotone</u> e un <u>elettrone libero</u> inizialmente fermo.  
-    Il fotone, dopo l’urto, viene diffuso con un angolo \(\theta\) rispetto alla direzione iniziale, e la sua lunghezza d’onda risulta aumentata.
-</p>
-<p>
-    La relazione che descrive questo fenomeno è la celebre <u>formula di Compton</u>:
-</p>
-
-<p style="text-align: center;">
-    \[
-    \Delta \lambda = \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos \theta)
-    \]
-</p>
-
-<p>
-    Dove:
-    <ul>
-        <li>\(\lambda\) è la lunghezza d’onda del fotone incidente,</li>
-        <li>\(\lambda'\) quella del fotone diffuso,</li>
-        <li>\(h\) è la costante di Planck,</li>
-        <li>\(m_e\) è la massa dell’elettrone,</li>
-        <li>\(c\) è la velocità della luce,</li>
-        <li>\(\theta\) è l’angolo di diffusione del fotone.</li>
-    </ul>
-    Il termine \(\frac{h}{m_e c}\) è chiamato <u>lunghezza d’onda Compton dell’elettrone</u> e vale circa \(2.43 \times 10^{-12}\) metri.
-</p>
-
-<p><strong>6ª fase (Derivazione quantitativa dello spostamento Compton con la cinematica relativistica)</strong></p>
-
-<p style="color:#800000;">
-    Per ottenere quantitativamente lo <u>scostamento Compton</u>, partiamo dall’ipotesi che il fenomeno possa essere descritto come un <u>urto tra due corpi</u>: un <u>fotone</u> (considerato come un pacchetto di energia) e un <u>elettrone libero</u>.  
-    Invece di trattare la diffusione come propagazione ondosa classica, seguiamo l’interpretazione suggerita da quanto visto nella <u>radiazione di corpo nero</u> e nell’<u>effetto fotoelettrico</u>: la radiazione è costituita da <u>quanti</u> di energia, ovvero <strong>fotoni</strong>, che interagiscono con particelle materiali.
-</p>
-
-<p style="color:#800000;">
-    In questa visione, l’<u>interazione tra la radiazione incidente e il cristallo</u> è descritta come un <u>processo di urto</u> tra un fotone e un elettrone.  
-    Il fotone incidente colpisce l’elettrone, trasferendogli parte della propria energia e quantità di moto.  
-    Dopo l’urto:
-</p>
-
-<ul style="color:#800000;">
-    <li>l’elettrone <u>rincula</u> (viene espulso con una certa energia cinetica),</li>
-    <li>il fotone viene <u>diffuso</u> con una nuova direzione e una frequenza minore (cioè una lunghezza d’onda maggiore).</li>
+<h2>Esempio d'esame: retrodiffusione di un fotone da 100 keV</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> \(E=100\,\mathrm{keV}\), \(m_ec^2=511\,\mathrm{keV}\), \(\theta=\pi\). La lunghezza iniziale è \(\lambda=hc/E\simeq12.398\,\mathrm{pm}\).</p>
+<p><strong>Calcolo.</strong> \(E'=100/[1+2(100/511)]\simeq71.88\,\mathrm{keV}\). Equivalentemente, \(\lambda'=\lambda+2\lambda_C\simeq17.250\,\mathrm{pm}\).</p>
+<p><strong>Risultato.</strong> L'elettrone riceve \(T_e=E-E'\simeq28.12\,\mathrm{keV}\). Il controllo energetico è immediato: \(E=E'+T_e\).</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Ipotesi e correzioni reali</h3>
+<ul>
+<li>L'elettrone è inizialmente fermo, libero oppure legato con energia trascurabile rispetto a \(E\).</li>
+<li>Il moto iniziale degli elettroni produce allargamento Doppler della riga Compton.</li>
+<li>Il legame atomico può lasciare una componente coerente non spostata e modificare il profilo misurato.</li>
+<li>L'effetto Compton inverso è un altro regime: un elettrone relativistico trasferisce energia al fotone.</li>
 </ul>
-
-<p style="color:#800000;">
-    Questo <u>salto concettuale</u> - dal modello ondulatorio al modello corpuscolare - è tutt’altro che banale, ma è necessario per spiegare le osservazioni sperimentali.  
-    Se il processo è un urto elastico tra due particelle, ci aspettiamo che:
-</p>
-
-<ul style="color:#800000;">
-    <li>l’<u>energia totale</u> si conservi,</li>
-    <li>così come la <u>quantità di moto</u> in tutte le direzioni,</li>
-    <li>ma che l’<u>energia dei singoli corpi</u> (fotone ed elettrone) cambi a seguito dell’urto.</li>
+</article>
+<article class="lecture-card">
+<h3>Errori tipici</h3>
+<ul>
+<li>Confondere \(\lambda_C=h/(m_ec)\) con la lunghezza ridotta \(\bar\lambda_C=\hbar/(m_ec)\).</li>
+<li>Usare soltanto la conservazione dell'energia, perdendo la dipendenza angolare.</li>
+<li>Trattare classicamente l'energia cinetica dell'elettrone quando il rinculo non è non relativistico.</li>
+<li>Dire che lo shift dipende da \(\lambda\): dipende da \(\theta\), mentre lo shift relativo dipende anche da \(\lambda\).</li>
 </ul>
-
-<div style="text-align:center; margin: 20px 0;">
-    <img src="img/compton1.jpg" alt="compton1" style="max-width:100%; height:auto;">
+</article>
 </div>
-
-<div style="text-align:center; margin: 20px 0;">
-    <img src="img/11.jpg" alt="11" style="max-width:100%; height:auto;">
-	<em>(Thomson*)</em>
-</div>
-
-<p style="color:#800000;">
-    Ora sappiamo che, nell’urto tra fotone ed elettrone, pur mantenendosi la <u>conservazione dell’energia totale</u> e della <u>quantità di moto totale</u>, le energie si <u>redistribuiscono diversamente</u> tra i due corpi coinvolti.  
-    È naturale quindi aspettarsi che la <u>radiazione diffusa</u> - ovvero il fotone dopo l’urto - possa avere un’<u>energia diversa</u> rispetto allo stato iniziale.
-</p>
-
-<p style="color:#800000;">
-    Poiché l’<u>energia di un fotone</u> è legata alla sua frequenza \( \nu \) (e quindi anche alla sua lunghezza d’onda), ci aspettiamo che nella distribuzione degli eventi osservati sperimentalmente compaiano <u>picchi a lunghezza d’onda diversa</u> da quella incidente.
-</p>
-
-<p style="color:#800000;">
-    Per descrivere quantitativamente questo fenomeno, possiamo procedere in due modi. Dato che il processo coinvolge due corpi in stato iniziale (fotone ed elettrone) e due in quello finale, ci serve almeno una <u>relazione tra energia e quantità di moto</u> come abbiamo visto nella Relatività Ristretta.
-</p>
-
-<p style="color:#800000;">
-    Ricordiamo che una <u>particella a massa nulla</u>, come il fotone, viaggia sempre alla velocità della luce \( c \), e la sua energia è legata al momento tramite la relazione relativistica.  
-    Applicando questo concetto al fotone come corpuscolo, possiamo quindi usare le leggi di conservazione del <u>trimomento</u> e dell’<u>energia</u> per descrivere il processo d’urto.
-</p>
-
-<p style="color:#800000;">
-    In altre parole, trattiamo l’interazione come un classico urto tra particelle: fotone iniziale e finale, elettrone iniziale e finale.  
-    Scrivendo le equazioni che regolano il trimomento e l’energia totale, tenendo conto che \( E = h\nu \), possiamo combinarle algebricamente fino a ottenere la relazione che descrive lo spostamento in lunghezza d’onda.
-</p>
-
-<p style="color:#800000;">
-    Ma c’è un modo ancora più potente per arrivare al risultato: sfruttare il <u>formalismo covariante</u> della Relatività Ristretta, cioè l’uso dei <u>quadrivettori</u>.  
-    Questo approccio, più compatto ed elegante, ci permette di derivare la formula dello spostamento Compton con meno passaggi e maggiore generalità.
-</p>
-
-<p style="color:#800000;">
-    In conclusione, per derivare quantitativamente lo spostamento Compton possiamo seguire due approcci:
-    <ol style="color:#800000;">
-        <li><strong>Approccio 1 - Cinematica classica relativistica:</strong> si basa sulla conservazione della quantità di moto (lungo x e y) e dell’energia, trattando l’urto come interazione tra particelle in un sistema a due corpi, con uso esplicito delle formule viste nella Relatività Ristretta.</li>
-        <li><strong>Approccio 2 - Formalismo covariante:</strong> utilizza i quadrivettori dell’energia-impulso per descrivere l’urto in modo compatto, efficiente e più generale. È la formulazione più elegante e diretta per ottenere la formula finale dello spostamento.</li>
-    </ol>
-    Entrambi portano allo stesso risultato fisico, ma il secondo riflette pienamente la struttura e il linguaggio della relatività.
-</p>
-
-
-<p><strong>7ª fase (Formalismo covariante: impostazione del problema)</strong></p>
-
-<p style="color:#4B0082;">
-    Studiamo ora quantitativamente l’effetto Compton utilizzando il formalismo covariante della Relatività Ristretta.  
-    Immaginiamo di rappresentare l’interazione nel seguente modo: utilizzeremo la lettera \( \gamma \) per indicare il <u>fotone</u>, associandogli il suo quadrivettore momento, scritto tra parentesi.
-</p>
-
-<p style="color:#4B0082;">
-    È importante sottolineare che stiamo compiendo un <u>passaggio concettuale non banale</u>: consideriamo la <u>radiazione come un insieme di particelle</u> (i fotoni), ciascuna delle quali trasporta una certa energia e quantità di moto, pur avendo massa nulla e viaggiando alla velocità della luce.
-</p>
-
-<p style="color:#4B0082;">
-    Nello <u>stato iniziale</u>, abbiamo un fotone entrante con quadrivettore:
-    \[
-    \gamma (\vec{K}_i)
-    \]
-    e un elettrone inizialmente fermo (o quasi), rappresentato da:
-    \[
-    e^- (\vec{P}_i)
-    \]
-</p>
-
-<p style="color:#4B0082;">
-    Dopo l’urto, nello <u>stato finale</u>, il fotone viene diffuso con un nuovo quadrivettore:
-    \[
-    \gamma (\vec{K}_f)
-    \]
-    mentre l’elettrone rincula e assume un nuovo quadrivettore:
-    \[
-    e^- (\vec{P}_f)
-    \]
-</p>
-
-<p style="color:#4B0082;">
-    Scriviamo simbolicamente il processo in termini di quadrivettori:
-    \[
-    \gamma(\vec{K}_i) + e^-(\vec{P}_i) \longrightarrow \gamma(\vec{K}_f) + e^-(\vec{P}_f)
-    \]
-    Questo è un classico <u>processo a due corpi</u>, che tratteremo applicando la <strong>conservazione del quadrimpulso</strong>:
-    \[
-    \vec{K}_i + \vec{P}_i = \vec{K}_f + \vec{P}_f
-    \]
-</p>
-
-<p style="color:#4B0082;">
-    Esplicitiamo ora i quadrivettori coinvolti nel processo. Ricordiamo che un quadrivettore momento ha la forma generale:
-    \[
-    P = \left( \frac{E}{c}, \vec{p} \right)
-    \]
-    dove \( E \) è l’energia della particella e \( \vec{p} \) è il vettore quantità di moto tridimensionale.
-</p>
-
-<p style="color:#4B0082;">
-    Per ciascuna particella coinvolta nel processo Compton, abbiamo:
-</p>
-
-<ul style="color:#4B0082;">
-    <li>
-        <strong>Fotone iniziale</strong> (in arrivo lungo l'asse x):  
-        \[
-        \vec{K}_i = \left( \frac{h \nu}{c}, \frac{h \nu}{c}, 0, 0 \right)
-        \]
-        dove \( h \nu \) è l’energia del fotone incidente.
-    </li>
-<details style="margin-top: 15px; color:#4B0082;">
-  <summary><strong>Spiegazione: perché \( \vec{K}_i = \left( \frac{h \nu}{c}, \frac{h \nu}{c}, 0, 0 \right) \) ?</strong></summary>
-  <p>
-    Ogni quadrivettore energia-impulso ha la forma:<br>
-    \( \vec{P} = \left( \frac{E}{c}, p_x, p_y, p_z \right) \)
-  </p>
-  <p>
-    Per un <strong>fotone</strong>:
-    <ul>
-      <li>Energia: \( E = h \nu \)</li>
-      <li>Quantità di moto: \( \vec{p} = \frac{h \nu}{c} \, \hat{n} \), dove \( \hat{n} \) è la direzione di propagazione</li>
-    </ul>
-  </p>
-  <p>
-    Se il fotone viaggia lungo l’asse x, allora:
-    \[
-    \vec{p} = \left( \frac{h \nu}{c}, 0, 0 \right)
-    \]
-    e quindi il quadrivettore completo è:
-    \[
-    \vec{K}_i = \left( \frac{h \nu}{c}, \frac{h \nu}{c}, 0, 0 \right)
-    \]
-  </p>
-  <p>
-    Questo è coerente con la relazione \( E = pc \) per una particella a massa nulla, e riflette il fatto che tutta la quantità di moto è nella direzione x.
-  </p>
-</details>
-
-    <li>
-        <strong>Elettrone iniziale</strong> (fermo):  
-        \[
-        \vec{P}_i = \left( m_e c, 0, 0, 0 \right)
-        \]
-        poiché ha energia pari alla massa a riposo e quantità di moto nulla.
-    </li>
-
-    <li>
-        <strong>Fotone diffuso</strong> (direzione a generico angolo \( \theta \)):  
-        \[
-        \vec{K}_f = \left( \frac{h \nu'}{c}, \frac{h \nu'}{c} \cos\theta, \frac{h \nu'}{c} \sin\theta, 0 \right)
-        \]
-        dove \( \nu' \) è la frequenza del fotone dopo l’urto.
-    </li>
-
-    <li>
-        <strong>Elettrone finale</strong> (rinculato):  
-        \[
-        \vec{P}_f = \left( \frac{E_e}{c}, p_{e,x}, p_{e,y}, 0 \right)
-        \]
-        con energia relativistica \( E_e \) e quantità di moto \( \vec{p}_e \) da determinare.
-    </li>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Definisci tutti i quadrimpulsi e specifica la metrica prima di elevarli al quadrato.</li>
+<li>Mostra perché \(K{\cdot}K'=EE'(1-\cos\theta)/c^2\).</li>
+<li>Deriva la formula senza saltare la cancellazione degli invarianti di massa.</li>
+<li>Ricava \(E'(\theta)\), \(T_e\) e l'angolo di rinculo \(\varphi\).</li>
+<li>Verifica i limiti \(0\), \(90^\circ\) e \(180^\circ\).</li>
+<li>Spiega perché il solo modello ondulatorio classico non produce lo spostamento osservato.</li>
+<li>Distingui componente Compton, componente coerente non spostata e allargamento Doppler.</li>
+<li>Controlla le dimensioni di \(h/(m_ec)\) e il valore numerico \(2.426\,\mathrm{pm}\).</li>
 </ul>
-
-<details style="margin-top: 15px; color:#4B0082;">
-  <summary><strong>Prima di andare avanti, possiamo già da ora iniziare a rispondere a una tipica domanda d’orale:  </strong></summary>
-  
-<p style="color:#4B0082;">
-    
-    <strong>“Perché l’Hamiltoniana deve essere hermitiana?”</strong>
-</p>
-
-<p style="color:#4B0082;">
-    Nel contesto dell’effetto Compton abbiamo visto che la <u>conservazione dell’energia</u> è centrale nel trattare la dinamica di particelle. In meccanica quantistica, l’equivalente della conservazione dell’energia è assicurato da un’<u>Hamiltoniana hermitiana</u>, che garantisce l’evoluzione unitaria del sistema.
-</p>
-
-<p style="color:#4B0082;">
-    In particolare, il fatto che l’Hamiltoniana sia hermitiana implica che i suoi autovalori - che rappresentano le possibili energie misurabili - siano reali. Ma soprattutto, assicura che la <u>probabilità totale</u> (cioè l’integrale della densità di probabilità sull’intero spazio) rimanga costante nel tempo: si conserva sia <u>globalmente</u> che <u>localmente</u>.
-</p>
-
-<p style="color:#4B0082;">
-    Questo è analogo a quanto abbiamo visto nel caso del Compton: anche lì, l’energia e la quantità di moto devono essere conservate <u>globalmente</u> nel sistema fotone-elettrone, e il bilancio va fatto su tutto il processo.
-</p>
-
-<p style="color:#4B0082;">
-    Ragionando in termini di <strong>vettore di stato</strong>, la conservazione della probabilità si traduce nel fatto che la norma del ket \( |\psi(t)\rangle \) rimane costante nel tempo.  
-    Questo richiede che l’operatore di evoluzione temporale \( U(t, t_0) \) sia <u>unitario</u>, e ciò avviene se l’Hamiltoniana è <u>hermitiana</u>.
-</p>
-
-<p style="color:#4B0082;">
-    Ma possiamo interpretare la stessa conservazione anche in termini <strong>ondulatori</strong>:  
-    se pensiamo \( \psi(x,t) \) come un’<u>onda complessa che evolve nel tempo</u>, allora la quantità fisicamente misurabile -- cioè la <u>densità di probabilità</u> \( |\psi(x,t)|^2 \) -- deve rimanere normalizzata a 1:
-</p>
-
-<p style="color:#4B0082; text-align: center;">
-    \[
-    \int |\psi(x,t)|^2 \, dx = 1 \quad \forall t
-    \]
-</p>
-
-<p style="color:#4B0082;">
-    Questo porta naturalmente al concetto di <strong>equazione di continuità</strong>:
-    \[
-    \frac{\partial \rho}{\partial t} + \nabla \cdot \vec{j} = 0
-    \]
-    dove \( \rho = |\psi|^2 \) è la densità di probabilità e \( \vec{j} \) è la corrente di probabilità.  
-    Anche in questa forma, la conservazione locale e globale della probabilità deriva direttamente dal fatto che l’Hamiltoniana è hermitiana.
-</p>
-
-<p style="color:#4B0082;">
-    Questo doppio punto di vista [ <u>vettoriale</u> e <u>ondulatorio</u> ] riflette esattamente la dualità che stiamo imparando a gestire anche nel caso dell’effetto Compton: trattare la radiazione come un <strong>corpuscolo quantizzato</strong>, ma senza abbandonare del tutto l’intuizione ondulatoria.
-</p>
-
-<p style="color:#4B0082;">
-    ...e distinguiamo <u>conservazione locale</u> e <u>conservazione globale</u> nel seguente modo:
-</p>
-
-<ul style="color:#4B0082;">
-    <li>
-        <strong>Conservazione globale</strong>: l’integrale della densità di probabilità su tutto lo spazio resta costante nel tempo:
-        \[
-        \frac{d}{dt} \int |\psi(x,t)|^2 \, dx = 0
-        \]
-        È ciò che assicura che la probabilità totale rimanga sempre pari a 1.
-    </li>
-
-    <li>
-        <strong>Conservazione locale</strong>: in ogni punto dello spazio, variazioni nella densità \( \rho \) sono bilanciate dal flusso della corrente di probabilità \( \vec{j} \), secondo l’equazione di continuità:
-        \[
-        \frac{\partial \rho}{\partial t} + \nabla \cdot \vec{j} = 0
-        \]
-        Questo implica che la probabilità <u>non scompare</u> né <u>compare dal nulla</u>, ma può solo fluire da una regione all’altra.
-    </li>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P3_DIM_13-18.txt">DIM 18</a> - crisi della fisica classica, impulso del fotone e formula di Compton</li>
+<li><a href="Appunti-MQ.pdf#page=25">Appunti-MQ.pdf, pagine PDF 25-26</a> - quadrimpulsi, invariante e derivazione dello spostamento</li>
+<li><a href="BibbiaAleHD.pdf#page=4">BibbiaAleHD.pdf, pagina PDF 4</a> - urto relativistico e schema angolare degli appunti di lezione</li>
 </ul>
-
-<p style="color:#4B0082;">
-    Entrambe le forme di conservazione sono garantite dalla struttura matematica della teoria: in particolare, dall’<u>ermiticità dell’Hamiltoniana</u> e dall’<u>unitarietà dell’evoluzione</u>.  
-    Sono due facce della stessa medaglia, proprio come onda e particella.
-</p>
-
-<details style="margin-top: 15px; color:#4B0082;">
-  <summary><strong>Quindi, Domanda d’orale: Perché l’Hamiltoniana deve essere hermitiana?</strong></summary>
-
-  <p style="color:#4B0082;">
-    In meccanica quantistica, un’<strong>Hamiltoniana hermitiana</strong> è necessaria affinché l’<u>operatore di evoluzione temporale</u> sia <strong>unitario</strong>.  
-    L’unitarietà implica, e anzi è equivalente a, la <strong>conservazione della probabilità</strong>:
-    \[
-    \langle \psi(t) | \psi(t) \rangle = \langle \psi(t_0) | \psi(t_0) \rangle
-    \]
-  </p>
-
-  <p style="color:#4B0082;">
-    Ragionando in termini di <u>vettore di stato</u>, la norma deve rimanere 1.  
-    Ragionando in termini <u>ondulatori</u>, la densità \( |\psi(x,t)|^2 \) deve restare normalizzata:
-    \[
-    \int |\psi(x,t)|^2 dx = 1 \quad \forall t
-    \]
-  </p>
-
-  <p style="color:#4B0082;">
-    Questo è garantito se e solo se l’Hamiltoniana è hermitiana.  
-    A livello locale, ciò corrisponde all’<strong>equazione di continuità</strong>:
-    \[
-    \frac{\partial \rho}{\partial t} + \nabla \cdot \vec{j} = 0
-    \]
-    che esprime il fatto che la probabilità non si crea né si distrugge, ma fluisce.  
-    Anche nel caso Compton, si conserva energia e quantità di moto globalmente: stessa logica, stessa struttura.
-  </p>
-  
-  <details style="margin-top: 15px; color:#4B0082;">
-  <summary><strong>Domanda d’orale: Perché l’Hamiltoniana deve essere hermitiana? Conservazione globale e locale della probabilità</strong></summary>
-
-  <p style="color:#4B0082;"><strong>Step 1 - Evoluzione dello stato:</strong><br>
-  L’equazione di Schrödinger è:<br>
-  \( i \hbar \frac{d}{dt}|\psi(t)\rangle = \hat{H} |\psi(t)\rangle \)<br>
-  con soluzione: \( |\psi(t)\rangle = U(t, t_0) |\psi(t_0)\rangle \)</p>
-
-  <p style="color:#4B0082;"><strong>Step 2 - Conservazione globale della norma:</strong><br>
-  \[
-  \langle \psi(t) | \psi(t) \rangle = \langle \psi(t_0) | U^\dagger U | \psi(t_0) \rangle = \langle \psi(t_0) | \psi(t_0) \rangle
-  \]
-  ⇒ \( U^\dagger = U^{-1} \) ⇒ \( U \) è unitario.</p>
-
-  <p style="color:#4B0082;"><strong>Step 3 - Unitarietà ⇔ Hamiltoniana hermitiana:</strong><br>
-  \[
-  \hat{H}^\dagger = \hat{H} \quad \Longleftrightarrow \quad U(t,t_0) \text{ unitario} \quad \Longleftrightarrow \quad \text{Probabilità globale conservata}
-  \]
-  </p>
-
-  <p style="color:#4B0082;"><strong>Step 4 - Vista ondulatoria:</strong><br>
-  \[
-  \int |\psi(x,t)|^2 dx = 1 \quad \forall t
-  \]
-  ⇒ interpretazione come conservazione della probabilità totale.</p>
-
-  <p style="color:#4B0082;"><strong>Step 5 - Conservazione locale:</strong><br>
-  \[
-  \frac{\partial \rho}{\partial t} + \nabla \cdot \vec{j} = 0
-  \]
-  con \( \rho = |\psi|^2 \) e \( \vec{j} = \frac{\hbar}{2im} (\psi^* \nabla \psi - \psi \nabla \psi^*) \)</p>
-
-  <p style="color:#4B0082;"><strong>Step 6 - Conclusione:</strong></p>
-  <table style="border-collapse: collapse; border: 1px solid #4B0082; color:#4B0082;">
-    <thead>
-      <tr style="background-color: #eee;">
-        <th style="border: 1px solid #4B0082; padding: 5px;">Tipo di conservazione</th>
-        <th style="border: 1px solid #4B0082; padding: 5px;">Significato</th>
-        <th style="border: 1px solid #4B0082; padding: 5px;">Condizione sufficiente</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="border: 1px solid #4B0082; padding: 5px;"><strong>Globale</strong></td>
-        <td style="border: 1px solid #4B0082; padding: 5px;">Norma costante</td>
-        <td style="border: 1px solid #4B0082; padding: 5px;">\( \hat{H} \) hermitiana ⇔ \( U \) unitario</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #4B0082; padding: 5px;"><strong>Locale</strong></td>
-        <td style="border: 1px solid #4B0082; padding: 5px;">Flusso continuo di probabilità</td>
-        <td style="border: 1px solid #4B0082; padding: 5px;">Equazione di continuità + \( \hat{H} \) hermitiana</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p style="color:#4B0082;">👉 Due prospettive diverse ma coerenti, che si completano come onda e particella.</p>
+<p class="lecture-note">La lezione integra i passaggi delle dispense con i controlli cinematici, il rinculo elettronico e le distinzioni sperimentali richieste all'orale.</p>
 </details>
-<details style="margin-top: 10px; color:#4B0082;">
-  <summary><strong>Nota: differenza tra norma costante e flusso continuo di probabilità</strong></summary>
-  <ul style="color:#4B0082;">
-    <li><strong>Norma costante</strong> (conservazione globale):<br>
-      La probabilità totale di trovare la particella da qualche parte è sempre 1.<br>
-      <em>→ La particella “esiste sempre”, non scompare mai.</em>
-    </li>
-    <li style="margin-top: 8px;"><strong>Flusso continuo</strong> (conservazione locale):<br>
-      La probabilità può spostarsi da un punto all’altro, ma non può apparire o sparire.<br>
-      <em>→ La probabilità “scorre”, come un liquido che non si comprime né evapora.</em>
-    </li>
-  </ul>
-  
-  <details style="margin-top: 15px; color:#4B0082;">
-  <summary><strong>Derivazione compatta dell’equazione di continuità (conservazione locale della probabilità)</strong></summary>
-
-  <p style="color:#4B0082;">
-    Consideriamo l’equazione di Schrödinger dipendente dal tempo per una particella libera:
-    \[
-    i\hbar \frac{\partial \psi}{\partial t} = -\frac{\hbar^2}{2m} \nabla^2 \psi
-    \]
-    e il suo complesso coniugato:
-    \[
-    -i\hbar \frac{\partial \psi^*}{\partial t} = -\frac{\hbar^2}{2m} \nabla^2 \psi^*
-    \]
-  </p>
-
-  <p style="color:#4B0082;">
-    Moltiplichiamo la prima per \( \psi^* \), la seconda per \( \psi \), e li combiniamo:
-    \[
-    \psi^* \frac{\partial \psi}{\partial t} + \psi \frac{\partial \psi^*}{\partial t} =
-    \frac{\hbar}{2im} \left( \psi^* \nabla^2 \psi - \psi \nabla^2 \psi^* \right)
-    \]
-  </p>
-
-  <p style="color:#4B0082;">
-    Il membro sinistro è la derivata temporale della densità di probabilità:
-    \[
-    \frac{\partial}{\partial t} |\psi|^2 = \frac{\partial \rho}{\partial t}
-    \]
-    mentre il membro destro può essere riscritto come divergente di una corrente:
-    \[
-    \nabla \cdot \vec{j} = \frac{\hbar}{2im} \left( \psi^* \nabla \psi - \psi \nabla \psi^* \right)
-    \]
-  </p>
-
-  <p style="color:#4B0082;">
-    Quindi otteniamo l’equazione di continuità:
-    \[
-    \boxed{
-      \frac{\partial \rho}{\partial t} + \nabla \cdot \vec{j} = 0
-    }
-    \]
-    che esprime la <strong>conservazione locale</strong> della probabilità.  
-    Non implica la globale, ma se integriamo su tutto lo spazio (e la corrente decade all’infinito), otteniamo:
-    \[
-    \frac{d}{dt} \int |\psi(x,t)|^2 \, dx = 0
-    \]
-  </p>
-  
-<p style="color:#4B0082;">
-    Questo non implica automaticamente la conservazione globale. Tuttavia, se:
-    \[
-    \lim_{|x| \to \infty} j(x, t) = 0
-    \]
-    allora, integrando su \( \mathbb{R} \), otteniamo:
-    \[
-    \frac{d}{dt} \int_{-\infty}^{+\infty} |\psi(x,t)|^2 \, dx = 0
-    \]
-    ovvero la probabilità totale è conservata.
-</p>
-
-
-</details>
-
-</details>
-
-  
-</details>
-
-
-</details>
-
-<p style="color:#4B0082;">
-    Per evitare confusione, distinguiamo due affermazioni matematiche ben diverse:
-</p>
-
-<ul style="color:#4B0082;">
-    <li>
-        <strong>(1) Normalizzazione della funzione d’onda:</strong><br>
-        È una <u>condizione iniziale</u> sulla funzione d’onda:
-        \[
-        \int_{-\infty}^{+\infty} |\psi(x,t)|^2 \, dx = 1 \quad \forall t
-        \]
-        Esprime che la <u>probabilità totale</u> deve valere sempre 1.
-    </li>
-
-    <li style="margin-top: 12px;">
-        <strong>(2) Conservazione globale della probabilità:</strong><br>
-        È una <u>legge di conservazione</u>, che afferma che l’integrale sopra resta costante nel tempo:
-        \[
-        \frac{d}{dt} \int_{-\infty}^{+\infty} |\psi(x,t)|^2 \, dx = 0
-        \]
-        Può essere derivata integrando l’equazione di continuità, a patto che:
-        \[
-        \lim_{|x| \to \infty} j(x, t) = 0
-        \]
-        cioè che non ci sia flusso di probabilità che “esce” all’infinito.
-    </li>
-</ul>
-
-<p style="color:#4B0082;">
-    In breve: la normalizzazione dice <em>“quanto vale la probabilità”</em>,  
-    la conservazione dice <em>“che quella quantità resta costante nel tempo”</em>.  
-    Sono concetti connessi, ma logicamente distinti.
-</p>
-
-<p><strong>8ª fase (Formalismo covariante: definizione dei quadrivettori)</strong></p>
-
-<p style="color:#800000;">
-    Procediamo con la scrittura covariante del processo:
-    \[
-    \underbrace{\gamma(k_i)}_{\text{fotone iniziale}} + \underbrace{e(P_i)}_{\text{elettrone iniziale}}
-    \longrightarrow
-    \underbrace{\gamma(k_f)}_{\text{fotone diffuso}} + \underbrace{e(P_f)}_{\text{elettrone finale}}
-    \]
-</p>
-
-<p style="color:#800000;">
-    Finora abbiamo rappresentato le particelle tramite i loro trimomenti \( \vec{k}, \vec{p} \), ma - come stabilito nel formalismo della Relatività Ristretta - è più naturale associare a ciascuna anche l’energia, e trattarle come <u>quadrivettori momento</u>.
-</p>
-
-<p style="color:#800000;">
-    Per questo motivo da ora:
-    <ul style="color:#800000;">
-        <li>Omettiamo la freccia sopra i vettori: \( k_i^\mu, p_i^\mu, k_f^\mu, p_f^\mu \)</li>
-        <li>Consideriamo esplicitamente i quadrivettori momento \( p^\mu = \left( \frac{E}{c}, \vec{p} \right) \)</li>
-    </ul>
-</p>
-
-<p style="color:#800000;">
-    Per un fotone in generale vale:
-    \[
-    \gamma(k) \Rightarrow k^\mu = \left( \frac{E}{c}, \vec{k} \right) = \left( |\vec{k}|, \vec{k} \right)
-    \]
-    perché l’energia è \( E = |\vec{k}| c \), e dunque:
-    \[
-    k^\mu k_\mu = \left( \frac{E}{c} \right)^2 - |\vec{k}|^2 = 0 \quad \Rightarrow \quad k^2 = 0
-    \]
-    cioè il quadrato lorentziano del quadrimpulso di un fotone è nullo: ciò riflette il fatto che la massa del fotone è nulla ("condizione on-shell").
-</p>
-
-<p style="color:#800000;">
-    Per l’elettrone invece, valgono:
-    \[
-    p_i^\mu = \left( \frac{E_i}{c}, \vec{p}_i \right), \quad
-    p_f^\mu = \left( \frac{E_f}{c}, \vec{p}_f \right)
-    \]
-    con:
-    \[
-    p_i^2 = p_f^2 = m_e^2 c^2
-    \]
-    cioè il quadrato lorentziano del quadrimpulso di una particella massiva è pari a \( m^2 c^2 \).
-</p>
-
-<p style="color:#800000;">
-    Riassumendo:
-</p>
-
-<ul style="color:#800000;">
-    <li><strong>Fotone iniziale:</strong> \( k_i^\mu = \left( \frac{h \nu}{c}, \vec{k}_i \right) \)</li>
-    <li><strong>Fotone diffuso:</strong> \( k_f^\mu = \left( \frac{h \nu'}{c}, \vec{k}_f \right) \)</li>
-    <li><strong>Elettrone iniziale:</strong> \( p_i^\mu = \left( m_e c, \vec{0} \right) \)</li>
-    <li><strong>Elettrone rinculato:</strong> \( p_f^\mu = \left( \frac{E_f}{c}, \vec{p}_f \right) \)</li>
-</ul>
-
-<p style="color:#800000;">
-    Ora possiamo scegliere un sistema di riferimento comodo: supponiamo che il fotone incidente propaghi lungo l’asse <strong>z</strong>, e l’elettrone iniziale sia fermo. Questo equivale a lavorare nel sistema del laboratorio ("Lab Frame").
-</p>
-
-<p style="color:#800000;">
-    Lo schema geometrico è il seguente:
-    <ul style="color:#800000;">
-        <li>Il fotone incidente ha vettore \( \vec{k}_i \) lungo \( +z \)</li>
-        <li>L’elettrone iniziale è fermo nell’origine \( \Rightarrow \vec{p}_i = 0 \)</li>
-        <li>Dopo l’urto, il fotone diffuso \( \vec{k}_f \) emerge con angolo \( \theta \) rispetto all’asse \( z \)</li>
-        <li>L’elettrone rincula con \( \vec{p}_f \) in una direzione opposta, formando un angolo \( \psi \)</li>
-    </ul>
-</p>
-
-<p><strong>9ª fase (Derivazione covariante della formula di Compton)</strong></p>
-
-<p style="color:#001F3F;">
-    Ripartiamo dalla conservazione del quadrimpulso:
-    \[
-    k_i^\mu + p_i^\mu = k_f^\mu + p_f^\mu
-    \]
-    Elevando al quadrato entrambi i membri (cioè calcolando il quadrato lorentziano):
-    \[
-    (k_i + p_i)^2 = (k_f + p_f)^2
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Espandiamo:
-    \[
-    k_i^2 + p_i^2 + 2 k_i \cdot p_i = k_f^2 + p_f^2 + 2 k_f \cdot p_f
-    \]
-    dove:
-    <ul style="color:#001F3F;">
-        <li>\( k_i^2 = k_f^2 = 0 \) (fotoni → massa nulla)</li>
-        <li>\( p_i^2 = p_f^2 = m_e^2 c^2 \) (massa dell’elettrone)</li>
-    </ul>
-    Otteniamo:
-    \[
-    2 k_i \cdot p_i = 2 k_f \cdot p_f \quad \Rightarrow \quad
-    k_i \cdot p_i = k_f \cdot p_f
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    In un sistema in cui l’elettrone è inizialmente fermo:
-    \[
-    p_i^\mu = (m_e c, \vec{0}) \quad \Rightarrow \quad
-    k_i \cdot p_i = \frac{h\nu}{c} \cdot m_e c = h\nu m_e
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Calcoliamo ora \( k_f \cdot p_f \).  
-    In alternativa a calcoli più complessi, consideriamo la conservazione dell’energia:
-    \[
-    h\nu + m_e c^2 = h\nu' + E_f
-    \quad \Rightarrow \quad
-    E_f = h\nu + m_e c^2 - h\nu'
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Possiamo quindi sostituire nelle espressioni covarianti o, più elegantemente, ricorrere al passaggio finale:
-    \[
-    \lambda = \frac{c}{\nu}, \quad \lambda' = \frac{c}{\nu'}
-    \]
-    e con le manipolazioni viste (prodotti scalari, energia-momento), si arriva alla:
-    \[
-    \boxed{
-        \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos\theta)
-    }
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Questa è la <strong>formula di Compton</strong>, ottenuta rigorosamente dal formalismo relativistico.  
-    Descrive la variazione in lunghezza d’onda in funzione dell’angolo di diffusione del fotone e dipende solo da costanti fondamentali:  
-    \( h \) (costante di Planck), \( m_e \) (massa dell’elettrone), e \( c \) (velocità della luce).
-</p>
-
-<p style="color:#001F3F;">
-    Procediamo esplicitamente con le manipolazioni.  
-    Scriviamo la conservazione della quantità di moto e dell’energia:
-    \[
-    \vec{p}_f = \vec{k}_i - \vec{k}_f
-    \qquad\text{e}\qquad
-    E_f = h\nu + m_e c^2 - h\nu'
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Applichiamo ora la relazione relativistica:
-    \[
-    E_f^2 = p_f^2 c^2 + m_e^2 c^4
-    \]
-    Sostituiamo \( \vec{p}_f = \vec{k}_i - \vec{k}_f \) e \( E_f \) espresso sopra:
-</p>
-
-<p style="color:#001F3F;">
-    Lato sinistro:
-    \[
-    E_f^2 = (h\nu + m_e c^2 - h\nu')^2
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Lato destro:
-    \[
-    |\vec{k}_i - \vec{k}_f|^2 = |\vec{k}_i|^2 + |\vec{k}_f|^2 - 2|\vec{k}_i||\vec{k}_f| \cos\theta
-    \]
-    quindi:
-    \[
-    p_f^2 c^2 = \left(\frac{h \nu}{c}\right)^2 + \left(\frac{h \nu'}{c}\right)^2 - 2 \frac{h^2 \nu \nu'}{c^2} \cos\theta
-    \]
-    e infine:
-    \[
-    E_f^2 = \left[ \frac{h^2 \nu^2 + h^2 \nu'^2 - 2 h^2 \nu \nu' \cos\theta}{c^2} \right] + m_e^2 c^4
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Uguagliando i due membri otteniamo una lunga espressione, ma si può semplificare dividendo tutto per \( c^2 \), e alla fine - dopo raccoglimenti e isolando \( \lambda' \) - si ottiene:
-    \[
-\underbrace{\left(\cancel{h\nu} + m_e c^2 - h\nu'\right)^2}_{\text{energia dell'elettrone}} 
-= \underbrace{\cancel{(h\nu)^2} + \cancel{(h\nu')^2} - 2 h^2 \nu \nu' \cos\theta}_{\text{momento quadrato}} + \underline{m_e^2 c^4}
-\Rightarrow 
-\boxed{\lambda' - \lambda = \underline{\frac{h}{m_e c}} (1 - \cos\theta)}
-\]
-
-	
-	\[
-    \boxed{
-        \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos\theta)
-    }
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Scopriamo dunque che <u>la lunghezza d’onda del fotone nello stato finale</u> è diversa da quella iniziale:
-    \[
-    \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos\theta)
-    \]
-    Questa quantità, detta <strong>spostamento Compton</strong>, dipende unicamente dall’angolo di diffusione \(\theta\) e dalla <u>massa della particella bersaglio</u>.
-</p>
-
-<p style="color:#001F3F;">
-    La costante \( \frac{h}{m_e c} \) viene chiamata <u>lunghezza d’onda Compton</u> dell’elettrone, ed è una misura dell’effetto massimo che un fotone può subire diffondendo su un elettrone libero.
-</p>
-
-<p style="color:#001F3F;">
-    Quando \(\theta = 0\) (diffusione in avanti), abbiamo:
-    \[
-    \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos 0) = 0
-    \]
-    Quindi <u>non c’è variazione</u>: la radiazione diffusa mantiene la stessa lunghezza d’onda del fotone incidente.
-</p>
-
-<p style="color:#001F3F;">
-    Ma se \(\theta = \pi\) (retrodiffusione), otteniamo lo spostamento massimo:
-    \[
-    \lambda' - \lambda = \frac{2h}{m_e c}
-    \]
-    In questo caso, il fotone rimbalza all’indietro e la sua lunghezza d’onda aumenta al massimo.  
-    Questo ci consente di calcolare e verificare sperimentalmente il valore di \( \frac{h}{m_e c} \) con grande precisione.
-</p>
-
-<p style="color:#001F3F;">
-    Questo effetto fu osservato proprio in esperimenti con <u>raggi X diffusi su reticoli cristallini</u>:  
-    la struttura periodica del reticolo permetteva di risolvere le lunghezze d’onda grazie a fenomeni di diffrazione, analogamente a quanto visto in ottica.
-</p>
-
-<p style="color:#001F3F;">
-    Come appreso in meccanica ondulatoria, per rivelare la natura ondulatoria della radiazione occorrono ostacoli o fenditure con dimensioni <u>comparate alla lunghezza d’onda</u>.  
-    Solo così le differenze tra \( \lambda \) e \( \lambda' \) diventano <u>sperimentabili</u>, permettendo a Compton di misurare con precisione le variazioni indotte dall’urto.
-</p>
-
-<p style="color:#001F3F;">
-    In maniera analitica, la formula:
-    \[
-    \Delta\lambda = \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos\theta)
-    \]
-    ci offre una <strong>valenza diagnostica</strong>: non solo ci dice quanto cambia la lunghezza d’onda, ma ci mostra chiaramente che il processo richiede una <u>trattazione relativistica</u>.
-</p>
-
-<p style="color:#001F3F;">
-    Infatti, nessuna analisi basata sulla sola <u>conservazione dell’energia classica</u> o sul comportamento ondulatorio tradizionale avrebbe potuto prevedere uno spostamento che:
-    <ul style="margin-left: 15px;">
-        <li>dipende dall’<u>angolo di diffusione</u>,</li>
-        <li>è massimo per \(\theta = \pi\),</li>
-        <li>e coinvolge la <u>massa dell’elettrone</u> in modo esplicito.</li>
-    </ul>
-</p>
-
-<p style="color:#001F3F;">
-    Proprio per questo, il formalismo covariante diventa lo strumento naturale per descrivere il processo:  
-    <strong>energia e quantità di moto</strong> sono unite in un <u>unico quadrivettore</u>, e la loro conservazione avviene in modo simultaneo e coerente in tutti i sistemi di riferimento.
-</p>
-
-<p style="color:#001F3F;">
-    Volendo, si può derivare lo stesso risultato usando:
-    <ul style="margin-left: 15px;">
-        <li>da un lato, la <u>conservazione dell’energia</u> (come abbiamo fatto con \( h\nu + m_e c^2 = h\nu' + E_e \))</li>
-        <li>dall’altro, la <u>conservazione del momento</u> usando vettori tridimensionali</li>
-    </ul>
-    ma è proprio la <u>Relatività Ristretta</u> a garantirne l’unitarietà strutturale, specialmente per fotoni a massa nulla.
-</p>
-
-<p><strong style="color:#001F3F;">10ª fase - Derivazione covariante della formula di Compton</strong></p>
-
-<p style="color:#001F3F;">
-    Procediamo con la derivazione quantitativa completa della formula di Compton, usando il formalismo covariante della Relatività Ristretta.
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 1 - Impostazione del processo</strong></p>
-<p style="color:#001F3F;">
-    Consideriamo l’urto:
-    \[
-    \gamma(k_i) + e(p_i) \longrightarrow \gamma(k_f) + e(p_f)
-    \]
-    dove tutte le variabili sono quadrivettori.
-    Lavoriamo nel sistema del laboratorio (Lab Frame), in cui l’elettrone è inizialmente fermo.
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 2 - Conservazione del quadrimpulso</strong></p>
-<p style="color:#001F3F;">
-    Impostiamo la conservazione covariante:
-    \[
-    k_i^\mu + p_i^\mu = k_f^\mu + p_f^\mu
-    \]
-    Eleviamo al quadrato entrambi i membri (prodotto scalare lorentziano):
-    \[
-    (k_i + p_i)^2 = (k_f + p_f)^2
-    \]
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 3 - Espansione del quadrato</strong></p>
-<p style="color:#001F3F;">
-    \[
-    k_i^2 + p_i^2 + 2 k_i \cdot p_i = k_f^2 + p_f^2 + 2 k_f \cdot p_f
-    \]
-    Sostituendo:
-    <ul style="color:#001F3F;">
-        <li>\(k_i^2 = k_f^2 = 0\) (massa nulla del fotone)</li>
-        <li>\(p_i^2 = p_f^2 = m_e^2 c^2\)</li>
-    </ul>
-    Otteniamo:
-    \[
-    2 k_i \cdot p_i = 2 k_f \cdot p_f \Rightarrow k_i \cdot p_i = k_f \cdot p_f
-    \]
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 4 - Calcolo di \( k_i \cdot p_i \)</strong></p>
-<p style="color:#001F3F;">
-    L’elettrone è inizialmente fermo:
-    \[
-    p_i^\mu = (m_e c, \vec{0})
-    \]
-    Allora:
-    \[
-    k_i \cdot p_i = \frac{h \nu}{c} \cdot m_e c = h \nu m_e
-    \]
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 5 - Calcolo di \( k_f \cdot p_f \)</strong></p>
-<p style="color:#001F3F;">
-    \[
-    k_f \cdot p_f = \frac{h \nu'}{c} \cdot \frac{E_f}{c} - \vec{k}_f \cdot \vec{p}_f
-    \]
-    Dalla conservazione dell’energia:
-    \[
-    h\nu + m_e c^2 = h\nu' + E_f \Rightarrow E_f = h\nu + m_e c^2 - h\nu'
-    \]
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 6 - Relazione relativistica</strong></p>
-<p style="color:#001F3F;">
-    Applichiamo:
-    \[
-    E_f^2 = p_f^2 c^2 + m_e^2 c^4
-    \]
-    dove:
-    \[
-    \vec{p}_f = \vec{k}_i - \vec{k}_f
-    \]
-    Quindi:
-    \[
-    |\vec{p}_f|^2 = |\vec{k}_i|^2 + |\vec{k}_f|^2 - 2 |\vec{k}_i||\vec{k}_f| \cos\theta
-    \]
-    Sostituendo:
-    \[
-    p_f^2 c^2 = \left(\frac{h \nu}{c}\right)^2 + \left(\frac{h \nu'}{c}\right)^2 - 2 \frac{h^2 \nu \nu'}{c^2} \cos\theta
-    \]
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 7 - Uguaglianza dei due lati</strong></p>
-
-<p style="color:#001F3F;">
-    Uguagliamo i due membri dell’equazione relativistica:
-</p>
-
-<p style="color:#001F3F;">
-    <u>Lato sinistro (energia finale dell’elettrone):</u><br>
-    \[
-    E_f^2 = \left( h \nu + m_e c^2 - h \nu' \right)^2
-    = \left( m_e c^2 + h(\nu - \nu') \right)^2
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    <u>Lato destro (impulso + massa):</u><br>
-    Usiamo:
-    \[
-    p_f^2 = |\vec{p}_f|^2 = |\vec{k}_i - \vec{k}_f|^2
-    \Rightarrow
-    |\vec{k}_i|^2 + |\vec{k}_f|^2 - 2 |\vec{k}_i||\vec{k}_f| \cos\theta
-    \]
-    Ricordando che per un fotone \( |\vec{k}| = \frac{h\nu}{c} = \frac{h}{\lambda} \), otteniamo:
-    \[
-    p_f^2 c^2 = \left( \frac{h\nu}{c} \right)^2 + \left( \frac{h\nu'}{c} \right)^2 - 2 \frac{h^2 \nu \nu'}{c^2} \cos\theta
-    \]
-    quindi:
-    \[
-    E_f^2 = \cancel{m_e^2 c^4} + \frac{h^2 \nu^2 + h^2 \nu'^2 - 2 h^2 \nu \nu' \cos\theta}{c^2} + \underline{m_e^2 c^4}
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Raccogliamo \( \frac{h}{c} \) e riscriviamo le frequenze in termini di lunghezze d’onda:<br>
-    \( \nu = \frac{c}{\lambda} \), \( \nu' = \frac{c}{\lambda'} \) ⇒  
-    \( h\nu = \frac{h c}{\lambda} \), \( h\nu' = \frac{h c}{\lambda'} \)
-</p>
-
-<p style="color:#001F3F;">
-    Dopo semplificazioni e raccolte finali:
-    \[
-    \boxed{
-        \lambda' - \lambda = \frac{h}{m_e c} (1 - \cos\theta)
-    }
-    \]
-</p>
-
-<p style="color:#001F3F;">
-    Il termine \( \frac{h}{m_e c} \) ha le dimensioni di una lunghezza e rappresenta la <u>lunghezza d’onda Compton</u> dell’elettrone, analoga alla lunghezza d’onda di De Broglie \( \lambda = \frac{h}{p} \), ma legata a una particella a riposo su cui un fotone diffonde.
-</p>
-
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 8 - Semplificazioni finali</strong></p>
-<p style="color:#001F3F;">
-    Sviluppiamo e semplifichiamo entrambi i lati. Dopo opportune cancellazioni e raccolte:
-    \[
-    \boxed{
-        \lambda' - \lambda = \frac{h}{m_e c}(1 - \cos\theta)
-    }
-    \]
-</p>
-
-<hr>
-
-<p style="color:#001F3F;"><strong>🔹 Step 9 - Commento fisico</strong></p>
-<p style="color:#001F3F;">
-    La lunghezza d’onda del fotone <u>dopo l’urto</u> è maggiore di quella iniziale.  
-    Questo scostamento:
-    <ul style="color:#001F3F;">
-        <li>dipende solo da \( \theta \)</li>
-        <li>è massimo per \( \theta = \pi \Rightarrow \Delta\lambda_{\text{max}} = \frac{2h}{m_e c} \)</li>
-        <li>rende misurabile la lunghezza d’onda Compton: \( \lambda_C = \frac{h}{m_e c} \)</li>
-    </ul>
-</p>
-
-<p style="color:#001F3F;">
-    Il fenomeno non è spiegabile con la sola ottica ondulatoria classica: la derivazione dimostra che <u>il fotone ha energia e quantità di moto proprie</u>, come una particella.
-</p>
-
-<p style="color:#001F3F;">
-    La Relatività Ristretta è cruciale: solo unendo energia e quantità di moto in un quadrivettore si ottiene una derivazione rigorosa e coerente in tutti i sistemi di riferimento.
-</p>
-
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 1 - DIM 18":"In-depth lesson - Topic 1 - DIM 18","Effetto Compton":"Compton effect","Dall'esperimento di diffusione dei raggi X, derivare senza salti lo spostamento Compton usando il quadrimpulso, ricavare energia e direzione del rinculo e chiarire quali osservazioni richiedono energia e impulso corpuscolari del fotone.":"Starting from the X-ray scattering experiment, derive the Compton shift step by step with four-momentum conservation, obtain the recoil energy and direction, and identify which observations require the photon to carry both energy and momentum.","Schema sperimentale":"Experimental setup","Un fascio quasi monocromatico di raggi X, di lunghezza d'onda \\(\\lambda\\), incide su un bersaglio leggero. Uno spettrometro misura a un angolo \\(\\theta\\) la radiazione diffusa. Oltre alla componente non spostata, associata soprattutto allo scattering coerente su sistemi legati, compare una componente con \\(\\lambda'>\\lambda\\).":"An almost monochromatic X-ray beam of wavelength \\(\\lambda\\) strikes a light target. A spectrometer measures the scattered radiation at an angle \\(\\theta\\). In addition to an unshifted component, associated mainly with coherent scattering by bound systems, a component with \\(\\lambda'>\\lambda\\) appears.","Lo spostamento della componente Compton dipende dall'angolo, non dal materiale del bersaglio.":"The shift of the Compton component depends on the angle, not on the target material.","Tre osservazioni decisive":"Three decisive observations","La frequenza diffusa è minore: il fotone cede energia all'elettrone.":"The scattered frequency is lower: the photon transfers energy to the electron.","Lo spostamento cresce con \\(1-\\cos\\theta\\) ed è massimo in retrodiffusione.":"The shift increases with \\(1-\\cos\\theta\\) and is greatest for backscattering.","Il valore è fissato dalla massa dell'elettrone attraverso \\(h/(m_ec)\\).":"Its value is set by the electron mass through \\(h/(m_ec)\\).","Il bilancio richiede una quantità di moto fotonica \\(p_\\gamma=h/\\lambda\\).":"Momentum balance requires the photon momentum \\(p_\\gamma=h/\\lambda\\).","Perché Thomson non basta":"Why Thomson scattering is insufficient","Previsione ondulatoria classica":"Classical wave prediction","Nel modello di Thomson il campo incidente forza un elettrone a oscillare alla stessa frequenza. L'elettrone riemette quindi radiazione con frequenza uguale a quella incidente: cambia la direzione e l'intensità angolare, ma non compare una nuova lunghezza d'onda dipendente da \\(\\theta\\).":"In the Thomson model, the incident field drives an electron to oscillate at the same frequency. The electron then reradiates at the incident frequency: the direction and angular intensity may change, but no new \\(\\theta\\)-dependent wavelength appears.","Interpretazione corpuscolare":"Particle interpretation","Compton tratta il processo come un urto relativistico tra un fotone e un elettrone quasi libero. Il fotone porta \\(E_\\gamma=h\\nu\\) e \\(\\mathbf p_\\gamma=\\hbar\\mathbf k\\), con \\(|\\mathbf p_\\gamma|=E_\\gamma/c=h/\\lambda\\). La dipendenza angolare nasce dalla conservazione vettoriale dell'impulso.":"Compton treats the process as a relativistic collision between a photon and an almost free electron. The photon carries \\(E_\\gamma=h\\nu\\) and \\(\\mathbf p_\\gamma=\\hbar\\mathbf k\\), with \\(|\\mathbf p_\\gamma|=E_\\gamma/c=h/\\lambda\\). The angular dependence follows from vector momentum conservation.","Dimostrazione covariante compatta":"Compact covariant derivation","Con metrica \\((+,-,-,-)\\), un quadrimpulso è \\(P=(E/c,\\mathbf p)\\) e soddisfa \\(P^2=m^2c^2\\). Per il fotone la massa è nulla.":"With metric \\((+,-,-,-)\\), a four-momentum is \\(P=(E/c,\\mathbf p)\\) and satisfies \\(P^2=m^2c^2\\). A photon has zero mass.","2. Stato iniziale":"2. Initial state","L'elettrone bersaglio è assunto libero e fermo. Indichiamo con \\(K,K'\\) i fotoni iniziale e finale, con \\(P,P'\\) l'elettrone iniziale e quello di rinculo.":"The target electron is assumed to be free and at rest. Let \\(K,K'\\) denote the initial and final photons, and \\(P,P'\\) the initial and recoiling electron.","3. Isolamento di \\(P'\\)":"3. Isolating \\(P'\\)","La conservazione del quadrimpulso dà \\(P'=P+K-K'\\). Elevare al quadrato elimina direttamente l'impulso ignoto dell'elettrone finale.":"Four-momentum conservation gives \\(P'=P+K-K'\\). Squaring this relation directly eliminates the unknown momentum of the final electron.","4. Prodotti scalari":"4. Scalar products","Nel sistema di laboratorio \\(P\\) non ha parte spaziale. L'angolo tra i fotoni è \\(\\theta\\), quindi il loro prodotto contiene \\(1-\\cos\\theta\\).":"In the laboratory frame, \\(P\\) has no spatial component. The angle between the photons is \\(\\theta\\), so their scalar product contains \\(1-\\cos\\theta\\).","5. Relazione energetica":"5. Energy relation","I termini di massa ai due membri si cancellano. Dividendo per \\(m_eEE'\\) si ottiene la forma più utile per passare alle lunghezze d'onda.":"The mass terms on both sides cancel. Dividing by \\(m_eEE'\\) gives the form most useful for converting to wavelengths.","6. Formula di Compton":"6. Compton formula","Poiché \\(1/E=\\lambda/(hc)\\), la relazione precedente diventa uno spostamento di lunghezza d'onda. La costante \\(\\lambda_C\\) usa \\(h\\), non \\(\\hbar\\).":"Because \\(1/E=\\lambda/(hc)\\), the preceding relation becomes a wavelength shift. The constant \\(\\lambda_C\\) contains \\(h\\), not \\(\\hbar\\).","7. Energia diffusa":"7. Scattered-photon energy","Invertendo la relazione energetica si legge quanto il fotone perde in funzione dell'angolo. Il parametro naturale è \\(\\alpha=E/(m_ec^2)\\).":"Inverting the energy relation shows how much energy the photon loses as a function of angle. The natural parameter is \\(\\alpha=E/(m_ec^2)\\).","8. Rinculo elettronico":"8. Electron recoil","Dalla conservazione tridimensionale \\(\\mathbf p_e=\\mathbf p_\\gamma-\\mathbf p'_\\gamma\\). Se \\(\\varphi\\) è l'angolo di rinculo rispetto al fascio incidente, componenti e modulo seguono dal triangolo degli impulsi.":"Three-momentum conservation gives \\(\\mathbf p_e=\\mathbf p_\\gamma-\\mathbf p'_\\gamma\\). If \\(\\varphi\\) is the recoil angle relative to the incident beam, its components and magnitude follow from the momentum triangle.","Limiti che devono tornare":"Required consistency limits","Controlli angolari":"Angular checks","Diffusione in avanti: \\(\\theta=0\\Rightarrow\\Delta\\lambda=0\\) e \\(E'=E\\).":"Forward scattering: \\(\\theta=0\\Rightarrow\\Delta\\lambda=0\\) and \\(E'=E\\).","Regime Thomson":"Thomson regime","Se \\(E\\ll m_ec^2\\), allora \\(\\alpha\\ll1\\) ed \\(E'/E\\simeq1-\\alpha(1-\\cos\\theta)\\). Lo spostamento assoluto resta \\(\\lambda_C(1-\\cos\\theta)\\), ma quello relativo \\(\\Delta\\lambda/\\lambda\\) è piccolo: il limite classico diventa una buona approssimazione.":"If \\(E\\ll m_ec^2\\), then \\(\\alpha\\ll1\\) and \\(E'/E\\simeq1-\\alpha(1-\\cos\\theta)\\). The absolute shift remains \\(\\lambda_C(1-\\cos\\theta)\\), but the relative shift \\(\\Delta\\lambda/\\lambda\\) is small, so the classical limit becomes a good approximation.","La formula di Compton determina la cinematica; la probabilità angolare richiede la sezione d'urto di Klein-Nishina.":"The Compton formula fixes the kinematics; the angular scattering probability requires the Klein-Nishina cross section.","Esempio d'esame: retrodiffusione di un fotone da 100 keV":"Exam example: backscattering of a 100 keV photon","\\(E=100\\,\\mathrm{keV}\\), \\(m_ec^2=511\\,\\mathrm{keV}\\), \\(\\theta=\\pi\\). La lunghezza iniziale è \\(\\lambda=hc/E\\simeq12.398\\,\\mathrm{pm}\\).":"\\(E=100\\,\\mathrm{keV}\\), \\(m_ec^2=511\\,\\mathrm{keV}\\), and \\(\\theta=\\pi\\). The initial wavelength is \\(\\lambda=hc/E\\simeq12.398\\,\\mathrm{pm}\\).","L'elettrone riceve \\(T_e=E-E'\\simeq28.12\\,\\mathrm{keV}\\). Il controllo energetico è immediato: \\(E=E'+T_e\\).":"The electron receives \\(T_e=E-E'\\simeq28.12\\,\\mathrm{keV}\\). The energy check is immediate: \\(E=E'+T_e\\).","Ipotesi e correzioni reali":"Real assumptions and corrections","L'elettrone è inizialmente fermo, libero oppure legato con energia trascurabile rispetto a \\(E\\).":"The electron is initially at rest and either free or bound with negligible binding energy compared with \\(E\\).","Il moto iniziale degli elettroni produce allargamento Doppler della riga Compton.":"The initial motion of the electrons produces Doppler broadening of the Compton line.","Il legame atomico può lasciare una componente coerente non spostata e modificare il profilo misurato.":"Atomic binding can leave an unshifted coherent component and modify the measured profile.","L'effetto Compton inverso è un altro regime: un elettrone relativistico trasferisce energia al fotone.":"Inverse Compton scattering is a different regime in which a relativistic electron transfers energy to a photon.","Errori tipici":"Common errors","Confondere \\(\\lambda_C=h/(m_ec)\\) con la lunghezza ridotta \\(\\bar\\lambda_C=\\hbar/(m_ec)\\).":"Confusing \\(\\lambda_C=h/(m_ec)\\) with the reduced wavelength \\(\\bar\\lambda_C=\\hbar/(m_ec)\\).","Usare soltanto la conservazione dell'energia, perdendo la dipendenza angolare.":"Using energy conservation alone and thereby losing the angular dependence.","Trattare classicamente l'energia cinetica dell'elettrone quando il rinculo non è non relativistico.":"Using the nonrelativistic kinetic-energy formula when the electron recoil is relativistic.","Dire che lo shift dipende da \\(\\lambda\\): dipende da \\(\\theta\\), mentre lo shift relativo dipende anche da \\(\\lambda\\).":"Saying that the absolute shift depends on \\(\\lambda\\): it depends on \\(\\theta\\), whereas the relative shift also depends on \\(\\lambda\\).","Controllo da orale":"Oral-exam check","Definisci tutti i quadrimpulsi e specifica la metrica prima di elevarli al quadrato.":"Define every four-momentum and state the metric before squaring the conservation law.","Mostra perché \\(K{\\cdot}K'=EE'(1-\\cos\\theta)/c^2\\).":"Show why \\(K{\\cdot}K'=EE'(1-\\cos\\theta)/c^2\\).","Deriva la formula senza saltare la cancellazione degli invarianti di massa.":"Derive the formula without skipping the cancellation of the mass invariants.","Ricava \\(E'(\\theta)\\), \\(T_e\\) e l'angolo di rinculo \\(\\varphi\\).":"Obtain \\(E'(\\theta)\\), \\(T_e\\), and the recoil angle \\(\\varphi\\).","Verifica i limiti \\(0\\), \\(90^\\circ\\) e \\(180^\\circ\\).":"Verify the limits \\(0\\), \\(90^\\circ\\), and \\(180^\\circ\\).","Spiega perché il solo modello ondulatorio classico non produce lo spostamento osservato.":"Explain why the classical wave model alone does not produce the observed shift.","Distingui componente Compton, componente coerente non spostata e allargamento Doppler.":"Distinguish the Compton component, the unshifted coherent component, and Doppler broadening.","Controlla le dimensioni di \\(h/(m_ec)\\) e il valore numerico \\(2.426\\,\\mathrm{pm}\\).":"Check the dimensions of \\(h/(m_ec)\\) and the numerical value \\(2.426\\,\\mathrm{pm}\\).","Boss, appunti e pagine verificate":"Boss material, lecture notes, and verified pages","- crisi della fisica classica, impulso del fotone e formula di Compton":"- crisis of classical physics, photon momentum, and the Compton formula","Appunti-MQ.pdf, pagine PDF 25-26":"Appunti-MQ.pdf, PDF pages 25-26","- quadrimpulsi, invariante e derivazione dello spostamento":"- four-momenta, invariant, and derivation of the shift","BibbiaAleHD.pdf, pagina PDF 4":"BibbiaAleHD.pdf, PDF page 4","- urto relativistico e schema angolare degli appunti di lezione":"- relativistic collision and angular diagram in the lecture notes","La lezione integra i passaggi delle dispense con i controlli cinematici, il rinculo elettronico e le distinzioni sperimentali richieste all'orale.":"This lesson combines the derivation in the lecture notes with kinematic checks, electron recoil, and the experimental distinctions required for the oral exam.","Ritorna all'indice MQ":"Return to the Quantum Mechanics index","Obiettivo.":"Objective.","1. Convenzioni":"1. Conventions","Base":"Core","Esito":"Result","ORALE":"ORAL","Check":"Check","Retrodiffusione: \\(\\theta=\\pi\\Rightarrow\\Delta\\lambda_{\\max}=2\\lambda_C\\).":"Backscattering: \\(\\theta=\\pi\\Rightarrow\\Delta\\lambda_{\\max}=2\\lambda_C\\).","A \\(\\theta=90^\\circ\\): \\(\\Delta\\lambda=\\lambda_C\\).":"At \\(\\theta=90^\\circ\\): \\(\\Delta\\lambda=\\lambda_C\\).","Dati.":"Data.","Calcolo.":"Calculation.","\\(E'=100/[1+2(100/511)]\\simeq71.88\\,\\mathrm{keV}\\). Equivalentemente, \\(\\lambda'=\\lambda+2\\lambda_C\\simeq17.250\\,\\mathrm{pm}\\).":"\\(E'=100/[1+2(100/511)]\\simeq71.88\\,\\mathrm{keV}\\). Equivalently, \\(\\lambda'=\\lambda+2\\lambda_C\\simeq17.250\\,\\mathrm{pm}\\).","Risultato.":"Result.","Nome storico mantenuto: effetto-compton2.html. La lezione scientifica verificata è condivisa con effetto-compton.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: effetto-compton2.html. The verified scientific lesson is shared with effetto-compton.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Quadrimpulso del fotone":"Photon four-momentum","Quadrimpulsi iniziali e finali":"Initial and final four-momenta","Sviluppo dell'invariante":"Expansion of the invariant","Calcolo dei prodotti scalari":"Evaluation of the scalar products","Relazione tra energie dei fotoni":"Relation between the photon energies","Derivazione dello spostamento Compton":"Derivation of the Compton shift","Energia finale del fotone":"Final photon energy","Impulso e angolo di rinculo":"Recoil momentum and angle"},"title":{"it":"Effetto Compton - Dimostrazioni e ripasso orale","en":"Compton Effect - Derivations and Oral Review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

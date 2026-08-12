@@ -1,194 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momento Angolare</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 1000px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2, h3 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trattazione operatoriale dello spettro angolare</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="trattazione-operatoriale.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Momento Angolare</h1>
-
-<p>Il momento angolare è una quantità chiave nella descrizione quantistica dei sistemi con simmetria rotazionale. In meccanica quantistica, gli operatori di momento angolare soddisfano specifiche relazioni di commutazione e possiedono autovalori quantizzati. La struttura del momento angolare è connessa allo studio di sistemi centrali, dell’equazione di Schrödinger in tre dimensioni, nonché alla trattazione dell’oscillatore armonico 3D e dei potenziali centrali.</p>
-
-<h2>Operatori \(L_x, L_y, L_z\) e Operatori Scalatori \(L_\pm\)</h2>
-
-<p>Il momento angolare orbitale per una singola particella è definito in termini di posizione \(\hat{\mathbf{r}}\) e impulso \(\hat{\mathbf{p}}\) come:</p>
-
-\[
-\hat{\mathbf{L}} = \hat{\mathbf{r}}\times \hat{\mathbf{p}}.
-\]
-
-<p>In componenti cartesiane:</p>
-
-\[
-\hat{L}_x = \hat{y}\hat{p}_z - \hat{z}\hat{p}_y, \quad \hat{L}_y = \hat{z}\hat{p}_x - \hat{x}\hat{p}_z, \quad \hat{L}_z = \hat{x}\hat{p}_y - \hat{y}\hat{p}_x.
-\]
-
-<p>Gli operatori \(\hat{L}_x, \hat{L}_y, \hat{L}_z\) non commutano fra di loro, ma soddisfano le commutazioni:</p>
-
-\[
-[\hat{L}_x,\hat{L}_y] = i\hbar \hat{L}_z, \quad [\hat{L}_y,\hat{L}_z] = i\hbar \hat{L}_x, \quad [\hat{L}_z,\hat{L}_x] = i\hbar \hat{L}_y.
-\]
-
-<p>È utile introdurre gli operatori scalatori di innalzamento e abbassamento:</p>
-
-\[
-\hat{L}_\pm = \hat{L}_x \pm i\hat{L}_y.
-\]
-
-Questi operatori cambiano il numero quantico \(m\) associato alla componente \(\hat{L}_z\). Conoscendo \(\hat{L}^2 = \hat{L}_x^2 + \hat{L}_y^2 + \hat{L}_z^2\) e \(\hat{L}_z\), otteniamo gli autovalori del momento angolare quantizzato.</p>
-
-<h2>Modello Vettoriale</h2>
-
-<p>Il modello vettoriale del momento angolare immagina \(\hat{\mathbf{L}}\) come un vettore quantistico con lunghezza ed orientamento incerti, ma con valore atteso e incertezze che soddisfano i limiti imposti dalle relazioni di indeterminazione. Nel modello vettoriale, consideriamo che \(\hat{L}^2\) e \(\hat{L}_z\) possono avere valori definiti simultaneamente. Le autovalutazioni:</p>
-
-\[
-\hat{L}^2 |l,m\rangle = \hbar^2 l(l+1)|l,m\rangle, \quad \hat{L}_z |l,m\rangle = \hbar m |l,m\rangle,
-\]
-
-dove \(l\) è intero o semintero, e \(m \in \{-l, -l+1, \dots, l-1, l\}\).</p>
-
-<h2>Evoluzione Temporale degli Operatori</h2>
-
-<p>L’evoluzione temporale degli operatori in meccanica quantistica può essere studiata nell’immagine di Heisenberg. Se \(\hat{A}\) è un operatore, la sua evoluzione è data da:</p>
-
-\[
-\frac{d\hat{A}}{dt} = \frac{i}{\hbar}[\hat{H}, \hat{A}] + \left(\frac{\partial \hat{A}}{\partial t}\right)_\text{esplicita}.
-\]
-
-<p>Per gli operatori di momento angolare, se l’Hamiltoniano \(\hat{H}\) è invariante per rotazioni (ad esempio un potenziale centrale), allora \([\hat{H}, \hat{\mathbf{L}}]=0\) e il momento angolare totale si conserva nel tempo. Ciò significa che \(\hat{L}^2\) e una sua componente (di solito \(\hat{L}_z\)) sono costanti del moto.</p>
-
-<h2>Equazione di Schrödinger in Tre Dimensioni</h2>
-
-<p>L’equazione di Schrödinger in 3D, per un potenziale centrale \(V(r)\) (con \(r=|\mathbf{r}|\)), si può scrivere in coordinate sferiche. Grazie alla simmetria sferica, è naturale separare la parte radiale e angolare della funzione d’onda:</p>
-
-\[
-\psi(\mathbf{r},\theta,\varphi) = R(r)Y_{l}^{m}(\theta,\varphi),
-\]
-
-dove \(Y_l^m(\theta,\varphi)\) sono le armoniche sferiche, autostati di \(\hat{L}^2\) e \(\hat{L}_z\), e \(R(r)\) è la parte radiale, determinata dall’equazione radiale.</p>
-
-<h2>Oscillatore Armonico in 3D</h2>
-
-<p>L’oscillatore armonico tridimensionale è un problema paradigmatico. L’Hamiltoniano è:</p>
-
-\[
-\hat{H} = \frac{\hat{p}^2}{2m} + \frac{1}{2}m\omega^2 r^2.
-\]
-
-Le autofunzioni si separano in coordinate sferiche in una parte radiale e una angolare. Le soluzioni sono classificabili tramite i numeri quantici \(n_r\) (radiale) e \((l,m)\) (angolari). Anche per questo sistema, \(\hat{L}^2\) e \(\hat{L}_z\) commutano con \(\hat{H}\), consentendo la classificazione degli stati secondo il momento angolare.</p>
-
-<h2>Potenziale Centrale e Funzione Radiale: \(u(r) = rR(r)\)</h2>
-
-<p>Per un potenziale centrale \(V(r)\), l’equazione radiale, dopo aver separato le variabili, assume una forma standard introducendo la funzione radiale modificata \(u(r)=rR(r)\). In questo modo, l’equazione radiale diventa un’equazione del tipo:</p>
-
-\[
--\frac{\hbar^2}{2m}\frac{d^2 u(r)}{dr^2} + \left[V(r) + \frac{\hbar^2 l(l+1)}{2mr^2}\right]u(r) = E u(r).
-\]
-
-<p>Questa forma evita la singolarità in \(r=0\) e rende la trattazione più diretta. La barriera centrifuga \(\frac{\hbar^2 l(l+1)}{2mr^2}\) emerge naturalmente, collegando il momento angolare al comportamento radiale della particella.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Scrivi le commutazioni del momento angolare:  
-\([L_x,L_y]=i\hbar L_z\), cicliche sulle altre componenti.
-<br><br>
-2. Introduci \(\hat{L}_\pm = L_x \pm iL_y\).
-<br><br>
-3. Spiega che \(\hat{L}^2|l,m\rangle=\hbar^2 l(l+1)|l,m\rangle\) e \(\hat{L}_z|l,m\rangle=\hbar m|l,m\rangle\).
-<br><br>
-4. Disegna uno schema con livelli energetici e i numeri quantici \((n,l,m)\). Se il potenziale è centrale, \(\hat{H},\hat{L}^2,\hat{L}_z\) commutano.
-<br><br>
-5. Mostra l’equazione radiale con \(u(r)=rR(r)\). Indica come la barriera centrifuga appaia come un termine addizionale efficace nel potenziale.
-</div>
-
-<h2>Significato Fisico e Applicazioni</h2>
-
-<p>La comprensione del momento angolare è essenziale per sistemi atomici, molecolari e nucleari. Le proprietà di quantizzazione di \(\hat{L}^2\) e \(\hat{L}_z\), insieme all’invarianza rotazionale del potenziale, permettono di costruire soluzioni dell’equazione di Schrödinger più facilmente. La struttura a multipli quantici \((l,m)\) è alla base della comprensione degli orbitali atomici (armoniche sferiche), dei multipoli in fisica nucleare e dei modi vibrazionali nello studio dell’oscillatore armonico 3D.</p>
-
-<h2>Ulteriori Dettagli sui Passaggi Matematici e sulle Procedure</h2>
-
-<p><i>Per comprendere a fondo la quantizzazione di l e m</i>, consideriamo gli operatori di innalzamento e abbassamento \(\hat{L}_\pm = \hat{L}_x \pm i \hat{L}_y\). Questi operatori, applicati a uno stato \(|l,m\rangle\), modificano il valore di m in modo determinato:</p>
-
-\[
-\hat{L}_\pm |l,m\rangle = \hbar\sqrt{l(l+1)-m(m\pm1)}\,|l,m\pm1\rangle.
-\]
-
-<p>Se si parte da uno stato di indice m massimo, esiste un limite superiore a m, altrimenti potremmo innalzarlo all’infinito. Questo limite definisce la dimensione dello spazio dei possibili autostati con lo stesso l. Analogamente, partendo dallo stato con m più alto, se si applica \(\hat{L}_-\) ripetutamente, si raggiunge un punto in cui non si può più abbassare il valore di m. Tali argomentazioni portano a concludere che m varia da -l a l in passi unitari, e che l è un numero intero o mezzo intero. Questi risultati non spuntano dal nulla: discendono dalle proprietà algebriche di \(\hat{L}^2\) e \(\hat{L}_z\), nonché dal fatto che l’Hilbert space associato è uno spazio di rappresentazione dei gruppi di rotazione, i cui caratteri discreti sono noti in matematica delle rappresentazioni.</p>
-
-<p><u>Alla lavagna</u> si può procedere come segue:</p>
-
-<ol>
-    <li>Mostrare \([\hat{L}^2,\hat{L}_z]=0\), da cui si possono diagonalizzare simultaneamente questi due operatori.</li>
-    <li>Supporre esista uno stato \(|l,m_{\text{max}}\rangle\) per cui \(\hat{L}_+|l,m_{\text{max}}\rangle=0\). Applicando \(\hat{L}^2\) e \(\hat{L}_z\) a questo stato e usando le commutazioni, si trova una relazione che lega l e m. L’analisi delle soluzioni di tale relazione implica che m_{\text{max}} = l.\</li>
-    <li>Simmetricamente, esiste un m_{\text{min}} tale che \(\hat{L}_-|l,m_{\text{min}}\rangle=0\), e il differenziale tra m_{\text{max}} e m_{\text{min}}\) in unità di 1 porta a un set finito di autostati. Questo set è \(\{m=-l,-l+1,\dots,l-1,l\}\).</li>
-</ol>
-
-<p><b>Considerando l’equazione di Schrödinger in tre dimensioni</b>, il fatto che \(\hat{L}^2\) e \(\hat{L}_z\) commutino con l’Hamiltoniano quando il potenziale è centrale significa che gli autostati di energia possono essere scelti anche come autostati di \(\hat{L}^2\) e \(\hat{L}_z\). Questo semplifica enormemente la risoluzione del problema. Si passa a coordinate sferiche (r,θ,φ), separando la funzione d’onda in una parte radiale R(r) e una parte angolare Y_l^m(θ,φ). Il termine angolare è dato dalle armoniche sferiche, che sono esattamente gli autostati di \(\hat{L}^2\) e \(\hat{L}_z\).</p>
-
-<p>L’equazione radiale assume allora la forma (introducendo u(r)=rR(r) per rimuovere la singolarità in r=0):</p>
-
-\[
--\frac{\hbar^2}{2m}\frac{d^2 u}{d r^2} + \left[V(r) + \frac{\hbar^2 l(l+1)}{2mr^2}\right] u(r) = E u(r).
-\]
-
-<p>Questo termine extra \(\frac{\hbar^2 l(l+1)}{2mr^2}\) è interpretabile come una barriera centrifuga che appare quando il sistema ha momento angolare non nullo. Non è un artifizio, ma una conseguenza diretta del fatto che in 3D, quando le soluzioni si separano in coordinate sferiche, il termine angolare mette in gioco il momento angolare quantizzato.</p>
-
-<p><i>Per quanto riguarda l’oscillatore armonico 3D</i>, si ottengono insiemi di livelli energetici quantizzati, con degenerazioni legate al fatto che l’energia dipende da n_r e l, ma non da m. L’elevata simmetria del potenziale armonico isotropo genera degenerazioni più estese rispetto al semplice caso unidimensionale, riflettendo la libertà di orientamento nello spazio. Anche in questo caso la presenza di \(\hat{L}^2\) e \(\hat{L}_z\) come integrali del moto semplifica l’analisi, consentendo di classificare gli stati in base a tali numeri quantici.</p>
-
-<p>Se si tratta di un potenziale centrale diverso, ad esempio quello coulombiano per l’atomo di idrogeno, la quantizzazione del momento angolare rimane un ingrediente chiave per ottenere le funzioni d’onda, gli orbitali. In definitiva, si sfruttano gli operatori del momento angolare per decomporre il problema in una parte radiale e una angolare, arrivando a funzioni Y_l^m(θ,φ) universali e a equazioni radiali che dipendono esclusivamente dal potenziale in questione.</p>
-
-<p><a href="1mq.html" class="back-link">Ritorna all'Indice</a></p>
-
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="momento-angolare.html" data-mq-shared-lesson="trattazione-operatoriale.html" id="lezione-trattazione-operatoriale"><div class="lecture-kicker">Lezione approfondita - Argomento 7 - DIM 15</div><h1>Trattazione operatoriale dello spettro angolare</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: momento-angolare.html. La lezione scientifica verificata è condivisa con trattazione-operatoriale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare autovalori j,m e coefficienti dei ladder usando soltanto algebra e positività, dimostrare estremi della catena, quantizzazione intera o semintera, dimensione del multipletto e valori medi, senza assumere anticipatamente coordinate o armoniche sferiche.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Lo spettro nasce dalla positività</h3><p>Le norme di J più e J meno non possono essere negative. Questo vincola m, obbliga la catena a terminare e fissa l'autovalore di J quadrato.</p></article><article class="lecture-card lecture-warning"><h3>j generale, ell orbitale</h3><p>L'algebra consente j intero o semintero. La restrizione a ell intero richiede la realizzazione orbitale monovalue, non segue dai soli commutatori.</p></article></div><h2>Base comune di J quadrato e Jz</h2><div class="lecture-grid"><article class="lecture-card"><h3>Etichette provvisorie</h3><p>Si scrivono autovalori hbar quadrato lambda e hbar m, poi si dimostra lambda uguale j(j+1).</p></article><article class="lecture-card"><h3>Ladder</h3><p>J più e J meno cambiano m di una unità e lasciano invariato lambda, quindi percorrono un solo multipletto.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Autostati simultanei<span class="lecture-step-boss">CSCO</span></h4><p>Poiché J quadrato commuta con Jz, si scelgono autostati comuni con autovalori inizialmente generici.</p><div aria-label="Autovalori provvisori di J quadrato e Jz" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J^2|\lambda,m\rangle=\hbar^2\lambda|\lambda,m\rangle,\qquad J_z|\lambda,m\rangle=\hbar m|\lambda,m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Operatori di scala<span class="lecture-step-boss">DEFINISCI</span></h4><p>Le combinazioni non hermitiane coniugate isolano le direzioni circolari nel piano x-y.</p><div aria-label="Definizione dei ladder angolari" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_\pm=J_x\pm iJ_y,\qquad J_\pm^\dagger=J_\mp\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Commutatori ladder<span class="lecture-step-boss">ALGEBRA</span></h4><p>Le relazioni fondamentali danno il cambiamento di proiezione e l'invarianza del Casimir.</p><div aria-label="Algebra dei ladder" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [J_z,J_\pm]=\pm\hbar J_\pm,\qquad[J^2,J_\pm]=0,\qquad[J_+,J_-]=2\hbar J_z\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Cambio di m<span class="lecture-step-boss">APPLICA</span></h4><p>Commutare Jz attraverso J più o meno mostra che il nuovo ket ha proiezione m più o meno uno.</p><div aria-label="Azione di salita e discesa sulla proiezione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_zJ_\pm|\lambda,m\rangle=\hbar(m\pm1)J_\pm|\lambda,m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Prodotti ladder<span class="lecture-step-boss">IDENTITÀ</span></h4><p>Espandere J meno J più e J più J meno in x,y esprime le norme tramite J quadrato e Jz.</p><div aria-label="Identità quadratiche dei ladder" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_-J_+=J^2-J_z^2-\hbar J_z,\qquad J_+J_-=J^2-J_z^2+\hbar J_z\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Norme positive<span class="lecture-step-boss">VINCOLA</span></h4><p>Il valore atteso dei prodotti A aggiunto A non può essere negativo.</p><div aria-label="Norme dei ket alzato e abbassato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \|J_+|\lambda,m\rangle\|^2=\hbar^2[\lambda-m(m+1)]\ge0,\quad\|J_-|\lambda,m\rangle\|^2=\hbar^2[\lambda-m(m-1)]\ge0\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Estremo superiore<span class="lecture-step-boss">TERMINA</span></h4><p>La catena non può salire indefinitamente perché la prima disuguaglianza fallirebbe; esiste m massimo annullato da J più.</p><div aria-label="Condizione al peso massimo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_+|\lambda,m_{\max}\rangle=0\Rightarrow\lambda=m_{\max}(m_{\max}+1)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Estremo inferiore<span class="lecture-step-boss">TERMINA -</span></h4><p>Analogamente la discesa termina in m minimo annullato da J meno.</p><div aria-label="Condizione al peso minimo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_-|\lambda,m_{\min}\rangle=0\Rightarrow\lambda=m_{\min}(m_{\min}-1)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Identificazione di j<span class="lecture-step-boss">CONFRONTA</span></h4><p>Uguagliare le due espressioni e ordinare gli estremi dà m massimo uguale meno m minimo, definito j.</p><div aria-label="Derivazione dell'autovalore del Casimir" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle m_{\max}(m_{\max}+1)=m_{\min}(m_{\min}-1)\Rightarrow m_{\max}=j,\quad m_{\min}=-j,\quad\lambda=j(j+1)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Quantizzazione<span class="lecture-step-boss">CATENA</span></h4><p>Poiché i ladder cambiano m di interi, la distanza tra più j e meno j deve essere un intero.</p><div aria-label="Quantizzazione intera o semintera di j" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle 2j=m_{\max}-m_{\min}\in\mathbb N_0\Rightarrow j=0,\tfrac12,1,\tfrac32,\ldots\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Valori di m<span class="lecture-step-boss">SPETTRO</span></h4><p>Il multipletto contiene tutti i passi unitari tra i due estremi.</p><div aria-label="Proiezioni e dimensione del multipletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle m=-j,-j+1,\ldots,j-1,j,\qquad\dim\mathcal H_j=2j+1\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Coefficienti normalizzati<span class="lecture-step-boss">NORMA</span></h4><p>Scegliendo fasi standard, le radici positive delle norme fissano l'azione completa.</p><div aria-label="Azione normalizzata dei ladder angolari" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_\pm|j,m\rangle=\hbar\sqrt{j(j+1)-m(m\pm1)}\,|j,m\pm1\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Spettro finale<span class="lecture-step-boss">RISULTATO</span></h4><p>Le etichette j,m assumono ora il loro significato spettrale definitivo.</p><div aria-label="Autovalori del momento angolare" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J^2|j,m\rangle=\hbar^2j(j+1)|j,m\rangle,\qquad J_z|j,m\rangle=\hbar m|j,m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Componenti trasverse<span class="lecture-step-boss">VALORI MEDI</span></h4><p>Jx e Jy cambiano m, quindi hanno media diagonale nulla; i loro quadrati dividono simmetricamente J quadrato meno Jz quadrato.</p><div aria-label="Valori medi trasversi in |j,m&gt;" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle J_x\rangle=\langle J_y\rangle=0,\qquad\langle J_x^2\rangle=\langle J_y^2\rangle=\frac{\hbar^2}{2}[j(j+1)-m^2]\)</span></div></article></section><h2>Esempio: costruzione del multipletto j uguale uno</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si parte dal peso massimo |1,1&gt; e si applica J meno con i coefficienti derivati.</p><p data-i18n-skip="true">\(\displaystyle J_-|1,1\rangle=\hbar\sqrt2|1,0\rangle,\qquad J_-|1,0\rangle=\hbar\sqrt2|1,-1\rangle,\qquad J_-|1,-1\rangle=0\)</p><p><strong>Controllo.</strong> La catena contiene tre stati, tutti con J quadrato uguale 2 hbar quadrato; i coefficienti uguali garantiscono le norme corrette e l'estremo inferiore.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Fase di Condon-Shortley</h3><p>I segni dei coefficienti ladder possono essere scelti positivi fissando ricorsivamente le fasi dei ket. Altre convenzioni equivalenti cambiano fasi, non probabilità.</p></article><article class="lecture-card"><h3>j uguale zero</h3><p>Il multipletto contiene il solo m uguale zero e tutte le componenti J_i agiscono come zero.</p></article><article class="lecture-card"><h3>Orbita e spin</h3><p>Per L orbitale, monovalenza angolare seleziona j=ell intero. Per spin sono ammessi multipletto seminteri non rappresentabili come sole funzioni scalari sulla sfera.</p></article><article class="lecture-card"><h3>Rappresentazioni irriducibili</h3><p>Ogni valore j definisce una rappresentazione irriducibile di SU(2) di dimensione 2j+1; una rappresentazione generale è somma diretta di tali blocchi.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Assumere subito lambda=j quadrato; perdere il termine più uno in j(j+1); usare lo stesso prodotto ladder per salita e discesa; dimenticare che j può essere semintero; omettere hbar nei coefficienti.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Le norme si annullano agli estremi; il radicando è non negativo; m cambia di uno; ci sono 2j+1 stati; J quadrato resta fisso; per j un mezzo i coefficienti non nulli valgono hbar.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scegli autostati di J quadrato e Jz.</li><li>Definisci J più e J meno e calcola i commutatori.</li><li>Deriva le identità dei prodotti ladder.</li><li>Usa positività per imporre gli estremi.</li><li>Confronta m massimo e m minimo.</li><li>Ricava j intero o semintero e 2j+1.</li><li>Normalizza l'azione dei ladder.</li><li>Controlla componenti trasverse ed esempio j=1.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, rotazioni e momento angolare</a></li><li><a href="boss/P2_DIM_7-12.txt#L385">DIM 8 - algebra, ladder e composizione</a></li><li><a href="Appunti-MQ.pdf#page=194">Appunti-MQ.pdf, pagine PDF 194-199 - spettro, ladder e multipleti</a></li></ul><p class="lecture-note">La catena è stata confrontata con le pagine PDF verificate 194-199 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 7 - DIM 15":"In-depth lesson - Topic 7 - DIM 15","Trattazione operatoriale dello spettro angolare":"Operator treatment of the angular spectrum","Obiettivo.":"Objective.","Derivare autovalori j,m e coefficienti dei ladder usando soltanto algebra e positività, dimostrare estremi della catena, quantizzazione intera o semintera, dimensione del multipletto e valori medi, senza assumere anticipatamente coordinate o armoniche sferiche.":"Derive j,m eigenvalues and ladder coefficients using only algebra and positivity, prove chain endpoints, integer or half-integer quantization, multiplet dimension, and expectation values without assuming coordinates or spherical harmonics in advance.","Lo spettro nasce dalla positività":"The spectrum comes from positivity","Le norme di J più e J meno non possono essere negative. Questo vincola m, obbliga la catena a terminare e fissa l'autovalore di J quadrato.":"Norms of J plus and J minus cannot be negative. This constrains m, forces the chain to terminate, and fixes the J squared eigenvalue.","j generale, ell orbitale":"General j, orbital ell","L'algebra consente j intero o semintero. La restrizione a ell intero richiede la realizzazione orbitale monovalue, non segue dai soli commutatori.":"The algebra permits integer or half-integer j. Restriction to integer ell requires the single-valued orbital realization and does not follow from commutators alone.","Base comune di J quadrato e Jz":"Common basis of J squared and Jz","Etichette provvisorie":"Provisional labels","Si scrivono autovalori hbar quadrato lambda e hbar m, poi si dimostra lambda uguale j(j+1).":"Write provisional eigenvalues hbar squared lambda and hbar m, then prove lambda equal j(j+1).","Ladder":"Ladders","J più e J meno cambiano m di una unità e lasciano invariato lambda, quindi percorrono un solo multipletto.":"J plus and J minus change m by one unit and leave lambda invariant, so they traverse one multiplet.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Autostati simultanei":"1. Simultaneous eigenstates","CSCO":"CSCO","Poiché J quadrato commuta con Jz, si scelgono autostati comuni con autovalori inizialmente generici.":"Because J squared commutes with Jz, choose common eigenstates with initially generic eigenvalues.","Passaggio":"Step","2. Operatori di scala":"2. Ladder operators","DEFINISCI":"DEFINE","Le combinazioni non hermitiane coniugate isolano le direzioni circolari nel piano x-y.":"The mutually adjoint non-Hermitian combinations isolate circular directions in the x-y plane.","3. Commutatori ladder":"3. Ladder commutators","ALGEBRA":"ALGEBRA","Le relazioni fondamentali danno il cambiamento di proiezione e l'invarianza del Casimir.":"Fundamental relations give the projection shift and Casimir invariance.","4. Cambio di m":"4. Shift of m","APPLICA":"APPLY","Commutare Jz attraverso J più o meno mostra che il nuovo ket ha proiezione m più o meno uno.":"Commute Jz through J plus or minus to show the new ket has projection m plus or minus one.","5. Prodotti ladder":"5. Ladder products","IDENTITÀ":"IDENTITY","Espandere J meno J più e J più J meno in x,y esprime le norme tramite J quadrato e Jz.":"Expand J minus J plus and J plus J minus in x,y to express norms through J squared and Jz.","6. Norme positive":"6. Positive norms","VINCOLA":"CONSTRAIN","Il valore atteso dei prodotti A aggiunto A non può essere negativo.":"The expectation of A dagger A products cannot be negative.","7. Estremo superiore":"7. Upper endpoint","TERMINA":"TERMINATE","La catena non può salire indefinitamente perché la prima disuguaglianza fallirebbe; esiste m massimo annullato da J più.":"The chain cannot rise indefinitely because the first inequality would fail; a maximum m annihilated by J plus exists.","8. Estremo inferiore":"8. Lower endpoint","TERMINA -":"TERMINATE -","Analogamente la discesa termina in m minimo annullato da J meno.":"Similarly descent terminates at a minimum m annihilated by J minus.","9. Identificazione di j":"9. Identification of j","CONFRONTA":"COMPARE","Uguagliare le due espressioni e ordinare gli estremi dà m massimo uguale meno m minimo, definito j.":"Equate the two expressions and order endpoints to obtain m maximum equal minus m minimum, defined as j.","10. Quantizzazione":"10. Quantization","CATENA":"CHAIN","Poiché i ladder cambiano m di interi, la distanza tra più j e meno j deve essere un intero.":"Because ladders change m by integers, the distance between plus j and minus j must be an integer.","11. Valori di m":"11. Values of m","SPETTRO":"SPECTRUM","Il multipletto contiene tutti i passi unitari tra i due estremi.":"The multiplet contains every unit step between the endpoints.","12. Coefficienti normalizzati":"12. Normalized coefficients","NORMA":"NORM","Scegliendo fasi standard, le radici positive delle norme fissano l'azione completa.":"With standard phases, positive square roots of the norms fix the full action.","13. Spettro finale":"13. Final spectrum","RISULTATO":"RESULT","Le etichette j,m assumono ora il loro significato spettrale definitivo.":"Labels j,m now acquire their final spectral meaning.","14. Componenti trasverse":"14. Transverse components","VALORI MEDI":"EXPECTATIONS","Jx e Jy cambiano m, quindi hanno media diagonale nulla; i loro quadrati dividono simmetricamente J quadrato meno Jz quadrato.":"Jx and Jy change m, so their diagonal expectations vanish; their squares symmetrically split J squared minus Jz squared.","Esempio: costruzione del multipletto j uguale uno":"Example: construction of the j equals one multiplet","Impostazione.":"Setup.","Si parte dal peso massimo |1,1> e si applica J meno con i coefficienti derivati.":"Start from highest weight |1,1> and apply J minus with the derived coefficients.","Controllo.":"Check.","La catena contiene tre stati, tutti con J quadrato uguale 2 hbar quadrato; i coefficienti uguali garantiscono le norme corrette e l'estremo inferiore.":"The chain contains three states, all with J squared equal 2 hbar squared; equal coefficients ensure correct norms and the lower endpoint.","Interpretazione e limiti":"Interpretation and limits","Fase di Condon-Shortley":"Condon-Shortley phase","I segni dei coefficienti ladder possono essere scelti positivi fissando ricorsivamente le fasi dei ket. Altre convenzioni equivalenti cambiano fasi, non probabilità.":"Ladder coefficient signs can be chosen positive by recursively fixing ket phases. Other equivalent conventions change phases, not probabilities.","j uguale zero":"j equals zero","Il multipletto contiene il solo m uguale zero e tutte le componenti J_i agiscono come zero.":"The multiplet contains only m equal zero and all components J_i act as zero.","Orbita e spin":"Orbit and spin","Per L orbitale, monovalenza angolare seleziona j=ell intero. Per spin sono ammessi multipletto seminteri non rappresentabili come sole funzioni scalari sulla sfera.":"For orbital L, angular single-valuedness selects integer j=ell. Spin permits half-integer multiplets not representable as scalar functions on the sphere alone.","Rappresentazioni irriducibili":"Irreducible representations","Ogni valore j definisce una rappresentazione irriducibile di SU(2) di dimensione 2j+1; una rappresentazione generale è somma diretta di tali blocchi.":"Each j defines an irreducible SU(2) representation of dimension 2j+1; a general representation is a direct sum of such blocks.","Errori tipici":"Common errors","Assumere subito lambda=j quadrato; perdere il termine più uno in j(j+1); usare lo stesso prodotto ladder per salita e discesa; dimenticare che j può essere semintero; omettere hbar nei coefficienti.":"Assuming lambda=j squared immediately; losing the plus one in j(j+1); using the same ladder product for raising and lowering; forgetting j may be half-integer; omitting hbar in coefficients.","Controlli rapidi":"Quick checks","Le norme si annullano agli estremi; il radicando è non negativo; m cambia di uno; ci sono 2j+1 stati; J quadrato resta fisso; per j un mezzo i coefficienti non nulli valgono hbar.":"Norms vanish at endpoints; radicand is nonnegative; m changes by one; there are 2j+1 states; J squared stays fixed; for j one half nonzero coefficients equal hbar.","Controllo da orale":"Oral exam checklist","Scegli autostati di J quadrato e Jz.":"Choose J squared and Jz eigenstates.","Definisci J più e J meno e calcola i commutatori.":"Define J plus and J minus and compute commutators.","Deriva le identità dei prodotti ladder.":"Derive ladder-product identities.","Usa positività per imporre gli estremi.":"Use positivity to impose endpoints.","Confronta m massimo e m minimo.":"Compare maximum and minimum m.","Ricava j intero o semintero e 2j+1.":"Derive integer or half-integer j and 2j+1.","Normalizza l'azione dei ladder.":"Normalize ladder action.","Controlla componenti trasverse ed esempio j=1.":"Check transverse components and the j=1 example.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 15 - commutatori, rotazioni e momento angolare":"DIM 15 - commutators, rotations, and angular momentum","DIM 8 - algebra, ladder e composizione":"DIM 8 - algebra, ladders, and composition","Appunti-MQ.pdf, pagine PDF 194-199 - spettro, ladder e multipleti":"Appunti-MQ.pdf, PDF pages 194-199 - spettro, ladder e multipleti","La catena è stata confrontata con le pagine PDF verificate 194-199 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.":"The chain was compared with verified PDF pages 194-199 and DIM 15; phase conventions, signs, and normalizations are kept consistent.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: momento-angolare.html. La lezione scientifica verificata è condivisa con trattazione-operatoriale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: momento-angolare.html. The verified scientific lesson is shared with trattazione-operatoriale.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Autovalori provvisori di J quadrato e Jz":"Provisional eigenvalues of J squared and Jz","Definizione dei ladder angolari":"Definition of angular ladders","Algebra dei ladder":"Ladder algebra","Azione di salita e discesa sulla proiezione":"Raising and lowering action on projection","Identità quadratiche dei ladder":"Quadratic ladder identities","Norme dei ket alzato e abbassato":"Norms of raised and lowered kets","Condizione al peso massimo":"Highest-weight condition","Condizione al peso minimo":"Lowest-weight condition","Derivazione dell'autovalore del Casimir":"Derivation of the Casimir eigenvalue","Quantizzazione intera o semintera di j":"Integer or half-integer quantization of j","Proiezioni e dimensione del multipletto":"Projections and multiplet dimension","Azione normalizzata dei ladder angolari":"Normalized action of angular ladders","Autovalori del momento angolare":"Angular-momentum eigenvalues","Valori medi trasversi in |j,m>":"Transverse expectations in |j,m>"},"title":{"it":"Trattazione operatoriale dello spettro angolare","en":"Operator treatment of the angular spectrum"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

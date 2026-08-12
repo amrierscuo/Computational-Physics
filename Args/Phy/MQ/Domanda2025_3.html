@@ -1,274 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Momento angolare di due fermioni legati</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- MathJax per formule LaTeX -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f9fafd; color: #202234; }
-        .slater-box { background: #f0e6f7; border-left: 5px solid #7d26cd; padding: 1.4em 1.5em; border-radius: 13px; font-size: 1.12em; margin-top: 2em; margin-bottom: 2em;}
-        .block-calc { background: #fff9e6; border-left: 5px solid #ffb400; padding: 1.1em 1.4em; border-radius: 11px; margin-bottom: 1.2em; }
-        .block-spin { background: #e6f7ff; border-left: 5px solid #009fc9; padding: 1.1em 1.4em; border-radius: 11px; margin-bottom: 1.2em; }
-        .block-symm { background: #f6e6e6; border-left: 5px solid #d41c1c; padding: 1.1em 1.4em; border-radius: 11px; margin-bottom: 1.2em; }
-        .formula-box { background: #fff; border-radius: 7px; padding: 0.18em 0.95em 0.18em 0.95em; font-size: 1.05em; display: inline-block; margin: 0.4em 0; }
-        ul { margin-bottom: 0.6em; }
-        img { box-shadow: 0 2px 14px #0001; border-radius: 8px; }
-        i { color: #505067; }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Somma di spin di due particelle</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="somma-spin-due-particelle.html" name="cp-shared-lesson"/></head>
 <body>
-<div class="slater-box">
-    <b>Momento angolare totale di due fermioni legati</b>
-    <br>
-    <i>
-    Riassumendo quanto visto sui sistemi di fermioni identici (come due elettroni): <br>
-    <b>La funzione d’onda totale deve essere antisimmetrica</b> per scambio di particelle, quindi la parte spaziale e quella di spin devono avere simmetria opposta.
-    </i>
-    <br><br>
-
-    <div class="block-spin">
-        <b>Combinazione dei momenti angolari:</b><br>
-        <i>
-        Dati due momenti angolari \( \vec{j}_1, \vec{j}_2 \) (ad esempio gli spin degli elettroni), il momento angolare totale è \( \vec{J} = \vec{j}_1 + \vec{j}_2 \).<br>
-        Gli autovalori possibili di \(J\) sono \( |j_1 - j_2|, |j_1 - j_2| + 1, ..., (j_1 + j_2) \).<br>
-        Per due fermioni (spin 1/2): \(J = 1\) (<i>tripletto</i>, simmetrico) oppure \(J = 0\) (<i>singoletto</i>, antisimmetrico).
-        </i>
-        <div class="formula-box">
-            \[
-            |S, M_S\rangle,\quad S=1,0,\quad M_S = -S, ..., S
-            \]
-        </div>
-        <i>
-        Gli stati di spin di due fermioni si costruiscono usando il prodotto tensoriale degli stati base di ciascun elettrone: \( |\uparrow\rangle, |\downarrow\rangle \).<br>
-        (Lo stato \( |\uparrow\downarrow\rangle \) significa: primo fermione spin up, secondo spin down.)
-        </i>
-    </div>
-
-<div class="block-calc">
-    <b>Tripletto \((S=1,\, \textbf{simmetrico})\):</b>
-    <ul>
-        <li>
-            <span class="formula-box">
-                \( |1,1\rangle = |\uparrow\uparrow\rangle \)
-            </span>
-            <i>&nbsp;Entrambi con spin up. (\(M_S = +1\))</i>
-        </li>
-        <li>
-            <span class="formula-box">
-                \( |1,0\rangle = \frac{1}{\sqrt{2}}\left( |\uparrow\downarrow\rangle + |\downarrow\uparrow\rangle \right) \)
-            </span>
-            <i>
-                Combinazione simmetrica, normalizzata. (\(M_S = 0\))<br>
-                <b>Normalizzazione esplicita:</b><br>
-                Si impone che \( \langle 1,0 | 1,0 \rangle = 1 \):
-                <br>
-                <div class="formula-box">
-                \[
-                \langle 1,0 | 1,0 \rangle =
-                \frac{1}{2} \left(
-                    \langle\uparrow\downarrow| + \langle\downarrow\uparrow|
-                \right)
-                \left(
-                    |\uparrow\downarrow\rangle + |\downarrow\uparrow\rangle
-                \right)
-                = \frac{1}{2}(1+0+0+1) = 1
-                \]
-                </div>
-                <span style="color:#009fc9;">Tutti gli stati tripletto sono ortonormali.</span>
-            </i>
-        </li>
-        <li>
-            <span class="formula-box">
-                \( |1,-1\rangle = |\downarrow\downarrow\rangle \)
-            </span>
-            <i>&nbsp;Entrambi con spin down. (\(M_S = -1\))</i>
-        </li>
-    </ul>
-</div>
-
-<div class="block-calc">
-    <b>Singoletto \((S=0,\, \textbf{antisimmetrico})\):</b>
-    <ul>
-        <li>
-            <span class="formula-box">
-                \( |0,0\rangle = \frac{1}{\sqrt{2}}\left( |\uparrow\downarrow\rangle - |\downarrow\uparrow\rangle \right) \)
-            </span>
-            <i>
-                Combinazione antisimmetrica (unico stato con spin totale zero).<br>
-                Anche qui, la normalizzazione si impone:
-                <div class="formula-box">
-                \[
-                \langle 0,0 | 0,0 \rangle =
-                \frac{1}{2} \left(
-                    \langle\uparrow\downarrow| - \langle\downarrow\uparrow|
-                \right)
-                \left(
-                    |\uparrow\downarrow\rangle - |\downarrow\uparrow\rangle
-                \right)
-                = \frac{1}{2}(1-0-0+1) = 1
-                \]
-                </div>
-            </i>
-        </li>
-    </ul>
-</div>
-
-
-    <div class="block-symm">
-        <b>Simmetria:</b>
-        <ul>
-            <li><i>Gli stati tripletto sono <span style="color:#2176ae;">simmetrici</span> rispetto allo scambio delle due particelle.</i></li>
-            <li><i>Lo stato singoletto è <span style="color:#b30000;">antisimmetrico</span> rispetto allo scambio.</i></li>
-        </ul>
-        <b>Regola generale:</b>
-        <i>
-        La funzione d’onda totale per due fermioni deve essere antisimmetrica: se la parte di spin è simmetrica (tripletto), la parte spaziale deve essere antisimmetrica, e viceversa, secondo il principio di esclusione di Pauli.
-        </i>
-    </div>
-
-    <div class="block-calc" style="background:#f4f7fe; border-left:5px solid #6660db;">
-        <b>Appunti:</b><br>
-        <div style="text-align:center; margin-top:1em;">
-            <img src="momfermioni.jpg" alt="Momento angolare di due fermioni legati" style="max-width: 440px; border-radius:8px;">
-        </div>
-        <i>
-        <br>
- possibili combinazioni dei due spin 1/2 e la costruzione dei multiplet di spin totale (tripletto e singoletto).<br>
-        <span style="color:#565;">Ricorda che ogni stato &nbsp;\(|\uparrow\downarrow\rangle\) &nbsp;sta per: primo fermione up, secondo fermione down, e così via.</span>
-        </i>
-    </div>
-	<div class="slater-box" style="background:#e8f6ff; border-left:5px solid #1d6fa5; margin-top:2.1em; margin-bottom:1.6em;">
-  <b>Combinazione di autostati: i coefficienti di Clebsch-Gordan</b><br>
-  <i>
-    Quando si hanno due momenti angolari (ad esempio, due spin 1/2), gli autostati del sistema composto si ottengono combinando gli autostati dei singoli sottosistemi.<br>
-    <br>
-    Queste combinazioni lineari sono determinate dai <b>coefficienti di Clebsch-Gordan</b>, che permettono di passare dalla base dei singoli momenti angolari (\( |m_1\rangle |m_2\rangle \)) alla base degli autostati di momento angolare totale (\( |S, M_S\rangle \)).
-    <br><br>
-    I coefficienti di Clebsch-Gordan sono quindi i pesi (numeri reali o complessi) che compaiono nella somma:
-  </i>
-  <div class="formula-box">
-    \[
-    |S, M_S\rangle = \sum_{m_1, m_2} C^{S,M_S}_{j_1, m_1; j_2, m_2} \; |j_1, m_1\rangle |j_2, m_2\rangle
-    \]
-  </div>
-  <i>
-    dove \(C^{S,M_S}_{j_1, m_1; j_2, m_2}\) sono appunto i coefficienti di Clebsch-Gordan.<br>
-    Nel nostro caso, per due spin 1/2:
-  </i>
-  <div class="formula-box">
-    \[
-    |1,0\rangle = \frac{1}{\sqrt{2}}\,|\uparrow\downarrow\rangle + \frac{1}{\sqrt{2}}\,|\downarrow\uparrow\rangle
-    \]
-    <br>
-    <span style="font-size:0.92em;">
-      I coefficienti di Clebsch-Gordan sono \(C^{1,0}_{\frac{1}{2},+\frac{1}{2};\,\frac{1}{2},-\frac{1}{2}} = \frac{1}{\sqrt{2}}\) e \(C^{1,0}_{\frac{1}{2},-\frac{1}{2};\,\frac{1}{2},+\frac{1}{2}} = \frac{1}{\sqrt{2}}\).
-    </span>
-  </div>
-  <i>
-    In generale, servono per combinare gli stati di spin (o di momento angolare orbitale) e costruire gli autostati del sistema totale. I valori si possono trovare su tabelle oppure calcolare con regole note.<br><br>
-    <b>Esempio esplicito:</b><br>
-    Supponiamo di voler esprimere lo stato con momento angolare totale massimo (\(S=1, M_S=1\)):
-  </i>
-  <div class="formula-box">
-    \[
-    |1,1\rangle = |\uparrow\uparrow\rangle
-    \]
-  </div>
-  <i>
-    Qui il coefficiente di Clebsch-Gordan vale 1 solo per \(m_1=+\frac{1}{2}, m_2=+\frac{1}{2}\).<br>
-    Per il caso \(S=1, M_S=0\) visto sopra, invece, è una combinazione lineare dei due casi possibili:
-  </i>
-  <div class="formula-box">
-    \[
-    |1,0\rangle = \frac{1}{\sqrt{2}} \Big( |\uparrow\downarrow\rangle + |\downarrow\uparrow\rangle \Big)
-    \]
-  </div>
-  <i>
-    Per il singoletto (\(S=0, M_S=0\)):
-  </i>
-  <div class="formula-box">
-    \[
-    |0,0\rangle = \frac{1}{\sqrt{2}} \Big( |\uparrow\downarrow\rangle - |\downarrow\uparrow\rangle \Big)
-    \]
-  </div>
-  <i>
-    <b>In sintesi:</b> <br>
-    I coefficienti di Clebsch-Gordan danno i pesi numerici precisi con cui si combinano gli stati dei sottosistemi per ottenere gli autostati di momento angolare totale. Nel caso di due spin 1/2, questi pesi sono sempre \(1\) o \(\pm \frac{1}{\sqrt{2}}\) (o zero per combinazioni non permesse).
-  </i>
-</div>
-<p style="margin-top:2em; background:#f4f8f7; border-left:5px solid #00897b; padding:1.1em 1.4em; border-radius:10px;">
-<b>Conclusione:</b>
-<i>
-Abbiamo visto come, partendo dai principi della meccanica quantistica per particelle identiche, la combinazione dei momenti angolari (spin) di due fermioni porti a stati simmetrici (tripletto) e antisimmetrici (singoletto), ciascuno con proprietà ben distinte. La costruzione degli autostati del sistema totale si basa sui coefficienti di Clebsch-Gordan, che fissano in modo univoco le combinazioni lineari possibili partendo dagli stati separati. In questo modo, la simmetria della funzione d’onda totale rispetta il principio di esclusione di Pauli e riflette le proprietà fondamentali della materia. 
-<br>
-<div class="block-calc">
-  <b>Costruzione esplicita degli stati di spin con notazione generica</b><br>
-  <i>
-    Consideriamo due fermioni identici (es: elettroni), ciascuno descritto da una variabile generica \( q_i = \{\vec{r}_i, \chi_i\} \), dove \( \vec{r}_i \) rappresenta la posizione (di solito in coordinate sferiche: \( r, \theta, \phi \)), e \( \chi_i \) lo stato di spin (spin up o down per il fermione \(i\)).<br>
-    <b>La funzione d’onda totale dipende sia dalle coordinate spaziali che dagli stati di spin:</b> \( \Psi(q_1, q_2) = \psi(\vec{r}_1, \vec{r}_2)\,\chi(\chi_1, \chi_2) \).
-  </i>
-  <br><br>
-  <b>Stati di spin simmetrici (tripletto, \(S=1\)):</b>
-  <ul>
-    <li>
-      <span class="formula-box">
-        \(\chi_{1,1} = \chi_+(1)\chi_+(2)\)
-      </span>
-      <i>&nbsp;&rarr; Entrambi i fermioni con spin up (\(M_S=1\)).</i>
-    </li>
-    <li>
-      <span class="formula-box">
-        \(\chi_{1,0} = \frac{1}{\sqrt{2}}\Big( \chi_+(1)\chi_-(2) + \chi_-(1)\chi_+(2) \Big)\)
-      </span>
-      <i>
-        &nbsp;&rarr; Stato simmetrico e normalizzato (\(M_S=0\)).<br>
-        <b>Normalizzazione esplicita:</b>
-        <div class="formula-box">
-        \[
-        \langle \chi_{1,0} | \chi_{1,0} \rangle = \frac{1}{2}\Big( \langle +-|+- \rangle + \langle -+|+- \rangle + \langle +-| -+ \rangle + \langle -+|-+ \rangle \Big) = 1
-        \]
-        </div>
-      </i>
-    </li>
-    <li>
-      <span class="formula-box">
-        \(\chi_{1,-1} = \chi_-(1)\chi_-(2)\)
-      </span>
-      <i>&nbsp;&rarr; Entrambi i fermioni con spin down (\(M_S = -1\)).</i>
-    </li>
-  </ul>
-  <b>Stato di spin antisimmetrico (singoletto, \(S=0\)):</b>
-  <ul>
-    <li>
-      <span class="formula-box">
-        \(\chi_{0,0} = \frac{1}{\sqrt{2}}\Big( \chi_+(1)\chi_-(2) - \chi_-(1)\chi_+(2) \Big)\)
-      </span>
-      <i>
-        &nbsp;&rarr; Stato antisimmetrico, unico con spin totale zero (\(M_S = 0\)).<br>
-        <b>Normalizzazione esplicita:</b>
-        <div class="formula-box">
-        \[
-        \langle \chi_{0,0} | \chi_{0,0} \rangle = \frac{1}{2}\Big( \langle +-|+- \rangle - \langle -+|+- \rangle - \langle +|-+ \rangle + \langle -+|-+ \rangle \Big) = 1
-        \]
-        </div>
-      </i>
-    </li>
-  </ul>
-  <i>
-    <b>Nota:</b> In questa notazione, ogni \(\chi_\pm(i)\) indica lo stato di spin (up/down) del fermione \(i\).<br>
-    <span style="color:#565;">
-      Se la parte spaziale \(\psi(\vec{r}_1, \vec{r}_2)\) è simmetrica, lo stato di spin deve essere antisimmetrico, e viceversa, per rispettare la simmetrizzazione della funzione d’onda totale.<br>
-      <b>Le variabili di posizione \(\vec{r}_i\) sono tipicamente espresse in coordinate sferiche negli atomi.</b>
-    </span>
-  </i>
-</div>
-
-</i>
-</p>
-
-</div>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="Domanda2025_3.html" data-mq-shared-lesson="somma-spin-due-particelle.html" id="lezione-somma-spin-due-particelle"><div class="lecture-kicker">Lezione approfondita - Argomento 11 - DIM 8</div><h1>Somma di spin di due particelle</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: Domanda2025_3.html. La lezione scientifica verificata è condivisa con somma-spin-due-particelle.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire senza scorciatoie tripletto e singoletto per due spin 1/2, verificarne autovalori e simmetria, ricavare proiettori, correlazioni e spettro dell'interazione isotropa e distinguere il grado di spin dalla statistica della particella completa.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Decomposizione irriducibile</h3><p>Lo spazio di due qubit ha dimensione quattro e si decompone in un sottospazio j uguale uno di dimensione tre e uno j uguale zero di dimensione uno.</p></article><article class="lecture-card lecture-warning"><h3>Spin e particelle identiche</h3><p>La simmetria qui riguarda soltanto il fattore di spin. Per elettroni identici lo stato totale deve essere antisimmetrico, quindi al tripletto va accoppiata una parte spaziale antisimmetrica e al singoletto una parte spaziale simmetrica.</p></article></div><h2>Base prodotto e base del totale</h2><div class="lecture-grid"><article class="lecture-card"><h3>Quattro prodotti</h3><p>La base z separata contiene up-up, up-down, down-up e down-down. È autovettore di S1z e S2z, ma i due stati con proiezione totale zero non sono autovettori individuali di S².</p></article><article class="lecture-card"><h3>Quattro stati accoppiati</h3><p>La base del totale contiene tre stati del tripletto e il singoletto. La trasformazione nella colonna m uguale zero è una matrice di Hadamard con una fase convenzionale.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Valori ammessi<span class="lecture-step-boss">DIM 8</span></h4><p>La regola triangolare applicata a s1 uguale s2 uguale un mezzo lascia soltanto s uguale uno e zero.</p><div aria-label="Decomposizione di due spin un mezzo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \tfrac12\otimes\tfrac12=1\oplus0,\qquad 2\cdot2=3+1\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Peso massimo<span class="lecture-step-boss">BOSS</span></h4><p>L'unico stato con m uguale uno è necessariamente il peso massimo del tripletto.</p><div aria-label="Stato di peso massimo del tripletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |1,1\rangle=|\uparrow\uparrow\rangle,\qquad S_+|1,1\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Prima discesa<span class="lecture-step-boss">CALCOLO</span></h4><p>S- agisce su entrambi i fattori; il coefficiente radice di due sul lato accoppiato fissa la normalizzazione.</p><div aria-label="Derivazione dello stato centrale del tripletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S_-|1,1\rangle=\hbar\sqrt2|1,0\rangle=\hbar(|\downarrow\uparrow\rangle+|\uparrow\downarrow\rangle)\Rightarrow|1,0\rangle=\frac{|\uparrow\downarrow\rangle+|\downarrow\uparrow\rangle}{\sqrt2}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Seconda discesa<span class="lecture-step-boss">CALCOLO</span></h4><p>Una seconda applicazione produce l'unico stato con m uguale meno uno.</p><div aria-label="Derivazione dello stato inferiore del tripletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S_-|1,0\rangle=\hbar\sqrt2|1,-1\rangle=\hbar\sqrt2|\downarrow\downarrow\rangle\Rightarrow|1,-1\rangle=|\downarrow\downarrow\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Singoletto per ortogonalità<span class="lecture-step-boss">DIM 8</span></h4><p>Nel sottospazio m uguale zero resta una sola direzione ortogonale alla combinazione simmetrica.</p><div aria-label="Costruzione ortogonale dello stato singoletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle1,0|0,0\rangle=0,\ \langle0,0|0,0\rangle=1\Rightarrow|0,0\rangle=\frac{|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle}{\sqrt2}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Controllo con i ladder<span class="lecture-step-boss">CHECK</span></h4><p>Il singoletto non possiede altri valori magnetici: entrambi i ladder totali lo annichilano per cancellazione dei due termini.</p><div aria-label="Annullamento del singoletto sotto salita e discesa" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S_\pm|0,0\rangle=(S_{1\pm}+S_{2\pm})\frac{|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle}{\sqrt2}=0\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Autovalori di S²<span class="lecture-step-boss">CHECK</span></h4><p>La regola generale assegna due hbar quadro al tripletto e zero al singoletto.</p><div aria-label="Spettro del quadrato dello spin totale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S^2|s,m\rangle=\hbar^2s(s+1)|s,m\rangle:\quad S^2|1,m\rangle=2\hbar^2|1,m\rangle,\quad S^2|0,0\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Prodotto scalare<span class="lecture-step-boss">ORALE</span></h4><p>Espandere S² consente di leggere il valore di S1·S2 senza calcolo matriciale.</p><div aria-label="Autovalori del prodotto scalare dei due spin" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf S_1\cdot\mathbf S_2=\frac12(S^2-S_1^2-S_2^2)\Rightarrow\begin{cases}\hbar^2/4,&amp;s=1\\-3\hbar^2/4,&amp;s=0\end{cases}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Scambio<span class="lecture-step-boss">PAULI</span></h4><p>Lo scambio lascia invariato ogni tripletto e cambia segno al singoletto.</p><div aria-label="Simmetria di scambio di tripletto e singoletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{12}|1,m\rangle=+|1,m\rangle,\qquad P_{12}|0,0\rangle=-|0,0\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Proiettori<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Poiché sigma1·sigma2 ha autovalori uno e meno tre, i polinomi spettrali isolano i due settori.</p><div aria-label="Proiettori sui settori tripletto e singoletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_T=\frac{3+\boldsymbol\sigma_1\cdot\boldsymbol\sigma_2}{4},\qquad P_S=\frac{1-\boldsymbol\sigma_1\cdot\boldsymbol\sigma_2}{4},\qquad P_T+P_S=I\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Invarianza rotazionale<span class="lecture-step-boss">SINGOLETTO</span></h4><p>S totale annulla il singoletto, quindi una rotazione comune dei due spin lo lascia invariato.</p><div aria-label="Invarianza del singoletto sotto rotazioni globali" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf S|0,0\rangle=0\Rightarrow e^{-i\boldsymbol\theta\cdot\mathbf S/\hbar}|0,0\rangle=|0,0\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Correlazione lungo assi<span class="lecture-step-boss">MISURA</span></h4><p>Le marginali dei singoli spin sono uniformi, ma le misure congiunte conservano una correlazione direzionale esatta.</p><div aria-label="Correlazione del singoletto per assi arbitrari" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle0,0|(\boldsymbol\sigma_1\cdot\mathbf a)(\boldsymbol\sigma_2\cdot\mathbf b)|0,0\rangle=-\mathbf a\cdot\mathbf b,\qquad\langle\boldsymbol\sigma_1\rangle=\langle\boldsymbol\sigma_2\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Riduzione a un qubit<span class="lecture-step-boss">ENTANGLEMENT</span></h4><p>Tracciare uno dei due spin elimina le coerenze locali e lascia lo stato massimamente misto.</p><div aria-label="Matrice ridotta del singoletto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho_S=|0,0\rangle\langle0,0|,\qquad\rho_1=\operatorname{Tr}_2\rho_S=\frac I2,\qquad S(\rho_1)=\log2\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Interazione isotropa<span class="lecture-step-boss">APPLICAZIONE</span></h4><p>Per H proporzionale a S1·S2 i settori accoppiati diagonalizzano automaticamente l'Hamiltoniana.</p><div aria-label="Spettro di un accoppiamento di scambio isotropo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=A\,\mathbf S_1\cdot\mathbf S_2\Rightarrow E_T=A\hbar^2/4,\quad E_S=-3A\hbar^2/4,\quad E_T-E_S=A\hbar^2\)</span></div></article></section><h2>Esempio d'esame: misura del singoletto</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prepara il singoletto e si misura il primo spin lungo z. Il risultato up compare con probabilità un mezzo.</p><p data-i18n-skip="true">\(\displaystyle |0,0\rangle=\frac{|\uparrow\downarrow\rangle-|\downarrow\uparrow\rangle}{\sqrt2}\xrightarrow{S_{1z}=+\hbar/2}|\uparrow\downarrow\rangle,\qquad p=\frac12\)</p><p><strong>Controllo.</strong> Condizionatamente a quel risultato, il secondo spin è down lungo lo stesso asse. Prima della misura nessuno dei due possiede però una direzione locale pura.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Correlazione non significa segnale</h3><p>Il collasso condizionale cambia la descrizione dello stato congiunto, ma la matrice ridotta del secondo spin resta I su due se non si comunica l'esito del primo.</p></article><article class="lecture-card"><h3>Tripletto non sempre parallelo</h3><p>Gli stati m uguale più o meno uno hanno spin paralleli lungo z; lo stato |1,0&gt; è invece una sovrapposizione con risultati opposti lungo z, pur appartenendo al settore simmetrico s uguale uno.</p></article><article class="lecture-card"><h3>Statistica fermionica</h3><p>Tripletto e singoletto descrivono il solo spin anche per particelle distinguibili. La richiesta di antisimmetria totale entra soltanto quando le particelle sono fermioni identici.</p></article><article class="lecture-card"><h3>Convenzione del segno</h3><p>La fase globale del singoletto è irrilevante, ma il segno relativo tra up-down e down-up è fisico: determina ortogonalità, simmetria di scambio e interferenza.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Chiamare tripletto soltanto gli stati paralleli; confondere s con m; assegnare antisimmetria all'intero stato senza considerare la parte spaziale; perdere la radice di due nell'azione di S-; interpretare l'entanglement come segnale.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Contare tre più uno, applicare S±, calcolare S² e S1·S2, scambiare i fattori, verificare P² uguale P per i proiettori e tracciare un sottosistema del singoletto.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Parti dalla decomposizione un mezzo tensoriale un mezzo.</li><li>Costruisci i tre stati del tripletto con S-.</li><li>Ottieni il singoletto per ortogonalità e normalizzazione.</li><li>Verifica ladder, S² e S1·S2 nei due settori.</li><li>Dimostra la simmetria sotto scambio.</li><li>Ricava i proiettori come polinomi di sigma1·sigma2.</li><li>Spiega invarianza rotazionale e correlazione meno a·b.</li><li>Distingui il fattore di spin dall'antisimmetria dello stato totale.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L645">DIM 8 - costruzione completa di tripletto e singoletto</a></li><li><a href="Appunti-MQ.pdf#page=227">Appunti-MQ.pdf, pagine PDF 227-229 - due spin 1/2, ladder e ortogonalità</a></li><li><a href="Domanda2025_3.html">Domanda 2025 n. 3 - momento angolare di due fermioni legati</a></li><li><a href="Domanda2025_18.html">Domanda 2025 n. 18 - composizione di momenti angolari totali</a></li><li><a href="coefficenti-clebsch-gordan.html">Coefficienti di Clebsch-Gordan - cambio di base generale</a></li><li><a href="principio-esclusione-pauli.html">Principio di Pauli - abbinamento tra simmetria spaziale e di spin</a></li></ul><p class="lecture-note">La derivazione conserva la notazione del corso e aggiunge proiettori e matrici ridotte per collegare il risultato a spettroscopia, qubit e particelle identiche.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 11 - DIM 8":"In-depth lesson - Topic 11 - DIM 8","Somma di spin di due particelle":"Addition of two particle spins","Obiettivo.":"Objective.","Costruire senza scorciatoie tripletto e singoletto per due spin 1/2, verificarne autovalori e simmetria, ricavare proiettori, correlazioni e spettro dell'interazione isotropa e distinguere il grado di spin dalla statistica della particella completa.":"Construct the triplet and singlet for two spin-1/2 particles without shortcuts, verify their eigenvalues and symmetry, derive projectors, correlations, and the isotropic-interaction spectrum, and distinguish the spin degree of freedom from full-particle statistics.","Decomposizione irriducibile":"Irreducible decomposition","Lo spazio di due qubit ha dimensione quattro e si decompone in un sottospazio j uguale uno di dimensione tre e uno j uguale zero di dimensione uno.":"The two-qubit space has dimension four and decomposes into a three-dimensional j equals one subspace and a one-dimensional j equals zero subspace.","Spin e particelle identiche":"Spin and identical particles","La simmetria qui riguarda soltanto il fattore di spin. Per elettroni identici lo stato totale deve essere antisimmetrico, quindi al tripletto va accoppiata una parte spaziale antisimmetrica e al singoletto una parte spaziale simmetrica.":"The symmetry here concerns only the spin factor. For identical electrons the total state must be antisymmetric, so the triplet pairs with an antisymmetric spatial part and the singlet with a symmetric spatial part.","Base prodotto e base del totale":"Product basis and total-spin basis","Quattro prodotti":"Four products","La base z separata contiene up-up, up-down, down-up e down-down. È autovettore di S1z e S2z, ma i due stati con proiezione totale zero non sono autovettori individuali di S².":"The separate z basis contains up-up, up-down, down-up, and down-down. It diagonalizes S1z and S2z, but the two states with zero total projection are not individually eigenstates of S².","Quattro stati accoppiati":"Four coupled states","La base del totale contiene tre stati del tripletto e il singoletto. La trasformazione nella colonna m uguale zero è una matrice di Hadamard con una fase convenzionale.":"The total-spin basis contains the three triplet states and the singlet. The transformation in the m equals zero column is a Hadamard matrix with a conventional phase.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Valori ammessi":"1. Allowed values","DIM 8":"DIM 8","La regola triangolare applicata a s1 uguale s2 uguale un mezzo lascia soltanto s uguale uno e zero.":"The triangle rule applied to s1 equals s2 equals one half leaves only s equals one and zero.","Passaggio":"Step","2. Peso massimo":"2. Highest weight","BOSS":"BOSS","L'unico stato con m uguale uno è necessariamente il peso massimo del tripletto.":"The unique state with m equals one is necessarily the highest weight of the triplet.","3. Prima discesa":"3. First lowering","CALCOLO":"CALCULATION","S- agisce su entrambi i fattori; il coefficiente radice di due sul lato accoppiato fissa la normalizzazione.":"S- acts on both factors; the square-root-of-two coefficient on the coupled side fixes normalization.","4. Seconda discesa":"4. Second lowering","Una seconda applicazione produce l'unico stato con m uguale meno uno.":"A second application produces the unique state with m equals minus one.","5. Singoletto per ortogonalità":"5. Singlet by orthogonality","Nel sottospazio m uguale zero resta una sola direzione ortogonale alla combinazione simmetrica.":"In the m equals zero subspace only one direction remains orthogonal to the symmetric combination.","6. Controllo con i ladder":"6. Ladder check","CHECK":"CHECK","Il singoletto non possiede altri valori magnetici: entrambi i ladder totali lo annichilano per cancellazione dei due termini.":"The singlet has no other magnetic values: both total ladder operators annihilate it by cancellation of the two terms.","7. Autovalori di S²":"7. Eigenvalues of S²","La regola generale assegna due hbar quadro al tripletto e zero al singoletto.":"The general rule assigns two hbar squared to the triplet and zero to the singlet.","8. Prodotto scalare":"8. Scalar product","ORALE":"ORAL","Espandere S² consente di leggere il valore di S1·S2 senza calcolo matriciale.":"Expanding S² gives the value of S1·S2 without a matrix calculation.","9. Scambio":"9. Exchange","PAULI":"PAULI","Lo scambio lascia invariato ogni tripletto e cambia segno al singoletto.":"Exchange leaves every triplet unchanged and changes the sign of the singlet.","10. Proiettori":"10. Projectors","ESTENSIONE":"EXTENSION","Poiché sigma1·sigma2 ha autovalori uno e meno tre, i polinomi spettrali isolano i due settori.":"Because sigma1·sigma2 has eigenvalues one and minus three, spectral polynomials isolate the two sectors.","11. Invarianza rotazionale":"11. Rotational invariance","SINGOLETTO":"SINGLET","S totale annulla il singoletto, quindi una rotazione comune dei due spin lo lascia invariato.":"Total S annihilates the singlet, so a common rotation of both spins leaves it invariant.","12. Correlazione lungo assi":"12. Correlation along axes","MISURA":"MEASUREMENT","Le marginali dei singoli spin sono uniformi, ma le misure congiunte conservano una correlazione direzionale esatta.":"Each single-spin marginal is uniform, while joint measurements retain an exact directional correlation.","13. Riduzione a un qubit":"13. One-qubit reduction","ENTANGLEMENT":"ENTANGLEMENT","Tracciare uno dei due spin elimina le coerenze locali e lascia lo stato massimamente misto.":"Tracing out either spin removes local coherences and leaves the maximally mixed state.","14. Interazione isotropa":"14. Isotropic interaction","APPLICAZIONE":"APPLICATION","Per H proporzionale a S1·S2 i settori accoppiati diagonalizzano automaticamente l'Hamiltoniana.":"For H proportional to S1·S2, the coupled sectors automatically diagonalize the Hamiltonian.","Esempio d'esame: misura del singoletto":"Exam example: measuring the singlet","Impostazione.":"Setup.","Si prepara il singoletto e si misura il primo spin lungo z. Il risultato up compare con probabilità un mezzo.":"Prepare the singlet and measure the first spin along z. The up result occurs with probability one half.","Controllo.":"Check.","Condizionatamente a quel risultato, il secondo spin è down lungo lo stesso asse. Prima della misura nessuno dei due possiede però una direzione locale pura.":"Conditioned on that result, the second spin is down along the same axis. Before measurement, however, neither spin has a pure local direction.","Interpretazione e limiti":"Interpretation and limits","Correlazione non significa segnale":"Correlation does not mean signaling","Il collasso condizionale cambia la descrizione dello stato congiunto, ma la matrice ridotta del secondo spin resta I su due se non si comunica l'esito del primo.":"Conditional collapse changes the joint-state description, but the second spin's reduced matrix remains I over two if the first outcome is not communicated.","Tripletto non sempre parallelo":"Triplet is not always parallel","Gli stati m uguale più o meno uno hanno spin paralleli lungo z; lo stato |1,0> è invece una sovrapposizione con risultati opposti lungo z, pur appartenendo al settore simmetrico s uguale uno.":"The m equals plus or minus one states have parallel spins along z; |1,0> is instead a superposition with opposite z outcomes while still belonging to the symmetric s equals one sector.","Statistica fermionica":"Fermionic statistics","Tripletto e singoletto descrivono il solo spin anche per particelle distinguibili. La richiesta di antisimmetria totale entra soltanto quando le particelle sono fermioni identici.":"Triplet and singlet describe spin alone even for distinguishable particles. Total antisymmetry is required only when the particles are identical fermions.","Convenzione del segno":"Sign convention","La fase globale del singoletto è irrilevante, ma il segno relativo tra up-down e down-up è fisico: determina ortogonalità, simmetria di scambio e interferenza.":"The singlet's global phase is irrelevant, but the relative sign between up-down and down-up is physical: it determines orthogonality, exchange symmetry, and interference.","Errori tipici":"Common errors","Chiamare tripletto soltanto gli stati paralleli; confondere s con m; assegnare antisimmetria all'intero stato senza considerare la parte spaziale; perdere la radice di due nell'azione di S-; interpretare l'entanglement come segnale.":"Calling only parallel states the triplet; confusing s with m; assigning antisymmetry to the full state without considering the spatial part; losing the square root of two in S- action; interpreting entanglement as signaling.","Controlli rapidi":"Quick checks","Contare tre più uno, applicare S±, calcolare S² e S1·S2, scambiare i fattori, verificare P² uguale P per i proiettori e tracciare un sottosistema del singoletto.":"Count three plus one, apply S±, compute S² and S1·S2, exchange factors, verify P squared equals P for the projectors, and trace out one singlet subsystem.","Controllo da orale":"Oral exam checklist","Parti dalla decomposizione un mezzo tensoriale un mezzo.":"Start from the one-half tensor one-half decomposition.","Costruisci i tre stati del tripletto con S-.":"Construct the three triplet states with S-.","Ottieni il singoletto per ortogonalità e normalizzazione.":"Obtain the singlet by orthogonality and normalization.","Verifica ladder, S² e S1·S2 nei due settori.":"Verify ladder action, S², and S1·S2 in both sectors.","Dimostra la simmetria sotto scambio.":"Prove symmetry under exchange.","Ricava i proiettori come polinomi di sigma1·sigma2.":"Derive the projectors as polynomials of sigma1·sigma2.","Spiega invarianza rotazionale e correlazione meno a·b.":"Explain rotational invariance and the minus a dot b correlation.","Distingui il fattore di spin dall'antisimmetria dello stato totale.":"Distinguish the spin factor from total-state antisymmetry.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 8 - costruzione completa di tripletto e singoletto":"DIM 8 - complete construction of triplet and singlet","Appunti-MQ.pdf, pagine PDF 227-229 - due spin 1/2, ladder e ortogonalità":"Appunti-MQ.pdf, PDF pages 227-229 - two spin-1/2 systems, ladder, and orthogonality","Domanda 2025 n. 3 - momento angolare di due fermioni legati":"2025 question 3 - angular momentum of two bound fermions","Domanda 2025 n. 18 - composizione di momenti angolari totali":"2025 question 18 - composition of total angular momenta","Coefficienti di Clebsch-Gordan - cambio di base generale":"Clebsch-Gordan coefficients - general basis transformation","Principio di Pauli - abbinamento tra simmetria spaziale e di spin":"Pauli principle - pairing spatial and spin symmetry","La derivazione conserva la notazione del corso e aggiunge proiettori e matrici ridotte per collegare il risultato a spettroscopia, qubit e particelle identiche.":"The derivation preserves the course notation and adds projectors and reduced matrices to connect the result with spectroscopy, qubits, and identical particles.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: Domanda2025_3.html. La lezione scientifica verificata è condivisa con somma-spin-due-particelle.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: Domanda2025_3.html. The verified scientific lesson is shared with somma-spin-due-particelle.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Decomposizione di due spin un mezzo":"Decomposition of two spin-one-half systems","Stato di peso massimo del tripletto":"Highest-weight triplet state","Derivazione dello stato centrale del tripletto":"Derivation of the central triplet state","Derivazione dello stato inferiore del tripletto":"Derivation of the lowest triplet state","Costruzione ortogonale dello stato singoletto":"Orthogonal construction of the singlet state","Annullamento del singoletto sotto salita e discesa":"Annihilation of the singlet by raising and lowering","Spettro del quadrato dello spin totale":"Spectrum of total spin squared","Autovalori del prodotto scalare dei due spin":"Eigenvalues of the two-spin scalar product","Simmetria di scambio di tripletto e singoletto":"Exchange symmetry of triplet and singlet","Proiettori sui settori tripletto e singoletto":"Projectors onto triplet and singlet sectors","Invarianza del singoletto sotto rotazioni globali":"Singlet invariance under global rotations","Correlazione del singoletto per assi arbitrari":"Singlet correlation for arbitrary axes","Matrice ridotta del singoletto":"Reduced density matrix of the singlet","Spettro di un accoppiamento di scambio isotropo":"Spectrum of an isotropic exchange coupling"},"title":{"it":"Somma di spin di due particelle","en":"Addition of two particle spins"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

@@ -1,319 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Correzioni al I ordine per gli stati</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Correzioni al primo ordine per gli stati</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Correzioni al I ordine per gli stati</h1>
-    <p>Il formalismo delle perturbazioni stazionarie permette di calcolare gli effetti di un termine perturbativo sull’energia e sugli stati di un sistema quantistico. In questa pagina, ci concentriamo sulle <strong>correzioni al primo ordine per gli stati</strong>, considerando un sistema con hamiltoniana non degenere.</p>
-
-    <h2>Espansione dell’autofunzione perturbata</h2>
-    <p>Consideriamo l’hamiltoniana perturbata:</p>
-    <div class="formula">
-        \[
-        H = H_0 + \lambda V
-        \]
-    </div>
-    <p>Qui \( H_0 \) rappresenta l’hamiltoniana non perturbata, \( V \) il termine perturbativo e \( \lambda \) è un parametro piccolo che controlla l’intensità della perturbazione. Gli stati corretti al primo ordine sono sviluppati come:</p>
-    <div class="formula">
-        \[
-        \ket{\psi_n} = \ket{\psi_n^{(0)}} + \lambda \ket{\psi_n^{(1)}} + \mathcal{O}(\lambda^2)
-        \]
-    </div>
-    <p>La funzione perturbata al primo ordine, \( \ket{\psi_n^{(1)}} \), viene calcolata imponendo l’ortogonalità tra la correzione e lo stato non perturbato:</p>
-    <div class="formula">
-        \[
-        \bra{\psi_n^{(0)}} \psi_n^{(1)} \rangle = 0
-        \]
-    </div>
-
-    <h2>Correzione al primo ordine per gli stati</h2>
-    <p>Espandendo l’equazione agli autovalori \( H \ket{\psi_n} = E_n \ket{\psi_n} \) al primo ordine, otteniamo un’equazione per \( \ket{\psi_n^{(1)}} \):</p>
-    <div class="formula">
-        \[
-        (H_0 - E_n^{(0)}) \ket{\psi_n^{(1)}} = - (V - \Delta E_n) \ket{\psi_n^{(0)}}
-        \]
-    </div>
-    <p>Moltiplicando scalarmene da sinistra per \( \bra{\psi_m^{(0)}} \), dove \( m \neq n \), otteniamo le componenti della correzione:</p>
-    <div class="formula">
-        \[
-        \braket{\psi_m^{(0)}}{\psi_n^{(1)}} = \frac{\bra{\psi_m^{(0)}} V \ket{\psi_n^{(0)}}}{E_n^{(0)} - E_m^{(0)}}, \quad m \neq n
-        \]
-    </div>
-    <p>Il denominatore rappresenta la differenza di energia tra lo stato base \( \ket{\psi_n^{(0)}} \) e lo stato \( \ket{\psi_m^{(0)}} \), mentre il numeratore è l’elemento di matrice del termine perturbativo tra i due stati.</p>
-
-    <h2>Forma finale dello stato corretto</h2>
-    <p>Combinando i contributi al primo ordine, lo stato corretto è dato da:</p>
-    <div class="formula">
-        \[
-        \ket{\psi_n} \approx \ket{\psi_n^{(0)}} + \sum_{m \neq n} \frac{\bra{\psi_m^{(0)}} V \ket{\psi_n^{(0)}}}{E_n^{(0)} - E_m^{(0)}} \ket{\psi_m^{(0)}}
-        \]
-    </div>
-    <p>Questo risultato mostra come lo stato perturbato sia una combinazione lineare dello stato iniziale e di contributi dagli altri stati della base non perturbata, modulati dall’intensità del termine perturbativo.</p>
-
-    <h2>Osservazioni</h2>
-    <p>Le correzioni al primo ordine per gli stati sono cruciali per prevedere come un sistema quantistico reagisce a una perturbazione. Questa metodologia trova applicazione in una vasta gamma di sistemi, dai livelli energetici atomici agli stati quantistici nei semiconduttori.</p>
-
-    <h2>Interpretazione fisica delle correzioni</h2>
-<p>Le correzioni agli stati descrivono come l'hamiltoniana perturbata modifica le proprietà fisiche del sistema, spostando gli stati iniziali non perturbati verso nuove configurazioni. Questo implica che:</p>
-<ul>
-    <li>Il termine \( \bra{\psi_m^{(0)}} V \ket{\psi_n^{(0)}} \) rappresenta il "peso" del contributo dello stato \( \ket{\psi_m^{(0)}} \) sullo stato corretto \( \ket{\psi_n} \).</li>
-    <li>La differenza \( E_n^{(0)} - E_m^{(0)} \) nel denominatore agisce da fattore di smorzamento: stati energeticamente vicini contribuiscono di più, mentre stati lontani contribuiscono meno.</li>
-</ul>
-<p>In sistemi fisici come gli atomi, questa struttura matematica si traduce, ad esempio, in modifiche alla probabilità di transizione o alla densità di carica elettronica.</p>
-
-<h2>Condizioni di validità</h2>
-<p>Il metodo delle perturbazioni stazionarie al primo ordine è valido quando:</p>
-<ul>
-    <li>La perturbazione \( \lambda V \) è sufficientemente piccola rispetto all’energia caratteristica del sistema \( H_0 \).</li>
-    <li>I livelli energetici non perturbati \( E_n^{(0)} \) e \( E_m^{(0)} \) non sono degeneri, ovvero \( E_n^{(0)} \neq E_m^{(0)} \) per ogni \( m \neq n \).</li>
-</ul>
-<p>Quando queste condizioni non sono soddisfatte, il metodo deve essere modificato o esteso, ad esempio tramite il formalismo per il caso degenere.</p>
-
-<h2>Esempio applicativo</h2>
-<p>Consideriamo un sistema a due livelli con un’hamiltoniana perturbata del tipo:</p>
-<div class="formula">
-    \[
-    H = \begin{pmatrix}
-    E_1^{(0)} & V_{12} \\
-    V_{21} & E_2^{(0)}
-    \end{pmatrix}
-    \]
-</div>
-<p>Calcolando al primo ordine, lo stato corretto del primo livello sarà:</p>
-<div class="formula">
-    \[
-    \ket{\psi_1} \approx \ket{\psi_1^{(0)}} + \frac{V_{21}}{E_1^{(0)} - E_2^{(0)}} \ket{\psi_2^{(0)}}
-    \]
-</div>
-<p>Qui, \( V_{21} \) rappresenta l’elemento di matrice che "mescola" i due stati, mentre il denominatore descrive la separazione energetica tra i livelli. Questo risultato mostra come lo stato perturbato sia una sovrapposizione dello stato iniziale e di contributi dallo stato adiacente.</p>
-
-<h2>Connessione con osservabili</h2>
-<p>Una volta corretto lo stato al primo ordine, è possibile calcolare le osservabili modificate. Ad esempio, la probabilità di trovare il sistema in uno stato \( \ket{\psi_m^{(0)}} \), data da:</p>
-<div class="formula">
-    \[
-    P_m = \left| \braket{\psi_m^{(0)}}{\psi_n} \right|^2
-    \]
-</div>
-<p>Questo valore sarà influenzato dal termine perturbativo, riflettendo l’effetto del mescolamento tra stati.</p>
-
-<h2>Considerazioni finali</h2>
-<p>Le correzioni al primo ordine per gli stati sono essenziali per prevedere i cambiamenti negli stati quantistici indotti da perturbazioni. La comprensione di questi sviluppi è fondamentale in numerose applicazioni fisiche, come l’interazione atomo-campo e lo studio dei materiali quantistici.</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 12</div>
-  <h2>Correzioni al I ordine per gli stati: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Calcolare il mescolamento degli autostati e mantenere una normalizzazione coerente.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La convenzione intermedia impone \(\langle n^0|n\rangle=1\), rendendo la correzione prima ortogonale allo stato imperturbato.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Primo ordine<span class="lecture-step-boss">DIM 7</span></h4>
-      <p>Proiezione su m diverso da n.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|n^{(1)}\rangle=\sum_{m\ne n}|m\rangle\frac{V_{mn}}{E_n^0-E_m^0}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (H_0-E_n^0)|n^{(1)}\rangle=-(V-E_n^{(1)})|n\rangle;\quad\langle m\ne n|\Rightarrow(E_m^0-E_n^0)\langle m|n^{(1)}\rangle=-V_{mn}\Rightarrow|n^{(1)}\rangle=\sum_{m\ne n}|m\rangle\frac{V_{mn}}{E_n^0-E_m^0}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Norma<span class="lecture-step-boss">DIM 7</span></h4>
-      <p>Per normalizzazione a uno serve un termine lungo n al secondo ordine.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|n\rangle_N\simeq\left(1-\frac{\lambda^2}{2}\langle n^{(1)}|n^{(1)}\rangle\right)|n\rangle+\lambda|n^{(1)}\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \||n\rangle+\lambda|n^{(1)}\rangle\|^2=1+\lambda^2\langle n^{(1)}|n^{(1)}\rangle+O(\lambda^3);\quad(1+x)^{-1/2}\simeq1-x/2\Rightarrow|n\rangle_N\simeq\left(1-\frac{\lambda^2}{2}\langle n^{(1)}|n^{(1)}\rangle\right)|n\rangle+\lambda|n^{(1)}\rangle\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Due livelli</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Gap Delta e accoppiamento v.</p>
-    <p><strong>Calcolo.</strong> L'ampiezza mescolata è circa \(v/\Delta\).</p>
-    <p><strong>Risultato e controllo.</strong> La probabilità dell'altro livello è di ordine \(|v/\Delta|^2\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 7</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_8.html">Domanda 2025 n. 8</a> - Perturbazioni stazionarie</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Gap non nullo.</li>
-          <li>Fase e convenzione di normalizzazione dichiarate.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Le energie possono cambiare poco mentre lo stato cambia sensibilmente se un gap è piccolo.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Verifica ortogonalità.</li>
-          <li>Confronta con diagonalizzazione esatta 2x2.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pp. 169-173: correzione degli autovettori e normalizzazione</a></li>
-          <li><a href="MQ.pdf#page=20">MQ.pdf, pp. capitolo 20: mescolamento dei livelli</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-correzioni-stati"><div class="lecture-kicker">Lezione approfondita - Argomento 12 - DIM 7</div><h1>Correzioni al primo ordine per gli stati</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare il mescolamento degli autostati, distinguere normalizzazione intermedia e norma fisica, calcolare fedeltà e correzioni degli osservabili, usare proiettori e selezioni e riconoscere l'insuccesso vicino a una degenerazione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Il ket cambia prima dell'energia</h3><p>Una perturbazione puramente fuori diagonale produce componenti nuove lineari in lambda anche quando E1 è zero. Transizioni e valori medi possono quindi essere sensibili allo stato corretto prima dello spettro.</p></article><article class="lecture-card lecture-warning"><h3>Fase e normalizzazione</h3><p>L'equazione agli autovalori non fissa la fase del ket. La normalizzazione intermedia sceglie un gauge comodo; la normalizzazione unitaria aggiunge correzioni longitudinali che non devono essere confuse col mixing fisico.</p></article></div><h2>Componente longitudinale e trasversa</h2><div class="lecture-grid"><article class="lecture-card "><h3>Direzione n</h3><p>La componente parallela a |n0&gt; può essere modificata da norma e fase senza cambiare la direzione fisica del raggio. Si pone a zero al primo ordine per convenzione.</p></article><article class="lecture-card "><h3>Complemento Q</h3><p>Le componenti sugli altri autostati sono fissate dinamicamente da V_mn diviso il gap. Esse cambiano probabilità e osservabili e costituiscono il vero mescolamento.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Serie del ket<span class="lecture-step-boss">BASE</span></h4><p>Lo stato esatto viene seguito per continuità dal ket n di H0.</p><div class="lecture-formula" aria-label="Espansione perturbativa dell&#x27;autostato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n(\lambda)\rangle=|n^{(0)}\rangle+\lambda|n^{(1)}\rangle+\lambda^2|n^{(2)}\rangle+\cdots\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Gauge intermedio<span class="lecture-step-boss">CONVENZIONE</span></h4><p>Si sceglie sovrapposizione reale unitaria con il ket iniziale.</p><div class="lecture-formula" aria-label="Fissaggio della componente longitudinale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle n^{(0)}|n(\lambda)\rangle=1\Rightarrow\langle n^{(0)}|n^{(r)}\rangle=0\ (r\ge1)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Equazione trasversa<span class="lecture-step-boss">DIM 7</span></h4><p>La parte Q dell'equazione al primo ordine elimina il termine E1 |n0&gt;.</p><div class="lecture-formula" aria-label="Equazione proiettata nel complemento"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle Q_n(H_0-E_n^{(0)})Q_n|n^{(1)}\rangle=-Q_nV|n^{(0)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Coefficienti<span class="lecture-step-boss">BOSS</span></h4><p>L'inversione sul complemento è lecita soltanto se il livello è non degenere.</p><div class="lecture-formula" aria-label="Coefficienti del ket corretto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_{mn}^{(1)}\equiv\langle m^{(0)}|n^{(1)}\rangle=\frac{V_{mn}}{E_n^{(0)}-E_m^{(0)}}\quad(m\ne n)\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Somma completa<span class="lecture-step-boss">DIM 7</span></h4><p>La completezza ricostruisce la correzione come combinazione di tutti i canali ammessi.</p><div class="lecture-formula" aria-label="Correzione dello stato in base spettrale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n^{(1)}\rangle=\sum_{m\ne n}c_{mn}^{(1)}|m^{(0)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Risolvente ridotta<span class="lecture-step-boss">ESTENSIONE</span></h4><p>La forma operatoriale separa la geometria dei proiettori dalla struttura dei gap.</p><div class="lecture-formula" aria-label="Risolvente ridotta applicata alla perturbazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle R'_n=Q_n(E_n^{(0)}-H_0)^{-1}Q_n,\qquad|n^{(1)}\rangle=R'_nV|n^{(0)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Norma intermedia<span class="lecture-step-boss">CHECK</span></h4><p>La componente trasversa aumenta la norma al secondo ordine.</p><div class="lecture-formula" aria-label="Norma del ket in convenzione intermedia"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle n|n\rangle_{\rm int}=1+\lambda^2\sum_{m\ne n}\frac{|V_{mn}|^2}{(E_n^{(0)}-E_m^{(0)})^2}+O(\lambda^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Ket normalizzato<span class="lecture-step-boss">CHECK</span></h4><p>Dividere per la radice della norma aggiunge meno un mezzo della probabilità di mixing lungo n. La parte trasversa al secondo ordine resta separata perché richiede l'equazione dell'ordine successivo.</p><div class="lecture-formula" aria-label="Stato perturbato con norma unitaria fino al secondo ordine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\widetilde n\rangle=\left[1-\frac{\lambda^2}{2}\sum_{m\ne n}\frac{|V_{mn}|^2}{\Delta_{nm}^2}\right]|n^{(0)}\rangle+\lambda\sum_{m\ne n}\frac{V_{mn}}{\Delta_{nm}}|m^{(0)}\rangle+\lambda^2|n_{\perp}^{(2)}\rangle+O(\lambda^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Fedeltà<span class="lecture-step-boss">MISURA</span></h4><p>La probabilità di ritrovare lo stato iniziale perde al secondo ordine la probabilità trasferita negli altri canali.</p><div class="lecture-formula" aria-label="Fedeltà tra stato imperturbato e perturbato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle F_n=|\langle n^{(0)}|\widetilde n\rangle|^2=1-\lambda^2\sum_{m\ne n}\frac{|V_{mn}|^2}{\Delta_{nm}^2}+O(\lambda^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Osservabile al primo ordine<span class="lecture-step-boss">APPLICAZIONE</span></h4><p>Per un operatore A indipendente da lambda, le due interferenze sono complesse coniugate.</p><div class="lecture-formula" aria-label="Correzione di un valore medio dovuta al mixing"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle A\rangle_n= A_{nn}+2\lambda\operatorname{Re}\sum_{m\ne n}\frac{A_{nm}V_{mn}}{E_n^{(0)}-E_m^{(0)}}+O(\lambda^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Regole di selezione<span class="lecture-step-boss">SIMMETRIA</span></h4><p>Un contributo richiede simultaneamente V_mn e A_nm non nulli. La parità dei due operatori decide quali intermedi sopravvivono.</p><div class="lecture-formula" aria-label="Condizione di selezione congiunta per gli osservabili"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \delta\langle A\rangle^{(1)}\ne0\Rightarrow\exists m:\ V_{mn}\ne0\ \land\ A_{nm}\ne0\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Derivata del ket<span class="lecture-step-boss">GEOMETRIA</span></h4><p>Nel gauge intermedio, la prima correzione coincide con la derivata trasversa del ket esatto a lambda zero.</p><div class="lecture-formula" aria-label="Suscettività di fedeltà del livello"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n^{(1)}\rangle=Q_n\left.\frac{d|n(\lambda)\rangle}{d\lambda}\right|_0,\qquad\chi_n\equiv\langle n^{(1)}|n^{(1)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Due livelli e angolo<span class="lecture-step-boss">CONTROLLO</span></h4><p>La diagonalizzazione esatta ruota la base di un angolo theta; lontano dall'incrocio theta coincide col coefficiente perturbativo.</p><div class="lecture-formula" aria-label="Angolo esatto di mixing in un sistema a due livelli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \tan2\theta=\frac{2\lambda|v|}{\Delta},\qquad\theta=\frac{\lambda|v|}{\Delta}+O(\lambda^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Perdita di validità<span class="lecture-step-boss">LIMITE</span></h4><p>La norma della correzione cresce come l'inverso del gap quadro e diverge al crossing nella descrizione non degenere.</p><div class="lecture-formula" aria-label="Criterio di rottura basato sulla norma dello stato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \|n^{(1)}\|^2=\sum_{m\ne n}\frac{|V_{mn}|^2}{\Delta_{nm}^2},\qquad\lambda\|n^{(1)}\|\not\ll1\Rightarrow\text{trattamento degenere}\)</span></div></article></section><h2>Esempio d'esame: mixing in un sistema a due livelli</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> H0 possiede |0&gt; e |1&gt; con gap Delta positivo; V ha elemento fuori diagonale v e diagonali nulle.</p><p data-i18n-skip="true">\(\displaystyle |\widetilde0\rangle=\left(1-\frac{\lambda^2|v|^2}{2\Delta^2}\right)|0\rangle-\lambda\frac{v^*}{\Delta}|1\rangle+O(\lambda^2),\qquad P_1=\lambda^2\frac{|v|^2}{\Delta^2}+O(\lambda^3)\)</p><p><strong>Controllo.</strong> Il termine di ordine lambda quadro non scritto nel ket contiene anche la componente trasversa. La probabilità trasferita è di ordine lambda quadro anche se l'ampiezza è lineare; l'energia cambia con shift meno lambda quadro |v|² su Delta.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Ampiezze e probabilità</h3><p>Il mixing compare linearmente nel ket ma quadraticamente nella probabilità di trovare un altro autostato di H0. I termini di interferenza possono invece correggere linearmente altri osservabili.</p></article><article class="lecture-card "><h3>Scelta di fase</h3><p>Un cambio di fase dipendente da lambda modifica la componente longitudinale della derivata del ket ma non il proiettore fisico né la parte Q usata nelle formule.</p></article><article class="lecture-card "><h3>Risposta lineare</h3><p>La formula per delta&lt;A&gt; contiene lo stesso schema elemento di matrice, gap, elemento di matrice che appare nelle suscettività statiche e nelle polarizzabilità.</p></article><article class="lecture-card "><h3>Stati quasi degeneri</h3><p>Uno stato può ruotare molto anche con uno shift energetico modesto. La norma della correzione è quindi un test più sensibile della sola energia per diagnosticare il breakdown.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Inserire la componente m uguale n nella somma; confondere normalizzazione intermedia con norma uno; omettere il termine longitudinale al secondo ordine; usare il modulo quadro al posto dell'ampiezza; trascurare le fasi nei valori medi.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Ortogonalità a n, unità dei coefficienti, norma fino a lambda quadro, conservazione della probabilità, limite a due livelli e selezioni congiunte di V e A.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Fissa il gauge di normalizzazione intermedia.</li><li>Proietta l'equazione al primo ordine con Q.</li><li>Ricava coefficienti e risolvente ridotta.</li><li>Confronta norma intermedia e ket unitario.</li><li>Calcola fedeltà e probabilità di mixing.</li><li>Ricava la correzione di un osservabile generico.</li><li>Usa le regole di selezione su entrambi gli operatori.</li><li>Diagnostica il breakdown con la norma della correzione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1">DIM 7 - perturbazioni stazionarie non degeneri e degeneri</a></li><li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo</a></li><li><a href="Domanda2025_8.html">Domanda 2025 n. 8 - perturbazioni stazionarie</a></li><li><a href="perturbazioni-non-degenere.html">Caso non degenere - derivazione comune</a></li><li><a href="correzioni-autovalori.html">Correzioni energetiche - confronto con lo shift dello stato</a></li></ul><p class="lecture-note">La pagina distingue esplicitamente ampiezza, probabilità, norma e fase, quattro oggetti che nelle versioni brevi vengono spesso sovrapposti.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 12 - DIM 7":"In-depth lesson - Topic 12 - DIM 7","Correzioni al primo ordine per gli stati":"First-order corrections to states","Obiettivo.":"Objective.","Derivare il mescolamento degli autostati, distinguere normalizzazione intermedia e norma fisica, calcolare fedeltà e correzioni degli osservabili, usare proiettori e selezioni e riconoscere l'insuccesso vicino a una degenerazione.":"Derive eigenstate mixing, distinguish intermediate normalization from physical norm, calculate fidelity and observable corrections, use projectors and selection rules, and recognize failure near a degeneracy.","Il ket cambia prima dell'energia":"The ket changes before the energy","Una perturbazione puramente fuori diagonale produce componenti nuove lineari in lambda anche quando E1 è zero. Transizioni e valori medi possono quindi essere sensibili allo stato corretto prima dello spettro.":"A purely off-diagonal perturbation produces new components linear in lambda even when E1 is zero. Transitions and expectation values may therefore be sensitive to the corrected state before the spectrum.","Fase e normalizzazione":"Phase and normalization","L'equazione agli autovalori non fissa la fase del ket. La normalizzazione intermedia sceglie un gauge comodo; la normalizzazione unitaria aggiunge correzioni longitudinali che non devono essere confuse col mixing fisico.":"The eigenvalue equation does not fix the ket phase. Intermediate normalization chooses a convenient gauge; unit normalization adds longitudinal corrections that must not be confused with physical mixing.","Componente longitudinale e trasversa":"Longitudinal and transverse components","Direzione n":"Direction n","La componente parallela a |n0> può essere modificata da norma e fase senza cambiare la direzione fisica del raggio. Si pone a zero al primo ordine per convenzione.":"The component parallel to |n0> may be changed by norm and phase without changing the physical ray direction. It is set to zero at first order by convention.","Complemento Q":"Q complement","Le componenti sugli altri autostati sono fissate dinamicamente da V_mn diviso il gap. Esse cambiano probabilità e osservabili e costituiscono il vero mescolamento.":"Components along other eigenstates are dynamically fixed by V_mn divided by the gap. They change probabilities and observables and constitute the actual mixing.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Serie del ket":"1. Ket series","BASE":"BASE","Lo stato esatto viene seguito per continuità dal ket n di H0.":"The exact state is followed continuously from ket n of H0.","Passaggio":"Step","2. Gauge intermedio":"2. Intermediate gauge","CONVENZIONE":"CONVENTION","Si sceglie sovrapposizione reale unitaria con il ket iniziale.":"Choose unit real overlap with the initial ket.","3. Equazione trasversa":"3. Transverse equation","DIM 7":"DIM 7","La parte Q dell'equazione al primo ordine elimina il termine E1 |n0>.":"The Q part of the first-order equation removes the E1 |n0> term.","4. Coefficienti":"4. Coefficients","BOSS":"BOSS","L'inversione sul complemento è lecita soltanto se il livello è non degenere.":"Inversion on the complement is valid only if the level is nondegenerate.","5. Somma completa":"5. Complete sum","La completezza ricostruisce la correzione come combinazione di tutti i canali ammessi.":"Completeness reconstructs the correction as a combination of all allowed channels.","6. Risolvente ridotta":"6. Reduced resolvent","ESTENSIONE":"EXTENSION","La forma operatoriale separa la geometria dei proiettori dalla struttura dei gap.":"The operator form separates projector geometry from gap structure.","7. Norma intermedia":"7. Intermediate norm","CHECK":"CHECK","La componente trasversa aumenta la norma al secondo ordine.":"The transverse component increases the norm at second order.","8. Ket normalizzato":"8. Normalized ket","Dividere per la radice della norma aggiunge meno un mezzo della probabilità di mixing lungo n. La parte trasversa al secondo ordine resta separata perché richiede l'equazione dell'ordine successivo.":"Dividing by the norm square root adds minus one half the mixing probability along n. The transverse second-order part remains separate because it requires the next-order equation.","9. Fedeltà":"9. Fidelity","MISURA":"MEASUREMENT","La probabilità di ritrovare lo stato iniziale perde al secondo ordine la probabilità trasferita negli altri canali.":"The probability of recovering the initial state loses at second order the probability transferred to other channels.","10. Osservabile al primo ordine":"10. Observable at first order","APPLICAZIONE":"APPLICATION","Per un operatore A indipendente da lambda, le due interferenze sono complesse coniugate.":"For a lambda-independent operator A, the two interference terms are complex conjugates.","11. Regole di selezione":"11. Selection rules","SIMMETRIA":"SYMMETRY","Un contributo richiede simultaneamente V_mn e A_nm non nulli. La parità dei due operatori decide quali intermedi sopravvivono.":"A contribution requires both V_mn and A_nm to be nonzero. The parity of both operators determines which intermediate states survive.","12. Derivata del ket":"12. Ket derivative","GEOMETRIA":"GEOMETRY","Nel gauge intermedio, la prima correzione coincide con la derivata trasversa del ket esatto a lambda zero.":"In the intermediate gauge, the first correction equals the transverse derivative of the exact ket at lambda zero.","13. Due livelli e angolo":"13. Two levels and angle","CONTROLLO":"CHECK","La diagonalizzazione esatta ruota la base di un angolo theta; lontano dall'incrocio theta coincide col coefficiente perturbativo.":"Exact diagonalization rotates the basis by an angle theta; far from the crossing theta equals the perturbative coefficient.","14. Perdita di validità":"14. Breakdown","LIMITE":"LIMIT","La norma della correzione cresce come l'inverso del gap quadro e diverge al crossing nella descrizione non degenere.":"The correction norm grows as the inverse gap squared and diverges at the crossing in the nondegenerate description.","Esempio d'esame: mixing in un sistema a due livelli":"Exam example: mixing in a two-level system","Impostazione.":"Setup.","H0 possiede |0> e |1> con gap Delta positivo; V ha elemento fuori diagonale v e diagonali nulle.":"H0 has |0> and |1> with positive gap Delta; V has off-diagonal element v and zero diagonal elements.","Controllo.":"Check.","Il termine di ordine lambda quadro non scritto nel ket contiene anche la componente trasversa. La probabilità trasferita è di ordine lambda quadro anche se l'ampiezza è lineare; l'energia cambia con shift meno lambda quadro |v|² su Delta.":"The unwritten order-lambda-squared ket term also contains the transverse component. Transferred probability is order lambda squared even though the amplitude is linear; the energy changes by minus lambda squared |v|² over Delta.","Interpretazione e limiti":"Interpretation and limits","Ampiezze e probabilità":"Amplitudes and probabilities","Il mixing compare linearmente nel ket ma quadraticamente nella probabilità di trovare un altro autostato di H0. I termini di interferenza possono invece correggere linearmente altri osservabili.":"Mixing appears linearly in the ket but quadratically in the probability of finding another H0 eigenstate. Interference terms may instead linearly correct other observables.","Scelta di fase":"Phase choice","Un cambio di fase dipendente da lambda modifica la componente longitudinale della derivata del ket ma non il proiettore fisico né la parte Q usata nelle formule.":"A lambda-dependent phase change modifies the longitudinal component of the ket derivative but not the physical projector or the Q part used in formulas.","Risposta lineare":"Linear response","La formula per delta<A> contiene lo stesso schema elemento di matrice, gap, elemento di matrice che appare nelle suscettività statiche e nelle polarizzabilità.":"The delta<A> formula contains the same matrix-element, gap, matrix-element pattern found in static susceptibilities and polarizabilities.","Stati quasi degeneri":"Nearly degenerate states","Uno stato può ruotare molto anche con uno shift energetico modesto. La norma della correzione è quindi un test più sensibile della sola energia per diagnosticare il breakdown.":"A state may rotate strongly even with a modest energy shift. The correction norm is therefore a more sensitive breakdown diagnostic than energy alone.","Errori tipici":"Common errors","Inserire la componente m uguale n nella somma; confondere normalizzazione intermedia con norma uno; omettere il termine longitudinale al secondo ordine; usare il modulo quadro al posto dell'ampiezza; trascurare le fasi nei valori medi.":"Including the m equals n component in the sum; confusing intermediate normalization with unit norm; omitting the second-order longitudinal term; using squared modulus instead of amplitude; neglecting phases in expectation values.","Controlli rapidi":"Quick checks","Ortogonalità a n, unità dei coefficienti, norma fino a lambda quadro, conservazione della probabilità, limite a due livelli e selezioni congiunte di V e A.":"Check orthogonality to n, coefficient units, norm through lambda squared, probability conservation, the two-level limit, and joint selection rules for V and A.","Controllo da orale":"Oral exam checklist","Fissa il gauge di normalizzazione intermedia.":"Fix the intermediate-normalization gauge.","Proietta l'equazione al primo ordine con Q.":"Project the first-order equation with Q.","Ricava coefficienti e risolvente ridotta.":"Derive coefficients and the reduced resolvent.","Confronta norma intermedia e ket unitario.":"Compare intermediate norm and unit ket.","Calcola fedeltà e probabilità di mixing.":"Calculate fidelity and mixing probabilities.","Ricava la correzione di un osservabile generico.":"Derive the correction to a generic observable.","Usa le regole di selezione su entrambi gli operatori.":"Apply selection rules to both operators.","Diagnostica il breakdown con la norma della correzione.":"Diagnose breakdown with the correction norm.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 7 - perturbazioni stazionarie non degeneri e degeneri":"DIM 7 - nondegenerate and degenerate stationary perturbation theory","Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo":"Appunti-MQ.pdf, PDF pages 169-175 - time-independent theory","Domanda 2025 n. 8 - perturbazioni stazionarie":"2025 question 8 - stationary perturbations","Caso non degenere - derivazione comune":"Nondegenerate case - common derivation","Correzioni energetiche - confronto con lo shift dello stato":"Energy corrections - comparison with state shifts","La pagina distingue esplicitamente ampiezza, probabilità, norma e fase, quattro oggetti che nelle versioni brevi vengono spesso sovrapposti.":"The page explicitly distinguishes amplitude, probability, norm, and phase, four objects often conflated in short versions.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Espansione perturbativa dell'autostato":"Perturbative eigenstate expansion","Fissaggio della componente longitudinale":"Fixing the longitudinal component","Equazione proiettata nel complemento":"Equation projected onto the complement","Coefficienti del ket corretto":"Coefficients of the corrected ket","Correzione dello stato in base spettrale":"State correction in the spectral basis","Risolvente ridotta applicata alla perturbazione":"Reduced resolvent applied to the perturbation","Norma del ket in convenzione intermedia":"Norm of the intermediate-normalized ket","Stato perturbato con norma unitaria fino al secondo ordine":"Unit-normalized perturbed state through second order","Fedeltà tra stato imperturbato e perturbato":"Fidelity between unperturbed and perturbed states","Correzione di un valore medio dovuta al mixing":"Expectation-value correction due to mixing","Condizione di selezione congiunta per gli osservabili":"Joint selection condition for observables","Suscettività di fedeltà del livello":"Fidelity susceptibility of the level","Angolo esatto di mixing in un sistema a due livelli":"Exact mixing angle in a two-level system","Criterio di rottura basato sulla norma dello stato":"State-norm breakdown criterion"},"title":{"it":"Correzioni al primo ordine per gli stati","en":"First-order corrections to states"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

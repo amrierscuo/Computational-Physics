@@ -1,385 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rappresentazioni Matriciali del Momento Angolare</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappresentazioni matriciali del momento angolare</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Rappresentazioni Matriciali del Momento Angolare</h1>
-    <h2>Operatori del momento angolare</h2>
-    Gli operatori del momento angolare \(\mathbf{L}\) in meccanica quantistica soddisfano le relazioni di commutazione fondamentali:
-    <div class="formula">
-        \[
-        [L_x, L_y] = i \hbar L_z, \quad [L_y, L_z] = i \hbar L_x, \quad [L_z, L_x] = i \hbar L_y
-        \]
-    </div>
-    Il momento angolare totale \(\mathbf{L}^2\) e la componente lungo \(z\), \(L_z\), sono simultaneamente osservabili, poiché:
-    <div class="formula">
-        \[
-        [\mathbf{L}^2, L_z] = 0
-        \]
-    </div>
-
-    <h2>Autovalori e autofunzioni</h2>
-    Gli operatori \(\mathbf{L}^2\) e \(L_z\) agiscono sugli autostati \(|l, m\rangle\) secondo:
-    <div class="formula">
-        \[
-        \mathbf{L}^2 |l, m\rangle = \hbar^2 l(l+1) |l, m\rangle, \quad L_z |l, m\rangle = \hbar m |l, m\rangle
-        \]
-    </div>
-    dove \(l\) è il numero quantico del momento angolare (\(l = 0, 1, 2, \ldots\)) e \(m\) è il numero quantico magnetico (\(m = -l, -l+1, \ldots, l\)).
-
-    <h2>Rappresentazioni matriciali</h2>
-    La rappresentazione matriciale degli operatori del momento angolare è definita nello spazio degli stati \(|l, m\rangle\). Per un dato valore di \(l\), il sistema ha dimensione \(2l+1\).
-
-    <h3>Componente \(L_z\)</h3>
-    La matrice associata a \(L_z\) è diagonale:
-    <div class="formula">
-        \[
-        L_z =
-        \begin{pmatrix}
-        l \hbar & 0 & \cdots & 0 \\
-        0 & (l-1)\hbar & \cdots & 0 \\
-        \vdots & \vdots & \ddots & \vdots \\
-        0 & 0 & \cdots & -l \hbar
-        \end{pmatrix}
-        \]
-    </div>
-
-    <h3>Operatori di salita e discesa</h3>
-    Gli operatori di salita \(L_+\) e discesa \(L_-\) sono definiti come:
-    <div class="formula">
-        \[
-        L_\pm = L_x \pm i L_y
-        \]
-    </div>
-    Essi agiscono sugli stati \(|l, m\rangle\) come segue:
-    <div class="formula">
-        \[
-        L_\pm |l, m\rangle = \hbar \sqrt{l(l+1) - m(m \pm 1)} |l, m \pm 1\rangle
-        \]
-    </div>
-
-    <h3>Matrice di \(L_x\) e \(L_y\)</h3>
-    Gli operatori \(L_x\) e \(L_y\) possono essere espressi in termini di \(L_+\) e \(L_-\):
-    <div class="formula">
-        \[
-        L_x = \frac{L_+ + L_-}{2}, \quad L_y = \frac{L_+ - L_-}{2i}
-        \]
-    </div>
-    Le loro rappresentazioni matriciali si ottengono combinando le matrici di \(L_+\) e \(L_-\).
-
-    <h2>Interpretazione fisica</h2>
-    Le rappresentazioni matriciali del momento angolare sono fondamentali per descrivere sistemi con simmetria sferica, come atomi e nuclei. 
-    Questi strumenti sono utilizzati per analizzare la struttura fine degli spettri atomici e per studiare le interazioni spin-orbita.
-<h2>Dettagli matematici: operatori di salita e discesa</h2>
-<p>
-    Gli operatori di salita e discesa, \( L_+ \) e \( L_- \), giocano un ruolo fondamentale nella costruzione delle matrici del momento angolare.
-    Partendo dalle relazioni di commutazione e dalle regole di azione di \( L_+ \) e \( L_- \) sugli autostati \(|l, m\rangle\), possiamo derivare le matrici.
-</p>
-<div class="formula">
-    \[
-    L_\pm |l, m\rangle = \hbar \sqrt{l(l+1) - m(m \pm 1)} |l, m \pm 1\rangle
-    \]
-</div>
-<p>
-    Le componenti \( L_x \) e \( L_y \) sono espresse in termini di \( L_+ \) e \( L_- \):
-</p>
-<div class="formula">
-    \[
-    L_x = \frac{L_+ + L_-}{2}, \quad L_y = \frac{L_+ - L_-}{2i}
-    \]
-</div>
-
-<h2>Costruzione della matrice per \( L_+ \) e \( L_- \)</h2>
-<p>
-    Consideriamo un esempio con \( l = 1 \) per illustrare il procedimento. Lo spazio degli stati è \(|1, 1\rangle\), \(|1, 0\rangle\), \(|1, -1\rangle\).
-    La matrice di \( L_+ \) è non diagonale e agisce come segue:
-</p>
-<ul>
-    <li>\( L_+ |1, -1\rangle = \hbar \sqrt{2} |1, 0\rangle \)</li>
-    <li>\( L_+ |1, 0\rangle = \hbar \sqrt{2} |1, 1\rangle \)</li>
-    <li>\( L_+ |1, 1\rangle = 0 \)</li>
-</ul>
-<p>
-    Questo si traduce nella matrice:
-</p>
-<div class="formula">
-    \[
-    L_+ =
-    \begin{pmatrix}
-    0 & \hbar \sqrt{2} & 0 \\
-    0 & 0 & \hbar \sqrt{2} \\
-    0 & 0 & 0
-    \end{pmatrix}
-    \]
-</div>
-<p>
-    La matrice di \( L_- \) è l'operatore Hermitiano coniugato di \( L_+ \):
-</p>
-<div class="formula">
-    \[
-    L_- =
-    \begin{pmatrix}
-    0 & 0 & 0 \\
-    \hbar \sqrt{2} & 0 & 0 \\
-    0 & \hbar \sqrt{2} & 0
-    \end{pmatrix}
-    \]
-</div>
-
-<h2>Costruzione delle matrici \( L_x \) e \( L_y \)</h2>
-<p>
-    Con \( L_+ \) e \( L_- \) noti, le matrici per \( L_x \) e \( L_y \) possono essere calcolate:
-</p>
-<div class="formula">
-    \[
-    L_x = \frac{L_+ + L_-}{2}, \quad
-    L_y = \frac{L_+ - L_-}{2i}
-    \]
-</div>
-<p>
-    Per \( l = 1 \), queste diventano:
-</p>
-<div class="formula">
-    \[
-    L_x =
-    \frac{\hbar}{\sqrt{2}}
-    \begin{pmatrix}
-    0 & 1 & 0 \\
-    1 & 0 & 1 \\
-    0 & 1 & 0
-    \end{pmatrix},
-    \quad
-    L_y =
-    \frac{\hbar}{\sqrt{2}}
-    \begin{pmatrix}
-    0 & -i & 0 \\
-    i & 0 & -i \\
-    0 & i & 0
-    \end{pmatrix}
-    \]
-</div>
-
-<h2>Applicazioni delle matrici del momento angolare</h2>
-<p>
-    Le matrici ottenute hanno ampie applicazioni in fisica teorica, dalla descrizione della struttura fine degli spettri atomici 
-    allo studio delle interazioni spin-orbita nei sistemi atomici e nucleari. Esse sono anche utilizzate per calcolare 
-    l'evoluzione temporale degli stati quantistici attraverso il formalismo di Heisenberg.
-</p>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 7</div>
-  <h2>Rappresentazioni Matriciali del Momento Angolare: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Costruire le matrici di momento angolare e verificare l'algebra.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>In base \(|j,m\rangle\), \(J_z\) è diagonale e \(J_\pm\) hanno una sola diagonale non nulla. Le matrici dipendono dalla base, invarianti e spettro no.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Elementi<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>Usa la formula scala.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="(J_+)_{m&#x27;,m}=\hbar\sqrt{j(j+1)-m(m+1)}\,\delta_{m&#x27;,m+1}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (J_+)_{m',m}=\langle j,m'|J_+|j,m\rangle=\hbar\sqrt{j(j+1)-m(m+1)}\langle j,m'|j,m+1\rangle\Rightarrow(J_+)_{m',m}=\hbar\sqrt{j(j+1)-m(m+1)}\delta_{m',m+1}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Cartesiane<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>Ricostruzione.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="J_x=(J_++J_-)/2,\quad J_y=(J_+-J_-)/(2i)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle J_+=J_x+iJ_y,\quad J_-=J_x-iJ_y\Rightarrow J_x=(J_++J_-)/2,\quad J_y=(J_+-J_-)/(2i)\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Spin 1/2</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per \(j=1/2\).</p>
-    <p><strong>Calcolo.</strong> Si ottiene \(J_i=\hbar\sigma_i/2\).</p>
-    <p><strong>Risultato e controllo.</strong> Le matrici di Pauli sono la più piccola rappresentazione non banale di su(2).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 15</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Ordinamento della base dichiarato.</li>
-          <li>Fasi coerenti degli autostati.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La verifica matriciale è un controllo concreto delle formule astratte e impedisce errori di segno.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Calcola i tre commutatori.</li>
-          <li>Verifica \(J^2=3\hbar^2I/4\).</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=194">Appunti-MQ.pdf, pp. 194-200: matrici di J in base |j,m&gt;</a></li>
-          <li><a href="MQ.pdf#page=13">MQ.pdf, pp. capitolo 13: elementi di matrice degli operatori scala</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-rappresentazioni-matriciali"><div class="lecture-kicker">Lezione approfondita - Argomento 7 - DIM 15</div><h1>Rappresentazioni matriciali del momento angolare</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire le matrici di Jz, J più, J meno, Jx e Jy nella base ordinata |j,m&gt;, verificare hermiticità, commutatori e Casimir, derivare i casi j un mezzo e j uno e ottenere rotazioni finite, autostati lungo un asse e tracce invarianti.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Ogni j è un blocco finito</h3><p>Fissato j, l'algebra agisce su 2j+1 stati e diventa una rappresentazione matriciale irriducibile. I ladder riempiono soltanto le diagonali adiacenti.</p></article><article class="lecture-card lecture-warning"><h3>L'ordine della base conta</h3><p>Si ordina m da j a meno j. Cambiare ordine permuta righe e colonne; le posizioni dei coefficienti cambiano ma algebra e spettro restano uguali.</p></article></div><h2>Base standard e elementi di matrice</h2><div class="lecture-grid"><article class="lecture-card "><h3>Ordine</h3><p>Si usa B_j=(|j,j&gt;,|j,j-1&gt;,...,|j,-j&gt;). La colonna n rappresenta il ket sul quale agisce l'operatore.</p></article><article class="lecture-card "><h3>Unità</h3><p>Si fattorizza hbar per mostrare matrici numeriche adimensionali, ricordando che gli operatori fisici hanno unità di momento angolare.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Elementi di Jz<span class="lecture-step-boss">DIAGONALE</span></h4><p>La base scelta diagonalizza Jz.</p><div class="lecture-formula" aria-label="Elementi di matrice di Jz"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle j,m'|J_z|j,m\rangle=\hbar m\,\delta_{m'm}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Elementi di J più<span class="lecture-step-boss">SOVRADIAGONALE</span></h4><p>J più porta la colonna m nella riga m più uno con il coefficiente ladder.</p><div class="lecture-formula" aria-label="Elementi di matrice di J più"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle j,m'|J_+|j,m\rangle=\hbar\sqrt{j(j+1)-m(m+1)}\,\delta_{m',m+1}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. J meno<span class="lecture-step-boss">AGGIUNTO</span></h4><p>Hermiticità di Jx e Jy rende J meno l'aggiunto coniugato di J più.</p><div class="lecture-formula" aria-label="Elementi di matrice di J meno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_-=J_+^\dagger,\qquad\langle j,m'|J_-|j,m\rangle=\hbar\sqrt{j(j+1)-m(m-1)}\,\delta_{m',m-1}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Componenti cartesiane<span class="lecture-step-boss">RICOSTRUISCI</span></h4><p>Somma e differenza dei ladder restituiscono due matrici hermitiane.</p><div class="lecture-formula" aria-label="Ricostruzione di Jx e Jy"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_x=\frac{J_++J_-}{2},\qquad J_y=\frac{J_+-J_-}{2i}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Casimir matriciale<span class="lecture-step-boss">BLOCCO j</span></h4><p>In una rappresentazione irriducibile fissata, J quadrato è proporzionale all'identità per Schur e per lo spettro già derivato.</p><div class="lecture-formula" aria-label="Casimir nella rappresentazione j"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_x^2+J_y^2+J_z^2=\hbar^2j(j+1)I_{2j+1}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Tracce<span class="lecture-step-boss">INVARIANTI</span></h4><p>La simmetria dei valori m rende nulla la traccia di ogni generatore; l'isotropia divide la traccia del Casimir in tre parti uguali.</p><div class="lecture-formula" aria-label="Tracce quadratiche dei generatori"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \operatorname{tr}J_i=0,\qquad\operatorname{tr}(J_iJ_j)=\frac{\hbar^2}{3}j(j+1)(2j+1)\delta_{ij}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Caso j un mezzo<span class="lecture-step-boss">PAULI</span></h4><p>La base più,meno produce direttamente metà hbar volte le matrici di Pauli.</p><div class="lecture-formula" aria-label="Rappresentazione spinoriale j un mezzo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_x=\frac\hbar2\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix},\quad J_y=\frac\hbar2\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix},\quad J_z=\frac\hbar2\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Identità di Pauli<span class="lecture-step-boss">PRODOTTO</span></h4><p>Il prodotto di due matrici sigma separa prodotto scalare e prodotto vettoriale.</p><div class="lecture-formula" aria-label="Identità di prodotto delle matrici di Pauli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (\boldsymbol\sigma\cdot\mathbf a)(\boldsymbol\sigma\cdot\mathbf b)=\mathbf a\cdot\mathbf b\,I+i\boldsymbol\sigma\cdot(\mathbf a\times\mathbf b)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Caso j uno<span class="lecture-step-boss">TRE PER TRE</span></h4><p>I coefficienti ladder sono entrambi hbar radice due nella base m=1,0,meno1.</p><div class="lecture-formula" aria-label="Matrici Jz e J più per j uno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_z=\hbar\begin{pmatrix}1&amp;0&amp;0\\0&amp;0&amp;0\\0&amp;0&amp;-1\end{pmatrix},\quad J_+=\hbar\sqrt2\begin{pmatrix}0&amp;1&amp;0\\0&amp;0&amp;1\\0&amp;0&amp;0\end{pmatrix}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Jx e Jy per j uno<span class="lecture-step-boss">RICAVA</span></h4><p>Applicare le combinazioni cartesiane produce matrici hermitiane tridiagonali.</p><div class="lecture-formula" aria-label="Matrici trasverse per j uno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_x=\frac\hbar{\sqrt2}\begin{pmatrix}0&amp;1&amp;0\\1&amp;0&amp;1\\0&amp;1&amp;0\end{pmatrix},\quad J_y=\frac\hbar{\sqrt2}\begin{pmatrix}0&amp;-i&amp;0\\i&amp;0&amp;-i\\0&amp;i&amp;0\end{pmatrix}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Verifica del commutatore<span class="lecture-step-boss">MOLTIPLICA</span></h4><p>Il prodotto matriciale deve riprodurre i hbar Jz e cicliche, fornendo un controllo sensibile di segni e ordine.</p><div class="lecture-formula" aria-label="Verifica matriciale dell&#x27;algebra"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J_xJ_y-J_yJ_x=i\hbar J_z\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Rotazione finita<span class="lecture-step-boss">ESPONENZIALE</span></h4><p>La matrice di rotazione nella rappresentazione j è l'esponenziale del generatore lungo l'asse.</p><div class="lecture-formula" aria-label="Matrice di rotazione nel multipletto j"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle D^{(j)}_{\hat n}(\theta)=\exp\left(-\frac{i\theta}{\hbar}\hat n\cdot\mathbf J^{(j)}\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Rotazione spinoriale<span class="lecture-step-boss">CHIUSA</span></h4><p>Per j un mezzo, (n dot sigma) quadrato vale I e la serie esponenziale si separa in seno e coseno.</p><div class="lecture-formula" aria-label="Forma chiusa della rotazione di spin un mezzo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle D^{(1/2)}_{\hat n}(\theta)=\cos\frac\theta2\,I-i\sin\frac\theta2\,\hat n\cdot\boldsymbol\sigma\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Asse arbitrario<span class="lecture-step-boss">AUTOSTATI</span></h4><p>Gli autostati di J_n si ottengono ruotando quelli di Jz; per spin un mezzo le probabilità dipendono dall'angolo tra assi.</p><div class="lecture-formula" aria-label="Autostati lungo un asse ruotato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |j,m\rangle_{\hat n}=D^{(j)}(R_{z\to n})|j,m\rangle_z,\qquad|\langle+\hat n|+\hat z\rangle|^2=\cos^2\frac\theta2\)</span></div></article></section><h2>Esempio: rotazione di pi attorno a y per spin un mezzo</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si usa la forma chiusa con n uguale y e theta uguale pi.</p><p data-i18n-skip="true">\(\displaystyle D_y^{(1/2)}(\pi)=-i\sigma_y=\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix},\quad D_y(\pi)|+z\rangle=|-z\rangle,\quad D_y(2\pi)=-I\)</p><p><strong>Controllo.</strong> La rotazione di pi inverte la proiezione z; quella di 2 pi cambia il segno dello spinore ma non il raggio fisico. Una rotazione di 4 pi restituisce il ket.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Rappresentazioni equivalenti</h3><p>Un cambio unitario di base trasforma tutti i J_i per similitudine. Le matrici cambiano, ma commutatori, Casimir, tracce e rotazioni fisiche restano invarianti.</p></article><article class="lecture-card "><h3>Blocchi riducibili</h3><p>Uno spazio che contiene più valori j ha matrici a blocchi. Operatori scalari non mescolano j diversi; operatori tensoriali possono farlo secondo regole di selezione.</p></article><article class="lecture-card "><h3>Rotazione orbitale</h3><p>Per ell intero D^(ell)(2pi)=I. Per j semintero vale meno I, riflettendo il doppio ricoprimento SU(2) verso SO(3).</p></article><article class="lecture-card "><h3>Calcolo numerico</h3><p>Le formule sparse dei ladder sono il modo stabile per costruire matrici a j grande; esponenziali possono essere calcolati dopo aver verificato hermiticità e Casimir.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Mettere J più sulla diagonale sbagliata per l'ordine scelto; perdere hbar radice due nel caso j uno; scrivere Jy reale; confondere Pauli sigma con J stesso; usare angolo theta invece di theta su due nello spinore.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Jz è reale diagonale; J meno è J più aggiunto; Jx,Jy sono hermitiani; tracce nulle; Casimir j(j+1); commutatore corretto; l'esponenziale di un hermitiano con meno i è unitario.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Fissa l'ordine della base.</li><li>Scrivi elementi di Jz e J più.</li><li>Ottieni J meno, Jx e Jy.</li><li>Verifica hermiticità, commutatore e Casimir.</li><li>Costruisci j un mezzo con Pauli.</li><li>Costruisci le matrici j uno.</li><li>Esponenzia una rotazione finita.</li><li>Controlla asse arbitrario e segno a 2 pi.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, rotazioni e momento angolare</a></li><li><a href="boss/P2_DIM_7-12.txt#L385">DIM 8 - algebra, ladder e composizione</a></li><li><a href="Appunti-MQ.pdf#page=194">Appunti-MQ.pdf, pagine PDF 194-199 - elementi di matrice e rotazioni finite</a></li></ul><p class="lecture-note">La catena è stata confrontata con le pagine PDF verificate 194-199 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 7 - DIM 15":"In-depth lesson - Topic 7 - DIM 15","Rappresentazioni matriciali del momento angolare":"Matrix representations of angular momentum","Obiettivo.":"Objective.","Costruire le matrici di Jz, J più, J meno, Jx e Jy nella base ordinata |j,m>, verificare hermiticità, commutatori e Casimir, derivare i casi j un mezzo e j uno e ottenere rotazioni finite, autostati lungo un asse e tracce invarianti.":"Construct matrices of Jz, J plus, J minus, Jx, and Jy in the ordered |j,m> basis, verify Hermiticity, commutators, and the Casimir, derive the j one-half and j one cases, and obtain finite rotations, eigenstates along an axis, and invariant traces.","Ogni j è un blocco finito":"Each j is a finite block","Fissato j, l'algebra agisce su 2j+1 stati e diventa una rappresentazione matriciale irriducibile. I ladder riempiono soltanto le diagonali adiacenti.":"For fixed j, the algebra acts on 2j+1 states and becomes an irreducible matrix representation. Ladders fill only adjacent diagonals.","L'ordine della base conta":"Basis order matters","Si ordina m da j a meno j. Cambiare ordine permuta righe e colonne; le posizioni dei coefficienti cambiano ma algebra e spettro restano uguali.":"Order m from j to minus j. Changing order permutes rows and columns; coefficient positions change but algebra and spectrum remain the same.","Base standard e elementi di matrice":"Standard basis and matrix elements","Ordine":"Ordering","Si usa B_j=(|j,j>,|j,j-1>,...,|j,-j>). La colonna n rappresenta il ket sul quale agisce l'operatore.":"Use B_j=(|j,j>,|j,j-1>,...,|j,-j>). Column n represents the ket acted on by the operator.","Unità":"Units","Si fattorizza hbar per mostrare matrici numeriche adimensionali, ricordando che gli operatori fisici hanno unità di momento angolare.":"Factor out hbar to display dimensionless numerical matrices, remembering physical operators carry angular-momentum units.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Elementi di Jz":"1. Jz elements","DIAGONALE":"DIAGONAL","La base scelta diagonalizza Jz.":"The chosen basis diagonalizes Jz.","Passaggio":"Step","2. Elementi di J più":"2. J plus elements","SOVRADIAGONALE":"SUPERDIAGONAL","J più porta la colonna m nella riga m più uno con il coefficiente ladder.":"J plus maps column m into row m plus one with the ladder coefficient.","3. J meno":"3. J minus","AGGIUNTO":"ADJOINT","Hermiticità di Jx e Jy rende J meno l'aggiunto coniugato di J più.":"Hermiticity of Jx and Jy makes J minus the conjugate adjoint of J plus.","4. Componenti cartesiane":"4. Cartesian components","RICOSTRUISCI":"RECONSTRUCT","Somma e differenza dei ladder restituiscono due matrici hermitiane.":"Sum and difference of ladders return two Hermitian matrices.","5. Casimir matriciale":"5. Matrix Casimir","BLOCCO j":"j BLOCK","In una rappresentazione irriducibile fissata, J quadrato è proporzionale all'identità per Schur e per lo spettro già derivato.":"In a fixed irreducible representation, J squared is proportional to identity by Schur and the previously derived spectrum.","6. Tracce":"6. Traces","INVARIANTI":"INVARIANTS","La simmetria dei valori m rende nulla la traccia di ogni generatore; l'isotropia divide la traccia del Casimir in tre parti uguali.":"Symmetry of m values makes each generator traceless; isotropy divides the Casimir trace into three equal parts.","7. Caso j un mezzo":"7. j one-half case","PAULI":"PAULI","La base più,meno produce direttamente metà hbar volte le matrici di Pauli.":"The plus,minus basis directly gives hbar over two times Pauli matrices.","8. Identità di Pauli":"8. Pauli identity","PRODOTTO":"PRODUCT","Il prodotto di due matrici sigma separa prodotto scalare e prodotto vettoriale.":"The product of two sigma matrices separates dot and cross products.","9. Caso j uno":"9. j one case","TRE PER TRE":"THREE BY THREE","I coefficienti ladder sono entrambi hbar radice due nella base m=1,0,meno1.":"Both ladder coefficients are hbar square root two in basis m=1,0,minus1.","10. Jx e Jy per j uno":"10. Jx and Jy for j one","RICAVA":"DERIVE","Applicare le combinazioni cartesiane produce matrici hermitiane tridiagonali.":"Apply Cartesian combinations to produce Hermitian tridiagonal matrices.","11. Verifica del commutatore":"11. Commutator check","MOLTIPLICA":"MULTIPLY","Il prodotto matriciale deve riprodurre i hbar Jz e cicliche, fornendo un controllo sensibile di segni e ordine.":"Matrix multiplication must reproduce i hbar Jz and cyclic relations, providing a sensitive sign and ordering check.","12. Rotazione finita":"12. Finite rotation","ESPONENZIALE":"EXPONENTIAL","La matrice di rotazione nella rappresentazione j è l'esponenziale del generatore lungo l'asse.":"The rotation matrix in representation j is the exponential of the generator along the axis.","13. Rotazione spinoriale":"13. Spinor rotation","CHIUSA":"CLOSED FORM","Per j un mezzo, (n dot sigma) quadrato vale I e la serie esponenziale si separa in seno e coseno.":"For j one half, (n dot sigma) squared equals I and the exponential series separates into sine and cosine.","14. Asse arbitrario":"14. Arbitrary axis","AUTOSTATI":"EIGENSTATES","Gli autostati di J_n si ottengono ruotando quelli di Jz; per spin un mezzo le probabilità dipendono dall'angolo tra assi.":"J_n eigenstates are obtained by rotating Jz eigenstates; for spin one half probabilities depend on the angle between axes.","Esempio: rotazione di pi attorno a y per spin un mezzo":"Example: pi rotation about y for spin one half","Impostazione.":"Setup.","Si usa la forma chiusa con n uguale y e theta uguale pi.":"Use the closed form with n equal y and theta equal pi.","Controllo.":"Check.","La rotazione di pi inverte la proiezione z; quella di 2 pi cambia il segno dello spinore ma non il raggio fisico. Una rotazione di 4 pi restituisce il ket.":"A pi rotation reverses z projection; a 2 pi rotation changes the spinor sign but not the physical ray. A 4 pi rotation restores the ket.","Interpretazione e limiti":"Interpretation and limits","Rappresentazioni equivalenti":"Equivalent representations","Un cambio unitario di base trasforma tutti i J_i per similitudine. Le matrici cambiano, ma commutatori, Casimir, tracce e rotazioni fisiche restano invarianti.":"A unitary basis change transforms all J_i by similarity. Matrices change, but commutators, Casimir, traces, and physical rotations remain invariant.","Blocchi riducibili":"Reducible blocks","Uno spazio che contiene più valori j ha matrici a blocchi. Operatori scalari non mescolano j diversi; operatori tensoriali possono farlo secondo regole di selezione.":"A space containing multiple j values has block matrices. Scalar operators do not mix different j; tensor operators may do so according to selection rules.","Rotazione orbitale":"Orbital rotation","Per ell intero D^(ell)(2pi)=I. Per j semintero vale meno I, riflettendo il doppio ricoprimento SU(2) verso SO(3).":"For integer ell, D^(ell)(2pi)=I. For half-integer j it equals minus I, reflecting the SU(2) double cover of SO(3).","Calcolo numerico":"Numerical calculation","Le formule sparse dei ladder sono il modo stabile per costruire matrici a j grande; esponenziali possono essere calcolati dopo aver verificato hermiticità e Casimir.":"Sparse ladder formulas are the stable way to build large-j matrices; exponentials may be computed after checking Hermiticity and the Casimir.","Errori tipici":"Common errors","Mettere J più sulla diagonale sbagliata per l'ordine scelto; perdere hbar radice due nel caso j uno; scrivere Jy reale; confondere Pauli sigma con J stesso; usare angolo theta invece di theta su due nello spinore.":"Putting J plus on the wrong diagonal for the chosen ordering; losing hbar square root two for j one; writing real Jy; confusing Pauli sigma with J itself; using angle theta instead of theta over two in a spinor.","Controlli rapidi":"Quick checks","Jz è reale diagonale; J meno è J più aggiunto; Jx,Jy sono hermitiani; tracce nulle; Casimir j(j+1); commutatore corretto; l'esponenziale di un hermitiano con meno i è unitario.":"Jz is real diagonal; J minus is J plus dagger; Jx,Jy are Hermitian; traces vanish; Casimir is j(j+1); commutator is correct; exponential of a Hermitian operator times minus i is unitary.","Controllo da orale":"Oral exam checklist","Fissa l'ordine della base.":"Fix the basis ordering.","Scrivi elementi di Jz e J più.":"Write Jz and J plus elements.","Ottieni J meno, Jx e Jy.":"Obtain J minus, Jx, and Jy.","Verifica hermiticità, commutatore e Casimir.":"Verify Hermiticity, commutator, and Casimir.","Costruisci j un mezzo con Pauli.":"Construct j one half with Pauli matrices.","Costruisci le matrici j uno.":"Construct the j one matrices.","Esponenzia una rotazione finita.":"Exponentiate a finite rotation.","Controlla asse arbitrario e segno a 2 pi.":"Check an arbitrary axis and the sign at 2 pi.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 15 - commutatori, rotazioni e momento angolare":"DIM 15 - commutators, rotations, and angular momentum","DIM 8 - algebra, ladder e composizione":"DIM 8 - algebra, ladders, and composition","Appunti-MQ.pdf, pagine PDF 194-199 - elementi di matrice e rotazioni finite":"Appunti-MQ.pdf, PDF pages 194-199 - elementi di matrice e rotazioni finite","La catena è stata confrontata con le pagine PDF verificate 194-199 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.":"The chain was compared with verified PDF pages 194-199 and DIM 15; phase conventions, signs, and normalizations are kept consistent.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Elementi di matrice di Jz":"Jz matrix elements","Elementi di matrice di J più":"J plus matrix elements","Elementi di matrice di J meno":"J minus matrix elements","Ricostruzione di Jx e Jy":"Reconstruction of Jx and Jy","Casimir nella rappresentazione j":"Casimir in the j representation","Tracce quadratiche dei generatori":"Quadratic traces of generators","Rappresentazione spinoriale j un mezzo":"Spinor j one-half representation","Identità di prodotto delle matrici di Pauli":"Pauli-matrix product identity","Matrici Jz e J più per j uno":"Jz and J plus matrices for j one","Matrici trasverse per j uno":"Transverse matrices for j one","Verifica matriciale dell'algebra":"Matrix verification of the algebra","Matrice di rotazione nel multipletto j":"Rotation matrix in the j multiplet","Forma chiusa della rotazione di spin un mezzo":"Closed form of a spin-one-half rotation","Autostati lungo un asse ruotato":"Eigenstates along a rotated axis"},"title":{"it":"Rappresentazioni matriciali del momento angolare","en":"Matrix representations of angular momentum"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

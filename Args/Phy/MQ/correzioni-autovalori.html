@@ -1,336 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Correzioni agli Autovalori</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Correzioni al primo e secondo ordine per l&#x27;energia</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Correzioni agli Autovalori</h1>
-    <p>
-        Nel contesto delle perturbazioni stazionarie, le correzioni agli autovalori dell'energia permettono di valutare gli effetti di un'interazione perturbativa su un sistema quantistico. Consideriamo un sistema descritto da un Hamiltoniano totale della forma:
-    </p>
-    <div class="formula">
-        \( H = H_0 + \lambda V \)
-    </div>
-    <p>
-        Qui, \( H_0 \) è l'Hamiltoniano non perturbato, i cui autovalori e autofunzioni sono noti:
-    </p>
-    <div class="formula">
-        \( H_0 \psi_n^{(0)} = E_n^{(0)} \psi_n^{(0)} \)
-    </div>
-    <p>
-        mentre \( \lambda V \) rappresenta una perturbazione di piccola entità rispetto a \( H_0 \).
-    </p>
-
-    <h2>Correzioni al Primo Ordine</h2>
-    <p>
-        Le correzioni al primo ordine per gli autovalori dell'energia si calcolano come il valore medio della perturbazione sull'autostato non perturbato:
-    </p>
-    <div class="formula">
-        \( E_n^{(1)} = \langle \psi_n^{(0)} | V | \psi_n^{(0)} \rangle \)
-    </div>
-    <p>
-        Questo risultato implica che l'energia al primo ordine dipende solo dallo stato iniziale \( \psi_n^{(0)} \) e dalla perturbazione \( V \).
-    </p>
-
-    <h2>Correzioni al Secondo Ordine</h2>
-    <p>
-        Le correzioni al secondo ordine per gli autovalori dell'energia introducono un contributo dovuto agli altri stati del sistema. La formula è:
-    </p>
-    <div class="formula">
-        \( E_n^{(2)} = \sum_{m \neq n} \frac{| \langle \psi_m^{(0)} | V | \psi_n^{(0)} \rangle |^2}{E_n^{(0)} - E_m^{(0)}} \)
-    </div>
-    <p>
-        Questa espressione evidenzia che il secondo ordine tiene conto dell'accoppiamento tra lo stato di interesse \( n \) e gli stati \( m \) attraverso l'operatore perturbativo \( V \). Il denominatore rappresenta la differenza di energia tra lo stato perturbato e gli altri stati del sistema.
-    </p>
-
-    <h2>Validità dell'Approccio Perturbativo</h2>
-    <p>
-        L'approccio perturbativo è valido solo se la perturbazione è sufficientemente piccola da garantire che:
-    </p>
-    <div class="formula">
-        \( | E_n^{(1)} | \ll | E_n^{(0)} |, \quad | E_n^{(2)} | \ll | E_n^{(1)} | \)
-    </div>
-    <p>
-        Inoltre, il denominatore nella correzione al secondo ordine deve essere diverso da zero, cioè gli autovalori di \( H_0 \) devono essere non degeneri.
-    </p>
-
-    <h2>Calcolo Esplicito delle Correzioni</h2>
-<p>
-    Per calcolare esplicitamente le correzioni agli autovalori fino al secondo ordine, consideriamo le autofunzioni e gli autovalori del sistema perturbato come serie espansive:
-</p>
-<div class="formula">
-    \[
-    E_n = E_n^{(0)} + \lambda E_n^{(1)} + \lambda^2 E_n^{(2)} + \dots
-    \]
-    \[
-    \psi_n = \psi_n^{(0)} + \lambda \psi_n^{(1)} + \lambda^2 \psi_n^{(2)} + \dots
-    \]
-</div>
-<p>
-    Inserendo queste espressioni nell'equazione di Schrödinger perturbata \( (H_0 + \lambda V) \psi_n = E_n \psi_n \) e confrontando i termini di ordine equivalente in \( \lambda \), otteniamo una serie di equazioni:
-</p>
-
-<h3>Equazione al Primo Ordine</h3>
-<p>
-    L'equazione per i termini di primo ordine è:
-</p>
-<div class="formula">
-    \[
-    H_0 \psi_n^{(1)} + V \psi_n^{(0)} = E_n^{(0)} \psi_n^{(1)} + E_n^{(1)} \psi_n^{(0)}
-    \]
-</div>
-<p>
-    Moltiplicando scalarmene per \( \psi_n^{(0)*} \) (autofunzione non perturbata), il primo termine sul lato sinistro si annulla grazie all'ortogonalità degli stati \( \psi_n^{(0)} \), ottenendo così la correzione al primo ordine:
-</p>
-<div class="formula">
-    \[
-    E_n^{(1)} = \langle \psi_n^{(0)} | V | \psi_n^{(0)} \rangle
-    \]
-</div>
-
-<h3>Equazione al Secondo Ordine</h3>
-<p>
-    Per i termini di secondo ordine, l'equazione risulta:
-</p>
-<div class="formula">
-    \[
-    H_0 \psi_n^{(2)} + V \psi_n^{(1)} = E_n^{(0)} \psi_n^{(2)} + E_n^{(1)} \psi_n^{(1)} + E_n^{(2)} \psi_n^{(0)}
-    \]
-</div>
-<p>
-    Analogamente, moltiplicando scalarmene per \( \psi_n^{(0)*} \), otteniamo:
-</p>
-<div class="formula">
-    \[
-    E_n^{(2)} = \sum_{m \neq n} \frac{| \langle \psi_m^{(0)} | V | \psi_n^{(0)} \rangle |^2}{E_n^{(0)} - E_m^{(0)}}
-    \]
-</div>
-<p>
-    Qui, il termine \( | \langle \psi_m^{(0)} | V | \psi_n^{(0)} \rangle |^2 \) rappresenta il contributo dell'accoppiamento tra lo stato perturbato \( n \) e gli stati \( m \), mentre il denominatore indica la differenza energetica tra lo stato \( n \) e gli stati \( m \) di riferimento.
-</p>
-
-<h2>Degenerazione e Applicazioni</h2>
-<p>
-    Nel caso di stati degeneri, l'approccio descritto non è valido poiché i denominatori \( E_n^{(0)} - E_m^{(0)} \) si annullano. In tali situazioni, è necessario diagonalizzare l'operatore perturbativo \( V \) nello spazio generato dagli stati degeneri. Questo porta a una rimozione della degenerazione e alla definizione di un nuovo insieme di stati propri del sistema perturbato.
-</p>
-<p>
-    Le correzioni agli autovalori giocano un ruolo fondamentale in molte applicazioni della meccanica quantistica, come il calcolo degli spettri atomici, l'interazione spin-orbita e i livelli energetici nelle molecole.
-</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 12</div>
-  <h2>Correzioni agli Autovalori: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Calcolare energie perturbate e usare simmetrie per eliminare termini.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Gli shift dipendono dagli elementi diagonali al primo ordine e da processi virtuali al secondo. Parità o altre simmetrie possono rendere nullo il primo termine.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Serie<span class="lecture-step-boss">DIM 7</span></h4>
-      <p>Energia analitica formale.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="E_n(\lambda)=E_n^0+\lambda V_{nn}+\lambda^2\sum_{m\ne n}\frac{|V_{mn}|^2}{E_n^0-E_m^0}+\cdots"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle E_n=E_n^0+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}+\cdots,\quad E_n^{(1)}=V_{nn},\quad E_n^{(2)}=\sum_{m\ne n}\frac{|V_{mn}|^2}{E_n^0-E_m^0}\Rightarrow E_n(\lambda)=E_n^0+\lambda V_{nn}+\lambda^2\sum_{m\ne n}\frac{|V_{mn}|^2}{E_n^0-E_m^0}+\cdots\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Parità<span class="lecture-step-boss">DIM 7</span></h4>
-      <p>Se V è dispari e n ha parità definita.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="V_{nn}=0"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P|n\rangle=\pi_n|n\rangle,\quad PVP=-V\Rightarrow V_{nn}=\langle n|P(-V)P|n\rangle=-\pi_n^2V_{nn}=-V_{nn}\Rightarrow V_{nn}=0\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Oscillatore con perturbazione \(\lambda x\)</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Il primo ordine è nullo.</p>
-    <p><strong>Calcolo.</strong> Il problema esatto è un oscillatore traslato con shift \(-\lambda^2/(2m\omega^2)\).</p>
-    <p><strong>Risultato e controllo.</strong> La formula al secondo ordine riproduce lo stesso risultato.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 7</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_8.html">Domanda 2025 n. 8</a> - Perturbazioni stazionarie</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Stato non degenere.</li>
-          <li>Somma completa sugli stati intermedi.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Un termine nullo per simmetria non implica assenza di effetto: l'ordine successivo può dominare.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Individua stati intermedi ammessi.</li>
-          <li>Confronta con completamento del quadrato.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pp. 169-173: energie al primo e secondo ordine</a></li>
-          <li><a href="MQ.pdf#page=20">MQ.pdf, pp. capitolo 20: elementi diagonali e somme virtuali</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-correzioni-autovalori"><div class="lecture-kicker">Lezione approfondita - Argomento 12 - DIM 7</div><h1>Correzioni al primo e secondo ordine per l'energia</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Analizzare in profondità le correzioni energetiche: derivazione proiettiva, zeri di simmetria, segno del secondo ordine, repulsione dei livelli, identità di traccia, confronto con soluzioni esatte e applicazione all'oscillatore traslato.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Primo ordine locale</h3><p>E1 legge soltanto la diagonale di V nello stato iniziale. È il coefficiente lineare dell'autovalore esatto rispetto al parametro di accoppiamento.</p></article><article class="lecture-card lecture-warning"><h3>Secondo ordine virtuale</h3><p>E2 somma processi che partono da n, visitano virtualmente m e ritornano a n. I denominatori conservano l'informazione su quali livelli sono sopra o sotto.</p></article></div><h2>Che cosa controlla uno shift energetico</h2><div class="lecture-grid"><article class="lecture-card "><h3>Elementi diagonali</h3><p>Simmetria e parità possono annullare V_nn. In quel caso il primo effetto energetico non nullo può essere quadratico, anche se il ket si mescola linearmente.</p></article><article class="lecture-card "><h3>Stati intermedi</h3><p>Soltanto gli m con V_mn non nullo contribuiscono a E2. Le regole di selezione riducono la somma e spesso determinano il segno dominante.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Definizione via derivate<span class="lecture-step-boss">BASE</span></h4><p>Le correzioni sono coefficienti di Taylor dell'autovalore seguito adiabaticamente da lambda zero.</p><div class="lecture-formula" aria-label="Correzioni energetiche come derivate rispetto al parametro"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n^{(r)}=\frac1{r!}\left.\frac{d^rE_n(\lambda)}{d\lambda^r}\right|_{\lambda=0}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Hellmann-Feynman<span class="lecture-step-boss">CHECK</span></h4><p>Per un autostato esatto normalizzato, la derivata dell'energia è il valore medio della derivata dell'Hamiltoniana.</p><div class="lecture-formula" aria-label="Teorema di Hellmann-Feynman per il parametro perturbativo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{dE_n}{d\lambda}=\langle n(\lambda)|\frac{dH}{d\lambda}|n(\lambda)\rangle=\langle n(\lambda)|V|n(\lambda)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Primo ordine<span class="lecture-step-boss">DIM 7</span></h4><p>Valutando a lambda zero si recupera la diagonale della perturbazione.</p><div class="lecture-formula" aria-label="Correzione energetica al primo ordine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n^{(1)}=V_{nn}=\langle n^{(0)}|V|n^{(0)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Zero per simmetria<span class="lecture-step-boss">SELEZIONE</span></h4><p>Se esiste una simmetria che rende V dispari e n ha parità definita, il valore medio cambia segno ed è nullo.</p><div class="lecture-formula" aria-label="Annullamento del primo ordine per parità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Pi|n^{(0)}\rangle=\pi_n|n^{(0)}\rangle,\quad\Pi V\Pi^{-1}=-V\Rightarrow V_{nn}=-V_{nn}=0\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Secondo ordine<span class="lecture-step-boss">DIM 7</span></h4><p>Inserire lo stato al primo ordine nella derivata successiva produce la somma sugli intermedi.</p><div class="lecture-formula" aria-label="Correzione energetica al secondo ordine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n^{(2)}=\sum_{m\ne n}\frac{|V_{mn}|^2}{E_n^{(0)}-E_m^{(0)}}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Segno del fondamentale<span class="lecture-step-boss">ORALE</span></h4><p>Per uno stato fondamentale non degenere tutti i livelli intermedi hanno energia maggiore: ogni denominatore è negativo.</p><div class="lecture-formula" aria-label="Non positività del secondo ordine del fondamentale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_m^{(0)}&gt;E_0^{(0)}\ (m&gt;0)\Rightarrow E_0^{(2)}=-\sum_{m&gt;0}\frac{|V_{m0}|^2}{E_m^{(0)}-E_0^{(0)}}\le0\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Livello eccitato<span class="lecture-step-boss">SEGNO</span></h4><p>Per un livello eccitato esistono contributi positivi dai livelli inferiori e negativi da quelli superiori; il segno totale non è universale.</p><div class="lecture-formula" aria-label="Separazione dei contributi sopra e sotto il livello"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_n^{(2)}=\sum_{m&lt;n}\frac{|V_{mn}|^2}{E_n^{(0)}-E_m^{(0)}}-\sum_{m&gt;n}\frac{|V_{mn}|^2}{E_m^{(0)}-E_n^{(0)}}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Repulsione a coppie<span class="lecture-step-boss">FISICA</span></h4><p>La stessa coppia m,n sposta il livello superiore verso l'alto e quello inferiore verso il basso.</p><div class="lecture-formula" aria-label="Cancellazione a coppie e repulsione dei livelli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \delta E_n^{(2,m)}=\frac{|V_{mn}|^2}{E_n^{(0)}-E_m^{(0)}}=-\delta E_m^{(2,n)}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Identità di traccia<span class="lecture-step-boss">CHECK</span></h4><p>In uno spazio finito, la somma degli shift al primo ordine è la traccia di V e la somma degli shift al secondo ordine si cancella a coppie.</p><div class="lecture-formula" aria-label="Somme globali delle correzioni energetiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sum_nE_n^{(1)}=\operatorname{Tr}V,\qquad\sum_nE_n^{(2)}=0\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Perturbazione diagonale<span class="lecture-step-boss">CHECK</span></h4><p>Se V è diagonale nella base di H0, non mescola stati: la correzione lineare è esatta e tutti gli ordini superiori svaniscono.</p><div class="lecture-formula" aria-label="Esattezza del primo ordine per perturbazioni diagonali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H_0,V]=0\ \text{e spettro semplice}\Rightarrow V_{mn}=V_{nn}\delta_{mn},\quad E_n=E_n^{(0)}+\lambda V_{nn}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Due livelli esatto<span class="lecture-step-boss">CONTROLLO</span></h4><p>La radice quadrata dell'autovalore esatto genera la serie e mostra il raggio limitato dai punti di coalescenza complessi.</p><div class="lecture-formula" aria-label="Autovalori esatti del modello a due livelli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_\pm=\frac{E_1+E_2}{2}\pm\sqrt{\frac{\Delta^2}{4}+\lambda^2|v|^2},\qquad\Delta=E_2-E_1\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Espansione del due livelli<span class="lecture-step-boss">CHECK</span></h4><p>Per il ramo inferiore la radice produce il termine negativo previsto da E2.</p><div class="lecture-formula" aria-label="Confronto tra serie perturbativa e risultato esatto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_-=E_1-\lambda^2\frac{|v|^2}{\Delta}+\lambda^4\frac{|v|^4}{\Delta^3}+O(\lambda^6)\quad(\Delta&gt;0)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Stima d'errore<span class="lecture-step-boss">PRATICA</span></h4><p>Il rapporto tra l'ultimo termine mantenuto e la scala energetica, insieme al massimo mixing, fornisce un controllo minimo; un ordine crescente segnala perdita di utilità.</p><div class="lecture-formula" aria-label="Indicatori pratici dell&#x27;errore perturbativo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \epsilon_E\sim\left|\frac{\lambda^2E_n^{(2)}}{E_n^{(0)}+\lambda E_n^{(1)}}\right|,\qquad\eta_n=\max_{m\ne n}\left|\frac{\lambda V_{mn}}{\Delta_{nm}}\right|\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Quasi degenerazione<span class="lecture-step-boss">LIMITE</span></h4><p>Quando un denominatore diventa comparabile con l'accoppiamento, E2 diverge artificialmente mentre gli autovalori esatti restano finiti e mostrano un avoided crossing.</p><div class="lecture-formula" aria-label="Criterio per il trattamento quasi degenere"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\Delta_{nm}|\lesssim2|\lambda V_{mn}|\Rightarrow\text{diagonalizzare il blocco }\{n,m\}\ \text{invece di espandere}\)</span></div></article></section><h2>Esempio d'esame: oscillatore armonico in un campo uniforme</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si aggiunge V uguale F x. La parità annulla E1 e x collega soltanto n con n più o meno uno.</p><p data-i18n-skip="true">\(\displaystyle E_n^{(1)}=0,\qquad E_n^{(2)}=F^2\sum_{m=n\pm1}\frac{|\langle m|x|n\rangle|^2}{E_n^{(0)}-E_m^{(0)}}=-\frac{F^2}{2m\omega^2}\)</p><p><strong>Controllo.</strong> Completando il quadrato, H uguale p² su 2m più m omega²(x più F su m omega²)² su due meno F² su 2m omega²: lo shift è esattamente lo stesso per ogni n e non esistono ordini superiori.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Zeri protetti</h3><p>Uno zero al primo ordine può essere imposto da parità o altra simmetria. Se la simmetria resta valida per ogni lambda, alcuni contributi possono mancare a tutti gli ordini dispari.</p></article><article class="lecture-card "><h3>Baricentro spettrale</h3><p>La traccia chiarisce che una perturbazione fuori diagonale redistribuisce i livelli senza cambiare il baricentro ai primi due ordini in dimensione finita.</p></article><article class="lecture-card "><h3>Livello fondamentale</h3><p>La discesa del fondamentale al secondo ordine è coerente col principio variazionale: permettere piccole componenti eccitate non può aumentare il minimo variazionale ottimizzato.</p></article><article class="lecture-card "><h3>Dipendenza dalla base</h3><p>Le somme sono invarianti, ma semplificano drasticamente in una base adattata alle simmetrie. In presenza di degenerazione la diagonale V_nn non è definita fisicamente finché non si diagonalizza il blocco.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Affermare che E2 sia sempre negativo; ignorare gli stati inferiori per livelli eccitati; scordare il modulo quadro; sommare stati vietati dalle selezioni; interpretare una divergenza perturbativa come divergenza fisica.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Parità di V, unità di energia, segno dei denominatori, cancellazione a coppie, limite V diagonale, confronto col due livelli esatto e completamento del quadrato quando disponibile.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Ricava E1 come derivata e come proiezione.</li><li>Usa una simmetria per dimostrare uno zero al primo ordine.</li><li>Ricava E2 e discuti separatamente fondamentale ed eccitati.</li><li>Spiega la repulsione dei livelli a coppie.</li><li>Dimostra le identità di traccia in spazio finito.</li><li>Confronta la serie col modello esatto a due livelli.</li><li>Stima errore e parametro di mixing.</li><li>Svolgi lo shift esatto dell'oscillatore traslato.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1">DIM 7 - perturbazioni stazionarie non degeneri e degeneri</a></li><li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo</a></li><li><a href="Domanda2025_8.html">Domanda 2025 n. 8 - perturbazioni stazionarie</a></li><li><a href="perturbazioni-non-degenere.html">Caso non degenere - derivazione ordine per ordine</a></li><li><a href="teorema-feynman-hellmann.html">Teorema di Hellmann-Feynman - interpretazione delle derivate energetiche</a></li></ul><p class="lecture-note">La pagina separa risultati rigorosi sui segni da euristiche: solo il fondamentale ha E2 necessariamente non positivo; per gli eccitati il segno dipende dallo spettro.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 12 - DIM 7":"In-depth lesson - Topic 12 - DIM 7","Correzioni al primo e secondo ordine per l'energia":"First- and second-order energy corrections","Obiettivo.":"Objective.","Analizzare in profondità le correzioni energetiche: derivazione proiettiva, zeri di simmetria, segno del secondo ordine, repulsione dei livelli, identità di traccia, confronto con soluzioni esatte e applicazione all'oscillatore traslato.":"Analyze energy corrections in depth: projective derivation, symmetry zeros, second-order sign, level repulsion, trace identities, comparison with exact solutions, and application to the displaced oscillator.","Primo ordine locale":"Local first order","E1 legge soltanto la diagonale di V nello stato iniziale. È il coefficiente lineare dell'autovalore esatto rispetto al parametro di accoppiamento.":"E1 reads only the diagonal of V in the initial state. It is the linear coefficient of the exact eigenvalue with respect to the coupling parameter.","Secondo ordine virtuale":"Virtual second order","E2 somma processi che partono da n, visitano virtualmente m e ritornano a n. I denominatori conservano l'informazione su quali livelli sono sopra o sotto.":"E2 sums processes that leave n, visit m virtually, and return to n. Denominators retain information about which levels lie above or below.","Che cosa controlla uno shift energetico":"What controls an energy shift","Elementi diagonali":"Diagonal elements","Simmetria e parità possono annullare V_nn. In quel caso il primo effetto energetico non nullo può essere quadratico, anche se il ket si mescola linearmente.":"Symmetry and parity may cancel V_nn. Then the first nonzero energy effect may be quadratic even though the ket mixes linearly.","Stati intermedi":"Intermediate states","Soltanto gli m con V_mn non nullo contribuiscono a E2. Le regole di selezione riducono la somma e spesso determinano il segno dominante.":"Only m with nonzero V_mn contribute to E2. Selection rules reduce the sum and often determine the dominant sign.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Definizione via derivate":"1. Definition by derivatives","BASE":"BASE","Le correzioni sono coefficienti di Taylor dell'autovalore seguito adiabaticamente da lambda zero.":"Corrections are Taylor coefficients of the eigenvalue followed adiabatically from lambda zero.","Passaggio":"Step","2. Hellmann-Feynman":"2. Hellmann-Feynman","CHECK":"CHECK","Per un autostato esatto normalizzato, la derivata dell'energia è il valore medio della derivata dell'Hamiltoniana.":"For a normalized exact eigenstate, the energy derivative is the expectation value of the Hamiltonian derivative.","3. Primo ordine":"3. First order","DIM 7":"DIM 7","Valutando a lambda zero si recupera la diagonale della perturbazione.":"Evaluating at lambda zero recovers the perturbation diagonal.","4. Zero per simmetria":"4. Symmetry zero","SELEZIONE":"SELECTION","Se esiste una simmetria che rende V dispari e n ha parità definita, il valore medio cambia segno ed è nullo.":"If a symmetry makes V odd and n has definite parity, the expectation value changes sign and vanishes.","5. Secondo ordine":"5. Second order","Inserire lo stato al primo ordine nella derivata successiva produce la somma sugli intermedi.":"Inserting the first-order state into the next derivative produces the intermediate-state sum.","6. Segno del fondamentale":"6. Ground-state sign","ORALE":"ORAL","Per uno stato fondamentale non degenere tutti i livelli intermedi hanno energia maggiore: ogni denominatore è negativo.":"For a nondegenerate ground state every intermediate level has higher energy: every denominator is negative.","7. Livello eccitato":"7. Excited level","SEGNO":"SIGN","Per un livello eccitato esistono contributi positivi dai livelli inferiori e negativi da quelli superiori; il segno totale non è universale.":"For an excited level there are positive contributions from lower levels and negative contributions from higher levels; the total sign is not universal.","8. Repulsione a coppie":"8. Pairwise repulsion","FISICA":"PHYSICS","La stessa coppia m,n sposta il livello superiore verso l'alto e quello inferiore verso il basso.":"The same m,n pair shifts the upper level upward and the lower level downward.","9. Identità di traccia":"9. Trace identity","In uno spazio finito, la somma degli shift al primo ordine è la traccia di V e la somma degli shift al secondo ordine si cancella a coppie.":"In a finite space, the sum of first-order shifts is the trace of V and second-order shifts cancel pairwise.","10. Perturbazione diagonale":"10. Diagonal perturbation","Se V è diagonale nella base di H0, non mescola stati: la correzione lineare è esatta e tutti gli ordini superiori svaniscono.":"If V is diagonal in the H0 basis, it does not mix states: the linear correction is exact and all higher orders vanish.","11. Due livelli esatto":"11. Exact two-level model","CONTROLLO":"CHECK","La radice quadrata dell'autovalore esatto genera la serie e mostra il raggio limitato dai punti di coalescenza complessi.":"The exact eigenvalue square root generates the series and shows a radius limited by complex coalescence points.","12. Espansione del due livelli":"12. Two-level expansion","Per il ramo inferiore la radice produce il termine negativo previsto da E2.":"For the lower branch the square root produces the negative term predicted by E2.","13. Stima d'errore":"13. Error estimate","PRATICA":"PRACTICE","Il rapporto tra l'ultimo termine mantenuto e la scala energetica, insieme al massimo mixing, fornisce un controllo minimo; un ordine crescente segnala perdita di utilità.":"The ratio of the last retained term to the energy scale, together with maximum mixing, gives a minimal check; increasing terms signal loss of usefulness.","14. Quasi degenerazione":"14. Near degeneracy","LIMITE":"LIMIT","Quando un denominatore diventa comparabile con l'accoppiamento, E2 diverge artificialmente mentre gli autovalori esatti restano finiti e mostrano un avoided crossing.":"When a denominator becomes comparable to the coupling, E2 diverges artificially while exact eigenvalues remain finite and show an avoided crossing.","Esempio d'esame: oscillatore armonico in un campo uniforme":"Exam example: harmonic oscillator in a uniform field","Impostazione.":"Setup.","Si aggiunge V uguale F x. La parità annulla E1 e x collega soltanto n con n più o meno uno.":"Add V equal to F x. Parity cancels E1 and x couples only n to n plus or minus one.","Controllo.":"Check.","Completando il quadrato, H uguale p² su 2m più m omega²(x più F su m omega²)² su due meno F² su 2m omega²: lo shift è esattamente lo stesso per ogni n e non esistono ordini superiori.":"Completing the square gives H equal to p² over 2m plus m omega²(x plus F over m omega²)² over two minus F² over 2m omega²: the shift is exactly the same for every n and there are no higher orders.","Interpretazione e limiti":"Interpretation and limits","Zeri protetti":"Protected zeros","Uno zero al primo ordine può essere imposto da parità o altra simmetria. Se la simmetria resta valida per ogni lambda, alcuni contributi possono mancare a tutti gli ordini dispari.":"A first-order zero may be enforced by parity or another symmetry. If the symmetry remains valid for every lambda, some contributions may vanish at all odd orders.","Baricentro spettrale":"Spectral centroid","La traccia chiarisce che una perturbazione fuori diagonale redistribuisce i livelli senza cambiare il baricentro ai primi due ordini in dimensione finita.":"The trace shows that an off-diagonal perturbation redistributes levels without changing the centroid through second order in finite dimension.","Livello fondamentale":"Ground level","La discesa del fondamentale al secondo ordine è coerente col principio variazionale: permettere piccole componenti eccitate non può aumentare il minimo variazionale ottimizzato.":"The second-order lowering of the ground level agrees with the variational principle: allowing small excited components cannot raise the optimized variational minimum.","Dipendenza dalla base":"Basis dependence","Le somme sono invarianti, ma semplificano drasticamente in una base adattata alle simmetrie. In presenza di degenerazione la diagonale V_nn non è definita fisicamente finché non si diagonalizza il blocco.":"The sums are invariant, but simplify drastically in a symmetry-adapted basis. With degeneracy the diagonal V_nn is not physically defined until the block is diagonalized.","Errori tipici":"Common errors","Affermare che E2 sia sempre negativo; ignorare gli stati inferiori per livelli eccitati; scordare il modulo quadro; sommare stati vietati dalle selezioni; interpretare una divergenza perturbativa come divergenza fisica.":"Claiming E2 is always negative; ignoring lower states for excited levels; forgetting the squared modulus; summing selection-forbidden states; interpreting perturbative divergence as physical divergence.","Controlli rapidi":"Quick checks","Parità di V, unità di energia, segno dei denominatori, cancellazione a coppie, limite V diagonale, confronto col due livelli esatto e completamento del quadrato quando disponibile.":"Check V parity, energy units, denominator signs, pairwise cancellation, the diagonal-V limit, comparison with the exact two-level model, and completing the square when available.","Controllo da orale":"Oral exam checklist","Ricava E1 come derivata e come proiezione.":"Derive E1 both as a derivative and projection.","Usa una simmetria per dimostrare uno zero al primo ordine.":"Use a symmetry to prove a first-order zero.","Ricava E2 e discuti separatamente fondamentale ed eccitati.":"Derive E2 and discuss ground and excited states separately.","Spiega la repulsione dei livelli a coppie.":"Explain pairwise level repulsion.","Dimostra le identità di traccia in spazio finito.":"Prove the finite-space trace identities.","Confronta la serie col modello esatto a due livelli.":"Compare the series with the exact two-level model.","Stima errore e parametro di mixing.":"Estimate error and the mixing parameter.","Svolgi lo shift esatto dell'oscillatore traslato.":"Work through the exact shift of the displaced oscillator.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 7 - perturbazioni stazionarie non degeneri e degeneri":"DIM 7 - nondegenerate and degenerate stationary perturbation theory","Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo":"Appunti-MQ.pdf, PDF pages 169-175 - time-independent theory","Domanda 2025 n. 8 - perturbazioni stazionarie":"2025 question 8 - stationary perturbations","Caso non degenere - derivazione ordine per ordine":"Nondegenerate case - order-by-order derivation","Teorema di Hellmann-Feynman - interpretazione delle derivate energetiche":"Hellmann-Feynman theorem - interpretation of energy derivatives","La pagina separa risultati rigorosi sui segni da euristiche: solo il fondamentale ha E2 necessariamente non positivo; per gli eccitati il segno dipende dallo spettro.":"The page separates rigorous sign results from heuristics: only the ground state necessarily has nonpositive E2; for excited states the sign depends on the spectrum.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Correzioni energetiche come derivate rispetto al parametro":"Energy corrections as derivatives with respect to the parameter","Teorema di Hellmann-Feynman per il parametro perturbativo":"Hellmann-Feynman theorem for the perturbation parameter","Correzione energetica al primo ordine":"First-order energy correction","Annullamento del primo ordine per parità":"First-order cancellation by parity","Correzione energetica al secondo ordine":"Second-order energy correction","Non positività del secondo ordine del fondamentale":"Nonpositivity of the ground-state second order","Separazione dei contributi sopra e sotto il livello":"Separation of contributions above and below the level","Cancellazione a coppie e repulsione dei livelli":"Pairwise cancellation and level repulsion","Somme globali delle correzioni energetiche":"Global sums of energy corrections","Esattezza del primo ordine per perturbazioni diagonali":"Exactness of first order for diagonal perturbations","Autovalori esatti del modello a due livelli":"Exact eigenvalues of the two-level model","Confronto tra serie perturbativa e risultato esatto":"Comparison between perturbative series and exact result","Indicatori pratici dell'errore perturbativo":"Practical perturbative error indicators","Criterio per il trattamento quasi degenere":"Criterion for nearly degenerate treatment"},"title":{"it":"Correzioni al primo e secondo ordine per l'energia","en":"First- and second-order energy corrections"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

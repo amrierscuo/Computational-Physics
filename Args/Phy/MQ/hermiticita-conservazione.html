@@ -1,165 +1,333 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hermiticità di H e Conservazione della Probabilità</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 800px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Conservazione della probabilità - Dimostrazioni e ripasso orale</title>
+<script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 0.96 }
+    };
+  </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
 
-        h1, h2 {
-            color: #1e90ff;
-        }
-
-        p, li {
-            text-align: justify;
-        }
-
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+</style>
+<meta content="conservazione-probabilita.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Hermiticità di \(H\) e Conservazione della Probabilità</h1>
-
-<p>L’Hamiltoniano \(\hat{H}\) in meccanica quantistica svolge un ruolo centrale: descrive l’energia totale del sistema e governa l’evoluzione temporale dello stato quantistico. Una caratteristica essenziale di \(\hat{H}\) è la sua hermiticità (\(\hat{H}=\hat{H}^\dagger\)). Non si tratta di un vincolo formale: senza di essa, non avremmo né energie reali né la garanzia che la probabilità si conservi nel tempo. Questo legame tra hermiticità e conservazione della probabilità è fondamentale per mantenere la consistenza fisica della teoria.</p>
-
-<h2>Hermiticità e Realtà degli Autovalori</h2>
-
-<p>Un operatore hermitiano ha autovalori reali. Poiché l’energia è un osservabile, i suoi valori misurati devono essere reali. Se \(\hat{H}\) non fosse hermitiano, potremmo ottenere valori energetici complessi, privi di significato fisico. Dalla condizione \(\hat{H}=\hat{H}^\dagger\) segue che per ogni autostato \(\phi\) con \(\hat{H}\phi = E\phi\), si ha \(E \in \mathbb{R}\). Questo è il primo tassello di coerenza.</p>
-
-<h2>Unità dell’Evoluzione Temporale e Conservazione della Norma</h2>
-
-<p>L’equazione di Schrödinger dipendente dal tempo è:</p>
-
-\[
-i\hbar \frac{d}{dt}|\psi(t)\rangle = \hat{H}|\psi(t)\rangle.
-\]
-
-<p>La soluzione formale è:</p>
-
-\[
-|\psi(t)\rangle = e^{-\frac{i}{\hbar}\hat{H}t}|\psi(0)\rangle.
-\]
-
-<p>Se \(\hat{H}\) è hermitiano, l’operatore di evoluzione \(\hat{U}(t)=e^{-\frac{i}{\hbar}\hat{H}t}\) è unitario. L’unitarietà significa \(\hat{U}^\dagger(t)\hat{U}(t)=\hat{I}\). Questo garantisce che la norma dello stato, e quindi la probabilità totale, rimangano invariati nel tempo.</p>
-
-<h2>Conservazione della Probabilità</h2>
-
-<p>Nella rappresentazione posizionale, la probabilità totale a un istante \(t\) è:</p>
-
-\[
-P(t) = \int |\psi(\mathbf{r},t)|^2 d^3r.
-\]
-
-<p>Siccome \(|\psi(t)\rangle\) evolve in modo unitario, \(|\psi(t)\rangle\) ha sempre la stessa norma di \(|\psi(0)\rangle\). Di conseguenza, la probabilità totale non cambia con il tempo, nessuna probabilità si crea o si distrugge. Senza hermiticità di \(\hat{H}\), l’evoluzione non sarebbe unitaria e potremmo “perdere” norma, violando il principio probabilistico della teoria.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Scrivi: \( i\hbar \frac{d}{dt}|\psi(t)\rangle = \hat{H}|\psi(t)\rangle \).  
-2. Mostra la soluzione formale: \(|\psi(t)\rangle = e^{-\frac{i}{\hbar}\hat{H}t}|\psi(0)\rangle.\)  
-3. Sottolinea che se \(\hat{H}\) è hermitiano, \(\hat{U}(t)=e^{-\frac{i}{\hbar}\hat{H}t}\) è unitario.  
-4. Disegna uno schema: stato iniziale \(|\psi(0)\rangle\) normato ad 1 → evoluzione unitaria → stato \(|\psi(t)\rangle\) sempre normato ad 1.  
-5. Spiega che ciò implica la conservazione della probabilità totale.  
-6. Evidenzia come questa proprietà derivi direttamente dall’hermiticità di \(\hat{H}\), rendendo coerente l’interpretazione probabilistica.
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group">
+<button aria-pressed="false" data-language="it" type="button">ITA</button>
+<button aria-pressed="false" data-language="en" type="button">ENG</button>
 </div>
-
-<h2>Risposta alla Domanda: “Hermiticità di H = Conservazione della Probabilità”</h2>
-
-<p>La ragione è che l’ermiticità di \(\hat{H}\) garantisce la realtà degli autovalori energetici e l’unitarietà dell’evoluzione temporale. Un’evoluzione unitaria non altera la norma dello stato, per cui la quantità \(\int |\psi(\mathbf{r},t)|^2 d^3r\) rimane costante. In assenza di hermiticità, l’operatore di evoluzione non sarebbe unitario, la norma potrebbe cambiare nel tempo e la probabilità non si conserverebbe.</p>
-    <h2>Approfondimento sulla Dimostrazione alla Lavagna</h2>
-
-    <p>Per rendere ancora più chiaro il legame tra hermiticità di \(\hat{H}\) e conservazione della probabilità, si può dettagliare meglio i passaggi alla lavagna. Supponiamo di voler mostrare come la norma di \(|\psi(t)\rangle\) rimane invariata durante l’evoluzione.
-
-    <ol>
-        <li><strong>Partenza dall’equazione di Schrödinger:</strong>
-        Scrivi:
-        \[
-        i\hbar \frac{d}{dt}|\psi(t)\rangle = \hat{H}|\psi(t)\rangle.
-        \]
-        Prendi il prodotto scalare a sinistra con \(\langle \psi(t)|\):
-        \[
-        i\hbar \langle \psi(t)|\frac{d}{dt}|\psi(t)\rangle = \langle \psi(t)|\hat{H}|\psi(t)\rangle.
-        \]</li>
-
-        <li><strong>Norma e derivata della norma:</strong>
-        La norma dello stato è:
-        \[
-        \langle \psi(t)|\psi(t)\rangle.
-        \]
-        La sua derivata temporale è:
-        \[
-        \frac{d}{dt}\langle \psi(t)|\psi(t)\rangle = \langle \frac{d}{dt}\psi(t)|\psi(t)\rangle + \langle \psi(t)|\frac{d}{dt}\psi(t)\rangle.
-        \]
-
-        Ora, usando l’equazione di Schrödinger, sostituiamo \(\frac{d}{dt}|\psi(t)\rangle\) e la sua coniugata. Da questa sostituzione emergono termini del tipo \(\langle \psi(t)|\hat{H}|\psi(t)\rangle\) e il suo complesso coniugato \(\langle \psi(t)|\hat{H}|\psi(t)\rangle^*\) (che sarà \(\langle \psi(t)|\hat{H}^\dagger|\psi(t)\rangle\)).</li>
-
-        <li><strong>Uso dell’hermiticità dell’Hamiltoniano:</strong>
-        Se \(\hat{H}\) è hermitiano, \(\hat{H}=\hat{H}^\dagger\). Ciò significa:
-        \[
-        \langle \psi(t)|\hat{H}|\psi(t)\rangle = \langle \psi(t)|\hat{H}|\psi(t)\rangle^*,
-        \]
-        un numero reale. Quindi, quando sommi i termini provenienti dalla derivata della norma, le parti immaginarie si cancellano. Di fatto, si dimostra che la derivata della norma è zero:
-        \[
-        \frac{d}{dt}\langle \psi(t)|\psi(t)\rangle = 0.
-        \]
-
-        Questo dimostra la conservazione della norma dello stato quantistico nel tempo.</li>
-
-        <li><strong>Dalla norma totale alla probabilità totale:</strong>
-        Nella rappresentazione di posizione, la norma dello stato \(|\psi(t)\rangle\) diventa:
-        \[
-        \langle \psi(t)|\psi(t)\rangle = \int |\psi(\mathbf{r},t)|^2 d^3r.
-        \]
-        Se questa norma è costante nel tempo, allora la probabilità totale di trovare la particella da qualche parte nell’universo non cambia, è costante e pari a 1 (se l’abbiamo normalizzata a 1 all’inizio).</li>
-
-        <li><strong>Conclusione logica:</strong>
-        Poiché tutta l’evoluzione è governata dall’operatore \(\hat{H}\), la sua hermiticità è la chiave per avere un’evoluzione unitaria e quindi conservare la probabilità. Se \(\hat{H}\) non fosse hermitiano, l’evoluzione potrebbe non essere unitaria e la probabilità totale potrebbe non essere conservata nel tempo, rendendo la teoria non interpretabile in termini probabilistici.</li>
-    </ol>
-
-    <p>Questa dimostrazione mostra, con operazioni algebriche relativamente semplici, che il requisito di hermiticità di \(\hat{H}\) non è un capriccio matematico, ma un elemento cruciale per la consistenza fisica della meccanica quantistica. Senza di esso, non potremmo dare un significato probabilistico ai risultati delle misure.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<main class="lecture-depth" data-mq-enrichment="2026-08-11" data-mq-historical-name="hermiticita-conservazione.html" data-mq-shared-lesson="conservazione-probabilita.html" id="lezione-conservazione-probabilita">
+<div class="lecture-kicker">Lezione approfondita - Argomento 2 - DIM 0 e DIM 1</div>
+<h1>Conservazione della probabilità</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: hermiticita-conservazione.html. La lezione scientifica verificata è condivisa con conservazione-probabilita.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p>
+<p class="lecture-lead"><strong>Obiettivo.</strong> Dimostrare la conservazione globale della norma da autoaggiuntezza e unitarietà, collegarla alla continuità locale e al flusso sul bordo, precisare le condizioni di dominio e interpretare correttamente evoluzioni efficaci non unitarie e sistemi aperti.</p>
+<div class="lecture-grid">
+<article class="lecture-card lecture-result">
+<h3>Sistema chiuso</h3>
+<p>Se lo stato è normalizzato e l'Hamiltoniano è autoaggiunto sul dominio fisico, l'evoluzione preserva norma e prodotti scalari. La probabilità totale resta uno senza rinormalizzazioni manuali.</p>
+</article>
+<article class="lecture-card lecture-warning">
+<h3>Volume finito</h3>
+<p>La probabilità <span class="mq-math" data-i18n-skip="true">\(P_\Omega\)</span> dentro una regione può diminuire anche in un sistema chiuso: la differenza è esattamente il flusso uscente attraverso <span class="mq-math" data-i18n-skip="true">\(\partial\Omega\)</span>. Non è perdita di probabilità globale.</p>
+</article>
+</div>
+<h2>Forma globale e forma locale</h2>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Norma nello spazio di Hilbert</h3>
+<p>La formulazione globale non richiede una rappresentazione particolare: vale per qualunque stato del dominio dell'Hamiltoniano.</p>
+<div aria-label="Probabilità totale come norma dello stato" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle \mathcal N(t)=\langle\psi(t)|\psi(t)\rangle,\qquad\psi\in L^2(\mathbb R^3):\ \mathcal N(t)=\int_{\mathbb R^3}|\psi(\mathbf r,t)|^2d^3r\)</span></div>
+</article>
+<article class="lecture-card">
+<h3>Bilancio in una regione</h3>
+<p>La formulazione locale specifica come la densità si redistribuisce. Integrata su una regione, diventa un bilancio tra accumulo interno e flusso attraverso il bordo.</p>
+<div aria-label="Bilancio locale della probabilità in un volume" class="lecture-formula"><span class="lecture-proof-tag">Def</span><span class="lecture-proof-math">\(\displaystyle P_\Omega(t)=\int_\Omega\rho\,d^3r,\qquad\frac{dP_\Omega}{dt}=-\oint_{\partial\Omega}\mathbf j\!\cdot\!d\mathbf S\)</span></div>
+</article>
+</div>
+<h2>Dimostrazioni compatte</h2>
+<div class="lecture-steps">
+<article class="lecture-card lecture-step">
+<h4>1. Derivata della norma<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Si usa la TDSE per il ket e l'equazione aggiunta per il bra, senza assumere a priori che l'Hamiltoniano sia autoaggiunto.</p>
+<div aria-label="Derivata temporale della norma per un Hamiltoniano generale" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\dot\psi\rangle=-\frac{i}{\hbar}\hat H|\psi\rangle,\quad\langle\dot\psi|=\frac{i}{\hbar}\langle\psi|\hat H^\dagger\Rightarrow\frac d{dt}\langle\psi|\psi\rangle=\frac{i}{\hbar}\langle\psi|(\hat H^\dagger-\hat H)|\psi\rangle\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>2. Autoaggiuntezza<span class="lecture-step-boss">DIM 0</span></h4>
+<p>Se generatore e aggiunto coincidono sullo stesso dominio, la derivata è nulla per ogni stato ammesso, anche se <span class="mq-math" data-i18n-skip="true">\(\hat H(t)\)</span> dipende dal tempo.</p>
+<div aria-label="Conservazione della norma per Hamiltoniano autoaggiunto" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \hat H^\dagger(t)=\hat H(t)\Rightarrow\frac{d\mathcal N}{dt}=0\Rightarrow\mathcal N(t)=\mathcal N(t_0)=1\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>3. Unitarietà dell'evoluzione<span class="lecture-step-boss">DIM 0</span></h4>
+<p>La stessa conclusione si esprime sull'operatore di evoluzione. Il calcolo resta valido per Hamiltoniani dipendenti dal tempo.</p>
+<div aria-label="Derivazione dell'unitarietà dell'operatore di evoluzione" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle i\hbar\partial_tU=\hat HU,\quad\partial_tU^\dagger=\frac{i}{\hbar}U^\dagger\hat H^\dagger\Rightarrow\partial_t(U^\dagger U)=\frac{i}{\hbar}U^\dagger(\hat H^\dagger-\hat H)U=0\Rightarrow U^\dagger U=\mathbf1\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>4. Prodotti scalari<span class="lecture-step-boss">ORALE</span></h4>
+<p>L'unitarietà conserva non soltanto la norma, ma anche sovrapposizioni e probabilità di transizione tra stati coevoluti.</p>
+<div aria-label="Conservazione dei prodotti scalari sotto evoluzione unitaria" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \langle U\phi|U\psi\rangle=\langle\phi|U^\dagger U|\psi\rangle=\langle\phi|\psi\rangle\Rightarrow|\langle U\phi|U\psi\rangle|^2=|\langle\phi|\psi\rangle|^2\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>5. Autovalori unitari<span class="lecture-step-boss">ORALE</span></h4>
+<p>Ogni autovalore di un operatore unitario è una fase: l'evoluzione non amplifica né attenua una componente normalizzata.</p>
+<div aria-label="Modulo degli autovalori di un operatore unitario" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle U|u\rangle=\lambda|u\rangle,\quad\langle u|U^\dagger U|u\rangle=|\lambda|^2\langle u|u\rangle=\langle u|u\rangle\Rightarrow|\lambda|=1\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>6. TDSE e coniugata<span class="lecture-step-boss">DIM 1</span></h4>
+<p>Per il potenziale scalare reale, coniugare cambia il segno di <span class="mq-math" data-i18n-skip="true">\(i\)</span> ma non quello di <span class="mq-math" data-i18n-skip="true">\(V\)</span>.</p>
+<div aria-label="TDSE e sua equazione complessa coniugata" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle i\hbar\partial_t\psi=-\frac{\hbar^2}{2m}\nabla^2\psi+V\psi,\qquad-i\hbar\partial_t\psi^*=-\frac{\hbar^2}{2m}\nabla^2\psi^*+V\psi^*,\quad V\in\mathbb R\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>7. Derivata della densità<span class="lecture-step-boss">DIM 1</span></h4>
+<p>Moltiplicando per la funzione coniugata e sommando le derivate temporali, i termini di potenziale si cancellano.</p>
+<div aria-label="Derivazione temporale della densità di probabilità" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \rho=\psi^*\psi\Rightarrow\partial_t\rho=\psi^*\partial_t\psi+\psi\partial_t\psi^*=\frac{i\hbar}{2m}(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>8. Identità di divergenza<span class="lecture-step-boss">DIM 1</span></h4>
+<p>I termini con i gradienti incrociati si cancellano, lasciando la differenza dei due Laplaciani.</p>
+<div aria-label="Identità di divergenza per la corrente di probabilità" class="lecture-formula"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \nabla\!\cdot(\psi^*\nabla\psi-\psi\nabla\psi^*)=\psi^*\nabla^2\psi-\psi\nabla^2\psi^*,\qquad\mathbf j=\frac{\hbar}{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>9. Continuità locale<span class="lecture-step-boss">DIM 1</span></h4>
+<p>La derivata della densità è l'opposto della divergenza della corrente: localmente la probabilità può soltanto fluire.</p>
+<div aria-label="Equazione locale di continuità della probabilità" class="lecture-formula"><span class="lecture-proof-tag">Risultato</span><span class="lecture-proof-math">\(\displaystyle \partial_t\rho=-\nabla\!\cdot\mathbf j\Rightarrow\boxed{\partial_t\rho+\nabla\!\cdot\mathbf j=0}\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>10. Teorema di Gauss<span class="lecture-step-boss">DIM 1</span></h4>
+<p>Integrando su un volume di controllo, la variazione della probabilità interna è uguale al flusso entrante meno quello uscente.</p>
+<div aria-label="Integrazione della continuità con il teorema di Gauss" class="lecture-formula"><span class="lecture-proof-tag">Orale</span><span class="lecture-proof-math">\(\displaystyle \frac d{dt}\int_\Omega\rho\,d^3r=-\int_\Omega\nabla\!\cdot\mathbf j\,d^3r=-\oint_{\partial\Omega}\mathbf j\!\cdot\!\hat{\mathbf n}\,dS\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>11. Dominio e bordo<span class="lecture-step-boss">ORALE</span></h4>
+<p>Coefficienti reali rendono l'operatore formalmente simmetrico; l'autoaggiuntezza richiede anche un dominio che annulli la forma di bordo.</p>
+<div aria-label="Termine di bordo dell'operatore cinetico" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle \langle\phi|\hat T\psi\rangle-\langle\hat T\phi|\psi\rangle=-\frac{\hbar^2}{2m}\oint_{\partial\Omega}(\phi^*\nabla\psi-\psi\nabla\phi^*)\!\cdot\!d\mathbf S=0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>12. Potenziale assorbente<span class="lecture-step-boss">ORALE</span></h4>
+<p>Una parte immaginaria negativa introduce un termine pozzo. La norma persa quantifica la probabilità rimossa dal modello efficace.</p>
+<div aria-label="Perdita di norma per un potenziale assorbente complesso" class="lecture-formula"><span class="lecture-proof-tag">Check</span><span class="lecture-proof-math">\(\displaystyle V=V_R-iW,\ W\ge0:\quad\partial_t\rho+\nabla\!\cdot\mathbf j=-\frac{2W}{\hbar}\rho,\qquad\frac{d\mathcal N}{dt}=-\frac2\hbar\langle W\rangle\le0\)</span></div>
+</article>
+<article class="lecture-card lecture-step">
+<h4>13. Sistema aperto<span class="lecture-step-boss">ORALE</span></h4>
+<p>Per un sistema aperto la matrice densità può evolvere in modo non unitario e tuttavia conservare la traccia. I termini di Lindblad si cancellano sotto traccia.</p>
+<div aria-label="Conservazione della traccia nell'equazione di Lindblad" class="lecture-formula"><span class="lecture-proof-tag">Estensione</span><span class="lecture-proof-math">\(\displaystyle \dot\rho=-\frac{i}{\hbar}[H,\rho]+\sum_k\left(L_k\rho L_k^\dagger-\frac12\{L_k^\dagger L_k,\rho\}\right)\Rightarrow\frac d{dt}\operatorname{Tr}\rho=0\)</span></div>
+</article>
+</div>
+<h2>Esempio d'esame: assorbitore uniforme</h2>
+<article class="lecture-card lecture-result lecture-example">
+<p><strong>Dati.</strong> <span class="mq-math" data-i18n-skip="true">\(V=V_R-iW_0\)</span> con <span class="mq-math" data-i18n-skip="true">\(W_0=5.00\,\mathrm{meV}\)</span> costante e flusso nullo al bordo.</p>
+<p><strong>Calcolo.</strong> <span class="mq-math" data-i18n-skip="true">\(\dot{\mathcal N}=-(2W_0/\hbar)\mathcal N\)</span>, quindi <span class="mq-math" data-i18n-skip="true">\(\mathcal N(t)=e^{-t/\tau}\mathcal N(0)\)</span> con <span class="mq-math" data-i18n-skip="true">\(\tau=\hbar/(2W_0)=65.8\,\mathrm{fs}\)</span>.</p>
+<p><strong>Risultato.</strong> A <span class="mq-math" data-i18n-skip="true">\(t=\tau\)</span> resta <span class="mq-math" data-i18n-skip="true">\(e^{-1}=36.8\%\)</span> della norma iniziale: è una probabilità di sopravvivenza nel sottospazio modellato.</p>
+</article>
+<div class="lecture-grid">
+<article class="lecture-card">
+<h3>Condizioni che chiudono il bilancio</h3>
+<p>Su tutto lo spazio basta un decadimento che renda nullo il flusso all'infinito. In una scatola funzionano, per esempio, pareti di Dirichlet, condizioni periodiche coerenti o condizioni riflettenti che annullano la componente normale di <span class="mq-math" data-i18n-skip="true">\(\mathbf j\)</span>.</p>
+</article>
+<article class="lecture-card">
+<h3>Norma ed energia sono bilanci diversi</h3>
+<p>Un Hamiltoniano autoaggiunto dipendente dal tempo conserva la norma ma non necessariamente il valor medio dell'energia. La conservazione energetica richiede inoltre l'assenza di dipendenza temporale esplicita.</p>
+</article>
+</div>
+<div class="lecture-grid">
+<article class="lecture-card lecture-warning">
+<h3>Errori tipici</h3>
+<ul>
+<li>Imporre <span class="mq-math" data-i18n-skip="true">\(dP_\Omega/dt=0\)</span> per ogni volume finito.</li>
+<li>Considerare sufficiente un potenziale reale senza controllare dominio e bordo.</li>
+<li>Confondere operatore formalmente hermitiano e operatore autoaggiunto.</li>
+<li>Rinormalizzare a ogni istante un'evoluzione assorbente senza dichiarare l'interpretazione condizionata.</li>
+<li>Concludere che norma conservata implica energia conservata per <span class="mq-math" data-i18n-skip="true">\(\hat H(t)\)</span>.</li>
+</ul>
+</article>
+<article class="lecture-card">
+<h3>Controlli dimensionali</h3>
+<p>In tre dimensioni <span class="mq-math" data-i18n-skip="true">\([\rho]=\mathrm{m^{-3}}\)</span>, <span class="mq-math" data-i18n-skip="true">\([\mathbf j]=\mathrm{m^{-2}s^{-1}}\)</span> e <span class="mq-math" data-i18n-skip="true">\([W/\hbar]=\mathrm{s^{-1}}\)</span>. Il flusso integrato su una superficie ha dimensione probabilità per unità di tempo.</p>
+</article>
+</div>
+<article class="lecture-card lecture-oral">
+<h3>Controllo da orale</h3>
+<ul class="lecture-checks">
+<li>Deriva la norma usando TDSE e aggiunta.</li>
+<li>Mostra l'unitarietà anche per <span class="mq-math" data-i18n-skip="true">\(\hat H(t)\)</span> autoaggiunto.</li>
+<li>Dimostra che gli autovalori unitari hanno modulo uno.</li>
+<li>Ottieni continuità da TDSE e coniugata senza sbagliare i segni.</li>
+<li>Integra con Gauss e interpreta il flusso orientato.</li>
+<li>Distingui conservazione globale e probabilità in un volume finito.</li>
+<li>Spiega perché l'autoaggiuntezza comprende il dominio.</li>
+<li>Deriva il termine pozzo per <span class="mq-math" data-i18n-skip="true">\(V_R-iW\)</span>.</li>
+<li>Mostra in una riga perché il generatore di Lindblad conserva la traccia.</li>
+</ul>
+</article>
+<details class="boss-ref">
+<summary>Boss, appunti e pagine verificate</summary>
+<ul>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 1</a> - TDSE, coniugata, divergenza, Gauss e condizioni al bordo</li>
+<li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0</a> - Hamiltoniano autoaggiunto ed evoluzione unitaria</li>
+<li><a href="Appunti-MQ.pdf#page=107">Appunti-MQ.pdf, pagine PDF 107-109</a> - operatore di evoluzione e unitarietà</li>
+<li><a href="Appunti-MQ.pdf#page=115">Appunti-MQ.pdf, pagine PDF 115-117</a> - densità, corrente, continuità e flusso</li>
+<li><a href="Domanda2025_6.html">Domanda 2025 n. 6</a> - conservazione globale e locale della probabilità</li>
+</ul>
+<p class="lecture-note">La pagina concentra il teorema globale; le pagine su densità-corrente e continuità sviluppano separatamente la struttura locale e le applicazioni.</p>
+</details>
+<div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div>
+</main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 2 - DIM 0 e DIM 1":"In-depth lesson - Topic 2 - DIM 0 and DIM 1","Conservazione della probabilità":"Probability conservation","Dimostrare la conservazione globale della norma da autoaggiuntezza e unitarietà, collegarla alla continuità locale e al flusso sul bordo, precisare le condizioni di dominio e interpretare correttamente evoluzioni efficaci non unitarie e sistemi aperti.":"Prove global norm conservation from self-adjointness and unitarity, connect it to local continuity and boundary flux, state the domain conditions precisely, and interpret effective nonunitary evolution and open systems correctly.","Sistema chiuso":"Closed system","Se lo stato è normalizzato e l'Hamiltoniano è autoaggiunto sul dominio fisico, l'evoluzione preserva norma e prodotti scalari. La probabilità totale resta uno senza rinormalizzazioni manuali.":"If the state is normalized and the Hamiltonian is self-adjoint on its physical domain, the evolution preserves norms and inner products. Total probability remains one without manual renormalization.","Volume finito":"Finite region","La probabilità":"The probability","dentro una regione può diminuire anche in un sistema chiuso: la differenza è esattamente il flusso uscente attraverso":"inside a region may decrease even in a closed system: the change is exactly the outward flux through",". Non è perdita di probabilità globale.":". This is not a loss of total probability.","Forma globale e forma locale":"Global and local forms","Norma nello spazio di Hilbert":"Norm in Hilbert space","La formulazione globale non richiede una rappresentazione particolare: vale per qualunque stato del dominio dell'Hamiltoniano.":"The global formulation requires no particular representation: it holds for every state in the Hamiltonian's domain.","Bilancio in una regione":"Balance in a region","La formulazione locale specifica come la densità si redistribuisce. Integrata su una regione, diventa un bilancio tra accumulo interno e flusso attraverso il bordo.":"The local formulation specifies how the density is redistributed. Integrated over a region, it becomes a balance between internal accumulation and boundary flux.","Dimostrazioni compatte":"Compact derivations","1. Derivata della norma":"1. Time derivative of the norm","Si usa la TDSE per il ket e l'equazione aggiunta per il bra, senza assumere a priori che l'Hamiltoniano sia autoaggiunto.":"Use the TDSE for the ket and the adjoint equation for the bra, without assuming beforehand that the Hamiltonian is self-adjoint.","Se generatore e aggiunto coincidono sullo stesso dominio, la derivata è nulla per ogni stato ammesso, anche se":"If the generator and its adjoint coincide on the same domain, the derivative vanishes for every admissible state, even if","dipende dal tempo.":"depends on time.","3. Unitarietà dell'evoluzione":"3. Unitarity of time evolution","La stessa conclusione si esprime sull'operatore di evoluzione. Il calcolo resta valido per Hamiltoniani dipendenti dal tempo.":"The same conclusion can be stated in terms of the evolution operator. The calculation remains valid for time-dependent Hamiltonians.","4. Prodotti scalari":"4. Inner products","L'unitarietà conserva non soltanto la norma, ma anche sovrapposizioni e probabilità di transizione tra stati coevoluti.":"Unitarity preserves not only the norm but also overlaps and transition probabilities between states evolved by the same operator.","5. Autovalori unitari":"5. Eigenvalues of a unitary operator","Ogni autovalore di un operatore unitario è una fase: l'evoluzione non amplifica né attenua una componente normalizzata.":"Every eigenvalue of a unitary operator is a phase: the evolution neither amplifies nor attenuates a normalized component.","6. TDSE e coniugata":"6. TDSE and its complex conjugate","Per il potenziale scalare reale, coniugare cambia il segno di":"For a real scalar potential, complex conjugation changes the sign of","ma non quello di":"but not that of","7. Derivata della densità":"7. Time derivative of the density","Moltiplicando per la funzione coniugata e sommando le derivate temporali, i termini di potenziale si cancellano.":"Multiplying by the conjugate wave function and adding the time derivatives makes the potential terms cancel.","8. Identità di divergenza":"8. Divergence identity","I termini con i gradienti incrociati si cancellano, lasciando la differenza dei due Laplaciani.":"The cross-gradient terms cancel, leaving the difference of the two Laplacians.","9. Continuità locale":"9. Local continuity","La derivata della densità è l'opposto della divergenza della corrente: localmente la probabilità può soltanto fluire.":"The time derivative of the density is minus the divergence of the current: locally, probability can only flow.","10. Teorema di Gauss":"10. Divergence theorem","Integrando su un volume di controllo, la variazione della probabilità interna è uguale al flusso entrante meno quello uscente.":"Integrating over a control volume, the change in the probability inside equals incoming flux minus outgoing flux.","11. Dominio e bordo":"11. Domain and boundary","Coefficienti reali rendono l'operatore formalmente simmetrico; l'autoaggiuntezza richiede anche un dominio che annulli la forma di bordo.":"Real coefficients make the operator formally symmetric; self-adjointness also requires a domain on which the boundary form vanishes.","12. Potenziale assorbente":"12. Absorbing potential","Una parte immaginaria negativa introduce un termine pozzo. La norma persa quantifica la probabilità rimossa dal modello efficace.":"A negative imaginary part introduces a sink term. The lost norm measures the probability removed from the effective model.","13. Sistema aperto":"13. Open system","Per un sistema aperto la matrice densità può evolvere in modo non unitario e tuttavia conservare la traccia. I termini di Lindblad si cancellano sotto traccia.":"For an open system, the density matrix may evolve nonunitarily while still preserving its trace. The Lindblad terms cancel under the trace.","Esempio d'esame: assorbitore uniforme":"Exam example: uniform absorber","con":"with","costante e flusso nullo al bordo.":"constant and zero boundary flux.",", quindi":", hence","della norma iniziale: è una probabilità di sopravvivenza nel sottospazio modellato.":"of the initial norm remains: this is the survival probability in the modeled subspace.","Condizioni che chiudono il bilancio":"Conditions that close the balance","Su tutto lo spazio basta un decadimento che renda nullo il flusso all'infinito. In una scatola funzionano, per esempio, pareti di Dirichlet, condizioni periodiche coerenti o condizioni riflettenti che annullano la componente normale di":"Over all space, sufficient decay makes the flux at infinity vanish. In a box, suitable choices include Dirichlet walls, consistent periodic boundary conditions, or reflecting conditions that set the normal component of","Norma ed energia sono bilanci diversi":"Norm and energy obey different balance laws","Un Hamiltoniano autoaggiunto dipendente dal tempo conserva la norma ma non necessariamente il valor medio dell'energia. La conservazione energetica richiede inoltre l'assenza di dipendenza temporale esplicita.":"A time-dependent self-adjoint Hamiltonian preserves the norm but not necessarily the expectation value of energy. Energy conservation also requires the absence of explicit time dependence.","Errori tipici":"Common errors","per ogni volume finito.":"for every finite region.","Considerare sufficiente un potenziale reale senza controllare dominio e bordo.":"Treating a real potential as sufficient without checking the domain and boundary conditions.","Confondere operatore formalmente hermitiano e operatore autoaggiunto.":"Confusing a formally Hermitian operator with a self-adjoint operator.","Rinormalizzare a ogni istante un'evoluzione assorbente senza dichiarare l'interpretazione condizionata.":"Renormalizing an absorbing evolution at every instant without stating the resulting conditional interpretation.","Concludere che norma conservata implica energia conservata per":"Concluding that norm conservation implies energy conservation for","Controlli dimensionali":"Dimensional checks","In tre dimensioni":"In three dimensions",". Il flusso integrato su una superficie ha dimensione probabilità per unità di tempo.":". The flux integrated over a surface has dimensions of probability per unit time.","Controllo da orale":"Oral exam checklist","Deriva la norma usando TDSE e aggiunta.":"Derive norm conservation from the TDSE and its adjoint.","Mostra l'unitarietà anche per":"Prove unitarity also for a self-adjoint","Dimostra che gli autovalori unitari hanno modulo uno.":"Prove that the eigenvalues of a unitary operator have unit modulus.","Ottieni continuità da TDSE e coniugata senza sbagliare i segni.":"Derive the continuity equation from the TDSE and its conjugate without sign errors.","Integra con Gauss e interpreta il flusso orientato.":"Integrate using the divergence theorem and interpret the oriented flux.","Distingui conservazione globale e probabilità in un volume finito.":"Distinguish global conservation from probability balance in a finite region.","Spiega perché l'autoaggiuntezza comprende il dominio.":"Explain why self-adjointness includes a domain specification.","Deriva il termine pozzo per":"Derive the sink term for","Mostra in una riga perché il generatore di Lindblad conserva la traccia.":"Show in one line why the Lindblad generator preserves the trace.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","- TDSE, coniugata, divergenza, Gauss e condizioni al bordo":"- TDSE, its conjugate, divergence, the divergence theorem, and boundary conditions","- Hamiltoniano autoaggiunto ed evoluzione unitaria":"- self-adjoint Hamiltonian and unitary evolution","Appunti-MQ.pdf, pagine PDF 107-109":"Appunti-MQ.pdf, PDF pages 107-109","- operatore di evoluzione e unitarietà":"- evolution operator and unitarity","Appunti-MQ.pdf, pagine PDF 115-117":"Appunti-MQ.pdf, PDF pages 115-117","- densità, corrente, continuità e flusso":"- density, current, continuity, and flux","Domanda 2025 n. 6":"2025 question no. 6","- conservazione globale e locale della probabilità":"- global and local probability conservation","La pagina concentra il teorema globale; le pagine su densità-corrente e continuità sviluppano separatamente la struttura locale e le applicazioni.":"This page focuses on the global theorem; the density-current and continuity pages develop the local structure and its applications separately.","Ritorna all'indice MQ":"Return to the MQ index","2. Autoaggiuntezza":"2. Self-adjointness","autoaggiunto.":".","Obiettivo.":"Goal.","Def":"Def","Base":"Core","Risultato":"Result","Check":"Check","Orale":"Oral","Estensione":"Extension","Dati.":"Given.","Calcolo.":"Calculation.","Risultato.":"Result.","A":"At","Nome storico mantenuto: hermiticita-conservazione.html. La lezione scientifica verificata è condivisa con conservazione-probabilita.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: hermiticita-conservazione.html. The verified scientific lesson is shared with conservazione-probabilita.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Probabilità totale come norma dello stato":"Total probability as the norm of the state","Bilancio locale della probabilità in un volume":"Local probability balance in a region","Derivata temporale della norma per un Hamiltoniano generale":"Time derivative of the norm for a general Hamiltonian","Conservazione della norma per Hamiltoniano autoaggiunto":"Norm conservation for a self-adjoint Hamiltonian","Derivazione dell'unitarietà dell'operatore di evoluzione":"Derivation of the unitarity of the evolution operator","Conservazione dei prodotti scalari sotto evoluzione unitaria":"Preservation of inner products under unitary evolution","Modulo degli autovalori di un operatore unitario":"Modulus of the eigenvalues of a unitary operator","TDSE e sua equazione complessa coniugata":"TDSE and its complex-conjugate equation","Derivazione temporale della densità di probabilità":"Time derivative of the probability density","Identità di divergenza per la corrente di probabilità":"Divergence identity for the probability current","Equazione locale di continuità della probabilità":"Local probability continuity equation","Integrazione della continuità con il teorema di Gauss":"Integration of the continuity equation using the divergence theorem","Termine di bordo dell'operatore cinetico":"Boundary term of the kinetic-energy operator","Perdita di norma per un potenziale assorbente complesso":"Norm loss caused by a complex absorbing potential","Conservazione della traccia nell'equazione di Lindblad":"Trace preservation in the Lindblad equation"},"title":{"it":"Conservazione della probabilità - Dimostrazioni e ripasso orale","en":"Probability conservation - Derivations and oral exam review"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

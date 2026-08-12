@@ -1,57 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Step di potenziale</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #faf6f6;
-            color: #2c3e50;
-            max-width: 700px;
-            margin: 40px auto 0 auto;
-            padding: 2em 1.5em 3em 1.5em;
-            border-radius: 14px;
-            box-shadow: 0 8px 40px rgba(90,40,20,0.13);
-        }
-        h1 {
-            color: #b30000;
-            font-size: 1.35em;
-            margin-bottom: 1em;
-            border-bottom: 2px solid #f0dddd;
-            padding-bottom: 0.2em;
-        }
-        .soluzione {
-            background: #fff5f5;
-            border: 1.5px solid #b30000;
-            border-radius: 8px;
-            padding: 1.2em 1.2em 1.8em 1.2em;
-            margin-top: 1.2em;
-        }
-        .imgwrap {
-            text-align: center;
-            margin-top: 1.5em;
-        }
-        img {
-            max-width: 97%;
-            margin: 0 auto;
-            border-radius: 6px;
-            box-shadow: 0 2px 16px rgba(140,0,0,0.13);
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gradino di potenziale: raccordo, flussi e penetrazione</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="gradino-potenziale.html" name="cp-shared-lesson"/></head>
 <body>
-    <h1>Step di potenziale</h1>
-    <div>Qui trovi la soluzione alla domanda:<br>
-    <b>Step di potenziale</b>
-    </div>
-    <div class="imgwrap">
-        <img src="img/Domanda2025_12.jpeg" alt="Soluzione Step di potenziale">
-    </div>
-    <div class="soluzione">
-        <!-- Inserisci qui la soluzione testuale, formule, commenti, ecc... -->
-        <p><i>Soluzione in fase di caricamento...</i></p>
-    </div>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="Domanda2025_12.html" data-mq-shared-lesson="gradino-potenziale.html" id="lezione-gradino-potenziale"><div class="lecture-kicker">Lezione approfondita - Argomento 4 - Appunti 8.4</div><h1>Gradino di potenziale: raccordo, flussi e penetrazione</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: Domanda2025_12.html. La lezione scientifica verificata è condivisa con gradino-potenziale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Risolvere il gradino per energia sopra e sotto la soglia, derivare ampiezze, coefficienti di riflessione e trasmissione dalla corrente, dimostrare la continuità dei raccordi e interpretare correttamente l'onda evanescente.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Riflessione senza punto di ritorno</h3><p>Anche per E maggiore di V0 una discontinuità di numero d'onda riflette parte del flusso: è un effetto di interferenza imposto dal raccordo.</p></article><article class="lecture-card lecture-warning"><h3>Ampiezza non è probabilità</h3><p>La trasmissione è un rapporto di correnti. Quando le velocità asintotiche differiscono, T non è semplicemente il modulo quadro di t.</p></article></div><h2>Problema di scattering da sinistra</h2><div class="lecture-grid"><article class="lecture-card"><h3>Potenziale</h3><p>Si pone V=0 a sinistra e V=V0 a destra, con V0 positivo; il flusso incidente arriva da meno infinito.</p></article><article class="lecture-card"><h3>Condizione radiativa</h3><p>A destra non si ammette un'onda entrante da più infinito. Questa scelta fisica completa le condizioni matematiche di raccordo.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Definizione<span class="lecture-step-boss">BASE</span></h4><p>Il gradino è finito ma discontinuo nell'origine.</p><div aria-label="Definizione del gradino di potenziale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(x)=\begin{cases}0,&amp;x&lt;0\\V_0,&amp;x&gt;0\end{cases},\qquad V_0&gt;0\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Caso sopra soglia<span class="lecture-step-boss">REGIONI</span></h4><p>Per E maggiore di V0 entrambe le regioni ammettono onde propaganti con numeri d'onda diversi.</p><div aria-label="Numeri d'onda sopra il gradino" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle k=\frac{\sqrt{2mE}}{\hbar},\qquad q=\frac{\sqrt{2m(E-V_0)}}{\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Ansatz di scattering<span class="lecture-step-boss">VERSI</span></h4><p>I segni negli esponenziali distinguono onda incidente, riflessa e trasmessa.</p><div aria-label="Ansatz per incidenza da sinistra" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_I=Ae^{ikx}+Be^{-ikx},\qquad\psi_{II}=Ce^{iqx}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Perché psi è continua<span class="lecture-step-boss">RACCORDO</span></h4><p>Un salto finito di psi genererebbe una delta nella derivata e una derivata di delta nella seconda derivata, assenti nell'equazione con V finito.</p><div aria-label="Primo raccordo al gradino" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(0^-)=\psi(0^+)\Rightarrow A+B=C\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Perché psi primo è continua<span class="lecture-step-boss">INTEGRA</span></h4><p>Integrando la TISE in un intervallo simmetrico e mandandone la larghezza a zero, l'integrale di (V-E)psi si annulla se V è finito.</p><div aria-label="Dimostrazione della continuità della derivata" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi'(0^+)-\psi'(0^-)=\frac{2m}{\hbar^2}\lim_{\epsilon\to0}\int_{-\epsilon}^{\epsilon}(V-E)\psi\,dx=0\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Secondo raccordo<span class="lecture-step-boss">ALGEBRA</span></h4><p>Applicando la continuità della derivata si ottiene la seconda equazione lineare per le ampiezze.</p><div aria-label="Secondo raccordo al gradino" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle ik(A-B)=iqC\Rightarrow k(A-B)=qC\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Ampiezze<span class="lecture-step-boss">RISOLVI</span></h4><p>Risolvendo le due equazioni e dividendo per l'ampiezza incidente si ricavano r e t.</p><div aria-label="Ampiezze di riflessione e trasmissione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle r\equiv\frac BA=\frac{k-q}{k+q},\qquad t\equiv\frac CA=\frac{2k}{k+q}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Correnti elementari<span class="lecture-step-boss">FLUSSO</span></h4><p>Un'esponenziale verso destra ha corrente positiva; quella verso sinistra ha corrente negativa.</p><div aria-label="Correnti delle onde incidenti e riflesse" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle j[Ae^{ikx}]=\frac{\hbar k}{m}|A|^2,\qquad j[Be^{-ikx}]=-\frac{\hbar k}{m}|B|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Coefficienti fisici<span class="lecture-step-boss">ORALE</span></h4><p>I rapporti di flusso introducono il fattore q/k nella trasmissione.</p><div aria-label="Coefficienti di riflessione e trasmissione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle R=-\frac{j_{\rm rif}}{j_{\rm inc}}=|r|^2=\left(\frac{k-q}{k+q}\right)^2,\quad T=\frac{j_{\rm tr}}{j_{\rm inc}}=\frac qk|t|^2=\frac{4kq}{(k+q)^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Conservazione<span class="lecture-step-boss">CHECK</span></h4><p>La somma unitaria segue direttamente dall'algebra o dalla costanza del Wronskiano per un potenziale reale.</p><div aria-label="Verifica della conservazione del flusso" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle R+T=\frac{(k-q)^2+4kq}{(k+q)^2}=1\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Caso sotto soglia<span class="lecture-step-boss">EVANESCENTE</span></h4><p>Per 0 minore di E minore di V0 il numero d'onda destro diventa immaginario; si conserva soltanto la soluzione limitata.</p><div aria-label="Onda evanescente nella regione proibita" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar},\qquad\psi_{II}=Ce^{-\kappa x}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Riflessione totale<span class="lecture-step-boss">SOGLIA</span></h4><p>I raccordi si ottengono ponendo q=i kappa; l'ampiezza riflessa ha modulo uno.</p><div aria-label="Ampiezza riflessa sotto soglia" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle r=\frac{k-i\kappa}{k+i\kappa}=e^{-2i\arctan(\kappa/k)},\qquad R=|r|^2=1\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Densità senza flusso<span class="lecture-step-boss">INTERPRETA</span></h4><p>L'esponenziale reale penetra per una lunghezza caratteristica ma da solo non trasporta corrente verso destra.</p><div aria-label="Penetrazione evanescente e corrente nulla" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi_{II}|^2=|C|^2e^{-2\kappa x},\qquad j_{II}=0,\qquad\ell_{\rm pen}=\kappa^{-1}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Energia alla soglia<span class="lecture-step-boss">LIMITE</span></h4><p>Per E uguale V0 l'equazione a destra è lineare; la limitatezza elimina il termine crescente e il limite q verso zero dà R verso uno.</p><div aria-label="Soluzione esattamente alla soglia" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E=V_0:\ \psi_{II}''=0\Rightarrow\psi_{II}=C+Dx,\quad D=0,\quad\lim_{q\to0^+}(R,T)=(1,0)\)</span></div></article></section><h2>Esempio numerico sopra soglia</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prende E uguale quattro V0, così q/k è radice di tre su due.</p><p data-i18n-skip="true">\(\displaystyle \frac qk=\sqrt{1-\frac{V_0}{E}}=\frac{\sqrt3}{2},\quad R=\left(\frac{2-\sqrt3}{2+\sqrt3}\right)^2\simeq0.00515,\quad T\simeq0.99485\)</p><p><strong>Controllo.</strong> La riflessione è piccola ma non nulla, nonostante non esista alcuna regione classicamente proibita. R più T vale uno entro l'arrotondamento.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Gradino crescente e decrescente</h3><p>Le formule di flusso restano valide scambiando i numeri d'onda; l'ampiezza r può cambiare segno, cioè fase, senza rendere negativa R.</p></article><article class="lecture-card"><h3>Sorgenti asintotiche</h3><p>La scelta di nessuna onda entrante da destra definisce il problema. Aggiungerla descriverebbe un diverso esperimento con due fasci coerenti.</p></article><article class="lecture-card"><h3>Potenziale delta</h3><p>La continuità di psi primo vale solo per discontinuità finite. Un termine delta mantiene psi continua ma produce un salto noto della derivata.</p></article><article class="lecture-card"><h3>Penetrazione non è trasmissione</h3><p>Nel semispazio proibito la densità è non nulla ma non vi è flusso asintotico trasmesso. Una barriera di larghezza finita cambia questa conclusione.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Porre T uguale modulo t quadrato; tenere e alla più kappa x a destra; dire che psi si annulla sotto soglia; imporre discontinuità della derivata per un gradino finito; dimenticare la fase di r.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>k e q hanno dimensione inversa di lunghezza; R e T sono adimensionali e non negativi; R più T vale uno; per V0 verso zero r tende a zero; per E verso V0 da sopra T tende a zero.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci i due numeri d'onda.</li><li>Scrivi i versi delle tre onde.</li><li>Dimostra entrambi i raccordi.</li><li>Risolvi il sistema per r e t.</li><li>Calcola le correnti prima di definire R e T.</li><li>Verifica R più T uguale uno.</li><li>Ripeti con q uguale i kappa.</li><li>Distingui penetrazione evanescente e flusso trasmesso.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L833">DIM 17 - buche, stati legati, diffusione e parità</a></li><li><a href="Appunti-MQ.pdf#page=128">Appunti-MQ.pdf, pagine PDF 128-133 - gradino sopra e sotto soglia</a></li><li><a href="set-7-parita-oscillatore.html">Set 7 - parità e oscillatore armonico</a></li></ul><p class="lecture-note">Le ampiezze e i coefficienti sono stati confrontati con le pagine verificate 128-133; il fattore di velocità in T e il caso esatto di soglia sono mantenuti espliciti per la prova orale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 4 - Appunti 8.4":"In-depth lesson - Topic 4 - Notes 8.4","Gradino di potenziale: raccordo, flussi e penetrazione":"Potential step: matching, fluxes, and penetration","Obiettivo.":"Objective.","Risolvere il gradino per energia sopra e sotto la soglia, derivare ampiezze, coefficienti di riflessione e trasmissione dalla corrente, dimostrare la continuità dei raccordi e interpretare correttamente l'onda evanescente.":"Solve the step above and below threshold, derive amplitudes and reflection and transmission coefficients from current, prove matching continuity, and correctly interpret the evanescent wave.","Riflessione senza punto di ritorno":"Reflection without a turning point","Anche per E maggiore di V0 una discontinuità di numero d'onda riflette parte del flusso: è un effetto di interferenza imposto dal raccordo.":"Even for E greater than V0, a wave-number discontinuity reflects part of the flux: it is an interference effect imposed by matching.","Ampiezza non è probabilità":"Amplitude is not probability","La trasmissione è un rapporto di correnti. Quando le velocità asintotiche differiscono, T non è semplicemente il modulo quadro di t.":"Transmission is a current ratio. When asymptotic velocities differ, T is not simply the modulus squared of t.","Problema di scattering da sinistra":"Left-incident scattering problem","Potenziale":"Potential","Si pone V=0 a sinistra e V=V0 a destra, con V0 positivo; il flusso incidente arriva da meno infinito.":"Set V=0 on the left and V=V0 on the right, with positive V0; the incident flux arrives from minus infinity.","Condizione radiativa":"Radiation condition","A destra non si ammette un'onda entrante da più infinito. Questa scelta fisica completa le condizioni matematiche di raccordo.":"No incoming wave from plus infinity is allowed on the right. This physical choice completes the mathematical matching conditions.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Definizione":"1. Definition","BASE":"BASE","Il gradino è finito ma discontinuo nell'origine.":"The step is finite but discontinuous at the origin.","Passaggio":"Step","2. Caso sopra soglia":"2. Above-threshold case","REGIONI":"REGIONS","Per E maggiore di V0 entrambe le regioni ammettono onde propaganti con numeri d'onda diversi.":"For E greater than V0, both regions admit traveling waves with different wave numbers.","3. Ansatz di scattering":"3. Scattering ansatz","VERSI":"DIRECTIONS","I segni negli esponenziali distinguono onda incidente, riflessa e trasmessa.":"Signs in the exponentials distinguish incident, reflected, and transmitted waves.","4. Perché psi è continua":"4. Why psi is continuous","RACCORDO":"MATCHING","Un salto finito di psi genererebbe una delta nella derivata e una derivata di delta nella seconda derivata, assenti nell'equazione con V finito.":"A finite jump in psi would generate a delta in its derivative and a delta derivative in its second derivative, absent from the equation with finite V.","5. Perché psi primo è continua":"5. Why psi prime is continuous","INTEGRA":"INTEGRATE","Integrando la TISE in un intervallo simmetrico e mandandone la larghezza a zero, l'integrale di (V-E)psi si annulla se V è finito.":"Integrate the TISE over a symmetric interval and shrink its width to zero; the integral of (V-E)psi vanishes if V is finite.","6. Secondo raccordo":"6. Second matching","ALGEBRA":"ALGEBRA","Applicando la continuità della derivata si ottiene la seconda equazione lineare per le ampiezze.":"Derivative continuity gives the second linear equation for the amplitudes.","7. Ampiezze":"7. Amplitudes","RISOLVI":"SOLVE","Risolvendo le due equazioni e dividendo per l'ampiezza incidente si ricavano r e t.":"Solve the two equations and divide by the incident amplitude to obtain r and t.","8. Correnti elementari":"8. Elementary currents","FLUSSO":"FLUX","Un'esponenziale verso destra ha corrente positiva; quella verso sinistra ha corrente negativa.":"A right-moving exponential has positive current; a left-moving one has negative current.","9. Coefficienti fisici":"9. Physical coefficients","ORALE":"ORAL","I rapporti di flusso introducono il fattore q/k nella trasmissione.":"Flux ratios introduce the q/k factor in transmission.","10. Conservazione":"10. Conservation","CHECK":"CHECK","La somma unitaria segue direttamente dall'algebra o dalla costanza del Wronskiano per un potenziale reale.":"The unit sum follows directly from algebra or from Wronskian constancy for a real potential.","11. Caso sotto soglia":"11. Below-threshold case","EVANESCENTE":"EVANESCENT","Per 0 minore di E minore di V0 il numero d'onda destro diventa immaginario; si conserva soltanto la soluzione limitata.":"For 0 less than E less than V0, the right wave number becomes imaginary; only the bounded solution is kept.","12. Riflessione totale":"12. Total reflection","SOGLIA":"THRESHOLD","I raccordi si ottengono ponendo q=i kappa; l'ampiezza riflessa ha modulo uno.":"Matching follows by setting q=i kappa; the reflected amplitude has unit modulus.","13. Densità senza flusso":"13. Density without flux","INTERPRETA":"INTERPRET","L'esponenziale reale penetra per una lunghezza caratteristica ma da solo non trasporta corrente verso destra.":"The real exponential penetrates over a characteristic length but by itself carries no rightward current.","14. Energia alla soglia":"14. Threshold energy","LIMITE":"LIMIT","Per E uguale V0 l'equazione a destra è lineare; la limitatezza elimina il termine crescente e il limite q verso zero dà R verso uno.":"At E equal to V0 the right equation is linear; boundedness removes the growing term and the q to zero limit gives R approaching one.","Esempio numerico sopra soglia":"Numerical example above threshold","Impostazione.":"Setup.","Si prende E uguale quattro V0, così q/k è radice di tre su due.":"Take E equal to four V0, so q/k is square root of three over two.","Controllo.":"Check.","La riflessione è piccola ma non nulla, nonostante non esista alcuna regione classicamente proibita. R più T vale uno entro l'arrotondamento.":"Reflection is small but nonzero although no classically forbidden region exists. R plus T equals one within rounding.","Interpretazione e limiti":"Interpretation and limits","Gradino crescente e decrescente":"Upward and downward steps","Le formule di flusso restano valide scambiando i numeri d'onda; l'ampiezza r può cambiare segno, cioè fase, senza rendere negativa R.":"Flux formulas remain valid when wave numbers are interchanged; amplitude r may change sign, hence phase, without making R negative.","Sorgenti asintotiche":"Asymptotic sources","La scelta di nessuna onda entrante da destra definisce il problema. Aggiungerla descriverebbe un diverso esperimento con due fasci coerenti.":"The choice of no incoming wave from the right defines the problem. Adding one would describe a different experiment with two coherent beams.","Potenziale delta":"Delta potential","La continuità di psi primo vale solo per discontinuità finite. Un termine delta mantiene psi continua ma produce un salto noto della derivata.":"Derivative continuity holds only for finite discontinuities. A delta term keeps psi continuous but produces a known derivative jump.","Penetrazione non è trasmissione":"Penetration is not transmission","Nel semispazio proibito la densità è non nulla ma non vi è flusso asintotico trasmesso. Una barriera di larghezza finita cambia questa conclusione.":"In the forbidden half-space density is nonzero but there is no asymptotic transmitted flux. A finite-width barrier changes this conclusion.","Errori tipici":"Common errors","Porre T uguale modulo t quadrato; tenere e alla più kappa x a destra; dire che psi si annulla sotto soglia; imporre discontinuità della derivata per un gradino finito; dimenticare la fase di r.":"Setting T equal to modulus t squared; keeping e to plus kappa x on the right; saying psi vanishes below threshold; imposing a derivative discontinuity for a finite step; forgetting the phase of r.","Controlli rapidi":"Quick checks","k e q hanno dimensione inversa di lunghezza; R e T sono adimensionali e non negativi; R più T vale uno; per V0 verso zero r tende a zero; per E verso V0 da sopra T tende a zero.":"k and q have inverse-length dimension; R and T are dimensionless and nonnegative; R plus T equals one; as V0 tends to zero r tends to zero; as E approaches V0 from above T tends to zero.","Controllo da orale":"Oral exam checklist","Definisci i due numeri d'onda.":"Define the two wave numbers.","Scrivi i versi delle tre onde.":"Write the directions of the three waves.","Dimostra entrambi i raccordi.":"Prove both matching conditions.","Risolvi il sistema per r e t.":"Solve the system for r and t.","Calcola le correnti prima di definire R e T.":"Compute currents before defining R and T.","Verifica R più T uguale uno.":"Verify R plus T equals one.","Ripeti con q uguale i kappa.":"Repeat with q equal to i kappa.","Distingui penetrazione evanescente e flusso trasmesso.":"Distinguish evanescent penetration from transmitted flux.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 17 - buche, stati legati, diffusione e parità":"DIM 17 - wells, bound states, scattering, and parity","Appunti-MQ.pdf, pagine PDF 128-133 - gradino sopra e sotto soglia":"Appunti-MQ.pdf, PDF pages 128-133 - gradino sopra e sotto soglia","Set 7 - parità e oscillatore armonico":"Set 7 - parity and harmonic oscillator","Le ampiezze e i coefficienti sono stati confrontati con le pagine verificate 128-133; il fattore di velocità in T e il caso esatto di soglia sono mantenuti espliciti per la prova orale.":"Amplitudes and coefficients were compared with verified pages 128-133; the velocity factor in T and the exact threshold case remain explicit for the oral exam.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: Domanda2025_12.html. La lezione scientifica verificata è condivisa con gradino-potenziale.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: Domanda2025_12.html. The verified scientific lesson is shared with gradino-potenziale.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Definizione del gradino di potenziale":"Definition of the potential step","Numeri d'onda sopra il gradino":"Wave numbers above the step","Ansatz per incidenza da sinistra":"Ansatz for incidence from the left","Primo raccordo al gradino":"First matching condition at the step","Dimostrazione della continuità della derivata":"Proof of derivative continuity","Secondo raccordo al gradino":"Second matching condition at the step","Ampiezze di riflessione e trasmissione":"Reflection and transmission amplitudes","Correnti delle onde incidenti e riflesse":"Currents of incident and reflected waves","Coefficienti di riflessione e trasmissione":"Reflection and transmission coefficients","Verifica della conservazione del flusso":"Flux-conservation check","Onda evanescente nella regione proibita":"Evanescent wave in the forbidden region","Ampiezza riflessa sotto soglia":"Below-threshold reflection amplitude","Penetrazione evanescente e corrente nulla":"Evanescent penetration and zero current","Soluzione esattamente alla soglia":"Solution exactly at threshold"},"title":{"it":"Gradino di potenziale: raccordo, flussi e penetrazione","en":"Potential step: matching, fluxes, and penetration"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

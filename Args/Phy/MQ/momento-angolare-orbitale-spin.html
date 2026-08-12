@@ -1,338 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momento Angolare Orbitale e Spin ½</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Somma di momento angolare orbitale e spin 1/2</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Momento Angolare Orbitale e Spin ½</h1>
-    <p>
-        La composizione del momento angolare orbitale \( \mathbf{L} \) con lo spin \( \mathbf{S} \) è uno degli aspetti fondamentali della meccanica quantistica. Questa combinazione porta alla definizione del momento angolare totale \( \mathbf{J} \), dato da:
-    </p>
-    <div class="formula">
-        \[
-        \mathbf{J} = \mathbf{L} + \mathbf{S}
-        \]
-    </div>
-    <p>
-        Dove \( \mathbf{L} \) rappresenta il momento angolare orbitale, legato al moto della particella nello spazio, e \( \mathbf{S} \) è il momento angolare intrinseco associato allo spin della particella. Entrambi sono operatori vettoriali con specifiche proprietà di commutazione:
-    </p>
-    <div class="formula">
-        \[
-        [J_i, J_j] = i \hbar \epsilon_{ijk} J_k, \quad [L_i, L_j] = i \hbar \epsilon_{ijk} L_k, \quad [S_i, S_j] = i \hbar \epsilon_{ijk} S_k
-        \]
-    </div>
-    <p>
-        L'operatore \( \mathbf{J} \) soddisfa le stesse relazioni di commutazione e ha autovalori determinati da:
-    </p>
-    <div class="formula">
-        \[
-        J^2 \ket{j, m_j} = \hbar^2 j (j+1) \ket{j, m_j}, \quad J_z \ket{j, m_j} = \hbar m_j \ket{j, m_j}
-        \]
-    </div>
-    <p>
-        Qui \( j \) è il numero quantico totale, mentre \( m_j \) è la componente del momento angolare totale lungo l'asse \( z \). Quando \( \mathbf{L} \) e \( \mathbf{S} \) si combinano, il valore di \( j \) è dato da:
-    </p>
-    <div class="formula">
-        \[
-        j = |l - s|, |l - s| + 1, \dots, l + s
-        \]
-    </div>
-    <p>
-        Per un sistema con \( l = 1 \) e \( s = \frac{1}{2} \), ad esempio, \( j \) può assumere i valori \( \frac{1}{2} \) e \( \frac{3}{2} \).
-    </p>
-    <h2>Coefficenti di Clebsch-Gordan</h2>
-    <p>
-        La combinazione di stati quantistici associati a \( \mathbf{L} \) e \( \mathbf{S} \) richiede l'uso dei coefficienti di Clebsch-Gordan. Essi forniscono l'espressione dei nuovi autostati \( \ket{j, m_j} \) in termini degli autostati \( \ket{l, m_l} \) e \( \ket{s, m_s} \):
-    </p>
-    <div class="formula">
-        \[
-        \ket{j, m_j} = \sum_{m_l, m_s} C_{l, s, m_l, m_s}^{j, m_j} \ket{l, m_l} \ket{s, m_s}
-        \]
-    </div>
-    <p>
-        Dove \( C_{l, s, m_l, m_s}^{j, m_j} \) rappresenta il coefficiente di Clebsch-Gordan e risponde a specifiche regole di selezione basate sui numeri quantici \( m_l \), \( m_s \) e \( m_j \).
-    </p>
-    <h2>Applicazioni</h2>
-    <p>
-        La combinazione \( \mathbf{L} + \mathbf{S} \) è cruciale in fisica atomica e molecolare. Ad esempio, nello spettro dell'idrogeno, i livelli energetici dipendono dalla struttura fine, che nasce dall'accoppiamento tra momento angolare orbitale e spin elettronico.
-    </p>
-    <h2>Analisi Matematica del Momento Angolare Totale</h2>
-<p>
-    Per comprendere appieno la combinazione di \( \mathbf{L} \) e \( \mathbf{S} \), consideriamo il prodotto tensoriale degli spazi degli stati. Ogni stato del sistema è rappresentato da \( \ket{l, m_l} \ket{s, m_s} \), dove \( m_l \) e \( m_s \) sono le componenti \( z \) di \( \mathbf{L} \) e \( \mathbf{S} \), rispettivamente. Gli operatori \( J^2 \) e \( J_z \) sono definiti sull'intero spazio combinato:
-</p>
-<div class="formula">
-    \[
-    J^2 = (\mathbf{L} + \mathbf{S})^2 = L^2 + S^2 + 2 \mathbf{L} \cdot \mathbf{S}
-    \]
-</div>
-<p>
-    Qui, \( \mathbf{L} \cdot \mathbf{S} \) rappresenta il prodotto scalare tra \( \mathbf{L} \) e \( \mathbf{S} \), che si esprime come:
-</p>
-<div class="formula">
-    \[
-    \mathbf{L} \cdot \mathbf{S} = \frac{1}{2} \left( J^2 - L^2 - S^2 \right)
-    \]
-</div>
-<p>
-    Questa relazione è fondamentale perché il termine \( \mathbf{L} \cdot \mathbf{S} \) determina lo splitting energetico nei livelli atomici, noto come accoppiamento spin-orbita.
-</p>
-<h2>Proprietà Degli Autovalori</h2>
-<p>
-    Gli autovalori di \( J^2 \) e \( J_z \) seguono le regole standard della meccanica quantistica. Per \( j \), il numero quantico totale, gli autovalori di \( J^2 \) sono:
-</p>
-<div class="formula">
-    \[
-    J^2 \ket{j, m_j} = \hbar^2 j(j+1) \ket{j, m_j}
-    \]
-</div>
-<p>
-    Dove \( j \) varia tra \( |l - s| \) e \( l + s \). Per ciascun valore di \( j \), \( m_j \) varia da \( -j \) a \( j \) con incrementi unitari. Ad esempio, se \( l = 1 \) e \( s = \frac{1}{2} \):
-</p>
-<ul>
-    <li>Per \( j = \frac{3}{2} \), \( m_j \in \{-\frac{3}{2}, -\frac{1}{2}, \frac{1}{2}, \frac{3}{2}\}\)</li>
-    <li>Per \( j = \frac{1}{2} \), \( m_j \in \{-\frac{1}{2}, \frac{1}{2}\}\)</li>
-</ul>
-<p>
-    Questa combinazione genera una struttura a livelli energetici differenziati, ciascuno associato a uno stato quantistico ben definito.
-</p>
-<h2>Coefficienti di Clebsch-Gordan: Calcolo Esplicito</h2>
-<p>
-    I coefficienti di Clebsch-Gordan, \( C_{l, s, m_l, m_s}^{j, m_j} \), sono utilizzati per combinare stati quantistici. Ad esempio, per \( l = 1 \), \( s = \frac{1}{2} \), e \( j = \frac{3}{2} \), uno stato combinato può essere scritto come:
-</p>
-<div class="formula">
-    \[
-    \ket{\frac{3}{2}, \frac{3}{2}} = \ket{1, 1} \ket{\frac{1}{2}, \frac{1}{2}}
-    \]
-</div>
-<p>
-    Altri stati richiedono la sovrapposizione lineare:
-</p>
-<div class="formula">
-    \[
-    \ket{\frac{3}{2}, \frac{1}{2}} = C_{1, \frac{1}{2}, 1, -\frac{1}{2}}^{\frac{3}{2}, \frac{1}{2}} \ket{1, 1} \ket{\frac{1}{2}, -\frac{1}{2}} + C_{1, \frac{1}{2}, 0, \frac{1}{2}}^{\frac{3}{2}, \frac{1}{2}} \ket{1, 0} \ket{\frac{1}{2}, \frac{1}{2}}
-    \]
-</div>
-<p>
-    Dove i coefficienti di Clebsch-Gordan sono calcolati tramite regole algebriche note e tabulati per convenienza.
-</p>
-<h2>Conclusioni Applicative</h2>
-<p>
-    La comprensione della somma di \( \mathbf{L} \) e \( \mathbf{S} \) non è solo teorica, ma trova applicazioni dirette nella spettroscopia atomica e nei sistemi molecolari. L'accoppiamento spin-orbita, per esempio, è responsabile della struttura fine negli spettri atomici, mentre in fisica delle particelle, la combinazione di spin e momento angolare orbitale descrive stati compositi di sistemi multipli.
-</p>
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 11</div>
-  <h2>Momento Angolare Orbitale e Spin ½: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Accoppiare L e S e valutare \(L\cdot S\) nella base di J.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Poiché \(J=L+S\), la base accoppiata diagonalizza simultaneamente \(J^2,L^2,S^2,J_z\). L'accoppiamento spin-orbita diventa diagonale.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Identità<span class="lecture-step-boss">DIM 8</span></h4>
-      <p>Quadrando J.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="2L\cdot S=J^2-L^2-S^2"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf J=\mathbf L+\mathbf S\Rightarrow J^2=(L+S)^2=L^2+S^2+2L\cdot S\Rightarrow2L\cdot S=J^2-L^2-S^2\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Autovalore<span class="lecture-step-boss">DIM 8</span></h4>
-      <p>Su \(|l,s;j,m\rangle\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\langle L\cdot S\rangle=\frac{\hbar^2}{2}[j(j+1)-l(l+1)-s(s+1)]"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle J^2\to\hbar^2j(j+1),\quad L^2\to\hbar^2l(l+1),\quad S^2\to\hbar^2s(s+1)\Rightarrow\langle L\cdot S\rangle=\frac{\hbar^2}{2}[j(j+1)-l(l+1)-s(s+1)]\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: p elettronico</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> l=1,s=1/2 dà j=3/2 o 1/2.</p>
-    <p><strong>Calcolo.</strong> Gli autovalori sono \(\hbar^2/2\) e \(-\hbar^2\).</p>
-    <p><strong>Risultato e controllo.</strong> Il segno diverso separa il doppietto fine.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 8</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_2.html">Domanda 2025 n. 2</a> - Termine spin-orbita nella struttura fine</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Accoppiamento LS valido nel regime considerato.</li>
-          <li>J resta buon numero quantico se la perturbazione è scalare rotazionale.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La base giusta trasforma un operatore misto in una semplice differenza di Casimir.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Conta le dimensioni dei multipleti.</li>
-          <li>Ricava i due valori per s=1/2.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=223">Appunti-MQ.pdf, pp. 223-229 e 282-286: accoppiamento L-S e valori di J</a></li>
-          <li><a href="BibbiaAleHD.pdf">BibbiaAleHD.pdf, pp. sezione sulla composizione: termini spettroscopici</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-momento-angolare-orbitale-spin"><div class="lecture-kicker">Lezione approfondita - Argomento 11 - DIM 8</div><h1>Somma di momento angolare orbitale e spin 1/2</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare i due multipleti j uguale l più o meno un mezzo e i relativi spinori sferici mediante il ladder totale, controllare normalizzazione e fase, diagonalizzare L·S e applicare il risultato a un elettrone p e allo splitting spin-orbita.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Accoppiamento LS a una particella</h3><p>Per spin s uguale un mezzo e l maggiore di zero, il prodotto di dimensione due volte due l più uno si divide esattamente nei multipleti j uguale l più un mezzo e j uguale l meno un mezzo.</p></article><article class="lecture-card lecture-warning"><h3>Non è una somma classica</h3><p>Le frecce del modello vettoriale aiutano a ricordare gli estremi, ma J² ha autovalore hbar² j(j+1), non il quadrato di un vettore classico di lunghezza j. I coefficienti vanno ricavati dall'algebra.</p></article></div><h2>Due prodotti per ogni proiezione interna</h2><div class="lecture-grid"><article class="lecture-card "><h3>Base non accoppiata</h3><p>Per m_j uguale m più un mezzo contribuiscono soltanto Y_lm chi+ e Y_l,m+1 chi-. Agli estremi una delle due combinazioni scompare.</p></article><article class="lecture-card "><h3>Base accoppiata</h3><p>Le due combinazioni ortogonali hanno lo stesso m_j ma diversi j. La prima appartiene a l più un mezzo; la seconda a l meno un mezzo.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Regola triangolare<span class="lecture-step-boss">DIM 8</span></h4><p>Con s uguale un mezzo, la catena generale contiene al massimo due valori di j.</p><div class="lecture-formula" aria-label="Valori ammessi di j per momento orbitale e spin un mezzo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf J=\mathbf L+\mathbf S,\qquad j=\ell\pm\tfrac12\ (\ell&gt;0),\qquad\ell=0\Rightarrow j=\tfrac12\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Conteggio<span class="lecture-step-boss">CHECK</span></h4><p>Le dimensioni dei due multipleti ricostruiscono il prodotto orbitale-spin.</p><div class="lecture-formula" aria-label="Controllo dimensionale dei multipleti l più o meno un mezzo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [2(\ell+\tfrac12)+1]+[2(\ell-\tfrac12)+1]=(2\ell+2)+(2\ell)=2(2\ell+1)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Sottospazio a m_j fissato<span class="lecture-step-boss">BASE</span></h4><p>Per una proiezione interna esistono due prodotti compatibili con m_j uguale m più un mezzo.</p><div class="lecture-formula" aria-label="Base prodotto per una proiezione totale fissata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle m_j=m+\tfrac12:\quad|a\rangle=|\ell,m\rangle|\uparrow\rangle,\qquad|b\rangle=|\ell,m+1\rangle|\downarrow\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Peso massimo<span class="lecture-step-boss">BOSS</span></h4><p>Lo stato superiore del multipletto j uguale l più un mezzo è l'unico prodotto con proiezione massima.</p><div class="lecture-formula" aria-label="Stato di peso massimo nell&#x27;accoppiamento orbitale-spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\ell+\tfrac12,\ell+\tfrac12\rangle=|\ell,\ell\rangle|\uparrow\rangle,\qquad J_+|\ell+\tfrac12,\ell+\tfrac12\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Discesa totale<span class="lecture-step-boss">CALCOLO</span></h4><p>Si applica J- uguale L- più S-. Il lato accoppiato fornisce un coefficiente fattoriale dopo k discese.</p><div class="lecture-formula" aria-label="Applicazione ripetuta del ladder totale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (J_-)^k|j,j\rangle=\hbar^k\sqrt{\frac{k!(2j)!}{(2j-k)!}}|j,j-k\rangle,\qquad j=\ell+\tfrac12\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Troncamento dello spin<span class="lecture-step-boss">PASSAGGIO</span></h4><p>Poiché S- al quadrato annulla up, l'espansione binomiale contiene soltanto il termine senza S- e quello lineare.</p><div class="lecture-formula" aria-label="Troncamento dell&#x27;espansione binomiale del ladder"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (S_-)^2|\uparrow\rangle=0\Rightarrow(L_-+S_-)^k|\ell,\ell\rangle|\uparrow\rangle=[L_-^k+kL_-^{k-1}S_-]|\ell,\ell\rangle|\uparrow\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Coefficienti c+ e c-<span class="lecture-step-boss">APPUNTI</span></h4><p>Ponendo k uguale l meno m e confrontando i fattoriali dei due lati si ottengono direttamente i coefficienti normalizzati.</p><div class="lecture-formula" aria-label="Coefficienti per il multipletto j uguale l più un mezzo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_+=\sqrt{\frac{\ell+m+1}{2\ell+1}},\qquad c_-=\sqrt{\frac{\ell-m}{2\ell+1}},\qquad c_+^2+c_-^2=1\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Multipletto superiore<span class="lecture-step-boss">RISULTATO</span></h4><p>La prima combinazione segue dal ladder e dalla scelta di fase positiva del peso massimo.</p><div class="lecture-formula" aria-label="Spinore sferico del multipletto superiore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal Y_{\ell+1/2,m+1/2}=\sqrt{\frac{\ell+m+1}{2\ell+1}}Y_{\ell m}\chi_++\sqrt{\frac{\ell-m}{2\ell+1}}Y_{\ell,m+1}\chi_-\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Multipletto inferiore<span class="lecture-step-boss">ORTOGONALITÀ</span></h4><p>Nel medesimo sottospazio bidimensionale, la combinazione ortogonale normalizzata fissa il secondo multipletto e il segno relativo.</p><div class="lecture-formula" aria-label="Spinore sferico del multipletto inferiore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal Y_{\ell-1/2,m+1/2}=-\sqrt{\frac{\ell-m}{2\ell+1}}Y_{\ell m}\chi_++\sqrt{\frac{\ell+m+1}{2\ell+1}}Y_{\ell,m+1}\chi_-\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Controllo unitario<span class="lecture-step-boss">CHECK</span></h4><p>La matrice due per due ha colonne ortonormali e determinante più uno nella convenzione adottata.</p><div class="lecture-formula" aria-label="Unitarietà locale del cambio di base"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U_m=\begin{pmatrix}c_+&amp;c_-\\-c_-&amp;c_+\end{pmatrix},\qquad U_mU_m^T=I,\qquad\det U_m=1\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Identità per L·S<span class="lecture-step-boss">ORALE</span></h4><p>Il prodotto misto diventa una differenza di operatori Casimir nella base accoppiata.</p><div class="lecture-formula" aria-label="Identità che diagonalizza il prodotto spin-orbita"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle J^2=(L+S)^2=L^2+S^2+2\mathbf L\cdot\mathbf S\Rightarrow\mathbf L\cdot\mathbf S=\frac12(J^2-L^2-S^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Autovalori di L·S<span class="lecture-step-boss">DIM 8</span></h4><p>Sostituendo s uguale un mezzo e i due j si ottengono due soli autovalori.</p><div class="lecture-formula" aria-label="Autovalori del prodotto scalare orbitale-spin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\mathbf L\cdot\mathbf S\rangle=\frac{\hbar^2}{2}[j(j+1)-\ell(\ell+1)-\tfrac34]=\begin{cases}\hbar^2\ell/2,&amp;j=\ell+1/2\\-\hbar^2(\ell+1)/2,&amp;j=\ell-1/2\end{cases}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Elettrone p<span class="lecture-step-boss">ESEMPIO</span></h4><p>Per l uguale uno e m_j uguale un mezzo, le due righe della matrice forniscono gli stati j uguale tre mezzi e un mezzo.</p><div class="lecture-formula" aria-label="Stati accoppiati di un elettrone p"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\tfrac32,\tfrac12\rangle=\sqrt{\tfrac23}|1,0\rangle|\uparrow\rangle+\sqrt{\tfrac13}|1,1\rangle|\downarrow\rangle,\quad|\tfrac12,\tfrac12\rangle=-\sqrt{\tfrac13}|1,0\rangle|\uparrow\rangle+\sqrt{\tfrac23}|1,1\rangle|\downarrow\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Probabilità inverse<span class="lecture-step-boss">MISURA</span></h4><p>Il cambio è ortogonale: invertire le righe esprime ogni prodotto come sovrapposizione dei due valori di j e ne fornisce le probabilità di misura.</p><div class="lecture-formula" aria-label="Probabilità di J² da uno stato prodotto p"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |1,0\rangle|\uparrow\rangle=\sqrt{\tfrac23}|\tfrac32,\tfrac12\rangle-\sqrt{\tfrac13}|\tfrac12,\tfrac12\rangle\Rightarrow P(j=\tfrac32)=\tfrac23,\ P(j=\tfrac12)=\tfrac13\)</span></div></article></section><h2>Esempio d'esame: splitting spin-orbita di un elettrone p</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si considera H spin-orbita uguale lambda L·S con l uguale uno. Il livello si divide in j uguale tre mezzi e j uguale un mezzo.</p><p data-i18n-skip="true">\(\displaystyle \Delta E_{3/2}=\lambda\hbar^2/2\quad(g=4),\qquad\Delta E_{1/2}=-\lambda\hbar^2\quad(g=2)\)</p><p><strong>Controllo.</strong> Il baricentro pesato resta nullo: quattro volte un mezzo più due volte meno uno uguale zero. Il segno di lambda decide quale multipletto è più basso.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Spinori sferici</h3><p>Le funzioni accoppiate non sono prodotti con m_l e m_s definiti, salvo gli stati estremi del multipletto superiore. Sono autostati di J² e Jz costruiti come spinori dipendenti dagli angoli.</p></article><article class="lecture-card "><h3>Base adatta all'Hamiltoniana</h3><p>Se H contiene L·S, la base accoppiata è diagonale; se domina un forte campo magnetico lungo z, può essere più naturale la base non accoppiata con m_l e m_s definiti.</p></article><article class="lecture-card "><h3>Caso l uguale zero</h3><p>La formula del ramo inferiore non esiste: manca il multipletto j uguale meno un mezzo. Resta soltanto j uguale un mezzo e L·S si annulla.</p></article><article class="lecture-card "><h3>Regime di accoppiamento</h3><p>La classificazione j è utile quando l'interazione rispetta la simmetria rotazionale e J è conservato. Nei sistemi multielettronici occorre distinguere accoppiamento LS, jj e regimi intermedi.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare due rami per l uguale zero; scambiare m con m_j; perdere il termine m più uno nel secondo orbitale; scegliere segni non ortogonali; confondere L·S con LzSz; dimenticare le degenerazioni due j più uno.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Somma delle dimensioni, somma dei quadrati c+² più c-², ortogonalità delle due righe, estremi m uguale più o meno l, valori di L·S e baricentro pesato dello splitting.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Ricava j uguale l più o meno un mezzo e conta le dimensioni.</li><li>Individua i due prodotti con m_j fissato.</li><li>Parti dal peso massimo e applica ripetutamente J-.</li><li>Spiega perché l'espansione si tronca dopo un solo S-.</li><li>Ricava c+ e c- e costruisci i due spinori sferici.</li><li>Verifica norma, ortogonalità e convenzione di fase.</li><li>Diagonalizza L·S con l'identità dei Casimir.</li><li>Svolgi l'esempio p e le probabilità della misura di J².</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L385">DIM 8 - composizione, ladder e cambio di base</a></li><li><a href="Appunti-MQ.pdf#page=282">Appunti-MQ.pdf, pagine PDF 282-285 - appendice su momento orbitale e spin 1/2</a></li><li><a href="Domanda2025_2.html">Domanda 2025 n. 2 - termine spin-orbita nella struttura fine</a></li><li><a href="set-10-momento-totale.html#ex3">Set 10, esercizio 3 - accoppiamento l uguale uno con spin 1/2</a></li><li><a href="coefficenti-clebsch-gordan.html">Coefficienti di Clebsch-Gordan - costruzione generale</a></li><li><a href="interazione-spin-orbita.html">Interazione spin-orbita - applicazione alla struttura fine</a></li></ul><p class="lecture-note">La pagina riproduce la catena logica dell'appendice del corso, inclusi il troncamento binomiale e i fattoriali, ma la compatta in passaggi adatti alla prova orale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 11 - DIM 8":"In-depth lesson - Topic 11 - DIM 8","Somma di momento angolare orbitale e spin 1/2":"Addition of orbital angular momentum and spin 1/2","Obiettivo.":"Objective.","Derivare i due multipleti j uguale l più o meno un mezzo e i relativi spinori sferici mediante il ladder totale, controllare normalizzazione e fase, diagonalizzare L·S e applicare il risultato a un elettrone p e allo splitting spin-orbita.":"Derive the two j equals l plus or minus one-half multiplets and their spinor spherical harmonics using the total ladder, check normalization and phase, diagonalize L·S, and apply the result to a p electron and spin-orbit splitting.","Accoppiamento LS a una particella":"One-particle LS coupling","Per spin s uguale un mezzo e l maggiore di zero, il prodotto di dimensione due volte due l più uno si divide esattamente nei multipleti j uguale l più un mezzo e j uguale l meno un mezzo.":"For spin s equals one half and l greater than zero, the product of dimension two times two l plus one splits exactly into the j equals l plus one half and j equals l minus one half multiplets.","Non è una somma classica":"Not a classical sum","Le frecce del modello vettoriale aiutano a ricordare gli estremi, ma J² ha autovalore hbar² j(j+1), non il quadrato di un vettore classico di lunghezza j. I coefficienti vanno ricavati dall'algebra.":"The vector model helps recall the endpoints, but J² has eigenvalue hbar² j(j+1), not the square of a classical vector of length j. Coefficients must be derived algebraically.","Due prodotti per ogni proiezione interna":"Two products for each interior projection","Base non accoppiata":"Uncoupled basis","Per m_j uguale m più un mezzo contribuiscono soltanto Y_lm chi+ e Y_l,m+1 chi-. Agli estremi una delle due combinazioni scompare.":"For m_j equals m plus one half, only Y_lm chi+ and Y_l,m+1 chi- contribute. At the endpoints one of the two combinations disappears.","Base accoppiata":"Coupled basis","Le due combinazioni ortogonali hanno lo stesso m_j ma diversi j. La prima appartiene a l più un mezzo; la seconda a l meno un mezzo.":"The two orthogonal combinations have the same m_j but different j. The first belongs to l plus one half; the second to l minus one half.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Regola triangolare":"1. Triangle rule","DIM 8":"DIM 8","Con s uguale un mezzo, la catena generale contiene al massimo due valori di j.":"With s equals one half, the general chain contains at most two j values.","Passaggio":"Step","2. Conteggio":"2. Counting","CHECK":"CHECK","Le dimensioni dei due multipleti ricostruiscono il prodotto orbitale-spin.":"The two multiplet dimensions reconstruct the orbital-spin product.","3. Sottospazio a m_j fissato":"3. Fixed-mj subspace","BASE":"BASE","Per una proiezione interna esistono due prodotti compatibili con m_j uguale m più un mezzo.":"For an interior projection there are two products compatible with m_j equals m plus one half.","4. Peso massimo":"4. Highest weight","BOSS":"BOSS","Lo stato superiore del multipletto j uguale l più un mezzo è l'unico prodotto con proiezione massima.":"The top state of the j equals l plus one-half multiplet is the unique product with maximum projection.","5. Discesa totale":"5. Total lowering","CALCOLO":"CALCULATION","Si applica J- uguale L- più S-. Il lato accoppiato fornisce un coefficiente fattoriale dopo k discese.":"Apply J- equals L- plus S-. The coupled side gives a factorial coefficient after k lowerings.","6. Troncamento dello spin":"6. Spin truncation","PASSAGGIO":"STEP","Poiché S- al quadrato annulla up, l'espansione binomiale contiene soltanto il termine senza S- e quello lineare.":"Because S- squared annihilates up, the binomial expansion contains only the term without S- and the linear term.","7. Coefficienti c+ e c-":"7. Coefficients c+ and c-","APPUNTI":"NOTES","Ponendo k uguale l meno m e confrontando i fattoriali dei due lati si ottengono direttamente i coefficienti normalizzati.":"Set k equal to l minus m and compare factorials on both sides to obtain the normalized coefficients directly.","8. Multipletto superiore":"8. Upper multiplet","RISULTATO":"RESULT","La prima combinazione segue dal ladder e dalla scelta di fase positiva del peso massimo.":"The first combination follows from the ladder and the positive phase choice for the highest weight.","9. Multipletto inferiore":"9. Lower multiplet","ORTOGONALITÀ":"ORTHOGONALITY","Nel medesimo sottospazio bidimensionale, la combinazione ortogonale normalizzata fissa il secondo multipletto e il segno relativo.":"In the same two-dimensional subspace, the normalized orthogonal combination fixes the second multiplet and the relative sign.","10. Controllo unitario":"10. Unitary check","La matrice due per due ha colonne ortonormali e determinante più uno nella convenzione adottata.":"The two-by-two matrix has orthonormal columns and determinant plus one in the chosen convention.","11. Identità per L·S":"11. Identity for L dot S","ORALE":"ORAL","Il prodotto misto diventa una differenza di operatori Casimir nella base accoppiata.":"The mixed product becomes a difference of Casimir operators in the coupled basis.","12. Autovalori di L·S":"12. Eigenvalues of L dot S","Sostituendo s uguale un mezzo e i due j si ottengono due soli autovalori.":"Substituting s equals one half and the two j values gives only two eigenvalues.","13. Elettrone p":"13. p electron","ESEMPIO":"EXAMPLE","Per l uguale uno e m_j uguale un mezzo, le due righe della matrice forniscono gli stati j uguale tre mezzi e un mezzo.":"For l equals one and m_j equals one half, the two matrix rows give the j equals three-halves and one-half states.","14. Probabilità inverse":"14. Inverse probabilities","MISURA":"MEASUREMENT","Il cambio è ortogonale: invertire le righe esprime ogni prodotto come sovrapposizione dei due valori di j e ne fornisce le probabilità di misura.":"The transformation is orthogonal: reversing the rows expresses each product as a superposition of the two j values and gives their measurement probabilities.","Esempio d'esame: splitting spin-orbita di un elettrone p":"Exam example: spin-orbit splitting of a p electron","Impostazione.":"Setup.","Si considera H spin-orbita uguale lambda L·S con l uguale uno. Il livello si divide in j uguale tre mezzi e j uguale un mezzo.":"Consider spin-orbit H equal to lambda L·S with l equal to one. The level splits into j equals three halves and j equals one half.","Controllo.":"Check.","Il baricentro pesato resta nullo: quattro volte un mezzo più due volte meno uno uguale zero. Il segno di lambda decide quale multipletto è più basso.":"The weighted centroid remains zero: four times one half plus two times minus one equals zero. The sign of lambda determines which multiplet lies lower.","Interpretazione e limiti":"Interpretation and limits","Spinori sferici":"Spinor spherical harmonics","Le funzioni accoppiate non sono prodotti con m_l e m_s definiti, salvo gli stati estremi del multipletto superiore. Sono autostati di J² e Jz costruiti come spinori dipendenti dagli angoli.":"Coupled functions are not products with definite m_l and m_s except at the extreme upper-multiplet states. They are J² and Jz eigenstates built as angle-dependent spinors.","Base adatta all'Hamiltoniana":"Basis adapted to the Hamiltonian","Se H contiene L·S, la base accoppiata è diagonale; se domina un forte campo magnetico lungo z, può essere più naturale la base non accoppiata con m_l e m_s definiti.":"If H contains L·S, the coupled basis is diagonal; if a strong z magnetic field dominates, the uncoupled basis with definite m_l and m_s may be more natural.","Caso l uguale zero":"The l equals zero case","La formula del ramo inferiore non esiste: manca il multipletto j uguale meno un mezzo. Resta soltanto j uguale un mezzo e L·S si annulla.":"The lower-branch formula does not exist: there is no j equals minus one-half multiplet. Only j equals one half remains and L·S vanishes.","Regime di accoppiamento":"Coupling regime","La classificazione j è utile quando l'interazione rispetta la simmetria rotazionale e J è conservato. Nei sistemi multielettronici occorre distinguere accoppiamento LS, jj e regimi intermedi.":"The j classification is useful when the interaction respects rotational symmetry and J is conserved. In multielectron systems one must distinguish LS, jj, and intermediate coupling regimes.","Errori tipici":"Common errors","Usare due rami per l uguale zero; scambiare m con m_j; perdere il termine m più uno nel secondo orbitale; scegliere segni non ortogonali; confondere L·S con LzSz; dimenticare le degenerazioni due j più uno.":"Using two branches for l equals zero; confusing m with m_j; losing the m plus one in the second orbital; choosing nonorthogonal signs; confusing L·S with LzSz; forgetting the two-j-plus-one degeneracies.","Controlli rapidi":"Quick checks","Somma delle dimensioni, somma dei quadrati c+² più c-², ortogonalità delle due righe, estremi m uguale più o meno l, valori di L·S e baricentro pesato dello splitting.":"Check the dimension sum, c+ squared plus c- squared, orthogonality of the two rows, the m equals plus or minus l endpoints, L·S values, and the weighted splitting centroid.","Controllo da orale":"Oral exam checklist","Ricava j uguale l più o meno un mezzo e conta le dimensioni.":"Derive j equals l plus or minus one half and count dimensions.","Individua i due prodotti con m_j fissato.":"Identify the two products for fixed m_j.","Parti dal peso massimo e applica ripetutamente J-.":"Start from the highest weight and repeatedly apply J-.","Spiega perché l'espansione si tronca dopo un solo S-.":"Explain why the expansion truncates after one S-.","Ricava c+ e c- e costruisci i due spinori sferici.":"Derive c+ and c- and construct both spinor spherical harmonics.","Verifica norma, ortogonalità e convenzione di fase.":"Verify norm, orthogonality, and phase convention.","Diagonalizza L·S con l'identità dei Casimir.":"Diagonalize L·S with the Casimir identity.","Svolgi l'esempio p e le probabilità della misura di J².":"Work through the p example and J² measurement probabilities.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 8 - composizione, ladder e cambio di base":"DIM 8 - composition, ladder operators, and basis change","Appunti-MQ.pdf, pagine PDF 282-285 - appendice su momento orbitale e spin 1/2":"Appunti-MQ.pdf, PDF pages 282-285 - appendix on orbital angular momentum and spin 1/2","Domanda 2025 n. 2 - termine spin-orbita nella struttura fine":"2025 question 2 - spin-orbit term in fine structure","Set 10, esercizio 3 - accoppiamento l uguale uno con spin 1/2":"Set 10, exercise 3 - coupling l equals one with spin 1/2","Coefficienti di Clebsch-Gordan - costruzione generale":"Clebsch-Gordan coefficients - general construction","Interazione spin-orbita - applicazione alla struttura fine":"Spin-orbit interaction - application to fine structure","La pagina riproduce la catena logica dell'appendice del corso, inclusi il troncamento binomiale e i fattoriali, ma la compatta in passaggi adatti alla prova orale.":"The page reproduces the logical chain of the course appendix, including binomial truncation and factorials, while compacting it into oral-exam-ready steps.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Valori ammessi di j per momento orbitale e spin un mezzo":"Allowed j values for orbital angular momentum and spin one half","Controllo dimensionale dei multipleti l più o meno un mezzo":"Dimensional check of the l plus or minus one-half multiplets","Base prodotto per una proiezione totale fissata":"Product basis for a fixed total projection","Stato di peso massimo nell'accoppiamento orbitale-spin":"Highest-weight state in orbital-spin coupling","Applicazione ripetuta del ladder totale":"Repeated application of the total ladder","Troncamento dell'espansione binomiale del ladder":"Truncation of the ladder binomial expansion","Coefficienti per il multipletto j uguale l più un mezzo":"Coefficients for the j equals l plus one-half multiplet","Spinore sferico del multipletto superiore":"Spinor spherical harmonic of the upper multiplet","Spinore sferico del multipletto inferiore":"Spinor spherical harmonic of the lower multiplet","Unitarietà locale del cambio di base":"Local unitarity of the basis transformation","Identità che diagonalizza il prodotto spin-orbita":"Identity diagonalizing the spin-orbit product","Autovalori del prodotto scalare orbitale-spin":"Eigenvalues of the orbital-spin scalar product","Stati accoppiati di un elettrone p":"Coupled states of a p electron","Probabilità di J² da uno stato prodotto p":"J squared probabilities from a p product state"},"title":{"it":"Somma di momento angolare orbitale e spin 1/2","en":"Addition of orbital angular momentum and spin 1/2"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

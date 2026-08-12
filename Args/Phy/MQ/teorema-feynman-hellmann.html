@@ -1,395 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teorema di Feynman-Hellmann</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teorema di Hellmann-Feynman</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Teorema di Feynman-Hellmann</h1>
-
-    <p>Il Teorema di Feynman-Hellmann è un risultato fondamentale che collega le derivate di un autovalore dell'Hamiltoniana rispetto a un parametro \( \lambda \) a un valore di aspettazione. Questo teorema trova applicazioni essenziali nella meccanica quantistica, in particolare nello studio delle correzioni agli autovalori energetici in presenza di perturbazioni parametrizzate.</p>
-
-    <h2>Enunciato</h2>
-    <p>Se \( \hat{H}(\lambda) \) è un'Hamiltoniana che dipende da un parametro \( \lambda \) e \( \psi_n(\lambda) \) è l'autofunzione associata all'autovalore \( E_n(\lambda) \), allora:</p>
-    <div class="formula">
-        \[
-        \frac{\partial E_n(\lambda)}{\partial \lambda} = \left\langle \psi_n(\lambda) \middle| \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \middle| \psi_n(\lambda) \right\rangle
-        \]
-    </div>
-    <p>Questo risultato presuppone che \( \psi_n(\lambda) \) sia normalizzata e che il sistema non presenti degenerazione in \( E_n(\lambda) \).</p>
-
-    <h2>Dimostrazione</h2>
-    <p>L'Hamiltoniana parametrizzata \( \hat{H}(\lambda) \) soddisfa:</p>
-    <div class="formula">
-        \[
-        \hat{H}(\lambda) \psi_n(\lambda) = E_n(\lambda) \psi_n(\lambda)
-        \]
-    </div>
-    <p>Derivando rispetto a \( \lambda \):</p>
-    <div class="formula">
-        \[
-        \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \psi_n(\lambda) + \hat{H}(\lambda) \frac{\partial \psi_n(\lambda)}{\partial \lambda} = \frac{\partial E_n(\lambda)}{\partial \lambda} \psi_n(\lambda) + E_n(\lambda) \frac{\partial \psi_n(\lambda)}{\partial \lambda}
-        \]
-    </div>
-    <p>Moltiplicando scalarmene a sinistra per \( \psi_n^*(\lambda) \) e utilizzando la normalizzazione di \( \psi_n(\lambda) \):</p>
-    <div class="formula">
-        \[
-        \frac{\partial E_n(\lambda)}{\partial \lambda} = \left\langle \psi_n(\lambda) \middle| \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \middle| \psi_n(\lambda) \right\rangle
-        \]
-    </div>
-    <p>Questo conclude la dimostrazione.</p>
-
-    <h2>Applicazioni</h2>
-    <ul>
-        <li><strong>Struttura fine dell’atomo:</strong> Calcolo delle correzioni energetiche relativistiche nell'atomo di idrogeno.</li>
-        <li><strong>Forze in sistemi molecolari:</strong> Determinazione delle forze sugli atomi a partire dai gradienti dell'energia totale rispetto alle coordinate.</li>
-        <li><strong>Teoria delle perturbazioni:</strong> Stima delle variazioni energetiche indotte da perturbazioni dipendenti da parametri.</li>
-    </ul>
-	
-	    <h2>Interpretazione Fisica</h2>
-    <p>Il Teorema di Feynman-Hellmann implica che l'autovalore \( E_n(\lambda) \) dipende direttamente dal valore di aspettazione dell'operatore \( \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \) calcolato nello stato \( \psi_n(\lambda) \). Questa relazione offre un metodo pratico per calcolare derivate rispetto ai parametri di sistema, evitando di dover risolvere esplicitamente l'intero problema agli autovalori.</p>
-
-    <p>Ad esempio, nel caso di un sistema atomico, se \( \lambda \) rappresenta una coordinata nucleare, il teorema fornisce un modo per calcolare le forze interatomiche come:</p>
-    <div class="formula">
-        \[
-        F = -\frac{\partial E}{\partial \lambda}
-        \]
-    </div>
-    <p>Con \( F \) che rappresenta la forza e \( E \) l'energia totale del sistema.</p>
-
-    <h2>Passaggi Matematici Estesi</h2>
-    <p>Riprendiamo la derivata completa dell'Hamiltoniana parametrizzata:</p>
-    <div class="formula">
-        \[
-        \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \psi_n(\lambda) + \hat{H}(\lambda) \frac{\partial \psi_n(\lambda)}{\partial \lambda} = \frac{\partial E_n(\lambda)}{\partial \lambda} \psi_n(\lambda) + E_n(\lambda) \frac{\partial \psi_n(\lambda)}{\partial \lambda}
-        \]
-    </div>
-    <p>Moltiplichiamo a sinistra per \( \psi_n^*(\lambda) \) e integriamo su tutto lo spazio:</p>
-    <div class="formula">
-        \[
-        \int \psi_n^*(\lambda) \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \psi_n(\lambda) \, d\tau + \int \psi_n^*(\lambda) \hat{H}(\lambda) \frac{\partial \psi_n(\lambda)}{\partial \lambda} \, d\tau = \frac{\partial E_n(\lambda)}{\partial \lambda} + E_n(\lambda) \int \psi_n^*(\lambda) \frac{\partial \psi_n(\lambda)}{\partial \lambda} \, d\tau
-        \]
-    </div>
-    <p>Poiché \( \hat{H}(\lambda) \psi_n(\lambda) = E_n(\lambda) \psi_n(\lambda) \), possiamo sostituire \( \hat{H}(\lambda) \) con \( E_n(\lambda) \). Inoltre, la normalizzazione di \( \psi_n(\lambda) \) implica che:</p>
-    <div class="formula">
-        \[
-        \int \psi_n^*(\lambda) \frac{\partial \psi_n(\lambda)}{\partial \lambda} \, d\tau = 0
-        \]
-    </div>
-    <p>Resta quindi:</p>
-    <div class="formula">
-        \[
-        \frac{\partial E_n(\lambda)}{\partial \lambda} = \int \psi_n^*(\lambda) \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \psi_n(\lambda) \, d\tau
-        \]
-    </div>
-    <p>che conferma la formula del teorema.</p>
-
-    <h2>Applicazioni Avanzate</h2>
-    <ul>
-        <li><strong>Teoria della struttura elettronica:</strong> Il teorema è utilizzato per calcolare proprietà derivanti dalle derivate dell'energia totale rispetto a parametri esterni, come costanti dielettriche o cariche nucleari.</li>
-        <li><strong>Spettroscopia atomica e molecolare:</strong> L'analisi delle correzioni relativistiche e spin-orbita trova un'applicazione diretta nel predire linee spettroscopiche.</li>
-        <li><strong>Teoria dei materiali:</strong> Determinazione delle proprietà elastiche e di trasporto mediante la dipendenza dell'energia da deformazioni strutturali.</li>
-    </ul>
-	<!-- ===================== NUOVA SEZIONE: ESEMPIO CALCOLATO ===================== -->
-<div class="lavagna" style="background:#114488; color:#f0f6fa; margin-top:30px;">
-    <h2 style="color:#ffdd66;">Esempio: Atomo di Idrogeno e Feynman-Hellmann</h2>
-    <p>
-    Considera l'Hamiltoniano dell'idrogeno (non relativistico):
-    </p>
-    \[
-    \hat{H} = -\frac{\hbar^2}{2m} \nabla^2 - \frac{Ze^2}{r}
-    \]
-    <ul>
-        <li>
-            <b>Scegliamo il parametro</b> \(\lambda = Z\) (numero atomico).
-        </li>
-        <li>
-            <b>Energia degli autostati:</b>
-            \[
-            E_n = -\frac{Z^2 e^4 m}{2 \hbar^2 n^2}
-            \]
-        </li>
-        <li>
-            <b>Derivata rispetto a \(Z\):</b>
-            \[
-            \frac{\partial E_n}{\partial Z} = -\frac{2 Z e^4 m}{2 \hbar^2 n^2} = -\frac{Z e^4 m}{\hbar^2 n^2}
-            \]
-        </li>
-        <li>
-            <b>Applichiamo Feynman-Hellmann:</b>
-            \[
-            \frac{\partial E_n}{\partial Z} = \left\langle \psi_n \left| \frac{\partial \hat{H}}{\partial Z} \right| \psi_n \right\rangle
-            \]
-            Ma:
-            \[
-            \frac{\partial \hat{H}}{\partial Z} = -\frac{e^2}{r}
-            \]
-            Quindi:
-            \[
-            \frac{\partial E_n}{\partial Z} = -e^2 \left\langle \frac{1}{r} \right\rangle
-            \]
-        </li>
-        <li>
-            <b>Ugualiamo i risultati:</b>
-            \[
-            -\frac{Z e^4 m}{\hbar^2 n^2} = -e^2 \left\langle \frac{1}{r} \right\rangle
-            \]
-            Quindi:
-            \[
-            \boxed{
-                \left\langle \frac{1}{r} \right\rangle = \frac{Z e^2 m}{\hbar^2 n^2}
-            }
-            \]
-        </li>
-    </ul>
-    <p>
-    Questo è un esempio classico: il valore medio di \(1/r\) sull’autostato dell’idrogeno, senza fare integrali!
-    </p>
-</div>
-
-<!-- ===================== BOX RIASSUNTIVO ===================== -->
-<div style="background:#ffeeaa; color:#333; border:2px solid #cc9; border-radius:10px; padding:22px 18px; margin:30px 0 10px 0;">
-    <h2 style="color:#e67300; margin-top:0;">Box Riassuntivo: Teorema di Feynman-Hellmann</h2>
-    <ul>
-        <li>
-            <b>Formula Generale:</b><br>
-            \[
-            \frac{\partial E_n(\lambda)}{\partial \lambda} = \left\langle \phi_n(\lambda)\left| \frac{\partial \hat{H}(\lambda)}{\partial \lambda} \right| \phi_n(\lambda)\right\rangle
-            \]
-        </li>
-        <li>
-            <b>Hamiltoniana lineare:</b><br>
-            Se \(\hat{H}(\lambda) = \hat{H}_0 + \lambda \hat{V}\), allora
-            \[
-            \frac{\partial E_n}{\partial \lambda} = \langle \hat{V} \rangle_n
-            \]
-        </li>
-        <li>
-            <b>Utilità:</b>
-            <ul>
-                <li>Permette di trovare valori medi rapidamente.</li>
-                <li>Evita calcoli integrali complessi.</li>
-                <li>Fondamentale in problemi di perturbazioni e variazione di parametri.</li>
-            </ul>
-        </li>
-    </ul>
-    <p style="margin-top:18px;">
-        <b>Da ricordare:</b> la validità del teorema si basa su autofunzioni non degeneri normalizzate. Per casi degeneri si usa una base ortogonale appropriata.
-    </p>
-</div>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 13</div>
-  <h2>Teorema di Feynman-Hellmann: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare valori medi come derivate parametriche degli autovalori.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Se H dipende da un parametro lambda e lo stato è un autovettore normalizzato non degenere, derivare l'equazione spettrale elimina la derivata dello stato.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Teorema<span class="lecture-step-boss">DIM 10</span></h4>
-      <p>Usando normalizzazione e hermiticità.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\frac{dE_n}{d\lambda}=\left\langle n(\lambda)\left|\frac{\partial H}{\partial\lambda}\right|n(\lambda)\right\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H(\lambda)|n\rangle=E_n|n\rangle\Rightarrow \partial_\lambda H|n\rangle+H|\partial_\lambda n\rangle=\frac{dE_n}{d\lambda}|n\rangle+E_n|\partial_\lambda n\rangle;\quad\langle n|H=E_n\langle n|\Rightarrow\frac{dE_n}{d\lambda}=\left\langle n(\lambda)\left|\frac{\partial H}{\partial\lambda}\right|n(\lambda)\right\rangle\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Degenerazione<span class="lecture-step-boss">DIM 10</span></h4>
-      <p>Serve diagonalizzare la derivata nel sottospazio.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P(\partial_\lambda H)P"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H_0P=E_0P;\quad\text{derivazione e proiezione in }P\Rightarrow P(\partial_\lambda H)P|\alpha\rangle=(\partial_\lambda E_\alpha)|\alpha\rangle\Rightarrow\text{diagonalizzare }P(\partial_\lambda H)P\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Oscillatore</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Usa lambda=omega in \(E_n=\hbar\omega(n+1/2)\).</p>
-    <p><strong>Calcolo.</strong> La derivata vale \(\hbar(n+1/2)=\langle m\omega x^2\rangle\).</p>
-    <p><strong>Risultato e controllo.</strong> Si ricava \(\langle x^2\rangle=\hbar(n+1/2)/(m\omega)\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 10</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Autostato differenziabile e normalizzato.</li>
-          <li>Trattamento speciale ai crossing.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Il teorema sostituisce integrali difficili con una derivata dello spettro.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Applicalo alla massa o alla carica.</li>
-          <li>Spiega il caso degenere.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="MQ.pdf#page=20">MQ.pdf, pp. capitolo 20: derivazione parametrica degli autovalori</a></li>
-          <li><a href="FisicaTeoricaMeccanicaQuantistica_compresso.pdf">FisicaTeoricaMeccanicaQuantistica_compresso.pdf, pp. dispensa manoscritta: applicazioni a valori medi</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-teorema-feynman-hellmann"><div class="lecture-kicker">DIM 10 - dimostrazione, degenerazione e applicazioni</div><h1>Teorema di Hellmann-Feynman</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'energia rispetto a un parametro senza derivare esplicitamente lo stato: prova completa, fase, sottospazi degeneri e risposte generalizzate.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Identità</h3><p>Vale per autostati esatti normalizzati e rami differenziabili.</p></article><article class="lecture-card lecture-warning"><h3>Vantaggio</h3><p>Non occorre calcolare la derivata del ket per la prima derivata dell'energia.</p></article></div><h2>Impostazione, ipotesi e convenzioni</h2><div class="lecture-grid"><article class="lecture-card "><h3>Ipotesi</h3><p>H(lambda) è autoaggiunto su un dominio appropriato, il ramo E_n(lambda) è differenziabile e il ket è normalizzato. La prova elementare considera inizialmente un livello semplice.</p></article><article class="lecture-card "><h3>Notazione</h3><p>Il primo indica derivata rispetto a lambda: H'=partial_lambda H, |n'&gt;=partial_lambda|n&gt; ed E'_n=dE_n/dlambda.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Equazione spettrale<span class="lecture-step-boss">IPOTESI</span></h4><p>Si segue un autovalore e il suo autovettore al variare del parametro reale.</p><div class="lecture-formula" aria-label="Problema agli autovalori parametrico e normalizzazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H(\lambda)|n(\lambda)\rangle=E_n(\lambda)|n(\lambda)\rangle,\qquad\langle n|n\rangle=1\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Derivata del prodotto<span class="lecture-step-boss">PROVA</span></h4><p>La derivata agisce sia sull'operatore sia sul ket in entrambi i membri.</p><div class="lecture-formula" aria-label="Derivata completa dell&#x27;equazione agli autovalori"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H'|n\rangle+H|n'\rangle=E_n'|n\rangle+E_n|n'\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Proiezione<span class="lecture-step-boss">PROVA</span></h4><p>Moltiplicando per il bra n si trasforma l'equazione vettoriale in una relazione scalare.</p><div class="lecture-formula" aria-label="Proiezione sullo stesso autostato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle n|H'|n\rangle+\langle n|H|n'\rangle=E_n'\langle n|n\rangle+E_n\langle n|n'\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Bra agli autovalori<span class="lecture-step-boss">PROVA</span></h4><p>L'autoaggiuntezza di H e la realtà di E permettono di coniugare l'equazione spettrale.</p><div class="lecture-formula" aria-label="Equazione agli autovalori per il bra"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H|n\rangle=E_n|n\rangle\Rightarrow\langle n|H=E_n\langle n|\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Cancellazione<span class="lecture-step-boss">PROVA</span></h4><p>Il secondo termine a sinistra diventa esattamente E_n&lt;n|n'&gt; e cancella quello a destra; la norma vale uno.</p><div class="lecture-formula" aria-label="Identità che produce la cancellazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle n|H|n'\rangle=E_n\langle n|n'\rangle,\qquad\langle n|n\rangle=1\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Teorema<span class="lecture-step-boss">RISULTATO</span></h4><p>Resta il valore medio della derivata parziale dell'operatore, valutato nell'autostato esatto allo stesso lambda.</p><div class="lecture-formula" aria-label="Teorema di Hellmann-Feynman"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \boxed{\frac{dE_n}{d\lambda}=\left\langle n(\lambda)\left|\frac{\partial H}{\partial\lambda}\right|n(\lambda)\right\rangle}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Fase del ket<span class="lecture-step-boss">GAUGE</span></h4><p>Derivare la normalizzazione mostra soltanto che &lt;n|n'&gt; è immaginario puro. Non occorre porlo a zero per la prova.</p><div class="lecture-formula" aria-label="Vincolo sulla connessione di fase"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle n'|n\rangle+\langle n|n'\rangle=0\Rightarrow\operatorname{Re}\langle n|n'\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Hamiltoniano lineare<span class="lecture-step-boss">PT</span></h4><p>Se H=H0+lambda V, la derivata coincide con V. A lambda zero si recupera immediatamente il primo ordine perturbativo.</p><div class="lecture-formula" aria-label="Collegamento con la perturbazione stazionaria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \left.\frac{dE_n}{d\lambda}\right|_0=\langle n^{(0)}|V|n^{(0)}\rangle=E_n^{(1)}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Livello degenere<span class="lecture-step-boss">DEG</span></h4><p>Nel sottospazio P il ket non è unico. Le pendenze fisiche sono gli autovalori della matrice proiettata di H'.</p><div class="lecture-formula" aria-label="Versione degenere di Hellmann-Feynman"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{ab}=\langle a|H'|b\rangle,\qquad W\mathbf c=w\mathbf c\Rightarrow\frac{dE_\alpha}{d\lambda}=w_\alpha\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Derivata del ket<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Proiettando l'equazione derivata su m diverso da n si ricava la parte trasversa della risposta dello stato.</p><div class="lecture-formula" aria-label="Coefficienti della derivata dell&#x27;autostato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle m|n'\rangle=\frac{\langle m|H'|n\rangle}{E_n-E_m},\qquad m\ne n\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Seconda derivata<span class="lecture-step-boss">RISPOSTA</span></h4><p>Per H lineare e livello semplice, derivare ancora introduce virtualmente gli altri livelli e riproduce i denominatori perturbativi.</p><div class="lecture-formula" aria-label="Curvatura energetica per dipendenza lineare"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{d^2E_n}{d\lambda^2}=2\sum_{m\ne n}\frac{|\langle m|H'|n\rangle|^2}{E_n-E_m}\quad(H''=0)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Forza generalizzata<span class="lecture-step-boss">FISICA</span></h4><p>Se lambda è una coordinata esterna, il gradiente negativo dell'energia è la forza media.</p><div class="lecture-formula" aria-label="Forza come derivata parametrica dell&#x27;energia"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle F_\lambda=-\frac{dE_n}{d\lambda}=-\left\langle\frac{\partial H}{\partial\lambda}\right\rangle_n\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Parametro di scala<span class="lecture-step-boss">VIRIALE</span></h4><p>Una dilatazione delle coordinate può trasformare il teorema in una relazione viriale senza valutare integrali separati.</p><div class="lecture-formula" aria-label="Uso di un parametro di dilatazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H(\lambda)=\lambda^2T+V(\mathbf r/\lambda),\qquad E_n'(1)=\langle\partial_\lambda H\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Dominio di validità<span class="lecture-step-boss">CAUTELA</span></h4><p>Ai crossing, con basi dipendenti dal parametro o domini variabili, occorre controllare differenziabilità e termini di Pulay; la formula ingenua può risultare incompleta.</p><div class="lecture-formula" aria-label="Condizione concettuale sul ramo spettrale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{dE}{d\lambda}=\langle\partial_\lambda H\rangle\quad\text{solo lungo un ramo differenziabile ben definito}\)</span></div></article></section><h2>Esempio guidato e controllo fisico</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Oscillatore armonico con lambda uguale omega: H=p²/(2m)+m omega²x²/2. Il teorema ricava &lt;x²&gt; dall'energia nota.</p><p data-i18n-skip="true">\(\displaystyle E_n=\hbar\omega(n+\tfrac12),\quad\partial_\omega H=m\omega x^2\Rightarrow\langle x^2\rangle_n=\frac{\hbar(n+\tfrac12)}{m\omega}\)</p><p><strong>Controllo.</strong> Il risultato coincide con ladder operators e con il viriale, ma non richiede alcun integrale sulla funzione d'onda.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Forza</h3><p>La derivata dell'Hamiltoniano è l'operatore di forza generalizzata con segno meno.</p></article><article class="lecture-card "><h3>Idea</h3><p>Si deriva l'equazione spettrale e si proietta sullo stesso autostato. I termini con |n'&gt; sono identici sui due membri.</p></article><article class="lecture-card "><h3>Forma multi-parametro</h3><p>Ogni componente fornisce la risposta rispetto al parametro corrispondente.</p></article><article class="lecture-card "><h3>Stato approssimato</h3><p>Il termine residuo si annulla per un autostato esatto o per un punto variazionale stazionario; questa è la cautela essenziale nei calcoli numerici.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare uno stato a lambda zero nel membro destro a lambda finito; imporre inutilmente &lt;n|n'&gt;=0; ignorare la degenerazione; confondere derivata totale di E con derivata parziale di H; applicare la formula a una base incompleta senza termini di Pulay.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>H' deve essere hermitiano; il risultato è reale; le dimensioni sono energia su lambda; per H0+lambda V a lambda zero coincide con E1; nel caso degenere occorre diagonalizzare PH'P.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Enuncia ipotesi e normalizzazione.</li><li>Deriva entrambi i prodotti.</li><li>Proietta con il bra n.</li><li>Usa autoaggiuntezza e cancella i termini di stato.</li><li>Spiega perché la fase non conta.</li><li>Collega H0 più lambda V al primo ordine.</li><li>Tratta la degenerazione con PH'P.</li><li>Fornisci un'applicazione senza integrali.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1104">DIM 10 - dimostrazione di Hellmann-Feynman e notazione</a></li><li><a href="Appunti-MQ.pdf#page=237">Appunti-MQ.pdf, pagina PDF 237 - scala relativistica e costante alpha</a></li><li><a href="correzioni-autovalori.html">Correzioni agli autovalori - collegamento perturbativo</a></li></ul><p class="lecture-note">Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"DIM 10 - dimostrazione, degenerazione e applicazioni":"DIM 10 - proof, degeneracy, and applications","Teorema di Hellmann-Feynman":"Hellmann-Feynman theorem","Obiettivo.":"Objective.","Derivare l'energia rispetto a un parametro senza derivare esplicitamente lo stato: prova completa, fase, sottospazi degeneri e risposte generalizzate.":"Differentiate energy with respect to a parameter without explicitly differentiating the state: complete proof, phase, degenerate subspaces, and generalized responses.","Identità":"Identity","Vale per autostati esatti normalizzati e rami differenziabili.":"It holds for exact normalized eigenstates and differentiable branches.","Vantaggio":"Advantage","Non occorre calcolare la derivata del ket per la prima derivata dell'energia.":"The ket derivative is not needed for the first derivative of the energy.","Impostazione, ipotesi e convenzioni":"Setup, assumptions, and conventions","Ipotesi":"Assumptions","H(lambda) è autoaggiunto su un dominio appropriato, il ramo E_n(lambda) è differenziabile e il ket è normalizzato. La prova elementare considera inizialmente un livello semplice.":"H(lambda) is self-adjoint on a suitable domain, the branch E_n(lambda) is differentiable, and the ket is normalized. The elementary proof first treats a simple level.","Notazione":"Notation","Il primo indica derivata rispetto a lambda: H'=partial_lambda H, |n'>=partial_lambda|n> ed E'_n=dE_n/dlambda.":"A prime denotes differentiation with respect to lambda: H'=partial_lambda H, |n'>=partial_lambda|n>, and E'_n=dE_n/dlambda.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Equazione spettrale":"1. Spectral equation","IPOTESI":"ASSUMPTION","Si segue un autovalore e il suo autovettore al variare del parametro reale.":"Track an eigenvalue and its eigenvector as the real parameter varies.","Passaggio":"Step","2. Derivata del prodotto":"2. Product derivative","PROVA":"PROOF","La derivata agisce sia sull'operatore sia sul ket in entrambi i membri.":"The derivative acts on both the operator and the ket on both sides.","3. Proiezione":"3. Projection","Moltiplicando per il bra n si trasforma l'equazione vettoriale in una relazione scalare.":"Multiplying by bra n turns the vector equation into a scalar relation.","4. Bra agli autovalori":"4. Left eigenvector","L'autoaggiuntezza di H e la realtà di E permettono di coniugare l'equazione spettrale.":"Self-adjointness of H and reality of E allow the spectral equation to be conjugated.","5. Cancellazione":"5. Cancellation","Il secondo termine a sinistra diventa esattamente E_n<n|n'> e cancella quello a destra; la norma vale uno.":"The second term on the left becomes exactly E_n<n|n'> and cancels the term on the right; the norm is one.","6. Teorema":"6. Theorem","RISULTATO":"RESULT","Resta il valore medio della derivata parziale dell'operatore, valutato nell'autostato esatto allo stesso lambda.":"The expectation value of the partial derivative of the operator remains, evaluated in the exact eigenstate at the same lambda.","7. Fase del ket":"7. Ket phase","GAUGE":"GAUGE","Derivare la normalizzazione mostra soltanto che <n|n'> è immaginario puro. Non occorre porlo a zero per la prova.":"Differentiating normalization only shows that <n|n'> is purely imaginary. It need not be set to zero for the proof.","8. Hamiltoniano lineare":"8. Linear Hamiltonian","PT":"PT","Se H=H0+lambda V, la derivata coincide con V. A lambda zero si recupera immediatamente il primo ordine perturbativo.":"If H=H0+lambda V, the derivative equals V. At lambda zero, first-order perturbation theory is recovered immediately.","9. Livello degenere":"9. Degenerate level","DEG":"DEG","Nel sottospazio P il ket non è unico. Le pendenze fisiche sono gli autovalori della matrice proiettata di H'.":"Inside subspace P, the ket is not unique. Physical slopes are the eigenvalues of the projected H' matrix.","10. Derivata del ket":"10. Ket derivative","ESTENSIONE":"EXTENSION","Proiettando l'equazione derivata su m diverso da n si ricava la parte trasversa della risposta dello stato.":"Projecting the differentiated equation onto m different from n gives the transverse response of the state.","11. Seconda derivata":"11. Second derivative","RISPOSTA":"RESPONSE","Per H lineare e livello semplice, derivare ancora introduce virtualmente gli altri livelli e riproduce i denominatori perturbativi.":"For linear H and a simple level, differentiating again virtually introduces the other levels and reproduces perturbative denominators.","12. Forza generalizzata":"12. Generalized force","FISICA":"PHYSICS","Se lambda è una coordinata esterna, il gradiente negativo dell'energia è la forza media.":"If lambda is an external coordinate, the negative energy gradient is the mean force.","13. Parametro di scala":"13. Scaling parameter","VIRIALE":"VIRIAL","Una dilatazione delle coordinate può trasformare il teorema in una relazione viriale senza valutare integrali separati.":"A coordinate dilation can turn the theorem into a virial relation without evaluating separate integrals.","14. Dominio di validità":"14. Domain of validity","CAUTELA":"CAUTION","Ai crossing, con basi dipendenti dal parametro o domini variabili, occorre controllare differenziabilità e termini di Pulay; la formula ingenua può risultare incompleta.":"At crossings, with parameter-dependent bases or changing domains, differentiability and Pulay terms must be checked; the naive formula may be incomplete.","Esempio guidato e controllo fisico":"Guided example and physical check","Impostazione.":"Setup.","Oscillatore armonico con lambda uguale omega: H=p²/(2m)+m omega²x²/2. Il teorema ricava <x²> dall'energia nota.":"Harmonic oscillator with lambda equal to omega: H=p²/(2m)+m omega²x²/2. The theorem obtains <x²> from the known energy.","Controllo.":"Check.","Il risultato coincide con ladder operators e con il viriale, ma non richiede alcun integrale sulla funzione d'onda.":"The result agrees with ladder operators and the virial theorem, but requires no wavefunction integral.","Interpretazione e limiti":"Interpretation and limits","Forza":"Force","La derivata dell'Hamiltoniano è l'operatore di forza generalizzata con segno meno.":"Minus the Hamiltonian derivative is the generalized-force operator.","Idea":"Idea","Si deriva l'equazione spettrale e si proietta sullo stesso autostato. I termini con |n'> sono identici sui due membri.":"Differentiate the spectral equation and project onto the same eigenstate. The terms containing |n'> are identical on both sides.","Forma multi-parametro":"Multi-parameter form","Ogni componente fornisce la risposta rispetto al parametro corrispondente.":"Each component gives the response to the corresponding parameter.","Stato approssimato":"Approximate state","Il termine residuo si annulla per un autostato esatto o per un punto variazionale stazionario; questa è la cautela essenziale nei calcoli numerici.":"The residual term vanishes for an exact eigenstate or a stationary variational point; this is the key caution in numerical calculations.","Errori tipici":"Common errors","Usare uno stato a lambda zero nel membro destro a lambda finito; imporre inutilmente <n|n'>=0; ignorare la degenerazione; confondere derivata totale di E con derivata parziale di H; applicare la formula a una base incompleta senza termini di Pulay.":"Using a lambda-zero state on the right at finite lambda; unnecessarily imposing <n|n'>=0; ignoring degeneracy; confusing the total derivative of E with the partial derivative of H; applying the formula in an incomplete basis without Pulay terms.","Controlli rapidi":"Quick checks","H' deve essere hermitiano; il risultato è reale; le dimensioni sono energia su lambda; per H0+lambda V a lambda zero coincide con E1; nel caso degenere occorre diagonalizzare PH'P.":"H' must be Hermitian; the result is real; dimensions are energy over lambda; for H0+lambda V at lambda zero it equals E1; in the degenerate case PH'P must be diagonalized.","Controllo da orale":"Oral exam checklist","Enuncia ipotesi e normalizzazione.":"State assumptions and normalization.","Deriva entrambi i prodotti.":"Differentiate both products.","Proietta con il bra n.":"Project with bra n.","Usa autoaggiuntezza e cancella i termini di stato.":"Use self-adjointness and cancel state terms.","Spiega perché la fase non conta.":"Explain why phase does not matter.","Collega H0 più lambda V al primo ordine.":"Connect H0 plus lambda V to first order.","Tratta la degenerazione con PH'P.":"Treat degeneracy with PH'P.","Fornisci un'applicazione senza integrali.":"Give an application without integrals.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 10 - dimostrazione di Hellmann-Feynman e notazione":"DIM 10 - Hellmann-Feynman proof and notation","Appunti-MQ.pdf, pagina PDF 237 - scala relativistica e costante alpha":"Appunti-MQ.pdf, PDF page 237 - relativistic scale and alpha constant","Correzioni agli autovalori - collegamento perturbativo":"Eigenvalue corrections - perturbative connection","Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.":"The formulas were checked against the listed PDF pages and compared with the Boss oral-exam outline; PDF references use the file's actual page numbering.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Problema agli autovalori parametrico e normalizzazione":"Parametric eigenvalue problem and normalization","Derivata completa dell'equazione agli autovalori":"Full derivative of the eigenvalue equation","Proiezione sullo stesso autostato":"Projection onto the same eigenstate","Equazione agli autovalori per il bra":"Bra eigenvalue equation","Identità che produce la cancellazione":"Identity producing the cancellation","Teorema di Hellmann-Feynman":"Hellmann-Feynman theorem","Vincolo sulla connessione di fase":"Constraint on the phase connection","Collegamento con la perturbazione stazionaria":"Connection with stationary perturbation theory","Versione degenere di Hellmann-Feynman":"Degenerate Hellmann-Feynman theorem","Coefficienti della derivata dell'autostato":"Coefficients of the eigenstate derivative","Curvatura energetica per dipendenza lineare":"Energy curvature for linear dependence","Forza come derivata parametrica dell'energia":"Force as a parametric energy derivative","Uso di un parametro di dilatazione":"Use of a dilation parameter","Condizione concettuale sul ramo spettrale":"Conceptual condition on the spectral branch"},"title":{"it":"Teorema di Hellmann-Feynman","en":"Hellmann-Feynman theorem"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

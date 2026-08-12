@@ -29,13 +29,99 @@
             text-align: center;
             color: #888;
         }
-    </style>
+    
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
 </head>
 <body>
+    <div class="language-switch" data-i18n-skip="true" role="group" aria-label="Lingua / Language">
+      <button data-language="it" type="button" aria-pressed="false">ITA</button>
+      <button data-language="en" type="button" aria-pressed="false">ENG</button>
+    </div>
     <h1>Set 7 new multivista</h1>
     <p>Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 7 new multivista. Grazie per la pazienza! Non è una svista, il prof ha fatto piu set 7 nel corso degli anni e questo è uscito duplicato poichè è l'unico che ricorsivamente si è impegnato ad aggiornare. Le sol son nell'altro set 7.</p>
     <footer>
         Generato automaticamente - Set 7 new multivista, vai nell'altro 7 per il set 7 completo :/
     </footer>
+
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Set 7 new multivista":"Set 7 new multiview","Questo argomento è ancora in lavorazione. Aggiungerò presto contenuti specifici e dettagli approfonditi per Set 7 new multivista. Grazie per la pazienza! Non è una svista, il prof ha fatto piu set 7 nel corso degli anni e questo è uscito duplicato poichè è l'unico che ricorsivamente si è impegnato ad aggiornare. Le sol son nell'altro set 7.":"This topic is still in processing. I will soon add specific content and in-depth details for Set 7 new multiview. Thanks for the patience! It's not an oversight, the prof has made more set 7 over the years and this has come out duplicated as it is the only one who recursively committed to updating. The sols are in the other set 7.","Generato automaticamente - Set 7 new multivista, vai nell'altro 7 per il set 7 completo :/":"Automatically generated - Set 7 new multiview, go to the other 7 set 7 complete:/"},"attrs":{},"title":{"it":"Set 7 new multivista","en":"Set 7 new multiview"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent);
+  const storageKey = 'cp-language-v1';
+  let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source;
+  document.documentElement.lang = lang;
+  const targetActive = lang === data.target;
+  const trimParts = value => {
+    const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    return match ? match.slice(1) : ['', String(value), ''];
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return;
+    const [prefix, core, suffix] = trimParts(node.nodeValue);
+    const translated = data.texts[core];
+    if(targetActive && translated) node.nodeValue = prefix + translated + suffix;
+  });
+  document.querySelectorAll('*').forEach(element => {
+    if(element.closest('[data-i18n-skip]')) return;
+    ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => {
+      if(!element.hasAttribute(attr)) return;
+      const original = element.getAttribute(attr);
+      const translated = data.attrs[original];
+      if(targetActive && translated) element.setAttribute(attr, translated);
+    });
+  });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => {
+    const active = button.dataset.language === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.addEventListener('click', () => {
+      const next = button.dataset.language;
+      if(next === lang) return;
+      try { localStorage.setItem(storageKey, next); } catch(error) {}
+      location.reload();
+    });
+  });
+  window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

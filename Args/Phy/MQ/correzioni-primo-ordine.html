@@ -1,320 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Correzioni al Primo Ordine</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Correzioni al primo ordine della struttura fine</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Correzioni al Primo Ordine</h1>
-    <p>
-        Le correzioni al primo ordine nella struttura fine dell'atomo di idrogeno derivano dall'applicazione della teoria delle perturbazioni indipendente dal tempo. Consideriamo un sistema quantistico descritto da un Hamiltoniano non perturbato \(H_0\) e una piccola perturbazione \(H'\), tale che l'Hamiltoniano totale sia:
-    </p>
-    <div class="formula">
-        \( H = H_0 + H' \)
-    </div>
-    <p>
-        Gli autovalori \(E_n^{(1)}\) delle energie corrette al primo ordine sono dati dalla media dell'operatore perturbativo \(H'\) calcolata rispetto agli stati non perturbati \(\psi_n^{(0)}\):
-    </p>
-    <div class="formula">
-        \( E_n^{(1)} = \langle \psi_n^{(0)} | H' | \psi_n^{(0)} \rangle \)
-    </div>
-    <p>
-        Questo risultato implica che la correzione dipende esclusivamente dall'interazione introdotta da \(H'\) e dalla natura degli stati base \(\psi_n^{(0)}\). 
-    </p>
-    <p>
-        Nel contesto dell’atomo di idrogeno, \(H'\) rappresenta tipicamente gli effetti relativistici. Una delle correzioni più significative deriva dal termine di spin-orbita, il cui contributo energetico può essere espresso come:
-    </p>
-    <div class="formula">
-        \( H'_\text{spin-orbita} = \frac{1}{2m_e^2c^2} \frac{1}{r} \frac{dV}{dr} \mathbf{L} \cdot \mathbf{S} \)
-    </div>
-    <p>
-        Dove:
-        <ul>
-            <li>\(m_e\): massa dell'elettrone</li>
-            <li>\(c\): velocità della luce</li>
-            <li>\(V(r)\): potenziale coulombiano</li>
-            <li>\(\mathbf{L}\): momento angolare orbitale</li>
-            <li>\(\mathbf{S}\): spin dell'elettrone</li>
-        </ul>
-    </p>
-    <p>
-        La correzione dovuta all’effetto spin-orbita è proporzionale al prodotto scalare \(\mathbf{L} \cdot \mathbf{S}\), che quantifica l'accoppiamento tra il momento angolare orbitale e lo spin.
-    </p>
-    <p>
-        Un'altra correzione al primo ordine deriva dal termine relativistico di Darwin, che considera gli effetti quantistici associati alla fluttuazione della posizione dell'elettrone. Il termine di correzione energetica può essere scritto come:
-    </p>
-    <div class="formula">
-        \( H'_\text{Darwin} = \frac{\hbar^2}{8m_e^2c^2} \nabla^2 V(r) \)
-    </div>
-    <p>
-        Questi termini, combinati, descrivono le deviazioni dai livelli energetici previsti dal modello di Bohr per l’atomo di idrogeno, fornendo una spiegazione accurata della struttura fine osservata negli spettri atomici.
-    </p>
-    <h2>Correzioni Spin-Orbita: Dettagli Matematici</h2>
-<p>
-    L'energia di correzione dovuta all'accoppiamento spin-orbita può essere calcolata considerando la dipendenza dal prodotto scalare \(\mathbf{L} \cdot \mathbf{S}\). Poiché \(\mathbf{L} \cdot \mathbf{S}\) è espresso in termini del momento angolare totale \(\mathbf{J}\), si ha:
-</p>
-<div class="formula">
-    \( \mathbf{L} \cdot \mathbf{S} = \frac{\hbar^2}{2} \left[ j(j+1) - l(l+1) - s(s+1) \right] \)
-</div>
-<p>
-    Qui:
-    <ul>
-        <li>\(j\): numero quantico del momento angolare totale (\(j = l \pm s\))</li>
-        <li>\(l\): numero quantico del momento angolare orbitale</li>
-        <li>\(s\): numero quantico dello spin (per l'elettrone, \(s = \frac{1}{2}\))</li>
-    </ul>
-</p>
-<p>
-    Inserendo questo risultato nell'Hamiltoniano perturbato, possiamo determinare la correzione energetica per ciascun livello quantico:
-</p>
-<div class="formula">
-    \( E_\text{spin-orbita} = \frac{\langle \mathbf{L} \cdot \mathbf{S} \rangle}{2m_e^2c^2} \frac{1}{r} \frac{dV}{dr} \)
-</div>
-
-<h2>Termine di Darwin: Approfondimento</h2>
-<p>
-    Il termine di Darwin rappresenta una correzione al potenziale coulombiano classico dovuta alla distribuzione spaziale dell'elettrone quantistico. La sua energia di correzione è proporzionale alla divergenza del gradiente del potenziale:
-</p>
-<div class="formula">
-    \( E_\text{Darwin} = \frac{\hbar^2}{8m_e^2c^2} \nabla^2 V(r) \)
-</div>
-<p>
-    Per un potenziale coulombiano \(V(r) = -\frac{Ze^2}{r}\), il laplaciano è dato da:
-</p>
-<div class="formula">
-    \( \nabla^2 V(r) = -\frac{4\pi Ze^2}{r^3} \)
-</div>
-<p>
-    Inserendo questo risultato, otteniamo la correzione al primo ordine per i livelli energetici sfericamente simmetrici (\(l = 0\)):
-</p>
-<div class="formula">
-    \( E_\text{Darwin} = -\frac{\hbar^2 Z e^2}{2m_e^2c^2 r^3} \)
-</div>
-
-<h2>Contributo Totale alla Struttura Fine</h2>
-<p>
-    La combinazione dei termini spin-orbita e Darwin, insieme ad altri effetti relativistici, contribuisce a un'evidente separazione dei livelli energetici negli spettri atomici. La correzione totale per ciascun livello quantico si può scrivere come:
-</p>
-<div class="formula">
-    \( E_\text{totale} = E_\text{spin-orbita} + E_\text{Darwin} \)
-</div>
-<p>
-    Questi termini spiegano la struttura fine osservata per i livelli \(n\) e \(l\) dell'atomo di idrogeno, confermando la necessità di una trattazione relativistica per una descrizione accurata.
-</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 13</div>
-  <h2>Correzioni al Primo Ordine: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Valutare gli shift di struttura fine con valori medi idrogenoidi.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Si applica \(E^{(1)}=\langle nl jm|H_{fs}|nl jm\rangle\). Le medie di \(1/r^k\), p⁴ e \(L\cdot S\) riducono il problema ad algebra dei numeri quantici.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Spin-orbita<span class="lecture-step-boss">DIM 11</span></h4>
-      <p>Valore diagonale.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\langle L\cdot S\rangle=\frac{\hbar^2}{2}[j(j+1)-l(l+1)-3/4]"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle 2L\cdot S=J^2-L^2-S^2,\quad s=1/2\Rightarrow S^2=3\hbar^2/4\Rightarrow\langle L\cdot S\rangle=\frac{\hbar^2}{2}[j(j+1)-l(l+1)-3/4]\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Risultato<span class="lecture-step-boss">DIM 11</span></h4>
-      <p>Somma dei contributi.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\Delta E_{nj}=\frac{mc^2(Z\alpha)^4}{2n^3}\left(\frac{3}{4n}-\frac1{j+1/2}\right)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \Delta E=\langle H_{mv}+H_{so}+H_D\rangle,\quad\langle r^{-1}\rangle=Z/(a_0n^2),\ \langle r^{-2}\rangle=Z^2/[a_0^2n^3(l+1/2)]\Rightarrow\Delta E_{nj}=\frac{mc^2(Z\alpha)^4}{2n^3}\left(\frac{3}{4n}-\frac1{j+1/2}\right)\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: n=2</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Confronta j=1/2 e 3/2.</p>
-    <p><strong>Calcolo.</strong> La dipendenza finale è da n e j; stati con l diverso ma stesso j restano degeneri a questo ordine.</p>
-    <p><strong>Risultato e controllo.</strong> La struttura fine separa i due valori di j.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 11</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_2.html">Domanda 2025 n. 2</a> - Termine spin-orbita nella struttura fine</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Idrogenoide e primo ordine.</li>
-          <li>Segni coerenti con energia legata negativa.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Le cancellazioni tra i tre contributi spiegano perché il risultato finale è più simmetrico dei singoli termini.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Calcola il segno dello splitting.</li>
-          <li>Confronta con espansione di Dirac.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=260">Appunti-MQ.pdf, pp. 260-267: valori medi idrogenoidi delle correzioni</a></li>
-          <li><a href="MQ.pdf#page=20">MQ.pdf, pp. capitolo 20: formula perturbativa al primo ordine</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a class="back-link" href="1mq.html">Torna all'indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-correzioni-primo-ordine"><div class="lecture-kicker">Struttura fine - calcolo perturbativo completo</div><h1>Correzioni al primo ordine della struttura fine</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Valori medi di massa-velocità, spin-orbita e Darwin fino alla formula finale dipendente soltanto da n e j.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Perturbazione</h3><p>Tutti i contributi sono trattati al primo ordine nella stessa approssimazione relativistica.</p></article><article class="lecture-card lecture-warning"><h3>Risultato</h3><p>La dipendenza separata da ell si cancella nella somma completa.</p></article></div><h2>Impostazione, ipotesi e convenzioni</h2><div class="lecture-grid"><article class="lecture-card "><h3>Teoria degenere</h3><p>Il livello coulombiano fissato da n è degenere. Gli scalari HMV, HSO e HD sono già diagonali nella base n ell j mj, quindi non occorre una matrice residua non diagonale.</p></article><article class="lecture-card "><h3>Identità radiali</h3><p>Il calcolo usa il viriale e i valori medi esatti di 1/r, 1/r² e, per ell maggiore di zero, 1/r³.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Primo ordine<span class="lecture-step-boss">PT</span></h4><p>Nella base corretta, lo shift è il valore medio della somma dei tre operatori.</p><div class="lecture-formula" aria-label="Formula perturbativa di partenza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta E_{n\ell j}^{(1)}=\langle n\ell jm_j|H_{MV}+H_{SO}+H_D|n\ell jm_j\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Riduzione di p²<span class="lecture-step-boss">MV</span></h4><p>L'equazione imperturbata permette di sostituire p² quando agisce sul ket, senza affermare un'identità operatoriale globale.</p><div class="lecture-formula" aria-label="Azione di p² su un autostato coulombiano"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p^2|n\ell m\rangle=2m(E_n^{(0)}-V)|n\ell m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Norma di p² psi<span class="lecture-step-boss">MV</span></h4><p>L'hermiticità di p² consente di calcolare p alla quarta come norma quadrata di p² psi.</p><div class="lecture-formula" aria-label="Riduzione del valore medio di p alla quarta"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle p^4\rangle=4m^2\langle(E_n^{(0)}-V)^2\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Viriale coulombiano<span class="lecture-step-boss">MV</span></h4><p>Per un potenziale omogeneo di grado meno uno, 2&lt;T&gt;=-&lt;V&gt; e quindi &lt;V&gt;=2E.</p><div class="lecture-formula" aria-label="Teorema del viriale per il Coulomb"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle 2\langle T\rangle=-\langle V\rangle,\qquad \langle V\rangle=2E_n^{(0)}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Media di 1/r²<span class="lecture-step-boss">MV</span></h4><p>L'integrale radiale introduce la dipendenza ell più un mezzo che apparirà nel contributo cinetico.</p><div class="lecture-formula" aria-label="Valore medio coulombiano di 1/r²"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \left\langle r^{-2}\right\rangle_{n\ell}=\frac{Z^2}{a_0^2n^3(\ell+\tfrac12)}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Shift massa-velocità<span class="lecture-step-boss">MV</span></h4><p>Sostituendo energia, viriale e media radiale si ottiene un termine dipendente da n ed ell.</p><div class="lecture-formula" aria-label="Correzione massa-velocità al primo ordine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle H_{MV}\rangle=mc^2(Z\alpha)^4\!\left[\frac{3}{8n^4}-\frac{1}{2n^3(\ell+\tfrac12)}\right]\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Identità angolare<span class="lecture-step-boss">SO</span></h4><p>Da J=L+S si isola il prodotto scalare, che è diagonale nella base accoppiata.</p><div class="lecture-formula" aria-label="Identità per il prodotto spin-orbita"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf L\cdot\mathbf S=\frac12(J^2-L^2-S^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Autovalore angolare<span class="lecture-step-boss">SO</span></h4><p>Per s uguale un mezzo, S² produce tre quarti hbar².</p><div class="lecture-formula" aria-label="Autovalore del prodotto L punto S"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\mathbf L\cdot\mathbf S\rangle=\frac{\hbar^2}{2}\left[j(j+1)-\ell(\ell+1)-\frac34\right]\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Media di 1/r³<span class="lecture-step-boss">SO</span></h4><p>La formula vale per ell almeno uno. Il caso ell zero non serve perché L annulla lo stato.</p><div class="lecture-formula" aria-label="Valore medio coulombiano di 1/r³"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \left\langle r^{-3}\right\rangle_{n\ell}=\frac{Z^3}{a_0^3n^3\ell(\ell+\tfrac12)(\ell+1)},\qquad\ell\ge1\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Shift spin-orbita<span class="lecture-step-boss">SO</span></h4><p>La parte radiale e quella angolare si moltiplicano perché gli operatori agiscono su fattori distinti dello stato.</p><div class="lecture-formula" aria-label="Correzione spin-orbita per ell positivo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle H_{SO}\rangle=\frac{mc^2(Z\alpha)^4}{4n^3}\frac{j(j+1)-\ell(\ell+1)-\tfrac34}{\ell(\ell+\tfrac12)(\ell+1)}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Selezione di Darwin<span class="lecture-step-boss">D</span></h4><p>La delta tridimensionale campiona la densità all'origine; il comportamento Rnl circa r alla ell elimina tutti gli stati non s.</p><div class="lecture-formula" aria-label="Densità idrogenoide al nucleo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi_{n\ell m}(0)|^2=\frac1\pi\left(\frac Z{a_0}\right)^3\frac1{n^3}\delta_{\ell0}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Shift Darwin<span class="lecture-step-boss">D</span></h4><p>Il contributo è positivo e compare soltanto per ell uguale zero.</p><div class="lecture-formula" aria-label="Correzione energetica di Darwin"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle H_D\rangle=\frac{mc^2(Z\alpha)^4}{2n^3}\delta_{\ell0}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Cancellazione di ell<span class="lecture-step-boss">SOMMA</span></h4><p>Per j=ell più o meno un mezzo, la somma dei contributi elimina ell. Per ell zero Darwin fornisce esattamente il completamento necessario.</p><div class="lecture-formula" aria-label="Formula finale della correzione di struttura fine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta E_{fs}=mc^2(Z\alpha)^4\left[\frac{3}{8n^4}-\frac{1}{2n^3(j+\tfrac12)}\right]\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Energia corretta<span class="lecture-step-boss">FINALE</span></h4><p>Fattorizzando l'energia negativa E0 si ottiene la forma spesso richiesta all'orale.</p><div class="lecture-formula" aria-label="Livelli idrogenoidi con struttura fine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_{n,j}\simeq E_n^{(0)}+E_n^{(0)}(Z\alpha)^2\left[\frac{1}{n(j+\tfrac12)}-\frac{3}{4n^2}\right]\)</span></div></article></section><h2>Esempio guidato e controllo fisico</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Calcoliamo la separazione interna del multipletto n=2 tra j=3/2 e j=1/2.</p><p data-i18n-skip="true">\(\displaystyle \Delta E_{2,3/2}-\Delta E_{2,1/2}=\frac{mc^2\alpha^4}{32}\quad(Z=1)\)</p><p><strong>Controllo.</strong> Il valore è positivo: il livello 2P3/2 si trova sopra i livelli con j=1/2. Il risultato è dell'ordine di 10 alla meno 4 eV, mentre l'intera correzione è dell'ordine di 10 alla meno 3 eV.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Degenerazione</h3><p>L'assenza di campi esterni mantiene i 2j+1 stati con diverso mj degeneri.</p></article><article class="lecture-card "><h3>Separazione</h3><p>La funzione d'onda fattorizza in parte radiale e spin-armonica; L punto S agisce solo sulla seconda.</p></article><article class="lecture-card "><h3>Doppietto</h3><p>Lo splitting dipende da j; non dipende da mj in assenza di un asse esterno.</p></article><article class="lecture-card "><h3>Degenerazione residua</h3><p>La struttura fine di Dirac non distingue questi livelli; il Lamb shift, escluso qui, li separa.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare p²=2m(E-V) come identità tra operatori; dimenticare l'hermiticità nel passaggio a p alla quarta; applicare &lt;1/r³&gt; a ell zero; perdere il fattore hbar² in L punto S; sommare soltanto due contributi.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Ogni shift scala come mc²(Z alpha)^4; Darwin contiene delta ell zero; il risultato non dipende da ell né mj; il segno del contributo cinetico è prevalentemente negativo; n=2 lascia due energie distinte.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Parti dalla formula perturbativa al primo ordine.</li><li>Riduci p alla quarta con l'equazione di Schrödinger.</li><li>Usa viriale e media di 1/r².</li><li>Diagonalizza L punto S tramite J².</li><li>Inserisci la media di 1/r³ per ell positivo.</li><li>Valuta Darwin dalla densità all'origine.</li><li>Mostra la cancellazione della dipendenza da ell.</li><li>Interpreta splitting e degenerazione residua.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1312">DIM 11 - struttura fine completa e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=260">Appunti-MQ.pdf, pagine PDF 260-267 - correzioni relativistiche</a></li><li><a href="Domanda2025_2.html">Domanda 2025 n. 2 - termine spin-orbita</a></li></ul><p class="lecture-note">Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Struttura fine - calcolo perturbativo completo":"Fine structure - complete perturbative calculation","Correzioni al primo ordine della struttura fine":"First-order fine-structure corrections","Obiettivo.":"Objective.","Valori medi di massa-velocità, spin-orbita e Darwin fino alla formula finale dipendente soltanto da n e j.":"Expectation values of mass-velocity, spin-orbit, and Darwin terms through the final formula depending only on n and j.","Perturbazione":"Perturbation","Tutti i contributi sono trattati al primo ordine nella stessa approssimazione relativistica.":"All contributions are treated at first order within the same relativistic approximation.","Risultato":"Result","La dipendenza separata da ell si cancella nella somma completa.":"The separate ell dependence cancels in the complete sum.","Impostazione, ipotesi e convenzioni":"Setup, assumptions, and conventions","Teoria degenere":"Degenerate theory","Il livello coulombiano fissato da n è degenere. Gli scalari HMV, HSO e HD sono già diagonali nella base n ell j mj, quindi non occorre una matrice residua non diagonale.":"The Coulomb level fixed by n is degenerate. The scalars HMV, HSO, and HD are already diagonal in the n ell j mj basis, so no residual nondiagonal matrix is needed.","Identità radiali":"Radial identities","Il calcolo usa il viriale e i valori medi esatti di 1/r, 1/r² e, per ell maggiore di zero, 1/r³.":"The calculation uses the virial theorem and exact expectation values of 1/r, 1/r², and, for positive ell, 1/r³.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Primo ordine":"1. First order","PT":"PT","Nella base corretta, lo shift è il valore medio della somma dei tre operatori.":"In the correct basis, the shift is the expectation value of the sum of the three operators.","Passaggio":"Step","2. Riduzione di p²":"2. Reduction of p²","MV":"MV","L'equazione imperturbata permette di sostituire p² quando agisce sul ket, senza affermare un'identità operatoriale globale.":"The unperturbed equation allows p² to be replaced when acting on the ket, without claiming a global operator identity.","3. Norma di p² psi":"3. Norm of p² psi","L'hermiticità di p² consente di calcolare p alla quarta come norma quadrata di p² psi.":"Hermiticity of p² allows p to the fourth to be computed as the squared norm of p² psi.","4. Viriale coulombiano":"4. Coulomb virial","Per un potenziale omogeneo di grado meno uno, 2<T>=-<V> e quindi <V>=2E.":"For a potential homogeneous of degree minus one, 2<T>=-<V>, hence <V>=2E.","5. Media di 1/r²":"5. Mean of 1/r²","L'integrale radiale introduce la dipendenza ell più un mezzo che apparirà nel contributo cinetico.":"The radial integral introduces the ell plus one half dependence that appears in the kinetic contribution.","6. Shift massa-velocità":"6. Mass-velocity shift","Sostituendo energia, viriale e media radiale si ottiene un termine dipendente da n ed ell.":"Substituting the energy, virial theorem, and radial mean gives a term depending on n and ell.","7. Identità angolare":"7. Angular identity","SO":"SO","Da J=L+S si isola il prodotto scalare, che è diagonale nella base accoppiata.":"From J=L+S, isolate the scalar product, which is diagonal in the coupled basis.","8. Autovalore angolare":"8. Angular eigenvalue","Per s uguale un mezzo, S² produce tre quarti hbar².":"For s equal to one half, S² gives three quarters hbar².","9. Media di 1/r³":"9. Mean of 1/r³","La formula vale per ell almeno uno. Il caso ell zero non serve perché L annulla lo stato.":"The formula holds for ell at least one. The ell-zero case is unnecessary because L annihilates the state.","10. Shift spin-orbita":"10. Spin-orbit shift","La parte radiale e quella angolare si moltiplicano perché gli operatori agiscono su fattori distinti dello stato.":"The radial and angular parts multiply because the operators act on distinct factors of the state.","11. Selezione di Darwin":"11. Darwin selection","D":"D","La delta tridimensionale campiona la densità all'origine; il comportamento Rnl circa r alla ell elimina tutti gli stati non s.":"The three-dimensional delta samples the density at the origin; the behavior Rnl approximately r to the ell removes every non-s state.","12. Shift Darwin":"12. Darwin shift","Il contributo è positivo e compare soltanto per ell uguale zero.":"The contribution is positive and appears only for ell equal to zero.","13. Cancellazione di ell":"13. Cancellation of ell","SOMMA":"SUM","Per j=ell più o meno un mezzo, la somma dei contributi elimina ell. Per ell zero Darwin fornisce esattamente il completamento necessario.":"For j=ell plus or minus one half, the sum of contributions removes ell. At ell zero Darwin supplies exactly the required completion.","14. Energia corretta":"14. Corrected energy","FINALE":"FINAL","Fattorizzando l'energia negativa E0 si ottiene la forma spesso richiesta all'orale.":"Factoring the negative energy E0 gives the form often requested in an oral exam.","Esempio guidato e controllo fisico":"Guided example and physical check","Impostazione.":"Setup.","Calcoliamo la separazione interna del multipletto n=2 tra j=3/2 e j=1/2.":"Compute the internal splitting of the n=2 multiplet between j=3/2 and j=1/2.","Controllo.":"Check.","Il valore è positivo: il livello 2P3/2 si trova sopra i livelli con j=1/2. Il risultato è dell'ordine di 10 alla meno 4 eV, mentre l'intera correzione è dell'ordine di 10 alla meno 3 eV.":"The value is positive: the 2P3/2 level lies above the j=1/2 levels. The result is of order 10 to the minus 4 eV, while the full correction is of order 10 to the minus 3 eV.","Interpretazione e limiti":"Interpretation and limits","Degenerazione":"Degeneracy","L'assenza di campi esterni mantiene i 2j+1 stati con diverso mj degeneri.":"In the absence of external fields, the 2j+1 states with different mj remain degenerate.","Separazione":"Separation","La funzione d'onda fattorizza in parte radiale e spin-armonica; L punto S agisce solo sulla seconda.":"The wavefunction factorizes into radial and spin-angular parts; L dot S acts only on the latter.","Doppietto":"Doublet","Lo splitting dipende da j; non dipende da mj in assenza di un asse esterno.":"The splitting depends on j; it does not depend on mj without an external axis.","Degenerazione residua":"Residual degeneracy","La struttura fine di Dirac non distingue questi livelli; il Lamb shift, escluso qui, li separa.":"Dirac fine structure does not distinguish these levels; the Lamb shift, excluded here, separates them.","Errori tipici":"Common errors","Usare p²=2m(E-V) come identità tra operatori; dimenticare l'hermiticità nel passaggio a p alla quarta; applicare <1/r³> a ell zero; perdere il fattore hbar² in L punto S; sommare soltanto due contributi.":"Using p²=2m(E-V) as an operator identity; forgetting Hermiticity in the p-to-the-fourth step; applying <1/r³> at ell zero; losing the hbar² factor in L dot S; adding only two contributions.","Controlli rapidi":"Quick checks","Ogni shift scala come mc²(Z alpha)^4; Darwin contiene delta ell zero; il risultato non dipende da ell né mj; il segno del contributo cinetico è prevalentemente negativo; n=2 lascia due energie distinte.":"Every shift scales as mc²(Z alpha)^4; Darwin contains delta ell zero; the result depends on neither ell nor mj; the kinetic contribution is predominantly negative; n=2 leaves two distinct energies.","Controllo da orale":"Oral exam checklist","Parti dalla formula perturbativa al primo ordine.":"Start from the first-order perturbative formula.","Riduci p alla quarta con l'equazione di Schrödinger.":"Reduce p to the fourth with the Schrödinger equation.","Usa viriale e media di 1/r².":"Use the virial theorem and the mean of 1/r².","Diagonalizza L punto S tramite J².":"Diagonalize L dot S through J².","Inserisci la media di 1/r³ per ell positivo.":"Insert the mean of 1/r³ for positive ell.","Valuta Darwin dalla densità all'origine.":"Evaluate Darwin from the density at the origin.","Mostra la cancellazione della dipendenza da ell.":"Show cancellation of the ell dependence.","Interpreta splitting e degenerazione residua.":"Interpret the splitting and residual degeneracy.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 11 - struttura fine completa e copione orale":"DIM 11 - complete fine structure and oral-exam script","Appunti-MQ.pdf, pagine PDF 260-267 - correzioni relativistiche":"Appunti-MQ.pdf, PDF pages 260-267 - relativistic corrections","Domanda 2025 n. 2 - termine spin-orbita":"2025 question 2 - spin-orbit term","Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.":"The formulas were checked against the listed PDF pages and compared with the Boss oral-exam outline; PDF references use the file's actual page numbering.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Formula perturbativa di partenza":"Starting perturbative formula","Azione di p² su un autostato coulombiano":"Action of p² on a Coulomb eigenstate","Riduzione del valore medio di p alla quarta":"Reduction of the expectation value of p to the fourth","Teorema del viriale per il Coulomb":"Virial theorem for the Coulomb potential","Valore medio coulombiano di 1/r²":"Coulomb expectation value of 1/r²","Correzione massa-velocità al primo ordine":"First-order mass-velocity correction","Identità per il prodotto spin-orbita":"Identity for the spin-orbit product","Autovalore del prodotto L punto S":"Eigenvalue of L dot S","Valore medio coulombiano di 1/r³":"Coulomb expectation value of 1/r³","Correzione spin-orbita per ell positivo":"Spin-orbit correction for positive ell","Densità idrogenoide al nucleo":"Hydrogen-like density at the nucleus","Correzione energetica di Darwin":"Darwin energy correction","Formula finale della correzione di struttura fine":"Final fine-structure correction formula","Livelli idrogenoidi con struttura fine":"Hydrogen-like levels with fine structure"},"title":{"it":"Correzioni al primo ordine della struttura fine","en":"First-order fine-structure corrections"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

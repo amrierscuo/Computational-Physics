@@ -1,291 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oscillatore Armonico con Metodi Operatoriali</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oscillatore armonico: struttura operatoriale</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Oscillatore Armonico con Metodi Operatoriali</h1>
-    <h2>Definizione e Hamiltoniana</h2>
-    L'oscillatore armonico quantistico è uno dei sistemi più studiati in meccanica quantistica per la sua semplicità e per il ruolo fondamentale nelle applicazioni teoriche. L'Hamiltoniana è data da:
-    <div class="formula">
-        \[
-        \hat{H} = \frac{\hat{p}^2}{2m} + \frac{1}{2}m\omega^2\hat{x}^2
-        \]
-    </div>
-    dove \( \hat{x} \) e \( \hat{p} \) sono rispettivamente gli operatori posizione e quantità di moto, \( m \) è la massa e \( \omega \) è la frequenza angolare.
-
-    <h2>Operatori di Creazione e Annichilazione</h2>
-    Introducendo gli operatori di creazione \( \hat{a}^\dagger \) [dagger, coniugata trasposta] e di annichilazione \( \hat{a} \), definiti come:
-    <div class="formula">
-        \[
-        \hat{a} = \sqrt{\frac{m\omega}{2\hbar}}\left(\hat{x} + i\frac{\hat{p}}{m\omega}\right), \quad \hat{a}^\dagger = \sqrt{\frac{m\omega}{2\hbar}}\left(\hat{x} - i\frac{\hat{p}}{m\omega}\right)
-        \]
-    </div>
-    l'Hamiltoniana si riscrive in termini di questi operatori:
-    <div class="formula">
-        \[
-        \hat{H} = \hbar\omega\left(\hat{a}^\dagger \hat{a} + \frac{1}{2}\right)
-        \]
-    </div>
-
-    <h2>Relazioni di Commutazione</h2>
-    Gli operatori \( \hat{a} \) e \( \hat{a}^\dagger \) soddisfano le seguenti relazioni di commutazione:
-    <div class="formula">
-        \[
-        [\hat{a}, \hat{a}^\dagger] = 1
-        \]
-    </div>
-    Queste relazioni sono fondamentali per la costruzione degli stati quantistici del sistema.
-
-    <h2>Stati e Energie</h2>
-    Gli stati propri dell'Hamiltoniana sono indicati come \( |n\rangle \), dove \( n \) è un numero quantico intero non negativo (\( n = 0, 1, 2, \ldots \)). Gli stati sono costruiti a partire dallo stato fondamentale \( |0\rangle \):
-    <div class="formula">
-        \[
-        |n\rangle = \frac{(\hat{a}^\dagger)^n}{\sqrt{n!}} |0\rangle
-        \]
-    </div>
-    L'energia associata agli stati è:
-    <div class="formula">
-        \[
-        E_n = \hbar\omega\left(n + \frac{1}{2}\right)
-        \]
-    </div>
-
-    <h2>Osservabili e Dinamica</h2>
-    Gli operatori posizione e quantità di moto in termini di \( \hat{a} \) e \( \hat{a}^\dagger \) sono:
-    <div class="formula">
-        \[
-        \hat{x} = \sqrt{\frac{\hbar}{2m\omega}}(\hat{a} + \hat{a}^\dagger), \quad \hat{p} = -i\sqrt{\frac{m\hbar\omega}{2}}(\hat{a} - \hat{a}^\dagger)
-        \]
-    </div>
-    L'evoluzione temporale degli operatori segue le equazioni di Heisenberg:
-    <div class="formula">
-        \[
-        \frac{d\hat{a}}{dt} = -i\omega \hat{a}, \quad \frac{d\hat{a}^\dagger}{dt} = i\omega \hat{a}^\dagger
-        \]
-    </div>
-
-    <h2>Significato e Applicazioni</h2>
-    L'oscillatore armonico quantistico è una base teorica per molteplici sistemi fisici, tra cui:
-    <ul>
-        <li>La descrizione dei modi normali di vibrazione nelle molecole.</li>
-        <li>La quantizzazione dei campi elettromagnetici in elettrodinamica quantistica.</li>
-        <li>I modelli di stati legati nei potenziali armonici.</li>
-    </ul>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 5</div>
-  <h2>Oscillatore Armonico con Metodi Operatoriali: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Ricavare l'intero spettro da commutatori, positività e normalizzazione.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Definendo operatori adimensionali a e \(a^\dagger\), H si fattorizza. La positività di \(N=a^\dagger a\) obbliga la catena discendente a terminare e fissa lo zero-point energy.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Algebra<span class="lecture-step-boss">DIM 6</span></h4>
-      <p>Le combinazioni di x e p soddisfano.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="[a,a^\dagger]=1,\quad H=\hbar\omega(N+\tfrac12)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle a=\sqrt{m\omega/(2\hbar)}\,x+ip/\sqrt{2m\hbar\omega},\quad[x,p]=i\hbar\Rightarrow[a,a^\dagger]=1;\quad a^\dagger a=H/(\hbar\omega)-1/2\Rightarrow H=\hbar\omega(N+1/2)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Scala<span class="lecture-step-boss">DIM 6</span></h4>
-      <p>Dai commutatori con H.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="a|n\rangle=\sqrt n|n-1\rangle,\quad a^\dagger|n\rangle=\sqrt{n+1}|n+1\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [N,a]=-a,\quad[N,a^\dagger]=a^\dagger\Rightarrow a|n\rangle=C_n|n-1\rangle,\ a^\dagger|n\rangle=D_n|n+1\rangle;\quad|C_n|^2=\langle n|a^\dagger a|n\rangle=n,\ |D_n|^2=n+1\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Medie in |n&gt;</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Usa \(x=x_0(a+a^\dagger)/\sqrt2\).</p>
-    <p><strong>Calcolo.</strong> I termini diagonali di a e \(a^\dagger\) sono nulli, quindi \(\langle x\rangle=0\); \(\langle x^2\rangle=x_0^2(n+1/2)\).</p>
-    <p><strong>Risultato e controllo.</strong> L'ampiezza tipica cresce come \(\sqrt n\), coerente col limite classico.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 6</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Domini compatibili per a e \(a^\dagger\).</li>
-          <li>Il fondamentale è definito da \(a|0\rangle=0\), non da energia nulla.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La quantizzazione emerge dalla rappresentazione dell'algebra, senza imporre condizioni di terminazione a una serie differenziale.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Deriva i fattori di radice dalla norma.</li>
-          <li>Costruisci \(|n\rangle\) da \(|0\rangle\).</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=149">Appunti-MQ.pdf, pp. 149-159: fattorizzazione e operatori scala</a></li>
-          <li><a href="MQ.pdf#page=12">MQ.pdf, pp. capitolo 12: spettro algebrico</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-oscillatore-operatoriale"><div class="lecture-kicker">Lezione approfondita - Argomento 5</div><h1>Oscillatore armonico: struttura operatoriale</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Usare l'algebra di Heisenberg per costruire base di Fock, identità di ordinamento e matrici di x, p e loro potenze, derivare regole di selezione ed evoluzione dei ladder e introdurre stati coerenti e operatore di spostamento con controlli di norma e indeterminazione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Dallo spettro ai calcoli</h3><p>Una volta nota la base |n&gt;, l'algebra dei ladder sostituisce integrali di Hermite con regole combinatorie per elementi di matrice, transizioni e dinamica.</p></article><article class="lecture-card lecture-warning"><h3>Ordinamento conta</h3><p>a e a aggiunto non commutano. Portarli in ordine normale genera termini aggiuntivi che producono energia di punto zero, contrazioni e valori medi non classici.</p></article></div><h2>Algebra di Fock e quadrature</h2><div class="lecture-grid"><article class="lecture-card "><h3>Quadrature</h3><p>x e p sono combinazioni hermitiane dei ladder e collegano livelli adiacenti.</p></article><article class="lecture-card "><h3>Numero</h3><p>N conta i quanti, H è affine in N e la base di Fock diagonalizza entrambi.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Algebra fondamentale<span class="lecture-step-boss">BASE</span></h4><p>Si parte dal commutatore unitario e dall'operatore numero.</p><div class="lecture-formula" aria-label="Algebra dell&#x27;oscillatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [a,a^\dagger]=I,\qquad N=a^\dagger a,\qquad H=\hbar\omega(N+\tfrac12)\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Base di Fock<span class="lecture-step-boss">COSTRUISCI</span></h4><p>Il vuoto è annullato da a e gli eccitati sono potenze normalizzate di a aggiunto.</p><div class="lecture-formula" aria-label="Costruzione della base di Fock"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a|0\rangle=0,\qquad|n\rangle=\frac{(a^\dagger)^n}{\sqrt{n!}}|0\rangle,\qquad\langle m|n\rangle=\delta_{mn}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Identità di commutazione<span class="lecture-step-boss">INDUZIONE</span></h4><p>Applicare Leibniz ripetutamente sposta a attraverso una potenza di a aggiunto.</p><div class="lecture-formula" aria-label="Commutatore con una potenza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [a,(a^\dagger)^n]=\sum_{r=0}^{n-1}(a^\dagger)^r[a,a^\dagger](a^\dagger)^{n-1-r}=n(a^\dagger)^{n-1}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Azione normalizzata<span class="lecture-step-boss">LADDER</span></h4><p>L'identità precedente e la sua aggiunta fissano coefficienti e fasi convenzionali.</p><div class="lecture-formula" aria-label="Azione dei ladder sulla base di Fock"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a|n\rangle=\sqrt n|n-1\rangle,\qquad a^\dagger|n\rangle=\sqrt{n+1}|n+1\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Quadrature inverse<span class="lecture-step-boss">RICAVA</span></h4><p>Somma e differenza delle definizioni di a ricostruiscono gli osservabili canonici.</p><div class="lecture-formula" aria-label="Posizione e impulso tramite ladder"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle x=x_0(a+a^\dagger),\quad p=-ip_0(a-a^\dagger),\quad x_0=\sqrt{\frac{\hbar}{2m\omega}},\quad p_0=\sqrt{\frac{m\hbar\omega}{2}}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Matrice di x<span class="lecture-step-boss">ELEMENTI</span></h4><p>La posizione connette soltanto livelli adiacenti con coefficienti a radice.</p><div class="lecture-formula" aria-label="Elementi di matrice della posizione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle m|x|n\rangle=x_0\left(\sqrt n\,\delta_{m,n-1}+\sqrt{n+1}\,\delta_{m,n+1}\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Matrice di p<span class="lecture-step-boss">ELEMENTI p</span></h4><p>L'impulso ha gli stessi collegamenti con una fase relativa immaginaria che assicura hermiticità.</p><div class="lecture-formula" aria-label="Elementi di matrice dell&#x27;impulso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle m|p|n\rangle=-ip_0\left(\sqrt n\,\delta_{m,n-1}-\sqrt{n+1}\,\delta_{m,n+1}\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Quadrato di x<span class="lecture-step-boss">ORDINA</span></h4><p>Espandere e usare a a aggiunto uguale N più uno separa parti diagonali e salti di due livelli.</p><div class="lecture-formula" aria-label="Forma normalmente riordinata di x quadrato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle x^2=x_0^2(a^2+a^{\dagger2}+2N+1)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Regole di selezione<span class="lecture-step-boss">TRANSIZIONI</span></h4><p>Un operatore lineare in x o p impone delta n uguale più o meno uno; uno quadratico permette zero e più o meno due.</p><div class="lecture-formula" aria-label="Regole di selezione armoniche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle x,p:\ \Delta n=\pm1,\qquad x^2,p^2:\ \Delta n=0,\pm2\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Evoluzione di a<span class="lecture-step-boss">HEISENBERG</span></h4><p>Il commutatore con H chiude sull'operatore stesso e integra una semplice fase.</p><div class="lecture-formula" aria-label="Evoluzione temporale dei ladder"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \dot a=\frac{i}{\hbar}[H,a]=-i\omega a\Rightarrow a(t)=ae^{-i\omega t},\quad a^\dagger(t)=a^\dagger e^{i\omega t}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Stato coerente<span class="lecture-step-boss">AUTOSTATO a</span></h4><p>Un autostato normalizzato di a si espande su tutti i livelli con coefficienti poissoniani.</p><div class="lecture-formula" aria-label="Espansione di uno stato coerente"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a|\alpha\rangle=\alpha|\alpha\rangle,\qquad|\alpha\rangle=e^{-|\alpha|^2/2}\sum_{n=0}^{\infty}\frac{\alpha^n}{\sqrt{n!}}|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Distribuzione dei quanti<span class="lecture-step-boss">POISSON</span></h4><p>Il modulo quadro dei coefficienti dà media e varianza del numero entrambe uguali a modulo alpha quadrato.</p><div class="lecture-formula" aria-label="Statistica poissoniana dello stato coerente"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_n=e^{-|\alpha|^2}\frac{|\alpha|^{2n}}{n!},\qquad\langle N\rangle=(\Delta N)^2=|\alpha|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Operatore di spostamento<span class="lecture-step-boss">BCH</span></h4><p>L'esponenziale antihermitiano genera unitariamente lo stato coerente dal vuoto.</p><div class="lecture-formula" aria-label="Operatore di spostamento e stato coerente"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle D(\alpha)=e^{\alpha a^\dagger-\alpha^*a},\quad D^\dagger aD=a+\alpha,\quad|\alpha\rangle=D(\alpha)|0\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Indeterminazioni coerenti<span class="lecture-step-boss">MINIMO</span></h4><p>Lo spostamento cambia soltanto i valori medi delle quadrature, non le varianze del vuoto.</p><div class="lecture-formula" aria-label="Indeterminazione minima degli stati coerenti"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta x=x_0,\qquad\Delta p=p_0,\qquad\Delta x\Delta p=\frac\hbar2\)</span></div></article></section><h2>Esempio: matrice troncata e stato n uguale due</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Nella base zero, uno, due, tre si rappresenta x e si calcolano i momenti sullo stato due.</p><p data-i18n-skip="true">\(\displaystyle \frac{x}{x_0}=\begin{pmatrix}0&amp;1&amp;0&amp;0\\1&amp;0&amp;\sqrt2&amp;0\\0&amp;\sqrt2&amp;0&amp;\sqrt3\\0&amp;0&amp;\sqrt3&amp;0\end{pmatrix},\quad\langle2|x|2\rangle=0,\quad\langle2|x^2|2\rangle=x_0^2(2\cdot2+1)=5x_0^2\)</p><p><strong>Controllo.</strong> La matrice è hermitiana e tridiagonale. Per x quadrato il contributo a |4&gt; non è visibile nel troncamento, quindi il valore va ottenuto dall'identità operatoriale o da una base sufficientemente grande.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Troncamento numerico</h3><p>Le relazioni canoniche non possono essere esatte in dimensione finita perché la traccia di un commutatore è zero. Le matrici troncate approssimano bene soltanto stati lontani dal bordo superiore.</p></article><article class="lecture-card "><h3>Stati squeezed</h3><p>Trasformazioni quadratiche dei ladder possono ridurre una varianza sotto il valore coerente aumentando l'altra, mantenendo il limite di Heisenberg.</p></article><article class="lecture-card "><h3>Stato coerente non ortogonale</h3><p>Due stati coerenti distinti hanno sovrapposizione non nulla e formano una famiglia sovracompleta, non una base ortonormale numerabile.</p></article><article class="lecture-card "><h3>Limite classico</h3><p>Per modulo alpha grande, fluttuazioni relative del numero scalano come uno su modulo alpha e il centro coerente segue l'orbita classica.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Commutare a e a aggiunto senza aggiungere uno; perdere le radici nei ladder; scrivere x con differenza anziché somma; usare delta n uguale più o meno uno per x quadrato; assumere gli stati coerenti ortogonali.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>x e p sono hermitiani; le matrici sono tridiagonali; x cambia parità; x quadrato ha diagonale 2n più uno; a(t) ha fase meno omega t; D è unitario.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Costruisci Fock con l'identità di commutazione.</li><li>Ricava x e p dai ladder.</li><li>Calcola gli elementi di matrice.</li><li>Riordina x quadrato e leggi le selezioni.</li><li>Evolvi a nel quadro di Heisenberg.</li><li>Risolvi a|alpha&gt; uguale alpha|alpha&gt;.</li><li>Ottieni statistica poissoniana e D(alpha).</li><li>Controlla indeterminazioni e limite di troncamento.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L802">Boss P1 - formalismo, rappresentazioni ed evoluzione</a></li><li><a href="Appunti-MQ.pdf#page=149">Appunti-MQ.pdf, pagine PDF 149-156 - oscillatore armonico e metodo operatoriale</a></li><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, generatori e simmetrie</a></li></ul><p class="lecture-note">La pagina parte dalle pagine verificate 149-156 ma si concentra sull'uso operativo dell'algebra: ordinamento, matrici, selezioni, Heisenberg e stati coerenti, evitando di duplicare la sola derivazione dello spettro.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 5":"In-depth lesson - Topic 5","Oscillatore armonico: struttura operatoriale":"Harmonic oscillator: operator structure","Obiettivo.":"Objective.","Usare l'algebra di Heisenberg per costruire base di Fock, identità di ordinamento e matrici di x, p e loro potenze, derivare regole di selezione ed evoluzione dei ladder e introdurre stati coerenti e operatore di spostamento con controlli di norma e indeterminazione.":"Use the Heisenberg algebra to construct the Fock basis, ordering identities, and matrices of x, p, and their powers, derive selection rules and ladder evolution, and introduce coherent states and the displacement operator with normalization and uncertainty checks.","Dallo spettro ai calcoli":"From spectrum to calculations","Una volta nota la base |n>, l'algebra dei ladder sostituisce integrali di Hermite con regole combinatorie per elementi di matrice, transizioni e dinamica.":"Once the |n> basis is known, ladder algebra replaces Hermite integrals with combinatorial rules for matrix elements, transitions, and dynamics.","Ordinamento conta":"Ordering matters","a e a aggiunto non commutano. Portarli in ordine normale genera termini aggiuntivi che producono energia di punto zero, contrazioni e valori medi non classici.":"a and a dagger do not commute. Normal ordering generates extra terms producing zero-point energy, contractions, and nonclassical expectation values.","Algebra di Fock e quadrature":"Fock algebra and quadratures","Quadrature":"Quadratures","x e p sono combinazioni hermitiane dei ladder e collegano livelli adiacenti.":"x and p are Hermitian ladder combinations and connect adjacent levels.","Numero":"Number","N conta i quanti, H è affine in N e la base di Fock diagonalizza entrambi.":"N counts quanta, H is affine in N, and the Fock basis diagonalizes both.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Algebra fondamentale":"1. Fundamental algebra","BASE":"BASE","Si parte dal commutatore unitario e dall'operatore numero.":"Start from the unit commutator and number operator.","Passaggio":"Step","2. Base di Fock":"2. Fock basis","COSTRUISCI":"CONSTRUCT","Il vuoto è annullato da a e gli eccitati sono potenze normalizzate di a aggiunto.":"The vacuum is annihilated by a and excited states are normalized powers of a dagger.","3. Identità di commutazione":"3. Commutation identity","INDUZIONE":"INDUCTION","Applicare Leibniz ripetutamente sposta a attraverso una potenza di a aggiunto.":"Repeatedly apply Leibniz to move a through a power of a dagger.","4. Azione normalizzata":"4. Normalized action","LADDER":"LADDER","L'identità precedente e la sua aggiunta fissano coefficienti e fasi convenzionali.":"The previous identity and its adjoint fix coefficients and conventional phases.","5. Quadrature inverse":"5. Inverse quadratures","RICAVA":"DERIVE","Somma e differenza delle definizioni di a ricostruiscono gli osservabili canonici.":"Sum and difference of a definitions reconstruct canonical observables.","6. Matrice di x":"6. Matrix of x","ELEMENTI":"ELEMENTS","La posizione connette soltanto livelli adiacenti con coefficienti a radice.":"Position connects only adjacent levels with square-root coefficients.","7. Matrice di p":"7. Matrix of p","ELEMENTI p":"p ELEMENTS","L'impulso ha gli stessi collegamenti con una fase relativa immaginaria che assicura hermiticità.":"Momentum has the same links with a relative imaginary phase ensuring Hermiticity.","8. Quadrato di x":"8. Square of x","ORDINA":"ORDER","Espandere e usare a a aggiunto uguale N più uno separa parti diagonali e salti di due livelli.":"Expand and use a a dagger equal N plus one to separate diagonal parts and two-level jumps.","9. Regole di selezione":"9. Selection rules","TRANSIZIONI":"TRANSITIONS","Un operatore lineare in x o p impone delta n uguale più o meno uno; uno quadratico permette zero e più o meno due.":"An operator linear in x or p imposes delta n equal plus or minus one; a quadratic operator allows zero and plus or minus two.","10. Evoluzione di a":"10. Evolution of a","HEISENBERG":"HEISENBERG","Il commutatore con H chiude sull'operatore stesso e integra una semplice fase.":"The commutator with H closes on the operator itself and integrates to a simple phase.","11. Stato coerente":"11. Coherent state","AUTOSTATO a":"a EIGENSTATE","Un autostato normalizzato di a si espande su tutti i livelli con coefficienti poissoniani.":"A normalized eigenstate of a expands over all levels with Poissonian coefficients.","12. Distribuzione dei quanti":"12. Quantum-number distribution","POISSON":"POISSON","Il modulo quadro dei coefficienti dà media e varianza del numero entrambe uguali a modulo alpha quadrato.":"Squared coefficient moduli give number mean and variance both equal to modulus alpha squared.","13. Operatore di spostamento":"13. Displacement operator","BCH":"BCH","L'esponenziale antihermitiano genera unitariamente lo stato coerente dal vuoto.":"The anti-Hermitian exponential unitarily generates the coherent state from vacuum.","14. Indeterminazioni coerenti":"14. Coherent uncertainties","MINIMO":"MINIMUM","Lo spostamento cambia soltanto i valori medi delle quadrature, non le varianze del vuoto.":"Displacement changes only quadrature means, not vacuum variances.","Esempio: matrice troncata e stato n uguale due":"Example: truncated matrix and n equal two state","Impostazione.":"Setup.","Nella base zero, uno, due, tre si rappresenta x e si calcolano i momenti sullo stato due.":"In the zero, one, two, three basis represent x and compute moments in state two.","Controllo.":"Check.","La matrice è hermitiana e tridiagonale. Per x quadrato il contributo a |4> non è visibile nel troncamento, quindi il valore va ottenuto dall'identità operatoriale o da una base sufficientemente grande.":"The matrix is Hermitian and tridiagonal. For x squared the contribution to |4> is absent from the truncation, so the value must be obtained from the operator identity or a sufficiently large basis.","Interpretazione e limiti":"Interpretation and limits","Troncamento numerico":"Numerical truncation","Le relazioni canoniche non possono essere esatte in dimensione finita perché la traccia di un commutatore è zero. Le matrici troncate approssimano bene soltanto stati lontani dal bordo superiore.":"Canonical relations cannot be exact in finite dimension because the trace of a commutator is zero. Truncated matrices approximate only states far from the upper boundary.","Stati squeezed":"Squeezed states","Trasformazioni quadratiche dei ladder possono ridurre una varianza sotto il valore coerente aumentando l'altra, mantenendo il limite di Heisenberg.":"Quadratic ladder transformations can reduce one variance below the coherent value while increasing the other, preserving the Heisenberg bound.","Stato coerente non ortogonale":"Nonorthogonal coherent state","Due stati coerenti distinti hanno sovrapposizione non nulla e formano una famiglia sovracompleta, non una base ortonormale numerabile.":"Distinct coherent states have nonzero overlap and form an overcomplete family, not a countable orthonormal basis.","Limite classico":"Classical limit","Per modulo alpha grande, fluttuazioni relative del numero scalano come uno su modulo alpha e il centro coerente segue l'orbita classica.":"For large modulus alpha, relative number fluctuations scale as one over modulus alpha and the coherent center follows the classical orbit.","Errori tipici":"Common errors","Commutare a e a aggiunto senza aggiungere uno; perdere le radici nei ladder; scrivere x con differenza anziché somma; usare delta n uguale più o meno uno per x quadrato; assumere gli stati coerenti ortogonali.":"Commuting a and a dagger without adding one; losing square roots in ladders; writing x with a difference instead of a sum; using delta n equal plus or minus one for x squared; assuming coherent states are orthogonal.","Controlli rapidi":"Quick checks","x e p sono hermitiani; le matrici sono tridiagonali; x cambia parità; x quadrato ha diagonale 2n più uno; a(t) ha fase meno omega t; D è unitario.":"x and p are Hermitian; matrices are tridiagonal; x changes parity; x squared has diagonal 2n plus one; a(t) has phase minus omega t; D is unitary.","Controllo da orale":"Oral exam checklist","Costruisci Fock con l'identità di commutazione.":"Construct Fock states with the commutation identity.","Ricava x e p dai ladder.":"Derive x and p from ladders.","Calcola gli elementi di matrice.":"Compute matrix elements.","Riordina x quadrato e leggi le selezioni.":"Reorder x squared and read selection rules.","Evolvi a nel quadro di Heisenberg.":"Evolve a in the Heisenberg picture.","Risolvi a|alpha> uguale alpha|alpha>.":"Solve a|alpha> equal alpha|alpha>.","Ottieni statistica poissoniana e D(alpha).":"Obtain Poisson statistics and D(alpha).","Controlla indeterminazioni e limite di troncamento.":"Check uncertainties and truncation limits.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss P1 - formalismo, rappresentazioni ed evoluzione":"Boss P1 - formalism, representations, and evolution","Appunti-MQ.pdf, pagine PDF 149-156 - oscillatore armonico e metodo operatoriale":"Appunti-MQ.pdf, PDF pages 149-156 - oscillatore armonico e metodo operatoriale","DIM 15 - commutatori, generatori e simmetrie":"DIM 15 - commutators, generators, and symmetries","La pagina parte dalle pagine verificate 149-156 ma si concentra sull'uso operativo dell'algebra: ordinamento, matrici, selezioni, Heisenberg e stati coerenti, evitando di duplicare la sola derivazione dello spettro.":"The page starts from verified pages 149-156 but focuses on operational algebra: ordering, matrices, selection rules, Heisenberg evolution, and coherent states, avoiding mere duplication of the spectrum derivation.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Algebra dell'oscillatore":"Oscillator algebra","Costruzione della base di Fock":"Construction of the Fock basis","Commutatore con una potenza":"Commutator with a power","Azione dei ladder sulla base di Fock":"Ladder action on the Fock basis","Posizione e impulso tramite ladder":"Position and momentum through ladders","Elementi di matrice della posizione":"Position matrix elements","Elementi di matrice dell'impulso":"Momentum matrix elements","Forma normalmente riordinata di x quadrato":"Normally reordered x squared","Regole di selezione armoniche":"Harmonic selection rules","Evoluzione temporale dei ladder":"Time evolution of ladder operators","Espansione di uno stato coerente":"Coherent-state expansion","Statistica poissoniana dello stato coerente":"Poisson statistics of a coherent state","Operatore di spostamento e stato coerente":"Displacement operator and coherent state","Indeterminazione minima degli stati coerenti":"Minimum uncertainty of coherent states"},"title":{"it":"Oscillatore armonico: struttura operatoriale","en":"Harmonic oscillator: operator structure"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

@@ -1,274 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parità</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parità: simmetria, autostati e regole di selezione</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Parità</h1>
-    <h2>Definizione</h2>
-    La parità di una funzione \( \psi(x) \) indica la sua simmetria rispetto all'inversione del segno della coordinata spaziale \( x \):
-    <div class="formula">
-        \[
-        \psi(-x) = \pm \psi(x)
-        \]
-    </div>
-    Una funzione con parità positiva (\( + \)) è detta pari, mentre una funzione con parità negativa (\( - \)) è detta dispari.
-
-    <h2>Operatori e parità</h2>
-    La parità è associata all'operatore di inversione spaziale \( \hat{P} \), definito come:
-    <div class="formula">
-        \[
-        \hat{P} \psi(x) = \psi(-x)
-        \]
-    </div>
-    L'autofunzione di \( \hat{P} \) ha un autovalore \( \pm 1 \), corrispondente a parità pari o dispari:
-    <div class="formula">
-        \[
-        \hat{P} \psi(x) = \pm \psi(x)
-        \]
-    </div>
-
-    <h2>Applicazioni in meccanica quantistica</h2>
-    La parità è una proprietà importante in molti problemi di meccanica quantistica:
-    <ul>
-        <li>Nel caso di un potenziale simmetrico \( V(x) = V(-x) \), le soluzioni dell'equazione di Schrödinger possono essere scelte come pari o dispari.</li>
-        <li>L'operatore momento \( \hat{p} = -i \hbar \frac{d}{dx} \) cambia segno sotto inversione spaziale:
-            \[
-            \hat{P} \hat{p} \hat{P}^{-1} = -\hat{p}
-            \]
-        </li>
-        <li>Gli stati legati in potenziali simmetrici, come la buca di potenziale infinita, mostrano alternanza di parità (stati pari e dispari).</li>
-    </ul>
-
-    <h2>Esempio: Buca di potenziale infinita</h2>
-    Consideriamo la funzione d'onda in una buca di potenziale infinita tra \( x = 0 \) e \( x = L \). Le soluzioni stazionarie sono:
-    <div class="formula">
-        \[
-        \psi_n(x) =
-        \begin{cases}
-        \sqrt{\frac{2}{L}} \sin\left(\frac{n \pi x}{L}\right) & \text{(dispari)} \\
-        \sqrt{\frac{2}{L}} \cos\left(\frac{n \pi x}{L}\right) & \text{(pari)}
-        \end{cases}
-        \]
-    </div>
-    Dove \( n \) è il numero quantico principale.
-
-    <h2>Significato fisico</h2>
-    La parità è una simmetria fondamentale che semplifica i calcoli in problemi di meccanica quantistica. In presenza di simmetrie spaziali, consente di ridurre lo spazio delle soluzioni a funzioni pari o dispari, facilitando l'analisi degli stati quantistici.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 4</div>
-  <h2>Parità: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Usare la simmetria spaziale per classificare stati e annullare elementi di matrice.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La parità agisce come \(P\psi(x)=\psi(-x)\), è unitaria ed hermitiana, con autovalori \(\pm1\). Se \(V(x)=V(-x)\), commuta con H e gli autostati non degeneri hanno parità definita.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Proprietà<span class="lecture-step-boss">DIM 5</span><span class="lecture-step-boss">DIM 17</span></h4>
-      <p>Applicare due volte l'inversione restituisce lo stato.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="P^2=I,\qquad P^\dagger=P"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle (P\psi)(x)=\psi(-x)\Rightarrow(P^2\psi)(x)=\psi(x)\Rightarrow P^2=I\Rightarrow P^{-1}=P;\quad P\ \text{unitario}\Rightarrow P^\dagger=P\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Selezione<span class="lecture-step-boss">DIM 5</span><span class="lecture-step-boss">DIM 17</span></h4>
-      <p>Un integrando dispari ha integrale nullo.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\langle f|x|i\rangle=0\quad\text{se }\pi_f\pi_i=+1"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P|i\rangle=\pi_i|i\rangle,\quad PxP=-x\Rightarrow\langle f|x|i\rangle=\langle f|P(-x)P|i\rangle=-\pi_f\pi_i\langle f|x|i\rangle\overset{\pi_f\pi_i=+1}{\Rightarrow}\langle f|x|i\rangle=0\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Oscillatore</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Gli stati hanno \(\pi_n=(-1)^n\).</p>
-    <p><strong>Calcolo.</strong> L'operatore x è dispari, quindi collega solo parità opposte.</p>
-    <p><strong>Risultato e controllo.</strong> Questo anticipa la regola \(\Delta n=\pm1\) insieme all'algebra degli operatori scala.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 5</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P3_DIM_13-18.txt">DIM 17</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Simmetria del dominio oltre che del potenziale.</li>
-          <li>In degenerazione si può scegliere una base di parità se \([H,P]=0\).</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La parità trasforma un calcolo integrale in una decisione algebrica e rende visibili regole di selezione.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Dimostra gli autovalori \(\pm1\).</li>
-          <li>Classifica densità e corrente sotto parità.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=145">Appunti-MQ.pdf, pp. 145-149 e 159-164: operatore parità e potenziali simmetrici</a></li>
-          <li><a href="MQ.pdf#page=10">MQ.pdf, pp. capitolo 10: simmetrie e autostati</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-parita"><div class="lecture-kicker">Lezione approfondita - Argomento 4 - Appunti capitolo 9</div><h1>Parità: simmetria, autostati e regole di selezione</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire l'operatore di inversione, dimostrarne unitarietà, hermiticità e spettro, collegare il commutatore con H agli autostati pari o dispari e ricavare valori medi nulli, regole di selezione e conservazione temporale.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Simmetria discreta</h3><p>La parità inverte simultaneamente tutte le coordinate. Non nasce da un parametro infinitesimo continuo, ma ha autovalori osservabili più uno e meno uno.</p></article><article class="lecture-card lecture-warning"><h3>Simmetria di H, non di ogni stato</h3><p>Se H commuta con P, gli autostati non degeneri hanno parità definita. Una sovrapposizione di settori pari e dispari resta però uno stato legittimo senza parità definita.</p></article></div><h2>Inversione nello spazio degli stati</h2><div class="lecture-grid"><article class="lecture-card "><h3>Azione attiva</h3><p>P trasforma lo stato mantenendo fissa l'etichetta x della rappresentazione: la nuova funzione in x è la vecchia funzione in meno x.</p></article><article class="lecture-card "><h3>Osservabili polari e assiali</h3><p>Posizione e impulso cambiano segno; il momento angolare, prodotto vettoriale di due vettori polari, non cambia segno.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Definizione sulla base x<span class="lecture-step-boss">BASE</span></h4><p>L'inversione manda ogni autostato di posizione nel punto opposto.</p><div class="lecture-formula" aria-label="Definizione dell&#x27;operatore parità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P|x\rangle=|-x\rangle\quad\text{in 1D},\qquad P|\mathbf r\rangle=|-\mathbf r\rangle\quad\text{in 3D}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Azione sulle funzioni<span class="lecture-step-boss">RAPPRESENTA</span></h4><p>Inserendo P nella rappresentazione delle coordinate si ottiene la funzione riflessa.</p><div class="lecture-formula" aria-label="Azione della parità in coordinate"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (P\psi)(x)=\langle x|P|\psi\rangle=\langle-x|\psi\rangle=\psi(-x)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Doppia inversione<span class="lecture-step-boss">ALGEBRA</span></h4><p>Applicare due volte la trasformazione riporta ogni ket nella posizione iniziale.</p><div class="lecture-formula" aria-label="Involutività dell&#x27;operatore parità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P^2|x\rangle=|x\rangle\Rightarrow P^2=I\Rightarrow P^{-1}=P\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Unitarietà ed hermiticità<span class="lecture-step-boss">DIMOSTRA</span></h4><p>L'inversione conserva prodotti scalari; insieme a P inverso uguale P questo implica P aggiunto uguale P.</p><div class="lecture-formula" aria-label="Prova di unitarietà ed hermiticità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle P\phi|P\psi\rangle=\int dx\,\phi^*(-x)\psi(-x)=\langle\phi|\psi\rangle\Rightarrow P^\dagger=P^{-1}=P\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Autovalori<span class="lecture-step-boss">SPETTRO</span></h4><p>Se P psi uguale eta psi, applicare P una seconda volta fissa eta quadrato uguale uno.</p><div class="lecture-formula" aria-label="Spettro della parità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P|\psi_\eta\rangle=\eta|\psi_\eta\rangle,\quad P^2=I\Rightarrow\eta^2=1\Rightarrow\eta=\pm1\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Proiettori<span class="lecture-step-boss">SETTORI</span></h4><p>Ogni stato si separa in componenti pari e dispari con due proiettori ortogonali e completi.</p><div class="lecture-formula" aria-label="Proiettori sui settori di parità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Pi_\pm=\frac{I\pm P}{2},\quad\Pi_\pm^2=\Pi_\pm,\quad\Pi_+\Pi_-=0,\quad\Pi_++\Pi_-=I\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Trasformazione delle osservabili<span class="lecture-step-boss">POLARE</span></h4><p>L'azione per coniugazione distingue vettori polari e assiali.</p><div class="lecture-formula" aria-label="Parità di posizione, impulso e momento angolare"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P\mathbf xP=-\mathbf x,\qquad P\mathbf pP=-\mathbf p,\qquad P\mathbf LP=P(\mathbf x\times\mathbf p)P=\mathbf L\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Hamiltoniana simmetrica<span class="lecture-step-boss">COMMUTA</span></h4><p>L'energia cinetica è pari; per una particella scalare la parità è simmetria esattamente quando V di x uguale V di meno x.</p><div class="lecture-formula" aria-label="Condizione di simmetria dell&#x27;Hamiltoniana"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=\frac{p^2}{2m}+V(x),\quad V(-x)=V(x)\Rightarrow PHP=H\Rightarrow[H,P]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Autostato non degenere<span class="lecture-step-boss">ORALE</span></h4><p>Se H psi uguale E psi, anche P psi ha la stessa energia. La non degenerazione lo rende proporzionale a psi, quindi psi ha parità definita.</p><div class="lecture-formula" aria-label="Dimostrazione della parità degli autostati non degeneri"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H(P|n\rangle)=PH|n\rangle=E_nP|n\rangle,\quad E_n\ \text{non degenere}\Rightarrow P|n\rangle=\pm|n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Livello degenere<span class="lecture-step-boss">CSCO</span></h4><p>Nel sottospazio degenere P può mescolare la base scelta, ma H e P hermitiani e commutanti possono essere diagonalizzati simultaneamente.</p><div class="lecture-formula" aria-label="Decomposizione di un autospazio degenere"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H,P]=0\Rightarrow\mathcal H_E=\mathcal H_{E,+}\oplus\mathcal H_{E,-}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Valore medio di un operatore dispari<span class="lecture-step-boss">SELEZIONE</span></h4><p>In uno stato di parità definita, inserire P quadrato e usare P O P uguale meno O cambia il segno del valore medio.</p><div class="lecture-formula" aria-label="Annullamento dei valori medi dispari"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P O_-P=-O_-,\quad P|\eta\rangle=\eta|\eta\rangle\Rightarrow\langle\eta|O_-|\eta\rangle=-\langle\eta|O_-|\eta\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Regola di selezione<span class="lecture-step-boss">MATRICE</span></h4><p>Tra stati di parità eta m ed eta n, un operatore dispari ha elemento non nullo solo se le parità sono opposte.</p><div class="lecture-formula" aria-label="Regola di selezione per operatori dispari"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle m|O_-|n\rangle=-\eta_m\eta_n\langle m|O_-|n\rangle\Rightarrow\eta_m\eta_n=-1\ \text{se non nullo}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Conservazione temporale<span class="lecture-step-boss">DINAMICA</span></h4><p>Se H commuta con P, l'evolutore commuta con P e un settore di parità non evolve nell'altro.</p><div class="lecture-formula" aria-label="Conservazione della parità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H,P]=0\Rightarrow[U(t),P]=0,\quad U=e^{-iHt/\hbar},\quad P|\psi(0)\rangle=\eta|\psi(0)\rangle\Rightarrow P|\psi(t)\rangle=\eta|\psi(t)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Parità orbitale in 3D<span class="lecture-step-boss">ARMONICHE</span></h4><p>L'inversione lascia r invariato e manda gli angoli nel punto antipodale; le armoniche sferiche acquistano meno uno alla ell.</p><div class="lecture-formula" aria-label="Parità degli stati orbitali centrali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle Y_{\ell m}(\pi-\theta,\varphi+\pi)=(-1)^\ell Y_{\ell m}(\theta,\varphi)\Rightarrow P[R_{n\ell}Y_{\ell m}]=(-1)^\ell R_{n\ell}Y_{\ell m}\)</span></div></article></section><h2>Esempio: selezione dipolare nell'oscillatore</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Gli autostati armonici hanno parità meno uno alla n e x è un operatore dispari.</p><p data-i18n-skip="true">\(\displaystyle P|n\rangle=(-1)^n|n\rangle,\quad PxP=-x\Rightarrow\langle m|x|n\rangle=0\ \text{se }m+n\ \text{è pari};\quad x=\sqrt{\frac{\hbar}{2m\omega}}(a+a^\dagger)\Rightarrow m=n\pm1\)</p><p><strong>Controllo.</strong> La parità fornisce la condizione necessaria di cambio tra pari e dispari; l'algebra del ladder la restringe ulteriormente a delta n uguale più o meno uno.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Rottura di parità</h3><p>Un termine dispari, come lambda x, rende il commutatore non nullo, mescola settori opposti e può produrre valori medi di x diversi da zero.</p></article><article class="lecture-card "><h3>Parità di una sovrapposizione</h3><p>La somma di due stati entrambi pari resta pari; la somma di un pari e un dispari non è autostato di P, anche se ogni componente evolve nel proprio settore.</p></article><article class="lecture-card "><h3>Simmetria e degenerazione</h3><p>Una simmetria discreta abeliana non obbliga da sola una degenerazione. La parità etichetta livelli non degeneri di molti problemi unidimensionali.</p></article><article class="lecture-card "><h3>Parità intrinseca</h3><p>Per particelle e campi può esistere un fattore intrinseco oltre a meno uno alla ell. Nella meccanica ondulatoria a una particella qui trattata si considera la parte spaziale.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Scrivere P psi di x uguale meno psi di x per ogni stato; concludere che ogni stato ha parità definita; confondere vettori polari e assiali; usare la regola dispari tra stati della stessa parità; assumere degenerazione perché esistono due autovalori di P.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>P quadrato e P aggiunto valgono I e P; eta è più o meno uno; x e p sono dispari, L è pari; V pari implica commutatore nullo; un integrando dispari ha integrale nullo su un dominio simmetrico.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci P sui ket di posizione.</li><li>Ricava la funzione trasformata psi di meno x.</li><li>Dimostra P quadrato, unitarietà ed hermiticità.</li><li>Ricava gli autovalori più e meno uno.</li><li>Mostra la trasformazione di x, p e L.</li><li>Dimostra la parità degli autostati non degeneri.</li><li>Ricava valore medio nullo e regola di selezione.</li><li>Spiega conservazione e rottura di parità.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L833">DIM 17 - buche, stati legati, diffusione e parità</a></li><li><a href="Appunti-MQ.pdf#page=145">Appunti-MQ.pdf, pagine PDF 145-148 - operatore di parità, autovalori e simmetria</a></li><li><a href="set-7-parita-oscillatore.html">Set 7 - parità e oscillatore armonico</a></li></ul><p class="lecture-note">Le proprietà dell'operatore sono state ricavate dalle pagine verificate 145-148; proiettori, prova non degenere e regole di selezione rendono espliciti i passaggi che negli appunti sono spesso usati in forma implicita.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 4 - Appunti capitolo 9":"In-depth lesson - Topic 4 - Notes Chapter 9","Parità: simmetria, autostati e regole di selezione":"Parity: symmetry, eigenstates, and selection rules","Obiettivo.":"Objective.","Costruire l'operatore di inversione, dimostrarne unitarietà, hermiticità e spettro, collegare il commutatore con H agli autostati pari o dispari e ricavare valori medi nulli, regole di selezione e conservazione temporale.":"Construct the inversion operator, prove its unitarity, Hermiticity, and spectrum, connect its commutator with H to even or odd eigenstates, and derive vanishing expectation values, selection rules, and time conservation.","Simmetria discreta":"Discrete symmetry","La parità inverte simultaneamente tutte le coordinate. Non nasce da un parametro infinitesimo continuo, ma ha autovalori osservabili più uno e meno uno.":"Parity simultaneously reverses all coordinates. It does not arise from a continuous infinitesimal parameter but has observable eigenvalues plus one and minus one.","Simmetria di H, non di ogni stato":"Symmetry of H, not every state","Se H commuta con P, gli autostati non degeneri hanno parità definita. Una sovrapposizione di settori pari e dispari resta però uno stato legittimo senza parità definita.":"If H commutes with P, nondegenerate eigenstates have definite parity. A superposition of even and odd sectors is nevertheless a legitimate state without definite parity.","Inversione nello spazio degli stati":"Inversion in state space","Azione attiva":"Active action","P trasforma lo stato mantenendo fissa l'etichetta x della rappresentazione: la nuova funzione in x è la vecchia funzione in meno x.":"P transforms the state while keeping the representation label x fixed: the new wavefunction at x is the old wavefunction at minus x.","Osservabili polari e assiali":"Polar and axial observables","Posizione e impulso cambiano segno; il momento angolare, prodotto vettoriale di due vettori polari, non cambia segno.":"Position and momentum change sign; angular momentum, a cross product of two polar vectors, does not change sign.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Definizione sulla base x":"1. Definition on the x basis","BASE":"BASE","L'inversione manda ogni autostato di posizione nel punto opposto.":"Inversion maps every position eigenstate to the opposite point.","Passaggio":"Step","2. Azione sulle funzioni":"2. Action on wavefunctions","RAPPRESENTA":"REPRESENT","Inserendo P nella rappresentazione delle coordinate si ottiene la funzione riflessa.":"Insert P in coordinate representation to obtain the reflected wavefunction.","3. Doppia inversione":"3. Double inversion","ALGEBRA":"ALGEBRA","Applicare due volte la trasformazione riporta ogni ket nella posizione iniziale.":"Applying the transformation twice returns every ket to its initial position.","4. Unitarietà ed hermiticità":"4. Unitarity and Hermiticity","DIMOSTRA":"PROVE","L'inversione conserva prodotti scalari; insieme a P inverso uguale P questo implica P aggiunto uguale P.":"Inversion preserves inner products; together with P inverse equal to P this implies P dagger equal to P.","5. Autovalori":"5. Eigenvalues","SPETTRO":"SPECTRUM","Se P psi uguale eta psi, applicare P una seconda volta fissa eta quadrato uguale uno.":"If P psi equals eta psi, applying P a second time fixes eta squared equal to one.","6. Proiettori":"6. Projectors","SETTORI":"SECTORS","Ogni stato si separa in componenti pari e dispari con due proiettori ortogonali e completi.":"Every state separates into even and odd components using two orthogonal complete projectors.","7. Trasformazione delle osservabili":"7. Transformation of observables","POLARE":"POLAR","L'azione per coniugazione distingue vettori polari e assiali.":"Conjugation distinguishes polar and axial vectors.","8. Hamiltoniana simmetrica":"8. Symmetric Hamiltonian","COMMUTA":"COMMUTE","L'energia cinetica è pari; per una particella scalare la parità è simmetria esattamente quando V di x uguale V di meno x.":"Kinetic energy is even; for a scalar particle parity is a symmetry exactly when V of x equals V of minus x.","9. Autostato non degenere":"9. Nondegenerate eigenstate","ORALE":"ORAL","Se H psi uguale E psi, anche P psi ha la stessa energia. La non degenerazione lo rende proporzionale a psi, quindi psi ha parità definita.":"If H psi equals E psi, then P psi has the same energy. Nondegeneracy makes it proportional to psi, so psi has definite parity.","10. Livello degenere":"10. Degenerate level","CSCO":"CSCO","Nel sottospazio degenere P può mescolare la base scelta, ma H e P hermitiani e commutanti possono essere diagonalizzati simultaneamente.":"Inside a degenerate subspace P may mix the chosen basis, but commuting Hermitian H and P can be diagonalized simultaneously.","11. Valore medio di un operatore dispari":"11. Expectation of an odd operator","SELEZIONE":"SELECTION","In uno stato di parità definita, inserire P quadrato e usare P O P uguale meno O cambia il segno del valore medio.":"In a definite-parity state, insert P squared and use P O P equal to minus O; the expectation value changes sign.","12. Regola di selezione":"12. Selection rule","MATRICE":"MATRIX","Tra stati di parità eta m ed eta n, un operatore dispari ha elemento non nullo solo se le parità sono opposte.":"Between states of parity eta m and eta n, an odd operator has a nonzero matrix element only if parities are opposite.","13. Conservazione temporale":"13. Time conservation","DINAMICA":"DYNAMICS","Se H commuta con P, l'evolutore commuta con P e un settore di parità non evolve nell'altro.":"If H commutes with P, the evolution operator commutes with P and one parity sector does not evolve into the other.","14. Parità orbitale in 3D":"14. Orbital parity in 3D","ARMONICHE":"HARMONICS","L'inversione lascia r invariato e manda gli angoli nel punto antipodale; le armoniche sferiche acquistano meno uno alla ell.":"Inversion leaves r unchanged and maps angles to the antipodal point; spherical harmonics acquire minus one to ell.","Esempio: selezione dipolare nell'oscillatore":"Example: dipole selection in the oscillator","Impostazione.":"Setup.","Gli autostati armonici hanno parità meno uno alla n e x è un operatore dispari.":"Harmonic eigenstates have parity minus one to n and x is an odd operator.","Controllo.":"Check.","La parità fornisce la condizione necessaria di cambio tra pari e dispari; l'algebra del ladder la restringe ulteriormente a delta n uguale più o meno uno.":"Parity gives the necessary even-to-odd condition; ladder algebra further restricts it to delta n equal plus or minus one.","Interpretazione e limiti":"Interpretation and limits","Rottura di parità":"Parity breaking","Un termine dispari, come lambda x, rende il commutatore non nullo, mescola settori opposti e può produrre valori medi di x diversi da zero.":"An odd term such as lambda x makes the commutator nonzero, mixes opposite sectors, and can produce nonzero x expectation values.","Parità di una sovrapposizione":"Parity of a superposition","La somma di due stati entrambi pari resta pari; la somma di un pari e un dispari non è autostato di P, anche se ogni componente evolve nel proprio settore.":"A sum of two even states remains even; a sum of one even and one odd state is not a P eigenstate, although each component evolves in its own sector.","Simmetria e degenerazione":"Symmetry and degeneracy","Una simmetria discreta abeliana non obbliga da sola una degenerazione. La parità etichetta livelli non degeneri di molti problemi unidimensionali.":"An Abelian discrete symmetry does not by itself enforce degeneracy. Parity labels nondegenerate levels in many one-dimensional problems.","Parità intrinseca":"Intrinsic parity","Per particelle e campi può esistere un fattore intrinseco oltre a meno uno alla ell. Nella meccanica ondulatoria a una particella qui trattata si considera la parte spaziale.":"For particles and fields an intrinsic factor may exist in addition to minus one to ell. In the one-particle wave mechanics treated here, the spatial part is considered.","Errori tipici":"Common errors","Scrivere P psi di x uguale meno psi di x per ogni stato; concludere che ogni stato ha parità definita; confondere vettori polari e assiali; usare la regola dispari tra stati della stessa parità; assumere degenerazione perché esistono due autovalori di P.":"Writing P psi of x equal minus psi of x for every state; concluding every state has definite parity; confusing polar and axial vectors; applying the odd rule between same-parity states; assuming degeneracy because P has two eigenvalues.","Controlli rapidi":"Quick checks","P quadrato e P aggiunto valgono I e P; eta è più o meno uno; x e p sono dispari, L è pari; V pari implica commutatore nullo; un integrando dispari ha integrale nullo su un dominio simmetrico.":"P squared and P dagger equal I and P; eta is plus or minus one; x and p are odd, L is even; even V implies zero commutator; an odd integrand integrates to zero on a symmetric domain.","Controllo da orale":"Oral exam checklist","Definisci P sui ket di posizione.":"Define P on position kets.","Ricava la funzione trasformata psi di meno x.":"Derive the transformed function psi of minus x.","Dimostra P quadrato, unitarietà ed hermiticità.":"Prove P squared, unitarity, and Hermiticity.","Ricava gli autovalori più e meno uno.":"Derive eigenvalues plus and minus one.","Mostra la trasformazione di x, p e L.":"Show the transformation of x, p, and L.","Dimostra la parità degli autostati non degeneri.":"Prove parity of nondegenerate eigenstates.","Ricava valore medio nullo e regola di selezione.":"Derive the zero expectation value and selection rule.","Spiega conservazione e rottura di parità.":"Explain parity conservation and breaking.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 17 - buche, stati legati, diffusione e parità":"DIM 17 - wells, bound states, scattering, and parity","Appunti-MQ.pdf, pagine PDF 145-148 - operatore di parità, autovalori e simmetria":"Appunti-MQ.pdf, PDF pages 145-148 - operatore di parità, autovalori e simmetria","Set 7 - parità e oscillatore armonico":"Set 7 - parity and harmonic oscillator","Le proprietà dell'operatore sono state ricavate dalle pagine verificate 145-148; proiettori, prova non degenere e regole di selezione rendono espliciti i passaggi che negli appunti sono spesso usati in forma implicita.":"Operator properties were derived from verified pages 145-148; projectors, the nondegenerate proof, and selection rules make explicit the steps often used implicitly in the notes.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Definizione dell'operatore parità":"Definition of the parity operator","Azione della parità in coordinate":"Parity action in coordinates","Involutività dell'operatore parità":"Involutory property of parity","Prova di unitarietà ed hermiticità":"Proof of unitarity and Hermiticity","Spettro della parità":"Parity spectrum","Proiettori sui settori di parità":"Projectors onto parity sectors","Parità di posizione, impulso e momento angolare":"Parity of position, momentum, and angular momentum","Condizione di simmetria dell'Hamiltoniana":"Hamiltonian symmetry condition","Dimostrazione della parità degli autostati non degeneri":"Proof of parity for nondegenerate eigenstates","Decomposizione di un autospazio degenere":"Decomposition of a degenerate eigenspace","Annullamento dei valori medi dispari":"Vanishing of odd expectation values","Regola di selezione per operatori dispari":"Selection rule for odd operators","Conservazione della parità":"Parity conservation","Parità degli stati orbitali centrali":"Parity of central orbital states"},"title":{"it":"Parità: simmetria, autostati e regole di selezione","en":"Parity: symmetry, eigenstates, and selection rules"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

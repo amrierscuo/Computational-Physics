@@ -1,272 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oscillatore Armonico</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oscillatore armonico unidimensionale</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Oscillatore Armonico</h1>
-    <h2>Descrizione del sistema</h2>
-    L'oscillatore armonico è uno dei sistemi fondamentali in fisica teorica, con applicazioni che spaziano dalla meccanica classica alla meccanica quantistica. Il potenziale che descrive il sistema è dato da:
-    <div class="formula">
-        \[
-        V(x) = \frac{1}{2} m \omega^2 x^2
-        \]
-    </div>
-    dove \( m \) è la massa della particella, \( \omega \) è la frequenza angolare, e \( x \) è la posizione.
-
-    <h2>Equazione di Schrödinger</h2>
-    L'equazione di Schrödinger per l'oscillatore armonico unidimensionale è:
-    <div class="formula">
-        \[
-        -\frac{\hbar^2}{2m} \frac{d^2 \psi(x)}{dx^2} + \frac{1}{2} m \omega^2 x^2 \psi(x) = E \psi(x)
-        \]
-    </div>
-    Le soluzioni di questa equazione forniscono gli autovalori di energia e le funzioni d'onda associate.
-
-    <h2>Soluzioni</h2>
-    Gli autovalori di energia sono quantizzati e dati da:
-    <div class="formula">
-        \[
-        E_n = \hbar \omega \left( n + \frac{1}{2} \right) \quad n = 0, 1, 2, \ldots
-        \]
-    </div>
-    Le funzioni d'onda associate sono espresse come:
-    <div class="formula">
-        \[
-        \psi_n(x) = \sqrt{\frac{1}{2^n n!}} \left( \frac{m \omega}{\pi \hbar} \right)^{1/4} e^{-\frac{m \omega x^2}{2 \hbar}} H_n\left(\sqrt{\frac{m \omega}{\hbar}} x\right)
-        \]
-    </div>
-    dove \( H_n(x) \) sono i polinomi di Hermite.
-
-    <h2>Proprietà delle soluzioni</h2>
-    <ul>
-        <li>Gli stati \( n = 0, 1, 2, \ldots \) sono chiamati stati stazionari o autostati.</li>
-        <li>L'energia del sistema è quantizzata, con il livello fondamentale a \( E_0 = \frac{1}{2} \hbar \omega \).</li>
-        <li>Le funzioni d'onda sono ortogonali e normalizzate, soddisfacendo:
-        <div class="formula">
-            \[
-            \int_{-\infty}^{+\infty} \psi_n^*(x) \psi_m(x) dx = \delta_{nm}
-            \]
-        </div>
-        </li>
-    </ul>
-
-    <h2>Significato fisico</h2>
-    L'oscillatore armonico quantistico rappresenta un modello ideale per comprendere le vibrazioni molecolari, i fononi nei solidi e il comportamento delle particelle nei potenziali quadrati. La quantizzazione dell'energia è una delle manifestazioni fondamentali della meccanica quantistica.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 4</div>
-  <h2>Oscillatore Armonico: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Collegare soluzione differenziale, scala naturale e struttura dei livelli.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>L'oscillatore introduce la lunghezza \(x_0=\sqrt{\hbar/(m\omega)}\). Normalizzabilità e terminazione della serie producono polinomi di Hermite e livelli equispaziati; il fondamentale ha energia non nulla.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Variabile adimensionale<span class="lecture-step-boss">DIM 6</span></h4>
-      <p>Con \(\xi=x/x_0\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\left[-\frac12\frac{d^2}{d\xi^2}+\frac12\xi^2\right]\psi=\frac{E}{\hbar\omega}\psi"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle x=x_0\xi,\quad x_0=\sqrt{\hbar/(m\omega)},\quad H\psi=E\psi\Rightarrow\left[-\tfrac12\frac{d^2}{d\xi^2}+\tfrac12\xi^2\right]\psi=\frac E{\hbar\omega}\psi\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Spettro<span class="lecture-step-boss">DIM 6</span></h4>
-      <p>L'asintotico gaussiano e la serie polinomiale danno.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="E_n=\hbar\omega(n+\tfrac12)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \psi=e^{-\xi^2/2}h(\xi),\quad h''-2\xi h'+(2E/\hbar\omega-1)h=0;\quad h\ \text{polinomio di grado }n\Rightarrow2E/(\hbar\omega)-1=2n\Rightarrow E_n=\hbar\omega(n+\tfrac12)\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Fondamentale</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per \(psi_0\propto e^{-x^2/(2x_0^2)}\).</p>
-    <p><strong>Calcolo.</strong> \(\Delta x=x_0/\sqrt2\), \(\Delta p=\hbar/(\sqrt2x_0)\).</p>
-    <p><strong>Risultato e controllo.</strong> Il prodotto vale \(\hbar/2\) e \(E_0=\hbar\omega/2\).</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 6</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Potenziale quadratico vicino a un minimo stabile.</li>
-          <li>Gli stati esatti non degenerano in una dimensione.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La zero-point energy è richiesta da commutatore e normalizzazione, non da un'aggiunta arbitraria.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Confronta densità quantistica e distribuzione classica ad alto n.</li>
-          <li>Calcola la parità di n.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=149">Appunti-MQ.pdf, pp. 149-159: soluzione differenziale e operatoriale</a></li>
-          <li><a href="MQ.pdf#page=12">MQ.pdf, pp. capitolo 12: spettro, stati e limite classico</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-oscillatore-armonico"><div class="lecture-kicker">Lezione approfondita - Argomento 4 - Appunti capitolo 10</div><h1>Oscillatore armonico unidimensionale</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare l'intero spettro con gli operatori di Dirac, provare l'esistenza del fondamentale, normalizzare l'azione dei ladder, ottenere gaussiana e polinomi di Hermite e controllare parità, nodi, indeterminazioni ed evoluzione di sovrapposizioni.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Algebra prima dell'equazione differenziale</h3><p>La fattorizzazione trasforma un problema del secondo ordine in commutatori e norme positive, producendo spettro e stati senza risolvere subito l'equazione di Hermite.</p></article><article class="lecture-card lecture-warning"><h3>Energia di punto zero</h3><p>Lo stato fondamentale non ha energia zero: annullare a minimizza H ma lascia hbar omega su due, conseguenza del commutatore canonico.</p></article></div><h2>Scala naturale e fattorizzazione</h2><div class="lecture-grid"><article class="lecture-card "><h3>Lunghezza dell'oscillatore</h3><p>ell uguale radice di hbar su m omega rende adimensionale xi uguale x su ell e fissa la larghezza del fondamentale.</p></article><article class="lecture-card "><h3>Base di Fock</h3><p>Un solo stato fondamentale e applicazioni ripetute di a aggiunto costruiscono una base ortonormale numerata da n non negativo.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Hamiltoniana<span class="lecture-step-boss">BASE</span></h4><p>Il potenziale quadratico confina per x verso più o meno infinito e produce uno spettro discreto.</p><div class="lecture-formula" aria-label="Hamiltoniana dell&#x27;oscillatore armonico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=\frac{p^2}{2m}+\frac12m\omega^2x^2,\qquad[x,p]=i\hbar\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Operatori ladder<span class="lecture-step-boss">DEFINISCI</span></h4><p>Le combinazioni adimensionali sono l'una aggiunta dell'altra per x e p hermitiani.</p><div class="lecture-formula" aria-label="Definizione degli operatori di annichilazione e creazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a=\sqrt{\frac{m\omega}{2\hbar}}x+\frac{i}{\sqrt{2m\hbar\omega}}p,\qquad a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}x-\frac{i}{\sqrt{2m\hbar\omega}}p\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Commutatore<span class="lecture-step-boss">CALCOLA</span></h4><p>I soli termini incrociati sopravvivono e il commutatore canonico fissa il risultato unitario.</p><div class="lecture-formula" aria-label="Derivazione del commutatore dei ladder"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [a,a^\dagger]=-2i\sqrt{\frac{m\omega}{2\hbar}}\frac1{\sqrt{2m\hbar\omega}}[x,p]=1\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Fattorizzazione di H<span class="lecture-step-boss">RIORDINA</span></h4><p>Moltiplicare a aggiunto per a riproduce i quadrati meno un mezzo dovuto al commutatore.</p><div class="lecture-formula" aria-label="Fattorizzazione e operatore numero"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a^\dagger a=\frac{m\omega}{2\hbar}x^2+\frac{p^2}{2m\hbar\omega}-\frac12\Rightarrow H=\hbar\omega\left(N+\frac12\right),\quad N=a^\dagger a\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Commutatori con H<span class="lecture-step-boss">LADDER</span></h4><p>Da N uguale a aggiunto a seguono immediatamente gli spostamenti energetici.</p><div class="lecture-formula" aria-label="Commutatori che alzano e abbassano l&#x27;energia"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [N,a]=-a,\quad[N,a^\dagger]=a^\dagger\Rightarrow[H,a]=-\hbar\omega a,\quad[H,a^\dagger]=\hbar\omega a^\dagger\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Discesa energetica<span class="lecture-step-boss">DIMOSTRA</span></h4><p>Se H psi uguale E psi, applicare a produce zero oppure un autostato con energia E meno hbar omega.</p><div class="lecture-formula" aria-label="Azione dell&#x27;operatore di annichilazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H(a|E\rangle)=aH|E\rangle+[H,a]|E\rangle=(E-\hbar\omega)a|E\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Limite inferiore<span class="lecture-step-boss">POSITIVITÀ</span></h4><p>La norma di a psi è non negativa, quindi N e H sono limitati inferiormente.</p><div class="lecture-formula" aria-label="Positività dell&#x27;operatore numero"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\psi|N|\psi\rangle=\langle a\psi|a\psi\rangle\ge0\Rightarrow\langle H\rangle\ge\frac12\hbar\omega\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Stato fondamentale<span class="lecture-step-boss">FONDO</span></h4><p>La discesa non può continuare sotto il limite: deve terminare in uno stato annullato da a.</p><div class="lecture-formula" aria-label="Condizione e energia del fondamentale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle a|0\rangle=0\Rightarrow N|0\rangle=0\Rightarrow H|0\rangle=\frac12\hbar\omega|0\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Spettro<span class="lecture-step-boss">RISULTATO</span></h4><p>Applicazioni ripetute di a aggiunto costruiscono una catena equidistanziata senza altri livelli intermedi.</p><div class="lecture-formula" aria-label="Autostati e spettro armonico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n\rangle=\frac{(a^\dagger)^n}{\sqrt{n!}}|0\rangle,\qquad E_n=\hbar\omega\left(n+\frac12\right),\quad n=0,1,2,\ldots\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Normalizzazione dei ladder<span class="lecture-step-boss">NORMA</span></h4><p>Le norme seguono dagli autovalori di N e da a a aggiunto uguale N più uno.</p><div class="lecture-formula" aria-label="Azione normalizzata dei ladder"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \|a|n\rangle\|^2=n,\quad\|a^\dagger|n\rangle\|^2=n+1\Rightarrow a|n\rangle=\sqrt n|n-1\rangle,\quad a^\dagger|n\rangle=\sqrt{n+1}|n+1\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Gaussiana fondamentale<span class="lecture-step-boss">COORDINATE</span></h4><p>In coordinate, a psi0 uguale zero è un'equazione del primo ordine che si integra e si normalizza.</p><div class="lecture-formula" aria-label="Derivazione della funzione fondamentale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \ell=\sqrt{\frac{\hbar}{m\omega}},\quad\frac1{\sqrt2}\left(\frac x\ell+\ell\frac d{dx}\right)\psi_0=0\Rightarrow\psi_0(x)=\frac{e^{-x^2/(2\ell^2)}}{\pi^{1/4}\sqrt\ell}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Autofunzioni di Hermite<span class="lecture-step-boss">POLINOMI</span></h4><p>Applicare il differenziale di creazione produce un polinomio di grado n moltiplicato per la stessa gaussiana.</p><div class="lecture-formula" aria-label="Autofunzioni normalizzate tramite Hermite"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_n(x)=\frac{H_n(x/\ell)e^{-x^2/(2\ell^2)}}{\pi^{1/4}\sqrt{2^n n!\ell}},\qquad H_n(\xi)=(-1)^ne^{\xi^2}\frac{d^n}{d\xi^n}e^{-\xi^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Parità e nodi<span class="lecture-step-boss">SIMMETRIA</span></h4><p>Hn contiene potenze della stessa parità di n; l'autofunzione alterna parità e possiede n zeri reali.</p><div class="lecture-formula" aria-label="Parità e nodi degli autostati armonici"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_n(-\xi)=(-1)^nH_n(\xi)\Rightarrow P|n\rangle=(-1)^n|n\rangle,\qquad N_{\rm nodi}=n\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Momenti e indeterminazione<span class="lecture-step-boss">CHECK</span></h4><p>Scrivere x e p con i ladder annulla i termini che cambiano n nei valori medi diagonali.</p><div class="lecture-formula" aria-label="Momenti quadratici e prodotto di indeterminazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle x\rangle=\langle p\rangle=0,\quad\langle x^2\rangle=\ell^2(n+\tfrac12),\quad\langle p^2\rangle=\frac{\hbar^2}{\ell^2}(n+\tfrac12),\quad\Delta x\Delta p=\hbar(n+\tfrac12)\)</span></div></article></section><h2>Esempio: battimento tra fondamentale e primo eccitato</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prepara la sovrapposizione normalizzata di zero e uno con coefficienti reali uguali.</p><p data-i18n-skip="true">\(\displaystyle |\psi(t)\rangle=\frac{e^{-i\omega t/2}|0\rangle+e^{-3i\omega t/2}|1\rangle}{\sqrt2},\quad\langle x\rangle_t=\sqrt{\frac{\hbar}{2m\omega}}\cos\omega t,\quad\langle p\rangle_t=-\sqrt{\frac{m\hbar\omega}{2}}\sin\omega t\)</p><p><strong>Controllo.</strong> I valori medi seguono l'oscillazione classica alla frequenza omega, mentre la misura dell'energia dà E0 o E1 con probabilità un mezzo.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Completezza della catena</h3><p>Qualunque presunto autostato può essere abbassato fino a uno stato annullato da a; l'equazione a psi uguale zero ha, a meno di fase, un'unica soluzione normalizzabile. Da qui non restano catene indipendenti.</p></article><article class="lecture-card "><h3>Metodo differenziale</h3><p>La soluzione diretta porta all'equazione di Hermite; la terminazione della serie impone gli stessi n interi. Il metodo operatoriale incorpora questa quantizzazione nelle norme.</p></article><article class="lecture-card "><h3>Stati coerenti</h3><p>Un autostato di a è una sovrapposizione poissoniana dei livelli e mantiene forma gaussiana mentre il centro percorre l'orbita classica. Non è un autostato di H.</p></article><article class="lecture-card "><h3>Perturbazioni anharmoniche</h3><p>Termini x cubo o x quarto rompono l'equidistanza. La base armonica resta però naturale per perturbazioni, selezione e calcolo numerico.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Perdere il termine un mezzo riordinando; assumere a aggiunto come semplice coniugato numerico; dimenticare le radici n e n più uno; porre E0 uguale zero; usare ell al posto di delta x del fondamentale, che vale ell su radice due.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>a è adimensionale; H ha unità energetiche; a psi0 vale zero; la norma di psi_n è uno; parità e numero di nodi seguono n; per n uguale zero il prodotto di indeterminazione è hbar su due.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci a e a aggiunto e calcola il commutatore.</li><li>Fattorizza H mantenendo il termine un mezzo.</li><li>Dimostra le relazioni di salita e discesa.</li><li>Usa la positività per trovare il fondamentale.</li><li>Ricava spettro e normalizzazioni dei ladder.</li><li>Risolvi a psi0 uguale zero in coordinate.</li><li>Costruisci Hermite, parità e nodi.</li><li>Calcola momenti quadratici e un esempio temporale.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L833">DIM 17 - buche, stati legati, diffusione e parità</a></li><li><a href="Appunti-MQ.pdf#page=149">Appunti-MQ.pdf, pagine PDF 149-158 - metodo operatoriale, fondamentale e polinomi di Hermite</a></li><li><a href="set-7-parita-oscillatore.html">Set 7 - parità e oscillatore armonico</a></li></ul><p class="lecture-note">La dimostrazione è stata confrontata con le pagine verificate 149-158 e mantiene tutti i passaggi richiesti dal metodo di Dirac: commutatore, termine di punto zero, positività, ladder normalizzati e soluzione in coordinate.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 4 - Appunti capitolo 10":"In-depth lesson - Topic 4 - Notes Chapter 10","Oscillatore armonico unidimensionale":"One-dimensional harmonic oscillator","Obiettivo.":"Objective.","Derivare l'intero spettro con gli operatori di Dirac, provare l'esistenza del fondamentale, normalizzare l'azione dei ladder, ottenere gaussiana e polinomi di Hermite e controllare parità, nodi, indeterminazioni ed evoluzione di sovrapposizioni.":"Derive the full spectrum using Dirac operators, prove the existence of the ground state, normalize ladder action, obtain the Gaussian and Hermite polynomials, and check parity, nodes, uncertainties, and superposition evolution.","Algebra prima dell'equazione differenziale":"Algebra before the differential equation","La fattorizzazione trasforma un problema del secondo ordine in commutatori e norme positive, producendo spettro e stati senza risolvere subito l'equazione di Hermite.":"Factorization turns a second-order problem into commutators and positive norms, producing spectrum and states before solving the Hermite equation.","Energia di punto zero":"Zero-point energy","Lo stato fondamentale non ha energia zero: annullare a minimizza H ma lascia hbar omega su due, conseguenza del commutatore canonico.":"The ground state does not have zero energy: annihilation by a minimizes H but leaves hbar omega over two, a consequence of the canonical commutator.","Scala naturale e fattorizzazione":"Natural scale and factorization","Lunghezza dell'oscillatore":"Oscillator length","ell uguale radice di hbar su m omega rende adimensionale xi uguale x su ell e fissa la larghezza del fondamentale.":"ell equal square root of hbar over m omega makes xi equal x over ell dimensionless and sets the ground-state width.","Base di Fock":"Fock basis","Un solo stato fondamentale e applicazioni ripetute di a aggiunto costruiscono una base ortonormale numerata da n non negativo.":"One ground state and repeated applications of a dagger construct an orthonormal basis labeled by nonnegative n.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Hamiltoniana":"1. Hamiltonian","BASE":"BASE","Il potenziale quadratico confina per x verso più o meno infinito e produce uno spettro discreto.":"The quadratic potential confines as x goes to plus or minus infinity and produces a discrete spectrum.","Passaggio":"Step","2. Operatori ladder":"2. Ladder operators","DEFINISCI":"DEFINE","Le combinazioni adimensionali sono l'una aggiunta dell'altra per x e p hermitiani.":"The dimensionless combinations are adjoints of one another for Hermitian x and p.","3. Commutatore":"3. Commutator","CALCOLA":"CALCULATE","I soli termini incrociati sopravvivono e il commutatore canonico fissa il risultato unitario.":"Only cross terms survive and the canonical commutator fixes the unit result.","4. Fattorizzazione di H":"4. Factorization of H","RIORDINA":"REORDER","Moltiplicare a aggiunto per a riproduce i quadrati meno un mezzo dovuto al commutatore.":"Multiplying a dagger by a reproduces the squares minus one half due to the commutator.","5. Commutatori con H":"5. Commutators with H","LADDER":"LADDER","Da N uguale a aggiunto a seguono immediatamente gli spostamenti energetici.":"From N equal a dagger a, the energy shifts follow immediately.","6. Discesa energetica":"6. Energy descent","DIMOSTRA":"PROVE","Se H psi uguale E psi, applicare a produce zero oppure un autostato con energia E meno hbar omega.":"If H psi equals E psi, applying a gives zero or an eigenstate with energy E minus hbar omega.","7. Limite inferiore":"7. Lower bound","POSITIVITÀ":"POSITIVITY","La norma di a psi è non negativa, quindi N e H sono limitati inferiormente.":"The norm of a psi is nonnegative, so N and H are bounded below.","8. Stato fondamentale":"8. Ground state","FONDO":"GROUND","La discesa non può continuare sotto il limite: deve terminare in uno stato annullato da a.":"Descent cannot continue below the bound: it must terminate in a state annihilated by a.","9. Spettro":"9. Spectrum","RISULTATO":"RESULT","Applicazioni ripetute di a aggiunto costruiscono una catena equidistanziata senza altri livelli intermedi.":"Repeated applications of a dagger build an equally spaced chain with no additional intermediate levels.","10. Normalizzazione dei ladder":"10. Ladder normalization","NORMA":"NORM","Le norme seguono dagli autovalori di N e da a a aggiunto uguale N più uno.":"Norms follow from N eigenvalues and a a dagger equal N plus one.","11. Gaussiana fondamentale":"11. Ground-state Gaussian","COORDINATE":"COORDINATES","In coordinate, a psi0 uguale zero è un'equazione del primo ordine che si integra e si normalizza.":"In coordinates, a psi0 equal zero is a first-order equation that integrates and normalizes.","12. Autofunzioni di Hermite":"12. Hermite eigenfunctions","POLINOMI":"POLYNOMIALS","Applicare il differenziale di creazione produce un polinomio di grado n moltiplicato per la stessa gaussiana.":"Applying the creation differential operator produces a degree-n polynomial times the same Gaussian.","13. Parità e nodi":"13. Parity and nodes","SIMMETRIA":"SYMMETRY","Hn contiene potenze della stessa parità di n; l'autofunzione alterna parità e possiede n zeri reali.":"Hn contains powers with the same parity as n; the eigenfunction alternates parity and has n real zeros.","14. Momenti e indeterminazione":"14. Moments and uncertainty","CHECK":"CHECK","Scrivere x e p con i ladder annulla i termini che cambiano n nei valori medi diagonali.":"Writing x and p with ladder operators removes n-changing terms from diagonal expectation values.","Esempio: battimento tra fondamentale e primo eccitato":"Example: beating between ground and first excited states","Impostazione.":"Setup.","Si prepara la sovrapposizione normalizzata di zero e uno con coefficienti reali uguali.":"Prepare the normalized superposition of zero and one with equal real coefficients.","Controllo.":"Check.","I valori medi seguono l'oscillazione classica alla frequenza omega, mentre la misura dell'energia dà E0 o E1 con probabilità un mezzo.":"Expectation values follow the classical oscillation at frequency omega, while energy measurement yields E0 or E1 with probability one half.","Interpretazione e limiti":"Interpretation and limits","Completezza della catena":"Completeness of the chain","Qualunque presunto autostato può essere abbassato fino a uno stato annullato da a; l'equazione a psi uguale zero ha, a meno di fase, un'unica soluzione normalizzabile. Da qui non restano catene indipendenti.":"Any presumed eigenstate can be lowered to a state annihilated by a; equation a psi equal zero has, up to phase, a unique normalizable solution. Thus no independent chains remain.","Metodo differenziale":"Differential method","La soluzione diretta porta all'equazione di Hermite; la terminazione della serie impone gli stessi n interi. Il metodo operatoriale incorpora questa quantizzazione nelle norme.":"The direct solution leads to Hermite's equation; series termination imposes the same integer n values. The operator method incorporates this quantization into norms.","Stati coerenti":"Coherent states","Un autostato di a è una sovrapposizione poissoniana dei livelli e mantiene forma gaussiana mentre il centro percorre l'orbita classica. Non è un autostato di H.":"An eigenstate of a is a Poissonian superposition of levels and retains Gaussian shape while its center follows the classical orbit. It is not an H eigenstate.","Perturbazioni anharmoniche":"Anharmonic perturbations","Termini x cubo o x quarto rompono l'equidistanza. La base armonica resta però naturale per perturbazioni, selezione e calcolo numerico.":"Cubic or quartic x terms break equal spacing. The harmonic basis remains natural for perturbation theory, selection, and numerical calculation.","Errori tipici":"Common errors","Perdere il termine un mezzo riordinando; assumere a aggiunto come semplice coniugato numerico; dimenticare le radici n e n più uno; porre E0 uguale zero; usare ell al posto di delta x del fondamentale, che vale ell su radice due.":"Losing the one-half term while reordering; treating a dagger as a mere numerical conjugate; forgetting square roots n and n plus one; setting E0 to zero; using ell for the ground-state delta x, which is ell over square root two.","Controlli rapidi":"Quick checks","a è adimensionale; H ha unità energetiche; a psi0 vale zero; la norma di psi_n è uno; parità e numero di nodi seguono n; per n uguale zero il prodotto di indeterminazione è hbar su due.":"a is dimensionless; H has energy units; a psi0 equals zero; psi_n has unit norm; parity and node count follow n; for n equal zero the uncertainty product is hbar over two.","Controllo da orale":"Oral exam checklist","Definisci a e a aggiunto e calcola il commutatore.":"Define a and a dagger and compute the commutator.","Fattorizza H mantenendo il termine un mezzo.":"Factorize H while retaining the one-half term.","Dimostra le relazioni di salita e discesa.":"Prove raising and lowering relations.","Usa la positività per trovare il fondamentale.":"Use positivity to find the ground state.","Ricava spettro e normalizzazioni dei ladder.":"Derive the spectrum and ladder normalizations.","Risolvi a psi0 uguale zero in coordinate.":"Solve a psi0 equal zero in coordinates.","Costruisci Hermite, parità e nodi.":"Construct Hermite functions, parity, and nodes.","Calcola momenti quadratici e un esempio temporale.":"Compute quadratic moments and a time-dependent example.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 17 - buche, stati legati, diffusione e parità":"DIM 17 - wells, bound states, scattering, and parity","Appunti-MQ.pdf, pagine PDF 149-158 - metodo operatoriale, fondamentale e polinomi di Hermite":"Appunti-MQ.pdf, PDF pages 149-158 - metodo operatoriale, fondamentale e polinomi di Hermite","Set 7 - parità e oscillatore armonico":"Set 7 - parity and harmonic oscillator","La dimostrazione è stata confrontata con le pagine verificate 149-158 e mantiene tutti i passaggi richiesti dal metodo di Dirac: commutatore, termine di punto zero, positività, ladder normalizzati e soluzione in coordinate.":"The proof was compared with verified pages 149-158 and retains every step required by Dirac's method: commutator, zero-point term, positivity, normalized ladders, and coordinate solution.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Hamiltoniana dell'oscillatore armonico":"Harmonic-oscillator Hamiltonian","Definizione degli operatori di annichilazione e creazione":"Definition of annihilation and creation operators","Derivazione del commutatore dei ladder":"Derivation of the ladder commutator","Fattorizzazione e operatore numero":"Factorization and number operator","Commutatori che alzano e abbassano l'energia":"Energy-raising and lowering commutators","Azione dell'operatore di annichilazione":"Action of the annihilation operator","Positività dell'operatore numero":"Positivity of the number operator","Condizione e energia del fondamentale":"Ground-state condition and energy","Autostati e spettro armonico":"Harmonic eigenstates and spectrum","Azione normalizzata dei ladder":"Normalized ladder action","Derivazione della funzione fondamentale":"Derivation of the ground wavefunction","Autofunzioni normalizzate tramite Hermite":"Normalized eigenfunctions through Hermite polynomials","Parità e nodi degli autostati armonici":"Parity and nodes of harmonic eigenstates","Momenti quadratici e prodotto di indeterminazione":"Quadratic moments and uncertainty product"},"title":{"it":"Oscillatore armonico unidimensionale","en":"One-dimensional harmonic oscillator"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

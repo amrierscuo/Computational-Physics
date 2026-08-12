@@ -1,127 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osservabili Compatibili</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Degenerazione delle osservabili e misure compatibili</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="degenerazione-osservabili.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Osservabili Compatibili (caso degenere e non degenere)</h1>
-
-<p>In meccanica quantistica, due osservabili rappresentati da operatori hermitiani \(\hat{A}\) e \(\hat{B}\) sono detti compatibili se possono essere misurati simultaneamente con precisione arbitraria. Il criterio formale per la compatibilità è la commutazione degli operatori:</p>
-
-\[
-[\hat{A}, \hat{B}] = \hat{A}\hat{B} - \hat{B}\hat{A} = 0.
-\]
-
-Se \([\hat{A}, \hat{B}]=0\), esiste un insieme completo di autofunzioni comuni a \(\hat{A}\) e \(\hat{B}\). Questo implica che l’osservazione di \(\hat{A}\) non altera i risultati prevedibili di \(\hat{B}\), e viceversa.</p>
-
-<h2>Osservabili Compatibili e Base Comune</h2>
-
-<p>Quando due operatori commutano, si possono trovare autofunzioni comuni. Ad esempio, se \(\hat{A}\phi = a\phi\) e \(\hat{B}\phi = b\phi\), la funzione d’onda \(\phi(\mathbf{r})\) è un autostato simultaneo di \(\hat{A}\) e \(\hat{B}\). In tal caso, conoscere il valore di uno degli osservabili non impedisce la conoscenza dell’altro. Questa è la situazione “ideale” per misurare due grandezze simultaneamente.</p>
-
-<h2>Caso Non Degenere</h2>
-
-<p>Se lo spettro di uno degli operatori, ad esempio \(\hat{A}\), è non degenere, ogni autovalore corrisponde a una singola autofunzione (a meno di un fattore di fase). In questo caso, se \([\hat{A}, \hat{B}]=0\), \(\hat{B}\) deve lasciare inalterati questi autostati, cioè \(\hat{B}\phi_a = b\phi_a\) per qualche \(b\). Questo garantisce univocamente una base di autostati comuni. La conoscenza di \(A\) fissa completamente lo stato nella base degli autostati di \(\hat{B}\).</p>
-
-<h2>Caso Degenere</h2>
-
-<p>Se \(\hat{A}\) ha un autovalore \(a\) degenerato, cioè esiste un sottospazio di dimensione maggiore di uno degli stati con lo stesso valore di \(a\), le autofunzioni associate ad \(a\) non sono uniche. In questo sottospazio, \(\hat{B}\) può ancora essere diagonalizzato (poiché commuta con \(\hat{A}\)) per selezionare una base di autofunzioni comuni. In altre parole, la degenerazione crea una “libertà” di scelta nella base degli autostati di \(\hat{A}\), e \(\hat{B}\) fornisce un criterio per scegliere una base privilegiata che diagonalizza entrambi gli operatori. Questo processo, detto “diagonalizzazione simultanea”, permette di costruire una base di autostati comuni anche in caso di degenerazione.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Scrivi il criterio di compatibilità:
-\[
-[\hat{A}, \hat{B}] = 0.
-\]
-<br><br>
-2. Se \(\hat{A}\phi = a\phi\) e lo spettro di \(\hat{A}\) è non degenere, \(\phi\) è univocamente determinato fino a un fattore di fase. Poiché \(\hat{B}\) commuta con \(\hat{A}\), si ha anche \(\hat{B}\phi = b\phi\). Quindi \(\phi\) è un autostato simultaneo.
-<br><br>
-3. Se invece \(a\) è degenere, cioè esiste un sottospazio di dimensione \(g>1\) per l’autovalore \(a\), in quel sottospazio \(\hat{B}\) potrà essere diagonalizzato. Scegliendo gli autostati di \(\hat{B}\) in tale sottospazio, si ottengono autofunzioni comuni a \(\hat{A}\) e \(\hat{B}\).
-<br><br>
-4. Disegna schematicamente un diagramma di livelli energetici (autovalori di \(\hat{A}\)) e mostra un livello degenerato, poi all’interno di quel livello rappresenta come l’operatore \(\hat{B}\) “splitta” il sottospazio in autostati propri di \(\hat{B}\).
-</div>
-
-<h2>Significato Fisico</h2>
-
-<p>La commutazione di due osservabili e la conseguente esistenza di autofunzioni comuni implicano la possibilità di conoscere simultaneamente i valori dei due osservabili senza indeterminazioni legate al principio di indeterminazione. Ad esempio, \(\hat{L}^2\) e \(\hat{L}_z\) per il momento angolare commutano, e per questo è possibile specificare simultaneamente il modulo quadro del momento angolare e la sua componente z.</p>
-
-<p>Se c’è degenerazione, l’esistenza di un altro osservabile compatibile (aggiuntivo) permette di eliminare l’ambiguità nella scelta della base nel sottospazio degenere. Questo è spesso sfruttato in fisica atomica, dove la conoscenza del momento angolare totale e della sua componente z non è sufficiente a distinguere tutti gli stati, ma ulteriori osservabili (come l’equazione per lo spin o altri operatori di simmetria) servono a classificare completamente gli stati.</p>
-
-<h2>Ulteriori Dettagli Matematici</h2>
-
-<p><i>Consideriamo due osservabili</i> rappresentati da operatori hermitiani \(\hat{A}\) e \(\hat{B}\). Supponiamo \([\hat{A}, \hat{B}] = 0\). Vogliamo capire meglio, dal punto di vista matematico, come avviene la costruzione di una base di autofunzioni comuni, in particolare quando si presenta il caso della degenerazione.</p>
-
-<p><u>Caso non degenere</u>:  
-Se lo spettro di \(\hat{A}\) è semplice, cioè ogni autovalore \(a\) ha molteplicità uno, allora per ciascuna autofunzione \(\phi_a(\mathbf{r})\) con \(\hat{A}\phi_a = a\phi_a\), consideriamo l’azione di \(\hat{B}\). Poiché \(\hat{B}\) commuta con \(\hat{A}\), il sottospazio generato da \(\phi_a\) è stabile sotto l’azione di \(\hat{B}\). Ma tale sottospazio è unidimensionale, quindi \(\hat{B}\phi_a = b(a)\phi_a\) per un qualche valore \(b(a)\). Ne segue immediatamente che \(\phi_a\) è anche un autostato di \(\hat{B}\) con autovalore \(b(a)\). In questo scenario, non c’è ambiguità: ogni autostato di \(\hat{A}\) è anche autostato di \(\hat{B}\).</p>
-
-<p><u>Caso degenere</u>:  
-Se per un autovalore \(a\) di \(\hat{A}\) esiste un sottospazio di dimensione \(g>1\), significa che vi sono \(g\) autofunzioni linearmente indipendenti \(\{\phi_{a,1}, \phi_{a,2}, ... \phi_{a,g}\}\) tali che \(\hat{A}\phi_{a,i} = a \phi_{a,i}\) per \(i=1,\dots,g\). Queste autofunzioni non sono uniche poiché qualunque combinazione lineare di esse è ancora un autostato con la stessa energia \(a\). In presenza di degenerazione, \(\hat{B}\) agisce su questo sottospazio lasciandolo stabile (poiché commuta con \(\hat{A}\), non può connettere autostati con autovalori diversi di \(\hat{A}\)). Possiamo dunque restringere \(\hat{B}\) al sottospazio degenerato di \(\hat{A}\). All’interno di questo sottospazio, \(\hat{B}\) è un operatore hermitiano su uno spazio di dimensione finita \(g\). Un risultato fondamentale dell’algebra lineare è che un operatore hermitiano su uno spazio finito-dimensionale può essere diagonalizzato da una base ortonormale. Questo implica che possiamo scegliere una combinazione lineare delle \(\phi_{a,i}\) in modo da ottenere nuove funzioni \(\tilde{\phi}_{a,j}\) che diagonalizzano \(\hat{B}\) all’interno del sottospazio con energia \(a\). In breve, la degenerazione offre libertà di scelta, ma l’esistenza di \(\hat{B}\) compatibile ne fissa una base “naturale” di autostati comuni \(\{\tilde{\phi}_{a,1}, ... \tilde{\phi}_{a,g}\}\) con:</p>
-
-<p>\[
-\hat{A}\tilde{\phi}_{a,j} = a \tilde{\phi}_{a,j}, \quad \hat{B}\tilde{\phi}_{a,j} = b_{j}\tilde{\phi}_{a,j}.
-\]</p>
-
-<p>Così, anche in presenza di degenerazione, si raggiunge un ordinamento simultaneo: i due operatori, grazie alla commutazione, consentono di costruire una base di autostati comuni ben definita. Questo processo è simile al scegliere un asse “preferito” in un sottospazio degenerato, asse individuato da \(\hat{B}\).</p>
-
-<p><b>Punto chiave</b>:  
-La commutazione \([\hat{A}, \hat{B}] = 0\) garantisce stabilità dei sottospazi degenerate di \(\hat{A}\) rispetto all’azione di \(\hat{B}\). Questo evita che \(\hat{B}\) mescoli livelli energetici diversi, limitandosi ad agire come un operatore interno a ogni sottospazio degenerato. La conseguenza è che in ogni sottospazio degenerato di \(\hat{A}\) si può diagonalizzare \(\hat{B}\), ottenendo autostati comuni. Nel caso non degenere, questa procedura è triviale, mentre nel caso degenere è l’elemento risolutore per definire stati quantistici con proprietà ben definite per entrambi gli osservabili.</p>
-
-<p><i>Geometricamente</i> si può pensare a uno scenario in cui \(\hat{A}\) definisce “strati” di energia; se uno strato presenta degenerazione, all’interno di esso \(\hat{B}\) crea una struttura più fine, dividendo o caratterizzando ulteriormente lo spazio degli autostati. La scelta della base diviene così unica (a meno di degenerazioni residue), assicurando una descrizione coerente del sistema.</p>
-
-<p>A livello fisico, individuare osservabili compatibili è spesso essenziale per classificare gli stati di un sistema, ad esempio per il momento angolare, spin e altre grandezze quantiche che permettono di etichettare gli stati in modo preciso. Se un osservabile rimuove la degenerazione introdotta da un altro, esso fornisce nuovi numeri quantici che distinguono nettamente gli stati degeneri e consentono misure simultanee, senza interferenze o incertezze aggiuntive.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="osservabili-compatibili.html" data-mq-shared-lesson="degenerazione-osservabili.html" id="lezione-degenerazione-osservabili"><div class="lecture-kicker">Lezione approfondita - Argomento 6 - DIM 0 e DIM 2</div><h1>Degenerazione delle osservabili e misure compatibili</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: osservabili-compatibili.html. La lezione scientifica verificata è condivisa con degenerazione-osservabili.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Definire autospazi degeneri e proiettori indipendenti dalla base, formulare Born e Lüders, mostrare come un'osservabile compatibile raffina la misura, costruire un CSCO e distinguere degenerazione di simmetria, accidentale e scissione perturbativa.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>L'esito non identifica sempre lo stato</h3><p>Se dim S_a è maggiore di uno, conoscere a determina soltanto un sottospazio. Servono altri numeri quantici compatibili per identificare un raggio.</p></article><article class="lecture-card lecture-warning"><h3>Il proiettore è l'oggetto fisico</h3><p>Ruotare la base dentro S_a cambia i singoli autovettori ma lascia invariati P_a, probabilità e aggiornamento di Lüders.</p></article></div><h2>Autospazi e raffinamenti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Degenerazione</h3><p>La molteplicità g_a è la dimensione del nucleo di A-aI e conta autovettori indipendenti con lo stesso esito.</p></article><article class="lecture-card"><h3>Raffinamento</h3><p>Un'osservabile B che commuta con A può distinguere vettori dentro S_a senza disturbare il valore già misurato di A.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Autospazio degenere<span class="lecture-step-boss">DEFINISCI</span></h4><p>Per l'autovalore a si raccoglie l'intero nucleo di A meno aI.</p><div aria-label="Definizione di degenerazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S_a=\ker(A-aI),\qquad g_a=\dim S_a&gt;1\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Base interna<span class="lecture-step-boss">ETICHETTA</span></h4><p>Una base ortonormale dell'autospazio richiede un indice di degenerazione mu.</p><div aria-label="Base di un autospazio degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|a,\mu\rangle=a|a,\mu\rangle,\qquad\langle a,\mu|a,\nu\rangle=\delta_{\mu\nu}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Proiettore spettrale<span class="lecture-step-boss">INVARIANTE</span></h4><p>La somma dei proiettori di rango uno è il proiettore ortogonale sull'intero S_a.</p><div aria-label="Proiettore su un livello degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_a=\sum_{\mu=1}^{g_a}|a,\mu\rangle\langle a,\mu|,\qquad P_a^2=P_a=P_a^\dagger\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Indipendenza dalla base<span class="lecture-step-boss">DIMOSTRA</span></h4><p>Una rotazione unitaria interna cancella U con U aggiunto nella somma.</p><div aria-label="Invarianza del proiettore degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |a,\alpha'\rangle=\sum_\mu|a,\mu\rangle U_{\mu\alpha}\Rightarrow\sum_\alpha|a,\alpha'\rangle\langle a,\alpha'|=P_a\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Spettro di A<span class="lecture-step-boss">DECOMPONI</span></h4><p>La decomposizione spettrale somma autovalori distinti moltiplicati per i loro proiettori.</p><div aria-label="Decomposizione spettrale degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=\sum_a aP_a,\qquad P_aP_b=\delta_{ab}P_a,\qquad\sum_aP_a=I\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Probabilità<span class="lecture-step-boss">BORN</span></h4><p>Born somma coerentemente i moduli quadri lungo una qualunque base dell'autospazio.</p><div aria-label="Probabilità di un esito degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p(a)=\langle\psi|P_a|\psi\rangle=\sum_\mu|\langle a,\mu|\psi\rangle|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Aggiornamento<span class="lecture-step-boss">LÜDERS</span></h4><p>La misura ideale di A conserva tutte le coerenze interne a S_a e rimuove soltanto le componenti ortogonali.</p><div aria-label="Stato dopo una misura degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi_a\rangle=\frac{P_a|\psi\rangle}{\sqrt{p(a)}}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Ripetizione<span class="lecture-step-boss">CHECK</span></h4><p>L'idempotenza del proiettore assicura che il nuovo stato appartenga interamente a S_a.</p><div aria-label="Ripetibilità dell'esito degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_a|\psi_a\rangle=|\psi_a\rangle\Rightarrow\langle\psi_a|P_a|\psi_a\rangle=1\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Osservabile compatibile<span class="lecture-step-boss">RAFFINA</span></h4><p>Se B commuta con A, ogni S_a è invariante per B e B può essere diagonalizzata al suo interno.</p><div aria-label="Raffinamento con un'osservabile commutante" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [A,B]=0\Rightarrow B:S_a\to S_a,\qquad|a,b,\lambda\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>10. CSCO<span class="lecture-step-boss">COMPLETO</span></h4><p>Si aggiungono osservabili commutanti finché la tupla degli autovalori identifica univocamente ogni raggio di base.</p><div aria-label="Insieme completo di osservabili commutanti" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \{A_1,\ldots,A_r\}:\quad[A_i,A_j]=0,\quad(a_1,\ldots,a_r)\ \text{non degenere}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Misure successive<span class="lecture-step-boss">COMPATIBILI</span></h4><p>Misurare B dopo A non cambia il valore di A se i proiettori spettrali commutano.</p><div aria-label="Compatibilità delle misure proiettive" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [P_a,Q_b]=0\Rightarrow P_aQ_bP_a=Q_bP_a\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Origine di simmetria<span class="lecture-step-boss">MULTIPLETTO</span></h4><p>Se H commuta con un gruppo, gli stati di una rappresentazione multipla condividono l'energia.</p><div aria-label="Degenerazione protetta da simmetria" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H,U(g)]=0\Rightarrow H\,U(g)|E,\alpha\rangle=E\,U(g)|E,\alpha\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Scissione perturbativa<span class="lecture-step-boss">SOLLEVA</span></h4><p>Una perturbazione va diagonalizzata dentro il sottospazio degenere; i suoi autovalori sono le correzioni di primo ordine.</p><div aria-label="Rimozione della degenerazione al primo ordine" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{\mu\nu}=\langle a,\mu|V|a,\nu\rangle,\qquad\det(W-wI)=0,\qquad E^{(1)}=w\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Accidentale o protetta<span class="lecture-step-boss">DIAGNOSI</span></h4><p>Una degenerazione accidentale non è imposta dalla simmetria manifesta e può essere scissa da perturbazioni che rispettano quest'ultima; una protetta richiede romperla o accoppiare rappresentazioni equivalenti.</p><div aria-label="Criterio qualitativo sulla stabilità della degenerazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \text{protetta}:\ [V,U(g)]=0\ \text{mantiene i multipleti irriducibili};\qquad\text{accidentale}:\ \text{nessun vincolo analogo}\)</span></div></article></section><h2>Esempio: raffinare un livello doppio</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si usano A diagonale con spettro a,a,b e B che distingue i primi due vettori.</p><p data-i18n-skip="true">\(\displaystyle A=\operatorname{diag}(a,a,b),\quad B=\operatorname{diag}(1,-1,0),\quad[A,B]=0,\quad P_a=\operatorname{diag}(1,1,0)\)</p><p><strong>Controllo.</strong> Misurare soltanto A lascia indeterminata la direzione nel piano dei primi due vettori; la coppia (A,B) ha autovettori univoci e costituisce un CSCO per questo spazio.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Degenerazione e scelta di base</h3><p>Dentro un autospazio degenere A è proporzionale all'identità, quindi nessuna base interna è privilegiata da A stessa.</p></article><article class="lecture-card"><h3>Lüders e misura raffinata</h3><p>Un apparecchio che misura anche una grandezza nascosta compatibile può distruggere coerenze interne che la misura ideale di A conserverebbe. Sono procedure fisiche diverse.</p></article><article class="lecture-card"><h3>Degenerazione del continuo</h3><p>Nel continuo, etichette come direzione dell'impulso o canale di scattering svolgono il ruolo di indici di degenerazione e richiedono delta multiple.</p></article><article class="lecture-card"><h3>Quasi-degenerazione</h3><p>Se la separazione energetica è comparabile alla perturbazione, la diagonalizzazione ristretta resta necessaria anche senza degenerazione esatta.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Sommare ampiezze invece di probabilità tra autovettori ortogonali dello stesso esito; scegliere arbitrariamente un ket post-misura; credere che [A,B]=0 elimini ogni degenerazione; perturbare con formule non degeneri; confondere molteplicità con numero di autovalori.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>g_a è dimensione; P_a non dipende dalla base; Born usa P_a; Lüders conserva il settore; un CSCO ha tuple non degeneri; la matrice W è hermitiana e ha correzioni reali.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci autospazio e molteplicità.</li><li>Costruisci P_a e dimostrane l'invarianza.</li><li>Scrivi Born e Lüders degeneri.</li><li>Dimostra la ripetibilità.</li><li>Mostra come B commutante raffina S_a.</li><li>Definisci un CSCO.</li><li>Diagonalizza la perturbazione dentro S_a.</li><li>Distingui degenerazione protetta e accidentale.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, misura ed evoluzione</a></li><li><a href="boss/P1_DIM_0-6.txt#L616">DIM 2 - derivazione completa dell'indeterminazione</a></li><li><a href="Appunti-MQ.pdf#page=72">Appunti-MQ.pdf, pagine PDF 72-79 - autovalori, proiettori e osservabili compatibili</a></li></ul><p class="lecture-note">La pagina sviluppa la formulazione a proiettori delle pagine verificate 72-79 e la collega al CSCO e alla perturbazione degenere, mantenendo separati esito, autospazio e base interna.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 6 - DIM 0 e DIM 2":"In-depth lesson - Topic 6 - DIM 0 and DIM 2","Degenerazione delle osservabili e misure compatibili":"Observable degeneracy and compatible measurements","Obiettivo.":"Objective.","Definire autospazi degeneri e proiettori indipendenti dalla base, formulare Born e Lüders, mostrare come un'osservabile compatibile raffina la misura, costruire un CSCO e distinguere degenerazione di simmetria, accidentale e scissione perturbativa.":"Define degenerate eigenspaces and basis-independent projectors, formulate Born and Lüders rules, show how a compatible observable refines a measurement, construct a CSCO, and distinguish symmetry degeneracy, accidental degeneracy, and perturbative splitting.","L'esito non identifica sempre lo stato":"An outcome does not always identify the state","Se dim S_a è maggiore di uno, conoscere a determina soltanto un sottospazio. Servono altri numeri quantici compatibili per identificare un raggio.":"If dim S_a is greater than one, knowing a determines only a subspace. Additional compatible quantum numbers are needed to identify a ray.","Il proiettore è l'oggetto fisico":"The projector is the physical object","Ruotare la base dentro S_a cambia i singoli autovettori ma lascia invariati P_a, probabilità e aggiornamento di Lüders.":"Rotating the basis inside S_a changes individual eigenvectors but leaves P_a, probabilities, and the Lüders update invariant.","Autospazi e raffinamenti":"Eigenspaces and refinements","Degenerazione":"Degeneracy","La molteplicità g_a è la dimensione del nucleo di A-aI e conta autovettori indipendenti con lo stesso esito.":"Multiplicity g_a is the dimension of the kernel of A-aI and counts independent eigenvectors with the same outcome.","Raffinamento":"Refinement","Un'osservabile B che commuta con A può distinguere vettori dentro S_a senza disturbare il valore già misurato di A.":"An observable B commuting with A may distinguish vectors inside S_a without disturbing the already measured value of A.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Autospazio degenere":"1. Degenerate eigenspace","DEFINISCI":"DEFINE","Per l'autovalore a si raccoglie l'intero nucleo di A meno aI.":"For eigenvalue a collect the entire kernel of A minus aI.","Passaggio":"Step","2. Base interna":"2. Internal basis","ETICHETTA":"LABEL","Una base ortonormale dell'autospazio richiede un indice di degenerazione mu.":"An orthonormal basis of the eigenspace requires degeneracy index mu.","3. Proiettore spettrale":"3. Spectral projector","INVARIANTE":"INVARIANT","La somma dei proiettori di rango uno è il proiettore ortogonale sull'intero S_a.":"The sum of rank-one projectors is the orthogonal projector onto all of S_a.","4. Indipendenza dalla base":"4. Basis independence","DIMOSTRA":"PROVE","Una rotazione unitaria interna cancella U con U aggiunto nella somma.":"An internal unitary rotation cancels U with U dagger in the sum.","5. Spettro di A":"5. Spectrum of A","DECOMPONI":"DECOMPOSE","La decomposizione spettrale somma autovalori distinti moltiplicati per i loro proiettori.":"The spectral decomposition sums distinct eigenvalues multiplied by their projectors.","6. Probabilità":"6. Probability","BORN":"BORN","Born somma coerentemente i moduli quadri lungo una qualunque base dell'autospazio.":"Born coherently sums squared moduli along any basis of the eigenspace.","7. Aggiornamento":"7. Update","LÜDERS":"LÜDERS","La misura ideale di A conserva tutte le coerenze interne a S_a e rimuove soltanto le componenti ortogonali.":"An ideal A measurement preserves all coherences within S_a and removes only orthogonal components.","8. Ripetizione":"8. Repetition","CHECK":"CHECK","L'idempotenza del proiettore assicura che il nuovo stato appartenga interamente a S_a.":"Projector idempotency ensures the new state lies entirely in S_a.","9. Osservabile compatibile":"9. Compatible observable","RAFFINA":"REFINE","Se B commuta con A, ogni S_a è invariante per B e B può essere diagonalizzata al suo interno.":"If B commutes with A, each S_a is invariant under B and B can be diagonalized inside it.","10. CSCO":"10. CSCO","COMPLETO":"COMPLETE","Si aggiungono osservabili commutanti finché la tupla degli autovalori identifica univocamente ogni raggio di base.":"Add commuting observables until the eigenvalue tuple uniquely identifies every basis ray.","11. Misure successive":"11. Successive measurements","COMPATIBILI":"COMPATIBLE","Misurare B dopo A non cambia il valore di A se i proiettori spettrali commutano.":"Measuring B after A does not change A's value if spectral projectors commute.","12. Origine di simmetria":"12. Symmetry origin","MULTIPLETTO":"MULTIPLET","Se H commuta con un gruppo, gli stati di una rappresentazione multipla condividono l'energia.":"If H commutes with a group, states in a multidimensional representation share the energy.","13. Scissione perturbativa":"13. Perturbative splitting","SOLLEVA":"LIFT","Una perturbazione va diagonalizzata dentro il sottospazio degenere; i suoi autovalori sono le correzioni di primo ordine.":"A perturbation must be diagonalized inside the degenerate subspace; its eigenvalues are first-order corrections.","14. Accidentale o protetta":"14. Accidental or protected","DIAGNOSI":"DIAGNOSIS","Una degenerazione accidentale non è imposta dalla simmetria manifesta e può essere scissa da perturbazioni che rispettano quest'ultima; una protetta richiede romperla o accoppiare rappresentazioni equivalenti.":"An accidental degeneracy is not imposed by manifest symmetry and may split under symmetry-preserving perturbations; a protected one requires symmetry breaking or coupling equivalent representations.","Esempio: raffinare un livello doppio":"Example: refining a double level","Impostazione.":"Setup.","Si usano A diagonale con spettro a,a,b e B che distingue i primi due vettori.":"Use diagonal A with spectrum a,a,b and B distinguishing the first two vectors.","Controllo.":"Check.","Misurare soltanto A lascia indeterminata la direzione nel piano dei primi due vettori; la coppia (A,B) ha autovettori univoci e costituisce un CSCO per questo spazio.":"Measuring A alone leaves the direction in the first-two-vector plane undetermined; pair (A,B) has unique eigenvectors and forms a CSCO for this space.","Interpretazione e limiti":"Interpretation and limits","Degenerazione e scelta di base":"Degeneracy and basis choice","Dentro un autospazio degenere A è proporzionale all'identità, quindi nessuna base interna è privilegiata da A stessa.":"Inside a degenerate eigenspace A is proportional to identity, so no internal basis is preferred by A itself.","Lüders e misura raffinata":"Lüders and refined measurement","Un apparecchio che misura anche una grandezza nascosta compatibile può distruggere coerenze interne che la misura ideale di A conserverebbe. Sono procedure fisiche diverse.":"An apparatus also measuring a hidden compatible quantity may destroy internal coherences that ideal A measurement would preserve. These are different physical procedures.","Degenerazione del continuo":"Continuum degeneracy","Nel continuo, etichette come direzione dell'impulso o canale di scattering svolgono il ruolo di indici di degenerazione e richiedono delta multiple.":"In the continuum, labels such as momentum direction or scattering channel act as degeneracy indices and require multiple deltas.","Quasi-degenerazione":"Near degeneracy","Se la separazione energetica è comparabile alla perturbazione, la diagonalizzazione ristretta resta necessaria anche senza degenerazione esatta.":"If energy separation is comparable to the perturbation, restricted diagonalization remains necessary even without exact degeneracy.","Errori tipici":"Common errors","Sommare ampiezze invece di probabilità tra autovettori ortogonali dello stesso esito; scegliere arbitrariamente un ket post-misura; credere che [A,B]=0 elimini ogni degenerazione; perturbare con formule non degeneri; confondere molteplicità con numero di autovalori.":"Summing amplitudes rather than probabilities among orthogonal eigenvectors of the same outcome; arbitrarily choosing a postmeasurement ket; believing [A,B]=0 removes all degeneracy; using nondegenerate perturbation formulas; confusing multiplicity with number of eigenvalues.","Controlli rapidi":"Quick checks","g_a è dimensione; P_a non dipende dalla base; Born usa P_a; Lüders conserva il settore; un CSCO ha tuple non degeneri; la matrice W è hermitiana e ha correzioni reali.":"g_a is a dimension; P_a is basis independent; Born uses P_a; Lüders preserves the sector; a CSCO has nondegenerate tuples; W is Hermitian and has real corrections.","Controllo da orale":"Oral exam checklist","Definisci autospazio e molteplicità.":"Define eigenspace and multiplicity.","Costruisci P_a e dimostrane l'invarianza.":"Construct P_a and prove its invariance.","Scrivi Born e Lüders degeneri.":"Write degenerate Born and Lüders rules.","Dimostra la ripetibilità.":"Prove repeatability.","Mostra come B commutante raffina S_a.":"Show how commuting B refines S_a.","Definisci un CSCO.":"Define a CSCO.","Diagonalizza la perturbazione dentro S_a.":"Diagonalize the perturbation inside S_a.","Distingui degenerazione protetta e accidentale.":"Distinguish protected and accidental degeneracy.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, misura ed evoluzione":"DIM 0 - postulates, measurement, and evolution","DIM 2 - derivazione completa dell'indeterminazione":"DIM 2 - complete uncertainty derivation","Appunti-MQ.pdf, pagine PDF 72-79 - autovalori, proiettori e osservabili compatibili":"Appunti-MQ.pdf, PDF pages 72-79 - autovalori, proiettori e osservabili compatibili","La pagina sviluppa la formulazione a proiettori delle pagine verificate 72-79 e la collega al CSCO e alla perturbazione degenere, mantenendo separati esito, autospazio e base interna.":"The page develops the projector formulation of verified pages 72-79 and connects it to CSCOs and degenerate perturbation theory, keeping outcome, eigenspace, and internal basis distinct.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: osservabili-compatibili.html. La lezione scientifica verificata è condivisa con degenerazione-osservabili.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: osservabili-compatibili.html. The verified scientific lesson is shared with degenerazione-osservabili.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Definizione di degenerazione":"Definition of degeneracy","Base di un autospazio degenere":"Basis of a degenerate eigenspace","Proiettore su un livello degenere":"Projector onto a degenerate level","Invarianza del proiettore degenere":"Invariance of the degenerate projector","Decomposizione spettrale degenere":"Degenerate spectral decomposition","Probabilità di un esito degenere":"Probability of a degenerate outcome","Stato dopo una misura degenere":"State after a degenerate measurement","Ripetibilità dell'esito degenere":"Repeatability of the degenerate outcome","Raffinamento con un'osservabile commutante":"Refinement by a commuting observable","Insieme completo di osservabili commutanti":"Complete set of commuting observables","Compatibilità delle misure proiettive":"Compatibility of projective measurements","Degenerazione protetta da simmetria":"Symmetry-protected degeneracy","Rimozione della degenerazione al primo ordine":"First-order degeneracy lifting","Criterio qualitativo sulla stabilità della degenerazione":"Qualitative criterion for degeneracy stability"},"title":{"it":"Degenerazione delle osservabili e misure compatibili","en":"Observable degeneracy and compatible measurements"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

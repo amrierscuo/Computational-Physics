@@ -1,193 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transizioni a Uno Stato del Continuo</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transizioni verso uno spettro continuo</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
 
-        h1, h2 {
-            color: #1e90ff;
-        }
-
-        p, li {
-            text-align: justify;
-        }
-
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+</style>
+<meta content="transizioni-al-continuo.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Transizioni a uno Stato del Continuo e Regola d’Oro di Fermi</h1>
-
-<p>Quando il sistema quantistico è soggetto a una perturbazione dipendente dal tempo, può verificarsi una transizione tra stati legati (discreti) e stati appartenenti a un continuum di energie. Un tipico esempio è l’emissione o assorbimento di un fotone da parte di un atomo, che può portare l’elettrone da uno stato quantizzato a uno stato del continuo, ovvero una configurazione dove l’elettrone è libero con energia variabile su un intervallo continuo.</p>
-
-<p>L’analisi di tali processi, in condizioni perturbative, conduce alla famosa Regola d’Oro di Fermi, che fornisce una formula semplice per il tasso di transizione da uno stato iniziale \(|i\rangle\) a uno finale \(|f\rangle\) appartenente a un insieme continuo di stati.</p>
-
-<h2>Setup del Problema</h2>
-
-<p>Consideriamo un Hamiltoniano del tipo:</p>
-
-\[
-\hat{H}(t) = \hat{H}_0 + \hat{V}(t),
-\]
-
-dove \(\hat{H}_0\) è l’Hamiltoniano non perturbato, con autostati \(|i\rangle\) di energia \(E_i\), e \(\hat{V}(t)\) è una piccola perturbazione dipendente dal tempo. Se si vuole studiare la transizione da uno stato iniziale \(|i\rangle\) a un insieme continuo di stati finali \(|f\rangle\), la probabilità di transizione per unità di tempo può essere derivata utilizzando l’approssimazione perturbativa del primo ordine.</p>
-
-<h2>Regola d’Oro di Fermi</h2>
-
-<p>La Regola d’Oro di Fermi afferma che il tasso di transizione \(w_{i \to f}\) dal livello iniziale \(|i\rangle\) verso stati finali in un intervallo di energia continuo è:</p>
-
-\[
-w_{i\to f} = \frac{2\pi}{\hbar} | \langle f|\hat{V}|i\rangle |^2 \rho(E_f),
-\]
-
-dove \(\rho(E_f)\) è la densità di stati finali per unità di energia attorno all’energia \(E_f\). La formula mostra che la probabilità di transizione è proporzionale al quadrato dell’elemento di matrice dell’interazione perturbativa tra lo stato iniziale e quello finale, e alla densità dei possibili stati finali disponibili a quella energia.</p>
-
-<h2>Interpretazione</h2>
-
-<p>La Regola d’Oro di Fermi è essenzialmente un risultato di teoria delle perturbazioni del secondo ordine, valido quando la perturbazione è debole e quando ci sono molti stati finali disponibili (continuo). È particolarmente utile per descrivere processi di decadimento o transizioni indotte da interazioni con campi esterni, come radiazioni elettromagnetiche o collisioni con altre particelle. L’ampiezza dell’interazione \(\langle f|\hat{V}|i\rangle\) determina l’efficienza del processo, mentre \(\rho(E_f)\) quantifica “quante” possibilità di stati finali ci sono alla giusta energia, favorendo la transizione.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Parti dall’equazione di Schrödinger perturbata:
-\[
-i\hbar \frac{d}{dt}|\psi(t)\rangle = (\hat{H}_0 + \hat{V}(t))|\psi(t)\rangle.
-\]
-<br><br>
-2. Considera uno stato iniziale \(|\psi(0)\rangle = |i\rangle\) autostato di \(\hat{H}_0\) con energia \(E_i\).
-<br><br>
-3. Al primo ordine in \(\hat{V}(t)\), l’ampiezza di probabilità di trovare il sistema in uno stato finale \(|f\rangle\) con energia \(E_f\) è proporzionale all’integrale nel tempo di:
-\[
-\langle f|\hat{V}(t)|i\rangle e^{i(E_f - E_i)t/\hbar}.
-\]
-4. In condizioni appropriate (ad esempio, perturbazione periodica o quasi-monocromatica, e passando al limite del continuo), si ottiene che il tasso di transizione è:
-\[
-w_{i\to f} = \frac{2\pi}{\hbar}| \langle f|\hat{V}|i\rangle |^2 \rho(E_f).
-\]
-5. Mostra graficamente il significato di \(\rho(E_f)\): uno spettro continuo di stati finali tra i quali il sistema può scegliere.
-</div>
-
-<h2>Impiego della Regola d’Oro di Fermi</h2>
-
-<p>La Regola d’Oro di Fermi si usa per calcolare tassi di emissione spontanea, assorbimento e emissione stimolata, decadimenti radioattivi, transizioni indotte da campi esterni, e più in generale processi in cui uno stato discreto si accoppia a un continuum. Essa fornisce un risultato semplice e compatto per il tasso di transizione in funzione dell’intensità dell’interazione e della densità di stati finali.</p>
-
-<p>In particolare, nelle reazioni atomiche, molecolari o nucleari, se la perturbazione è piccola e costante nel tempo (o si raggiunge un regime stazionario), la Regola d’Oro diventa uno strumento fondamentale per capire il flusso di probabilità verso i canali di uscita continui.</p>
-
-<h2>Passi Matematici per la Derivazione della Regola d'Oro di Fermi</h2>
-
-<p>Nell’approccio perturbativo, partendo da uno stato iniziale \(|i\rangle\) ad energia \(E_i\), si considera una piccola perturbazione <u>tempo-dipendente</u> \(V(t)\), applicata a partire da \(t=0\). L’obiettivo è valutare l’ampiezza di probabilità di transizione ad uno stato finale \(|f\rangle\), appartenente ad un insieme continuo con energia \(E_f\). La funzione d’onda può essere espansa in autostati non perturbati:</p>
-
-\[
-|\psi(t)\rangle = |i\rangle + \sum_f c_f(t)|f\rangle,
-\]
-
-dove i coefficienti \(c_f(t)\) sono piccoli per una perturbazione debole. All’ordine più basso in \(V(t)\), si ottiene un’equazione differenziale per \(c_f(t)\):
-
-\[
-i\hbar \frac{d}{dt} c_f(t) = \langle f|V(t)|i\rangle e^{\frac{i}{\hbar}(E_f - E_i)t}.
-\]
-
-<p>Integrando tra \(0\) e \(t\):</p>
-
-\[
-c_f(t) = \frac{1}{i\hbar} \int_0^t \langle f|V(t')|i\rangle e^{\frac{i}{\hbar}(E_f - E_i)t'} dt'.
-\]
-
-<p>Se la perturbazione ha una durata lunga, o se consideriamo tempi tali da poter approssimare la funzione \(e^{\frac{i}{\hbar}(E_f - E_i)t'}\) come un fattore oscillante, si può applicare un’analisi con la trasformata di Fourier. Nel limite di tempi lunghi, l’integrale produce un picco quando \(E_f \approx E_i\), a causa dell’oscillatore armonico integrato su un ampio intervallo di tempo. Ciò permette di approssimare la delta di Dirac per la conservazione dell’energia:</p>
-
-\[
-\lim_{T \to \infty} \frac{1}{2\pi\hbar}\int_0^T e^{\frac{i}{\hbar}(E_f - E_i)t'} dt' = \delta(E_f - E_i).
-\]
-
-<p>A questo punto, assumendo un potenziale perturbante quasi stazionario o periodico, l’elemento di matrice \(\langle f|V|i\rangle\) si può considerare quasi costante nel tempo per tempi sufficientemente grandi. Questo porta la probabilità di transizione nell’unità di tempo verso gli stati finali con energia attorno a \(E_f\) a essere proporzionale a:</p>
-
-\[
-| \langle f|V|i\rangle |^2 \delta(E_f - E_i).
-\]
-
-<p>Poiché gli stati finali sono continui, bisogna introdurre la densità di stati \(\rho(E_f)\), che misura quanti stati esistono per unità di intervallo energetico attorno a \(E_f\).</p>
-
-<p>Combinando questi risultati, si ottiene la formula:</p>
-
-\[
-w_{i \to f} = \frac{2\pi}{\hbar}| \langle f|V|i\rangle |^2 \rho(E_f).
-\]
-
-<p>Tale espressione è la <u>Regola d'Oro di Fermi</u>. Essa dice che la velocità di transizione è proporzionale al quadrato dell’ampiezza di accoppiamento tra i due stati e alla densità di stati finali disponibili alla corretta energia. In sostanza, la frequenza delle transizioni è alta se il sistema può attingere a molti stati finali a energia compatibile, e se la perturbazione permette un accoppiamento forte tra stato iniziale e finale.</p>
-
-<p>In una situazione tipica, ad esempio un atomo inizialmente in uno stato legato che interagisce con un campo elettromagnetico, la perturbazione \(V(t)\) potrebbe corrispondere all’interazione dipolare con un’onda elettromagnetica. Se l’energia del fotone corrisponde alla differenza \(E_f - E_i\), la transizione risulta fortemente amplificata, e la Regola d’Oro di Fermi fornisce un modo semplice per stimare il tasso di emissione o assorbimento del fotone.</p>
-
-<h2>Dettagli Matematici e Deduzione dei Risultati</h2>
-
-<p><b>Consideriamo il sistema inizialmente nello stato</b> \( |i\rangle \) con energia \(E_i\). Introducendo una perturbazione dipendente dal tempo, si vuole capire come evolve il coefficiente \(c_i(t)\) nello sviluppo in autofunzioni dell’Hamiltoniano non perturbato. Se lo spettro finale include stati continui \( |f\rangle \) con energie nella regione \([E_i-\Delta, E_i+\Delta]\) e se la perturbazione consente transizioni da \( |i\rangle \) a tali stati, l’ampiezza per rimanere in \( |i\rangle \) diminuisce nel tempo.</p>
-
-<p>Il calcolo perturbativo, al primo ordine, mostra che se il tasso di transizione in uscita da \( |i\rangle \) verso un insieme di stati finali è \(\Gamma\), allora, per tempi abbastanza lunghi da rendere trascurabili gli andamenti di breve periodo ma non così lunghi da richiedere termini di ordine più alto della perturbazione, la probabilità di rimanere in \( |i\rangle \) assume forma esponenziale:
-<em>P</em><sub>i→i</sub>(t) = exp(-Γ t).
-Questo comportamento è tipico dei processi di decadimento.</p>
-
-<p><u>Sulla lavagna, uno schema per il derivare questo risultato in modo semplificato</u>:
-<ul>
-    <li>Scrivere la soluzione generale come \(\psi(t) = c_i(t)|i\rangle + \sum_f c_f(t)|f\rangle\).</li>
-    <li>L’equazione di Schrödinger, trattata perturbativamente, fornisce equazioni accoppiate per i coefficienti \(c_i(t)\) e \(c_f(t)\).</li>
-    <li>Se le densità di stati finali sono elevate, la sommatoria su \(f\) si trasforma in un integrale, e si ottiene un’equazione integro-differenziale per \(c_i(t)\).</li>
-    <li>Assumendo una perturbazione costante nel tempo o con una dipendenza temporale regolare, si estrae un termine proporzionale a \(c_i(t)\) che provoca un decadimento esponenziale: \(\frac{d}{dt}c_i(t) \approx -\frac{\Gamma}{2} c_i(t)\), quindi \(c_i(t) = c_i(0)e^{-\Gamma t/2}\). Di conseguenza \(P_{i→i}(t) = |c_i(t)|^2 = e^{-\Gamma t}\).</li>
-</ul></p>
-
-<p><b>La costante \(\Gamma\) che appare è legata al tasso totale di decadimento</b> dallo stato \( |i\rangle \) verso tutti gli altri stati accessibili. Considerando il limite di grandi tempi, l’andamento esponenziale è la soluzione più semplice che rispetti la struttura delle equazioni, essendo lineari e con coefficienti costanti nel tempo.</p>
-
-<p><i>Usando il legame tra vita media \(\tau\) e \(\Gamma\), si ha \(\tau = 1/\Gamma\). Inoltre, dalla relazione tra incertezza energetica e vita media, \(\Delta E \approx \hbar/\tau\), si capisce che se il sistema decade rapidamente, la riga energetica è larga; se il decadimento è lento, la riga è stretta. Questo risultato è in linea con il principio di indeterminazione energia-tempo, fornendo un quadro coerente tra dinamica temporale e risoluzione energetica.</i></p>
-
-<p>In applicazioni pratiche, come la fisica atomica, l’emissione spontanea o indotta, la fisica delle particelle e la fisica nucleare, queste formule permettono di collegare osservabili sperimentali (come larghezze di riga nelle transizioni spettrali, o tempi di decadimento delle particelle) alle proprietà fondamentali degli stati quantistici coinvolti.</p>
-
-<p>Dunque, la probabilità di rimanere nello stato iniziale fornisce un ponte tra la meccanica quantistica e la fenomenologia sperimentale, rendendo tangibile l’effetto delle perturbazioni sullo stato del sistema, sulla sua stabilità nel tempo e sulla misura della larghezza di riga osservabile negli spettri.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
-
-
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="transizioni-continuo.html" data-mq-shared-lesson="transizioni-al-continuo.html" id="lezione-transizioni-al-continuo"><div class="lecture-kicker">Lezione approfondita - dal singolo livello al guscio energetico</div><h1>Transizioni verso uno spettro continuo</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: transizioni-continuo.html. La lezione scientifica verificata è condivisa con transizioni-al-continuo.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Mostrare come la somma su finali densi trasformi il profilo sinc quadro in crescita lineare, definire correttamente la densità degli stati e isolare le ipotesi che precedono la regola d'oro.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Perché serve il continuo</h3><p>Ogni singolo livello riceve una probabilità stretta e non lineare. Il numero di livelli dentro la finestra cresce abbastanza da compensarne il restringimento.</p></article><article class="lecture-card lecture-warning"><h3>Normalizzazione</h3><p>Stati normalizzati a uno in una scatola e stati normalizzati a delta hanno elementi di matrice e densità diversi, ma il prodotto fisico resta invariato.</p></article></div><h2>Etichette finali e densità</h2><div class="lecture-grid"><article class="lecture-card"><h3>Quasi-continuo</h3><p>In un volume finito lo spettro è discreto. Il limite di volume grande rende la spaziatura molto minore della risoluzione hbar/T.</p></article><article class="lecture-card"><h3>Densità differenziale</h3><p>rho(E,alpha)dE conta gli stati nell'intervallo dE con ulteriori numeri quantici alpha. Questi vanno sommati o integrati esplicitamente.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Probabilità per un finale<span class="lecture-step-boss">BASE</span></h4><p>Per un accoppiamento costante nella finestra, ogni stato finale porta una sinc quadro centrata sulla conservazione dell'energia.</p><div aria-label="Probabilità finita verso un singolo stato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to f}(T)=\frac{4\lambda^2|V_{fi}|^2}{\hbar^2}\frac{\sin^2[(E_f-E_i)T/(2\hbar)]}{[(E_f-E_i)/\hbar]^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Somma sui finali<span class="lecture-step-boss">CONTINUO</span></h4><p>La probabilità totale è la somma di eventi finali ortogonali, non la somma coerente delle ampiezze.</p><div aria-label="Somma incoerente sui finali ortogonali" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to\mathcal C}(T)=\sum_{f\in\mathcal C}P_{i\to f}(T)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Densità degli stati<span class="lecture-step-boss">DEFINIZIONE</span></h4><p>rho ha dimensioni uno su energia e converte la somma in un integrale.</p><div aria-label="Definizione e uso della densità energetica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle dN_f=\rho(E_f)dE_f,\qquad\sum_f\longrightarrow\int dE_f\,\rho(E_f)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Integrale totale<span class="lecture-step-boss">CONTINUO</span></h4><p>Elemento di matrice e densità possono dipendere dall'energia; il kernel concentra l'integrale vicino a E_i.</p><div aria-label="Probabilità integrata sul continuo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to\mathcal C}(T)=\frac{4\lambda^2}{\hbar^2}\int dE\,\rho(E)|V_{Ei}|^2\frac{\sin^2[(E-E_i)T/(2\hbar)]}{[(E-E_i)/\hbar]^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Picco centrale<span class="lecture-step-boss">SCALA</span></h4><p>Il kernel ha altezza T² all'origine e larghezza di ordine hbar/T.</p><div aria-label="Scala di altezza e larghezza del kernel" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle K_T(\Delta E)=\frac{4\sin^2(\Delta ET/2\hbar)}{(\Delta E/\hbar)^2},\quad K_T(0)=T^2,\quad\delta E\sim\frac{\hbar}{T}\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Area lineare<span class="lecture-step-boss">SCALA</span></h4><p>Altezza per larghezza cresce come T: è l'origine geometrica del tasso costante.</p><div aria-label="Area esatta del kernel di transizione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \int_{-\infty}^{\infty}d(\Delta E)\,K_T(\Delta E)=2\pi\hbar T\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Identità distribuzionale<span class="lecture-step-boss">DELTA</span></h4><p>Contro una funzione liscia, il kernel diviso per T converge alla delta energetica con coefficiente corretto.</p><div aria-label="Limite a delta del kernel energetico" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \lim_{T\to\infty}\frac{K_T(\Delta E)}{T}=2\pi\hbar\delta(\Delta E)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Cambio di variabile<span class="lecture-step-boss">CHECK</span></h4><p>La delta in pulsazione e quella in energia differiscono di hbar.</p><div aria-label="Conversione tra delta di pulsazione ed energia" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \delta(\omega_{fi})=\delta\!\left(\frac{E_f-E_i}{\hbar}\right)=\hbar\delta(E_f-E_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Funzioni lente<span class="lecture-step-boss">MARKOV</span></h4><p>Se rho(E)|V_Ei|² varia poco nella finestra hbar/T, la si valuta sul guscio E=E_i.</p><div aria-label="Approssimazione di densità e accoppiamento lenti" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho(E)|V_{Ei}|^2\simeq\rho(E_i)|V_{E_i i}|^2\quad\text{per }|E-E_i|\lesssim\hbar/T\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Crescita lineare<span class="lecture-step-boss">RISULTATO</span></h4><p>Dopo l'integrazione, la probabilità totale è proporzionale al tempo.</p><div aria-label="Probabilità totale nel regime della regola d'oro" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to\mathcal C}(T)\simeq\frac{2\pi\lambda^2}{\hbar}|V_{E_i i}|^2\rho(E_i)T\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Tasso<span class="lecture-step-boss">RISULTATO</span></h4><p>La derivata temporale elimina T e definisce la probabilità per unità di tempo.</p><div aria-label="Tasso di transizione nel continuo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{i\to\mathcal C}=\frac{dP}{dT}=\frac{2\pi\lambda^2}{\hbar}|V_{E_i i}|^2\rho(E_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Finestra temporale<span class="lecture-step-boss">VALIDITÀ</span></h4><p>T deve essere lungo rispetto al tempo di correlazione del continuo, ma corto rispetto al tempo di svuotamento dello stato iniziale.</p><div aria-label="Finestra intermedia della regola d'oro" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \tau_{\rm corr}\ll T\ll W^{-1}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Canali e degenerazioni<span class="lecture-step-boss">CONTA</span></h4><p>La densità deve comprendere momento, spin, polarizzazione e ogni molteplicità finale non osservata.</p><div aria-label="Somma completa sui canali del guscio energetico" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W=\frac{2\pi}{\hbar}\sum_\alpha\int dE\,\rho_\alpha(E)|V_{E\alpha,i}|^2\delta(E-E_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Soglie<span class="lecture-step-boss">LIMITE</span></h4><p>Vicino a una soglia rho o V possono variare rapidamente e la crescita può non essere lineare; il valore sul guscio non basta.</p><div aria-label="Comportamento non regolare alla soglia" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho(E)\propto(E-E_{\rm th})^\nu\Theta(E-E_{\rm th})\Rightarrow\text{dinamica non uniforme presso }E_i=E_{\rm th}\)</span></div></article></section><h2>Esempio: continuo quasi uniforme</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> In una banda ampia, rho(E)=rho0 e V_Ei=g possono essere considerati costanti vicino a E_i.</p><p data-i18n-skip="true">\(\displaystyle P(T)\simeq\frac{2\pi\lambda^2}{\hbar}|g|^2\rho_0T,\qquad W=\frac{2\pi\lambda^2}{\hbar}|g|^2\rho_0\)</p><p><strong>Controllo.</strong> La formula vale dopo che il sistema risolve molti livelli, ma prima che P diventi confrontabile con uno. L'estrapolazione esponenziale richiede una risommatoria ulteriore.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Tre limiti coordinati</h3><p>Servono livelli fitti, tempo lungo per formare la delta e accoppiamento debole per evitare lo svuotamento durante la finestra.</p></article><article class="lecture-card"><h3>Invarianza di normalizzazione</h3><p>In una scatola |V|² spesso scala come uno sul volume e rho come il volume; il prodotto non dipende dalla scatola.</p></article><article class="lecture-card"><h3>Guscio energetico</h3><p>La delta elimina una sola integrazione energetica, non tutte le variabili finali: angoli e canali restano da sommare.</p></article><article class="lecture-card"><h3>Memoria</h3><p>Una densità strutturata produce un kernel di memoria lungo e può invalidare l'approssimazione di tasso locale.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Sommare ampiezze di finali ortogonali; dimenticare rho; usare delta prima di integrare; perdere hbar nel cambio di variabile; applicare la crescita lineare fino a P maggiore di uno.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>rho ha unità 1/energia; W ha unità 1/tempo; |V|²rho/hbar ha unità corrette; il risultato è positivo; volume e convenzione di normalizzazione si cancellano.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi P per un singolo finale.</li><li>Somma probabilità sui finali ortogonali.</li><li>Sostituisci la somma con rho dE.</li><li>Calcola altezza, larghezza e area del kernel.</li><li>Usa correttamente la delta energetica.</li><li>Valuta gli elementi sul guscio.</li><li>Dichiara la finestra tau_corr minore di T minore di 1/W.</li><li>Controlla soglie e degenerazioni.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1726">DIM 12 - perturbazioni dipendenti dal tempo e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro</a></li><li><a href="set-12-probabilita-transizione.html">Set 12 - esercizi sulle probabilità di transizione</a></li><li><a href="Domanda2025_13.html">Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo</a></li></ul><p class="lecture-note">Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - dal singolo livello al guscio energetico":"In-depth lesson - from one level to the energy shell","Transizioni verso uno spettro continuo":"Transitions into a continuous spectrum","Obiettivo.":"Objective.","Mostrare come la somma su finali densi trasformi il profilo sinc quadro in crescita lineare, definire correttamente la densità degli stati e isolare le ipotesi che precedono la regola d'oro.":"Show how summing over dense final states turns a squared-sinc profile into linear growth, correctly define density of states, and isolate the assumptions preceding the golden rule.","Perché serve il continuo":"Why a continuum is needed","Ogni singolo livello riceve una probabilità stretta e non lineare. Il numero di livelli dentro la finestra cresce abbastanza da compensarne il restringimento.":"Each individual level receives a narrow nonlinear probability. The number of levels inside the window grows enough to compensate for its narrowing.","Normalizzazione":"Normalization","Stati normalizzati a uno in una scatola e stati normalizzati a delta hanno elementi di matrice e densità diversi, ma il prodotto fisico resta invariato.":"Box-normalized and delta-normalized states have different matrix elements and densities, but the physical product remains invariant.","Etichette finali e densità":"Final labels and density","Quasi-continuo":"Quasi-continuum","In un volume finito lo spettro è discreto. Il limite di volume grande rende la spaziatura molto minore della risoluzione hbar/T.":"In finite volume the spectrum is discrete. The large-volume limit makes level spacing much smaller than resolution hbar/T.","Densità differenziale":"Differential density","rho(E,alpha)dE conta gli stati nell'intervallo dE con ulteriori numeri quantici alpha. Questi vanno sommati o integrati esplicitamente.":"rho(E,alpha)dE counts states in interval dE with further quantum numbers alpha. These must be summed or integrated explicitly.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Probabilità per un finale":"1. Probability for one final state","BASE":"BASE","Per un accoppiamento costante nella finestra, ogni stato finale porta una sinc quadro centrata sulla conservazione dell'energia.":"For coupling constant within the window, each final state carries a squared sinc centered on energy conservation.","Passaggio":"Step","2. Somma sui finali":"2. Sum over final states","CONTINUO":"CONTINUUM","La probabilità totale è la somma di eventi finali ortogonali, non la somma coerente delle ampiezze.":"Total probability is the sum over orthogonal final events, not a coherent sum of amplitudes.","3. Densità degli stati":"3. Density of states","DEFINIZIONE":"DEFINITION","rho ha dimensioni uno su energia e converte la somma in un integrale.":"rho has dimensions inverse energy and converts the sum into an integral.","4. Integrale totale":"4. Total integral","Elemento di matrice e densità possono dipendere dall'energia; il kernel concentra l'integrale vicino a E_i.":"Matrix element and density may depend on energy; the kernel concentrates the integral near E_i.","5. Picco centrale":"5. Central peak","SCALA":"SCALE","Il kernel ha altezza T² all'origine e larghezza di ordine hbar/T.":"The kernel has height T² at the origin and width of order hbar/T.","6. Area lineare":"6. Linear area","Altezza per larghezza cresce come T: è l'origine geometrica del tasso costante.":"Height times width grows as T: this is the geometric origin of the constant rate.","7. Identità distribuzionale":"7. Distributional identity","DELTA":"DELTA","Contro una funzione liscia, il kernel diviso per T converge alla delta energetica con coefficiente corretto.":"Against a smooth function, the kernel divided by T converges to the energy delta with the correct coefficient.","8. Cambio di variabile":"8. Variable change","CHECK":"CHECK","La delta in pulsazione e quella in energia differiscono di hbar.":"The angular-frequency delta and energy delta differ by hbar.","9. Funzioni lente":"9. Slow functions","MARKOV":"MARKOV","Se rho(E)|V_Ei|² varia poco nella finestra hbar/T, la si valuta sul guscio E=E_i.":"If rho(E)|V_Ei|² varies little across window hbar/T, evaluate it on shell E=E_i.","10. Crescita lineare":"10. Linear growth","RISULTATO":"RESULT","Dopo l'integrazione, la probabilità totale è proporzionale al tempo.":"After integration, total probability is proportional to time.","11. Tasso":"11. Rate","La derivata temporale elimina T e definisce la probabilità per unità di tempo.":"The time derivative removes T and defines probability per unit time.","12. Finestra temporale":"12. Time window","VALIDITÀ":"VALIDITY","T deve essere lungo rispetto al tempo di correlazione del continuo, ma corto rispetto al tempo di svuotamento dello stato iniziale.":"T must be long relative to the continuum correlation time but short relative to depletion time of the initial state.","13. Canali e degenerazioni":"13. Channels and degeneracies","CONTA":"COUNT","La densità deve comprendere momento, spin, polarizzazione e ogni molteplicità finale non osservata.":"Density must include momentum, spin, polarization, and every unobserved final multiplicity.","14. Soglie":"14. Thresholds","LIMITE":"LIMIT","Vicino a una soglia rho o V possono variare rapidamente e la crescita può non essere lineare; il valore sul guscio non basta.":"Near a threshold, rho or V may vary rapidly and growth may not be linear; the on-shell value is insufficient.","Esempio: continuo quasi uniforme":"Example: nearly uniform continuum","Impostazione.":"Setup.","In una banda ampia, rho(E)=rho0 e V_Ei=g possono essere considerati costanti vicino a E_i.":"Across a broad band, rho(E)=rho0 and V_Ei=g may be treated as constant near E_i.","Controllo.":"Check.","La formula vale dopo che il sistema risolve molti livelli, ma prima che P diventi confrontabile con uno. L'estrapolazione esponenziale richiede una risommatoria ulteriore.":"The formula holds after the system resolves many levels but before P becomes comparable with one. Exponential extrapolation requires a further resummation.","Interpretazione e limiti":"Interpretation and limits","Tre limiti coordinati":"Three coordinated limits","Servono livelli fitti, tempo lungo per formare la delta e accoppiamento debole per evitare lo svuotamento durante la finestra.":"Dense levels, long time to form the delta, and weak coupling to avoid depletion within the window are all required.","Invarianza di normalizzazione":"Normalization invariance","In una scatola |V|² spesso scala come uno sul volume e rho come il volume; il prodotto non dipende dalla scatola.":"In a box, |V|² often scales as inverse volume and rho as volume; the product is box independent.","Guscio energetico":"Energy shell","La delta elimina una sola integrazione energetica, non tutte le variabili finali: angoli e canali restano da sommare.":"The delta removes one energy integral, not all final variables: angles and channels remain to be summed.","Memoria":"Memory","Una densità strutturata produce un kernel di memoria lungo e può invalidare l'approssimazione di tasso locale.":"A structured density produces a long memory kernel and may invalidate the local-rate approximation.","Errori tipici":"Common errors","Sommare ampiezze di finali ortogonali; dimenticare rho; usare delta prima di integrare; perdere hbar nel cambio di variabile; applicare la crescita lineare fino a P maggiore di uno.":"Summing amplitudes of orthogonal final states; forgetting rho; using the delta before integration; losing hbar in the variable change; applying linear growth until P exceeds one.","Controlli rapidi":"Quick checks","rho ha unità 1/energia; W ha unità 1/tempo; |V|²rho/hbar ha unità corrette; il risultato è positivo; volume e convenzione di normalizzazione si cancellano.":"rho has units 1/energy; W has units 1/time; |V|²rho/hbar has correct units; the result is positive; volume and normalization convention cancel.","Controllo da orale":"Oral exam checklist","Scrivi P per un singolo finale.":"Write P for one final state.","Somma probabilità sui finali ortogonali.":"Sum probabilities over orthogonal finals.","Sostituisci la somma con rho dE.":"Replace the sum with rho dE.","Calcola altezza, larghezza e area del kernel.":"Compute kernel height, width, and area.","Usa correttamente la delta energetica.":"Use the energy delta correctly.","Valuta gli elementi sul guscio.":"Evaluate quantities on shell.","Dichiara la finestra tau_corr minore di T minore di 1/W.":"State the window tau_corr less than T less than 1/W.","Controlla soglie e degenerazioni.":"Check thresholds and degeneracies.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 12 - perturbazioni dipendenti dal tempo e copione orale":"DIM 12 - time-dependent perturbations and oral-exam script","Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro":"Appunti-MQ.pdf, PDF pages 176-184 - theory, resonance, and golden rule","Set 12 - esercizi sulle probabilità di transizione":"Set 12 - transition-probability exercises","Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo":"2025 question 13 - time-dependent perturbations","Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.":"Conventions for angular frequencies, Dirac deltas, and density of states are kept identical across all six pages in this block.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: transizioni-continuo.html. La lezione scientifica verificata è condivisa con transizioni-al-continuo.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: transizioni-continuo.html. The verified scientific lesson is shared with transizioni-al-continuo.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Probabilità finita verso un singolo stato":"Finite-time probability into one state","Somma incoerente sui finali ortogonali":"Incoherent sum over orthogonal final states","Definizione e uso della densità energetica":"Definition and use of energy density","Probabilità integrata sul continuo":"Probability integrated over the continuum","Scala di altezza e larghezza del kernel":"Height and width scale of the kernel","Area esatta del kernel di transizione":"Exact area of the transition kernel","Limite a delta del kernel energetico":"Delta limit of the energy kernel","Conversione tra delta di pulsazione ed energia":"Conversion between angular-frequency and energy deltas","Approssimazione di densità e accoppiamento lenti":"Slow-density and slow-coupling approximation","Probabilità totale nel regime della regola d'oro":"Total probability in the golden-rule regime","Tasso di transizione nel continuo":"Transition rate into the continuum","Finestra intermedia della regola d'oro":"Intermediate golden-rule time window","Somma completa sui canali del guscio energetico":"Complete sum over energy-shell channels","Comportamento non regolare alla soglia":"Nonregular behavior at threshold"},"title":{"it":"Transizioni verso uno spettro continuo","en":"Transitions into a continuous spectrum"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

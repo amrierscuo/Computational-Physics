@@ -1,57 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Profilo generico di potenziale</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #faf6f6;
-            color: #2c3e50;
-            max-width: 700px;
-            margin: 40px auto 0 auto;
-            padding: 2em 1.5em 3em 1.5em;
-            border-radius: 14px;
-            box-shadow: 0 8px 40px rgba(90,40,20,0.13);
-        }
-        h1 {
-            color: #b30000;
-            font-size: 1.35em;
-            margin-bottom: 1em;
-            border-bottom: 2px solid #f0dddd;
-            padding-bottom: 0.2em;
-        }
-        .soluzione {
-            background: #fff5f5;
-            border: 1.5px solid #b30000;
-            border-radius: 8px;
-            padding: 1.2em 1.2em 1.8em 1.2em;
-            margin-top: 1.2em;
-        }
-        .imgwrap {
-            text-align: center;
-            margin-top: 1.5em;
-        }
-        img {
-            max-width: 97%;
-            margin: 0 auto;
-            border-radius: 6px;
-            box-shadow: 0 2px 16px rgba(140,0,0,0.13);
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stati legati e stati di diffusione in una dimensione</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="stati-legati-diffusione.html" name="cp-shared-lesson"/></head>
 <body>
-    <h1>Profilo generico di potenziale</h1>
-    <div>Qui trovi la soluzione alla domanda:<br>
-    <b>Profilo generico di potenziale</b>
-    </div>
-    <div class="imgwrap">
-        <img src="img/Domanda2025_9.jpeg" alt="Soluzione Profilo generico di potenziale">
-    </div>
-    <div class="soluzione">
-        <!-- Inserisci qui la soluzione testuale, formule, commenti, ecc... -->
-        <p><i>Soluzione in fase di caricamento...</i></p>
-    </div>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="Domanda2025_9.html" data-mq-shared-lesson="stati-legati-diffusione.html" id="lezione-stati-legati-diffusione"><div class="lecture-kicker">Lezione approfondita - Argomento 4 - classificazione spettrale</div><h1>Stati legati e stati di diffusione in una dimensione</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: Domanda2025_9.html. La lezione scientifica verificata è condivisa con stati-legati-diffusione.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Distinguere spettro discreto e continuo dalle condizioni asintotiche, dimostrare la non degenerazione degli stati legati in una dimensione, definire matrice S e flussi e collegare poli, stati legati e risonanze con un esempio delta risolto.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>L'asintoto decide</h3><p>Per un potenziale che tende a zero, il segno di E determina se la soluzione può decadere o deve oscillare all'infinito.</p></article><article class="lecture-card lecture-warning"><h3>Due normalizzazioni</h3><p>Gli stati legati hanno norma uno e livelli discreti; gli stati di scattering hanno normalizzazione a delta e energia continua. Mescolare le due convenzioni produce fattori errati.</p></article></div><h2>Ipotesi asintotica</h2><div class="lecture-grid"><article class="lecture-card"><h3>Potenziale localizzato</h3><p>Si assume V reale e tendente a zero abbastanza rapidamente per x verso più o meno infinito.</p></article><article class="lecture-card"><h3>Soglia del continuo</h3><p>Con questa scelta dello zero energetico la soglia è E uguale zero; aggiungere una costante a V trasla insieme energie e soglia.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Asintoto libero<span class="lecture-step-boss">BASE</span></h4><p>Lontano dalla regione d'interazione la TISE diventa quella libera.</p><div aria-label="Equazione asintotica per un potenziale localizzato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(x)\to0:\qquad-\frac{\hbar^2}{2m}\psi''\simeq E\psi\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Stato legato<span class="lecture-step-boss">E&lt;0</span></h4><p>Per energia negativa le soluzioni sono esponenziali; normalizzabilità seleziona la coda decrescente su ciascun lato.</p><div aria-label="Code di uno stato legato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E=-\frac{\hbar^2\kappa^2}{2m}&lt;0:\quad\psi\sim A_-e^{\kappa x}\ (x\to-\infty),\quad\psi\sim A_+e^{-\kappa x}\ (x\to+\infty)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Spettro discreto<span class="lecture-step-boss">BORDI</span></h4><p>Due condizioni di decadimento possono essere soddisfatte simultaneamente solo per valori isolati dell'energia.</p><div aria-label="Normalizzazione degli stati legati" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi\in L^2(\mathbb R),\quad\int_{-\infty}^{\infty}|\psi_n|^2dx=1,\quad H\psi_n=E_n\psi_n\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Stato di diffusione<span class="lecture-step-boss">E&gt;0</span></h4><p>Per energia positiva l'asintoto è oscillante e non può avere norma unitaria su tutta la retta.</p><div aria-label="Asintoto e normalizzazione di scattering" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E=\frac{\hbar^2k^2}{2m}&gt;0:\quad\psi\sim A_\pm e^{ikx}+B_\pm e^{-ikx},\qquad\langle k'|k\rangle=\delta(k-k')\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Wronskiano<span class="lecture-step-boss">DIMOSTRA</span></h4><p>Due soluzioni alla stessa energia hanno Wronskiano costante, perché i termini con V-E si cancellano.</p><div aria-label="Costanza del Wronskiano" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W[\psi_1,\psi_2]=\psi_1\psi_2'-\psi_1'\psi_2,\qquad W'=\psi_1\psi_2''-\psi_1''\psi_2=0\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Non degenerazione legata<span class="lecture-step-boss">ORALE</span></h4><p>Per due stati legati alla stessa energia, funzioni e derivate decadono all'infinito: il Wronskiano costante vale zero e le soluzioni sono proporzionali.</p><div aria-label="Dimostrazione della non degenerazione in una dimensione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W(+\infty)=0\Rightarrow W(x)=0\Rightarrow\left(\frac{\psi_1}{\psi_2}\right)'=0\Rightarrow\psi_1=C\psi_2\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Teorema dei nodi<span class="lecture-step-boss">STURM</span></h4><p>Per livelli legati ordinati, il fondamentale non ha nodi e ogni livello successivo ne aggiunge uno.</p><div aria-label="Ordinamento nodale degli stati legati" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_0&lt;E_1&lt;E_2&lt;\cdots,\qquad N_{\rm nodi}(\psi_n)=n\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Incidenza da sinistra<span class="lecture-step-boss">CANALI</span></h4><p>Una soluzione di scattering fisica fissa un canale entrante e legge quelli uscenti.</p><div aria-label="Soluzione di scattering con incidenza sinistra" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_L\sim e^{ikx}+r_Le^{-ikx}\ (x\to-\infty),\qquad\psi_L\sim t_Le^{ikx}\ (x\to+\infty)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Matrice S<span class="lecture-step-boss">STRUTTURA</span></h4><p>La matrice S trasforma ampiezze entranti in uscenti per i due canali asintotici.</p><div aria-label="Definizione della matrice di scattering" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \binom{b_L}{b_R}=S(k)\binom{a_L}{a_R},\qquad S=\begin{pmatrix}r_L&amp;t_R\\t_L&amp;r_R\end{pmatrix}\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Unitarietà<span class="lecture-step-boss">FLUSSO</span></h4><p>Per V reale la conservazione della corrente rende S unitaria quando i canali sono normalizzati a flusso unitario.</p><div aria-label="Unitarietà e relazioni tra ampiezze" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle S^\dagger S=I\Rightarrow |r_L|^2+|t_L|^2=1,\quad r_L^*t_R+t_L^*r_R=0\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Reciprocità<span class="lecture-step-boss">TEMPO</span></h4><p>In una dimensione, per un potenziale reale senza campi che rompano l'inversione temporale, le ampiezze di trasmissione dai due lati coincidono.</p><div aria-label="Reciprocità della trasmissione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle t_L(k)=t_R(k),\qquad T_L=T_R\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Pozzo delta<span class="lecture-step-boss">ESEMPIO</span></h4><p>Un potenziale attrattivo puntiforme mantiene psi continua e impone un salto della derivata.</p><div aria-label="Condizione al bordo del pozzo delta" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(x)=-g\delta(x),\quad g&gt;0,\qquad\psi'(0^+)-\psi'(0^-)=-\frac{2mg}{\hbar^2}\psi(0)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Unico stato legato delta<span class="lecture-step-boss">RISOLVI</span></h4><p>La forma pari esponenziale soddisfa il salto soltanto per un valore di kappa e fornisce un unico livello.</p><div aria-label="Stato legato del pozzo delta" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_b(x)=\sqrt{\alpha}e^{-\alpha|x|},\quad\alpha=\frac{mg}{\hbar^2},\qquad E_b=-\frac{\hbar^2\alpha^2}{2m}=-\frac{mg^2}{2\hbar^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Polo e scattering delta<span class="lecture-step-boss">ANALITICA</span></h4><p>Le ampiezze di scattering hanno un polo nel piano complesso esattamente al numero d'onda dello stato legato.</p><div aria-label="Scattering e polo del pozzo delta" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle r(k)=-\frac{\alpha}{\alpha+ik},\quad t(k)=\frac{ik}{\alpha+ik},\quad T=\frac{k^2}{k^2+\alpha^2},\quad\alpha+ik=0\Rightarrow k=i\alpha\)</span></div></article></section><h2>Esempio: limite di alta energia del pozzo delta</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Per k molto maggiore di alpha si espandono le ampiezze esatte.</p><p data-i18n-skip="true">\(\displaystyle r=-\frac{\alpha}{ik}\left[1+O(\alpha/k)\right],\qquad R\simeq\frac{\alpha^2}{k^2},\qquad T\simeq1-\frac{\alpha^2}{k^2}\)</p><p><strong>Controllo.</strong> La particella veloce vede il difetto come quasi trasparente e R più T resta uno all'ordine mostrato.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Stati legati come poli</h3><p>La continuazione analitica di S al semipiano Im k positivo identifica stati legati; poli vicini al reale nel semipiano appropriato descrivono risonanze, non autostati normalizzabili.</p></article><article class="lecture-card"><h3>Soglia e stato quasi legato</h3><p>Quando E tende a zero da sotto, kappa tende a zero, la coda si allunga e la normalizzazione si distribuisce su distanze grandi.</p></article><article class="lecture-card"><h3>Non degenerazione: ipotesi</h3><p>La prova usa una singola coordinata, condizioni legate e un problema regolare. In più dimensioni la degenerazione può essere prodotta dalle simmetrie.</p></article><article class="lecture-card"><h3>Completezza mista</h3><p>Un potenziale con stati legati e continuo richiede entrambi nella risoluzione dell'identità e nell'evoluzione di uno stato generale.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Normalizzare a uno uno stato di scattering; dedurre degenerazione dai due versi più e meno k; applicare la prova del Wronskiano al continuo; dimenticare il salto della derivata per la delta; chiamare risonanza un vero autostato legato.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Le code legate decadono sui due lati; lo spettro continuo parte dalla soglia; S è unitaria per V reale; alpha ha dimensione inversa di lunghezza; il polo k uguale i alpha restituisce l'energia negativa.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Classifica l'asintoto per E minore o maggiore di zero.</li><li>Spiega le due normalizzazioni.</li><li>Dimostra che il Wronskiano è costante.</li><li>Concludi la non degenerazione legata.</li><li>Definisci canali entranti, uscenti e matrice S.</li><li>Ricava l'unitarietà dal flusso.</li><li>Risolvi salto e stato legato della delta.</li><li>Collega il polo di t allo stato legato.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L833">DIM 17 - buche, stati legati, diffusione e parità</a></li><li><a href="Appunti-MQ.pdf#page=118">Appunti-MQ.pdf, pagine PDF 118-144 - stati legati, scattering, corrente e tunnel</a></li><li><a href="set-7-parita-oscillatore.html">Set 7 - parità e oscillatore armonico</a></li></ul><p class="lecture-note">La classificazione usa DIM 17 e le pagine verificate del capitolo 8; Wronskiano, matrice S e pozzo delta aggiungono le dimostrazioni minime necessarie a collegare rigorosamente spettro discreto e diffusione.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 4 - classificazione spettrale":"In-depth lesson - Topic 4 - spectral classification","Stati legati e stati di diffusione in una dimensione":"Bound and scattering states in one dimension","Obiettivo.":"Objective.","Distinguere spettro discreto e continuo dalle condizioni asintotiche, dimostrare la non degenerazione degli stati legati in una dimensione, definire matrice S e flussi e collegare poli, stati legati e risonanze con un esempio delta risolto.":"Distinguish discrete and continuous spectra from asymptotic conditions, prove nondegeneracy of one-dimensional bound states, define the S matrix and fluxes, and connect poles, bound states, and resonances through a solved delta example.","L'asintoto decide":"The asymptote decides","Per un potenziale che tende a zero, il segno di E determina se la soluzione può decadere o deve oscillare all'infinito.":"For a potential tending to zero, the sign of E determines whether the solution can decay or must oscillate at infinity.","Due normalizzazioni":"Two normalizations","Gli stati legati hanno norma uno e livelli discreti; gli stati di scattering hanno normalizzazione a delta e energia continua. Mescolare le due convenzioni produce fattori errati.":"Bound states have unit norm and discrete levels; scattering states have delta normalization and continuous energy. Mixing the two conventions produces wrong factors.","Ipotesi asintotica":"Asymptotic assumption","Potenziale localizzato":"Localized potential","Si assume V reale e tendente a zero abbastanza rapidamente per x verso più o meno infinito.":"Assume a real potential tending sufficiently rapidly to zero as x goes to plus or minus infinity.","Soglia del continuo":"Continuum threshold","Con questa scelta dello zero energetico la soglia è E uguale zero; aggiungere una costante a V trasla insieme energie e soglia.":"With this energy-zero choice the threshold is E equal to zero; adding a constant to V shifts energies and threshold together.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Asintoto libero":"1. Free asymptote","BASE":"BASE","Lontano dalla regione d'interazione la TISE diventa quella libera.":"Far from the interaction region the TISE becomes free.","Passaggio":"Step","2. Stato legato":"2. Bound state","E<0":"E<0","Per energia negativa le soluzioni sono esponenziali; normalizzabilità seleziona la coda decrescente su ciascun lato.":"For negative energy solutions are exponential; normalizability selects the decaying tail on each side.","3. Spettro discreto":"3. Discrete spectrum","BORDI":"BOUNDARIES","Due condizioni di decadimento possono essere soddisfatte simultaneamente solo per valori isolati dell'energia.":"Two decay conditions can be satisfied simultaneously only at isolated energy values.","4. Stato di diffusione":"4. Scattering state","E>0":"E>0","Per energia positiva l'asintoto è oscillante e non può avere norma unitaria su tutta la retta.":"For positive energy the asymptote is oscillatory and cannot have unit norm on the full line.","5. Wronskiano":"5. Wronskian","DIMOSTRA":"PROVE","Due soluzioni alla stessa energia hanno Wronskiano costante, perché i termini con V-E si cancellano.":"Two solutions at the same energy have constant Wronskian because the V-E terms cancel.","6. Non degenerazione legata":"6. Bound-state nondegeneracy","ORALE":"ORAL","Per due stati legati alla stessa energia, funzioni e derivate decadono all'infinito: il Wronskiano costante vale zero e le soluzioni sono proporzionali.":"For two bound states at the same energy, functions and derivatives decay at infinity: the constant Wronskian is zero and the solutions are proportional.","7. Teorema dei nodi":"7. Node theorem","STURM":"STURM","Per livelli legati ordinati, il fondamentale non ha nodi e ogni livello successivo ne aggiunge uno.":"For ordered bound levels, the ground state has no nodes and each successive level adds one.","8. Incidenza da sinistra":"8. Incidence from the left","CANALI":"CHANNELS","Una soluzione di scattering fisica fissa un canale entrante e legge quelli uscenti.":"A physical scattering solution fixes one incoming channel and reads the outgoing ones.","9. Matrice S":"9. S matrix","STRUTTURA":"STRUCTURE","La matrice S trasforma ampiezze entranti in uscenti per i due canali asintotici.":"The S matrix maps incoming to outgoing amplitudes for the two asymptotic channels.","10. Unitarietà":"10. Unitarity","FLUSSO":"FLUX","Per V reale la conservazione della corrente rende S unitaria quando i canali sono normalizzati a flusso unitario.":"For real V, current conservation makes S unitary when channels are normalized to unit flux.","11. Reciprocità":"11. Reciprocity","TEMPO":"TIME","In una dimensione, per un potenziale reale senza campi che rompano l'inversione temporale, le ampiezze di trasmissione dai due lati coincidono.":"In one dimension, for a real potential without time-reversal-breaking fields, transmission amplitudes from the two sides coincide.","12. Pozzo delta":"12. Delta well","ESEMPIO":"EXAMPLE","Un potenziale attrattivo puntiforme mantiene psi continua e impone un salto della derivata.":"An attractive point potential keeps psi continuous and imposes a derivative jump.","13. Unico stato legato delta":"13. Unique delta bound state","RISOLVI":"SOLVE","La forma pari esponenziale soddisfa il salto soltanto per un valore di kappa e fornisce un unico livello.":"The even exponential satisfies the jump only for one kappa value and gives a unique level.","14. Polo e scattering delta":"14. Pole and delta scattering","ANALITICA":"ANALYTIC","Le ampiezze di scattering hanno un polo nel piano complesso esattamente al numero d'onda dello stato legato.":"Scattering amplitudes have a complex-plane pole exactly at the bound-state wave number.","Esempio: limite di alta energia del pozzo delta":"Example: high-energy limit of the delta well","Impostazione.":"Setup.","Per k molto maggiore di alpha si espandono le ampiezze esatte.":"For k much greater than alpha, expand the exact amplitudes.","Controllo.":"Check.","La particella veloce vede il difetto come quasi trasparente e R più T resta uno all'ordine mostrato.":"The fast particle sees the defect as nearly transparent and R plus T remains one to the displayed order.","Interpretazione e limiti":"Interpretation and limits","Stati legati come poli":"Bound states as poles","La continuazione analitica di S al semipiano Im k positivo identifica stati legati; poli vicini al reale nel semipiano appropriato descrivono risonanze, non autostati normalizzabili.":"Analytic continuation of S into the upper Im k half-plane identifies bound states; poles near the real axis in the appropriate half-plane describe resonances, not normalizable eigenstates.","Soglia e stato quasi legato":"Threshold and weak binding","Quando E tende a zero da sotto, kappa tende a zero, la coda si allunga e la normalizzazione si distribuisce su distanze grandi.":"As E approaches zero from below, kappa tends to zero, the tail lengthens, and normalization spreads over large distances.","Non degenerazione: ipotesi":"Nondegeneracy assumptions","La prova usa una singola coordinata, condizioni legate e un problema regolare. In più dimensioni la degenerazione può essere prodotta dalle simmetrie.":"The proof uses one coordinate, bound conditions, and a regular problem. In higher dimensions symmetry can produce degeneracy.","Completezza mista":"Mixed completeness","Un potenziale con stati legati e continuo richiede entrambi nella risoluzione dell'identità e nell'evoluzione di uno stato generale.":"A potential with bound states and a continuum requires both in the identity resolution and in general-state evolution.","Errori tipici":"Common errors","Normalizzare a uno uno stato di scattering; dedurre degenerazione dai due versi più e meno k; applicare la prova del Wronskiano al continuo; dimenticare il salto della derivata per la delta; chiamare risonanza un vero autostato legato.":"Unit-normalizing a scattering state; inferring degeneracy from the two directions plus and minus k; applying the Wronskian proof to the continuum; forgetting the derivative jump for a delta; calling a resonance a true bound eigenstate.","Controlli rapidi":"Quick checks","Le code legate decadono sui due lati; lo spettro continuo parte dalla soglia; S è unitaria per V reale; alpha ha dimensione inversa di lunghezza; il polo k uguale i alpha restituisce l'energia negativa.":"Bound tails decay on both sides; the continuum begins at threshold; S is unitary for real V; alpha has inverse-length dimension; pole k equal to i alpha returns the negative energy.","Controllo da orale":"Oral exam checklist","Classifica l'asintoto per E minore o maggiore di zero.":"Classify the asymptote for E below or above zero.","Spiega le due normalizzazioni.":"Explain the two normalizations.","Dimostra che il Wronskiano è costante.":"Prove that the Wronskian is constant.","Concludi la non degenerazione legata.":"Conclude bound-state nondegeneracy.","Definisci canali entranti, uscenti e matrice S.":"Define incoming and outgoing channels and the S matrix.","Ricava l'unitarietà dal flusso.":"Derive unitarity from flux.","Risolvi salto e stato legato della delta.":"Solve the delta jump and bound state.","Collega il polo di t allo stato legato.":"Connect the pole of t to the bound state.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 17 - buche, stati legati, diffusione e parità":"DIM 17 - wells, bound states, scattering, and parity","Appunti-MQ.pdf, pagine PDF 118-144 - stati legati, scattering, corrente e tunnel":"Appunti-MQ.pdf, PDF pages 118-144 - stati legati, scattering, corrente e tunnel","Set 7 - parità e oscillatore armonico":"Set 7 - parity and harmonic oscillator","La classificazione usa DIM 17 e le pagine verificate del capitolo 8; Wronskiano, matrice S e pozzo delta aggiungono le dimostrazioni minime necessarie a collegare rigorosamente spettro discreto e diffusione.":"The classification uses DIM 17 and verified Chapter 8 pages; the Wronskian, S matrix, and delta well add the minimal proofs needed to rigorously connect discrete spectrum and scattering.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: Domanda2025_9.html. La lezione scientifica verificata è condivisa con stati-legati-diffusione.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: Domanda2025_9.html. The verified scientific lesson is shared with stati-legati-diffusione.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Equazione asintotica per un potenziale localizzato":"Asymptotic equation for a localized potential","Code di uno stato legato":"Bound-state tails","Normalizzazione degli stati legati":"Bound-state normalization","Asintoto e normalizzazione di scattering":"Scattering asymptote and normalization","Costanza del Wronskiano":"Wronskian constancy","Dimostrazione della non degenerazione in una dimensione":"Proof of nondegeneracy in one dimension","Ordinamento nodale degli stati legati":"Nodal ordering of bound states","Soluzione di scattering con incidenza sinistra":"Left-incident scattering solution","Definizione della matrice di scattering":"Definition of the scattering matrix","Unitarietà e relazioni tra ampiezze":"Unitarity and amplitude relations","Reciprocità della trasmissione":"Transmission reciprocity","Condizione al bordo del pozzo delta":"Boundary condition for the delta well","Stato legato del pozzo delta":"Bound state of the delta well","Scattering e polo del pozzo delta":"Scattering and pole of the delta well"},"title":{"it":"Stati legati e stati di diffusione in una dimensione","en":"Bound and scattering states in one dimension"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

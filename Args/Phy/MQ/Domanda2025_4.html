@@ -1,57 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Teoria delle perturbazioni stazionarie degenere</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #faf6f6;
-            color: #2c3e50;
-            max-width: 700px;
-            margin: 40px auto 0 auto;
-            padding: 2em 1.5em 3em 1.5em;
-            border-radius: 14px;
-            box-shadow: 0 8px 40px rgba(90,40,20,0.13);
-        }
-        h1 {
-            color: #b30000;
-            font-size: 1.35em;
-            margin-bottom: 1em;
-            border-bottom: 2px solid #f0dddd;
-            padding-bottom: 0.2em;
-        }
-        .soluzione {
-            background: #fff5f5;
-            border: 1.5px solid #b30000;
-            border-radius: 8px;
-            padding: 1.2em 1.2em 1.8em 1.2em;
-            margin-top: 1.2em;
-        }
-        .imgwrap {
-            text-align: center;
-            margin-top: 1.5em;
-        }
-        img {
-            max-width: 97%;
-            margin: 0 auto;
-            border-radius: 6px;
-            box-shadow: 0 2px 16px rgba(140,0,0,0.13);
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perturbazioni stazionarie: caso degenere</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="perturbazioni-degenere.html" name="cp-shared-lesson"/></head>
 <body>
-    <h1>Teoria delle perturbazioni stazionarie degenere</h1>
-    <div>Qui trovi la soluzione alla domanda:<br>
-    <b>Teoria delle perturbazioni stazionarie degenere</b>
-    </div>
-    <div class="imgwrap">
-        <img src="img/Domanda2025_4.jpeg" alt="Soluzione Teoria delle perturbazioni stazionarie degenere">
-    </div>
-    <div class="soluzione">
-        <!-- Inserisci qui la soluzione testuale, formule, commenti, ecc... -->
-        <p><i>Soluzione in fase di caricamento...</i></p>
-    </div>
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="Domanda2025_4.html" data-mq-shared-lesson="perturbazioni-degenere.html" id="lezione-perturbazioni-degenere"><div class="lecture-kicker">Lezione approfondita - Argomento 12 - DIM 7</div><h1>Perturbazioni stazionarie: caso degenere</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: Domanda2025_4.html. La lezione scientifica verificata è condivisa con perturbazioni-degenere.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire il problema secolare nel sottospazio degenere, ottenere shift e combinazioni buone, derivare correzioni esterne e Hamiltoniana efficace al secondo ordine e trattare degenerazione residua e quasi degenerazione senza denominatori nulli.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Il limite seleziona la base</h3><p>Quando lambda tende a zero, un autostato perturbato può convergere a qualunque combinazione del livello degenere. È V, non la base arbitraria iniziale, a selezionare le combinazioni con limite regolare.</p></article><article class="lecture-card lecture-warning"><h3>Mai dividere per zero</h3><p>Le formule non degeneri non si riparano eliminando a mano un termine divergente. Si deve prima diagonalizzare PVP nell'intero sottospazio degenere e soltanto poi sommare sugli stati esterni Q.</p></article></div><h2>Proiettori sul livello e sul complemento</h2><div class="lecture-grid"><article class="lecture-card"><h3>Sottospazio P</h3><p>P proietta sui r autostati di H0 con la stessa energia E0. Ogni cambio unitario interno è equivalente prima di introdurre la perturbazione.</p></article><article class="lecture-card"><h3>Sottospazio Q</h3><p>Q contiene tutti gli stati con energie diverse. Dopo aver trovato una base buona in P, le correzioni verso Q hanno denominatori non nulli e seguono la struttura non degenere.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Livello r volte<span class="lecture-step-boss">BASE</span></h4><p>Si sceglie una base ortonormale arbitraria del sottospazio degenere.</p><div aria-label="Definizione dei proiettori degeneri" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_0|n,i\rangle=E_n^{(0)}|n,i\rangle,\quad i=1,\ldots,r,\qquad P=\sum_{i=1}^r|n,i\rangle\langle n,i|,\quad Q=I-P\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Combinazione di ordine zero<span class="lecture-step-boss">DIM 7</span></h4><p>Lo stato limite va cercato come combinazione sconosciuta dentro P.</p><div aria-label="Ansatz nel sottospazio degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |n,a^{(0)}\rangle=\sum_{i=1}^r\alpha_i^{(a)}|n,i\rangle,\qquad P|n,a^{(0)}\rangle=|n,a^{(0)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Equazione al primo ordine<span class="lecture-step-boss">BOSS</span></h4><p>L'equazione è formalmente uguale al caso semplice, ma la proiezione va eseguita su tutto P.</p><div aria-label="Equazione perturbativa per il livello degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (H_0-E_n^{(0)})|n,a^{(1)}\rangle+(V-E_{n,a}^{(1)})|n,a^{(0)}\rangle=0\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Proiezione su P<span class="lecture-step-boss">DIM 7</span></h4><p>Poiché P(H0-E0) è zero, resta un problema agli autovalori interamente interno.</p><div aria-label="Problema efficace al primo ordine" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle PVP|n,a^{(0)}\rangle=E_{n,a}^{(1)}|n,a^{(0)}\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Matrice secolare<span class="lecture-step-boss">DIM 7</span></h4><p>Nella base scelta W_ij sono gli elementi di V ristretti a P.</p><div aria-label="Sistema lineare secolare" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{ij}=\langle n,i|V|n,j\rangle,\qquad\sum_j(W_{ij}-E_{n,a}^{(1)}\delta_{ij})\alpha_j^{(a)}=0\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Equazione secolare<span class="lecture-step-boss">BOSS</span></h4><p>Una soluzione non nulla esiste soltanto quando il determinante si annulla.</p><div aria-label="Equazione secolare del sottospazio degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \det(W-E^{(1)}I_r)=0\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Stati buoni<span class="lecture-step-boss">RISULTATO</span></h4><p>Gli autovettori ortonormali di W forniscono le combinazioni che hanno un limite definito per lambda a zero.</p><div aria-label="Shift e base buona al primo ordine" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W\boldsymbol\alpha^{(a)}=w_a\boldsymbol\alpha^{(a)},\quad E_{n,a}=E_n^{(0)}+\lambda w_a+O(\lambda^2),\quad\langle n,a^{(0)}|n,b^{(0)}\rangle=\delta_{ab}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Doppietto generale<span class="lecture-step-boss">ORALE</span></h4><p>Per r uguale due l'equazione quadratica mostra separatamente differenza diagonale e accoppiamento fuori diagonale.</p><div aria-label="Autovalori del blocco degenere due per due" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle w_\pm=\frac{W_{11}+W_{22}}2\pm\frac12\sqrt{(W_{11}-W_{22})^2+4|W_{12}|^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Angolo e fase di mixing<span class="lecture-step-boss">CALCOLO</span></h4><p>Dopo aver rimosso la fase di W12, una rotazione reale diagonalizza il blocco.</p><div aria-label="Autovettore del doppietto perturbato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{12}=|W_{12}|e^{i\varphi},\qquad\tan2\theta=\frac{2|W_{12}|}{W_{11}-W_{22}},\qquad|+\rangle=\cos\theta|1\rangle+e^{-i\varphi}\sin\theta|2\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Correzione esterna<span class="lecture-step-boss">DIM 7</span></h4><p>Scelto |n,a0&gt;, si proietta su Q e si sommano soltanto energie diverse da E0.</p><div aria-label="Correzione dello stato fuori dal sottospazio" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle Q|n,a^{(1)}\rangle=\sum_{m\notin P}\frac{\langle m|V|n,a^{(0)}\rangle}{E_n^{(0)}-E_m^{(0)}}|m\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Secondo ordine non residuo<span class="lecture-step-boss">ESTENSIONE</span></h4><p>Se w_a è semplice, lo shift successivo è la somma sugli stati esterni.</p><div aria-label="Secondo ordine dopo la diagonalizzazione interna" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_{n,a}^{(2)}=\sum_{m\notin P}\frac{|\langle m|V|n,a^{(0)}\rangle|^2}{E_n^{(0)}-E_m^{(0)}}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Hamiltoniana efficace<span class="lecture-step-boss">ESTENSIONE</span></h4><p>In forma matriciale, gli stati virtuali Q generano un nuovo operatore dentro P.</p><div aria-label="Hamiltoniana efficace nel sottospazio degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_{\rm eff}=E_n^{(0)}P+\lambda PVP+\lambda^2PVQ(E_n^{(0)}-QH_0Q)^{-1}QVP+O(\lambda^3)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Degenerazione residua<span class="lecture-step-boss">CHECK</span></h4><p>Se W possiede un autovalore ancora multiplo, il primo ordine non seleziona una base unica in quel sottoblocco; occorre diagonalizzare l'operatore efficace di ordine successivo.</p><div aria-label="Procedura per una degenerazione residua" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle w_a=w_b\Rightarrow P_{ab}H_{\rm eff}^{(2)}P_{ab}\ \text{da diagonalizzare prima di usare formule scalari}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Quasi degenerazione<span class="lecture-step-boss">LIMITE</span></h4><p>Livelli separati da un gap dello stesso ordine di lambda V vanno inclusi nello stesso spazio modello anche se non sono esattamente degeneri a lambda zero.</p><div aria-label="Scelta del sottospazio quasi degenere" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |E_i^{(0)}-E_j^{(0)}|=O(\lambda V)\Rightarrow P=\sum_{k\in\text{manifold}}|k\rangle\langle k|\)</span></div></article></section><h2>Esempio d'esame: doppietto con diagonali opposte</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Nel sottospazio degenere la perturbazione ha W uguale delta sigma z più g sigma x, con delta e g reali.</p><p data-i18n-skip="true">\(\displaystyle W=\begin{pmatrix}\delta&amp;g\\g&amp;-\delta\end{pmatrix},\qquad w_\pm=\pm\sqrt{\delta^2+g^2},\qquad\tan2\theta=g/\delta\)</p><p><strong>Controllo.</strong> Il livello si separa di due radice di delta quadro più g quadro. Se delta è zero, gli stati buoni sono le combinazioni simmetrica e antisimmetrica, non i vettori di base originari.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Base arbitraria e spettro</h3><p>Gli elementi W_ij cambiano sotto rotazioni interne, ma i suoi autovalori e quindi gli shift sono invarianti. Parlare di correzione diagonale prima della diagonalizzazione non ha significato fisico.</p></article><article class="lecture-card"><h3>Rimozione parziale</h3><p>Autovalori ripetuti di W lasciano una degenerazione residua. Può essere accidentale oppure protetta da una simmetria che la perturbazione conserva.</p></article><article class="lecture-card"><h3>Spazio modello</h3><p>La qualità del metodo dipende dalla scelta di P. Un manifold troppo piccolo lascia piccoli denominatori in Q; uno troppo grande aumenta il problema matriciale ma migliora uniformità.</p></article><article class="lecture-card"><h3>Ordini superiori</h3><p>Al secondo ordine non basta applicare una formula scalare se il primo ordine è ancora degenere. Si deve costruire e diagonalizzare l'intera matrice efficace nel sottospazio residuo.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare la base degenere scelta per comodità come se fosse fisica; dividere per zero; diagonalizzare V nell'intero spazio anziché PVP; dimenticare le correzioni Q; applicare E2 scalare a un autovalore w ancora multiplo.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Hermiticità di W, invarianza della traccia, ortonormalità degli autovettori, dimensione r, esclusione completa di P dalle somme Q e verifica della degenerazione residua a ogni ordine.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci P e Q per un livello r volte degenere.</li><li>Scrivi la combinazione di ordine zero sconosciuta.</li><li>Proietta l'equazione al primo ordine su P.</li><li>Costruisci W, sistema omogeneo e determinante secolare.</li><li>Trova shift e stati buoni nel doppietto generale.</li><li>Ricava correzione Q e secondo ordine.</li><li>Costruisci l'Hamiltoniana efficace matriciale.</li><li>Tratta correttamente residua e quasi degenerazione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1">DIM 7 - perturbazioni stazionarie non degeneri e degeneri</a></li><li><a href="Appunti-MQ.pdf#page=169">Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo</a></li><li><a href="Domanda2025_8.html">Domanda 2025 n. 8 - perturbazioni stazionarie</a></li><li><a href="Domanda2025_4.html">Domanda 2025 n. 4 - perturbazioni stazionarie degeneri</a></li><li><a href="rimozione-degenerazione.html">Rimozione della degenerazione - simmetrie e splitting</a></li></ul><p class="lecture-note">La derivazione distingue il primo problema interno P dal mixing esterno Q e include l'Hamiltoniana efficace necessaria quando la degenerazione sopravvive al primo ordine.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 12 - DIM 7":"In-depth lesson - Topic 12 - DIM 7","Perturbazioni stazionarie: caso degenere":"Stationary perturbations: degenerate case","Obiettivo.":"Objective.","Costruire il problema secolare nel sottospazio degenere, ottenere shift e combinazioni buone, derivare correzioni esterne e Hamiltoniana efficace al secondo ordine e trattare degenerazione residua e quasi degenerazione senza denominatori nulli.":"Construct the secular problem in the degenerate subspace, obtain shifts and good combinations, derive external corrections and the second-order effective Hamiltonian, and treat residual degeneracy and near degeneracy without zero denominators.","Il limite seleziona la base":"The limit selects the basis","Quando lambda tende a zero, un autostato perturbato può convergere a qualunque combinazione del livello degenere. È V, non la base arbitraria iniziale, a selezionare le combinazioni con limite regolare.":"As lambda tends to zero, a perturbed eigenstate may converge to any combination within the degenerate level. V, not the arbitrary initial basis, selects combinations with a regular limit.","Mai dividere per zero":"Never divide by zero","Le formule non degeneri non si riparano eliminando a mano un termine divergente. Si deve prima diagonalizzare PVP nell'intero sottospazio degenere e soltanto poi sommare sugli stati esterni Q.":"Nondegenerate formulas are not repaired by manually deleting a divergent term. One must first diagonalize PVP in the whole degenerate subspace and only then sum over external Q states.","Proiettori sul livello e sul complemento":"Projectors onto the level and its complement","Sottospazio P":"P subspace","P proietta sui r autostati di H0 con la stessa energia E0. Ogni cambio unitario interno è equivalente prima di introdurre la perturbazione.":"P projects onto the r H0 eigenstates with the same energy E0. Every internal unitary basis change is equivalent before adding the perturbation.","Sottospazio Q":"Q subspace","Q contiene tutti gli stati con energie diverse. Dopo aver trovato una base buona in P, le correzioni verso Q hanno denominatori non nulli e seguono la struttura non degenere.":"Q contains all states with different energies. After finding a good basis in P, corrections toward Q have nonzero denominators and follow the nondegenerate structure.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Livello r volte":"1. r-fold level","BASE":"BASE","Si sceglie una base ortonormale arbitraria del sottospazio degenere.":"Choose an arbitrary orthonormal basis of the degenerate subspace.","Passaggio":"Step","2. Combinazione di ordine zero":"2. Zeroth-order combination","DIM 7":"DIM 7","Lo stato limite va cercato come combinazione sconosciuta dentro P.":"The limiting state must be sought as an unknown combination inside P.","3. Equazione al primo ordine":"3. First-order equation","BOSS":"BOSS","L'equazione è formalmente uguale al caso semplice, ma la proiezione va eseguita su tutto P.":"The equation has the same form as in the simple case, but projection must cover all of P.","4. Proiezione su P":"4. Projection onto P","Poiché P(H0-E0) è zero, resta un problema agli autovalori interamente interno.":"Because P(H0-E0) vanishes, an entirely internal eigenvalue problem remains.","5. Matrice secolare":"5. Secular matrix","Nella base scelta W_ij sono gli elementi di V ristretti a P.":"In the chosen basis W_ij are the elements of V restricted to P.","6. Equazione secolare":"6. Secular equation","Una soluzione non nulla esiste soltanto quando il determinante si annulla.":"A nonzero solution exists only when the determinant vanishes.","7. Stati buoni":"7. Good states","RISULTATO":"RESULT","Gli autovettori ortonormali di W forniscono le combinazioni che hanno un limite definito per lambda a zero.":"The orthonormal eigenvectors of W give combinations with a definite lambda-to-zero limit.","8. Doppietto generale":"8. General doublet","ORALE":"ORAL","Per r uguale due l'equazione quadratica mostra separatamente differenza diagonale e accoppiamento fuori diagonale.":"For r equals two the quadratic equation separately displays diagonal difference and off-diagonal coupling.","9. Angolo e fase di mixing":"9. Mixing angle and phase","CALCOLO":"CALCULATION","Dopo aver rimosso la fase di W12, una rotazione reale diagonalizza il blocco.":"After removing the phase of W12, a real rotation diagonalizes the block.","10. Correzione esterna":"10. External correction","Scelto |n,a0>, si proietta su Q e si sommano soltanto energie diverse da E0.":"After choosing |n,a0>, project onto Q and sum only energies different from E0.","11. Secondo ordine non residuo":"11. Nonresidual second order","ESTENSIONE":"EXTENSION","Se w_a è semplice, lo shift successivo è la somma sugli stati esterni.":"If w_a is simple, the next shift is the sum over external states.","12. Hamiltoniana efficace":"12. Effective Hamiltonian","In forma matriciale, gli stati virtuali Q generano un nuovo operatore dentro P.":"In matrix form, virtual Q states generate a new operator inside P.","13. Degenerazione residua":"13. Residual degeneracy","CHECK":"CHECK","Se W possiede un autovalore ancora multiplo, il primo ordine non seleziona una base unica in quel sottoblocco; occorre diagonalizzare l'operatore efficace di ordine successivo.":"If W still has a multiple eigenvalue, first order does not select a unique basis in that subblock; the next-order effective operator must be diagonalized.","14. Quasi degenerazione":"14. Near degeneracy","LIMITE":"LIMIT","Livelli separati da un gap dello stesso ordine di lambda V vanno inclusi nello stesso spazio modello anche se non sono esattamente degeneri a lambda zero.":"Levels separated by a gap of the same order as lambda V should be included in the same model space even if not exactly degenerate at lambda zero.","Esempio d'esame: doppietto con diagonali opposte":"Exam example: doublet with opposite diagonals","Impostazione.":"Setup.","Nel sottospazio degenere la perturbazione ha W uguale delta sigma z più g sigma x, con delta e g reali.":"In the degenerate subspace the perturbation is W equal to delta sigma z plus g sigma x, with real delta and g.","Controllo.":"Check.","Il livello si separa di due radice di delta quadro più g quadro. Se delta è zero, gli stati buoni sono le combinazioni simmetrica e antisimmetrica, non i vettori di base originari.":"The level splits by two times the square root of delta squared plus g squared. If delta is zero, the good states are symmetric and antisymmetric combinations, not the original basis vectors.","Interpretazione e limiti":"Interpretation and limits","Base arbitraria e spettro":"Arbitrary basis and spectrum","Gli elementi W_ij cambiano sotto rotazioni interne, ma i suoi autovalori e quindi gli shift sono invarianti. Parlare di correzione diagonale prima della diagonalizzazione non ha significato fisico.":"W_ij elements change under internal rotations, but eigenvalues and therefore shifts are invariant. Speaking of a diagonal correction before diagonalization has no physical meaning.","Rimozione parziale":"Partial lifting","Autovalori ripetuti di W lasciano una degenerazione residua. Può essere accidentale oppure protetta da una simmetria che la perturbazione conserva.":"Repeated eigenvalues of W leave residual degeneracy. It may be accidental or protected by a symmetry preserved by the perturbation.","Spazio modello":"Model space","La qualità del metodo dipende dalla scelta di P. Un manifold troppo piccolo lascia piccoli denominatori in Q; uno troppo grande aumenta il problema matriciale ma migliora uniformità.":"Method quality depends on the choice of P. A model space that is too small leaves small denominators in Q; a larger one increases matrix size but improves uniformity.","Ordini superiori":"Higher orders","Al secondo ordine non basta applicare una formula scalare se il primo ordine è ancora degenere. Si deve costruire e diagonalizzare l'intera matrice efficace nel sottospazio residuo.":"At second order a scalar formula is insufficient if first order remains degenerate. The full effective matrix must be constructed and diagonalized in the residual subspace.","Errori tipici":"Common errors","Usare la base degenere scelta per comodità come se fosse fisica; dividere per zero; diagonalizzare V nell'intero spazio anziché PVP; dimenticare le correzioni Q; applicare E2 scalare a un autovalore w ancora multiplo.":"Treating a convenient degenerate basis as physical; dividing by zero; diagonalizing V in the full space instead of PVP; forgetting Q corrections; applying scalar E2 to a still-multiple w eigenvalue.","Controlli rapidi":"Quick checks","Hermiticità di W, invarianza della traccia, ortonormalità degli autovettori, dimensione r, esclusione completa di P dalle somme Q e verifica della degenerazione residua a ogni ordine.":"Check W Hermiticity, trace invariance, eigenvector orthonormality, dimension r, complete exclusion of P from Q sums, and residual degeneracy at each order.","Controllo da orale":"Oral exam checklist","Definisci P e Q per un livello r volte degenere.":"Define P and Q for an r-fold degenerate level.","Scrivi la combinazione di ordine zero sconosciuta.":"Write the unknown zeroth-order combination.","Proietta l'equazione al primo ordine su P.":"Project the first-order equation onto P.","Costruisci W, sistema omogeneo e determinante secolare.":"Construct W, the homogeneous system, and secular determinant.","Trova shift e stati buoni nel doppietto generale.":"Find shifts and good states in the general doublet.","Ricava correzione Q e secondo ordine.":"Derive the Q correction and second order.","Costruisci l'Hamiltoniana efficace matriciale.":"Construct the matrix effective Hamiltonian.","Tratta correttamente residua e quasi degenerazione.":"Correctly treat residual and near degeneracy.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 7 - perturbazioni stazionarie non degeneri e degeneri":"DIM 7 - nondegenerate and degenerate stationary perturbation theory","Appunti-MQ.pdf, pagine PDF 169-175 - teoria indipendente dal tempo":"Appunti-MQ.pdf, PDF pages 169-175 - time-independent theory","Domanda 2025 n. 8 - perturbazioni stazionarie":"2025 question 8 - stationary perturbations","Domanda 2025 n. 4 - perturbazioni stazionarie degeneri":"2025 question 4 - degenerate stationary perturbations","Rimozione della degenerazione - simmetrie e splitting":"Lifting degeneracy - symmetries and splitting","La derivazione distingue il primo problema interno P dal mixing esterno Q e include l'Hamiltoniana efficace necessaria quando la degenerazione sopravvive al primo ordine.":"The derivation distinguishes the internal P problem from external Q mixing and includes the effective Hamiltonian needed when degeneracy survives first order.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: Domanda2025_4.html. La lezione scientifica verificata è condivisa con perturbazioni-degenere.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: Domanda2025_4.html. The verified scientific lesson is shared with perturbazioni-degenere.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Definizione dei proiettori degeneri":"Definition of degenerate projectors","Ansatz nel sottospazio degenere":"Ansatz in the degenerate subspace","Equazione perturbativa per il livello degenere":"Perturbation equation for the degenerate level","Problema efficace al primo ordine":"First-order effective problem","Sistema lineare secolare":"Secular linear system","Equazione secolare del sottospazio degenere":"Secular equation of the degenerate subspace","Shift e base buona al primo ordine":"First-order shifts and good basis","Autovalori del blocco degenere due per due":"Eigenvalues of the two-by-two degenerate block","Autovettore del doppietto perturbato":"Eigenvector of the perturbed doublet","Correzione dello stato fuori dal sottospazio":"State correction outside the subspace","Secondo ordine dopo la diagonalizzazione interna":"Second order after internal diagonalization","Hamiltoniana efficace nel sottospazio degenere":"Effective Hamiltonian in the degenerate subspace","Procedura per una degenerazione residua":"Procedure for residual degeneracy","Scelta del sottospazio quasi degenere":"Choice of a nearly degenerate subspace"},"title":{"it":"Perturbazioni stazionarie: caso degenere","en":"Stationary perturbations: degenerate case"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

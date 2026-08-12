@@ -1,143 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Correzione di Darwin (H_Darwin)</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Effetti relativistici nell'atomo idrogenoide</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="effetti-relativistici.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Correzione di Darwin</h1>
-
-<p>Nella struttura fine dell’atomo di idrogeno, oltre ai termini relativistici che correggono l’energia e l’interazione spin-orbita, compare anche una correzione nota come termine di Darwin. Questa è una delle correzioni di ordine \( \alpha^2 \) (dove \(\alpha\) è la costante di struttura fine) che emerge dall’equazione di Dirac, quando si espande approssimativamente per velocità piccole rispetto a quella della luce. Il termine di Darwin modifica l’energia dei livelli elettronici soprattutto negli stati a momento angolare orbitale nullo, ovvero quelli con \(l=0\).</p>
-
-<h2>Origine del Termine di Darwin</h2>
-
-<p>L’equazione di Dirac per l’elettrone nell’atomo di idrogeno tiene conto relativisticamente del legame tra spin ed energia. Espandendo l’equazione di Dirac in serie di potenze di \(v/c\), oltre al termine cinetico relativistico e al termine spin-orbita, emerge un termine aggiuntivo. Questo termine, noto come termine di Darwin, rappresenta un effetto relativistico che non può essere spiegato semplicemente con la meccanica quantistica non relativistica e l’accoppiamento spin-orbita.</p>
-
-<p>In particolare, si può interpretare il termine di Darwin come una correzione che tiene conto della fluttuazione rapida della posizione dell’elettrone (il cosiddetto “Zitterbewegung”), un effetto relativistico che fa sì che l’elettrone non possa essere considerato semplicemente come una particella puntiforme ferma all’interno del potenziale coulombiano, ma possieda una sorta di movimento “tremolante” ad altissima frequenza.</p>
-
-<h2>Forma del Termine di Darwin</h2>
-
-<p>La correzione di Darwin si presenta come un potenziale addizionale che modifica l’Hamiltoniano effettivo. L’Hamiltoniano corretto include il termine di Darwin \(H_D\) di forma:</p>
-
-\[
-H_\text{Darwin} = \frac{\hbar^2}{8 m^2 c^2}\nabla^2 V(\mathbf{r})
-\]
-
-dove \( V(\mathbf{r}) \) è il potenziale coulombiano (per l’idrogeno, \(-\frac{e^2}{4\pi \epsilon_0 r}\)). Il Laplaciano del potenziale introduce quindi un contributo aggiuntivo concentrato soprattutto vicino al nucleo (perché la derivata seconda del potenziale coulombiano è significativa a piccoli \(r\)).</p>
-
-<p>Poiché questo termine dipende dal Laplaciano del potenziale, e dunque dalla curvatura di \(V(r)\), esso ha un effetto maggiore negli stati sfericamente simmetrici senza momento angolare orbitale, \(l=0\), ovvero gli stati “s”. Per questi stati, la funzione d’onda è non nulla anche a \(r=0\), e dunque la correzione di Darwin ha un impatto osservabile sull’energia.</p>
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Considera l’Hamiltoniano relativistico espanso. Oltre ai termini:
-   - \(H_\text{rel}\) (correzione relativistica all’energia cinetica)
-   - \(H_\text{so}\) (termine spin-orbita)
-   
-   appare \(H_\text{D}\), il termine di Darwin.
-<br><br>
-2. Scrivi la forma:
-\[
-H_\text{D} = \frac{\hbar^2}{8 m^2 c^2}\nabla^2 V(r).
-\]
-<br><br>
-3. Per l’atomo di idrogeno, \(V(r) = -\frac{e^2}{4\pi \epsilon_0 r}\). Calcola \(\nabla^2 V(r)\) per capire che il termine è proporzionale a \(\delta(\mathbf{r})\) o comunque concentrato nella regione intorno al nucleo.
-<br><br>
-4. Sottolinea che questo termiche appare dal formalismo di Dirac ed è assente nel quadro non relativistico. Mostra che agisce soprattutto sugli stati sferici con \(l=0\).
-</div>
-
-<h2>Effetto sulla Struttura Fine</h2>
-
-<p>Nella struttura fine dell’idrogeno, le correzioni relativistiche portano a uno splitting dei livelli energetici rispetto ai risultati del semplice modello di Bohr o della soluzione non relativistica dell’equazione di Schrödinger. Il termine di Darwin, insieme al termine di spin-orbita e alla correzione relativistica dell’energia cinetica, contribuisce a spiegare le differenze tra livelli con stessi \(n\) ma differenti \(l\) ed altri dettagli dell’evidenza sperimentale.</p>
-
-<p>In particolare, il termine Darwin non dipende dallo spin dell’elettrone, a differenza del termine spin-orbita. È un termine scalare, che agisce uniformemente, ma il suo effetto è più rilevante per le funzioni d’onda che hanno valore significativo al nucleo, e dunque caratterizza l’osservabile scostamento dei livelli energetici da quanto previsto dal semplice modello non relativistico.</p>
-
-<h2>Derivazione più dettagliata del termine di Darwin</h2>
-
-<p>Per cogliere meglio l'origine matematica del termine di Darwin, si può partire dall'equazione di Dirac per l'elettrone nell'atomo di idrogeno. L'equazione di Dirac, considerando soltanto il potenziale coulombiano generato dal nucleo, si presenta come una forma relativistica dell'equazione d'onda. Il potenziale a simmetria centrale è \(V(r) = -\frac{e^2}{4\pi \epsilon_0 r}\). Sotto certe approssimazioni (ad esempio per stati legati con velocità dell'elettrone molto minori della velocità della luce, \(c\)), si sviluppa l'equazione di Dirac in serie di potenze di \(v/c\).</p>
-
-<p>Il primo passo è prendere l'operatore Hamiltoniano relativistico completo (compreso il termine di massa, il termine cinetico relativistico, il potenziale coulombiano e i termini che derivano dall'espansione) e applicare un'espansione di Foldy-Wouthuysen o una procedura analoga, che separi le parti grandi e piccole del bispinore di Dirac. Ciò produce, a ordine \(v^2/c^2\), oltre ai termini già noti (correzione relativistica dell'energia cinetica e accoppiamento spin-orbita), anche un ulteriore termine scalare.</p>
-
-<p>Questo termine, una volta estratto e riscritto in forma non-relativistica, si traduce in una correzione potenziale aggiuntiva di tipo locale. Si ricava infatti che l'operatore Hamiltoniano effettivo diventa:</p>
-
-<p style="text-align:center;">
-\[H_{\text{eff}} = H_{\text{non-rel}} + H_{\text{rel}} + H_{\text{so}} + H_{\text{Darwin}}\],
-</p>
-
-<p>dove \(H_{\text{Darwin}}\) è dato, in forma approssimata, da:</p>
-
-<p style="text-align:center;">
-\[H_{\text{Darwin}} = \frac{\hbar^2}{8 m^2 c^2} \nabla^2 V(r)\].
-</p>
-
-<p>Per verificare questa espressione, si consideri il potenziale coulombiano. Il laplaciano del potenziale coulombiano in tre dimensioni è un'operazione ben nota:  
-\[\nabla^2\left(\frac{1}{r}\right) = -4\pi \delta^{(3)}(\mathbf{r})\]
-(dove \(\delta^{(3)}(\mathbf{r})\) è la delta di Dirac tridimensionale). Questo implica che \(\nabla^2 V(r)\) risulta proporzionale a una delta di Dirac centrata nell'origine. Di conseguenza, \(H_{\text{Darwin}}\) è un termine fortemente localizzato intorno al nucleo, privo di dipendenza da direzioni spaziali (è scalare e sferico) e che, per la distribuzione di probabilità di un elettrone, avrà un effetto marcato soprattutto laddove la funzione d'onda abbia un valore significativo all'origine, cioè negli stati \(s\) (con \(l=0\)).</p>
-
-<h2>Effetto sugli stati \(s\) e correzione ai livelli energetici</h2>
-
-<p>L'elettrone negli stati \(s\) possiede una funzione d'onda con densità di probabilità non nulla al nucleo (\(r=0\)), a differenza degli stati con momento angolare orbitale \(l>0\), nei quali la funzione d'onda si annulla all'origine. Per questo il termine di Darwin, essendo proporzionale a \(\delta^{(3)}(\mathbf{r})\), agisce come un potenziale effettivo puntiforme che innalza l'energia degli stati \(s\) rispetto a quanto previsto dal semplice modello non relativistico.</p>
-
-<p>In pratica, quando si calcolano le correzioni di struttura fine, si sommano i contributi:
-<ul>
-    <li><i>\(H_{\text{rel}}\)</i>: correzione relativistica dell'energia cinetica</li>
-    <li><i>\(H_{\text{so}}\)</i>: termine di spin-orbita</li>
-    <li><i>\(H_{\text{Darwin}}\)</i>: termine di Darwin, aggiuntivo e indipendente dallo spin, con effetto locale al nucleo</li>
-</ul></p>
-
-<p>La presenza di \(H_{\text{Darwin}}\) permette di riprodurre con maggiore accuratezza i livelli energetici osservati sperimentalmente, contribuendo in modo significativo alla comprensione della struttura fine dell'atomo di idrogeno, e in generale dei sistemi idrogenoidi. Questo termine non si potrebbe semplicemente inventare nella meccanica quantistica non relativistica standard: è il risultato coerente di una descrizione relativistica completa (equazione di Dirac) ridotta a un regime non relativistico, mostrando così l'importanza della teoria di campo quantistica nel giustificare correzioni a prima vista "misteriose".</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="correzione-darwin.html" data-mq-shared-lesson="effetti-relativistici.html" id="lezione-effetti-relativistici"><div class="lecture-kicker">Struttura fine - origine dei tre operatori</div><h1>Effetti relativistici nell'atomo idrogenoide</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: correzione-darwin.html. La lezione scientifica verificata è condivisa con effetti-relativistici.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Dall'espansione a ordine 1/c² ai termini massa-velocità, spin-orbita e Darwin, con ipotesi, fattore di Thomas e scala fisica.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Regime</h3><p>L'espansione non relativistica è controllata dalla velocità orbitale tipica v/c circa Z alpha.</p></article><article class="lecture-card lecture-warning"><h3>Scala</h3><p>Ogni termine è più piccolo dell'energia coulombiana di un fattore circa (Z alpha)².</p></article></div><h2>Impostazione, ipotesi e convenzioni</h2><div class="lecture-grid"><article class="lecture-card"><h3>Hamiltoniano di partenza</h3><p>Si separa la dinamica coulombiana esatta dalle piccole correzioni di ordine 1/c². La massa m può essere sostituita dalla massa ridotta per spettroscopia di precisione.</p></article><article class="lecture-card"><h3>Tre origini fisiche</h3><p>La dispersione relativistica produce massa-velocità; il campo magnetico nel riferimento elettronico produce spin-orbita; la localizzazione relativistica produce il contatto di Darwin.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Problema coulombiano<span class="lecture-step-boss">BASE</span></h4><p>Per un nucleo puntiforme e immobile, H0 dipende soltanto da r e ha livelli degeneri in ell e m.</p><div aria-label="Hamiltoniano e spettro idrogenoide non relativistici" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_0=\frac{p^2}{2m}-\frac{Ze^2}{4\pi\varepsilon_0r},\qquad E_n^{(0)}=-\frac{mc^2(Z\alpha)^2}{2n^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Dispersione esatta<span class="lecture-step-boss">MV</span></h4><p>L'energia libera relativistica contiene la massa a riposo e una radice da espandere nel piccolo rapporto p/(mc).</p><div aria-label="Relazione energia-impulso relativistica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_{\rm rel}=\sqrt{m^2c^4+p^2c^2}=mc^2\sqrt{1+\frac{p^2}{m^2c^2}}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Sviluppo della radice<span class="lecture-step-boss">MV</span></h4><p>Si usa sqrt(1+x)=1+x/2-x²/8+... e si sottrae il termine costante mc².</p><div aria-label="Sviluppo non relativistico dell'energia cinetica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T_{\rm rel}=E_{\rm rel}-mc^2=\frac{p^2}{2m}-\frac{p^4}{8m^3c^2}+O(c^{-4})\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Massa-velocità<span class="lecture-step-boss">MV</span></h4><p>Il primo termine è già incluso in H0; quello successivo abbassa l'energia perché ha segno negativo.</p><div aria-label="Operatore di correzione massa-velocità" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_{MV}=-\frac{p^4}{8m^3c^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Campo nel riferimento elettronico<span class="lecture-step-boss">SO</span></h4><p>Nel limite non relativistico, il moto attraverso il campo elettrico centrale genera un campo magnetico efficace proporzionale a v vettore E.</p><div aria-label="Trasformazione approssimata del campo elettrico" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf B'\simeq-\frac{\mathbf v}{c^2}\times\mathbf E,\qquad \mathbf E=-\frac{1}{e}\nabla V\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Momento magnetico di spin<span class="lecture-step-boss">SO</span></h4><p>Per l'elettrone g è circa due; l'energia magnetica è meno mu punto B. Il segno della carica è già incorporato in mu.</p><div aria-label="Momento magnetico intrinseco e interazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \boldsymbol\mu_s=-g\frac{e}{2m}\mathbf S,\qquad H_{\rm mag}=-\boldsymbol\mu_s\cdot\mathbf B'\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Geometria centrale<span class="lecture-step-boss">SO</span></h4><p>Con grad V parallelo a r, il triplo prodotto converte r vettore p nella quantità L punto S.</p><div aria-label="Riduzione del prodotto vettoriale al termine L punto S" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf S\cdot(\mathbf p\times\nabla V)=\frac1r\frac{dV}{dr}\,\mathbf S\cdot(\mathbf p\times\mathbf r)\propto\mathbf L\cdot\mathbf S\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Precessione di Thomas<span class="lecture-step-boss">SO</span></h4><p>Il riferimento istantaneo dell'elettrone accelera e ruota. La precessione di Thomas dimezza il risultato semiclassico senza correzione.</p><div aria-label="Interazione spin-orbita con fattore di Thomas" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_{SO}=\frac{1}{2m^2c^2}\frac1r\frac{dV}{dr}\,\mathbf L\cdot\mathbf S\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Specializzazione coulombiana<span class="lecture-step-boss">SO</span></h4><p>La derivata del potenziale è positiva e fornisce il fattore radiale 1/r³.</p><div aria-label="Termine spin-orbita per un potenziale coulombiano" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac1r\frac{dV}{dr}=\frac{Ze^2}{4\pi\varepsilon_0r^3},\qquad H_{SO}=\frac{Ze^2}{8\pi\varepsilon_0m^2c^2r^3}\mathbf L\cdot\mathbf S\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Smearing relativistico<span class="lecture-step-boss">D</span></h4><p>Una fluttuazione isotropa rho con media nulla elimina il termine lineare nello sviluppo di Taylor; il quadratico lascia il Laplaciano.</p><div aria-label="Media isotropa dello sviluppo locale del potenziale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle V(\mathbf r+\boldsymbol\rho)\rangle=V(\mathbf r)+\frac{\langle\rho^2\rangle}{6}\nabla^2V(\mathbf r)+\cdots\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Operatore di Darwin<span class="lecture-step-boss">D</span></h4><p>La riduzione di Foldy-Wouthuysen fissa il coefficiente esatto. Il Laplaciano agisce sul potenziale, non sulla delta.</p><div aria-label="Termine di Darwin generale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_D=\frac{\hbar^2}{8m^2c^2}\nabla^2V(\mathbf r)\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Contatto coulombiano<span class="lecture-step-boss">D</span></h4><p>L'identità distribuzionale trasforma il Laplaciano di 1/r in una delta tridimensionale concentrata nel nucleo.</p><div aria-label="Riduzione del termine Darwin a interazione di contatto" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \nabla^2\frac1r=-4\pi\delta^{(3)}(\mathbf r)\Rightarrow H_D=\frac{\hbar^2Ze^2}{8m^2c^2\varepsilon_0}\delta^{(3)}(\mathbf r)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Hamiltoniano efficace<span class="lecture-step-boss">SINTESI</span></h4><p>I tre operatori sono della stessa accuratezza formale e vanno mantenuti insieme per ottenere una risposta coerente a ordine 1/c².</p><div aria-label="Hamiltoniano efficace della struttura fine" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_{\rm eff}=H_0+H_{MV}+H_{SO}+H_D+O(c^{-4})\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Buoni numeri quantici<span class="lecture-step-boss">SIMMETRIA</span></h4><p>L'effettivo è uno scalare rotazionale. La base accoppiata diagonalizza L punto S e conserva la degenerazione in mj.</p><div aria-label="Commutatori imposti dalla simmetria rotazionale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [H_{\rm eff},J^2]=[H_{\rm eff},J_z]=0,\qquad \mathbf J=\mathbf L+\mathbf S\)</span></div></article></section><h2>Esempio guidato e controllo fisico</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Per n=2 gli stati non relativistici 2S e 2P sono degeneri. I termini relativistici riorganizzano lo spazio secondo j.</p><p data-i18n-skip="true">\(\displaystyle 2S_{1/2},\quad2P_{1/2},\quad2P_{3/2};\qquad \Delta E_{fs}=\Delta E_{fs}(n,j)\)</p><p><strong>Controllo.</strong> La struttura fine separa il doppietto con j=3/2 da quelli con j=1/2. La degenerazione 2S1/2-2P1/2 sopravvive in questa approssimazione e sarà rotta dal Lamb shift.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Base naturale</h3><p>La simmetria rotazionale conserva J² e Jz; Lz e Sz non sono separatamente buoni con spin-orbita.</p></article><article class="lecture-card"><h3>Approssimazione</h3><p>Si trascurano Lamb shift, rinculo oltre la massa ridotta, struttura nucleare e termini di ordine superiore in Z alpha.</p></article><article class="lecture-card"><h3>Gerarchia</h3><p>La teoria è affidabile per Z alpha molto minore di uno; per nuclei pesanti serve una trattazione di Dirac più diretta.</p></article><article class="lecture-card"><h3>Selettività</h3><p>Spin-orbita agisce solo per ell maggiore o uguale a uno; Darwin solo sugli stati s non nulli all'origine.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dimenticare il fattore un mezzo di Thomas; scrivere il Laplaciano della delta invece del Laplaciano di V; usare Lz e Sz come buoni numeri; includere Darwin per ell diverso da zero; confondere struttura fine e Lamb shift.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Dimensioni di energia; segno negativo di HMV; fattore 1/r³ in HSO; supporto puntuale di HD; invarianza rotazionale; scala relativa (Z alpha)².</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi H0 e la scala coulombiana.</li><li>Espandi la dispersione fino a p alla quarta.</li><li>Deriva la struttura L punto S e cita Thomas.</li><li>Spiega lo smearing isotropo di Darwin.</li><li>Applica il Laplaciano coulombiano.</li><li>Riunisci i tre termini a ordine 1/c².</li><li>Identifica la base n ell j mj.</li><li>Dichiara scala e limiti dell'approssimazione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1312">DIM 11 - struttura fine completa e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=260">Appunti-MQ.pdf, pagine PDF 260-267 - correzioni relativistiche</a></li><li><a href="Domanda2025_2.html">Domanda 2025 n. 2 - termine spin-orbita</a></li></ul><p class="lecture-note">Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Struttura fine - origine dei tre operatori":"Fine structure - origin of the three operators","Effetti relativistici nell'atomo idrogenoide":"Relativistic effects in a hydrogen-like atom","Obiettivo.":"Objective.","Dall'espansione a ordine 1/c² ai termini massa-velocità, spin-orbita e Darwin, con ipotesi, fattore di Thomas e scala fisica.":"From the order-1/c² expansion to the mass-velocity, spin-orbit, and Darwin terms, including assumptions, the Thomas factor, and physical scale.","Regime":"Regime","L'espansione non relativistica è controllata dalla velocità orbitale tipica v/c circa Z alpha.":"The nonrelativistic expansion is controlled by the typical orbital velocity v/c approximately Z alpha.","Scala":"Scale","Ogni termine è più piccolo dell'energia coulombiana di un fattore circa (Z alpha)².":"Each term is smaller than the Coulomb energy by a factor of approximately (Z alpha)².","Impostazione, ipotesi e convenzioni":"Setup, assumptions, and conventions","Hamiltoniano di partenza":"Starting Hamiltonian","Si separa la dinamica coulombiana esatta dalle piccole correzioni di ordine 1/c². La massa m può essere sostituita dalla massa ridotta per spettroscopia di precisione.":"The exact Coulomb dynamics is separated from the small order-1/c² corrections. The mass m may be replaced by the reduced mass for precision spectroscopy.","Tre origini fisiche":"Three physical origins","La dispersione relativistica produce massa-velocità; il campo magnetico nel riferimento elettronico produce spin-orbita; la localizzazione relativistica produce il contatto di Darwin.":"Relativistic dispersion produces the mass-velocity term; the magnetic field in the electron frame produces spin-orbit coupling; relativistic localization produces the Darwin contact term.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Problema coulombiano":"1. Coulomb problem","BASE":"BASE","Per un nucleo puntiforme e immobile, H0 dipende soltanto da r e ha livelli degeneri in ell e m.":"For a pointlike fixed nucleus, H0 depends only on r and has levels degenerate in ell and m.","Passaggio":"Step","2. Dispersione esatta":"2. Exact dispersion","MV":"MV","L'energia libera relativistica contiene la massa a riposo e una radice da espandere nel piccolo rapporto p/(mc).":"The free relativistic energy contains the rest mass and a square root to be expanded in the small ratio p/(mc).","3. Sviluppo della radice":"3. Square-root expansion","Si usa sqrt(1+x)=1+x/2-x²/8+... e si sottrae il termine costante mc².":"Use sqrt(1+x)=1+x/2-x²/8+... and subtract the constant term mc².","4. Massa-velocità":"4. Mass-velocity term","Il primo termine è già incluso in H0; quello successivo abbassa l'energia perché ha segno negativo.":"The first term is already included in H0; the next one lowers the energy because it has a negative sign.","5. Campo nel riferimento elettronico":"5. Field in the electron frame","SO":"SO","Nel limite non relativistico, il moto attraverso il campo elettrico centrale genera un campo magnetico efficace proporzionale a v vettore E.":"In the nonrelativistic limit, motion through the central electric field generates an effective magnetic field proportional to v cross E.","6. Momento magnetico di spin":"6. Spin magnetic moment","Per l'elettrone g è circa due; l'energia magnetica è meno mu punto B. Il segno della carica è già incorporato in mu.":"For the electron g is approximately two; the magnetic energy is minus mu dot B. The charge sign is already included in mu.","7. Geometria centrale":"7. Central geometry","Con grad V parallelo a r, il triplo prodotto converte r vettore p nella quantità L punto S.":"With grad V parallel to r, the triple product converts r cross p into L dot S.","8. Precessione di Thomas":"8. Thomas precession","Il riferimento istantaneo dell'elettrone accelera e ruota. La precessione di Thomas dimezza il risultato semiclassico senza correzione.":"The instantaneous electron frame accelerates and rotates. Thomas precession halves the uncorrected semiclassical result.","9. Specializzazione coulombiana":"9. Coulomb specialization","La derivata del potenziale è positiva e fornisce il fattore radiale 1/r³.":"The derivative of the potential is positive and supplies the radial factor 1/r³.","10. Smearing relativistico":"10. Relativistic smearing","D":"D","Una fluttuazione isotropa rho con media nulla elimina il termine lineare nello sviluppo di Taylor; il quadratico lascia il Laplaciano.":"An isotropic fluctuation rho with zero mean removes the linear term in the Taylor expansion; the quadratic term leaves the Laplacian.","11. Operatore di Darwin":"11. Darwin operator","La riduzione di Foldy-Wouthuysen fissa il coefficiente esatto. Il Laplaciano agisce sul potenziale, non sulla delta.":"The Foldy-Wouthuysen reduction fixes the exact coefficient. The Laplacian acts on the potential, not on the delta function.","12. Contatto coulombiano":"12. Coulomb contact","L'identità distribuzionale trasforma il Laplaciano di 1/r in una delta tridimensionale concentrata nel nucleo.":"The distributional identity turns the Laplacian of 1/r into a three-dimensional delta function concentrated at the nucleus.","13. Hamiltoniano efficace":"13. Effective Hamiltonian","SINTESI":"SUMMARY","I tre operatori sono della stessa accuratezza formale e vanno mantenuti insieme per ottenere una risposta coerente a ordine 1/c².":"The three operators have the same formal accuracy and must be retained together for a consistent order-1/c² answer.","14. Buoni numeri quantici":"14. Good quantum numbers","SIMMETRIA":"SYMMETRY","L'effettivo è uno scalare rotazionale. La base accoppiata diagonalizza L punto S e conserva la degenerazione in mj.":"The effective Hamiltonian is a rotational scalar. The coupled basis diagonalizes L dot S and preserves the mj degeneracy.","Esempio guidato e controllo fisico":"Guided example and physical check","Impostazione.":"Setup.","Per n=2 gli stati non relativistici 2S e 2P sono degeneri. I termini relativistici riorganizzano lo spazio secondo j.":"For n=2 the nonrelativistic 2S and 2P states are degenerate. Relativistic terms reorganize the space according to j.","Controllo.":"Check.","La struttura fine separa il doppietto con j=3/2 da quelli con j=1/2. La degenerazione 2S1/2-2P1/2 sopravvive in questa approssimazione e sarà rotta dal Lamb shift.":"Fine structure separates the j=3/2 doublet from the j=1/2 levels. The 2S1/2-2P1/2 degeneracy survives in this approximation and is broken by the Lamb shift.","Interpretazione e limiti":"Interpretation and limits","Base naturale":"Natural basis","La simmetria rotazionale conserva J² e Jz; Lz e Sz non sono separatamente buoni con spin-orbita.":"Rotational symmetry preserves J² and Jz; Lz and Sz are not separately good in the presence of spin-orbit coupling.","Approssimazione":"Approximation","Si trascurano Lamb shift, rinculo oltre la massa ridotta, struttura nucleare e termini di ordine superiore in Z alpha.":"The Lamb shift, recoil beyond reduced mass, nuclear structure, and higher orders in Z alpha are neglected.","Gerarchia":"Hierarchy","La teoria è affidabile per Z alpha molto minore di uno; per nuclei pesanti serve una trattazione di Dirac più diretta.":"The theory is reliable for Z alpha much smaller than one; heavy nuclei require a more direct Dirac treatment.","Selettività":"Selectivity","Spin-orbita agisce solo per ell maggiore o uguale a uno; Darwin solo sugli stati s non nulli all'origine.":"Spin-orbit acts only for ell at least one; Darwin only on s states that are nonzero at the origin.","Errori tipici":"Common errors","Dimenticare il fattore un mezzo di Thomas; scrivere il Laplaciano della delta invece del Laplaciano di V; usare Lz e Sz come buoni numeri; includere Darwin per ell diverso da zero; confondere struttura fine e Lamb shift.":"Forgetting the Thomas factor one half; writing the Laplacian of the delta instead of the Laplacian of V; using Lz and Sz as good quantum numbers; including Darwin for nonzero ell; confusing fine structure with the Lamb shift.","Controlli rapidi":"Quick checks","Dimensioni di energia; segno negativo di HMV; fattore 1/r³ in HSO; supporto puntuale di HD; invarianza rotazionale; scala relativa (Z alpha)².":"Energy dimensions; negative sign of HMV; 1/r³ factor in HSO; point support of HD; rotational invariance; relative scale (Z alpha)².","Controllo da orale":"Oral exam checklist","Scrivi H0 e la scala coulombiana.":"Write H0 and the Coulomb scale.","Espandi la dispersione fino a p alla quarta.":"Expand the dispersion through p to the fourth power.","Deriva la struttura L punto S e cita Thomas.":"Derive the L dot S structure and mention Thomas.","Spiega lo smearing isotropo di Darwin.":"Explain isotropic Darwin smearing.","Applica il Laplaciano coulombiano.":"Apply the Coulomb Laplacian.","Riunisci i tre termini a ordine 1/c².":"Combine the three terms at order 1/c².","Identifica la base n ell j mj.":"Identify the n ell j mj basis.","Dichiara scala e limiti dell'approssimazione.":"State the scale and limits of the approximation.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 11 - struttura fine completa e copione orale":"DIM 11 - complete fine structure and oral-exam script","Appunti-MQ.pdf, pagine PDF 260-267 - correzioni relativistiche":"Appunti-MQ.pdf, PDF pages 260-267 - relativistic corrections","Domanda 2025 n. 2 - termine spin-orbita":"2025 question 2 - spin-orbit term","Le formule sono state ricontrollate sulle pagine PDF indicate e confrontate con la traccia orale Boss; i riferimenti PDF usano la numerazione effettiva del file.":"The formulas were checked against the listed PDF pages and compared with the Boss oral-exam outline; PDF references use the file's actual page numbering.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: correzione-darwin.html. La lezione scientifica verificata è condivisa con effetti-relativistici.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: correzione-darwin.html. The verified scientific lesson is shared with effetti-relativistici.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Hamiltoniano e spettro idrogenoide non relativistici":"Nonrelativistic hydrogen-like Hamiltonian and spectrum","Relazione energia-impulso relativistica":"Relativistic energy-momentum relation","Sviluppo non relativistico dell'energia cinetica":"Nonrelativistic expansion of kinetic energy","Operatore di correzione massa-velocità":"Mass-velocity correction operator","Trasformazione approssimata del campo elettrico":"Approximate transformation of the electric field","Momento magnetico intrinseco e interazione":"Intrinsic magnetic moment and interaction","Riduzione del prodotto vettoriale al termine L punto S":"Reduction of the vector product to the L dot S term","Interazione spin-orbita con fattore di Thomas":"Spin-orbit interaction with Thomas factor","Termine spin-orbita per un potenziale coulombiano":"Spin-orbit term for a Coulomb potential","Media isotropa dello sviluppo locale del potenziale":"Isotropic average of the local potential expansion","Termine di Darwin generale":"General Darwin term","Riduzione del termine Darwin a interazione di contatto":"Reduction of the Darwin term to a contact interaction","Hamiltoniano efficace della struttura fine":"Effective fine-structure Hamiltonian","Commutatori imposti dalla simmetria rotazionale":"Commutators imposed by rotational symmetry"},"title":{"it":"Effetti relativistici nell'atomo idrogenoide","en":"Relativistic effects in a hydrogen-like atom"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

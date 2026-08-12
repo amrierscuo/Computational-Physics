@@ -1,152 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particella Libera</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, li {
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    </style>
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Particella libera: spettro, pacchetti e corrente</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
+
+</style>
+<meta content="particella-libera.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Particella Libera</h1>
-
-<p>Una particella libera in meccanica quantistica è un sistema privo di potenziale confinante o forze esterne: il potenziale \(V(x)\) è costante, spesso preso uguale a zero. In questa situazione, l’equazione di Schrödinger riduce il problema alla sola energia cinetica, senza livelli quantizzati come accade in buche o barriere. Ciò significa che la particella non ha autostati con energia discreta, ma un continuo di autostati con ogni valore di energia maggiore o uguale a zero.</p>
-
-<h2>Equazione di Schrödinger per Particella Libera</h2>
-
-<p>Consideriamo una dimensione spaziale. Con \(V(x)=0\), l’equazione di Schrödinger indipendente dal tempo diventa:</p>
-
-\[
--\frac{\hbar^2}{2m}\frac{d^2}{dx^2}\phi(x) = E \phi(x).
-\]
-
-<p>Non essendoci confini o potenziali, le soluzioni sono funzioni d’onda di tipo ondulatorio semplice, cioè onde piane. In particolare, una soluzione generale può essere espressa come combinazione di esponenziali complesse:</p>
-
-\[
-\phi_k(x) = e^{i k x},
-\]
-
-dove \(k\) è il numero d’onda legato all’energia via \(E = \frac{\hbar^2 k^2}{2m}\).</p>
-
-<h2>Spettro Continuo e Stati di Scattering</h2>
-
-<p>Per la particella libera non ci sono energie preferenziali: ogni \(k\) corrisponde a una energia diversa, e le particelle possono avere qualunque valore continuo di energia. In questo senso il loro spettro energetico è continuo, non quantizzato come in una buca o in un potenziale confinante.</p>
-
-<p>Le autofunzioni \(\phi_k(x)\) non sono normalizzabili in senso stretto (non integrabili su tutto l’asse reale), ma si può definire una normalizzazione “delta-dirac” per creare una base completa e continua di stati. Qualsiasi funzione d’onda può essere espressa come sovrapposizione integrale di onde piane, un po’ come una trasformata di Fourier:</p>
-
-\[
-\psi(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} \tilde{\psi}(k)e^{i k x} dk.
-\]
-
-<h2>Alla Lavagna</h2>
-
-<div class="lavagna">
-1. Inizia con \(\hat{H} = \frac{\hat{p}^2}{2m}\) e \(V=0\).
-<br><br>
-2. Scrivi l’equazione indipendente dal tempo:
-\[
--\frac{\hbar^2}{2m}\frac{d^2}{dx^2}\phi(x) = E\phi(x).
-\]
-<br><br>
-3. Soluzione generale:
-\[
-\phi(x) = A e^{i k x} + B e^{-i k x}, \quad \text{con } E=\frac{\hbar^2 k^2}{2m}.
-\]
-4. Poiché non c’è potenziale, non hai condizioni quantizzanti: tutti i \(k\) sono possibili.
-<br><br>
-5. Visualizza un’onda piana che si estende su tutto lo spazio: \(\phi_k(x)=e^{i k x}\), una soluzione “libera” senza confini né nodi forzati.
-</div>
-
-<h2>Considerazioni Fisiche</h2>
-
-<p>La particella libera, se preparata in uno stato con numero d’onda ben definito \(k\), ha una distribuzione di probabilità uniforme nello spazio, il che non è fisicamente realistico come stato normalizzato. In pratica, si considerano pacchetti d’onda, cioè sovrapposizioni di molti valori di \(k\), che creano una funzione d’onda localizzata. Questi pacchetti possono muoversi liberamente senza modificare la loro forma ideale, tranne che per la dispersione dovuta alle componenti in \(k\).</p>
-
-<p>L’analisi della particella libera è fondamentale come punto di partenza per comprendere problemi più complessi, come la diffusione su potenziali, la riflessione e la trasmissione su gradini o barriere, e la costruzione di pacchetti d’onda in meccanica quantistica.</p>
-<h2>Approfondimento Matematico sui Coefficienti di Fourier</h2>
-
-<p>Nella situazione di particella libera, la soluzione generale dell’equazione di Schrödinger indipendente dal tempo è una combinazione lineare di onde piane. Sul piano pratico, invece di considerare un singolo stato \(\phi_k(x)=e^{i k x}\), si analizzano superposizioni di molti \(\phi_k(x)\). Questo porta alla decomposizione di \(\psi(x)\) tramite una trasformata di Fourier:</p>
-
-\[
-\psi(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} \tilde{\psi}(k) e^{i k x} dk,
-\]
-
-dove \(\tilde{\psi}(k)\) è il coefficiente di Fourier, ovvero l’ampiezza dell’onda piana con numero d’onda \(k\). Per ricavare \(\tilde{\psi}(k)\) da una funzione nota \(\psi(x)\), si sfrutta l’ortogonalità delle funzioni \(e^{i k x}\):
-
-\[
-\tilde{\psi}(k) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} \psi(x)e^{-i k x} dx.
-\]
-
-<p>In tal modo si possono costruire pacchetti d’onda localizzati: se \(\tilde{\psi}(k)\) è concentrata attorno a un certo \(k_0\), allora \(\psi(x)\) sarà simile a un’onda con lunghezza d’onda media \(\lambda = 2\pi/k_0\), ma modulata da una funzione d’inviluppo più ampia. Questa modulazione è responsabile della localizzazione spaziale della particella.</p>
-
-<h2>Alla Lavagna: Pacchetti d’Onda</h2>
-
-<div class="lavagna">
-1. Parti dalla soluzione formale: \(\psi(x) = \int \tilde{\psi}(k) e^{i k x} dk\).
-<br><br>
-2. Disegna sul lato sinistro un grafico di \(\tilde{\psi}(k)\) contro \(k\), una funzione piccata attorno a \(k_0\). Spiega che il centro di questa distribuzione in spazio dei numeri d’onda determina la “quasi-impulso” della particella.
-<br><br>
-3. Sul lato destro, mostra come la trasformata inversa di Fourier produce \(\psi(x)\), un pacchetto localizzato. Più larga è la distribuzione in \(k\), più stretto è il pacchetto in \(x\). Questo riflette la relazione di indeterminazione: sapere meglio l’impulso significa avere meno certezza sulla posizione.
-<br><br>
-4. Sottolinea che per una particella libera non c’è evoluzione imposta dal potenziale, ma la forma del pacchetto può cambiare nel tempo a causa della dispersione: le componenti in \(k\) evolvono come \(e^{-i \frac{\hbar k^2}{2m} t}\), provocando un allargamento del pacchetto nel tempo.
-</div>
-
-<h2>Evoluzione Temporale di un Pacchetto Libero</h2>
-
-<p>Per capire come \(\psi(x,t)\) evolve, si considerano le soluzioni del tipo \(\psi_k(x,t)=e^{i k x - i\frac{\hbar k^2}{2m}t}\). Ogni componente \(\tilde{\psi}(k)\) acquisisce una fase temporale differente, cosicché il pacchetto inizialmente ben localizzato tende ad allargarsi col tempo. Il raggio medio di dispersione aumenta, rendendo il pacchetto sempre meno localizzato. Questo comportamento riflette la natura quantistica dell’impulso non definito esattamente per uno stato localizzato.</p>
-
-<p>Se all’istante iniziale \(t=0\), il pacchetto è centrato su \(x_0\), con una distribuzione di \(k\) attorno a \(k_0\), allora dopo un certo tempo il pacchetto non solo si muove con una velocità media \(\hbar k_0/m\), ma si dilata, perdendo coerenza spaziale. Questa caratteristica differenzia la particella libera quantistica dalla pallina classica: mentre la pallina classica mantiene la sua “forma” e posizione, la funzione d’onda della particella quantistica libera non rimane compatta.</p>
-
-<h2>Significato Fisico</h2>
-
-<p>La particella libera rappresenta il caso più semplice di dinamica quantistica, ma racchiude le idee fondamentali della sovrapposizione di stati, della trasformata di Fourier, e della relazione di indeterminazione. Non esistono stati legati o quantizzati, e l’intera fenomenologia consiste nell’evoluzione libera di onde piane e pacchetti d’onda. Queste nozioni sono fondamentali come base per comprendere fenomeni di scattering più complessi, dove l’interazione con un potenziale produce riflessioni, trasmissioni e stati legati.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="particella-libera2.html" data-mq-shared-lesson="particella-libera.html" id="lezione-particella-libera"><div class="lecture-kicker">Lezione approfondita - Argomento 4 - Appunti 7.4-7.5</div><h1>Particella libera: spettro, pacchetti e corrente</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: particella-libera2.html. La lezione scientifica verificata è condivisa con particella-libera.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare gli autostati liberi in una e tre dimensioni, precisarne normalizzazione e degenerazione, costruire pacchetti normalizzabili e ottenere corrente, dispersione e propagatore senza confondere onde piane e stati fisici localizzati.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Traslazioni e impulso</h3><p>Senza potenziale l'Hamiltoniana è funzione di p: energia e impulso ammettono autostati comuni e lo spettro non ha una scala discreta.</p></article><article class="lecture-card lecture-warning"><h3>Onde piane generalizzate</h3><p>Una singola onda piana non appartiene a L2 su tutto lo spazio. È un autovettore generalizzato, normalizzato a delta, dal quale si costruiscono pacchetti fisici.</p></article></div><h2>Tre livelli della descrizione</h2><div class="lecture-grid"><article class="lecture-card"><h3>Autostato</h3><p>Fissa esattamente p ed E ma è completamente delocalizzato; la densità e la corrente sono uniformi.</p></article><article class="lecture-card"><h3>Pacchetto</h3><p>Una sovrapposizione integrabile di impulsi localizza la particella, evolve con fasi diverse e in generale si allarga.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Hamiltoniana libera<span class="lecture-step-boss">BASE</span></h4><p>L'assenza di potenziale lascia soltanto l'energia cinetica e rende H una funzione dell'operatore impulso.</p><div aria-label="Hamiltoniana libera e commutatore con l'impulso" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H=\frac{\mathbf p^2}{2m}=-\frac{\hbar^2}{2m}\nabla^2,\qquad[H,p_i]=0\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Autostati di impulso<span class="lecture-step-boss">DERIVA</span></h4><p>In rappresentazione delle coordinate l'equazione al primo ordine si integra in un'esponenziale complesso.</p><div aria-label="Soluzione dell'equazione agli autovalori dell'impulso" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -i\hbar\nabla\phi_{\mathbf p}=\mathbf p\phi_{\mathbf p}\Rightarrow\phi_{\mathbf p}(\mathbf r)=\frac{e^{i\mathbf p\cdot\mathbf r/\hbar}}{(2\pi\hbar)^{3/2}}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Relazione di dispersione<span class="lecture-step-boss">SPETTRO</span></h4><p>La sostituzione dell'onda piana nella TISE collega impulso, vettore d'onda e frequenza.</p><div aria-label="Dispersione della particella libera non relativistica" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_{\mathbf p}=\frac{p^2}{2m}=\frac{\hbar^2k^2}{2m},\qquad\mathbf p=\hbar\mathbf k,\quad\omega(k)=\frac{\hbar k^2}{2m}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Evoluzione stazionaria<span class="lecture-step-boss">TEMPO</span></h4><p>Ogni componente di impulso acquista la fase determinata dalla sua energia.</p><div aria-label="Onda piana dipendente dal tempo" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_{\mathbf p}(\mathbf r,t)=\phi_{\mathbf p}(\mathbf r)e^{-iE_{\mathbf p}t/\hbar}=\frac{e^{i(\mathbf p\cdot\mathbf r-E_{\mathbf p}t)/\hbar}}{(2\pi\hbar)^{3/2}}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Normalizzazione a delta<span class="lecture-step-boss">RIGORE</span></h4><p>La normalizzazione continua sostituisce la norma unitaria degli autostati discreti.</p><div aria-label="Normalizzazione e completezza degli autostati liberi" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\mathbf p'|\mathbf p\rangle=\delta^{(3)}(\mathbf p-\mathbf p'),\qquad\int d^3p\,|\mathbf p\rangle\langle\mathbf p|=I\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Spettro e degenerazione<span class="lecture-step-boss">ORALE</span></h4><p>Lo spettro è continuo da zero a infinito; in tre dimensioni una stessa energia non nulla corrisponde a tutte le direzioni sulla sfera di raggio p.</p><div aria-label="Spettro continuo e degenerazione direzionale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E\in[0,\infty),\qquad p=\sqrt{2mE},\qquad\{\mathbf p:E_{\mathbf p}=E\}=S^2_p\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Pacchetto di onde<span class="lecture-step-boss">FOURIER</span></h4><p>Uno stato normalizzabile è una trasformata di Fourier con ampiezza c quadrato integrabile.</p><div aria-label="Espansione continua di un pacchetto libero" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(\mathbf r,t)=\int d^3p\,c(\mathbf p)\phi_{\mathbf p}(\mathbf r)e^{-ip^2t/(2m\hbar)},\qquad\int d^3p\,|c(\mathbf p)|^2=1\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Velocità di gruppo<span class="lecture-step-boss">PACCHETTO</span></h4><p>Il massimo di un pacchetto stretto in k si muove con il gradiente della dispersione.</p><div aria-label="Velocità di gruppo e di fase" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf v_g=\nabla_{\mathbf k}\omega=\frac{\hbar\mathbf k}{m}=\frac{\mathbf p}{m},\qquad v_{\rm ph}=\frac{\omega}{k}=\frac{v_g}{2}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Continuità<span class="lecture-step-boss">DIMOSTRA</span></h4><p>Moltiplicando la TDSE per psi coniugata e sottraendo la coniugata si cancellano i termini di potenziale reale.</p><div aria-label="Derivazione locale dell'equazione di continuità" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \partial_t|\psi|^2=\frac{i\hbar}{2m}(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*)=-\nabla\cdot\mathbf j\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Densità di corrente<span class="lecture-step-boss">FLUSSO</span></h4><p>L'identità del prodotto trasforma la differenza di Laplaciani nella divergenza della corrente.</p><div aria-label="Densità e corrente di probabilità" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho=|\psi|^2,\qquad\mathbf j=\frac{\hbar}{2mi}(\psi^*\nabla\psi-\psi\nabla\psi^*)=\frac{\hbar}{m}\operatorname{Im}(\psi^*\nabla\psi)\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Corrente dell'onda piana<span class="lecture-step-boss">CHECK</span></h4><p>Per ampiezza N, il rapporto tra corrente e densità coincide con la velocità classica.</p><div aria-label="Corrente trasportata da un'onda piana" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho=|N|^2,\qquad\mathbf j=\frac{\mathbf p}{m}|N|^2,\qquad\frac{\mathbf j}{\rho}=\frac{\mathbf p}{m}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Allargamento<span class="lecture-step-boss">DISPERSIONE</span></h4><p>Poiché omega è quadratica, componenti vicine hanno velocità di gruppo diverse e un pacchetto libero si disperde.</p><div aria-label="Varianza spaziale esatta per evoluzione libera" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sigma_x(t)^2=\sigma_x(0)^2+\frac{t^2}{m^2}\sigma_p(0)^2+\frac{t}{m}\langle\{\Delta x,\Delta p\}\rangle_0\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Propagatore<span class="lecture-step-boss">NUCLEO</span></h4><p>L'integrale gaussiano sugli impulsi fornisce l'ampiezza per andare da x primo a x in un tempo t positivo.</p><div aria-label="Propagatore libero unidimensionale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle K(x,t;x',0)=\int\frac{dp}{2\pi\hbar}e^{ip(x-x')/\hbar-ip^2t/(2m\hbar)}=\sqrt{\frac{m}{2\pi i\hbar t}}e^{im(x-x')^2/(2\hbar t)}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Limite classico medio<span class="lecture-step-boss">EHRENFEST</span></h4><p>In assenza di forza l'impulso medio è costante e la posizione media segue una retta, anche se il pacchetto si allarga.</p><div aria-label="Moto dei valori medi per la particella libera" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{d\langle p\rangle}{dt}=0,\qquad\langle x\rangle_t=\langle x\rangle_0+\frac{t}{m}\langle p\rangle_0\)</span></div></article></section><h2>Esempio: pacchetto gaussiano minimo</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Al tempo zero si prende una gaussiana centrata in x0 con impulso medio p0 e varianza sigma0 quadrato.</p><p data-i18n-skip="true">\(\displaystyle \psi(x,0)=\frac{e^{-(x-x_0)^2/(4\sigma_0^2)+ip_0x/\hbar}}{(2\pi\sigma_0^2)^{1/4}},\quad\sigma_x(t)=\sigma_0\sqrt{1+\left(\frac{\hbar t}{2m\sigma_0^2}\right)^2},\quad\langle x\rangle=x_0+\frac{p_0t}{m}\)</p><p><strong>Controllo.</strong> La norma resta uno; il centro segue il moto classico, mentre la larghezza cresce. Il tempo caratteristico di dispersione è 2m sigma0 quadrato su hbar.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Stazionario non significa localizzato</h3><p>L'onda piana ha densità indipendente dal tempo, ma non descrive una particella in una regione finita. La localizzazione richiede sovrapposizione di energie.</p></article><article class="lecture-card"><h3>Degenerazione diversa in una dimensione</h3><p>In una dimensione E maggiore di zero ha due impulsi, più e meno p; in tre dimensioni ha una degenerazione direzionale continua.</p></article><article class="lecture-card"><h3>Normalizzazione in una scatola</h3><p>Si può usare un volume finito e poi mandarlo all'infinito; i fattori cambiano, ma osservabili e densità degli stati devono restare coerenti.</p></article><article class="lecture-card"><h3>Dispersione non dissipativa</h3><p>L'allargamento non perde probabilità e non è attrito: nasce dalle fasi diverse delle componenti di impulso in un'evoluzione unitaria.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Normalizzare a uno un'onda piana su R; dimenticare la degenerazione in direzione; confondere velocità di fase e di gruppo; scrivere la corrente senza 1/m; attribuire l'allargamento a una forza.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>E è non negativa; p e k differiscono per hbar; j/rho=p/m; la norma del pacchetto è quella di c(p); K ha dimensione inversa di una lunghezza.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scrivi H e dimostra che commuta con p.</li><li>Ricava onda piana, energia e fase temporale.</li><li>Spiega normalizzazione a delta e completezza.</li><li>Costruisci un pacchetto e ricava la velocità di gruppo.</li><li>Deriva l'equazione di continuità senza saltare la sottrazione.</li><li>Calcola la corrente di un'onda piana.</li><li>Distingui moto del centro e dispersione.</li><li>Controlla il propagatore e il limite t verso zero.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L833">DIM 17 - buche, stati legati, diffusione e parità</a></li><li><a href="Appunti-MQ.pdf#page=114">Appunti-MQ.pdf, pagine PDF 114-117 - particella libera, normalizzazione e corrente</a></li><li><a href="set-7-parita-oscillatore.html">Set 7 - parità e oscillatore armonico</a></li></ul><p class="lecture-note">La derivazione segue le pagine verificate 114-117 e rende esplicite normalizzazione continua, pacchetto gaussiano e propagatore, richiesti per non identificare impropriamente un'onda piana con uno stato fisico localizzato.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 4 - Appunti 7.4-7.5":"In-depth lesson - Topic 4 - Notes 7.4-7.5","Particella libera: spettro, pacchetti e corrente":"Free particle: spectrum, wave packets, and current","Obiettivo.":"Objective.","Derivare gli autostati liberi in una e tre dimensioni, precisarne normalizzazione e degenerazione, costruire pacchetti normalizzabili e ottenere corrente, dispersione e propagatore senza confondere onde piane e stati fisici localizzati.":"Derive free eigenstates in one and three dimensions, specify normalization and degeneracy, construct normalizable wave packets, and obtain current, dispersion, and propagator without confusing plane waves with localized physical states.","Traslazioni e impulso":"Translations and momentum","Senza potenziale l'Hamiltoniana è funzione di p: energia e impulso ammettono autostati comuni e lo spettro non ha una scala discreta.":"Without a potential the Hamiltonian is a function of p: energy and momentum have common eigenstates and the spectrum has no discrete scale.","Onde piane generalizzate":"Generalized plane waves","Una singola onda piana non appartiene a L2 su tutto lo spazio. È un autovettore generalizzato, normalizzato a delta, dal quale si costruiscono pacchetti fisici.":"A single plane wave is not in L2 over all space. It is a generalized, delta-normalized eigenvector from which physical packets are built.","Tre livelli della descrizione":"Three levels of the description","Autostato":"Eigenstate","Fissa esattamente p ed E ma è completamente delocalizzato; la densità e la corrente sono uniformi.":"It fixes p and E exactly but is completely delocalized; density and current are uniform.","Pacchetto":"Wave packet","Una sovrapposizione integrabile di impulsi localizza la particella, evolve con fasi diverse e in generale si allarga.":"An integrable superposition of momenta localizes the particle, evolves with different phases, and generally spreads.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Hamiltoniana libera":"1. Free Hamiltonian","BASE":"BASE","L'assenza di potenziale lascia soltanto l'energia cinetica e rende H una funzione dell'operatore impulso.":"The absence of a potential leaves only kinetic energy and makes H a function of the momentum operator.","Passaggio":"Step","2. Autostati di impulso":"2. Momentum eigenstates","DERIVA":"DERIVE","In rappresentazione delle coordinate l'equazione al primo ordine si integra in un'esponenziale complesso.":"In coordinate representation the first-order equation integrates to a complex exponential.","3. Relazione di dispersione":"3. Dispersion relation","SPETTRO":"SPECTRUM","La sostituzione dell'onda piana nella TISE collega impulso, vettore d'onda e frequenza.":"Substitution of the plane wave into the TISE relates momentum, wave vector, and frequency.","4. Evoluzione stazionaria":"4. Stationary evolution","TEMPO":"TIME","Ogni componente di impulso acquista la fase determinata dalla sua energia.":"Each momentum component acquires the phase determined by its energy.","5. Normalizzazione a delta":"5. Delta normalization","RIGORE":"RIGOR","La normalizzazione continua sostituisce la norma unitaria degli autostati discreti.":"Continuous normalization replaces unit normalization of discrete eigenstates.","6. Spettro e degenerazione":"6. Spectrum and degeneracy","ORALE":"ORAL","Lo spettro è continuo da zero a infinito; in tre dimensioni una stessa energia non nulla corrisponde a tutte le direzioni sulla sfera di raggio p.":"The spectrum is continuous from zero to infinity; in three dimensions the same nonzero energy corresponds to all directions on the sphere of radius p.","7. Pacchetto di onde":"7. Wave packet","FOURIER":"FOURIER","Uno stato normalizzabile è una trasformata di Fourier con ampiezza c quadrato integrabile.":"A normalizable state is a Fourier transform with square-integrable amplitude c.","8. Velocità di gruppo":"8. Group velocity","PACCHETTO":"PACKET","Il massimo di un pacchetto stretto in k si muove con il gradiente della dispersione.":"The maximum of a packet narrow in k moves with the gradient of the dispersion.","9. Continuità":"9. Continuity","DIMOSTRA":"PROVE","Moltiplicando la TDSE per psi coniugata e sottraendo la coniugata si cancellano i termini di potenziale reale.":"Multiply the TDSE by psi conjugate and subtract its conjugate; real-potential terms cancel.","10. Densità di corrente":"10. Current density","FLUSSO":"FLUX","L'identità del prodotto trasforma la differenza di Laplaciani nella divergenza della corrente.":"The product identity turns the Laplacian difference into the divergence of the current.","11. Corrente dell'onda piana":"11. Plane-wave current","CHECK":"CHECK","Per ampiezza N, il rapporto tra corrente e densità coincide con la velocità classica.":"For amplitude N, the current-to-density ratio equals the classical velocity.","12. Allargamento":"12. Spreading","DISPERSIONE":"DISPERSION","Poiché omega è quadratica, componenti vicine hanno velocità di gruppo diverse e un pacchetto libero si disperde.":"Because omega is quadratic, nearby components have different group velocities and a free packet spreads.","13. Propagatore":"13. Propagator","NUCLEO":"KERNEL","L'integrale gaussiano sugli impulsi fornisce l'ampiezza per andare da x primo a x in un tempo t positivo.":"The Gaussian momentum integral gives the amplitude to go from x prime to x in positive time t.","14. Limite classico medio":"14. Mean classical limit","EHRENFEST":"EHRENFEST","In assenza di forza l'impulso medio è costante e la posizione media segue una retta, anche se il pacchetto si allarga.":"Without force the mean momentum is constant and the mean position follows a straight line, even while the packet spreads.","Esempio: pacchetto gaussiano minimo":"Example: minimum Gaussian packet","Impostazione.":"Setup.","Al tempo zero si prende una gaussiana centrata in x0 con impulso medio p0 e varianza sigma0 quadrato.":"At time zero take a Gaussian centered at x0 with mean momentum p0 and variance sigma0 squared.","Controllo.":"Check.","La norma resta uno; il centro segue il moto classico, mentre la larghezza cresce. Il tempo caratteristico di dispersione è 2m sigma0 quadrato su hbar.":"The norm remains one; the center follows classical motion while the width grows. The characteristic spreading time is 2m sigma0 squared over hbar.","Interpretazione e limiti":"Interpretation and limits","Stazionario non significa localizzato":"Stationary does not mean localized","L'onda piana ha densità indipendente dal tempo, ma non descrive una particella in una regione finita. La localizzazione richiede sovrapposizione di energie.":"A plane wave has time-independent density but does not describe a particle in a finite region. Localization requires an energy superposition.","Degenerazione diversa in una dimensione":"Different degeneracy in one dimension","In una dimensione E maggiore di zero ha due impulsi, più e meno p; in tre dimensioni ha una degenerazione direzionale continua.":"In one dimension E greater than zero has two momenta, plus and minus p; in three dimensions it has continuous directional degeneracy.","Normalizzazione in una scatola":"Box normalization","Si può usare un volume finito e poi mandarlo all'infinito; i fattori cambiano, ma osservabili e densità degli stati devono restare coerenti.":"One may use a finite volume and then take it to infinity; factors change, but observables and the density of states must remain consistent.","Dispersione non dissipativa":"Nondissipative spreading","L'allargamento non perde probabilità e non è attrito: nasce dalle fasi diverse delle componenti di impulso in un'evoluzione unitaria.":"Spreading loses no probability and is not friction: it comes from different momentum-component phases under unitary evolution.","Errori tipici":"Common errors","Normalizzare a uno un'onda piana su R; dimenticare la degenerazione in direzione; confondere velocità di fase e di gruppo; scrivere la corrente senza 1/m; attribuire l'allargamento a una forza.":"Unit-normalizing a plane wave on R; forgetting directional degeneracy; confusing phase and group velocities; writing current without 1/m; attributing spreading to a force.","Controlli rapidi":"Quick checks","E è non negativa; p e k differiscono per hbar; j/rho=p/m; la norma del pacchetto è quella di c(p); K ha dimensione inversa di una lunghezza.":"E is nonnegative; p and k differ by hbar; j/rho=p/m; packet normalization equals that of c(p); K has inverse-length dimension.","Controllo da orale":"Oral exam checklist","Scrivi H e dimostra che commuta con p.":"Write H and prove that it commutes with p.","Ricava onda piana, energia e fase temporale.":"Derive the plane wave, energy, and time phase.","Spiega normalizzazione a delta e completezza.":"Explain delta normalization and completeness.","Costruisci un pacchetto e ricava la velocità di gruppo.":"Construct a packet and derive group velocity.","Deriva l'equazione di continuità senza saltare la sottrazione.":"Derive the continuity equation without skipping the subtraction.","Calcola la corrente di un'onda piana.":"Compute the current of a plane wave.","Distingui moto del centro e dispersione.":"Distinguish center motion from spreading.","Controlla il propagatore e il limite t verso zero.":"Check the propagator and the t to zero limit.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 17 - buche, stati legati, diffusione e parità":"DIM 17 - wells, bound states, scattering, and parity","Appunti-MQ.pdf, pagine PDF 114-117 - particella libera, normalizzazione e corrente":"Appunti-MQ.pdf, PDF pages 114-117 - particella libera, normalizzazione e corrente","Set 7 - parità e oscillatore armonico":"Set 7 - parity and harmonic oscillator","La derivazione segue le pagine verificate 114-117 e rende esplicite normalizzazione continua, pacchetto gaussiano e propagatore, richiesti per non identificare impropriamente un'onda piana con uno stato fisico localizzato.":"The derivation follows verified pages 114-117 and makes continuous normalization, the Gaussian packet, and the propagator explicit so a plane wave is not improperly identified with a localized physical state.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: particella-libera2.html. La lezione scientifica verificata è condivisa con particella-libera.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: particella-libera2.html. The verified scientific lesson is shared with particella-libera.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Hamiltoniana libera e commutatore con l'impulso":"Free Hamiltonian and momentum commutator","Soluzione dell'equazione agli autovalori dell'impulso":"Solution of the momentum eigenvalue equation","Dispersione della particella libera non relativistica":"Nonrelativistic free-particle dispersion","Onda piana dipendente dal tempo":"Time-dependent plane wave","Normalizzazione e completezza degli autostati liberi":"Normalization and completeness of free eigenstates","Spettro continuo e degenerazione direzionale":"Continuous spectrum and directional degeneracy","Espansione continua di un pacchetto libero":"Continuous expansion of a free packet","Velocità di gruppo e di fase":"Group and phase velocities","Derivazione locale dell'equazione di continuità":"Local derivation of the continuity equation","Densità e corrente di probabilità":"Probability density and current","Corrente trasportata da un'onda piana":"Current carried by a plane wave","Varianza spaziale esatta per evoluzione libera":"Exact spatial variance under free evolution","Propagatore libero unidimensionale":"One-dimensional free propagator","Moto dei valori medi per la particella libera":"Motion of free-particle expectation values"},"title":{"it":"Particella libera: spettro, pacchetti e corrente","en":"Free particle: spectrum, wave packets, and current"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

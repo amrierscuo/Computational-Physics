@@ -1,294 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regola d'Oro di Fermi</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regola d&#x27;oro di Fermi</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Regola d'Oro di Fermi</h1>
-
-    <p>La Regola d'Oro di Fermi è uno strumento fondamentale per calcolare la probabilità di transizione tra due stati quantistici in un sistema perturbato. Si applica in situazioni in cui il sistema interagisce con una perturbazione dipendente dal tempo, ed è particolarmente utile per descrivere fenomeni come l'emissione spontanea, l'assorbimento di radiazione, e le transizioni indotte tra livelli energetici discreti e continui.</p>
-
-    <h2>Formula Generale</h2>
-    <div class="formula">
-        \( w_{i \to f} = \frac{2\pi}{\hbar} \left| \langle f | \hat{H}' | i \rangle \right|^2 \rho(E_f) \)
-    </div>
-
-    <p>In questa espressione:</p>
-    <ul>
-        <li>\( w_{i \to f} \): tasso di transizione (probabilità per unità di tempo) dallo stato iniziale \( | i \rangle \) allo stato finale \( | f \rangle \).</li>
-        <li>\( \hat{H}' \): operatore perturbativo responsabile della transizione.</li>
-        <li>\( \rho(E_f) \): densità degli stati finali, ossia il numero di stati disponibili per unità di energia intorno all'energia finale \( E_f \).</li>
-        <li>\( \langle f | \hat{H}' | i \rangle \): elemento di matrice che rappresenta l'ampiezza della transizione indotta dalla perturbazione.</li>
-    </ul>
-
-    <h2>Applicazioni</h2>
-    <p>La Regola d'Oro di Fermi viene utilizzata in numerosi contesti, tra cui:</p>
-    <ul>
-        <li><strong>Decadimenti radioattivi:</strong> descrive i tassi di emissione delle particelle in processi nucleari.</li>
-        <li><strong>Transizioni ottiche:</strong> calcolo delle probabilità di assorbimento o emissione di fotoni da parte di atomi o molecole.</li>
-        <li><strong>Processi di scattering:</strong> interpretazione di eventi di scattering elastico o anelastico tra particelle subatomiche.</li>
-    </ul>
-
-    <h2>Validità e Limiti</h2>
-    <p>La Regola d'Oro di Fermi assume che:</p>
-    <ul>
-        <li>La perturbazione \( \hat{H}' \) sia sufficientemente debole da permettere un approccio perturbativo di primo ordine.</li>
-        <li>La densità degli stati finali \( \rho(E_f) \) sia continua o quasi continua.</li>
-        <li>Le transizioni siano considerate in regime di "lunga durata", dove le fluttuazioni temporali diventano trascurabili.</li>
-    </ul>
-    <p>Non è applicabile in condizioni di perturbazioni forti o di accoppiamento non lineare tra gli stati.</p>
-
-<h2>Derivazione della Regola</h2>
-<p>Per derivare la Regola d'Oro di Fermi, si parte dalla teoria delle perturbazioni dipendenti dal tempo. Consideriamo un sistema descritto da uno stato iniziale \( | i \rangle \) e una perturbazione dipendente dal tempo \( \hat{H}'(t) \). L'evoluzione temporale degli stati quantistici è governata dall'equazione di Schrödinger:</p>
-
-<div class="formula">
-    \( i \hbar \frac{\partial}{\partial t} | \psi(t) \rangle = (\hat{H}_0 + \hat{H}'(t)) | \psi(t) \rangle \)
-</div>
-
-<p>Applicando l'approssimazione perturbativa di primo ordine e assumendo che la perturbazione abbia una dipendenza temporale armonica del tipo:</p>
-
-<div class="formula">
-    \( \hat{H}'(t) = \hat{H}' e^{-i \omega t} + \hat{H}'^\dagger e^{i \omega t} \)
-</div>
-
-<p>il tasso di transizione \( w_{i \to f} \) si ottiene calcolando la probabilità di transizione tra \( | i \rangle \) e \( | f \rangle \) dopo un tempo sufficientemente lungo. Questa probabilità è proporzionale al modulo quadro dell'elemento di matrice:</p>
-
-<div class="formula">
-    \( |\langle f | \hat{H}' | i \rangle|^2 \)
-</div>
-
-<p>Utilizzando l'espansione perturbativa e integrando su tutti gli stati finali disponibili, si introduce la densità degli stati \( \rho(E_f) \), ottenendo la formula completa della Regola d’Oro:</p>
-
-<div class="formula">
-    \( w_{i \to f} = \frac{2\pi}{\hbar} |\langle f | \hat{H}' | i \rangle|^2 \rho(E_f) \)
-</div>
-
-<h2>Interpretazione Fisica</h2>
-<p>Il termine \( \rho(E_f) \) rappresenta il numero di stati finali disponibili per il sistema per unità di energia, ed è cruciale per descrivere fenomeni come la transizione di un sistema da un livello energetico discreto a uno continuo. La costante \( \frac{2\pi}{\hbar} \) deriva dal trattamento del problema tramite il formalismo di Fourier, legando la probabilità di transizione alla durata dell'interazione perturbativa.</p>
-
-<h2>Esempio Applicativo</h2>
-<p>Consideriamo un atomo che interagisce con un campo elettromagnetico, dove la perturbazione \( \hat{H}' \) rappresenta l'accoppiamento dipolare. La probabilità di assorbimento o emissione di un fotone dipende dalla densità degli stati del campo elettromagnetico e dall'elemento di matrice del momento di dipolo:</p>
-
-<div class="formula">
-    \( |\langle f | \vec{d} \cdot \vec{E} | i \rangle|^2 \)
-</div>
-
-<p>Qui \( \vec{d} \) è il momento di dipolo elettrico e \( \vec{E} \) è il campo elettrico associato al fotone.</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 14</div>
-  <h2>Regola d'Oro di Fermi: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare il tasso dal limite sinc-quadro e dichiararne la finestra di validità.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>A tempi lunghi rispetto alla scala di correlazione, ma brevi rispetto allo svuotamento dello stato iniziale, il profilo temporale diventa una delta energetica e la probabilità cresce linearmente.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Limite<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>In senso distribuzionale.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\frac1t\frac{4\sin^2(xt/2)}{x^2}\to2\pi\delta(x)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \delta_t(x)=\frac1{2\pi t}\left|\int_0^te^{ixt'}dt'\right|^2=\frac1{2\pi t}\frac{4\sin^2(xt/2)}{x^2},\quad\int\delta_t(x)dx=1\Rightarrow\frac1t\frac{4\sin^2(xt/2)}{x^2}\to2\pi\delta(x)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Tasso<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Dopo integrazione sul continuo. Uso W per il tasso; la larghezza energetica associata è \(\Gamma=\hbar W\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="W_{i\to f}=\frac{2\pi}{\hbar}|V_{fi}|^2\rho(E_f)\big|_{E_f=E_i}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle P(t)=\frac{|V_{fi}|^2}{\hbar^2}\frac{4\sin^2[(E_f-E_i)t/(2\hbar)]}{[(E_f-E_i)/\hbar]^2};\quad\int\rho(E_f)dE_f,\ t\to\infty\Rightarrow W_{i\to f}=P/t=\frac{2\pi}{\hbar}|V_{fi}|^2\rho(E_i)\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Controllo dimensionale</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> V ha dimensione energia e rho energia inversa.</p>
-    <p><strong>Calcolo.</strong> \(|V|^2\rho/\hbar\) ha dimensione \(1/tempo\).</p>
-    <p><strong>Risultato e controllo.</strong> La regola d'oro produce un tasso, non una probabilità.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 12</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Accoppiamento debole e continuo liscio.</li>
-          <li>Assenza di ricorrenze risolte nella finestra temporale.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>La delta non è imposta a mano: è il risultato del limite temporale dell'interferenza tra fasi.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Indica quando fallisce vicino a una soglia.</li>
-          <li>Distingui \(W\), \(P\) e la larghezza energetica \(\Gamma=\hbar W\).</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pp. 176-189: limite a tempi lunghi e delta energetica</a></li>
-          <li><a href="MQ.pdf#page=27">MQ.pdf, pp. capitolo 27: tasso di transizione</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-regola-oro-fermi"><div class="lecture-kicker">Lezione approfondita - derivazione, forma on-shell e limiti</div><h1>Regola d'oro di Fermi</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare il tasso con tutti i fattori di hbar e 2pi, estenderlo a perturbazioni periodiche e molti canali e riconoscere esattamente quando la formula non è applicabile.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Forma universale</h3><p>Il tasso è elemento di matrice al quadrato per densità di stati sul guscio energetico, moltiplicato da 2pi/hbar.</p></article><article class="lecture-card lecture-warning"><h3>Nome ingannevole</h3><p>Non è una legge esatta per ogni tempo: è il limite debole, lungo ma pre-deplezione, verso un insieme fitto di stati finali.</p></article></div><h2>Ipotesi operative</h2><div class="lecture-grid"><article class="lecture-card "><h3>Debole accoppiamento</h3><p>Lo stato iniziale resta quasi occupato nella finestra usata per estrarre la pendenza lineare.</p></article><article class="lecture-card "><h3>Continuo regolare</h3><p>Densità ed elemento di matrice variano lentamente entro la larghezza hbar/T e il continuo perde rapidamente memoria di fase.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Ampiezza di Born<span class="lecture-step-boss">BASE</span></h4><p>Al primo ordine, la transizione contiene un solo inserimento della perturbazione.</p><div class="lecture-formula" aria-label="Ampiezza di Born al primo ordine"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle c_f^{(1)}(T)=-\frac{i}{\hbar}\int_0^Tdt\,e^{i(E_f-E_i)t/\hbar}V_{fi}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Modulo quadro<span class="lecture-step-boss">BASE</span></h4><p>Per V costante nella finestra si ottiene il kernel di durata finita.</p><div class="lecture-formula" aria-label="Probabilità verso il finale f"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |c_f^{(1)}|^2=\frac{|V_{fi}|^2}{\hbar^2}\frac{4\sin^2[(E_f-E_i)T/(2\hbar)]}{[(E_f-E_i)/\hbar]^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Delta nascente<span class="lecture-step-boss">LIMITE</span></h4><p>Il kernel per unità di tempo converge a 2pi hbar delta in energia.</p><div class="lecture-formula" aria-label="Identità distribuzionale fondamentale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \lim_{T\to\infty}\frac1T\frac{4\sin^2(\Delta ET/2\hbar)}{(\Delta E/\hbar)^2}=2\pi\hbar\delta(\Delta E)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Tasso differenziale<span class="lecture-step-boss">GOLDEN</span></h4><p>Prima di integrare sui finali, la risposta è una distribuzione concentrata sul guscio.</p><div class="lecture-formula" aria-label="Regola d&#x27;oro in forma differenziale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle dW_{i\to f}=\frac{2\pi}{\hbar}|V_{fi}|^2\delta(E_f-E_i)\,dN_f\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Densità energetica<span class="lecture-step-boss">GOLDEN</span></h4><p>Con dN=rho(E)dE, la delta valuta il prodotto all'energia iniziale.</p><div class="lecture-formula" aria-label="Regola d&#x27;oro integrata per un continuo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{i\to\mathcal C}=\frac{2\pi}{\hbar}|V_{E_i i}|^2\rho(E_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Controllo dimensionale<span class="lecture-step-boss">CHECK</span></h4><p>V è un'energia, rho è uno su energia e hbar è energia per tempo.</p><div class="lecture-formula" aria-label="Dimensioni del tasso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \left[\frac{|V|^2\rho}{\hbar}\right]=\frac{E^2E^{-1}}{E\,T}=T^{-1}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Molti canali<span class="lecture-step-boss">SOMMA</span></h4><p>Finali ortogonali e non osservati contribuiscono con tassi additivi.</p><div class="lecture-formula" aria-label="Somma dei tassi parziali"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_i=\sum_aW_{i\to a}=\frac{2\pi}{\hbar}\sum_a|V_{ai}|^2\rho_a(E_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Forma in spazio delle fasi<span class="lecture-step-boss">CONTINUO</span></h4><p>Se il finale è etichettato dal momento, la densità è incorporata nella misura d³p/(2pi hbar)³.</p><div class="lecture-formula" aria-label="Regola d&#x27;oro in spazio degli impulsi"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W=\frac{2\pi}{\hbar}\int\frac{d^3p}{(2\pi\hbar)^3}|V_{\mathbf p i}|^2\delta(E_{\mathbf p}-E_i)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Assorbimento periodico<span class="lecture-step-boss">FOTONE +</span></h4><p>La componente F e alla meno i omega t sposta il guscio finale verso E_i+hbar omega.</p><div class="lecture-formula" aria-label="Regola d&#x27;oro per assorbimento armonico"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{\rm abs}=\frac{2\pi}{\hbar}\sum_f|F_{fi}|^2\delta(E_f-E_i-\hbar\omega)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Emissione periodica<span class="lecture-step-boss">FOTONE -</span></h4><p>La componente aggiunta sposta il guscio verso E_i-hbar omega.</p><div class="lecture-formula" aria-label="Regola d&#x27;oro per emissione stimolata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{\rm em}=\frac{2\pi}{\hbar}\sum_f|(F^\dagger)_{fi}|^2\delta(E_f-E_i+\hbar\omega)\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Regole di selezione<span class="lecture-step-boss">SIMMETRIA</span></h4><p>La delta impone l'energia ma non garantisce V_fi non nullo; simmetrie e polarizzazioni eliminano canali.</p><div class="lecture-formula" aria-label="Regola di selezione da una quantità conservata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [V,Q]=0\Rightarrow q_f=q_i\ \text{per }V_{fi}\ne0\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Delta allargata<span class="lecture-step-boss">FINITO</span></h4><p>Durata finita, decoerenza o larghezza iniziale sostituiscono la delta con un profilo normalizzato.</p><div class="lecture-formula" aria-label="Sostituzione fenomenologica con Lorentziana"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \delta(E_f-E_i)\longrightarrow L_\Gamma(\Delta E)=\frac1\pi\frac{\Gamma/2}{\Delta E^2+(\Gamma/2)^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Autenergia<span class="lecture-step-boss">ESTENSIONE</span></h4><p>La stessa combinazione di elementi sul continuo produce parte reale, shift, e parte immaginaria, larghezza.</p><div class="lecture-formula" aria-label="Legame tra autenergia e larghezza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Sigma(E)=\sum_f\frac{|V_{fi}|^2}{E-E_f+i0^+},\qquad\Gamma=-2\operatorname{Im}\Sigma(E_i)=\hbar W\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Casi di fallimento<span class="lecture-step-boss">LIMITE</span></h4><p>Pochi livelli discreti, accoppiamento forte, soglie, bande strette e tempi brevissimi richiedono evoluzione coerente o kernel di memoria.</p><div class="lecture-formula" aria-label="Condizioni qualitative di applicabilità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \text{Golden rule:}\quad\tau_{\rm corr}\ll T\ll W^{-1},\quad |V|\rho\ll1\)</span></div></article></section><h2>Esempio: due canali di decadimento</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Uno stato i è collegato a due continui a e b con densità quasi costanti e accoppiamenti g_a e g_b.</p><p data-i18n-skip="true">\(\displaystyle W_a=\frac{2\pi}{\hbar}|g_a|^2\rho_a,\quad W_b=\frac{2\pi}{\hbar}|g_b|^2\rho_b,\quad W=W_a+W_b\)</p><p><strong>Controllo.</strong> I tassi si sommano perché i finali sono ortogonali. La probabilità relativa di osservare il canale a sarà W_a/W nel regime esponenziale.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>On-shell</h3><p>La regola usa soltanto elementi sul guscio energetico, ma lo shift reale può dipendere dall'intero spettro tramite un valore principale.</p></article><article class="lecture-card "><h3>Irreversibilità efficace</h3><p>L'evoluzione totale resta unitaria; il decadimento emerge ignorando le fasi di moltissimi stati del continuo.</p></article><article class="lecture-card "><h3>Fattore 2pi</h3><p>Nasce dalla trasformata di Fourier su tempi lunghi. Usare frequenza ordinaria invece di pulsazione cambia la posizione dei 2pi.</p></article><article class="lecture-card "><h3>Densità fisica</h3><p>rho deve corrispondere alla stessa normalizzazione usata per V_fi e includere le degenerazioni effettivamente sommate.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dimenticare 2pi/hbar; moltiplicare due volte per rho; valutare rho lontano dal guscio; usare la formula per un solo finale discreto; confondere W con probabilità.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>W ha unità inverso tempo; ogni termine è positivo; la delta ha unità inverso energia; i tassi parziali si sommano; il risultato non dipende dal volume di normalizzazione.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Parti dall'ampiezza al primo ordine.</li><li>Eleva al quadrato su durata T.</li><li>Dimostra il limite a delta.</li><li>Integra con rho(E).</li><li>Controlla 2pi, hbar e unità.</li><li>Somma canali e degenerazioni.</li><li>Adatta il guscio per una guida periodica.</li><li>Enuncia chiaramente i casi di fallimento.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1726">DIM 12 - perturbazioni dipendenti dal tempo e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro</a></li><li><a href="set-12-probabilita-transizione.html">Set 12 - esercizi sulle probabilità di transizione</a></li><li><a href="Domanda2025_13.html">Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo</a></li></ul><p class="lecture-note">Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - derivazione, forma on-shell e limiti":"In-depth lesson - derivation, on-shell form, and limits","Regola d'oro di Fermi":"Fermi's golden rule","Obiettivo.":"Objective.","Derivare il tasso con tutti i fattori di hbar e 2pi, estenderlo a perturbazioni periodiche e molti canali e riconoscere esattamente quando la formula non è applicabile.":"Derive the rate with every hbar and 2pi factor, extend it to periodic perturbations and multiple channels, and identify exactly when the formula is not applicable.","Forma universale":"Universal form","Il tasso è elemento di matrice al quadrato per densità di stati sul guscio energetico, moltiplicato da 2pi/hbar.":"The rate is squared matrix element times on-shell density of states, multiplied by 2pi/hbar.","Nome ingannevole":"Potentially misleading name","Non è una legge esatta per ogni tempo: è il limite debole, lungo ma pre-deplezione, verso un insieme fitto di stati finali.":"It is not an exact law at every time: it is the weak-coupling, long-time but pre-depletion limit into a dense set of final states.","Ipotesi operative":"Operational assumptions","Debole accoppiamento":"Weak coupling","Lo stato iniziale resta quasi occupato nella finestra usata per estrarre la pendenza lineare.":"The initial state remains nearly occupied in the window used to extract the linear slope.","Continuo regolare":"Regular continuum","Densità ed elemento di matrice variano lentamente entro la larghezza hbar/T e il continuo perde rapidamente memoria di fase.":"Density and matrix element vary slowly within width hbar/T and the continuum rapidly loses phase memory.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Ampiezza di Born":"1. Born amplitude","BASE":"BASE","Al primo ordine, la transizione contiene un solo inserimento della perturbazione.":"At first order, the transition contains a single insertion of the perturbation.","Passaggio":"Step","2. Modulo quadro":"2. Squared modulus","Per V costante nella finestra si ottiene il kernel di durata finita.":"For V constant within the window, obtain the finite-duration kernel.","3. Delta nascente":"3. Emergent delta","LIMITE":"LIMIT","Il kernel per unità di tempo converge a 2pi hbar delta in energia.":"The kernel per unit time converges to 2pi hbar times an energy delta.","4. Tasso differenziale":"4. Differential rate","GOLDEN":"GOLDEN","Prima di integrare sui finali, la risposta è una distribuzione concentrata sul guscio.":"Before integrating over final states, the response is a distribution concentrated on shell.","5. Densità energetica":"5. Energy density","Con dN=rho(E)dE, la delta valuta il prodotto all'energia iniziale.":"With dN=rho(E)dE, the delta evaluates the product at initial energy.","6. Controllo dimensionale":"6. Dimensional check","CHECK":"CHECK","V è un'energia, rho è uno su energia e hbar è energia per tempo.":"V is energy, rho is inverse energy, and hbar is energy times time.","7. Molti canali":"7. Multiple channels","SOMMA":"SUM","Finali ortogonali e non osservati contribuiscono con tassi additivi.":"Orthogonal unobserved final states contribute additive rates.","8. Forma in spazio delle fasi":"8. Phase-space form","CONTINUO":"CONTINUUM","Se il finale è etichettato dal momento, la densità è incorporata nella misura d³p/(2pi hbar)³.":"If the final state is labeled by momentum, density is incorporated into measure d³p/(2pi hbar)³.","9. Assorbimento periodico":"9. Periodic absorption","FOTONE +":"PHOTON +","La componente F e alla meno i omega t sposta il guscio finale verso E_i+hbar omega.":"The F e to minus i omega t component shifts the final shell to E_i+hbar omega.","10. Emissione periodica":"10. Periodic emission","FOTONE -":"PHOTON -","La componente aggiunta sposta il guscio verso E_i-hbar omega.":"The adjoint component shifts the shell to E_i-hbar omega.","11. Regole di selezione":"11. Selection rules","SIMMETRIA":"SYMMETRY","La delta impone l'energia ma non garantisce V_fi non nullo; simmetrie e polarizzazioni eliminano canali.":"The delta enforces energy but does not guarantee nonzero V_fi; symmetries and polarizations remove channels.","12. Delta allargata":"12. Broadened delta","FINITO":"FINITE","Durata finita, decoerenza o larghezza iniziale sostituiscono la delta con un profilo normalizzato.":"Finite duration, decoherence, or initial linewidth replaces the delta by a normalized profile.","13. Autenergia":"13. Self-energy","ESTENSIONE":"EXTENSION","La stessa combinazione di elementi sul continuo produce parte reale, shift, e parte immaginaria, larghezza.":"The same continuum matrix elements produce a real part, the shift, and an imaginary part, the width.","14. Casi di fallimento":"14. Failure cases","Pochi livelli discreti, accoppiamento forte, soglie, bande strette e tempi brevissimi richiedono evoluzione coerente o kernel di memoria.":"Few discrete levels, strong coupling, thresholds, narrow bands, and very short times require coherent evolution or memory kernels.","Esempio: due canali di decadimento":"Example: two decay channels","Impostazione.":"Setup.","Uno stato i è collegato a due continui a e b con densità quasi costanti e accoppiamenti g_a e g_b.":"State i is coupled to two continua a and b with nearly constant densities and couplings g_a and g_b.","Controllo.":"Check.","I tassi si sommano perché i finali sono ortogonali. La probabilità relativa di osservare il canale a sarà W_a/W nel regime esponenziale.":"Rates add because final states are orthogonal. The relative probability of observing channel a is W_a/W in the exponential regime.","Interpretazione e limiti":"Interpretation and limits","On-shell":"On shell","La regola usa soltanto elementi sul guscio energetico, ma lo shift reale può dipendere dall'intero spettro tramite un valore principale.":"The rule uses only on-shell elements, but the real shift may depend on the entire spectrum through a principal value.","Irreversibilità efficace":"Effective irreversibility","L'evoluzione totale resta unitaria; il decadimento emerge ignorando le fasi di moltissimi stati del continuo.":"Total evolution remains unitary; decay emerges by ignoring phases of very many continuum states.","Fattore 2pi":"2pi factor","Nasce dalla trasformata di Fourier su tempi lunghi. Usare frequenza ordinaria invece di pulsazione cambia la posizione dei 2pi.":"It comes from the long-time Fourier transform. Using ordinary rather than angular frequency changes where 2pi factors appear.","Densità fisica":"Physical density","rho deve corrispondere alla stessa normalizzazione usata per V_fi e includere le degenerazioni effettivamente sommate.":"rho must match the normalization used for V_fi and include the degeneracies actually summed.","Errori tipici":"Common errors","Dimenticare 2pi/hbar; moltiplicare due volte per rho; valutare rho lontano dal guscio; usare la formula per un solo finale discreto; confondere W con probabilità.":"Forgetting 2pi/hbar; multiplying twice by rho; evaluating rho away from shell; using the formula for a single discrete final state; confusing W with probability.","Controlli rapidi":"Quick checks","W ha unità inverso tempo; ogni termine è positivo; la delta ha unità inverso energia; i tassi parziali si sommano; il risultato non dipende dal volume di normalizzazione.":"W has inverse-time units; every term is positive; the delta has inverse-energy units; partial rates add; the result is independent of normalization volume.","Controllo da orale":"Oral exam checklist","Parti dall'ampiezza al primo ordine.":"Start from the first-order amplitude.","Eleva al quadrato su durata T.":"Square over duration T.","Dimostra il limite a delta.":"Prove the delta limit.","Integra con rho(E).":"Integrate with rho(E).","Controlla 2pi, hbar e unità.":"Check 2pi, hbar, and units.","Somma canali e degenerazioni.":"Sum channels and degeneracies.","Adatta il guscio per una guida periodica.":"Adapt the shell for a periodic drive.","Enuncia chiaramente i casi di fallimento.":"Clearly state failure cases.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 12 - perturbazioni dipendenti dal tempo e copione orale":"DIM 12 - time-dependent perturbations and oral-exam script","Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro":"Appunti-MQ.pdf, PDF pages 176-184 - theory, resonance, and golden rule","Set 12 - esercizi sulle probabilità di transizione":"Set 12 - transition-probability exercises","Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo":"2025 question 13 - time-dependent perturbations","Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.":"Conventions for angular frequencies, Dirac deltas, and density of states are kept identical across all six pages in this block.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Ampiezza di Born al primo ordine":"First-order Born amplitude","Probabilità verso il finale f":"Probability into final state f","Identità distribuzionale fondamentale":"Fundamental distributional identity","Regola d'oro in forma differenziale":"Golden rule in differential form","Regola d'oro integrata per un continuo":"Integrated golden rule for a continuum","Dimensioni del tasso":"Dimensions of the rate","Somma dei tassi parziali":"Sum of partial rates","Regola d'oro in spazio degli impulsi":"Golden rule in momentum space","Regola d'oro per assorbimento armonico":"Golden rule for harmonic absorption","Regola d'oro per emissione stimolata":"Golden rule for stimulated emission","Regola di selezione da una quantità conservata":"Selection rule from a conserved quantity","Sostituzione fenomenologica con Lorentziana":"Phenomenological replacement by a Lorentzian","Legame tra autenergia e larghezza":"Relation between self-energy and width","Condizioni qualitative di applicabilità":"Qualitative applicability conditions"},"title":{"it":"Regola d'oro di Fermi","en":"Fermi's golden rule"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

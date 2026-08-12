@@ -1,1140 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postulati della Meccanica Quantistica</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000;
-            color: #fff;
-            overflow-x: hidden;
-            min-height: 100vh;
-            background: radial-gradient(ellipse at center, #0a0f2e 0%, #000000 100%);
-        }
-        
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        .main-content {
-            position: relative;
-            z-index: 10;
-            padding: 2rem 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            text-shadow: 0 0 15px rgba(0, 150, 255, 0.8);
-            background: linear-gradient(to right, #4facfe, #00f2fe, #4facfe);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: 2px;
-            animation: titleGlow 3s infinite alternate;
-            position: relative;
-            padding: 0 20px;
-        }
-        
-        h1::before, h1::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(to right, transparent, #00f2fe, transparent);
-        }
-        
-        h1::before {
-            left: -120px;
-        }
-        
-        h1::after {
-            right: -120px;
-        }
-        
-        @keyframes titleGlow {
-            0% { 
-                text-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
-                transform: translateY(0);
-            }
-            100% { 
-                text-shadow: 0 0 20px rgba(0, 200, 255, 1), 0 0 30px rgba(0, 100, 255, 0.5);
-                transform: translateY(-5px);
-            }
-        }
-        
-        .frame {
-            position: relative;
-            width: 90%;
-            max-width: 1000px;
-            padding: 30px;
-            border-radius: 20px;
-            background: rgba(10, 15, 30, 0.7);
-            box-shadow: 
-                0 0 50px rgba(0, 150, 255, 0.5),
-                inset 0 0 50px rgba(0, 150, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(100, 200, 255, 0.3);
-            overflow: hidden;
-            margin-bottom: 3rem;
-        }
-        
-        .frame::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff, #33ff99, #ff00cc);
-            z-index: -1;
-            border-radius: 25px;
-            animation: borderAnimation 8s linear infinite;
-            filter: blur(8px);
-            background-size: 400% 400%;
-        }
-        
-        .frame::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 15, 30, 0.9);
-            z-index: -1;
-            border-radius: 20px;
-        }
-        
-        @keyframes borderAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .image-container {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-        
-        .image-container:hover {
-            transform: scale(1.01);
-        }
-        
-        .image-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 150, 255, 0.1) 0%, rgba(0, 200, 255, 0.05) 100%);
-            z-index: 1;
-            pointer-events: none;
-        }
-        
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            transition: all 0.5s ease;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .ornaments {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 5;
-        }
-        
-        .ornament {
-            position: absolute;
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(0, 200, 255, 0.7);
-            animation: float 6s infinite ease-in-out;
-            background: radial-gradient(circle, rgba(0, 200, 255, 0.8) 0%, rgba(0, 100, 255, 0.3) 70%);
-        }
-        
-        .ornament:nth-child(1) { 
-            top: 10%; 
-            left: 5%; 
-            width: 25px;
-            height: 25px;
-            animation-delay: 0s; 
-        }
-        
-        .ornament:nth-child(2) { 
-            top: 15%; 
-            right: 10%; 
-            width: 20px;
-            height: 20px;
-            animation-delay: 1s; 
-        }
-        
-        .ornament:nth-child(3) { 
-            bottom: 20%; 
-            left: 8%; 
-            width: 30px;
-            height: 30px;
-            animation-delay: 2s; 
-        }
-        
-        .ornament:nth-child(4) { 
-            bottom: 10%; 
-            right: 5%; 
-            width: 22px;
-            height: 22px;
-            animation-delay: 3s; 
-        }
-        
-        .ornament:nth-child(5) { 
-            top: 50%; 
-            left: 3%; 
-            width: 18px;
-            height: 18px;
-            animation-delay: 4s; 
-        }
-        
-        .ornament:nth-child(6) { 
-            top: 50%; 
-            right: 3%; 
-            width: 28px;
-            height: 28px;
-            animation-delay: 5s; 
-        }
-        
-        @keyframes float {
-            0%, 100% { 
-                transform: translateY(0) rotate(0deg) scale(1);
-                box-shadow: 0 0 15px rgba(0, 200, 255, 0.7);
-            }
-            50% { 
-                transform: translateY(-20px) rotate(180deg) scale(1.1);
-                box-shadow: 0 0 25px rgba(0, 200, 255, 1);
-            }
-        }
-        
-        .quantum-symbols {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 4;
-        }
-        
-        .symbol {
-            position: absolute;
-            font-size: 24px;
-            color: rgba(0, 200, 255, 0.7);
-            opacity: 0.6;
-            animation: symbolFloat 10s infinite linear;
-        }
-        
-        .symbol:nth-child(1) { top: 15%; left: 12%; animation-delay: 0s; }
-        .symbol:nth-child(2) { top: 25%; right: 15%; animation-delay: 2s; }
-        .symbol:nth-child(3) { bottom: 30%; left: 10%; animation-delay: 4s; }
-        .symbol:nth-child(4) { bottom: 15%; right: 12%; animation-delay: 6s; }
-        .symbol:nth-child(5) { top: 40%; left: 5%; animation-delay: 1s; }
-        .symbol:nth-child(6) { top: 40%; right: 5%; animation-delay: 3s; }
-        .symbol:nth-child(7) { bottom: 40%; left: 7%; animation-delay: 5s; }
-        .symbol:nth-child(8) { bottom: 40%; right: 7%; animation-delay: 7s; }
-        
-        @keyframes symbolFloat {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
-            50% { transform: translateY(-15px) rotate(180deg); opacity: 0.7; }
-            100% { transform: translateY(0) rotate(360deg); opacity: 0.3; }
-        }
-        
-        .energy-waves {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 3;
-            overflow: hidden;
-            border-radius: 20px;
-        }
-        
-        .wave {
-            position: absolute;
-            border: 2px solid rgba(0, 150, 255, 0.3);
-            border-radius: 50%;
-            animation: waveExpand 8s infinite linear;
-        }
-        
-        .wave:nth-child(1) {
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            margin-top: -5px;
-            margin-left: -5px;
-            animation-delay: 0s;
-        }
-        
-        .wave:nth-child(2) {
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            margin-top: -5px;
-            margin-left: -5px;
-            animation-delay: 2s;
-        }
-        
-        .wave:nth-child(3) {
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            margin-top: -5px;
-            margin-left: -5px;
-            animation-delay: 4s;
-        }
-        
-        .wave:nth-child(4) {
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            margin-top: -5px;
-            margin-left: -5px;
-            animation-delay: 6s;
-        }
-        
-        @keyframes waveExpand {
-            0% {
-                transform: scale(1);
-                opacity: 0.8;
-                border-width: 2px;
-            }
-            100% {
-                transform: scale(20);
-                opacity: 0;
-                border-width: 0;
-            }
-        }
-        
-        .corner-decoration {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            z-index: 6;
-        }
-        
-        .corner-tl {
-            top: 15px;
-            left: 15px;
-            border-top: 3px solid rgba(0, 200, 255, 0.7);
-            border-left: 3px solid rgba(0, 200, 255, 0.7);
-            border-top-left-radius: 15px;
-        }
-        
-        .corner-tr {
-            top: 15px;
-            right: 15px;
-            border-top: 3px solid rgba(0, 200, 255, 0.7);
-            border-right: 3px solid rgba(0, 200, 255, 0.7);
-            border-top-right-radius: 15px;
-        }
-        
-        .corner-bl {
-            bottom: 15px;
-            left: 15px;
-            border-bottom: 3px solid rgba(0, 200, 255, 0.7);
-            border-left: 3px solid rgba(0, 200, 255, 0.7);
-            border-bottom-left-radius: 15px;
-        }
-        
-        .corner-br {
-            bottom: 15px;
-            right: 15px;
-            border-bottom: 3px solid rgba(0, 200, 255, 0.7);
-            border-right: 3px solid rgba(0, 200, 255, 0.7);
-            border-bottom-right-radius: 15px;
-        }
-        
-        .light-beams {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 2;
-            overflow: hidden;
-            border-radius: 20px;
-        }
-        
-        .beam {
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.7), transparent);
-            transform-origin: left center;
-            animation: beamRotate 20s infinite linear;
-        }
-        
-        .beam:nth-child(1) { top: 20%; left: 50%; width: 50%; animation-delay: 0s; }
-        .beam:nth-child(2) { top: 40%; left: 50%; width: 40%; animation-delay: 5s; }
-        .beam:nth-child(3) { top: 60%; left: 50%; width: 60%; animation-delay: 10s; }
-        .beam:nth-child(4) { top: 80%; left: 50%; width: 45%; animation-delay: 15s; }
-        
-        @keyframes beamRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .floating-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 7;
-        }
-        
-        .floater {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: rgba(0, 200, 255, 0.5);
-            border-radius: 50%;
-            animation: floaterMove 15s infinite linear;
-            box-shadow: 0 0 10px rgba(0, 200, 255, 0.7);
-        }
-        
-        .floater:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
-        .floater:nth-child(2) { top: 70%; left: 80%; animation-delay: 3s; }
-        .floater:nth-child(3) { top: 40%; left: 10%; animation-delay: 6s; }
-        .floater:nth-child(4) { top: 10%; left: 60%; animation-delay: 9s; }
-        .floater:nth-child(5) { top: 80%; left: 30%; animation-delay: 12s; }
-        
-        @keyframes floaterMove {
-            0% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(20px, -15px) scale(1.2); }
-            50% { transform: translate(10px, 20px) scale(0.8); }
-            75% { transform: translate(-15px, 10px) scale(1.1); }
-            100% { transform: translate(0, 0) scale(1); }
-        }
-        
-        .quantum-formulas {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.1;
-        }
-        
-        .formula {
-            position: absolute;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
-            animation: formulaFade 25s infinite linear;
-        }
-        
-        .formula:nth-child(1) { top: 15%; left: 5%; animation-delay: 0s; }
-        .formula:nth-child(2) { top: 25%; right: 10%; animation-delay: 5s; }
-        .formula:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 10s; }
-        .formula:nth-child(4) { bottom: 20%; right: 5%; animation-delay: 15s; }
-        .formula:nth-child(5) { top: 60%; left: 8%; animation-delay: 20s; }
-        
-        @keyframes formulaFade {
-            0% { opacity: 0; transform: translateY(0); }
-            10% { opacity: 0.5; }
-            20% { opacity: 0.2; transform: translateY(-10px); }
-            30% { opacity: 0.7; }
-            40% { opacity: 0.3; transform: translateY(5px); }
-            50% { opacity: 0.8; }
-            60% { opacity: 0.4; transform: translateY(-5px); }
-            70% { opacity: 0.6; }
-            80% { opacity: 0.2; transform: translateY(10px); }
-            90% { opacity: 0.4; }
-            100% { opacity: 0; transform: translateY(0); }
-        }
-        
-        .scroll-indicator {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            text-align: center;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-        
-        .particle-controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .control-btn {
-            background: rgba(0, 100, 255, 0.7);
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            margin: 0 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .control-btn:hover {
-            background: rgba(0, 150, 255, 0.9);
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .frame {
-                width: 95%;
-                padding: 20px;
-            }
-            
-            .corner-decoration {
-                width: 50px;
-                height: 50px;
-            }
-        }
-        
-        .decoration-grid {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.1;
-            background-image: 
-                linear-gradient(rgba(0, 150, 255, 0.3) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 150, 255, 0.3) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s infinite linear;
-        }
-        
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; }
-        }
-        
-        .sparkle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
-            animation: sparkleTwinkle 3s infinite;
-            z-index: 8;
-        }
-        
-        .sparkle:nth-child(1) { top: 10%; left: 15%; animation-delay: 0s; }
-        .sparkle:nth-child(2) { top: 20%; right: 20%; animation-delay: 0.5s; }
-        .sparkle:nth-child(3) { bottom: 30%; left: 25%; animation-delay: 1s; }
-        .sparkle:nth-child(4) { bottom: 15%; right: 15%; animation-delay: 1.5s; }
-        .sparkle:nth-child(5) { top: 40%; left: 40%; animation-delay: 2s; }
-        .sparkle:nth-child(6) { top: 60%; right: 30%; animation-delay: 2.5s; }
-        
-        @keyframes sparkleTwinkle {
-            0%, 100% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-        
-        .quantum-connections {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .connection {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.5), transparent);
-            animation: connectionPulse 4s infinite;
-        }
-        
-        .connection:nth-child(1) { top: 30%; left: 10%; width: 30%; animation-delay: 0s; }
-        .connection:nth-child(2) { top: 60%; right: 15%; width: 25%; animation-delay: 1s; }
-        .connection:nth-child(3) { bottom: 40%; left: 20%; width: 35%; animation-delay: 2s; }
-        .connection:nth-child(4) { top: 20%; right: 10%; width: 20%; animation-delay: 3s; }
-        
-        @keyframes connectionPulse {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.8; }
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postulati della meccanica quantistica</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
-</style>
 
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</style>
 </head>
 <body>
-    <div id="canvas-container"></div>
-    
-    <div class="particle-controls">
-        <button class="control-btn" id="moreParticles">+ Particelle</button>
-        <button class="control-btn" id="lessParticles">- Particelle</button>
-    </div>
-    
-    <div class="main-content">
-        <h1>POSTULATI DELLA MECCANICA QUANTISTICA</h1>
-        
-        <div class="frame">
-            <div class="decoration-grid"></div>
-            <div class="energy-waves">
-                <div class="wave"></div>
-                <div class="wave"></div>
-                <div class="wave"></div>
-                <div class="wave"></div>
-            </div>
-            <div class="light-beams">
-                <div class="beam"></div>
-                <div class="beam"></div>
-                <div class="beam"></div>
-                <div class="beam"></div>
-            </div>
-            <div class="quantum-formulas">
-                <div class="formula">ψ(x,t) = ∫Ψ(k)e^{i(kx-ωt)}dk</div>
-                <div class="formula">[x̂, p̂] = iℏ</div>
-                <div class="formula">Ĥψ = Eψ</div>
-                <div class="formula">ΔxΔp ≥ ℏ/2</div>
-                <div class="formula">|ψ⟩ = ∑c_n|φ_n⟩</div>
-            </div>
-            <div class="quantum-connections">
-                <div class="connection"></div>
-                <div class="connection"></div>
-                <div class="connection"></div>
-                <div class="connection"></div>
-            </div>
-            
-            <div class="ornaments">
-                <div class="ornament"></div>
-                <div class="ornament"></div>
-                <div class="ornament"></div>
-                <div class="ornament"></div>
-                <div class="ornament"></div>
-                <div class="ornament"></div>
-            </div>
-            
-            <div class="quantum-symbols">
-                <div class="symbol">Ψ</div>
-                <div class="symbol">ℏ</div>
-                <div class="symbol">Δ</div>
-                <div class="symbol">∫</div>
-                <div class="symbol">∂</div>
-                <div class="symbol">∑</div>
-                <div class="symbol">∞</div>
-                <div class="symbol">π</div>
-            </div>
-            
-            <div class="floating-elements">
-                <div class="floater"></div>
-                <div class="floater"></div>
-                <div class="floater"></div>
-                <div class="floater"></div>
-                <div class="floater"></div>
-            </div>
-            
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            
-            <div class="corner-decoration corner-tl"></div>
-            <div class="corner-decoration corner-tr"></div>
-            <div class="corner-decoration corner-bl"></div>
-            <div class="corner-decoration corner-br"></div>
-            
-            <div class="image-container">
-                <img src="img/PQ6.jpg" alt="I 6 Postulati della Meccanica Quantistica">
-            </div>
-        </div>
-        
-        <!-- Spazio aggiuntivo per permettere lo scrolling -->
-        <div style="height: 100vh;"></div>
-    </div>
-    
-    <div class="scroll-indicator">
-        <div>Scrolla per vedere l'intera immagine</div>
-        <div style="font-size: 20px;">↓</div>
-    </div>
-
-    <script>
-        // Inizializzazione Three.js
-        let scene, camera, renderer, particles;
-        let particleCount = 32;
-        const particleSystems = [];
-        const particleVelocities = [];
-        
-        function init() {
-            // Creazione della scena
-            scene = new THREE.Scene();
-            
-            // Configurazione della camera
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 30;
-            
-            // Configurazione del renderer
-            renderer = new THREE.WebGLRenderer({ 
-                alpha: true, 
-                antialias: true,
-                powerPreference: "high-performance"
-            });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setClearColor(0x000000, 0);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
-            
-            // Creazione delle particelle
-            createParticles();
-            
-            // Gestione del ridimensionamento della finestra
-            window.addEventListener('resize', onWindowResize);
-            
-            // Controlli per le particelle
-            document.getElementById('moreParticles').addEventListener('click', () => {
-                particleCount = Math.min(particleCount + 10, 200);
-                recreateParticles();
-            });
-            
-            document.getElementById('lessParticles').addEventListener('click', () => {
-                particleCount = Math.max(particleCount - 10, 10);
-                recreateParticles();
-            });
-            
-            // Avvio dell'animazione
-            animate();
-        }
-        
-        function createParticles() {
-            // Rimuovi i sistemi di particelle esistenti
-            particleSystems.forEach(system => {
-                scene.remove(system);
-            });
-            particleSystems.length = 0;
-            particleVelocities.length = 0;
-            
-            // Crea diversi tipi di particelle
-            const types = [
-                { color: 0x4facfe, size: 1.5 }, // Blu
-                { color: 0x00f2fe, size: 1.2 }, // Ciano
-                { color: 0x43e97b, size: 1.0 }, // Verde
-                { color: 0xfa709a, size: 1.8 }  // Rosa
-            ];
-            
-            const particlesPerType = Math.ceil(particleCount / types.length);
-            
-            types.forEach((type, typeIndex) => {
-                const geometry = new THREE.BufferGeometry();
-                const positions = new Float32Array(particlesPerType * 3);
-                const colors = new Float32Array(particlesPerType * 3);
-                
-                // Materiale delle particelle
-                const material = new THREE.PointsMaterial({
-                    size: type.size,
-                    vertexColors: true,
-                    transparent: true,
-                    opacity: 0.7,
-                    blending: THREE.AdditiveBlending,
-                    sizeAttenuation: true
-                });
-                
-                // Inizializzazione delle posizioni e velocità delle particelle
-                for (let i = 0; i < particlesPerType; i++) {
-                    const i3 = i * 3;
-                    
-                    // Posizione iniziale casuale
-                    positions[i3] = (Math.random() - 0.5) * 100;
-                    positions[i3 + 1] = (Math.random() - 0.5) * 100;
-                    positions[i3 + 2] = (Math.random() - 0.5) * 100;
-                    
-                    // Velocità iniziale casuale
-                    particleVelocities.push({
-                        x: (Math.random() - 0.5) * 0.2,
-                        y: (Math.random() - 0.5) * 0.2,
-                        z: (Math.random() - 0.5) * 0.2,
-                        type: typeIndex
-                    });
-                    
-                    // Colori delle particelle basati sul tipo
-                    const color = new THREE.Color(type.color);
-                    colors[i3] = color.r;
-                    colors[i3 + 1] = color.g;
-                    colors[i3 + 2] = color.b;
-                }
-                
-                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-                
-                const particleSystem = new THREE.Points(geometry, material);
-                scene.add(particleSystem);
-                particleSystems.push(particleSystem);
-            });
-        }
-        
-        function recreateParticles() {
-            createParticles();
-        }
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            // Aggiornamento delle posizioni delle particelle
-            let velocityIndex = 0;
-            
-            particleSystems.forEach((particles, systemIndex) => {
-                const positions = particles.geometry.attributes.position.array;
-                const count = positions.length / 3;
-                
-                for (let i = 0; i < count; i++) {
-                    const i3 = i * 3;
-                    const vIndex = velocityIndex + i;
-                    
-                    if (vIndex >= particleVelocities.length) continue;
-                    
-                    const velocity = particleVelocities[vIndex];
-                    
-                    // Aggiornamento posizione
-                    positions[i3] += velocity.x;
-                    positions[i3 + 1] += velocity.y;
-                    positions[i3 + 2] += velocity.z;
-                    
-                    // Controllo dei bordi e rimbalzo
-                    if (positions[i3] > 50 || positions[i3] < -50) {
-                        velocity.x *= -1;
-                    }
-                    if (positions[i3 + 1] > 50 || positions[i3 + 1] < -50) {
-                        velocity.y *= -1;
-                    }
-                    if (positions[i3 + 2] > 50 || positions[i3 + 2] < -50) {
-                        velocity.z *= -1;
-                    }
-                    
-                    // Attrazione verso il centro (dove si trova l'immagine)
-                    const centerX = 0, centerY = 0, centerZ = 0;
-                    const dx = centerX - positions[i3];
-                    const dy = centerY - positions[i3 + 1];
-                    const dz = centerZ - positions[i3 + 2];
-                    
-                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                    
-                    // Forza di attrazione verso il centro
-                    if (distance > 0) {
-                        const force = 0.0005;
-                        velocity.x += dx * force;
-                        velocity.y += dy * force;
-                        velocity.z += dz * force;
-                    }
-                    
-                    // Limitazione della velocità
-                    const speed = Math.sqrt(
-                        velocity.x * velocity.x +
-                        velocity.y * velocity.y +
-                        velocity.z * velocity.z
-                    );
-                    
-                    const maxSpeed = 0.5;
-                    if (speed > maxSpeed) {
-                        velocity.x = (velocity.x / speed) * maxSpeed;
-                        velocity.y = (velocity.y / speed) * maxSpeed;
-                        velocity.z = (velocity.z / speed) * maxSpeed;
-                    }
-                    
-                    // Effetto di respingimento tra particelle dello stesso tipo
-                    for (let j = 0; j < count; j++) {
-                        if (i === j) continue;
-                        
-                        const j3 = j * 3;
-                        const dx2 = positions[i3] - positions[j3];
-                        const dy2 = positions[i3 + 1] - positions[j3 + 1];
-                        const dz2 = positions[i3 + 2] - positions[j3 + 2];
-                        
-                        const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
-                        
-                        if (dist2 < 5 && dist2 > 0) {
-                            const repulseForce = 0.001;
-                            velocity.x += (dx2 / dist2) * repulseForce;
-                            velocity.y += (dy2 / dist2) * repulseForce;
-                            velocity.z += (dz2 / dist2) * repulseForce;
-                        }
-                    }
-                }
-                
-                particles.geometry.attributes.position.needsUpdate = true;
-                velocityIndex += count;
-            });
-            
-            // Rotazione leggera della scena
-            scene.rotation.x += 0.0005;
-            scene.rotation.y += 0.001;
-            
-            renderer.render(scene, camera);
-        }
-        
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-        
-        // Avvio dell'applicazione
-        init();
-        
-        // Nascondi l'indicatore di scroll dopo un po' o quando l'utente scrolla
-        window.addEventListener('scroll', function() {
-            document.querySelector('.scroll-indicator').style.opacity = '0';
-            setTimeout(() => {
-                document.querySelector('.scroll-indicator').style.display = 'none';
-            }, 500);
-        });
-        
-        // Ripristina l'indicatore se si torna in cima
-        window.addEventListener('scroll', function() {
-            if (window.scrollY < 100) {
-                document.querySelector('.scroll-indicator').style.display = 'block';
-                setTimeout(() => {
-                    document.querySelector('.scroll-indicator').style.opacity = '1';
-                }, 10);
-            }
-        });
-    </script>
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 6</div>
-  <h2>POSTULATI DELLA MECCANICA QUANTISTICA: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Presentare i postulati come una catena coerente tra stati, osservabili, misura, composizione ed evoluzione.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Uno stato puro è un raggio normalizzato dello spazio di Hilbert; le osservabili sono autoaggiunte; Born assegna probabilità ai proiettori spettrali; la misura aggiorna condizionatamente lo stato; l'evoluzione chiusa è unitaria; sistemi composti richiedono il prodotto tensoriale.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Born e Lüders<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Per un esito a anche degenere.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="p(a)=\langle\psi|P_a|\psi\rangle,\quad |\psi_a\rangle=P_a|\psi\rangle/\sqrt{p(a)}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi_a^{\rm raw}\rangle=P_a|\psi\rangle,\quad p(a)=\|P_a\psi\|^2=\langle\psi|P_a|\psi\rangle\Rightarrow|\psi_a\rangle=P_a|\psi\rangle/\sqrt{p(a)}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Evoluzione<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Tra misure.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="i\hbar\partial_t|\psi\rangle=H|\psi\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle U(dt)=I-iHdt/\hbar+O(dt^2),\quad|\psi(t+dt)\rangle=U(dt)|\psi(t)\rangle\Rightarrow i\hbar\partial_t|\psi\rangle=H|\psi\rangle\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Misure successive</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Misura A, ottieni a, poi ripeti subito la stessa misura ideale.</p>
-    <p><strong>Calcolo.</strong> Poiché \(P_a^2=P_a\), il nuovo stato è interamente nel sottospazio a.</p>
-    <p><strong>Risultato e controllo.</strong> La seconda misura restituisce a con probabilità uno, anche se il livello è degenere.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P1_DIM_0-6.txt">DIM 3</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Postulati per sistemi chiusi e misure proiettive ideali.</li>
-          <li>POVM e sistemi aperti generalizzano il quadro.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>I postulati non sono regole isolate: unitarietà preserva la normalizzazione richiesta da Born, e il prodotto tensoriale rende possibili correlazioni non classiche.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Distingui vettore e raggio.</li>
-          <li>Spiega misura degenere con un proiettore.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=53">Appunti-MQ.pdf, pp. 53-86 e 107-109: stati, osservabili, misura ed evoluzione</a></li>
-          <li><a href="MQ.pdf#page=4">MQ.pdf, pp. capitoli 4-8: postulati in forma spettrale</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-<p class="lecture-return"><a href="1mq.html">Torna agli argomenti di Meccanica Quantistica</a></p>
-<p class="lecture-return"><a href="1mq.html">Torna agli argomenti di Meccanica Quantistica</a></p>
-</section>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-PostulatiQM"><div class="lecture-kicker">Lezione approfondita - Argomento 6 - DIM 0 e DIM 2</div><h1>Postulati della meccanica quantistica</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Presentare in una catena coerente stato, osservabili, regola di Born, valori medi, aggiornamento di misura, evoluzione unitaria e sistemi composti, includendo spettri degeneri e continui e distinguendo postulati fisici da scelte di rappresentazione o quantizzazione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Una struttura operativa</h3><p>I postulati collegano preparazione, previsione statistica, misura e dinamica. Nessuno di essi dice che una funzione d'onda in coordinate sia l'unico modo di descrivere lo stato.</p></article><article class="lecture-card lecture-warning"><h3>Degenerazione tramite proiettori</h3><p>La formulazione robusta usa il proiettore sull'intero autospazio. Scegliere un particolare autovettore dentro un livello degenere aggiunge informazione non fornita dalla misura.</p></article></div><h2>Dalla preparazione alla previsione</h2><div class="lecture-grid"><article class="lecture-card "><h3>Stato puro</h3><p>Una preparazione ideale è rappresentata da un raggio normalizzato dello spazio di Hilbert; sovrapposizioni coerenti contengono fasi relative.</p></article><article class="lecture-card "><h3>Stato misto</h3><p>Un insieme statistico di preparazioni è rappresentato da una matrice densità positiva a traccia uno; non ogni miscela è un ket.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Postulato dello stato<span class="lecture-step-boss">STATO</span></h4><p>A ogni sistema si associa uno spazio di Hilbert complesso e una preparazione pura a un raggio di ket normalizzati.</p><div class="lecture-formula" aria-label="Stato puro come raggio di Hilbert"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle\in\mathcal H,\quad\langle\psi|\psi\rangle=1,\quad|\psi\rangle\sim e^{i\alpha}|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Sovrapposizione<span class="lecture-step-boss">LINEARITÀ</span></h4><p>Combinazioni lineari non nulle definiscono stati dopo normalizzazione; le fasi relative influenzano interferenza e misura.</p><div class="lecture-formula" aria-label="Principio di sovrapposizione normalizzato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\chi\rangle=\frac{a|\psi\rangle+b|\phi\rangle}{\sqrt{\langle a\psi+b\phi|a\psi+b\phi\rangle}}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Osservabili<span class="lecture-step-boss">MISURA</span></h4><p>Una grandezza misurabile è associata a un operatore autoaggiunto sul dominio fisico.</p><div class="lecture-formula" aria-label="Osservabile e decomposizione spettrale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=A^\dagger,\qquad A=\sum_a aP_a\ \text{oppure}\ A=\int a\,dP(a)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Esiti possibili<span class="lecture-step-boss">SPETTRO</span></h4><p>I risultati ideali della misura sono valori nello spettro dell'operatore, non valori arbitrari del suo valor medio.</p><div class="lecture-formula" aria-label="Autovalori e degenerazione degli esiti"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|a,\mu\rangle=a|a,\mu\rangle,\qquad\mu=1,\ldots,g_a\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Born discreto<span class="lecture-step-boss">PROBABILITÀ</span></h4><p>La probabilità di un autovalore degenere è la norma della proiezione sull'intero autospazio.</p><div class="lecture-formula" aria-label="Regola di Born con degenerazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p(a)=\langle\psi|P_a|\psi\rangle=\sum_{\mu=1}^{g_a}|\langle a,\mu|\psi\rangle|^2,\qquad\sum_ap(a)=1\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Born continuo<span class="lecture-step-boss">INTERVALLI</span></h4><p>Per uno spettro continuo si assegna probabilità a insiemi misurabili, evitando di trattare una densità come probabilità puntuale.</p><div class="lecture-formula" aria-label="Born per intervalli continui"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Pr(A\in\Delta)=\langle\psi|P(\Delta)|\psi\rangle,\qquad\Pr(x\in[x_1,x_2])=\int_{x_1}^{x_2}|\psi(x)|^2dx\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Valore medio<span class="lecture-step-boss">MEDIA</span></h4><p>La media di molte misure identiche coincide con il valore di aspettazione spettrale.</p><div class="lecture-formula" aria-label="Media e dispersione di un&#x27;osservabile"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle A\rangle=\sum_aap(a)=\langle\psi|A|\psi\rangle,\qquad(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Aggiornamento di Lüders<span class="lecture-step-boss">COLLASSO</span></h4><p>Condizionando sull'esito a, lo stato ideale diventa la proiezione normalizzata sull'autospazio osservato.</p><div class="lecture-formula" aria-label="Aggiornamento selettivo dello stato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle\longrightarrow|\psi_a\rangle=\frac{P_a|\psi\rangle}{\sqrt{\langle\psi|P_a|\psi\rangle}}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Misura non selettiva<span class="lecture-step-boss">DENSITÀ</span></h4><p>Se l'esito non viene registrato, si sommano i rami classici e si perdono le coerenze tra autospazi distinti.</p><div class="lecture-formula" aria-label="Aggiornamento non selettivo di Lüders"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho\longrightarrow\rho'=\sum_aP_a\rho P_a\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Ripetibilità ideale<span class="lecture-step-boss">PROIETTORE</span></h4><p>Poiché P_a quadrato vale P_a, ripetere subito la stessa misura restituisce a con probabilità uno.</p><div class="lecture-formula" aria-label="Ripetibilità di una misura proiettiva"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_a|\psi_a\rangle=|\psi_a\rangle\Rightarrow\Pr(a\ \text{alla seconda misura})=1\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Evoluzione isolata<span class="lecture-step-boss">DINAMICA</span></h4><p>Tra misure, un sistema chiuso evolve unitariamente con generatore Hamiltoniana autoaggiunta.</p><div class="lecture-formula" aria-label="Postulato dinamico di Schrödinger"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\frac d{dt}|\psi(t)\rangle=H(t)|\psi(t)\rangle,\qquad|\psi(t)\rangle=U(t,t_0)|\psi(t_0)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Norma e probabilità<span class="lecture-step-boss">UNITARIETÀ</span></h4><p>H autoaggiunta rende U unitario e conserva tutte le probabilità totali.</p><div class="lecture-formula" aria-label="Conservazione della normalizzazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger U=I\Rightarrow\langle\psi(t)|\psi(t)\rangle=\langle\psi(t_0)|\psi(t_0)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Sistemi composti<span class="lecture-step-boss">TENSORE</span></h4><p>Lo spazio di due sistemi è il prodotto tensoriale; non tutti i suoi ket si fattorizzano.</p><div class="lecture-formula" aria-label="Postulato di composizione ed entanglement"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal H_{AB}=\mathcal H_A\otimes\mathcal H_B,\qquad|\Psi\rangle\ne|\psi_A\rangle\otimes|\phi_B\rangle\ \text{in generale}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Osservabili compatibili<span class="lecture-step-boss">CSCO</span></h4><p>Operatori autoaggiunti commutanti ammettono una base comune; un insieme completo rimuove le degenerazioni residue.</p><div class="lecture-formula" aria-label="Compatibilità e insieme completo di osservabili"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [A,B]=0\Rightarrow\exists\{|a,b,\mu\rangle\},\qquad\text{CSCO}:\ \mu\ \text{assente}\)</span></div></article></section><h2>Esempio: misura degenere a tre livelli</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prende A con autovalore a due volte degenere e autovalore b semplice.</p><p data-i18n-skip="true">\(\displaystyle A=a(|1\rangle\langle1|+|2\rangle\langle2|)+b|3\rangle\langle3|,\quad|\psi\rangle=\frac{|1\rangle+i|2\rangle+|3\rangle}{\sqrt3},\quad p(a)=\frac23,\ p(b)=\frac13,\quad|\psi_a\rangle=\frac{|1\rangle+i|2\rangle}{\sqrt2}\)</p><p><strong>Controllo.</strong> La misura di A non sceglie tra |1&gt; e |2&gt;: conserva la sovrapposizione interna all'autospazio a, come richiede Lüders.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Quantizzazione non unica</h3><p>La sostituzione classica x,p con operatori non è un postulato sufficiente per prodotti non commutanti. Ordinamento e simmetrizzazione sono scelte motivate dal modello.</p></article><article class="lecture-card "><h3>Misure generali</h3><p>Le POVM estendono le misure proiettive con effetti positivi E_k che sommano a I. Il nucleo del corso usa PVM e aggiornamento di Lüders.</p></article><article class="lecture-card "><h3>Collasso ed evoluzione</h3><p>L'aggiornamento condizionato non è l'evoluzione unitaria di un sistema chiuso. Descrive il nuovo stato assegnato dopo aver acquisito l'esito.</p></article><article class="lecture-card "><h3>Miscele proprie e improprie</h3><p>La stessa rho locale può nascere da ignoranza classica o da traccia parziale di uno stato entangled; tutte le misure locali dipendono soltanto da rho.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dire che il valor medio è un esito possibile; usare un singolo autovettore in un livello degenere; collassare l'osservabile invece dello stato; confondere densità continua e probabilità puntuale; applicare Schrödinger durante l'aggiornamento ideale.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Le probabilità sommano a uno; P_a è indipendente dalla base interna; lo stato post-misura è normalizzato; una seconda misura è certa; U è unitario; il prodotto tensoriale permette stati non separabili.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci stato come raggio normalizzato.</li><li>Associa osservabili autoaggiunte e spettro.</li><li>Enuncia Born discreto, degenere e continuo.</li><li>Ricava media e varianza.</li><li>Scrivi aggiornamenti selettivo e non selettivo.</li><li>Dimostra la ripetibilità con P quadrato.</li><li>Enuncia evoluzione unitaria e composizione.</li><li>Distingui postulati, rappresentazione e quantizzazione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, misura ed evoluzione</a></li><li><a href="boss/P1_DIM_0-6.txt#L616">DIM 2 - derivazione completa dell'indeterminazione</a></li><li><a href="Appunti-MQ.pdf#page=71">Appunti-MQ.pdf, pagine PDF 71-79 - misure, osservabili, proiettori e compatibilità</a></li></ul><p class="lecture-note">La formulazione combina DIM 0 con le pagine verificate 71-79 e usa proiettori spettrali per coprire senza ambiguità degenerazione, continuo, ripetibilità e stato post-misura.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 6 - DIM 0 e DIM 2":"In-depth lesson - Topic 6 - DIM 0 and DIM 2","Postulati della meccanica quantistica":"Postulates of quantum mechanics","Obiettivo.":"Objective.","Presentare in una catena coerente stato, osservabili, regola di Born, valori medi, aggiornamento di misura, evoluzione unitaria e sistemi composti, includendo spettri degeneri e continui e distinguendo postulati fisici da scelte di rappresentazione o quantizzazione.":"Present in one coherent chain states, observables, the Born rule, expectation values, measurement update, unitary evolution, and composite systems, including degenerate and continuous spectra and distinguishing physical postulates from representation or quantization choices.","Una struttura operativa":"An operational structure","I postulati collegano preparazione, previsione statistica, misura e dinamica. Nessuno di essi dice che una funzione d'onda in coordinate sia l'unico modo di descrivere lo stato.":"The postulates connect preparation, statistical prediction, measurement, and dynamics. None says that a coordinate wavefunction is the only state description.","Degenerazione tramite proiettori":"Degeneracy through projectors","La formulazione robusta usa il proiettore sull'intero autospazio. Scegliere un particolare autovettore dentro un livello degenere aggiunge informazione non fornita dalla misura.":"The robust formulation uses the projector onto the full eigenspace. Choosing a particular eigenvector inside a degenerate level adds information not supplied by the measurement.","Dalla preparazione alla previsione":"From preparation to prediction","Stato puro":"Pure state","Una preparazione ideale è rappresentata da un raggio normalizzato dello spazio di Hilbert; sovrapposizioni coerenti contengono fasi relative.":"An ideal preparation is represented by a normalized Hilbert-space ray; coherent superpositions contain relative phases.","Stato misto":"Mixed state","Un insieme statistico di preparazioni è rappresentato da una matrice densità positiva a traccia uno; non ogni miscela è un ket.":"A statistical ensemble of preparations is represented by a positive unit-trace density matrix; not every mixture is a ket.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Postulato dello stato":"1. State postulate","STATO":"STATE","A ogni sistema si associa uno spazio di Hilbert complesso e una preparazione pura a un raggio di ket normalizzati.":"Each system is assigned a complex Hilbert space and each pure preparation a ray of normalized kets.","Passaggio":"Step","2. Sovrapposizione":"2. Superposition","LINEARITÀ":"LINEARITY","Combinazioni lineari non nulle definiscono stati dopo normalizzazione; le fasi relative influenzano interferenza e misura.":"Nonzero linear combinations define states after normalization; relative phases affect interference and measurement.","3. Osservabili":"3. Observables","MISURA":"MEASUREMENT","Una grandezza misurabile è associata a un operatore autoaggiunto sul dominio fisico.":"A measurable quantity is associated with a self-adjoint operator on the physical domain.","4. Esiti possibili":"4. Possible outcomes","SPETTRO":"SPECTRUM","I risultati ideali della misura sono valori nello spettro dell'operatore, non valori arbitrari del suo valor medio.":"Ideal measurement results are values in the operator spectrum, not arbitrary values of its expectation.","5. Born discreto":"5. Discrete Born rule","PROBABILITÀ":"PROBABILITY","La probabilità di un autovalore degenere è la norma della proiezione sull'intero autospazio.":"The probability of a degenerate eigenvalue is the norm of the projection onto the full eigenspace.","6. Born continuo":"6. Continuous Born rule","INTERVALLI":"INTERVALS","Per uno spettro continuo si assegna probabilità a insiemi misurabili, evitando di trattare una densità come probabilità puntuale.":"For a continuous spectrum assign probability to measurable sets, avoiding treatment of a density as point probability.","7. Valore medio":"7. Expectation value","MEDIA":"MEAN","La media di molte misure identiche coincide con il valore di aspettazione spettrale.":"The mean of many identically prepared measurements equals the spectral expectation value.","8. Aggiornamento di Lüders":"8. Lüders update","COLLASSO":"COLLAPSE","Condizionando sull'esito a, lo stato ideale diventa la proiezione normalizzata sull'autospazio osservato.":"Conditioning on outcome a, the ideal state becomes the normalized projection onto the observed eigenspace.","9. Misura non selettiva":"9. Nonselective measurement","DENSITÀ":"DENSITY","Se l'esito non viene registrato, si sommano i rami classici e si perdono le coerenze tra autospazi distinti.":"If the outcome is not recorded, classical branches are summed and coherences between distinct eigenspaces are lost.","10. Ripetibilità ideale":"10. Ideal repeatability","PROIETTORE":"PROJECTOR","Poiché P_a quadrato vale P_a, ripetere subito la stessa misura restituisce a con probabilità uno.":"Because P_a squared equals P_a, immediately repeating the same measurement returns a with probability one.","11. Evoluzione isolata":"11. Isolated evolution","DINAMICA":"DYNAMICS","Tra misure, un sistema chiuso evolve unitariamente con generatore Hamiltoniana autoaggiunta.":"Between measurements, a closed system evolves unitarily with a self-adjoint Hamiltonian generator.","12. Norma e probabilità":"12. Norm and probability","UNITARIETÀ":"UNITARITY","H autoaggiunta rende U unitario e conserva tutte le probabilità totali.":"Self-adjoint H makes U unitary and preserves all total probabilities.","13. Sistemi composti":"13. Composite systems","TENSORE":"TENSOR","Lo spazio di due sistemi è il prodotto tensoriale; non tutti i suoi ket si fattorizzano.":"The space of two systems is the tensor product; not all its kets factorize.","14. Osservabili compatibili":"14. Compatible observables","CSCO":"CSCO","Operatori autoaggiunti commutanti ammettono una base comune; un insieme completo rimuove le degenerazioni residue.":"Commuting self-adjoint operators admit a common basis; a complete set removes residual degeneracies.","Esempio: misura degenere a tre livelli":"Example: degenerate measurement in three levels","Impostazione.":"Setup.","Si prende A con autovalore a due volte degenere e autovalore b semplice.":"Take A with a twofold-degenerate eigenvalue a and simple eigenvalue b.","Controllo.":"Check.","La misura di A non sceglie tra |1> e |2>: conserva la sovrapposizione interna all'autospazio a, come richiede Lüders.":"Measuring A does not choose between |1> and |2>: it preserves the superposition inside eigenspace a, as required by Lüders.","Interpretazione e limiti":"Interpretation and limits","Quantizzazione non unica":"Quantization is not unique","La sostituzione classica x,p con operatori non è un postulato sufficiente per prodotti non commutanti. Ordinamento e simmetrizzazione sono scelte motivate dal modello.":"Replacing classical x,p by operators is not a sufficient postulate for noncommuting products. Ordering and symmetrization are model-motivated choices.","Misure generali":"General measurements","Le POVM estendono le misure proiettive con effetti positivi E_k che sommano a I. Il nucleo del corso usa PVM e aggiornamento di Lüders.":"POVMs extend projective measurements with positive effects E_k summing to I. The course core uses PVMs and Lüders updates.","Collasso ed evoluzione":"Collapse and evolution","L'aggiornamento condizionato non è l'evoluzione unitaria di un sistema chiuso. Descrive il nuovo stato assegnato dopo aver acquisito l'esito.":"Conditioned update is not closed-system unitary evolution. It describes the newly assigned state after acquiring the outcome.","Miscele proprie e improprie":"Proper and improper mixtures","La stessa rho locale può nascere da ignoranza classica o da traccia parziale di uno stato entangled; tutte le misure locali dipendono soltanto da rho.":"The same local rho may arise from classical ignorance or partial tracing of an entangled state; all local measurements depend only on rho.","Errori tipici":"Common errors","Dire che il valor medio è un esito possibile; usare un singolo autovettore in un livello degenere; collassare l'osservabile invece dello stato; confondere densità continua e probabilità puntuale; applicare Schrödinger durante l'aggiornamento ideale.":"Saying the expectation is a possible outcome; using one eigenvector in a degenerate level; collapsing the observable instead of the state; confusing continuous density with point probability; applying Schrödinger during ideal update.","Controlli rapidi":"Quick checks","Le probabilità sommano a uno; P_a è indipendente dalla base interna; lo stato post-misura è normalizzato; una seconda misura è certa; U è unitario; il prodotto tensoriale permette stati non separabili.":"Probabilities sum to one; P_a is independent of the internal basis; the postmeasurement state is normalized; a second measurement is certain; U is unitary; the tensor product allows nonseparable states.","Controllo da orale":"Oral exam checklist","Definisci stato come raggio normalizzato.":"Define a state as a normalized ray.","Associa osservabili autoaggiunte e spettro.":"Associate self-adjoint observables and spectra.","Enuncia Born discreto, degenere e continuo.":"State discrete, degenerate, and continuous Born rules.","Ricava media e varianza.":"Derive mean and variance.","Scrivi aggiornamenti selettivo e non selettivo.":"Write selective and nonselective updates.","Dimostra la ripetibilità con P quadrato.":"Prove repeatability using P squared.","Enuncia evoluzione unitaria e composizione.":"State unitary evolution and composition.","Distingui postulati, rappresentazione e quantizzazione.":"Distinguish postulates, representation, and quantization.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, misura ed evoluzione":"DIM 0 - postulates, measurement, and evolution","DIM 2 - derivazione completa dell'indeterminazione":"DIM 2 - complete uncertainty derivation","Appunti-MQ.pdf, pagine PDF 71-79 - misure, osservabili, proiettori e compatibilità":"Appunti-MQ.pdf, PDF pages 71-79 - misure, osservabili, proiettori e compatibilità","La formulazione combina DIM 0 con le pagine verificate 71-79 e usa proiettori spettrali per coprire senza ambiguità degenerazione, continuo, ripetibilità e stato post-misura.":"The formulation combines DIM 0 with verified pages 71-79 and uses spectral projectors to cover degeneracy, the continuum, repeatability, and postmeasurement state without ambiguity.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Stato puro come raggio di Hilbert":"Pure state as a Hilbert-space ray","Principio di sovrapposizione normalizzato":"Normalized superposition principle","Osservabile e decomposizione spettrale":"Observable and spectral decomposition","Autovalori e degenerazione degli esiti":"Outcome eigenvalues and degeneracy","Regola di Born con degenerazione":"Born rule with degeneracy","Born per intervalli continui":"Born rule for continuous intervals","Media e dispersione di un'osservabile":"Observable mean and variance","Aggiornamento selettivo dello stato":"Selective state update","Aggiornamento non selettivo di Lüders":"Nonselective Lüders update","Ripetibilità di una misura proiettiva":"Repeatability of a projective measurement","Postulato dinamico di Schrödinger":"Schrödinger dynamical postulate","Conservazione della normalizzazione":"Preservation of normalization","Postulato di composizione ed entanglement":"Composition postulate and entanglement","Compatibilità e insieme completo di osservabili":"Compatibility and complete set of observables"},"title":{"it":"Postulati della meccanica quantistica","en":"Postulates of quantum mechanics"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

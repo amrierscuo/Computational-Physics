@@ -1,347 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coordinate Sferiche</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momento angolare in coordinate sferiche</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-
-    <h1>Momento Angolare in Coordinate Sferiche</h1>
-    <h2>Descrizione</h2>
-    Il momento angolare in coordinate sferiche è una delle rappresentazioni fondamentali per lo studio degli operatori di momento angolare nella meccanica quantistica. Utilizzando le coordinate sferiche \((r, \theta, \phi)\), gli operatori di momento angolare sono descritti in termini delle loro componenti \( L_x, L_y, L_z \) e del modulo totale \( L^2 \).
-
-    <h2>Operatore \(L^2\)</h2>
-    L'operatore del modulo del momento angolare è dato da:
-    <div class="formula">
-        \[
-        L^2 = -\hbar^2 \left[ \frac{1}{\sin\theta} \frac{\partial}{\partial\theta} \left( \sin\theta \frac{\partial}{\partial\theta} \right) + \frac{1}{\sin^2\theta} \frac{\partial^2}{\partial\phi^2} \right]
-        \]
-    </div>
-
-    <h2>Operatore \(L_z\)</h2>
-    L'operatore della componente \(z\) del momento angolare è:
-    <div class="formula">
-        \[
-        L_z = -i\hbar \frac{\partial}{\partial\phi}
-        \]
-    </div>
-
-    <h2>Autofunzioni di \(L^2\) e \(L_z\)</h2>
-    Le autofunzioni simultanee di \(L^2\) e \(L_z\) sono le armoniche sferiche \(Y_l^m(\theta, \phi)\), definite come:
-    <div class="formula">
-        \[
-        Y_l^m(\theta, \phi) = N_{l,m} P_l^m(\cos\theta) e^{im\phi}
-        \]
-    </div>
-    dove:
-    <ul>
-        <li>\( l \): Numero quantico del momento angolare totale (\( l = 0, 1, 2, \ldots \))</li>
-        <li>\( m \): Numero quantico del momento angolare z (\( m = -l, -l+1, \ldots, l \))</li>
-        <li>\( N_{l,m} \): Fattore di normalizzazione</li>
-        <li>\( P_l^m(\cos\theta) \): Polinomi associati di Legendre</li>
-    </ul>
-
-    <h2>Proprietà degli operatori</h2>
-    Gli operatori di momento angolare soddisfano le relazioni di commutazione fondamentali:
-    <div class="formula">
-        \[
-        [L_x, L_y] = i\hbar L_z, \quad [L_y, L_z] = i\hbar L_x, \quad [L_z, L_x] = i\hbar L_y
-        \]
-    </div>
-    Inoltre:
-    <div class="formula">
-        \[
-        [L^2, L_x] = [L^2, L_y] = [L^2, L_z] = 0
-        \]
-    </div>
-    Questo implica che \(L^2\) e una qualunque componente (\(L_z\), per convenzione) possono essere misurate simultaneamente.
-
-    <h2>Applicazioni</h2>
-    <ul>
-        <li>Studio degli stati quantistici in sistemi a simmetria sferica, come l'atomo di idrogeno.</li>
-        <li>Calcolo degli stati angolari in fisica nucleare e molecolare.</li>
-        <li>Descrizione delle onde piane in coordinate sferiche tramite espansione in armoniche sferiche.</li>
-    </ul>
-    <h1>Coordinate Sferiche</h1>
-    <h2>Definizione</h2>
-    Le coordinate sferiche sono un sistema di riferimento utile per descrivere problemi con simmetria sferica. In questo sistema, la posizione di un punto nello spazio è definita da tre coordinate:
-    <ul>
-        <li>\( r \): distanza radiale, ovvero la distanza del punto dall'origine.</li>
-        <li>\( \theta \): angolo zenitale, misurato rispetto all'asse \( z \) (intervallo \( [0, \pi] \)).</li>
-        <li>\( \phi \): angolo azimutale, misurato nel piano \( xy \) rispetto all'asse \( x \) (intervallo \( [0, 2\pi] \)).</li>
-    </ul>
-
-    <h2>Relazioni con le coordinate cartesiane</h2>
-    Le coordinate sferiche sono collegate alle coordinate cartesiane tramite le seguenti relazioni:
-    <div class="formula">
-        \[
-        x = r \sin\theta \cos\phi, \quad y = r \sin\theta \sin\phi, \quad z = r \cos\theta
-        \]
-    </div>
-    Inversamente, le coordinate sferiche possono essere ottenute dalle coordinate cartesiane come:
-    <div class="formula">
-        \[
-        r = \sqrt{x^2 + y^2 + z^2}, \quad \theta = \arccos\left(\frac{z}{r}\right), \quad \phi = \arctan\left(\frac{y}{x}\right)
-        \]
-    </div>
-
-    <h2>Elementi differenziali</h2>
-    L'elemento di lunghezza infinitesimale in coordinate sferiche è dato da:
-    <div class="formula">
-        \[
-        ds^2 = dr^2 + r^2 d\theta^2 + r^2 \sin^2\theta \, d\phi^2
-        \]
-    </div>
-    L'elemento di volume infinitesimale è:
-    <div class="formula">
-        \[
-        dV = r^2 \sin\theta \, dr \, d\theta \, d\phi
-        \]
-    </div>
-
-    <h2>Operatori differenziali</h2>
-    In coordinate sferiche, gli operatori differenziali assumono forme particolari utili per problemi con simmetria sferica:
-    <h3>1. Gradiente</h3>
-    <div class="formula">
-        \[
-        \nabla f = \frac{\partial f}{\partial r} \hat{r} + \frac{1}{r} \frac{\partial f}{\partial \theta} \hat{\theta} + \frac{1}{r \sin\theta} \frac{\partial f}{\partial \phi} \hat{\phi}
-        \]
-    </div>
-
-    <h3>2. Divergenza</h3>
-    <div class="formula">
-        \[
-        \nabla \cdot \vec{A} = \frac{1}{r^2} \frac{\partial}{\partial r} \left( r^2 A_r \right) + \frac{1}{r \sin\theta} \frac{\partial}{\partial \theta} \left( \sin\theta A_\theta \right) + \frac{1}{r \sin\theta} \frac{\partial A_\phi}{\partial \phi}
-        \]
-    </div>
-
-    <h3>3. Laplaciano</h3>
-    <div class="formula">
-        \[
-        \nabla^2 f = \frac{1}{r^2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial f}{\partial r} \right) + \frac{1}{r^2 \sin\theta} \frac{\partial}{\partial \theta} \left( \sin\theta \frac{\partial f}{\partial \theta} \right) + \frac{1}{r^2 \sin^2\theta} \frac{\partial^2 f}{\partial \phi^2}
-        \]
-    </div>
-
-    <h2>Applicazioni</h2>
-    Le coordinate sferiche sono fondamentali per risolvere problemi di simmetria sferica, come:
-    <ul>
-        <li>Studio del campo gravitazionale e del campo elettrico.</li>
-        <li>Equazioni di Schrödinger per atomi idrogenoidi.</li>
-        <li>Problemi di diffusione e propagazione delle onde.</li>
-    </ul>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 7</div>
-  <h2>Momento Angolare in Coordinate Sferiche: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Derivare Laplaciano e operatori angolari in coordinate sferiche.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La metrica sferica separa parte radiale e angolare. Il Laplaciano contiene esattamente \(L^2\), rendendo naturale la separazione dei potenziali centrali.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Laplaciano<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>Il Jacobiano è \(r^2\sin\theta\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\nabla^2=\frac1{r^2}\partial_r(r^2\partial_r)-\frac{L^2}{\hbar^2r^2}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle ds^2=dr^2+r^2d\theta^2+r^2\sin^2\theta\,d\phi^2\Rightarrow\nabla^2=\frac1{r^2}\partial_r(r^2\partial_r)+\frac1{r^2\sin\theta}\partial_\theta(\sin\theta\partial_\theta)+\frac1{r^2\sin^2\theta}\partial_\phi^2=\frac1{r^2}\partial_r(r^2\partial_r)-\frac{L^2}{\hbar^2r^2}\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Componenti<span class="lecture-step-boss">DIM 15</span></h4>
-      <p>L'asse z è semplice.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="L_z=-i\hbar\partial_\phi"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle R_z(\alpha)\psi(r,\theta,\phi)=\psi(r,\theta,\phi-\alpha)\simeq(1-\alpha\partial_\phi)\psi=(1-i\alpha L_z/\hbar)\psi\Rightarrow L_z=-i\hbar\partial_\phi\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Normalizzazione</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per \(psi=R(r)Y_l^m\).</p>
-    <p><strong>Calcolo.</strong> La norma fattorizza in \(\int|R|^2r^2dr\) e \(\int|Y|^2d\Omega\).</p>
-    <p><strong>Risultato e controllo.</strong> Il fattore \(r^2\sin\theta\) non può essere omesso.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P3_DIM_13-18.txt">DIM 15</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Coordinate singolari ai poli, non fisica singolare.</li>
-          <li>Regolarità e periodicità in phi.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Il termine centrifugo è la memoria della dinamica angolare dentro l'equazione radiale.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Deriva il volume elementare.</li>
-          <li>Scrivi \(L^2\) esplicitamente.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=200">Appunti-MQ.pdf, pp. 200-208 e 240-244: operatori angolari e Laplaciano</a></li>
-          <li><a href="FisicaTeoricaMeccanicaQuantistica_compresso.pdf">FisicaTeoricaMeccanicaQuantistica_compresso.pdf, pp. dispensa manoscritta: separazione in coordinate sferiche</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-coordinate-sferiche"><div class="lecture-kicker">Lezione approfondita - Argomento 7 - DIM 15</div><h1>Momento angolare in coordinate sferiche</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare metrica, Jacobiano, gradiente e Laplaciano sferici, separare la parte radiale da quella angolare e ottenere Lz, L più, L meno e L quadrato come operatori differenziali, verificandone segni, hermiticità e azione su funzioni semplici.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>La geometria fissa i fattori</h3><p>I fattori r quadrato e seno theta non sono decorazioni: provengono dalla metrica e determinano norma, autoaggiuntezza e forma del Laplaciano.</p></article><article class="lecture-card lecture-warning"><h3>Parte angolare del Laplaciano</h3><p>L quadrato coincide con meno hbar quadrato volte il Laplaciano sulla sfera unitaria. Questo collega rotazioni, separazione centrale e armoniche sferiche.</p></article></div><h2>Carta sferica e misura</h2><div class="lecture-grid"><article class="lecture-card "><h3>Coordinate</h3><p>Si usa r non negativo, theta tra zero e pi e phi modulo 2 pi. Ai poli phi è una coordinata singolare, non una singolarità fisica.</p></article><article class="lecture-card "><h3>Prodotto interno</h3><p>Le funzioni tridimensionali si normalizzano con r quadrato seno theta; quelle soltanto angolari con dOmega uguale seno theta dtheta dphi.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Cambio cartesiano<span class="lecture-step-boss">GEOMETRIA</span></h4><p>Le coordinate sferiche parametrizzano il vettore posizione con asse polare z.</p><div class="lecture-formula" aria-label="Trasformazione da sferiche a cartesiane"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle x=r\sin\theta\cos\varphi,\quad y=r\sin\theta\sin\varphi,\quad z=r\cos\theta\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Differenziale lineare<span class="lecture-step-boss">METRICA</span></h4><p>Derivare il vettore r e prendere il modulo quadro elimina i termini incrociati grazie alla terna ortonormale locale.</p><div class="lecture-formula" aria-label="Metrica euclidea in coordinate sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle d\mathbf r=\hat e_rdr+r\hat e_\theta d\theta+r\sin\theta\hat e_\varphi d\varphi\Rightarrow ds^2=dr^2+r^2d\theta^2+r^2\sin^2\theta d\varphi^2\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Jacobiano<span class="lecture-step-boss">VOLUME</span></h4><p>Il prodotto dei tre fattori di scala fornisce l'elemento di volume.</p><div class="lecture-formula" aria-label="Jacobiano e angolo solido"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle h_r=1,\quad h_\theta=r,\quad h_\varphi=r\sin\theta,\qquad d^3r=r^2\sin\theta\,dr\,d\theta\,d\varphi=r^2dr\,d\Omega\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Gradiente<span class="lecture-step-boss">DERIVA</span></h4><p>In coordinate ortogonali ogni derivata direzionale è divisa per il relativo fattore di scala.</p><div class="lecture-formula" aria-label="Gradiente in coordinate sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \nabla=\hat e_r\partial_r+\hat e_\theta\frac1r\partial_\theta+\hat e_\varphi\frac1{r\sin\theta}\partial_\varphi\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Laplaciano<span class="lecture-step-boss">DIVERGENZA</span></h4><p>Applicare la divergenza al gradiente produce una parte radiale e una parte sulla sfera.</p><div class="lecture-formula" aria-label="Laplaciano sferico completo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \nabla^2=\frac1{r^2}\partial_r(r^2\partial_r)+\frac1{r^2\sin\theta}\partial_\theta(\sin\theta\partial_\theta)+\frac1{r^2\sin^2\theta}\partial_\varphi^2\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Definizione orbitale<span class="lecture-step-boss">CANONICA</span></h4><p>Con p uguale meno i hbar gradiente, il prodotto r vettor p elimina automaticamente la derivata radiale.</p><div class="lecture-formula" aria-label="Momento orbitale come derivata tangenziale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathbf L=\mathbf r\times\mathbf p=-i\hbar\,\mathbf r\times\nabla=-i\hbar(\hat e_\varphi\partial_\theta-\hat e_\theta\csc\theta\partial_\varphi)\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Componente z<span class="lecture-step-boss">AZIMUT</span></h4><p>Una rotazione attorno a z trasla phi, quindi il suo generatore è meno i hbar derivata azimutale.</p><div class="lecture-formula" aria-label="Operatore Lz in sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L_z=xp_y-yp_x=-i\hbar\frac{\partial}{\partial\varphi}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Componenti cartesiane<span class="lecture-step-boss">PROIETTA</span></h4><p>Proiettare la forma tangenziale sugli assi fissi produce coefficienti trigonometrici e cotangente.</p><div class="lecture-formula" aria-label="Operatori Lx e Ly in sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L_x=i\hbar(\sin\varphi\,\partial_\theta+\cot\theta\cos\varphi\,\partial_\varphi),\quad L_y=i\hbar(-\cos\varphi\,\partial_\theta+\cot\theta\sin\varphi\,\partial_\varphi)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Ladder differenziali<span class="lecture-step-boss">COMBINA</span></h4><p>Combinare Lx più o meno i Ly raccoglie le funzioni trigonometriche in esponenziali di fase.</p><div class="lecture-formula" aria-label="Operatori ladder orbitali in sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L_\pm=L_x\pm iL_y=\hbar e^{\pm i\varphi}\left(\pm\partial_\theta+i\cot\theta\,\partial_\varphi\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Quadrato angolare<span class="lecture-step-boss">IDENTITÀ</span></h4><p>Usare L quadrato uguale L meno L più più Lz quadrato più hbar Lz e semplificare le derivate produce il Laplaciano angolare.</p><div class="lecture-formula" aria-label="Operatore L quadrato in coordinate sferiche"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle L^2=-\hbar^2\left[\frac1{\sin\theta}\partial_\theta(\sin\theta\partial_\theta)+\frac1{\sin^2\theta}\partial_\varphi^2\right]\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Separazione del Laplaciano<span class="lecture-step-boss">CENTRALE</span></h4><p>Confrontare i due risultati isola esattamente la parte rotazionale dell'energia cinetica.</p><div class="lecture-formula" aria-label="Separazione radiale-angolare del Laplaciano"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \nabla^2=\frac1{r^2}\partial_r(r^2\partial_r)-\frac{L^2}{\hbar^2r^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Energia cinetica<span class="lecture-step-boss">HAMILTONIANA</span></h4><p>In un potenziale centrale il termine angolare diventa la barriera centrifuga nell'equazione radiale.</p><div class="lecture-formula" aria-label="Decomposizione dell&#x27;energia cinetica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -\frac{\hbar^2}{2m}\nabla^2=-\frac{\hbar^2}{2mr^2}\partial_r(r^2\partial_r)+\frac{L^2}{2mr^2}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Prodotto interno angolare<span class="lecture-step-boss">HERMITICITÀ</span></h4><p>Con misura seno theta e periodicità in phi, integrazione per parti annulla i bordi e rende Lz e L quadrato autoaggiunti.</p><div class="lecture-formula" aria-label="Misura naturale e hermiticità angolare"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle f|g\rangle_\Omega=\int_0^{2\pi}d\varphi\int_0^\pi d\theta\,\sin\theta\,f^*g,\quad\langle f|L_zg\rangle=\langle L_zf|g\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Controllo su e alla imphi<span class="lecture-step-boss">AUTOVALORE</span></h4><p>La periodicità seleziona m intero per funzioni orbitali monovalue e Lz restituisce hbar m.</p><div class="lecture-formula" aria-label="Autofunzioni azimutali di Lz"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Phi_m(\varphi)=\frac{e^{im\varphi}}{\sqrt{2\pi}},\quad\Phi(\varphi+2\pi)=\Phi(\varphi)\Rightarrow m\in\mathbb Z,\quad L_z\Phi_m=\hbar m\Phi_m\)</span></div></article></section><h2>Esempio: azione su Y_10</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si usa Y_10 uguale radice di tre su quattro pi volte cos theta, indipendente da phi.</p><p data-i18n-skip="true">\(\displaystyle L_zY_{10}=0,\qquad L_+Y_{10}=\hbar e^{i\varphi}\partial_\theta\left(\sqrt{\frac3{4\pi}}\cos\theta\right)=-\hbar\sqrt{\frac3{4\pi}}\sin\theta e^{i\varphi}=\hbar\sqrt2\,Y_{11}\)</p><p><strong>Controllo.</strong> Con la convenzione di Condon-Shortley Y_11 ha il segno meno; il risultato coincide con il coefficiente ladder hbar radice di ell(ell+1)-m(m+1).</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Singolarità coordinate</h3><p>Cotangente e cosecante divergono ai poli, ma l'azione su funzioni regolari e monovalue resta finita. Le armoniche incorporano il comportamento corretto.</p></article><article class="lecture-card "><h3>Radiale e angolare</h3><p>L non deriva rispetto a r e commuta con ogni funzione radiale. Per questo gli autovalori angolari sono universali per tutti i potenziali centrali.</p></article><article class="lecture-card "><h3>Hermiticità formale</h3><p>I termini di bordo a theta uguale zero,pi e la periodicità azimutale fanno parte del dominio. Ignorarli può produrre autovalori non fisici.</p></article><article class="lecture-card "><h3>Carta alternativa</h3><p>Si può cambiare asse polare o usare più carte sulla sfera; gli operatori geometrici e lo spettro non dipendono dalla carta.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dimenticare seno theta nel volume; cambiare segno a Lz; perdere cot theta nei ladder; scrivere L quadrato con segno positivo davanti al Laplaciano sferico; trattare i poli come vere singolarità fisiche.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Il Jacobiano ha dimensione r quadrato; L non contiene derivata radiale; Lz su e imphi dà hbar m; L quadrato è positivo; il termine centrifugo ha segno positivo; dOmega integra a 4 pi.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Deriva metrica e Jacobiano.</li><li>Scrivi gradiente e Laplaciano.</li><li>Calcola r cross meno i hbar gradiente.</li><li>Ottieni Lz, Lx e Ly.</li><li>Combina i ladder e controlla i segni.</li><li>Ricava L quadrato e il Laplaciano separato.</li><li>Spiega misura e hermiticità.</li><li>Verifica l'azione su Y10.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, rotazioni e momento angolare</a></li><li><a href="boss/P2_DIM_7-12.txt#L385">DIM 8 - algebra, ladder e composizione</a></li><li><a href="Appunti-MQ.pdf#page=200">Appunti-MQ.pdf, pagine PDF 200-208 - operatori orbitali e rappresentazione polare</a></li></ul><p class="lecture-note">La catena è stata confrontata con le pagine PDF verificate 200-208 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 7 - DIM 15":"In-depth lesson - Topic 7 - DIM 15","Momento angolare in coordinate sferiche":"Angular momentum in spherical coordinates","Obiettivo.":"Objective.","Derivare metrica, Jacobiano, gradiente e Laplaciano sferici, separare la parte radiale da quella angolare e ottenere Lz, L più, L meno e L quadrato come operatori differenziali, verificandone segni, hermiticità e azione su funzioni semplici.":"Derive the spherical metric, Jacobian, gradient, and Laplacian, separate radial and angular parts, and obtain Lz, L plus, L minus, and L squared as differential operators, checking signs, Hermiticity, and action on simple functions.","La geometria fissa i fattori":"Geometry fixes the factors","I fattori r quadrato e seno theta non sono decorazioni: provengono dalla metrica e determinano norma, autoaggiuntezza e forma del Laplaciano.":"Factors r squared and sine theta are not decorations: they come from the metric and determine norm, self-adjointness, and the Laplacian form.","Parte angolare del Laplaciano":"Angular part of the Laplacian","L quadrato coincide con meno hbar quadrato volte il Laplaciano sulla sfera unitaria. Questo collega rotazioni, separazione centrale e armoniche sferiche.":"L squared equals minus hbar squared times the Laplacian on the unit sphere. This connects rotations, central separation, and spherical harmonics.","Carta sferica e misura":"Spherical chart and measure","Coordinate":"Coordinates","Si usa r non negativo, theta tra zero e pi e phi modulo 2 pi. Ai poli phi è una coordinata singolare, non una singolarità fisica.":"Use nonnegative r, theta between zero and pi, and phi modulo 2 pi. At the poles phi is a coordinate singularity, not a physical singularity.","Prodotto interno":"Inner product","Le funzioni tridimensionali si normalizzano con r quadrato seno theta; quelle soltanto angolari con dOmega uguale seno theta dtheta dphi.":"Three-dimensional functions are normalized with r squared sine theta; purely angular ones with dOmega equal sine theta dtheta dphi.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Cambio cartesiano":"1. Cartesian change","GEOMETRIA":"GEOMETRY","Le coordinate sferiche parametrizzano il vettore posizione con asse polare z.":"Spherical coordinates parameterize the position vector with polar z axis.","Passaggio":"Step","2. Differenziale lineare":"2. Line element","METRICA":"METRIC","Derivare il vettore r e prendere il modulo quadro elimina i termini incrociati grazie alla terna ortonormale locale.":"Differentiate the position vector and square its norm; cross terms vanish thanks to the local orthonormal triad.","3. Jacobiano":"3. Jacobian","VOLUME":"VOLUME","Il prodotto dei tre fattori di scala fornisce l'elemento di volume.":"The product of the three scale factors gives the volume element.","4. Gradiente":"4. Gradient","DERIVA":"DERIVE","In coordinate ortogonali ogni derivata direzionale è divisa per il relativo fattore di scala.":"In orthogonal coordinates each directional derivative is divided by its scale factor.","5. Laplaciano":"5. Laplacian","DIVERGENZA":"DIVERGENCE","Applicare la divergenza al gradiente produce una parte radiale e una parte sulla sfera.":"Apply divergence to the gradient to obtain a radial part and a spherical part.","6. Definizione orbitale":"6. Orbital definition","CANONICA":"CANONICAL","Con p uguale meno i hbar gradiente, il prodotto r vettor p elimina automaticamente la derivata radiale.":"With p equal minus i hbar gradient, r cross p automatically removes the radial derivative.","7. Componente z":"7. z component","AZIMUT":"AZIMUTH","Una rotazione attorno a z trasla phi, quindi il suo generatore è meno i hbar derivata azimutale.":"A rotation about z translates phi, so its generator is minus i hbar azimuthal derivative.","8. Componenti cartesiane":"8. Cartesian components","PROIETTA":"PROJECT","Proiettare la forma tangenziale sugli assi fissi produce coefficienti trigonometrici e cotangente.":"Project the tangential form onto fixed axes to obtain trigonometric coefficients and cotangent.","9. Ladder differenziali":"9. Differential ladders","COMBINA":"COMBINE","Combinare Lx più o meno i Ly raccoglie le funzioni trigonometriche in esponenziali di fase.":"Combine Lx plus or minus i Ly to collect trigonometric functions into phase exponentials.","10. Quadrato angolare":"10. Angular square","IDENTITÀ":"IDENTITY","Usare L quadrato uguale L meno L più più Lz quadrato più hbar Lz e semplificare le derivate produce il Laplaciano angolare.":"Use L squared equal L minus L plus plus Lz squared plus hbar Lz and simplify derivatives to obtain the angular Laplacian.","11. Separazione del Laplaciano":"11. Laplacian separation","CENTRALE":"CENTRAL","Confrontare i due risultati isola esattamente la parte rotazionale dell'energia cinetica.":"Compare the two results to isolate exactly the rotational part of kinetic energy.","12. Energia cinetica":"12. Kinetic energy","HAMILTONIANA":"HAMILTONIAN","In un potenziale centrale il termine angolare diventa la barriera centrifuga nell'equazione radiale.":"In a central potential the angular term becomes the centrifugal barrier in the radial equation.","13. Prodotto interno angolare":"13. Angular inner product","HERMITICITÀ":"HERMITICITY","Con misura seno theta e periodicità in phi, integrazione per parti annulla i bordi e rende Lz e L quadrato autoaggiunti.":"With sine-theta measure and phi periodicity, integration by parts cancels boundaries and makes Lz and L squared self-adjoint.","14. Controllo su e alla imphi":"14. Check on e to imphi","AUTOVALORE":"EIGENVALUE","La periodicità seleziona m intero per funzioni orbitali monovalue e Lz restituisce hbar m.":"Periodicity selects integer m for single-valued orbital functions and Lz returns hbar m.","Esempio: azione su Y_10":"Example: action on Y_10","Impostazione.":"Setup.","Si usa Y_10 uguale radice di tre su quattro pi volte cos theta, indipendente da phi.":"Use Y_10 equal square root of three over four pi times cosine theta, independent of phi.","Controllo.":"Check.","Con la convenzione di Condon-Shortley Y_11 ha il segno meno; il risultato coincide con il coefficiente ladder hbar radice di ell(ell+1)-m(m+1).":"With the Condon-Shortley convention Y_11 has a minus sign; the result agrees with ladder coefficient hbar square root of ell(ell+1)-m(m+1).","Interpretazione e limiti":"Interpretation and limits","Singolarità coordinate":"Coordinate singularities","Cotangente e cosecante divergono ai poli, ma l'azione su funzioni regolari e monovalue resta finita. Le armoniche incorporano il comportamento corretto.":"Cotangent and cosecant diverge at the poles, but their action on regular single-valued functions remains finite. Harmonics encode the correct behavior.","Radiale e angolare":"Radial and angular","L non deriva rispetto a r e commuta con ogni funzione radiale. Per questo gli autovalori angolari sono universali per tutti i potenziali centrali.":"L does not differentiate r and commutes with every radial function. Thus angular eigenvalues are universal for all central potentials.","Hermiticità formale":"Formal Hermiticity","I termini di bordo a theta uguale zero,pi e la periodicità azimutale fanno parte del dominio. Ignorarli può produrre autovalori non fisici.":"Boundary terms at theta equal zero,pi and azimuthal periodicity are part of the domain. Ignoring them may produce unphysical eigenvalues.","Carta alternativa":"Alternative chart","Si può cambiare asse polare o usare più carte sulla sfera; gli operatori geometrici e lo spettro non dipendono dalla carta.":"One may change the polar axis or use multiple charts on the sphere; geometric operators and spectrum do not depend on the chart.","Errori tipici":"Common errors","Dimenticare seno theta nel volume; cambiare segno a Lz; perdere cot theta nei ladder; scrivere L quadrato con segno positivo davanti al Laplaciano sferico; trattare i poli come vere singolarità fisiche.":"Forgetting sine theta in volume; changing the Lz sign; losing cot theta in ladders; writing L squared with a positive spherical-Laplacian sign; treating poles as physical singularities.","Controlli rapidi":"Quick checks","Il Jacobiano ha dimensione r quadrato; L non contiene derivata radiale; Lz su e imphi dà hbar m; L quadrato è positivo; il termine centrifugo ha segno positivo; dOmega integra a 4 pi.":"The Jacobian has r-squared dimension; L has no radial derivative; Lz on e imphi gives hbar m; L squared is positive; the centrifugal term has positive sign; dOmega integrates to 4 pi.","Controllo da orale":"Oral exam checklist","Deriva metrica e Jacobiano.":"Derive metric and Jacobian.","Scrivi gradiente e Laplaciano.":"Write gradient and Laplacian.","Calcola r cross meno i hbar gradiente.":"Compute r cross minus i hbar gradient.","Ottieni Lz, Lx e Ly.":"Obtain Lz, Lx, and Ly.","Combina i ladder e controlla i segni.":"Combine ladders and check signs.","Ricava L quadrato e il Laplaciano separato.":"Derive L squared and the separated Laplacian.","Spiega misura e hermiticità.":"Explain measure and Hermiticity.","Verifica l'azione su Y10.":"Verify action on Y10.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 15 - commutatori, rotazioni e momento angolare":"DIM 15 - commutators, rotations, and angular momentum","DIM 8 - algebra, ladder e composizione":"DIM 8 - algebra, ladders, and composition","Appunti-MQ.pdf, pagine PDF 200-208 - operatori orbitali e rappresentazione polare":"Appunti-MQ.pdf, PDF pages 200-208 - operatori orbitali e rappresentazione polare","La catena è stata confrontata con le pagine PDF verificate 200-208 e con DIM 15; convenzioni di fase, segni e normalizzazioni sono mantenute coerenti.":"The chain was compared with verified PDF pages 200-208 and DIM 15; phase conventions, signs, and normalizations are kept consistent.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Trasformazione da sferiche a cartesiane":"Transformation from spherical to Cartesian coordinates","Metrica euclidea in coordinate sferiche":"Euclidean metric in spherical coordinates","Jacobiano e angolo solido":"Jacobian and solid angle","Gradiente in coordinate sferiche":"Gradient in spherical coordinates","Laplaciano sferico completo":"Full spherical Laplacian","Momento orbitale come derivata tangenziale":"Orbital momentum as a tangential derivative","Operatore Lz in sferiche":"Lz operator in spherical coordinates","Operatori Lx e Ly in sferiche":"Lx and Ly operators in spherical coordinates","Operatori ladder orbitali in sferiche":"Orbital ladder operators in spherical coordinates","Operatore L quadrato in coordinate sferiche":"L squared operator in spherical coordinates","Separazione radiale-angolare del Laplaciano":"Radial-angular separation of the Laplacian","Decomposizione dell'energia cinetica":"Kinetic-energy decomposition","Misura naturale e hermiticità angolare":"Natural measure and angular Hermiticity","Autofunzioni azimutali di Lz":"Azimuthal Lz eigenfunctions"},"title":{"it":"Momento angolare in coordinate sferiche","en":"Angular momentum in spherical coordinates"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

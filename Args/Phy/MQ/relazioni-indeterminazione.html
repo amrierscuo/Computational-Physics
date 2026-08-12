@@ -1,268 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relazioni di Indeterminazione</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relazioni di indeterminazione di Robertson e Schrödinger</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Relazioni di Indeterminazione</h1>
-    <h2>Introduzione</h2>
-    Le relazioni di indeterminazione rappresentano un limite fondamentale alla precisione con cui è possibile misurare simultaneamente coppie di osservabili, come posizione e momento, o energia e tempo. Questo principio è una conseguenza diretta della struttura matematica della meccanica quantistica.
-
-    <h2>Derivazione generale</h2>
-    Per due osservabili \( \hat{A} \) e \( \hat{B} \), definite da operatori hermitiani, la relazione di indeterminazione è espressa come:
-    <div class="formula">
-        \[
-        \sigma_A \sigma_B \geq \frac{1}{2} \left| \langle [\hat{A}, \hat{B}] \rangle \right|
-        \]
-    </div>
-    \( \sigma_A \) e \( \sigma_B \) rappresentano le deviazioni standard delle misurazioni di \( \hat{A} \) e \( \hat{B} \). Il commutatore \( [\hat{A}, \hat{B}] \) è definito come:
-    <div class="formula">
-        \[
-        [\hat{A}, \hat{B}] = \hat{A}\hat{B} - \hat{B}\hat{A}
-        \]
-    </div>
-
-    <h2>Relazione posizione-momento</h2>
-    Una delle forme più celebri delle relazioni di indeterminazione riguarda la posizione \( x \) e il momento \( p \):
-    <div class="formula">
-        \[
-        \sigma_x \sigma_p \geq \frac{\hbar}{2}
-        \]
-    </div>
-    Questa relazione indica che non è possibile conoscere con precisione arbitraria sia la posizione che il momento di una particella.
-
-    <h2>Relazione energia-tempo</h2>
-    Per energia \( E \) e tempo \( t \), esiste un limite simile:
-    <div class="formula">
-        \[
-        \Delta E \Delta t \geq \frac{\hbar}{2}
-        \]
-    </div>
-    Questa relazione è fondamentale per comprendere fenomeni transitori in fisica quantistica, come la larghezza di riga spettrale e le proprietà degli stati instabili.
-
-    <h2>Significato fisico</h2>
-    Le relazioni di indeterminazione non derivano da limiti tecnologici, ma dalla natura intrinseca della descrizione quantistica della realtà. Esse riflettono il fatto che osservabili non commutanti non possono essere misurate simultaneamente con precisione arbitraria.
-
-    <h2>Applicazioni</h2>
-    <ul>
-        <li>Spettroscopia: la relazione energia-tempo spiega la larghezza delle righe spettrali.</li>
-        <li>Ottica quantistica: limiti nella determinazione simultanea di fase e ampiezza di un'onda elettromagnetica.</li>
-        <li>Teoria dei campi: relazione tra stati di vuoto e fluttuazioni quantistiche.</li>
-    </ul>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 6</div>
-  <h2>Relazioni di Indeterminazione: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Usare la forma completa di Robertson-Schrödinger e interpretare il termine di covarianza.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Per operatori A e B la sola media del commutatore non esaurisce il limite. La parte anticommutatore misura correlazioni statistiche; stati ruotati o chirpati possono avere prodotto di varianze maggiore pur saturando la forma forte.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Forma completa<span class="lecture-step-boss">DIM 2</span></h4>
-      <p>Con \(\delta A=A-\langle A\rangle\).</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\Delta A^2\Delta B^2\ge\frac14|\langle[A,B]\rangle|^2+\frac14|\langle\{\delta A,\delta B\}\rangle|^2"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \|\delta A\psi\|^2\|\delta B\psi\|^2\ge|\langle\delta A\delta B\rangle|^2,\quad\delta A\delta B=\tfrac12\{\delta A,\delta B\}+\tfrac12[A,B]\Rightarrow\Delta A^2\Delta B^2\ge\tfrac14|\langle[A,B]\rangle|^2+\tfrac14|\langle\{\delta A,\delta B\}\rangle|^2\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Compatibilità<span class="lecture-step-boss">DIM 2</span></h4>
-      <p>Una base comune completa implica commutatore nullo, ma un solo stato con limite nullo non basta.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="[A,B]=0\Rightarrow \Delta A\Delta B\ge0"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle [A,B]=0\Rightarrow\langle[A,B]\rangle=0\Rightarrow\Delta A\Delta B\ge\tfrac12|\langle[A,B]\rangle|=0\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Stato chirpato</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Moltiplica una gaussiana per \(e^{icx^2}\).</p>
-    <p><strong>Calcolo.</strong> La densità e \(\Delta x\) restano uguali, ma compare covarianza x-p e aumenta \(\Delta p\).</p>
-    <p><strong>Risultato e controllo.</strong> La forma forte identifica l'aumento come correlazione, non come semplice rumore.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 2</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_14.html">Domanda 2025 n. 14</a> - Principio di Heisenberg</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Varianze finite.</li>
-          <li>Operatori e prodotti definiti sullo stato.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>L'indeterminazione è geometria dello stato: commutatore e covarianza separano incompatibilità algebrica e correlazione specifica.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Quando si satura la disuguaglianza?</li>
-          <li>Fornisci un caso con media del commutatore nulla ma operatori incompatibili.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=79">Appunti-MQ.pdf, pp. 79-85 e 95-96: Robertson-Schrödinger e coppia x-p</a></li>
-          <li><a href="MQ.pdf#page=9">MQ.pdf, pp. capitolo 9: varianze e commutatori</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-relazioni-indeterminazione"><div class="lecture-kicker">Lezione approfondita - Argomento 6 - DIM 0 e DIM 2</div><h1>Relazioni di indeterminazione di Robertson e Schrödinger</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare la disuguaglianza completa da Cauchy-Schwarz senza saltare i vettori centrati, separare commutatore e covarianza, ottenere il caso x-p, caratterizzare la saturazione gaussiana e verificare spin, compatibilità e limiti dell'interpretazione tempo-energia.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Dispersione, non errore strumentale</h3><p>Delta A misura la dispersione statistica degli esiti nello stato preparato. Può essere non nulla anche per un apparato ideale.</p></article><article class="lecture-card lecture-warning"><h3>Robertson è una conseguenza più debole</h3><p>La relazione completa contiene anche la covarianza simmetrizzata. Eliminandola si ottiene il limite con il solo commutatore, più noto ma talvolta non saturabile.</p></article></div><h2>Operatori centrati nello stato</h2><div class="lecture-grid"><article class="lecture-card "><h3>Scarti</h3><p>Si definiscono A tilde e B tilde sottraendo i rispettivi valori medi; le loro norme sul ket sono le varianze.</p></article><article class="lecture-card "><h3>Ipotesi</h3><p>Lo stato deve appartenere ai domini dei prodotti necessari e A,B devono essere autoaggiunti sulle condizioni al bordo scelte.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Operatori centrati<span class="lecture-step-boss">DEFINISCI</span></h4><p>Sottrarre uno scalare non cambia il commutatore ma rende nulli i valori medi degli scarti.</p><div class="lecture-formula" aria-label="Definizione degli operatori di scarto"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \widetilde A=A-\langle A\rangle I,\quad\widetilde B=B-\langle B\rangle I,\quad[\widetilde A,\widetilde B]=[A,B]\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Vettori di scarto<span class="lecture-step-boss">COSTRUISCI</span></h4><p>Si applicano gli operatori centrati allo stesso ket normalizzato.</p><div class="lecture-formula" aria-label="Vettori usati in Cauchy-Schwarz"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\alpha\rangle=\widetilde A|\psi\rangle,\qquad|\beta\rangle=\widetilde B|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Norme e varianze<span class="lecture-step-boss">IDENTIFICA</span></h4><p>Per autoaggiuntezza, le norme quadrate coincidono con le varianze.</p><div class="lecture-formula" aria-label="Varianze come norme"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\alpha|\alpha\rangle=\langle\widetilde A^2\rangle=(\Delta A)^2,\qquad\langle\beta|\beta\rangle=(\Delta B)^2\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Cauchy-Schwarz<span class="lecture-step-boss">DISUGUAGLIANZA</span></h4><p>Il prodotto delle norme limita il modulo quadro del prodotto interno.</p><div class="lecture-formula" aria-label="Applicazione di Cauchy-Schwarz"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (\Delta A)^2(\Delta B)^2\ge|\langle\alpha|\beta\rangle|^2=|\langle\widetilde A\widetilde B\rangle|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Commutatore e anticommutatore<span class="lecture-step-boss">SCOMPONI</span></h4><p>Il prodotto ordinato è metà parte simmetrica più metà parte antisimmetrica.</p><div class="lecture-formula" aria-label="Decomposizione del prodotto degli scarti"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \widetilde A\widetilde B=\frac12\{\widetilde A,\widetilde B\}+\frac12[A,B]\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Realtà delle due parti<span class="lecture-step-boss">HERMITICITÀ</span></h4><p>L'anticommutatore è hermitiano e ha media reale; il commutatore è antihermitiano e ha media puramente immaginaria.</p><div class="lecture-formula" aria-label="Separazione reale e immaginaria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\{\widetilde A,\widetilde B\}\rangle\in\mathbb R,\qquad\langle[A,B]\rangle^*=-\langle[A,B]\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Robertson-Schrödinger<span class="lecture-step-boss">RISULTATO</span></h4><p>Il modulo quadro è la somma dei quadrati delle due componenti ortogonali nel piano complesso.</p><div class="lecture-formula" aria-label="Relazione completa di Robertson-Schrödinger"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle (\Delta A)^2(\Delta B)^2\ge\frac14|\langle[A,B]\rangle|^2+\frac14|\langle\{\widetilde A,\widetilde B\}\rangle|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Robertson<span class="lecture-step-boss">COROLLARIO</span></h4><p>Eliminare il termine di covarianza non negativo produce la forma più nota.</p><div class="lecture-formula" aria-label="Relazione di Robertson"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Delta A\,\Delta B\ge\frac12|\langle[A,B]\rangle|\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Posizione e impulso<span class="lecture-step-boss">HEISENBERG</span></h4><p>Il commutatore canonico è uno scalare e il suo valore medio vale i hbar in ogni stato del dominio.</p><div class="lecture-formula" aria-label="Relazione di Heisenberg x-p"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [x,p]=i\hbar I\Rightarrow\Delta x\,\Delta p\ge\frac\hbar2\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Condizione di uguaglianza<span class="lecture-step-boss">CAUCHY</span></h4><p>Cauchy-Schwarz satura se e soltanto se i due vettori di scarto sono linearmente dipendenti.</p><div class="lecture-formula" aria-label="Condizione generale di saturazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \widetilde B|\psi\rangle=c\,\widetilde A|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Gaussiana minima<span class="lecture-step-boss">RISOLVI</span></h4><p>Per covarianza nulla e x-p, la costante è immaginaria e l'equazione del primo ordine si integra in una gaussiana.</p><div class="lecture-formula" aria-label="Equazione e soluzione dello stato minimo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \left[p-p_0-i\frac{\hbar}{2\sigma_x^2}(x-x_0)\right]\psi=0\Rightarrow\psi(x)=C e^{-(x-x_0)^2/(4\sigma_x^2)+ip_0x/\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Normalizzazione e prodotto<span class="lecture-step-boss">CHECK</span></h4><p>Normalizzare la gaussiana e trasformarla in impulso fissa la varianza coniugata.</p><div class="lecture-formula" aria-label="Saturazione della gaussiana"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle C=(2\pi\sigma_x^2)^{-1/4},\qquad\sigma_p=\frac\hbar{2\sigma_x},\qquad\sigma_x\sigma_p=\frac\hbar2\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Esempio di spin<span class="lecture-step-boss">PAULI</span></h4><p>Nello stato più z, Sx e Sy hanno medie nulle e varianze hbar quadrato su quattro; il limite è saturato.</p><div class="lecture-formula" aria-label="Saturazione per uno spin polarizzato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [S_x,S_y]=i\hbar S_z,\quad\Delta S_x=\Delta S_y=\frac\hbar2,\quad\frac12|\langle[S_x,S_y]\rangle|=\frac{\hbar^2}{4}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Compatibilità<span class="lecture-step-boss">LIMITE ZERO</span></h4><p>Se il commutatore è nullo, Robertson dà soltanto un limite zero; esistono autostati comuni, ma uno stato generico può ancora avere entrambe le dispersioni non nulle.</p><div class="lecture-formula" aria-label="Compatibilità e assenza di limite positivo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [A,B]=0\Rightarrow\Delta A\Delta B\ge0\quad\text{e può esistere }|a,b\rangle\text{ con }\Delta A=\Delta B=0\)</span></div></article></section><h2>Esempio: stato non minimo con covarianza</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Per una gaussiana con fase quadratica reale gamma, posizione e impulso sono correlati.</p><p data-i18n-skip="true">\(\displaystyle \psi(x)\propto e^{-(1-i\gamma)(x-x_0)^2/(4\sigma_x^2)+ip_0x/\hbar},\quad\sigma_p^2=\frac{\hbar^2}{4\sigma_x^2}(1+\gamma^2),\quad\frac12\langle\{\widetilde x,\widetilde p\}\rangle=\frac{\hbar\gamma}{2}\)</p><p><strong>Controllo.</strong> Il prodotto sigma x sigma p supera hbar su due se gamma non è zero, ma la relazione completa è ancora saturata perché include la covarianza.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Commutatore medio nullo</h3><p>Un commutatore operatoriale non nullo può avere valore medio zero in uno stato particolare, rendendo Robertson non informativa. La covarianza o altre disuguaglianze possono restare utili.</p></article><article class="lecture-card "><h3>Tempo-energia</h3><p>Nel formalismo non relativistico ordinario il tempo è un parametro, non un operatore canonico universale. Relazioni tempo-energia descrivono durata dinamica, larghezza spettrale o risoluzione secondo la definizione adottata.</p></article><article class="lecture-card "><h3>Disturbo di misura</h3><p>Robertson riguarda dispersioni nello stesso stato, non quantifica direttamente il disturbo prodotto da due apparecchi successivi. Le relazioni errore-disturbo richiedono definizioni aggiuntive.</p></article><article class="lecture-card "><h3>Domini</h3><p>Per x e p su domini con bordi, integrazione per parti e commutatore formale possono avere termini di bordo. Lo stato deve appartenere ai domini dei prodotti usati.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Partire direttamente dal commutatore senza Cauchy-Schwarz; confondere delta A con errore sperimentale; dimenticare la covarianza; affermare che ogni gaussiana satura Robertson semplice; trattare il tempo come operatore x-analogo senza ipotesi.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Gli operatori sono centrati; le norme sono varianze; anticommutatore reale e commutatore immaginario; il lato destro ha unità di A per B; la gaussiana minima dà hbar su due.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci gli scarti e i due vettori.</li><li>Applica Cauchy-Schwarz.</li><li>Scomponi il prodotto in commutatore e anticommutatore.</li><li>Ricava Robertson-Schrödinger e Robertson.</li><li>Specializza a x e p.</li><li>Enuncia la condizione di uguaglianza.</li><li>Risolvi e normalizza la gaussiana minima.</li><li>Spiega spin, compatibilità e cautela tempo-energia.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, misura ed evoluzione</a></li><li><a href="boss/P1_DIM_0-6.txt#L616">DIM 2 - derivazione completa dell'indeterminazione</a></li><li><a href="Appunti-MQ.pdf#page=79">Appunti-MQ.pdf, pagine PDF 79-82 - osservabili incompatibili e derivazione dell'indeterminazione</a></li></ul><p class="lecture-note">La dimostrazione segue DIM 2 e le pagine verificate 79-82, conserva il termine di covarianza della relazione completa e risolve esplicitamente la condizione di saturazione x-p.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 6 - DIM 0 e DIM 2":"In-depth lesson - Topic 6 - DIM 0 and DIM 2","Relazioni di indeterminazione di Robertson e Schrödinger":"Robertson and Schrödinger uncertainty relations","Obiettivo.":"Objective.","Derivare la disuguaglianza completa da Cauchy-Schwarz senza saltare i vettori centrati, separare commutatore e covarianza, ottenere il caso x-p, caratterizzare la saturazione gaussiana e verificare spin, compatibilità e limiti dell'interpretazione tempo-energia.":"Derive the complete inequality from Cauchy-Schwarz without skipping centered vectors, separate commutator and covariance, obtain the x-p case, characterize Gaussian saturation, and check spin, compatibility, and limits of the time-energy interpretation.","Dispersione, non errore strumentale":"Spread, not instrumental error","Delta A misura la dispersione statistica degli esiti nello stato preparato. Può essere non nulla anche per un apparato ideale.":"Delta A measures the statistical spread of outcomes in the prepared state. It may be nonzero even for an ideal apparatus.","Robertson è una conseguenza più debole":"Robertson is a weaker consequence","La relazione completa contiene anche la covarianza simmetrizzata. Eliminandola si ottiene il limite con il solo commutatore, più noto ma talvolta non saturabile.":"The complete relation also contains symmetrized covariance. Dropping it gives the more familiar commutator-only bound, which may not be saturable.","Operatori centrati nello stato":"Operators centered in the state","Scarti":"Deviations","Si definiscono A tilde e B tilde sottraendo i rispettivi valori medi; le loro norme sul ket sono le varianze.":"Define centered A tilde and B tilde by subtracting their expectations; their norms on the ket are the variances.","Ipotesi":"Assumptions","Lo stato deve appartenere ai domini dei prodotti necessari e A,B devono essere autoaggiunti sulle condizioni al bordo scelte.":"The state must belong to the domains of the required products and A,B must be self-adjoint under the chosen boundary conditions.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Operatori centrati":"1. Centered operators","DEFINISCI":"DEFINE","Sottrarre uno scalare non cambia il commutatore ma rende nulli i valori medi degli scarti.":"Subtracting a scalar does not change the commutator but makes centered expectations vanish.","Passaggio":"Step","2. Vettori di scarto":"2. Deviation vectors","COSTRUISCI":"CONSTRUCT","Si applicano gli operatori centrati allo stesso ket normalizzato.":"Apply centered operators to the same normalized ket.","3. Norme e varianze":"3. Norms and variances","IDENTIFICA":"IDENTIFY","Per autoaggiuntezza, le norme quadrate coincidono con le varianze.":"By self-adjointness, squared norms equal the variances.","4. Cauchy-Schwarz":"4. Cauchy-Schwarz","DISUGUAGLIANZA":"INEQUALITY","Il prodotto delle norme limita il modulo quadro del prodotto interno.":"The norm product bounds the squared modulus of the inner product.","5. Commutatore e anticommutatore":"5. Commutator and anticommutator","SCOMPONI":"DECOMPOSE","Il prodotto ordinato è metà parte simmetrica più metà parte antisimmetrica.":"The ordered product is half symmetric part plus half antisymmetric part.","6. Realtà delle due parti":"6. Reality of both parts","HERMITICITÀ":"HERMITICITY","L'anticommutatore è hermitiano e ha media reale; il commutatore è antihermitiano e ha media puramente immaginaria.":"The anticommutator is Hermitian with real expectation; the commutator is anti-Hermitian with purely imaginary expectation.","7. Robertson-Schrödinger":"7. Robertson-Schrödinger","RISULTATO":"RESULT","Il modulo quadro è la somma dei quadrati delle due componenti ortogonali nel piano complesso.":"The squared modulus is the sum of squares of the two orthogonal complex-plane components.","8. Robertson":"8. Robertson","COROLLARIO":"COROLLARY","Eliminare il termine di covarianza non negativo produce la forma più nota.":"Dropping the nonnegative covariance term gives the familiar form.","9. Posizione e impulso":"9. Position and momentum","HEISENBERG":"HEISENBERG","Il commutatore canonico è uno scalare e il suo valore medio vale i hbar in ogni stato del dominio.":"The canonical commutator is a scalar and its expectation equals i hbar in every state in the domain.","10. Condizione di uguaglianza":"10. Equality condition","CAUCHY":"CAUCHY","Cauchy-Schwarz satura se e soltanto se i due vettori di scarto sono linearmente dipendenti.":"Cauchy-Schwarz saturates if and only if the two deviation vectors are linearly dependent.","11. Gaussiana minima":"11. Minimum Gaussian","RISOLVI":"SOLVE","Per covarianza nulla e x-p, la costante è immaginaria e l'equazione del primo ordine si integra in una gaussiana.":"For zero covariance and x-p, the constant is imaginary and the first-order equation integrates to a Gaussian.","12. Normalizzazione e prodotto":"12. Normalization and product","CHECK":"CHECK","Normalizzare la gaussiana e trasformarla in impulso fissa la varianza coniugata.":"Normalize the Gaussian and Fourier transform it to fix the conjugate variance.","13. Esempio di spin":"13. Spin example","PAULI":"PAULI","Nello stato più z, Sx e Sy hanno medie nulle e varianze hbar quadrato su quattro; il limite è saturato.":"In the plus-z state, Sx and Sy have zero means and variances hbar squared over four; the bound is saturated.","14. Compatibilità":"14. Compatibility","LIMITE ZERO":"ZERO BOUND","Se il commutatore è nullo, Robertson dà soltanto un limite zero; esistono autostati comuni, ma uno stato generico può ancora avere entrambe le dispersioni non nulle.":"If the commutator vanishes, Robertson gives only a zero bound; common eigenstates exist, but a generic state may still have both spreads nonzero.","Esempio: stato non minimo con covarianza":"Example: nonminimum state with covariance","Impostazione.":"Setup.","Per una gaussiana con fase quadratica reale gamma, posizione e impulso sono correlati.":"For a Gaussian with real quadratic phase gamma, position and momentum are correlated.","Controllo.":"Check.","Il prodotto sigma x sigma p supera hbar su due se gamma non è zero, ma la relazione completa è ancora saturata perché include la covarianza.":"The product sigma x sigma p exceeds hbar over two when gamma is nonzero, but the full relation is still saturated because it includes covariance.","Interpretazione e limiti":"Interpretation and limits","Commutatore medio nullo":"Zero mean commutator","Un commutatore operatoriale non nullo può avere valore medio zero in uno stato particolare, rendendo Robertson non informativa. La covarianza o altre disuguaglianze possono restare utili.":"A nonzero operator commutator may have zero expectation in a particular state, making Robertson uninformative. Covariance or other inequalities may remain useful.","Tempo-energia":"Time-energy","Nel formalismo non relativistico ordinario il tempo è un parametro, non un operatore canonico universale. Relazioni tempo-energia descrivono durata dinamica, larghezza spettrale o risoluzione secondo la definizione adottata.":"In ordinary nonrelativistic formalism time is a parameter, not a universal canonical operator. Time-energy relations describe dynamical duration, spectral width, or resolution depending on the adopted definition.","Disturbo di misura":"Measurement disturbance","Robertson riguarda dispersioni nello stesso stato, non quantifica direttamente il disturbo prodotto da due apparecchi successivi. Le relazioni errore-disturbo richiedono definizioni aggiuntive.":"Robertson concerns spreads in the same state and does not directly quantify disturbance from successive apparatuses. Error-disturbance relations need additional definitions.","Domini":"Domains","Per x e p su domini con bordi, integrazione per parti e commutatore formale possono avere termini di bordo. Lo stato deve appartenere ai domini dei prodotti usati.":"For x and p on bounded domains, integration by parts and the formal commutator may have boundary terms. The state must lie in the domains of the products used.","Errori tipici":"Common errors","Partire direttamente dal commutatore senza Cauchy-Schwarz; confondere delta A con errore sperimentale; dimenticare la covarianza; affermare che ogni gaussiana satura Robertson semplice; trattare il tempo come operatore x-analogo senza ipotesi.":"Starting directly from the commutator without Cauchy-Schwarz; confusing delta A with experimental error; forgetting covariance; claiming every Gaussian saturates simple Robertson; treating time as an x-like operator without assumptions.","Controlli rapidi":"Quick checks","Gli operatori sono centrati; le norme sono varianze; anticommutatore reale e commutatore immaginario; il lato destro ha unità di A per B; la gaussiana minima dà hbar su due.":"Operators are centered; norms are variances; anticommutator is real and commutator imaginary; the right-hand side has A times B units; the minimum Gaussian gives hbar over two.","Controllo da orale":"Oral exam checklist","Definisci gli scarti e i due vettori.":"Define deviations and the two vectors.","Applica Cauchy-Schwarz.":"Apply Cauchy-Schwarz.","Scomponi il prodotto in commutatore e anticommutatore.":"Decompose the product into commutator and anticommutator.","Ricava Robertson-Schrödinger e Robertson.":"Derive Robertson-Schrödinger and Robertson.","Specializza a x e p.":"Specialize to x and p.","Enuncia la condizione di uguaglianza.":"State the equality condition.","Risolvi e normalizza la gaussiana minima.":"Solve and normalize the minimum Gaussian.","Spiega spin, compatibilità e cautela tempo-energia.":"Explain spin, compatibility, and time-energy caution.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, misura ed evoluzione":"DIM 0 - postulates, measurement, and evolution","DIM 2 - derivazione completa dell'indeterminazione":"DIM 2 - complete uncertainty derivation","Appunti-MQ.pdf, pagine PDF 79-82 - osservabili incompatibili e derivazione dell'indeterminazione":"Appunti-MQ.pdf, PDF pages 79-82 - osservabili incompatibili e derivazione dell'indeterminazione","La dimostrazione segue DIM 2 e le pagine verificate 79-82, conserva il termine di covarianza della relazione completa e risolve esplicitamente la condizione di saturazione x-p.":"The proof follows DIM 2 and verified pages 79-82, retains the covariance term in the full relation, and explicitly solves the x-p saturation condition.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Definizione degli operatori di scarto":"Definition of deviation operators","Vettori usati in Cauchy-Schwarz":"Vectors used in Cauchy-Schwarz","Varianze come norme":"Variances as norms","Applicazione di Cauchy-Schwarz":"Application of Cauchy-Schwarz","Decomposizione del prodotto degli scarti":"Decomposition of the deviation product","Separazione reale e immaginaria":"Separation into real and imaginary parts","Relazione completa di Robertson-Schrödinger":"Full Robertson-Schrödinger relation","Relazione di Robertson":"Robertson relation","Relazione di Heisenberg x-p":"Heisenberg x-p relation","Condizione generale di saturazione":"General saturation condition","Equazione e soluzione dello stato minimo":"Equation and solution of the minimum state","Saturazione della gaussiana":"Gaussian saturation","Saturazione per uno spin polarizzato":"Saturation for a polarized spin","Compatibilità e assenza di limite positivo":"Compatibility and absence of a positive bound"},"title":{"it":"Relazioni di indeterminazione di Robertson e Schrödinger","en":"Robertson and Schrödinger uncertainty relations"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

@@ -1,288 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sviluppo in Serie di Autofunzioni</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sviluppo in serie di autofunzioni</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Sviluppo in Serie di Autofunzioni</h1>
-    <h2>Concetto di base</h2>
-    In meccanica quantistica, una qualsiasi funzione d'onda \( \psi(x) \) che descrive uno stato quantistico può essere espressa come combinazione lineare delle autofunzioni \( \psi_n(x) \) dell'operatore hamiltoniano:
-    <div class="formula">
-        \[
-        \psi(x, t) = \sum_n c_n \psi_n(x) e^{-i E_n t / \hbar}
-        \]
-    </div>
-    dove \( c_n \) sono i coefficienti di sviluppo e rappresentano l'ampiezza della probabilità che il sistema si trovi nello stato \( n \).
-
-    <h2>Proprietà delle autofunzioni</h2>
-    Le autofunzioni \( \psi_n(x) \) hanno le seguenti proprietà fondamentali:
-    <ul>
-        <li><strong>Ortogonalità:</strong>
-            \[
-            \int \psi_n^*(x) \psi_m(x) dx = \delta_{nm}
-            \]
-            dove \( \delta_{nm} \) è il delta di Kronecker.</li>
-        <li><strong>Completezza:</strong> Qualsiasi funzione \( \psi(x) \) può essere sviluppata nella base formata dalle autofunzioni:
-            \[
-            \psi(x) = \sum_n c_n \psi_n(x)
-            \]
-        </li>
-    </ul>
-
-    <h2>Calcolo dei coefficienti</h2>
-    I coefficienti \( c_n \) dello sviluppo in serie si calcolano come:
-    <div class="formula">
-        \[
-        c_n = \int \psi_n^*(x) \psi(x) dx
-        \]
-    </div>
-    Questo implica che i coefficienti \( c_n \) rappresentano la proiezione della funzione d'onda iniziale \( \psi(x) \) sulla \( n \)-esima autofunzione.
-
-    <h2>Evoluzione temporale</h2>
-    Una funzione d'onda \( \psi(x, t) \) evolve nel tempo secondo l'equazione di Schrödinger. Se si conosce lo sviluppo iniziale \( \psi(x, 0) \), l'evoluzione temporale è data da:
-    <div class="formula">
-        \[
-        \psi(x, t) = \sum_n c_n \psi_n(x) e^{-i E_n t / \hbar}
-        \]
-    </div>
-    dove \( E_n \) è l'autovalore energetico associato allo stato \( n \).
-
-    <h2>Esempio: Buca di potenziale infinita</h2>
-    Consideriamo una particella confinata in una buca di potenziale infinita di larghezza \( L \). Le autofunzioni sono:
-    <div class="formula">
-        \[
-        \psi_n(x) = \sqrt{\frac{2}{L}} \sin\left(\frac{n \pi x}{L}\right), \quad n = 1, 2, 3, \ldots
-        \]
-    </div>
-    Se la funzione d'onda iniziale è una combinazione di autofunzioni, ad esempio:
-    <div class="formula">
-        \[
-        \psi(x, 0) = a \psi_1(x) + b \psi_2(x)
-        \]
-    </div>
-    la sua evoluzione temporale è:
-    <div class="formula">
-        \[
-        \psi(x, t) = a \psi_1(x) e^{-i E_1 t / \hbar} + b \psi_2(x) e^{-i E_2 t / \hbar}
-        \]
-    </div>
-
-    <h2>Significato fisico</h2>
-    Lo sviluppo in serie di autofunzioni consente di descrivere stati quantistici generici come combinazioni di stati base. Questa rappresentazione è essenziale per calcolare osservabili, probabilità di transizione e altri fenomeni quantistici.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 3</div>
-  <h2>Sviluppo in Serie di Autofunzioni: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Espandere uno stato in una base completa e far evolvere separatamente i coefficienti energetici.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>La completezza consente di sostituire un'equazione differenziale con l'evoluzione di coefficienti. Per una base ortonormale \(c_n=\langle n|\psi\rangle\); nel continuo compare una densità di ampiezza.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Espansione<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Inserendo l'identità.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|\psi\rangle=\sum_n|n\rangle\langle n|\psi\rangle=\sum_nc_n|n\rangle"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle I=\sum_n|n\rangle\langle n|\Rightarrow|\psi\rangle=I|\psi\rangle=\sum_n|n\rangle\langle n|\psi\rangle=\sum_nc_n|n\rangle\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Evoluzione<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Se H è indipendente dal tempo.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="c_n(t)=c_n(0)e^{-iE_nt/\hbar}"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle i\hbar\dot c_n=E_nc_n\Rightarrow\dot c_n/c_n=-iE_n/\hbar\Rightarrow c_n(t)=c_n(0)e^{-iE_nt/\hbar}\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Due livelli</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Sia \(|\psi(0)\rangle=(|1\rangle+|2\rangle)/\sqrt2\).</p>
-    <p><strong>Calcolo.</strong> Le popolazioni restano \(1/2\), la fase relativa evolve con \((E_2-E_1)t/\hbar\).</p>
-    <p><strong>Risultato e controllo.</strong> Osservabili non diagonali mostrano oscillazioni alla frequenza di Bohr.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P1_DIM_0-6.txt">DIM 3</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Base completa nel sottospazio fisico.</li>
-          <li>Con H dipendente dal tempo i coefficienti si accoppiano.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Le probabilità energetiche possono restare costanti mentre altre osservabili evolvono attraverso le fasi relative.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Calcola la norma dalla somma dei \(|c_n|^2\).</li>
-          <li>Aggiungi correttamente un contributo continuo.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=74">Appunti-MQ.pdf, pp. 74-76 e 107-114: completezza ed evoluzione dei coefficienti</a></li>
-          <li><a href="MQ.pdf#page=3">MQ.pdf, pp. capitoli 3 e 10: espansione nella base energetica</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-sviluppo-serie-autofunzioni"><div class="lecture-kicker">Lezione approfondita - completezza, coefficienti e Parseval</div><h1>Sviluppo in serie di autofunzioni</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Derivare i coefficienti di espansione da ortonormalità, dimostrare Parseval e ricostruzione, includere degenerazione e continuo, e quantificare l'errore di troncamento.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Coordinate in Hilbert</h3><p>I coefficienti c_n sono le coordinate complesse dello stato in una base ortonormale. Cambiare osservabile significa cambiare base, non cambiare stato.</p></article><article class="lecture-card lecture-warning"><h3>Completezza necessaria</h3><p>Ortonormalità permette di estrarre coefficienti, ma solo la completezza garantisce che la serie ricostruisca ogni stato del sottospazio considerato.</p></article></div><h2>Base ortonormale e chiusura</h2><div class="lecture-grid"><article class="lecture-card "><h3>Spettro discreto</h3><p>Si parte da una famiglia completa |u_n&gt; con prodotti delta di Kronecker. La convergenza è in norma di Hilbert, non necessariamente puntuale.</p></article><article class="lecture-card "><h3>Caso energia</h3><p>Se la base è quella di H, gli stessi coefficienti fissano probabilità di energia ed evoluzione temporale per un Hamiltoniano stazionario.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Ortonormalità<span class="lecture-step-boss">BASE</span></h4><p>Gli elementi della base hanno norma uno e sono mutuamente ortogonali.</p><div class="lecture-formula" aria-label="Relazione di ortonormalità discreta"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_m|u_n\rangle=\delta_{mn}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Chiusura<span class="lecture-step-boss">COMPLETEZZA</span></h4><p>La somma dei proiettori di base agisce come identità su ogni stato.</p><div class="lecture-formula" aria-label="Risoluzione discreta dell&#x27;identità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle I=\sum_n|u_n\rangle\langle u_n|\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Inserimento dell'identità<span class="lecture-step-boss">DERIVA</span></h4><p>Applicando la chiusura a psi si ottiene direttamente lo sviluppo.</p><div class="lecture-formula" aria-label="Derivazione dello sviluppo di uno stato"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=I|\psi\rangle=\sum_n|u_n\rangle\langle u_n|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Coefficienti<span class="lecture-step-boss">RISULTATO</span></h4><p>Il prodotto con il bra u_m isola un solo termine grazie alla delta di Kronecker.</p><div class="lecture-formula" aria-label="Formula dei coefficienti di Fourier quantistici"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_nc_n|u_n\rangle,\qquad c_n=\langle u_n|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Rappresentazione x<span class="lecture-step-boss">FUNZIONI</span></h4><p>Proiettando su x, il ket diventa una serie delle autofunzioni u_n(x).</p><div class="lecture-formula" aria-label="Sviluppo funzionale in coordinate"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(x)=\langle x|\psi\rangle=\sum_nc_nu_n(x),\qquad u_n(x)=\langle x|u_n\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Norma della serie<span class="lecture-step-boss">PARSEVAL</span></h4><p>Sostituendo bra e ket espansi, i doppi indici collassano sulla diagonale.</p><div class="lecture-formula" aria-label="Identità di Parseval"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle\psi|\psi\rangle=\sum_{mn}c_m^*c_n\langle u_m|u_n\rangle=\sum_n|c_n|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Stato normalizzato<span class="lecture-step-boss">BORN</span></h4><p>Se la norma vale uno, i moduli quadri formano una distribuzione discreta.</p><div class="lecture-formula" aria-label="Normalizzazione dei coefficienti e Born"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \sum_n|c_n|^2=1,\qquad P(a_n)=|c_n|^2\quad\text{nel caso non degenere}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Prodotto di due stati<span class="lecture-step-boss">PLANCHEREL</span></h4><p>Le coordinate preservano il prodotto interno e quindi tutte le distanze e gli angoli di Hilbert.</p><div class="lecture-formula" aria-label="Identità di Plancherel discreta"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_nc_n|u_n\rangle,\ |\phi\rangle=\sum_nd_n|u_n\rangle\Rightarrow\langle\phi|\psi\rangle=\sum_nd_n^*c_n\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Operatore diagonale<span class="lecture-step-boss">SPETTRALE</span></h4><p>Nella propria base, A moltiplica ogni coefficiente per il corrispondente autovalore.</p><div class="lecture-formula" aria-label="Azione di un operatore nella base spettrale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|\psi\rangle=\sum_na_nc_n|u_n\rangle,\qquad\langle A\rangle=\sum_na_n|c_n|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Degenerazione<span class="lecture-step-boss">DEG</span></h4><p>Un secondo indice risolve una base ortonormale nell'autospazio; la probabilità del valore somma i moduli quadri interni.</p><div class="lecture-formula" aria-label="Sviluppo e probabilità nel caso degenere"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle=\sum_{n,k}c_n^{(k)}|u_n^{(k)}\rangle,\qquad P(a_n)=\sum_{k=1}^{r_n}|c_n^{(k)}|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Continuo<span class="lecture-step-boss">INTEGRALE</span></h4><p>La delta di Dirac svolge il ruolo della delta di Kronecker e i coefficienti diventano una densità di ampiezza.</p><div class="lecture-formula" aria-label="Sviluppo su uno spettro continuo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle u_a|u_{a'}\rangle=\delta(a-a'),\quad|\psi\rangle=\int da\,c(a)|u_a\rangle,\quad c(a)=\langle u_a|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Spettro misto<span class="lecture-step-boss">SOMMA+INT</span></h4><p>Se esistono stati legati e scattering, la completezza contiene entrambi senza doppio conteggio.</p><div class="lecture-formula" aria-label="Chiusura per spettro discreto e continuo"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle I=\sum_{n\in\rm bound}|n\rangle\langle n|+\int_{\rm cont}dE\sum_\alpha|E,\alpha\rangle\langle E,\alpha|\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Troncamento<span class="lecture-step-boss">ERRORE</span></h4><p>La proiezione sui primi N modi è l'approssimazione di minima distanza nello spazio da essi generato.</p><div class="lecture-formula" aria-label="Errore esatto del troncamento ortogonale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi_N\rangle=\sum_{n=1}^Nc_n|u_n\rangle,\qquad\|\psi-\psi_N\|^2=\sum_{n&gt;N}|c_n|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Cambio di base<span class="lecture-step-boss">UNITARIA</span></h4><p>Le coordinate in due basi ortonormali sono collegate dalla matrice unitaria delle sovrapposizioni.</p><div class="lecture-formula" aria-label="Trasformazione unitaria dei coefficienti"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle d_\alpha=\sum_nU_{\alpha n}c_n,\qquad U_{\alpha n}=\langle v_\alpha|u_n\rangle,\qquad UU^\dagger=I\)</span></div></article></section><h2>Esempio: buca infinita</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Nell'intervallo 0&lt;x&lt;L, le autofunzioni di energia formano la base seno.</p><p data-i18n-skip="true">\(\displaystyle u_n(x)=\sqrt{\frac2L}\sin\frac{n\pi x}{L},\quad c_n=\sqrt{\frac2L}\int_0^Ldx\,\sin\frac{n\pi x}{L}\,\psi(x),\quad\sum_n|c_n|^2=1\)</p><p><strong>Controllo.</strong> Le condizioni al bordo sono incorporate nella base. Una funzione iniziale che non le rispetta puntualmente può comunque avere una rappresentazione in norma, con il consueto significato delle serie di Fourier ai bordi.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Fasi dei coefficienti</h3><p>I moduli quadri fissano le probabilità nella base, ma le fasi relative sono indispensabili per interferenza e misure in basi diverse.</p></article><article class="lecture-card "><h3>Convergenza</h3><p>Convergenza in norma garantisce probabilità totali corrette; proprietà puntuali e derivate richiedono ipotesi di regolarità più forti.</p></article><article class="lecture-card "><h3>Scelta della base</h3><p>Una base adattata a simmetrie o all'Hamiltoniano rende pochi coefficienti rilevanti e migliora l'efficienza dei troncamenti.</p></article><article class="lecture-card "><h3>Densità di probabilità</h3><p>Nel continuo |c(a)|² è densità rispetto alla misura da specificare; una riparametrizzazione introduce il relativo Jacobiano.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dimenticare il complesso coniugato nel coefficiente integrale; confondere ortogonalità con completezza; sommare ampiezze dentro un risultato degenere; trattare |c(E)|² come probabilità puntuale; ignorare l'errore di coda.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Coefficienti adimensionali nel discreto; Parseval; ricostruzione tramite I; probabilità totale uno; cambio di base unitario; errore di troncamento non negativo.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Enuncia ortonormalità e completezza.</li><li>Inserisci I sullo stato.</li><li>Proietta per ricavare c_n.</li><li>Dimostra Parseval.</li><li>Calcola l'azione di A nella sua base.</li><li>Aggiungi degenerazione e continuo.</li><li>Quantifica l'errore del troncamento.</li><li>Mostra il cambio unitario di base.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, TISE, TDSE, misura e proiettori</a></li><li><a href="PostulatiQM.html">Postulati della meccanica quantistica - quadro generale</a></li><li><a href="set-6-operatori-autofunzioni.html">Set 6 - operatori, autofunzioni e spettro</a></li></ul><p class="lecture-note">La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - completezza, coefficienti e Parseval":"In-depth lesson - completeness, coefficients, and Parseval","Sviluppo in serie di autofunzioni":"Expansion in an eigenfunction series","Obiettivo.":"Objective.","Derivare i coefficienti di espansione da ortonormalità, dimostrare Parseval e ricostruzione, includere degenerazione e continuo, e quantificare l'errore di troncamento.":"Derive expansion coefficients from orthonormality, prove Parseval and reconstruction, include degeneracy and continuum, and quantify truncation error.","Coordinate in Hilbert":"Coordinates in Hilbert space","I coefficienti c_n sono le coordinate complesse dello stato in una base ortonormale. Cambiare osservabile significa cambiare base, non cambiare stato.":"Coefficients c_n are complex coordinates of the state in an orthonormal basis. Changing the observable changes the basis, not the state.","Completezza necessaria":"Completeness is required","Ortonormalità permette di estrarre coefficienti, ma solo la completezza garantisce che la serie ricostruisca ogni stato del sottospazio considerato.":"Orthonormality allows coefficient extraction, but only completeness guarantees that the series reconstructs every state in the considered subspace.","Base ortonormale e chiusura":"Orthonormal basis and closure","Spettro discreto":"Discrete spectrum","Si parte da una famiglia completa |u_n> con prodotti delta di Kronecker. La convergenza è in norma di Hilbert, non necessariamente puntuale.":"Start from a complete family |u_n> with Kronecker-delta products. Convergence is in Hilbert norm, not necessarily pointwise.","Caso energia":"Energy case","Se la base è quella di H, gli stessi coefficienti fissano probabilità di energia ed evoluzione temporale per un Hamiltoniano stazionario.":"If the basis is that of H, the same coefficients determine energy probabilities and time evolution for a stationary Hamiltonian.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Ortonormalità":"1. Orthonormality","BASE":"BASE","Gli elementi della base hanno norma uno e sono mutuamente ortogonali.":"Basis elements have unit norm and are mutually orthogonal.","Passaggio":"Step","2. Chiusura":"2. Closure","COMPLETEZZA":"COMPLETENESS","La somma dei proiettori di base agisce come identità su ogni stato.":"The sum of basis projectors acts as the identity on every state.","3. Inserimento dell'identità":"3. Identity insertion","DERIVA":"DERIVE","Applicando la chiusura a psi si ottiene direttamente lo sviluppo.":"Applying closure to psi directly yields the expansion.","4. Coefficienti":"4. Coefficients","RISULTATO":"RESULT","Il prodotto con il bra u_m isola un solo termine grazie alla delta di Kronecker.":"Inner product with bra u_m isolates one term through the Kronecker delta.","5. Rappresentazione x":"5. x representation","FUNZIONI":"FUNCTIONS","Proiettando su x, il ket diventa una serie delle autofunzioni u_n(x).":"Projecting onto x turns the ket into a series of eigenfunctions u_n(x).","6. Norma della serie":"6. Series norm","PARSEVAL":"PARSEVAL","Sostituendo bra e ket espansi, i doppi indici collassano sulla diagonale.":"Substituting expanded bra and ket collapses double indices onto the diagonal.","7. Stato normalizzato":"7. Normalized state","BORN":"BORN","Se la norma vale uno, i moduli quadri formano una distribuzione discreta.":"If norm equals one, squared magnitudes form a discrete distribution.","8. Prodotto di due stati":"8. Inner product of two states","PLANCHEREL":"PLANCHEREL","Le coordinate preservano il prodotto interno e quindi tutte le distanze e gli angoli di Hilbert.":"Coordinates preserve the inner product and thus all Hilbert-space distances and angles.","9. Operatore diagonale":"9. Diagonal operator","SPETTRALE":"SPECTRAL","Nella propria base, A moltiplica ogni coefficiente per il corrispondente autovalore.":"In its eigenbasis, A multiplies each coefficient by the corresponding eigenvalue.","10. Degenerazione":"10. Degeneracy","DEG":"DEG","Un secondo indice risolve una base ortonormale nell'autospazio; la probabilità del valore somma i moduli quadri interni.":"A second index resolves an orthonormal basis in the eigenspace; probability of the value sums internal squared magnitudes.","11. Continuo":"11. Continuum","INTEGRALE":"INTEGRAL","La delta di Dirac svolge il ruolo della delta di Kronecker e i coefficienti diventano una densità di ampiezza.":"The Dirac delta plays the role of the Kronecker delta and coefficients become an amplitude density.","12. Spettro misto":"12. Mixed spectrum","SOMMA+INT":"SUM+INT","Se esistono stati legati e scattering, la completezza contiene entrambi senza doppio conteggio.":"If bound and scattering states coexist, completeness contains both without double counting.","13. Troncamento":"13. Truncation","ERRORE":"ERROR","La proiezione sui primi N modi è l'approssimazione di minima distanza nello spazio da essi generato.":"Projection onto the first N modes is the minimum-distance approximation in their span.","14. Cambio di base":"14. Change of basis","UNITARIA":"UNITARY","Le coordinate in due basi ortonormali sono collegate dalla matrice unitaria delle sovrapposizioni.":"Coordinates in two orthonormal bases are related by the unitary overlap matrix.","Esempio: buca infinita":"Example: infinite well","Impostazione.":"Setup.","Nell'intervallo 0<x<L, le autofunzioni di energia formano la base seno.":"On interval 0<x<L, energy eigenfunctions form the sine basis.","Controllo.":"Check.","Le condizioni al bordo sono incorporate nella base. Una funzione iniziale che non le rispetta puntualmente può comunque avere una rappresentazione in norma, con il consueto significato delle serie di Fourier ai bordi.":"Boundary conditions are built into the basis. An initial function that does not satisfy them pointwise may still have a norm-convergent representation, with the usual Fourier-series meaning at boundaries.","Interpretazione e limiti":"Interpretation and limits","Fasi dei coefficienti":"Coefficient phases","I moduli quadri fissano le probabilità nella base, ma le fasi relative sono indispensabili per interferenza e misure in basi diverse.":"Squared magnitudes fix probabilities in the basis, but relative phases are essential for interference and measurements in other bases.","Convergenza":"Convergence","Convergenza in norma garantisce probabilità totali corrette; proprietà puntuali e derivate richiedono ipotesi di regolarità più forti.":"Norm convergence guarantees correct total probabilities; pointwise properties and derivatives require stronger regularity assumptions.","Scelta della base":"Basis choice","Una base adattata a simmetrie o all'Hamiltoniano rende pochi coefficienti rilevanti e migliora l'efficienza dei troncamenti.":"A basis adapted to symmetries or the Hamiltonian leaves few relevant coefficients and improves truncation efficiency.","Densità di probabilità":"Probability density","Nel continuo |c(a)|² è densità rispetto alla misura da specificare; una riparametrizzazione introduce il relativo Jacobiano.":"In the continuum, |c(a)|² is a density with respect to a specified measure; reparameterization introduces the corresponding Jacobian.","Errori tipici":"Common errors","Dimenticare il complesso coniugato nel coefficiente integrale; confondere ortogonalità con completezza; sommare ampiezze dentro un risultato degenere; trattare |c(E)|² come probabilità puntuale; ignorare l'errore di coda.":"Forgetting complex conjugation in the coefficient integral; confusing orthogonality with completeness; summing amplitudes inside a degenerate outcome; treating |c(E)|² as a point probability; ignoring tail error.","Controlli rapidi":"Quick checks","Coefficienti adimensionali nel discreto; Parseval; ricostruzione tramite I; probabilità totale uno; cambio di base unitario; errore di troncamento non negativo.":"Dimensionless discrete coefficients; Parseval; reconstruction through I; total probability one; unitary basis change; nonnegative truncation error.","Controllo da orale":"Oral exam checklist","Enuncia ortonormalità e completezza.":"State orthonormality and completeness.","Inserisci I sullo stato.":"Insert I on the state.","Proietta per ricavare c_n.":"Project to obtain c_n.","Dimostra Parseval.":"Prove Parseval.","Calcola l'azione di A nella sua base.":"Compute action of A in its basis.","Aggiungi degenerazione e continuo.":"Add degeneracy and continuum.","Quantifica l'errore del troncamento.":"Quantify truncation error.","Mostra il cambio unitario di base.":"Show unitary basis change.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, TISE, TDSE, misura e proiettori":"DIM 0 - postulates, TISE, TDSE, measurement, and projectors","Postulati della meccanica quantistica - quadro generale":"Quantum mechanics postulates - general framework","Set 6 - operatori, autofunzioni e spettro":"Set 6 - operators, eigenfunctions, and spectrum","La fonte Boss trascrive le immagini di lezione 132-137, che non coincidono con la numerazione del PDF principale; per questo non viene indicato un collegamento PDF artificiale.":"The Boss source transcribes lecture images 132-137, whose numbering does not match the main PDF; therefore no artificial PDF link is given.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Relazione di ortonormalità discreta":"Discrete orthonormality relation","Risoluzione discreta dell'identità":"Discrete resolution of identity","Derivazione dello sviluppo di uno stato":"Derivation of a state expansion","Formula dei coefficienti di Fourier quantistici":"Formula for quantum Fourier coefficients","Sviluppo funzionale in coordinate":"Coordinate-space function expansion","Identità di Parseval":"Parseval identity","Normalizzazione dei coefficienti e Born":"Coefficient normalization and Born rule","Identità di Plancherel discreta":"Discrete Plancherel identity","Azione di un operatore nella base spettrale":"Action of an operator in its spectral basis","Sviluppo e probabilità nel caso degenere":"Expansion and probability in the degenerate case","Sviluppo su uno spettro continuo":"Expansion over a continuous spectrum","Chiusura per spettro discreto e continuo":"Closure for discrete and continuous spectra","Errore esatto del troncamento ortogonale":"Exact error of orthogonal truncation","Trasformazione unitaria dei coefficienti":"Unitary transformation of coefficients"},"title":{"it":"Sviluppo in serie di autofunzioni","en":"Expansion in an eigenfunction series"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

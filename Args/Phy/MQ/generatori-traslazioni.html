@@ -1,265 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generatori di Traslazioni</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generatori delle traslazioni e operatore impulso</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Generatori di Traslazioni</h1>
-    <h2>Introduzione</h2>
-    Le traslazioni spaziali sono trasformazioni che spostano un sistema di coordinate di un certo vettore \( \vec{a} \). In meccanica quantistica, le traslazioni sono descritte da operatori unitari che agiscono sugli stati quantistici. Il generatore infinitesimale delle traslazioni è la quantità di moto, direttamente collegata al teorema di Noether.
-
-    <h2>Operatore di traslazione</h2>
-    L'operatore unitario di traslazione \( \hat{T}(\vec{a}) \) che sposta un sistema di una quantità \( \vec{a} \) è definito come:
-    <div class="formula">
-        \[
-        \hat{T}(\vec{a}) = e^{-\frac{i}{\hbar} \vec{a} \cdot \hat{\vec{p}}}
-        \]
-    </div>
-    dove \( \hat{\vec{p}} \) è l'operatore quantità di moto.
-
-    <h2>Azione sugli stati</h2>
-    Applicando \( \hat{T}(\vec{a}) \) a una funzione d'onda \( \psi(\vec{r}) \), si ottiene:
-    <div class="formula">
-        \[
-        \psi'(\vec{r}) = \hat{T}(\vec{a}) \psi(\vec{r}) = \psi(\vec{r} - \vec{a})
-        \]
-    </div>
-    Questo mostra che l'operatore \( \hat{T}(\vec{a}) \) trasla lo stato di una quantità \( \vec{a} \).
-
-    <h2>Generatore infinitesimale</h2>
-    Per una traslazione infinitesimale \( \vec{a} \to d\vec{a} \), l'operatore può essere espanso:
-    <div class="formula">
-        \[
-        \hat{T}(d\vec{a}) \approx 1 - \frac{i}{\hbar} d\vec{a} \cdot \hat{\vec{p}}
-        \]
-    </div>
-    Da ciò si identifica che il generatore delle traslazioni è \( \hat{\vec{p}} \), l'operatore quantità di moto.
-
-    <h2>Relazioni di commutazione</h2>
-    La commutazione tra l'operatore di traslazione \( \hat{T}(\vec{a}) \) e l'operatore posizione \( \hat{\vec{r}} \) fornisce:
-    <div class="formula">
-        \[
-        [\hat{\vec{p}}, \hat{\vec{r}}] = -i\hbar
-        \]
-    </div>
-    Questa relazione riflette il principio di indeterminazione posizione-quantità di moto.
-
-    <h2>Leggi di conservazione</h2>
-    Secondo il teorema di Noether, la simmetria per traslazioni nello spazio implica la conservazione della quantità di moto. Questo principio è valido sia per sistemi classici che quantistici.
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 5</div>
-  <h2>Generatori di Traslazioni: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Mostrare che l'impulso genera traslazioni e ricavare il commutatore canonico.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Una traslazione di a è unitaria e compone additivamente. Stone associa al gruppo continuo un generatore autoaggiunto, identificato con l'impulso.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Traslazione finita<span class="lecture-step-boss">DIM 4</span></h4>
-      <p>La funzione viene spostata in senso opposto all'argomento.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="T(a)=e^{-ia p/\hbar},\qquad (T(a)\psi)(x)=\psi(x-a)"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle T(a)=e^{-iap/\hbar},\quad p=-i\hbar\partial_x\Rightarrow T(a)=e^{-a\partial_x};\quad e^{-a\partial_x}\psi(x)=\sum_n\frac{(-a)^n}{n!}\psi^{(n)}(x)=\psi(x-a)\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Infinitesima<span class="lecture-step-boss">DIM 4</span></h4>
-      <p>Confrontando lo sviluppo esponenziale con Taylor.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="p=-i\hbar\partial_x,\qquad [x,p]=i\hbar"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle T(a)\psi=\psi-a\psi'+O(a^2),\quad T(a)=I-iap/\hbar+O(a^2)\Rightarrow p=-i\hbar\partial_x\Rightarrow[x,p]\psi=i\hbar\psi\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Valore medio</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Per uno stato traslato \(T(a)|\psi\rangle\).</p>
-    <p><strong>Calcolo.</strong> \(T^\dagger xT=x+a\).</p>
-    <p><strong>Risultato e controllo.</strong> La posizione media cresce di a, mentre la distribuzione dell'impulso resta invariata.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 4</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Traslazioni su retta; su domini finiti il generatore richiede condizioni al bordo.</li>
-          <li>Segno legato alla convenzione attiva.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>L'impulso non è definito soltanto come massa per velocità: è il generatore geometrico dell'omogeneità spaziale.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Deriva la legge di gruppo \(T(a)T(b)=T(a+b)\).</li>
-          <li>Controlla il segno sull'onda piana.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=92">Appunti-MQ.pdf, pp. 92-100 e 190-194: impulso e momento angolare come generatori</a></li>
-          <li><a href="MQ.pdf#page=29">MQ.pdf, pp. capitolo 29: trasformazioni infinitesime</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-generatori-traslazioni"><div class="lecture-kicker">Lezione approfondita - Argomento 5</div><h1>Generatori delle traslazioni e operatore impulso</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Costruire l'operatore di traslazione dalla sua azione sui ket di posizione, derivare azione sulle funzioni, unitarietà, legge di gruppo, generatore impulso, commutatore canonico e onde piane e collegare omogeneità spaziale e conservazione di p.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Segno controllato fisicamente</h3><p>T(a)|x&gt; uguale |x+a&gt; sposta a destra un pacchetto; nella funzione trasformata compare psi(x-a). Questa coppia fissa il segno di exp(-iap/hbar).</p></article><article class="lecture-card lecture-warning"><h3>Generatore, non valore della traslazione</h3><p>p ha unità di impulso e moltiplicato per a su hbar dà il parametro adimensionale dell'esponenziale. T è unitario, p è hermitiano.</p></article></div><h2>Traslazione attiva in una dimensione</h2><div class="lecture-grid"><article class="lecture-card "><h3>Ket localizzato</h3><p>La trasformazione porta il punto x nel punto x+a e non modifica gli altri gradi di libertà.</p></article><article class="lecture-card "><h3>Stato generico</h3><p>Espandere il ket sulla base x trasporta l'intero profilo mantenendone forma e norma.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Azione sui ket x<span class="lecture-step-boss">DEFINISCI</span></h4><p>La traslazione attiva di ampiezza a è definita sul sistema completo di autoket di posizione.</p><div class="lecture-formula" aria-label="Definizione dell&#x27;operatore di traslazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T(a)|x\rangle=|x+a\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Azione sulla funzione<span class="lecture-step-boss">VARIABILE</span></h4><p>Inserendo completezza e cambiando variabile, l'ampiezza al punto x proviene dal vecchio punto x meno a.</p><div class="lecture-formula" aria-label="Traslazione della funzione d&#x27;onda"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_a(x)=\langle x|T(a)|\psi\rangle=\psi(x-a)\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Legge di gruppo<span class="lecture-step-boss">COMPOSIZIONE</span></h4><p>Due spostamenti successivi sommano i parametri e l'opposto fornisce l'inverso.</p><div class="lecture-formula" aria-label="Gruppo abeliano delle traslazioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T(a)T(b)=T(a+b),\qquad T(0)=I,\qquad T(a)^{-1}=T(-a)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Unitarietà<span class="lecture-step-boss">NORMA</span></h4><p>Il cambio di variabile nell'integrale mostra che il prodotto interno è conservato.</p><div class="lecture-formula" aria-label="Prova dell&#x27;unitarietà delle traslazioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \int dx\,\phi^*(x-a)\psi(x-a)=\int dy\,\phi^*(y)\psi(y)\Rightarrow T^\dagger(a)=T(-a)\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Forma infinitesima<span class="lecture-step-boss">TAYLOR</span></h4><p>Per a piccolo la funzione traslata si espande con meno a derivata.</p><div class="lecture-formula" aria-label="Espansione infinitesima della traslazione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi(x-a)=\psi(x)-a\psi'(x)+O(a^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Identificazione di p<span class="lecture-step-boss">GENERA</span></h4><p>Confrontare T uguale I meno i a G su hbar con Taylor identifica G come meno i hbar derivata.</p><div class="lecture-formula" aria-label="Impulso come generatore delle traslazioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T(a)=I-\frac{ia}{\hbar}p+O(a^2),\qquad\langle x|p|\psi\rangle=-i\hbar\frac{d\psi}{dx}\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Traslazione finita<span class="lecture-step-boss">ESPONENZIALE</span></h4><p>La legge di gruppo con generatore costante integra il passo infinitesimo.</p><div class="lecture-formula" aria-label="Esponenziale finito del generatore impulso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T(a)=e^{-iap/\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Trasformazione di x<span class="lecture-step-boss">BCH</span></h4><p>La coniugazione attiva dell'osservabile posizione si tronca al primo commutatore perché il successivo è nullo.</p><div class="lecture-formula" aria-label="Spostamento dell&#x27;operatore posizione"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T^\dagger(a)xT(a)=x+\frac{ia}{\hbar}[p,x]=x+a\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Commutatore canonico<span class="lecture-step-boss">DERIVA</span></h4><p>Confrontare il termine lineare della coniugazione con x più a fissa il commutatore.</p><div class="lecture-formula" aria-label="Commutatore da una traslazione infinitesima"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \frac{ia}{\hbar}[p,x]=a\Rightarrow[x,p]=i\hbar\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Autostati del generatore<span class="lecture-step-boss">ONDE</span></h4><p>L'equazione agli autovalori di p nella base x produce esponenziali complessi.</p><div class="lecture-formula" aria-label="Autofunzioni dell&#x27;impulso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle -i\hbar\frac d{dx}\langle x|p\rangle=p\langle x|p\rangle\Rightarrow\langle x|p\rangle=\frac{e^{ipx/\hbar}}{\sqrt{2\pi\hbar}}\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Carattere della traslazione<span class="lecture-step-boss">FASE</span></h4><p>Un autostato di impulso è anche autostato di ogni traslazione, con una fase dipendente da p e a.</p><div class="lecture-formula" aria-label="Fase di traslazione di un autostato di impulso"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T(a)|p\rangle=e^{-iap/\hbar}|p\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Relazione di de Broglie<span class="lecture-step-boss">LUNGHEZZA</span></h4><p>La periodicità spaziale dell'onda piana identifica k uguale p su hbar.</p><div class="lecture-formula" aria-label="Relazione tra impulso e lunghezza d&#x27;onda"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle k=\frac p\hbar,\qquad\lambda=\frac{2\pi}{k}=\frac hp\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Omogeneità e conservazione<span class="lecture-step-boss">SIMMETRIA</span></h4><p>Se H è invariante per ogni a, differenziare il commutatore con T in a uguale zero produce [H,p]=0.</p><div class="lecture-formula" aria-label="Conservazione dell&#x27;impulso da omogeneità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T^\dagger(a)HT(a)=H\ \forall a\Rightarrow[H,p]=0\Rightarrow\dot p=0\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Tre dimensioni<span class="lecture-step-boss">VETTORE</span></h4><p>Le tre traslazioni commutano e sono generate dalle componenti dell'impulso.</p><div class="lecture-formula" aria-label="Traslazioni e commutatori in tre dimensioni"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle T(\mathbf a)=e^{-i\mathbf a\cdot\mathbf p/\hbar},\qquad[x_i,p_j]=i\hbar\delta_{ij},\qquad[p_i,p_j]=0\)</span></div></article></section><h2>Esempio: traslazione di una gaussiana</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si applica T(a) a un pacchetto centrato in x0 con impulso medio p0.</p><p data-i18n-skip="true">\(\displaystyle \psi(x)=Ne^{-(x-x_0)^2/(4\sigma^2)+ip_0x/\hbar}\Rightarrow(T(a)\psi)(x)=Ne^{-(x-x_0-a)^2/(4\sigma^2)+ip_0(x-a)/\hbar}\)</p><p><strong>Controllo.</strong> Il centro diventa x0 più a, larghezza e impulso medio restano invariati e il fattore e alla meno i p0 a su hbar è una fase globale.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Traslazione passiva</h3><p>Cambiare l'origine delle coordinate può produrre segni opposti nelle formule. La convenzione adottata è attiva e controllata dal centro della gaussiana.</p></article><article class="lecture-card "><h3>Impulso su intervallo</h3><p>Su domini finiti, p uguale meno i hbar derivata è autoaggiunto solo con condizioni al bordo appropriate. Pareti di Dirichlet non rendono automaticamente p un'osservabile autoaggiunta.</p></article><article class="lecture-card "><h3>Traslazione e reticolo</h3><p>Se la simmetria è soltanto discreta, si conservano gli autovalori di T(a0) e compare il quasi-impulso modulo un vettore reciproco.</p></article><article class="lecture-card "><h3>Campi elettromagnetici</h3><p>In presenza di potenziale vettore, impulso canonico e impulso cinetico differiscono; le traslazioni magnetiche richiedono una trattazione modificata.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare T uguale exp più iap senza dichiarare la convenzione; ottenere psi(x+a) mentre il pacchetto dovrebbe andare a destra; confondere p hermitiano con T unitario; perdere hbar; dedurre conservazione se V dipende da x.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>T(a)|x&gt; dà |x+a&gt;; la funzione è psi(x-a); T aggiunto è T(-a); T aggiunto x T è x+a; l'esponenziale è adimensionale; p è conservato solo se H è omogenea.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci T sulla base di posizione.</li><li>Ricava psi(x-a) con completezza.</li><li>Dimostra gruppo e unitarietà.</li><li>Confronta Taylor e forma infinitesima.</li><li>Identifica p e integra l'esponenziale.</li><li>Ricava T aggiunto x T e [x,p].</li><li>Ottieni onde piane e de Broglie.</li><li>Collega omogeneità a conservazione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L802">Boss P1 - formalismo, rappresentazioni ed evoluzione</a></li><li><a href="Appunti-MQ.pdf#page=92">Appunti-MQ.pdf, pagine PDF 92-100 - traslazioni, impulso e onde piane</a></li><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, generatori e simmetrie</a></li></ul><p class="lecture-note">Segni e convenzioni sono stati controllati sulle pagine verificate 92-100 e sulla traslazione esplicita di una gaussiana; generatore, commutatore e conservazione seguono dalla stessa definizione attiva.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 5":"In-depth lesson - Topic 5","Generatori delle traslazioni e operatore impulso":"Translation generators and momentum operator","Obiettivo.":"Objective.","Costruire l'operatore di traslazione dalla sua azione sui ket di posizione, derivare azione sulle funzioni, unitarietà, legge di gruppo, generatore impulso, commutatore canonico e onde piane e collegare omogeneità spaziale e conservazione di p.":"Construct the translation operator from its action on position kets, derive its wavefunction action, unitarity, group law, momentum generator, canonical commutator, and plane waves, and connect spatial homogeneity with momentum conservation.","Segno controllato fisicamente":"Physically checked sign","T(a)|x> uguale |x+a> sposta a destra un pacchetto; nella funzione trasformata compare psi(x-a). Questa coppia fissa il segno di exp(-iap/hbar).":"T(a)|x> equal |x+a> shifts a packet right; the transformed wavefunction contains psi(x-a). This pair fixes the sign of exp(-iap/hbar).","Generatore, non valore della traslazione":"Generator, not translation value","p ha unità di impulso e moltiplicato per a su hbar dà il parametro adimensionale dell'esponenziale. T è unitario, p è hermitiano.":"p has momentum units and multiplied by a over hbar gives the dimensionless exponential parameter. T is unitary, p is Hermitian.","Traslazione attiva in una dimensione":"Active translation in one dimension","Ket localizzato":"Localized ket","La trasformazione porta il punto x nel punto x+a e non modifica gli altri gradi di libertà.":"The transformation takes point x to point x+a and does not alter other degrees of freedom.","Stato generico":"Generic state","Espandere il ket sulla base x trasporta l'intero profilo mantenendone forma e norma.":"Expanding the ket in the x basis transports the full profile while retaining shape and norm.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Azione sui ket x":"1. Action on x kets","DEFINISCI":"DEFINE","La traslazione attiva di ampiezza a è definita sul sistema completo di autoket di posizione.":"An active translation by a is defined on the complete set of position eigenkets.","Passaggio":"Step","2. Azione sulla funzione":"2. Action on the wavefunction","VARIABILE":"VARIABLE","Inserendo completezza e cambiando variabile, l'ampiezza al punto x proviene dal vecchio punto x meno a.":"Insert completeness and change variables; the amplitude at x comes from the old point x minus a.","3. Legge di gruppo":"3. Group law","COMPOSIZIONE":"COMPOSITION","Due spostamenti successivi sommano i parametri e l'opposto fornisce l'inverso.":"Two successive shifts add parameters and the opposite gives the inverse.","4. Unitarietà":"4. Unitarity","NORMA":"NORM","Il cambio di variabile nell'integrale mostra che il prodotto interno è conservato.":"A change of variable in the integral shows the inner product is preserved.","5. Forma infinitesima":"5. Infinitesimal form","TAYLOR":"TAYLOR","Per a piccolo la funzione traslata si espande con meno a derivata.":"For small a the translated function expands with minus a derivative.","6. Identificazione di p":"6. Identification of p","GENERA":"GENERATE","Confrontare T uguale I meno i a G su hbar con Taylor identifica G come meno i hbar derivata.":"Compare T equal I minus i a G over hbar with Taylor to identify G as minus i hbar derivative.","7. Traslazione finita":"7. Finite translation","ESPONENZIALE":"EXPONENTIAL","La legge di gruppo con generatore costante integra il passo infinitesimo.":"The group law with constant generator integrates the infinitesimal step.","8. Trasformazione di x":"8. Transformation of x","BCH":"BCH","La coniugazione attiva dell'osservabile posizione si tronca al primo commutatore perché il successivo è nullo.":"Active conjugation of the position observable truncates at the first commutator because the next one vanishes.","9. Commutatore canonico":"9. Canonical commutator","DERIVA":"DERIVE","Confrontare il termine lineare della coniugazione con x più a fissa il commutatore.":"Compare the linear term of the conjugation with x plus a to fix the commutator.","10. Autostati del generatore":"10. Generator eigenstates","ONDE":"WAVES","L'equazione agli autovalori di p nella base x produce esponenziali complessi.":"The p eigenvalue equation in the x basis produces complex exponentials.","11. Carattere della traslazione":"11. Translation character","FASE":"PHASE","Un autostato di impulso è anche autostato di ogni traslazione, con una fase dipendente da p e a.":"A momentum eigenstate is also an eigenstate of every translation, with phase depending on p and a.","12. Relazione di de Broglie":"12. de Broglie relation","LUNGHEZZA":"WAVELENGTH","La periodicità spaziale dell'onda piana identifica k uguale p su hbar.":"Spatial periodicity of the plane wave identifies k equal p over hbar.","13. Omogeneità e conservazione":"13. Homogeneity and conservation","SIMMETRIA":"SYMMETRY","Se H è invariante per ogni a, differenziare il commutatore con T in a uguale zero produce [H,p]=0.":"If H is invariant for every a, differentiate the commutator with T at a equal zero to obtain [H,p]=0.","14. Tre dimensioni":"14. Three dimensions","VETTORE":"VECTOR","Le tre traslazioni commutano e sono generate dalle componenti dell'impulso.":"The three translations commute and are generated by momentum components.","Esempio: traslazione di una gaussiana":"Example: translation of a Gaussian","Impostazione.":"Setup.","Si applica T(a) a un pacchetto centrato in x0 con impulso medio p0.":"Apply T(a) to a packet centered at x0 with mean momentum p0.","Controllo.":"Check.","Il centro diventa x0 più a, larghezza e impulso medio restano invariati e il fattore e alla meno i p0 a su hbar è una fase globale.":"The center becomes x0 plus a, width and mean momentum stay unchanged, and factor e to minus i p0 a over hbar is a global phase.","Interpretazione e limiti":"Interpretation and limits","Traslazione passiva":"Passive translation","Cambiare l'origine delle coordinate può produrre segni opposti nelle formule. La convenzione adottata è attiva e controllata dal centro della gaussiana.":"Changing the coordinate origin can produce opposite signs. The adopted convention is active and checked through the Gaussian center.","Impulso su intervallo":"Momentum on an interval","Su domini finiti, p uguale meno i hbar derivata è autoaggiunto solo con condizioni al bordo appropriate. Pareti di Dirichlet non rendono automaticamente p un'osservabile autoaggiunta.":"On finite domains, p equal minus i hbar derivative is self-adjoint only with appropriate boundary conditions. Dirichlet walls do not automatically make p a self-adjoint observable.","Traslazione e reticolo":"Translation and lattice","Se la simmetria è soltanto discreta, si conservano gli autovalori di T(a0) e compare il quasi-impulso modulo un vettore reciproco.":"If symmetry is only discrete, eigenvalues of T(a0) are conserved and quasimomentum appears modulo a reciprocal vector.","Campi elettromagnetici":"Electromagnetic fields","In presenza di potenziale vettore, impulso canonico e impulso cinetico differiscono; le traslazioni magnetiche richiedono una trattazione modificata.":"With a vector potential, canonical and kinetic momentum differ; magnetic translations require a modified treatment.","Errori tipici":"Common errors","Usare T uguale exp più iap senza dichiarare la convenzione; ottenere psi(x+a) mentre il pacchetto dovrebbe andare a destra; confondere p hermitiano con T unitario; perdere hbar; dedurre conservazione se V dipende da x.":"Using T equal exp plus iap without stating convention; obtaining psi(x+a) while the packet should move right; confusing Hermitian p with unitary T; losing hbar; inferring conservation when V depends on x.","Controlli rapidi":"Quick checks","T(a)|x> dà |x+a>; la funzione è psi(x-a); T aggiunto è T(-a); T aggiunto x T è x+a; l'esponenziale è adimensionale; p è conservato solo se H è omogenea.":"T(a)|x> gives |x+a>; the function is psi(x-a); T dagger is T(-a); T dagger x T is x+a; the exponential is dimensionless; p is conserved only if H is homogeneous.","Controllo da orale":"Oral exam checklist","Definisci T sulla base di posizione.":"Define T on the position basis.","Ricava psi(x-a) con completezza.":"Derive psi(x-a) using completeness.","Dimostra gruppo e unitarietà.":"Prove group law and unitarity.","Confronta Taylor e forma infinitesima.":"Compare Taylor and infinitesimal forms.","Identifica p e integra l'esponenziale.":"Identify p and integrate the exponential.","Ricava T aggiunto x T e [x,p].":"Derive T dagger x T and [x,p].","Ottieni onde piane e de Broglie.":"Obtain plane waves and de Broglie relation.","Collega omogeneità a conservazione.":"Connect homogeneity to conservation.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss P1 - formalismo, rappresentazioni ed evoluzione":"Boss P1 - formalism, representations, and evolution","Appunti-MQ.pdf, pagine PDF 92-100 - traslazioni, impulso e onde piane":"Appunti-MQ.pdf, PDF pages 92-100 - traslazioni, impulso e onde piane","DIM 15 - commutatori, generatori e simmetrie":"DIM 15 - commutators, generators, and symmetries","Segni e convenzioni sono stati controllati sulle pagine verificate 92-100 e sulla traslazione esplicita di una gaussiana; generatore, commutatore e conservazione seguono dalla stessa definizione attiva.":"Signs and conventions were checked against verified pages 92-100 and the explicit translation of a Gaussian; generator, commutator, and conservation follow from the same active definition.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Definizione dell'operatore di traslazione":"Definition of the translation operator","Traslazione della funzione d'onda":"Translation of the wavefunction","Gruppo abeliano delle traslazioni":"Abelian translation group","Prova dell'unitarietà delle traslazioni":"Proof of translation unitarity","Espansione infinitesima della traslazione":"Infinitesimal expansion of translation","Impulso come generatore delle traslazioni":"Momentum as translation generator","Esponenziale finito del generatore impulso":"Finite exponential of the momentum generator","Spostamento dell'operatore posizione":"Shift of the position operator","Commutatore da una traslazione infinitesima":"Commutator from an infinitesimal translation","Autofunzioni dell'impulso":"Momentum eigenfunctions","Fase di traslazione di un autostato di impulso":"Translation phase of a momentum eigenstate","Relazione tra impulso e lunghezza d'onda":"Relation between momentum and wavelength","Conservazione dell'impulso da omogeneità":"Momentum conservation from homogeneity","Traslazioni e commutatori in tre dimensioni":"Translations and commutators in three dimensions"},"title":{"it":"Generatori delle traslazioni e operatore impulso","en":"Translation generators and momentum operator"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

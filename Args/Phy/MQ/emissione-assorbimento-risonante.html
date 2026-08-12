@@ -1,316 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emissione e Assorbimento Risonante</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emissione e assorbimento risonante</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Emissione e Assorbimento Risonante</h1>
-
-    <p>
-        L'emissione e l'assorbimento risonante sono fenomeni che si verificano quando un sistema quantistico, come un atomo o una molecola, interagisce con un campo elettromagnetico con frequenza compatibile con una transizione tra due livelli energetici del sistema. Questo tipo di interazione è alla base di molti processi fisici, tra cui l'assorbimento della luce, la fluorescenza e l'emissione stimolata.
-    </p>
-
-    <h2>Descrizione Matematica</h2>
-
-    <p>
-        Consideriamo un sistema con due stati energetici \( |1\rangle \) e \( |2\rangle \), associati alle energie \( E_1 \) ed \( E_2 \). L'interazione tra il sistema e un campo elettromagnetico oscillante può essere descritta da un termine perturbativo del tipo:
-    </p>
-    <div class="formula">
-        \( H'(t) = \mu \cos(\omega t) \)
-    </div>
-    <p>
-        dove \( \mu \) rappresenta il momento di dipolo elettrico e \( \omega \) è la frequenza del campo. L'equazione di Schrödinger perturbata consente di determinare la probabilità di transizione tra i due stati:
-    </p>
-    <div class="formula">
-        \( P_{1 \to 2}(t) = \frac{\mu^2}{\hbar^2} \frac{\sin^2((\omega - \omega_0)t/2)}{(\omega - \omega_0)^2} \)
-    </div>
-    <p>
-        dove \( \omega_0 = \frac{E_2 - E_1}{\hbar} \) è la frequenza di risonanza. L'assorbimento è massimo quando la frequenza del campo è in risonanza con \( \omega_0 \), mentre la larghezza della risonanza dipende dal tempo di interazione e dai meccanismi di smorzamento del sistema.
-    </p>
-
-    <h2>Emissione Stimolata e Assorbimento</h2>
-
-    <p>
-        In regime di risonanza, l'interazione del campo elettromagnetico con il sistema può portare a due processi principali:
-    </p>
-    <ul>
-        <li><strong>Assorbimento:</strong> Il sistema assorbe un fotone del campo e si eccita passando dallo stato \( |1\rangle \) a \( |2\rangle \).</li>
-        <li><strong>Emissione Stimolata:</strong> Un fotone del campo stimola la transizione inversa \( |2\rangle \to |1\rangle \), emettendo un secondo fotone coerente con il primo.</li>
-    </ul>
-
-    <h2>Applicazioni</h2>
-
-    <p>
-        Questi fenomeni sono fondamentali in vari campi della fisica e della tecnologia:
-    </p>
-    <ul>
-        <li>La spettroscopia ottica sfrutta l'assorbimento risonante per determinare la struttura energetica di atomi e molecole.</li>
-        <li>I laser operano grazie al processo di emissione stimolata, generando luce coerente di alta intensità.</li>
-        <li>La fluorescenza e la fosforescenza in chimica e biologia sono esempi di emissione risonante utilizzata per l'analisi di materiali e tessuti.</li>
-    </ul>
-
-    <h2>Dettagli Matematici e Fisici</h2>
-
-<p>
-    L'equazione per la probabilità di transizione, 
-    \( P_{1 \to 2}(t) = \frac{\mu^2}{\hbar^2} \frac{\sin^2((\omega - \omega_0)t/2)}{(\omega - \omega_0)^2} \),
-    rivela il comportamento della transizione in funzione della frequenza \( \omega \) del campo elettromagnetico e del tempo \( t \).
-</p>
-
-<p>
-    Quando \( \omega = \omega_0 \), la probabilità di transizione assume un valore massimo, noto come risonanza. In questo caso, la funzione seno si avvicina a \( \sin^2((\omega_0 - \omega_0)t/2) = \sin^2(0) \), mentre il denominatore non contribuisce ad alcun smorzamento. Ciò porta al massimo assorbimento o emissione risonante:
-</p>
-
-<div class="formula">
-    \( P_{1 \to 2}(t) \big|_{\omega = \omega_0} = \frac{\mu^2 t^2}{4 \hbar^2} \)
-</div>
-
-<p>
-    Questo risultato mostra che, in assenza di smorzamento, la probabilità di transizione cresce quadraticamente nel tempo, evidenziando l'importanza della coerenza e della durata dell'interazione. Tuttavia, nella realtà, processi di smorzamento e fenomeni dissipativi limitano la crescita illimitata della probabilità.
-</p>
-
-<h2>Effetto dello Smorzamento</h2>
-
-<p>
-    Consideriamo un termine di smorzamento \( \gamma \), che rappresenta la perdita di coerenza nel sistema. L'inclusione di \( \gamma \) modifica la probabilità di transizione in:
-</p>
-
-<div class="formula">
-    \( P_{1 \to 2}(t) = \frac{\mu^2}{\hbar^2} \frac{\sin^2((\omega - \omega_0)t/2)}{((\omega - \omega_0)^2 + \gamma^2)} \)
-</div>
-
-<p>
-    Il termine \( \gamma \) allarga il picco di risonanza, rendendo la transizione meno sensibile alla precisione della frequenza del campo elettromagnetico. Questo effetto è comunemente osservato nella spettroscopia come "larghezza della linea" e fornisce informazioni sulla dinamica interna del sistema.
-</p>
-
-<h2>Condizione di Einstein per Emissione e Assorbimento</h2>
-
-<p>
-    I coefficienti di Einstein \( A_{21} \) e \( B_{12} \) descrivono quantitativamente l'emissione spontanea, l'assorbimento e l'emissione stimolata. In equilibrio termodinamico, la relazione tra questi coefficienti è:
-</p>
-
-<div class="formula">
-    \( \frac{B_{12}}{A_{21}} = \frac{8 \pi \nu^3}{c^3} \)
-</div>
-
-<p>
-    dove \( \nu \) è la frequenza della transizione e \( c \) è la velocità della luce. Questa relazione stabilisce il legame tra i processi di emissione stimolata, emissione spontanea e assorbimento in un sistema quantistico.
-</p>
-
-
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 14</div>
-  <h2>Emissione e Assorbimento Risonante: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Identificare termini di assorbimento ed emissione e le regole di selezione dipolari.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Un campo reale contiene frequenze positive e negative. La risonanza \(E_f-E_i=\pm\hbar\omega\) corrisponde ad assorbimento o emissione stimolata; l'elemento di matrice dipolare decide l'intensità.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Perturbazione<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Campo uniforme su scala atomica.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="V(t)=-q\mathbf E_0\cdot\mathbf r\cos\omega t"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle H_{int}=-\mathbf d\cdot\mathbf E,\quad\mathbf d=q\mathbf r,\quad\mathbf E(t)=\mathbf E_0\cos\omega t\Rightarrow V(t)=-q\mathbf E_0\cdot\mathbf r\cos\omega t\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Selezione<span class="lecture-step-boss">DIM 12</span></h4>
-      <p>Per atomi centrali.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="\Delta l=\pm1,\qquad\Delta m=0,\pm1"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \mathbf r\ \text{tensore sferico di rango }1,\quad\langle l'm'|r_q|lm\rangle\propto C_{lm,1q}^{l'm'}\Rightarrow l'=l\pm1,\quad m'=m+q,\ q=0,\pm1\Rightarrow\Delta l=\pm1,\ \Delta m=0,\pm1\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Parità</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> L'operatore r è dispari.</p>
-    <p><strong>Calcolo.</strong> L'integrale dipolare è nullo tra stati della stessa parità.</p>
-    <p><strong>Risultato e controllo.</strong> La differenza energetica da sola non rende una transizione dipolarmente permessa.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P2_DIM_7-12.txt">DIM 12</a> - copione e passaggi richiesti all'orale</li><li><a href="Domanda2025_5.html">Domanda 2025 n. 5</a> - Transizioni con pulsazione di Bohr</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>Approssimazione di dipolo.</li>
-          <li>Campo debole e quasi monocromatico.</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>Risonanza stabilisce dove può avvenire la transizione; simmetria stabilisce se l'ampiezza è diversa da zero.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Collega polarizzazione e delta m.</li>
-          <li>Distingui spontanea e stimolata.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=183">Appunti-MQ.pdf, pp. 183-186: termini risonanti di assorbimento ed emissione</a></li>
-          <li><a href="MQ.pdf#page=27">MQ.pdf, pp. capitolo 27: radiazione incidente su un atomo</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Torna all'Indice</a>
-
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-emissione-assorbimento-risonante"><div class="lecture-kicker">Lezione approfondita - canali energetici e selezione</div><h1>Emissione e assorbimento risonante</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Separare rigorosamente i due contributi di una perturbazione armonica, associare ciascun delta al flusso di energia corretto e chiarire differenze tra emissione stimolata, spontanea e dinamica coerente di Rabi.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Due canali</h3><p>L'hermiticità obbliga una componente a frequenza positiva e la sua aggiunta. Una risuona per assorbimento, l'altra per emissione stimolata.</p></article><article class="lecture-card lecture-warning"><h3>Campo classico</h3><p>La perturbazione semiclassica descrive assorbimento ed emissione stimolata. L'emissione spontanea richiede la quantizzazione del campo elettromagnetico.</p></article></div><h2>Stati iniziale e finale</h2><div class="lecture-grid"><article class="lecture-card "><h3>Gap orientato</h3><p>Si mantiene omega_fi=(E_f-E_i)/hbar, che può essere positivo o negativo. Questo evita di cambiare convenzione tra i processi.</p></article><article class="lecture-card "><h3>Operatore armonico</h3><p>F può contenere dipolo elettrico, momento magnetico o altro accoppiamento. I suoi elementi di matrice codificano le regole di selezione.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Perturbazione hermitiana<span class="lecture-step-boss">BASE</span></h4><p>La somma di F e della sua aggiunta garantisce V(t)=V(t) aggiunto.</p><div class="lecture-formula" aria-label="Perturbazione monocromatica hermitiana"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V(t)=Fe^{-i\omega t}+F^\dagger e^{i\omega t}\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Elemento di matrice<span class="lecture-step-boss">BASE</span></h4><p>Tra i e f, le due componenti portano elementi in generale differenti ma legati dall'hermiticità.</p><div class="lecture-formula" aria-label="Elementi armonici tra due livelli"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V_{fi}(t)=F_{fi}e^{-i\omega t}+(F^\dagger)_{fi}e^{i\omega t},\quad(F^\dagger)_{fi}=F_{if}^*\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Fase totale<span class="lecture-step-boss">DIM 12</span></h4><p>La fase di Bohr somma o sottrae la frequenza esterna.</p><div class="lecture-formula" aria-label="Due fasi di detuning"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V_{fi}(t)e^{i\omega_{fi}t}=F_{fi}e^{i(\omega_{fi}-\omega)t}+F_{if}^*e^{i(\omega_{fi}+\omega)t}\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Ampiezza finita<span class="lecture-step-boss">INTEGRALE</span></h4><p>Ogni esponenziale integrato produce la funzione di finestra D_T.</p><div class="lecture-formula" aria-label="Ampiezza espressa tramite la finestra temporale"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle D_T(\Delta)=e^{i\Delta T/2}\frac{2\sin(\Delta T/2)}{\Delta},\qquad c_f^{(1)}=-\frac{i\lambda}{\hbar}[F_{fi}D_T(\omega_{fi}-\omega)+F_{if}^*D_T(\omega_{fi}+\omega)]\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Assorbimento<span class="lecture-step-boss">CANALE +</span></h4><p>Per E_f maggiore di E_i, omega_fi è positiva e risuona la componente e alla meno i omega t.</p><div class="lecture-formula" aria-label="Bilancio energetico dell&#x27;assorbimento"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_f&gt;E_i:\quad\omega_{fi}-\omega=0\Rightarrow E_f=E_i+\hbar\omega\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Emissione stimolata<span class="lecture-step-boss">CANALE -</span></h4><p>Per E_f minore di E_i, omega_fi è negativa e risuona la componente aggiunta.</p><div class="lecture-formula" aria-label="Bilancio energetico dell&#x27;emissione stimolata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle E_f&lt;E_i:\quad\omega_{fi}+\omega=0\Rightarrow E_f=E_i-\hbar\omega\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Limite lungo<span class="lecture-step-boss">DELTA</span></h4><p>Il modulo quadro della finestra, diviso per T, converge a una delta in pulsazione.</p><div class="lecture-formula" aria-label="Limite distribuzionale della finestra armonica"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \lim_{T\to\infty}\frac{|D_T(\Delta)|^2}{T}=2\pi\delta(\Delta)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Tasso di assorbimento<span class="lecture-step-boss">GOLDEN</span></h4><p>Nel continuo finale il primo delta seleziona E_f=E_i+hbar omega.</p><div class="lecture-formula" aria-label="Regola d&#x27;oro per assorbimento"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{i\to f}^{\rm abs}=\frac{2\pi\lambda^2}{\hbar}|F_{fi}|^2\rho(E_i+\hbar\omega)\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Tasso di emissione<span class="lecture-step-boss">GOLDEN</span></h4><p>Il secondo delta seleziona E_f=E_i-hbar omega e contiene l'elemento della componente aggiunta.</p><div class="lecture-formula" aria-label="Regola d&#x27;oro per emissione stimolata"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle W_{i\to f}^{\rm stim}=\frac{2\pi\lambda^2}{\hbar}|F_{if}|^2\rho(E_i-\hbar\omega)\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Reciprocità microscopica<span class="lecture-step-boss">CHECK</span></h4><p>Per lo stesso paio di stati, l'hermiticità rende uguali i moduli degli elementi diretti e inversi, a parità di polarizzazione appropriata.</p><div class="lecture-formula" aria-label="Relazione tra elementi di matrice inversi"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |F_{fi}|^2=|(F^\dagger)_{if}|^2\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Finestra risonante<span class="lecture-step-boss">RISOLUZIONE</span></h4><p>A tempo finito il delta è sostituito da una sinc quadro con larghezza di ordine 2pi/T.</p><div class="lecture-formula" aria-label="Condizione pratica di quasi risonanza"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\omega_{fi}\mp\omega|\lesssim\frac{2\pi}{T}\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Sistema a due livelli<span class="lecture-step-boss">RWA</span></h4><p>Vicino a risonanza e dopo RWA, la dinamica si riduce a una matrice due per due con detuning e accoppiamento.</p><div class="lecture-formula" aria-label="Hamiltoniano efficace risonante"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle H_I^{\rm RWA}=\frac{\hbar}{2}\begin{pmatrix}-\Delta&amp;\Omega^*\\\Omega&amp;\Delta\end{pmatrix},\qquad\Omega=\frac{2\lambda F_{fi}}{\hbar}\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Oscillazioni di Rabi<span class="lecture-step-boss">OLTRE PT</span></h4><p>La soluzione esatta del due livelli limita automaticamente la probabilità tra zero e uno.</p><div class="lecture-formula" aria-label="Probabilità di Rabi con detuning"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_{i\to f}(t)=\frac{|\Omega|^2}{|\Omega|^2+\Delta^2}\sin^2\!\left(\frac{t}{2}\sqrt{|\Omega|^2+\Delta^2}\right)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Emissione spontanea<span class="lecture-step-boss">LIMITE</span></h4><p>Se il campo classico è assente, F è nullo e questa teoria non produce decadimento radiativo; i modi quantizzati del vuoto forniscono invece gli stati finali.</p><div class="lecture-formula" aria-label="Origine quantistica dell&#x27;emissione spontanea"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle V_{\rm int}=-\mathbf d\cdot\mathbf E_{\rm quant}\Rightarrow W_{\rm spont}\ne0\quad\text{anche per }\langle\mathbf E\rangle=0\)</span></div></article></section><h2>Esempio: dipolo elettrico</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Un campo E0 cos(omega t) polarizzato lungo epsilon interagisce con il dipolo d.</p><p data-i18n-skip="true">\(\displaystyle V(t)=-\mathbf d\cdot\boldsymbol\epsilon E_0\cos\omega t,\quad F_{fi}=-\frac{E_0}{2}\langle f|\mathbf d\cdot\boldsymbol\epsilon|i\rangle\)</p><p><strong>Controllo.</strong> La risonanza richiede hbar omega=|E_f-E_i|, ma la transizione esiste soltanto se il dipolo proiettato è non nullo. Parità e momento angolare determinano quindi intensità e polarizzazione.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Energia del sistema</h3><p>Assorbire aumenta l'energia del sistema; emettere la diminuisce. Il segno si legge dal delta, non dal nome del termine esponenziale.</p></article><article class="lecture-card "><h3>Coerenza contro tasso</h3><p>Un singolo due livelli ideale oscilla coerentemente; un tasso costante emerge dopo somma su un continuo o perdita di memoria di fase.</p></article><article class="lecture-card "><h3>Polarizzazione</h3><p>Le componenti sferiche del dipolo distinguono Delta m=0, più uno e meno uno e quindi selezionano le righe osservate.</p></article><article class="lecture-card "><h3>Campo quantizzato</h3><p>Stimolata e spontanea condividono lo stesso elemento di dipolo, ma differiscono per l'occupazione dei modi fotonici e per il contributo del vuoto.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Chiamare spontanea l'emissione prodotta da un campo classico; usare lo stesso delta per entrambi i canali; perdere F aggiunto; applicare la regola d'oro a due soli livelli; ignorare le regole di selezione.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Assorbimento seleziona E_i+hbar omega; emissione seleziona E_i-hbar omega; i tassi sono positivi; il due livelli conserva la norma; senza elemento di matrice la risonanza non basta.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Scomponi V in F e F aggiunto.</li><li>Mantieni omega_fi orientata.</li><li>Deriva i due detuning.</li><li>Associa ogni zero al bilancio energetico.</li><li>Passa al delta soltanto nel limite lungo.</li><li>Inserisci densità e regole di selezione.</li><li>Spiega RWA e oscillazioni di Rabi.</li><li>Distingui emissione stimolata e spontanea.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P2_DIM_7-12.txt#L1726">DIM 12 - perturbazioni dipendenti dal tempo e copione orale</a></li><li><a href="Appunti-MQ.pdf#page=176">Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro</a></li><li><a href="set-12-probabilita-transizione.html">Set 12 - esercizi sulle probabilità di transizione</a></li><li><a href="Domanda2025_13.html">Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo</a></li></ul><p class="lecture-note">Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - canali energetici e selezione":"In-depth lesson - energy channels and selection","Emissione e assorbimento risonante":"Resonant emission and absorption","Obiettivo.":"Objective.","Separare rigorosamente i due contributi di una perturbazione armonica, associare ciascun delta al flusso di energia corretto e chiarire differenze tra emissione stimolata, spontanea e dinamica coerente di Rabi.":"Rigorously separate the two contributions of a harmonic perturbation, associate each delta with the correct energy flow, and clarify differences among stimulated emission, spontaneous emission, and coherent Rabi dynamics.","Due canali":"Two channels","L'hermiticità obbliga una componente a frequenza positiva e la sua aggiunta. Una risuona per assorbimento, l'altra per emissione stimolata.":"Hermiticity requires a positive-frequency component and its adjoint. One resonates for absorption, the other for stimulated emission.","Campo classico":"Classical field","La perturbazione semiclassica descrive assorbimento ed emissione stimolata. L'emissione spontanea richiede la quantizzazione del campo elettromagnetico.":"The semiclassical perturbation describes absorption and stimulated emission. Spontaneous emission requires quantization of the electromagnetic field.","Stati iniziale e finale":"Initial and final states","Gap orientato":"Oriented gap","Si mantiene omega_fi=(E_f-E_i)/hbar, che può essere positivo o negativo. Questo evita di cambiare convenzione tra i processi.":"Keep omega_fi=(E_f-E_i)/hbar, which may be positive or negative. This avoids changing conventions between processes.","Operatore armonico":"Harmonic operator","F può contenere dipolo elettrico, momento magnetico o altro accoppiamento. I suoi elementi di matrice codificano le regole di selezione.":"F may contain an electric dipole, magnetic moment, or another coupling. Its matrix elements encode selection rules.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Perturbazione hermitiana":"1. Hermitian perturbation","BASE":"BASE","La somma di F e della sua aggiunta garantisce V(t)=V(t) aggiunto.":"The sum of F and its adjoint guarantees V(t)=V(t) adjoint.","Passaggio":"Step","2. Elemento di matrice":"2. Matrix element","Tra i e f, le due componenti portano elementi in generale differenti ma legati dall'hermiticità.":"Between i and f, the two components carry generally different matrix elements related by Hermiticity.","3. Fase totale":"3. Total phase","DIM 12":"DIM 12","La fase di Bohr somma o sottrae la frequenza esterna.":"The Bohr phase adds or subtracts the external frequency.","4. Ampiezza finita":"4. Finite-time amplitude","INTEGRALE":"INTEGRAL","Ogni esponenziale integrato produce la funzione di finestra D_T.":"Each integrated exponential produces the window function D_T.","5. Assorbimento":"5. Absorption","CANALE +":"CHANNEL +","Per E_f maggiore di E_i, omega_fi è positiva e risuona la componente e alla meno i omega t.":"For E_f greater than E_i, omega_fi is positive and the e to minus i omega t component resonates.","6. Emissione stimolata":"6. Stimulated emission","CANALE -":"CHANNEL -","Per E_f minore di E_i, omega_fi è negativa e risuona la componente aggiunta.":"For E_f lower than E_i, omega_fi is negative and the adjoint component resonates.","7. Limite lungo":"7. Long-time limit","DELTA":"DELTA","Il modulo quadro della finestra, diviso per T, converge a una delta in pulsazione.":"The squared window modulus divided by T converges to a delta in angular frequency.","8. Tasso di assorbimento":"8. Absorption rate","GOLDEN":"GOLDEN","Nel continuo finale il primo delta seleziona E_f=E_i+hbar omega.":"In a final continuum, the first delta selects E_f=E_i+hbar omega.","9. Tasso di emissione":"9. Emission rate","Il secondo delta seleziona E_f=E_i-hbar omega e contiene l'elemento della componente aggiunta.":"The second delta selects E_f=E_i-hbar omega and contains the adjoint-component matrix element.","10. Reciprocità microscopica":"10. Microscopic reciprocity","CHECK":"CHECK","Per lo stesso paio di stati, l'hermiticità rende uguali i moduli degli elementi diretti e inversi, a parità di polarizzazione appropriata.":"For the same pair of states, Hermiticity makes direct and reverse matrix-element magnitudes equal, for the corresponding polarization.","11. Finestra risonante":"11. Resonance window","RISOLUZIONE":"RESOLUTION","A tempo finito il delta è sostituito da una sinc quadro con larghezza di ordine 2pi/T.":"At finite time, the delta is replaced by a squared sinc with width of order 2pi/T.","12. Sistema a due livelli":"12. Two-level system","RWA":"RWA","Vicino a risonanza e dopo RWA, la dinamica si riduce a una matrice due per due con detuning e accoppiamento.":"Near resonance and after RWA, dynamics reduces to a two-by-two matrix with detuning and coupling.","13. Oscillazioni di Rabi":"13. Rabi oscillations","OLTRE PT":"BEYOND PT","La soluzione esatta del due livelli limita automaticamente la probabilità tra zero e uno.":"The exact two-level solution automatically bounds probability between zero and one.","14. Emissione spontanea":"14. Spontaneous emission","LIMITE":"LIMIT","Se il campo classico è assente, F è nullo e questa teoria non produce decadimento radiativo; i modi quantizzati del vuoto forniscono invece gli stati finali.":"If the classical field is absent, F vanishes and this theory produces no radiative decay; quantized vacuum modes instead provide the final states.","Esempio: dipolo elettrico":"Example: electric dipole","Impostazione.":"Setup.","Un campo E0 cos(omega t) polarizzato lungo epsilon interagisce con il dipolo d.":"A field E0 cos(omega t) polarized along epsilon interacts with dipole d.","Controllo.":"Check.","La risonanza richiede hbar omega=|E_f-E_i|, ma la transizione esiste soltanto se il dipolo proiettato è non nullo. Parità e momento angolare determinano quindi intensità e polarizzazione.":"Resonance requires hbar omega=|E_f-E_i|, but the transition exists only if the projected dipole is nonzero. Parity and angular momentum therefore determine intensity and polarization.","Interpretazione e limiti":"Interpretation and limits","Energia del sistema":"System energy","Assorbire aumenta l'energia del sistema; emettere la diminuisce. Il segno si legge dal delta, non dal nome del termine esponenziale.":"Absorption raises system energy; emission lowers it. The sign is read from the delta, not from the name of the exponential term.","Coerenza contro tasso":"Coherence versus rate","Un singolo due livelli ideale oscilla coerentemente; un tasso costante emerge dopo somma su un continuo o perdita di memoria di fase.":"An ideal single two-level system oscillates coherently; a constant rate emerges after summing over a continuum or losing phase memory.","Polarizzazione":"Polarization","Le componenti sferiche del dipolo distinguono Delta m=0, più uno e meno uno e quindi selezionano le righe osservate.":"Spherical dipole components distinguish Delta m=0, plus one, and minus one, thereby selecting observed lines.","Campo quantizzato":"Quantized field","Stimolata e spontanea condividono lo stesso elemento di dipolo, ma differiscono per l'occupazione dei modi fotonici e per il contributo del vuoto.":"Stimulated and spontaneous processes share the same dipole element but differ in photon-mode occupation and the vacuum contribution.","Errori tipici":"Common errors","Chiamare spontanea l'emissione prodotta da un campo classico; usare lo stesso delta per entrambi i canali; perdere F aggiunto; applicare la regola d'oro a due soli livelli; ignorare le regole di selezione.":"Calling emission produced by a classical field spontaneous; using the same delta for both channels; losing F adjoint; applying the golden rule to only two levels; ignoring selection rules.","Controlli rapidi":"Quick checks","Assorbimento seleziona E_i+hbar omega; emissione seleziona E_i-hbar omega; i tassi sono positivi; il due livelli conserva la norma; senza elemento di matrice la risonanza non basta.":"Absorption selects E_i+hbar omega; emission selects E_i-hbar omega; rates are positive; the two-level model conserves norm; without a matrix element resonance is insufficient.","Controllo da orale":"Oral exam checklist","Scomponi V in F e F aggiunto.":"Decompose V into F and F adjoint.","Mantieni omega_fi orientata.":"Keep omega_fi oriented.","Deriva i due detuning.":"Derive the two detunings.","Associa ogni zero al bilancio energetico.":"Associate each zero with energy balance.","Passa al delta soltanto nel limite lungo.":"Pass to a delta only in the long-time limit.","Inserisci densità e regole di selezione.":"Insert density and selection rules.","Spiega RWA e oscillazioni di Rabi.":"Explain RWA and Rabi oscillations.","Distingui emissione stimolata e spontanea.":"Distinguish stimulated and spontaneous emission.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 12 - perturbazioni dipendenti dal tempo e copione orale":"DIM 12 - time-dependent perturbations and oral-exam script","Appunti-MQ.pdf, pagine PDF 176-184 - teoria, risonanza e regola d'oro":"Appunti-MQ.pdf, PDF pages 176-184 - theory, resonance, and golden rule","Set 12 - esercizi sulle probabilità di transizione":"Set 12 - transition-probability exercises","Domanda 2025 n. 13 - perturbazioni dipendenti dal tempo":"2025 question 13 - time-dependent perturbations","Le convenzioni per pulsazioni, delta di Dirac e densità degli stati sono mantenute identiche in tutte le sei pagine del blocco.":"Conventions for angular frequencies, Dirac deltas, and density of states are kept identical across all six pages in this block.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Perturbazione monocromatica hermitiana":"Hermitian monochromatic perturbation","Elementi armonici tra due livelli":"Harmonic matrix elements between two levels","Due fasi di detuning":"Two detuning phases","Ampiezza espressa tramite la finestra temporale":"Amplitude expressed through the time window","Bilancio energetico dell'assorbimento":"Energy balance for absorption","Bilancio energetico dell'emissione stimolata":"Energy balance for stimulated emission","Limite distribuzionale della finestra armonica":"Distributional limit of the harmonic window","Regola d'oro per assorbimento":"Golden rule for absorption","Regola d'oro per emissione stimolata":"Golden rule for stimulated emission","Relazione tra elementi di matrice inversi":"Relation between reverse matrix elements","Condizione pratica di quasi risonanza":"Practical near-resonance condition","Hamiltoniano efficace risonante":"Effective resonant Hamiltonian","Probabilità di Rabi con detuning":"Rabi probability with detuning","Origine quantistica dell'emissione spontanea":"Quantum origin of spontaneous emission"},"title":{"it":"Emissione e assorbimento risonante","en":"Resonant emission and absorption"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

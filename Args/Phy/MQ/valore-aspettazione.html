@@ -1,164 +1,137 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valore di aspettazione</title>
-    <!-- Caricamento MathJax -->
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 900px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Postulati della meccanica quantistica</title>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
+        radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
+}
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
+}
 
-        h1, h2, h3 {
-            color: #1e90ff;
-        }
-
-        p, li {
-            text-align: justify;
-        }
-
-        ul {
-            list-style-type: disc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-
-        .lavagna {
-            background: #252525;
-            color: #eee;
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-
-        .formula {
-            background: #f4f4f4;
-            padding: 10px;
-            border-left: 3px solid #1e90ff;
-            font-family: 'Courier New', monospace;
-            margin: 15px 0;
-        }
-    </style>
-</head>
+</style>
+<meta content="PostulatiQM.html" name="cp-shared-lesson"/></head>
 <body>
-
-<h1>Valore di aspettazione</h1>
-
-<p>In meccanica quantistica, il valore di aspettazione di un osservabile rappresentato da un operatore hermitiano \( \hat{A} \) fornisce la media dei risultati di misura di quell’osservabile su un gran numero di sistemi preparati nello stesso stato. A differenza della meccanica classica, il cui stato determina i valori definiti di posizione, impulso ed energia, nella descrizione quantistica si ricava una previsione statistica, ossia la media dei possibili risultati.</p>
-
-<p>Supponendo un sistema descritto da una funzione d’onda \(\psi(\mathbf{r},t)\) normalizzata, il valore di aspettazione di un osservabile \(\hat{A}\) è:</p>
-
-<div class="formula">
-\[
-\langle A \rangle = \int \psi^*(\mathbf{r},t)\,\hat{A}\,\psi(\mathbf{r},t)\, d^3r.
-\]
-</div>
-
-<p>Se la descrizione è astratta, tramite notazione bra-ket, per uno stato \(|\psi(t)\rangle\):</p>
-
-<div class="formula">
-\[
-\langle A \rangle = \langle \psi(t)|\hat{A}|\psi(t)\rangle.
-\]
-</div>
-
-<p>La necessità dell’ermiticità di \(\hat{A}\) garantisce che \(\langle A \rangle\) sia reale, condizione fondamentale perché il risultato di una misura fisica non sia un numero complesso.</p>
-
-<p>Sulla lavagna, si può iniziare disegnando uno schema: a sinistra un potenziale \(V(\mathbf{r})\), al centro il profilo della funzione d’onda \(\psi(\mathbf{r},t)\) lungo un asse orizzontale \(x\), e sopra questa curva indicare un operatore \(\hat{A}\), ad esempio l’operatore posizione \(\hat{x}\) o impulso \(\hat{p}\). Mostrare poi come, applicando \(\hat{A}\) a \(\psi(\mathbf{r},t)\), si ottiene una nuova funzione, e come la complessa coniugata \(\psi^*(\mathbf{r},t)\) moltiplicata per questa nuova funzione e integrata su tutto lo spazio dia un valore numerico reale.</p>
-
-<div class="lavagna">
-1. Segnare sul lato sinistro \(\hat{A}\): se si tratta di posizione, \(\hat{x}\) è un semplice moltiplicatore \(x\), se si tratta di impulso in una dimensione, \(\hat{p} = -i\hbar \frac{\partial}{\partial x}\).
-<br><br>
-2. Disegnare l’andamento qualitativo di \(\psi(x,t)\) come un’onda localizzata attorno a una certa regione. Mostrare che la valutazione di \(\langle A \rangle\) comporta:
-\[
-\langle A \rangle = \int_{-\infty}^{\infty} \psi^*(x,t)\,\hat{A}\,\psi(x,t)\, dx.
-\]
-3. Specificare che se \(\hat{A} = \hat{x}\), allora
-\[
-\langle x \rangle = \int_{-\infty}^{\infty} x|\psi(x,t)|^2 dx,
-\]
-mentre se \(\hat{A} = \hat{p}\),
-\[
-\langle p \rangle = \int_{-\infty}^{\infty} \psi^*(x,t) \left(-i\hbar\frac{\partial}{\partial x}\right)\psi(x,t)\,dx.
-\]
-4. Sottolineare con il gesso che il risultato è sempre reale e che modificando lo stato \(\psi(x,t)\), \(\langle A \rangle\) cambia, riflettendo una proprietà statistica dello stato.
-</div>
-
-<p>Questa procedura porta dunque ad interpretare gli operatori come mediatori tra stato e misura. Nessuna singola misura di un sistema produce necessariamente il valore di aspettazione, ma l’esecuzione ripetuta dell’esperimento su molti sistemi identicamente preparati fornirà un valore medio che tende a \(\langle A \rangle\).</p>
-    <h2>Ulteriore Dettaglio: Dalla Definizione all'Interpretazione Probabilistica</h2>
-
-    <p>Dal punto di vista matematico, il valore di aspettazione è essenzialmente una media statistica calcolata sulla funzione d’onda, che gioca il ruolo di ampiezza di probabilità. Per rendere più chiari i passaggi, si possono considerare i seguenti punti alla lavagna, espandendo i concetti già mostrati:</p>
-
-    <ol>
-        <li><strong>Da osservabile classico a operatore quantistico:</strong>
-        Nel passaggio dalla fisica classica a quella quantistica, grandezze come posizione \(x\) o impulso \(p\) non sono più semplici variabili, ma diventano operatori lineari che agiscono su \(\psi\).  
-        - Per la posizione: \(\hat{x}\psi(x) = x\psi(x)\).  
-        - Per l’impulso (in una dimensione): \(\hat{p}\psi(x) = -i\hbar \frac{d}{dx}\psi(x)\).
-        
-        Questa sostituzione è cruciale per comprendere come ottenere i valori di aspettazione: non si sostituisce semplicemente un numero, ma si fa agire un operatore sulla funzione d’onda.</li>
-
-        <li><strong>Applicazione dell’operatore alla funzione d’onda:</strong>  
-        Se vogliamo calcolare \(\langle A \rangle\), dobbiamo prima calcolare \(\hat{A}\psi\).  
-        Ad esempio, se \(\hat{A}=\hat{p}\),
-        \[
-        \hat{p}\psi(x,t) = -i\hbar\frac{d}{dx}\psi(x,t).
-        \]
-        Questo produce una nuova funzione d’onda, diciamo \(\phi(x,t) = \hat{A}\psi(x,t)\).</li>
-
-        <li><strong>Formare il prodotto scalare per ottenere \(\langle A \rangle\):</strong>  
-        Una volta ottenuta \(\phi(x,t) = \hat{A}\psi(x,t)\), il valore di aspettazione è:
-        \[
-        \langle A \rangle = \int \psi^*(x,t)\phi(x,t) dx.
-        \]
-        Poiché \(\phi(x,t)\) e \(\psi(x,t)\) sono in generale funzioni complesse, l’integrale produrrà un numero complesso. Tuttavia, l’ermiticità dell’operatore \(\hat{A}\) assicura che questo numero sia reale. Alla lavagna, si può evidenziare come la parte immaginaria si annulli grazie al fatto che \(\hat{A}\) = \(\hat{A}^\dagger\).</li>
-
-        <li><strong>Interpretazione probabilistica:</strong>  
-        Il modulo quadro \(|\psi(x,t)|^2\) è una densità di probabilità di trovare la particella a \(x\) al tempo \(t\). Quindi, quando calcoliamo \(\langle x \rangle\), esso diventa:
-        \[
-        \langle x \rangle = \int x |\psi(x,t)|^2 dx,
-        \]
-        cioè la media statistica della posizione, come se \(|\psi(x,t)|^2\) fosse una distribuzione di probabilità.
-
-        Per \(\langle p \rangle\), l’interpretazione è simile, ma l’impulso è ottenuto tramite un’operazione differenziale. In pratica, stiamo convertendo l’informazione codificata nella forma di \(\psi(x,t)\) in un “valore medio” di impulso.  
-        In un esperimento reale, ripetendo la misura dell’impulso su molti sistemi preparati nello stesso stato \(\psi\), la media dei valori misurati tenderà a \(\langle p \rangle\).</li>
-
-        <li><strong>Linearità e cambio di base:</strong>
-        Il formalismo è lineare. Se abbiamo due stati \(\psi_1\) e \(\psi_2\), e formiamo \(\psi = a\psi_1 + b\psi_2\), il valore di aspettazione di \(\hat{A}\) nel nuovo stato è:
-        \[
-        \langle A \rangle_\psi = |a|^2 \langle A \rangle_{\psi_1} + |b|^2 \langle A \rangle_{\psi_2} + \text{termini di interferenza}.
-        \]
-        Ciò mostra come combinare stati porta a combinare le previsioni statistiche. Inoltre, cambiando base (ad esempio dall’asse x all’asse p), possiamo calcolare il valore di aspettazione integrando non in x, ma nello spazio degli impulsi, sfruttando la trasformata di Fourier. La fisica non cambia: \(\langle A \rangle\) è invariato, ma i calcoli possono essere semplificati scegliendo la base adatta.</li>
-    </ol>
-
-    <p>In sintesi, i passaggi matematici partono dall’azione dell’operatore sull’onda, l’integrazione con \(\psi^*\) per formare il valore di aspettazione e l’interpretazione probabilistica di \(|\psi|^2\). L’ermiticità dell’operatore \(\hat{A}\) garantisce la realtà di \(\langle A \rangle\), rendendo coerente il modello quantistico con misure fisiche reali.</p>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
-
+<div aria-label="Lingua / Language" class="language-switch" data-i18n-skip="true" role="group"><button aria-pressed="false" data-language="it" type="button">ITA</button><button aria-pressed="false" data-language="en" type="button">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" data-mq-historical-name="valore-aspettazione.html" data-mq-shared-lesson="PostulatiQM.html" id="lezione-PostulatiQM"><div class="lecture-kicker">Lezione approfondita - Argomento 6 - DIM 0 e DIM 2</div><h1>Postulati della meccanica quantistica</h1><p class="lecture-lead lecture-alias-note">Nome storico mantenuto: valore-aspettazione.html. La lezione scientifica verificata è condivisa con PostulatiQM.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.</p><p class="lecture-lead"><strong>Obiettivo.</strong> Presentare in una catena coerente stato, osservabili, regola di Born, valori medi, aggiornamento di misura, evoluzione unitaria e sistemi composti, includendo spettri degeneri e continui e distinguendo postulati fisici da scelte di rappresentazione o quantizzazione.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Una struttura operativa</h3><p>I postulati collegano preparazione, previsione statistica, misura e dinamica. Nessuno di essi dice che una funzione d'onda in coordinate sia l'unico modo di descrivere lo stato.</p></article><article class="lecture-card lecture-warning"><h3>Degenerazione tramite proiettori</h3><p>La formulazione robusta usa il proiettore sull'intero autospazio. Scegliere un particolare autovettore dentro un livello degenere aggiunge informazione non fornita dalla misura.</p></article></div><h2>Dalla preparazione alla previsione</h2><div class="lecture-grid"><article class="lecture-card"><h3>Stato puro</h3><p>Una preparazione ideale è rappresentata da un raggio normalizzato dello spazio di Hilbert; sovrapposizioni coerenti contengono fasi relative.</p></article><article class="lecture-card"><h3>Stato misto</h3><p>Un insieme statistico di preparazioni è rappresentato da una matrice densità positiva a traccia uno; non ogni miscela è un ket.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Postulato dello stato<span class="lecture-step-boss">STATO</span></h4><p>A ogni sistema si associa uno spazio di Hilbert complesso e una preparazione pura a un raggio di ket normalizzati.</p><div aria-label="Stato puro come raggio di Hilbert" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle\in\mathcal H,\quad\langle\psi|\psi\rangle=1,\quad|\psi\rangle\sim e^{i\alpha}|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Sovrapposizione<span class="lecture-step-boss">LINEARITÀ</span></h4><p>Combinazioni lineari non nulle definiscono stati dopo normalizzazione; le fasi relative influenzano interferenza e misura.</p><div aria-label="Principio di sovrapposizione normalizzato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\chi\rangle=\frac{a|\psi\rangle+b|\phi\rangle}{\sqrt{\langle a\psi+b\phi|a\psi+b\phi\rangle}}\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Osservabili<span class="lecture-step-boss">MISURA</span></h4><p>Una grandezza misurabile è associata a un operatore autoaggiunto sul dominio fisico.</p><div aria-label="Osservabile e decomposizione spettrale" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=A^\dagger,\qquad A=\sum_a aP_a\ \text{oppure}\ A=\int a\,dP(a)\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Esiti possibili<span class="lecture-step-boss">SPETTRO</span></h4><p>I risultati ideali della misura sono valori nello spettro dell'operatore, non valori arbitrari del suo valor medio.</p><div aria-label="Autovalori e degenerazione degli esiti" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|a,\mu\rangle=a|a,\mu\rangle,\qquad\mu=1,\ldots,g_a\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Born discreto<span class="lecture-step-boss">PROBABILITÀ</span></h4><p>La probabilità di un autovalore degenere è la norma della proiezione sull'intero autospazio.</p><div aria-label="Regola di Born con degenerazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle p(a)=\langle\psi|P_a|\psi\rangle=\sum_{\mu=1}^{g_a}|\langle a,\mu|\psi\rangle|^2,\qquad\sum_ap(a)=1\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Born continuo<span class="lecture-step-boss">INTERVALLI</span></h4><p>Per uno spettro continuo si assegna probabilità a insiemi misurabili, evitando di trattare una densità come probabilità puntuale.</p><div aria-label="Born per intervalli continui" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \Pr(A\in\Delta)=\langle\psi|P(\Delta)|\psi\rangle,\qquad\Pr(x\in[x_1,x_2])=\int_{x_1}^{x_2}|\psi(x)|^2dx\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Valore medio<span class="lecture-step-boss">MEDIA</span></h4><p>La media di molte misure identiche coincide con il valore di aspettazione spettrale.</p><div aria-label="Media e dispersione di un'osservabile" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle A\rangle=\sum_aap(a)=\langle\psi|A|\psi\rangle,\qquad(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Aggiornamento di Lüders<span class="lecture-step-boss">COLLASSO</span></h4><p>Condizionando sull'esito a, lo stato ideale diventa la proiezione normalizzata sull'autospazio osservato.</p><div aria-label="Aggiornamento selettivo dello stato" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle\longrightarrow|\psi_a\rangle=\frac{P_a|\psi\rangle}{\sqrt{\langle\psi|P_a|\psi\rangle}}\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Misura non selettiva<span class="lecture-step-boss">DENSITÀ</span></h4><p>Se l'esito non viene registrato, si sommano i rami classici e si perdono le coerenze tra autospazi distinti.</p><div aria-label="Aggiornamento non selettivo di Lüders" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho\longrightarrow\rho'=\sum_aP_a\rho P_a\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Ripetibilità ideale<span class="lecture-step-boss">PROIETTORE</span></h4><p>Poiché P_a quadrato vale P_a, ripetere subito la stessa misura restituisce a con probabilità uno.</p><div aria-label="Ripetibilità di una misura proiettiva" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle P_a|\psi_a\rangle=|\psi_a\rangle\Rightarrow\Pr(a\ \text{alla seconda misura})=1\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Evoluzione isolata<span class="lecture-step-boss">DINAMICA</span></h4><p>Tra misure, un sistema chiuso evolve unitariamente con generatore Hamiltoniana autoaggiunta.</p><div aria-label="Postulato dinamico di Schrödinger" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle i\hbar\frac d{dt}|\psi(t)\rangle=H(t)|\psi(t)\rangle,\qquad|\psi(t)\rangle=U(t,t_0)|\psi(t_0)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Norma e probabilità<span class="lecture-step-boss">UNITARIETÀ</span></h4><p>H autoaggiunta rende U unitario e conserva tutte le probabilità totali.</p><div aria-label="Conservazione della normalizzazione" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger U=I\Rightarrow\langle\psi(t)|\psi(t)\rangle=\langle\psi(t_0)|\psi(t_0)\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Sistemi composti<span class="lecture-step-boss">TENSORE</span></h4><p>Lo spazio di due sistemi è il prodotto tensoriale; non tutti i suoi ket si fattorizzano.</p><div aria-label="Postulato di composizione ed entanglement" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \mathcal H_{AB}=\mathcal H_A\otimes\mathcal H_B,\qquad|\Psi\rangle\ne|\psi_A\rangle\otimes|\phi_B\rangle\ \text{in generale}\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Osservabili compatibili<span class="lecture-step-boss">CSCO</span></h4><p>Operatori autoaggiunti commutanti ammettono una base comune; un insieme completo rimuove le degenerazioni residue.</p><div aria-label="Compatibilità e insieme completo di osservabili" class="lecture-formula"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle [A,B]=0\Rightarrow\exists\{|a,b,\mu\rangle\},\qquad\text{CSCO}:\ \mu\ \text{assente}\)</span></div></article></section><h2>Esempio: misura degenere a tre livelli</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Si prende A con autovalore a due volte degenere e autovalore b semplice.</p><p data-i18n-skip="true">\(\displaystyle A=a(|1\rangle\langle1|+|2\rangle\langle2|)+b|3\rangle\langle3|,\quad|\psi\rangle=\frac{|1\rangle+i|2\rangle+|3\rangle}{\sqrt3},\quad p(a)=\frac23,\ p(b)=\frac13,\quad|\psi_a\rangle=\frac{|1\rangle+i|2\rangle}{\sqrt2}\)</p><p><strong>Controllo.</strong> La misura di A non sceglie tra |1&gt; e |2&gt;: conserva la sovrapposizione interna all'autospazio a, come richiede Lüders.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card"><h3>Quantizzazione non unica</h3><p>La sostituzione classica x,p con operatori non è un postulato sufficiente per prodotti non commutanti. Ordinamento e simmetrizzazione sono scelte motivate dal modello.</p></article><article class="lecture-card"><h3>Misure generali</h3><p>Le POVM estendono le misure proiettive con effetti positivi E_k che sommano a I. Il nucleo del corso usa PVM e aggiornamento di Lüders.</p></article><article class="lecture-card"><h3>Collasso ed evoluzione</h3><p>L'aggiornamento condizionato non è l'evoluzione unitaria di un sistema chiuso. Descrive il nuovo stato assegnato dopo aver acquisito l'esito.</p></article><article class="lecture-card"><h3>Miscele proprie e improprie</h3><p>La stessa rho locale può nascere da ignoranza classica o da traccia parziale di uno stato entangled; tutte le misure locali dipendono soltanto da rho.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Dire che il valor medio è un esito possibile; usare un singolo autovettore in un livello degenere; collassare l'osservabile invece dello stato; confondere densità continua e probabilità puntuale; applicare Schrödinger durante l'aggiornamento ideale.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Le probabilità sommano a uno; P_a è indipendente dalla base interna; lo stato post-misura è normalizzato; una seconda misura è certa; U è unitario; il prodotto tensoriale permette stati non separabili.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Definisci stato come raggio normalizzato.</li><li>Associa osservabili autoaggiunte e spettro.</li><li>Enuncia Born discreto, degenere e continuo.</li><li>Ricava media e varianza.</li><li>Scrivi aggiornamenti selettivo e non selettivo.</li><li>Dimostra la ripetibilità con P quadrato.</li><li>Enuncia evoluzione unitaria e composizione.</li><li>Distingui postulati, rappresentazione e quantizzazione.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L1">DIM 0 - postulati, misura ed evoluzione</a></li><li><a href="boss/P1_DIM_0-6.txt#L616">DIM 2 - derivazione completa dell'indeterminazione</a></li><li><a href="Appunti-MQ.pdf#page=71">Appunti-MQ.pdf, pagine PDF 71-79 - misure, osservabili, proiettori e compatibilità</a></li></ul><p class="lecture-note">La formulazione combina DIM 0 con le pagine verificate 71-79 e usa proiettori spettrali per coprire senza ambiguità degenerazione, continuo, ripetibilità e stato post-misura.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 6 - DIM 0 e DIM 2":"In-depth lesson - Topic 6 - DIM 0 and DIM 2","Postulati della meccanica quantistica":"Postulates of quantum mechanics","Obiettivo.":"Objective.","Presentare in una catena coerente stato, osservabili, regola di Born, valori medi, aggiornamento di misura, evoluzione unitaria e sistemi composti, includendo spettri degeneri e continui e distinguendo postulati fisici da scelte di rappresentazione o quantizzazione.":"Present in one coherent chain states, observables, the Born rule, expectation values, measurement update, unitary evolution, and composite systems, including degenerate and continuous spectra and distinguishing physical postulates from representation or quantization choices.","Una struttura operativa":"An operational structure","I postulati collegano preparazione, previsione statistica, misura e dinamica. Nessuno di essi dice che una funzione d'onda in coordinate sia l'unico modo di descrivere lo stato.":"The postulates connect preparation, statistical prediction, measurement, and dynamics. None says that a coordinate wavefunction is the only state description.","Degenerazione tramite proiettori":"Degeneracy through projectors","La formulazione robusta usa il proiettore sull'intero autospazio. Scegliere un particolare autovettore dentro un livello degenere aggiunge informazione non fornita dalla misura.":"The robust formulation uses the projector onto the full eigenspace. Choosing a particular eigenvector inside a degenerate level adds information not supplied by the measurement.","Dalla preparazione alla previsione":"From preparation to prediction","Stato puro":"Pure state","Una preparazione ideale è rappresentata da un raggio normalizzato dello spazio di Hilbert; sovrapposizioni coerenti contengono fasi relative.":"An ideal preparation is represented by a normalized Hilbert-space ray; coherent superpositions contain relative phases.","Stato misto":"Mixed state","Un insieme statistico di preparazioni è rappresentato da una matrice densità positiva a traccia uno; non ogni miscela è un ket.":"A statistical ensemble of preparations is represented by a positive unit-trace density matrix; not every mixture is a ket.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Postulato dello stato":"1. State postulate","STATO":"STATE","A ogni sistema si associa uno spazio di Hilbert complesso e una preparazione pura a un raggio di ket normalizzati.":"Each system is assigned a complex Hilbert space and each pure preparation a ray of normalized kets.","Passaggio":"Step","2. Sovrapposizione":"2. Superposition","LINEARITÀ":"LINEARITY","Combinazioni lineari non nulle definiscono stati dopo normalizzazione; le fasi relative influenzano interferenza e misura.":"Nonzero linear combinations define states after normalization; relative phases affect interference and measurement.","3. Osservabili":"3. Observables","MISURA":"MEASUREMENT","Una grandezza misurabile è associata a un operatore autoaggiunto sul dominio fisico.":"A measurable quantity is associated with a self-adjoint operator on the physical domain.","4. Esiti possibili":"4. Possible outcomes","SPETTRO":"SPECTRUM","I risultati ideali della misura sono valori nello spettro dell'operatore, non valori arbitrari del suo valor medio.":"Ideal measurement results are values in the operator spectrum, not arbitrary values of its expectation.","5. Born discreto":"5. Discrete Born rule","PROBABILITÀ":"PROBABILITY","La probabilità di un autovalore degenere è la norma della proiezione sull'intero autospazio.":"The probability of a degenerate eigenvalue is the norm of the projection onto the full eigenspace.","6. Born continuo":"6. Continuous Born rule","INTERVALLI":"INTERVALS","Per uno spettro continuo si assegna probabilità a insiemi misurabili, evitando di trattare una densità come probabilità puntuale.":"For a continuous spectrum assign probability to measurable sets, avoiding treatment of a density as point probability.","7. Valore medio":"7. Expectation value","MEDIA":"MEAN","La media di molte misure identiche coincide con il valore di aspettazione spettrale.":"The mean of many identically prepared measurements equals the spectral expectation value.","8. Aggiornamento di Lüders":"8. Lüders update","COLLASSO":"COLLAPSE","Condizionando sull'esito a, lo stato ideale diventa la proiezione normalizzata sull'autospazio osservato.":"Conditioning on outcome a, the ideal state becomes the normalized projection onto the observed eigenspace.","9. Misura non selettiva":"9. Nonselective measurement","DENSITÀ":"DENSITY","Se l'esito non viene registrato, si sommano i rami classici e si perdono le coerenze tra autospazi distinti.":"If the outcome is not recorded, classical branches are summed and coherences between distinct eigenspaces are lost.","10. Ripetibilità ideale":"10. Ideal repeatability","PROIETTORE":"PROJECTOR","Poiché P_a quadrato vale P_a, ripetere subito la stessa misura restituisce a con probabilità uno.":"Because P_a squared equals P_a, immediately repeating the same measurement returns a with probability one.","11. Evoluzione isolata":"11. Isolated evolution","DINAMICA":"DYNAMICS","Tra misure, un sistema chiuso evolve unitariamente con generatore Hamiltoniana autoaggiunta.":"Between measurements, a closed system evolves unitarily with a self-adjoint Hamiltonian generator.","12. Norma e probabilità":"12. Norm and probability","UNITARIETÀ":"UNITARITY","H autoaggiunta rende U unitario e conserva tutte le probabilità totali.":"Self-adjoint H makes U unitary and preserves all total probabilities.","13. Sistemi composti":"13. Composite systems","TENSORE":"TENSOR","Lo spazio di due sistemi è il prodotto tensoriale; non tutti i suoi ket si fattorizzano.":"The space of two systems is the tensor product; not all its kets factorize.","14. Osservabili compatibili":"14. Compatible observables","CSCO":"CSCO","Operatori autoaggiunti commutanti ammettono una base comune; un insieme completo rimuove le degenerazioni residue.":"Commuting self-adjoint operators admit a common basis; a complete set removes residual degeneracies.","Esempio: misura degenere a tre livelli":"Example: degenerate measurement in three levels","Impostazione.":"Setup.","Si prende A con autovalore a due volte degenere e autovalore b semplice.":"Take A with a twofold-degenerate eigenvalue a and simple eigenvalue b.","Controllo.":"Check.","La misura di A non sceglie tra |1> e |2>: conserva la sovrapposizione interna all'autospazio a, come richiede Lüders.":"Measuring A does not choose between |1> and |2>: it preserves the superposition inside eigenspace a, as required by Lüders.","Interpretazione e limiti":"Interpretation and limits","Quantizzazione non unica":"Quantization is not unique","La sostituzione classica x,p con operatori non è un postulato sufficiente per prodotti non commutanti. Ordinamento e simmetrizzazione sono scelte motivate dal modello.":"Replacing classical x,p by operators is not a sufficient postulate for noncommuting products. Ordering and symmetrization are model-motivated choices.","Misure generali":"General measurements","Le POVM estendono le misure proiettive con effetti positivi E_k che sommano a I. Il nucleo del corso usa PVM e aggiornamento di Lüders.":"POVMs extend projective measurements with positive effects E_k summing to I. The course core uses PVMs and Lüders updates.","Collasso ed evoluzione":"Collapse and evolution","L'aggiornamento condizionato non è l'evoluzione unitaria di un sistema chiuso. Descrive il nuovo stato assegnato dopo aver acquisito l'esito.":"Conditioned update is not closed-system unitary evolution. It describes the newly assigned state after acquiring the outcome.","Miscele proprie e improprie":"Proper and improper mixtures","La stessa rho locale può nascere da ignoranza classica o da traccia parziale di uno stato entangled; tutte le misure locali dipendono soltanto da rho.":"The same local rho may arise from classical ignorance or partial tracing of an entangled state; all local measurements depend only on rho.","Errori tipici":"Common errors","Dire che il valor medio è un esito possibile; usare un singolo autovettore in un livello degenere; collassare l'osservabile invece dello stato; confondere densità continua e probabilità puntuale; applicare Schrödinger durante l'aggiornamento ideale.":"Saying the expectation is a possible outcome; using one eigenvector in a degenerate level; collapsing the observable instead of the state; confusing continuous density with point probability; applying Schrödinger during ideal update.","Controlli rapidi":"Quick checks","Le probabilità sommano a uno; P_a è indipendente dalla base interna; lo stato post-misura è normalizzato; una seconda misura è certa; U è unitario; il prodotto tensoriale permette stati non separabili.":"Probabilities sum to one; P_a is independent of the internal basis; the postmeasurement state is normalized; a second measurement is certain; U is unitary; the tensor product allows nonseparable states.","Controllo da orale":"Oral exam checklist","Definisci stato come raggio normalizzato.":"Define a state as a normalized ray.","Associa osservabili autoaggiunte e spettro.":"Associate self-adjoint observables and spectra.","Enuncia Born discreto, degenere e continuo.":"State discrete, degenerate, and continuous Born rules.","Ricava media e varianza.":"Derive mean and variance.","Scrivi aggiornamenti selettivo e non selettivo.":"Write selective and nonselective updates.","Dimostra la ripetibilità con P quadrato.":"Prove repeatability using P squared.","Enuncia evoluzione unitaria e composizione.":"State unitary evolution and composition.","Distingui postulati, rappresentazione e quantizzazione.":"Distinguish postulates, representation, and quantization.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","DIM 0 - postulati, misura ed evoluzione":"DIM 0 - postulates, measurement, and evolution","DIM 2 - derivazione completa dell'indeterminazione":"DIM 2 - complete uncertainty derivation","Appunti-MQ.pdf, pagine PDF 71-79 - misure, osservabili, proiettori e compatibilità":"Appunti-MQ.pdf, PDF pages 71-79 - misure, osservabili, proiettori e compatibilità","La formulazione combina DIM 0 con le pagine verificate 71-79 e usa proiettori spettrali per coprire senza ambiguità degenerazione, continuo, ripetibilità e stato post-misura.":"The formulation combines DIM 0 with verified pages 71-79 and uses spectral projectors to cover degeneracy, the continuum, repeatability, and postmeasurement state without ambiguity.","Ritorna all'indice MQ":"Return to the MQ index","Nome storico mantenuto: valore-aspettazione.html. La lezione scientifica verificata è condivisa con PostulatiQM.html, così formule e traduzioni non divergono tra due accessi allo stesso argomento.":"Historical name retained: valore-aspettazione.html. The verified scientific lesson is shared with PostulatiQM.html, so formulas and translations do not diverge between two entry points to the same topic."},"attrs":{"Stato puro come raggio di Hilbert":"Pure state as a Hilbert-space ray","Principio di sovrapposizione normalizzato":"Normalized superposition principle","Osservabile e decomposizione spettrale":"Observable and spectral decomposition","Autovalori e degenerazione degli esiti":"Outcome eigenvalues and degeneracy","Regola di Born con degenerazione":"Born rule with degeneracy","Born per intervalli continui":"Born rule for continuous intervals","Media e dispersione di un'osservabile":"Observable mean and variance","Aggiornamento selettivo dello stato":"Selective state update","Aggiornamento non selettivo di Lüders":"Nonselective Lüders update","Ripetibilità di una misura proiettiva":"Repeatability of a projective measurement","Postulato dinamico di Schrödinger":"Schrödinger dynamical postulate","Conservazione della normalizzazione":"Preservation of normalization","Postulato di composizione ed entanglement":"Composition postulate and entanglement","Compatibilità e insieme completo di osservabili":"Compatibility and complete set of observables"},"title":{"it":"Postulati della meccanica quantistica","en":"Postulates of quantum mechanics"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>

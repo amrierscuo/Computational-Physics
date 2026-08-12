@@ -1,278 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trasformazioni Unitarie</title>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1e90ff;
-        }
-        p, ul {
-            background: #ffffff;
-            padding: 15px;
-            border-left: 3px solid #1e90ff;
-            margin: 15px 0;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 0;
-            padding-left: 20px;
-        }
-        .formula {
-            display: block;
-            padding: 10px;
-            background: #f4f4f4;
-            margin: 15px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .back-link {
-            margin-top: 20px;
-            display: inline-block;
-            font-size: 1em;
-            color: #1e90ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #1e90ff;
-        }
-        .back-link:hover {
-            color: #104e8b;
-            border-bottom: 1px solid #104e8b;
-        }
-    
-/* mq-lecture-depth:start */
-.lecture-depth {
-    position: relative;
-    left: 50%;
-    box-sizing: border-box;
-    width: min(1200px, calc(100vw - 32px));
-    max-width: none;
-    margin: 42px auto 24px;
-    transform: translateX(-50%);
-    padding: clamp(22px, 4vw, 42px);
-    color: #172033;
-    background:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambiamenti di base e trasformazioni unitarie</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: #172033;
+      background: #f5f7fb;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .lecture-depth {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 28px auto;
+      padding: clamp(22px, 4vw, 42px);
+      background:
         radial-gradient(circle at top right, rgba(30, 144, 255, .13), transparent 34%),
         linear-gradient(145deg, #ffffff 0%, #f4f8ff 100%);
-    border: 1px solid rgba(30, 99, 170, .22);
-    border-radius: 22px;
-    box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+      border: 1px solid rgba(30, 99, 170, .22);
+      border-radius: 22px;
+      box-shadow: 0 22px 55px rgba(20, 47, 83, .13);
+    }
+    .lecture-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      color: #0a4f92;
+      background: #e8f3ff;
+      border: 1px solid #b9d9f8;
+      border-radius: 999px;
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 10px; color: #103d70; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.12; }
+    h2 { margin: 30px 0 12px; color: #123e70; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
+    h3 { margin: 0 0 8px; color: #123e70; font-size: 1.08rem; }
+    p, ul { margin: 0; padding: 0; color: #26364a; }
+    p + p { margin-top: 10px; }
+    li { margin: 7px 0; line-height: 1.52; }
+    .lecture-lead { font-size: 1.06rem; line-height: 1.78; }
+    .lecture-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+    .lecture-card { padding: 18px; background: rgba(255,255,255,.9); border: 1px solid #d6e3f1; border-radius: 14px; }
+    .lecture-card ul { padding-left: 20px; }
+    .observation-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 !important; list-style: none; }
+    .observation-list li { margin: 0; padding: 11px 13px; background: #f7fbff; border: 1px solid #d6e3f1; border-radius: 10px; }
+    .lecture-note { color: #52657b; font-size: .91rem; }
+    .lecture-warning { border-left: 5px solid #d48a16; }
+    .lecture-result { border-left: 5px solid #18835f; }
+    .lecture-oral { margin-top: 18px; border-left: 5px solid #6c55c6; }
+    .lecture-steps { display: grid; gap: 8px; }
+    .lecture-step { display: grid; grid-template-columns: minmax(140px,.38fr) minmax(190px,.72fr) minmax(0,1.7fr); gap: 12px; align-items: center; padding: 10px 12px; }
+    .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
+    .lecture-step p { font-size: .94rem; line-height: 1.42; }
+    .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
+    .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; color: #102f54; background: #edf6ff; border: 1px solid #bfdcf7; border-left: 5px solid #1e77c5; border-radius: 12px; white-space: nowrap; contain: inline-size; }
+    .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+    .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
+    .lecture-formula mjx-container { margin: 0 !important; }
+    .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .lecture-example p { font-size: .93rem; line-height: 1.48; }
+    .lecture-checks { columns: 2 28ch; column-gap: 28px; }
+    .lecture-checks li { break-inside: avoid; }
+    details { margin-top: 20px; padding: 13px 15px; background: #f8fbff; border: 1px solid #d3e2f2; border-radius: 12px; }
+    summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
+    details ul { margin-top: 10px; padding-left: 20px; }
+    details a { color: #0a5ba7; text-underline-offset: 2px; }
+    .lecture-return { margin-top: 20px; text-align: center; }
+    .lecture-return a { display: inline-flex; padding: 9px 14px; color: #0a4f92; background: #e8f3ff; border: 1px solid #b9d9f8; border-radius: 999px; font: 700 .9rem/1.3 system-ui, sans-serif; text-decoration: none; }
+    .lecture-return a:hover { background: #d9ecff; }
+    @media (max-width: 800px) {
+      .lecture-depth { width: calc(100vw - 20px); margin: 10px auto; padding: 20px; border-radius: 16px; }
+      .lecture-grid, .observation-list, .lecture-step, .lecture-example { grid-template-columns: 1fr; }
+      .lecture-checks { columns: 1; }
+    }
+  
+.language-switch{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:999px;
+  background:rgba(16,24,41,.78);
+  box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,.28));
 }
-.lecture-depth * { box-sizing: border-box; }
-.lecture-depth .lecture-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 7px 12px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .78rem/1.2 system-ui, sans-serif;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+.language-switch button{
+  cursor:pointer;
+  border:0;
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--muted,#dbeafe);
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-.lecture-depth h2,
-.lecture-depth h3 { color: #123e70; }
-.lecture-depth h2 { margin: 12px 0 10px; font-size: clamp(1.45rem, 2.7vw, 2.05rem); }
-.lecture-depth h3 { margin: 0 0 8px; font-size: 1.08rem; }
-.lecture-depth p,
-.lecture-depth ul {
-    margin: 0;
-    padding: 0;
-    color: #26364a;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    font-family: Georgia, 'Times New Roman', serif;
+.language-switch button:hover{color:var(--text,#fff)}
+.language-switch button.is-active{
+  color:#07111f;
+  background:linear-gradient(135deg,var(--accent,#38bdf8),#c4b5fd);
 }
-.lecture-depth p + p { margin-top: 12px; }
-.lecture-depth .lecture-lead { font-size: 1.06rem; line-height: 1.82; }
-.lecture-depth .lecture-formula {
-    overflow-x: auto;
-    margin: 22px 0;
-    padding: 17px 20px;
-    color: #102f54;
-    background: #edf6ff;
-    border: 1px solid #bfdcf7;
-    border-left: 5px solid #1e77c5;
-    border-radius: 12px;
-    text-align: center;
-}
-.lecture-depth .lecture-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr);
-    gap: 16px;
-    margin: 22px 0;
-}
-.lecture-depth .lecture-card {
-    padding: 18px;
-    background: rgba(255, 255, 255, .88);
-    border: 1px solid #d6e3f1;
-    border-radius: 14px;
-}
-.lecture-depth .lecture-card ul { padding-left: 20px; }
-.lecture-depth .lecture-card li { margin: 7px 0; line-height: 1.55; }
-.lecture-depth .lecture-narrative { columns: 2 32ch; column-gap: 24px; }
-.lecture-depth .lecture-narrative p { break-inside: avoid; line-height: 1.58; }
-.lecture-depth .lecture-steps { display: grid; gap: 8px; }
-.lecture-depth .lecture-step { display: grid; grid-template-columns: minmax(130px,.34fr) minmax(180px,.65fr) minmax(0,1.65fr); gap: 12px; align-items: center; padding: 10px 12px; }
-.lecture-depth .lecture-step h4 { margin: 0; color: #174f88; font: 700 .93rem/1.3 system-ui, sans-serif; }
-.lecture-depth .lecture-step-boss { display: inline-flex; margin-left: 5px; padding: 2px 6px; color: #5a429f; background: #eee9ff; border: 1px solid #d4c9fb; border-radius: 999px; font: 700 .66rem/1.15 system-ui, sans-serif; vertical-align: 1px; white-space: nowrap; }
-.lecture-depth .lecture-step p { font-size: .94rem; line-height: 1.42; }
-.lecture-depth .lecture-step .lecture-formula { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 7px 10px; overflow-x: auto; overflow-y: hidden; contain: inline-size; text-align: left; white-space: nowrap; }
-.lecture-depth .lecture-proof-tag { position: sticky; left: 0; z-index: 1; flex: 0 0 auto; padding: 3px 6px; color: #0a5d48; background: #e8f7f1; border: 1px solid #b9dfd1; border-radius: 6px; font: 800 .66rem/1.15 system-ui, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
-.lecture-depth .lecture-proof-math { flex: 0 0 auto; min-width: max-content; font-size: .93em; }
-.lecture-depth .lecture-formula mjx-container { margin: 0 !important; }
-.lecture-depth .lecture-example { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-.lecture-depth .lecture-example p { margin: 0; line-height: 1.48; }
-.lecture-depth .boss-ref { margin-top: 12px; }
-.lecture-depth .lecture-result { border-left: 5px solid #18835f; }
-.lecture-depth .lecture-warning { border-left: 5px solid #d48a16; }
-.lecture-depth .lecture-oral { border-left: 5px solid #6c55c6; }
-.lecture-depth details {
-    margin-top: 20px;
-    padding: 13px 15px;
-    background: #f8fbff;
-    border: 1px solid #d3e2f2;
-    border-radius: 12px;
-}
-.lecture-depth summary { cursor: pointer; color: #174f88; font: 700 .94rem/1.4 system-ui, sans-serif; }
-.lecture-depth details ul { margin-top: 10px; padding-left: 20px; }
-.lecture-depth details a { color: #0a5ba7; text-underline-offset: 2px; }
-.lecture-depth .lecture-note { margin-top: 9px; color: #52657b; font-size: .91rem; }
-.lecture-depth .lecture-return { margin-top: 20px; text-align: center; }
-.lecture-depth .lecture-return a {
-    display: inline-flex;
-    padding: 9px 14px;
-    color: #0a4f92;
-    background: #e8f3ff;
-    border: 1px solid #b9d9f8;
-    border-radius: 999px;
-    font: 700 .9rem/1.3 system-ui, sans-serif;
-    text-decoration: none;
-}
-.lecture-depth .lecture-return a:hover { background: #d9ecff; }
-@media (max-width: 760px) {
-    .lecture-depth { width: calc(100vw - 20px); margin-top: 28px; padding: 20px; border-radius: 16px; }
-    .lecture-depth .lecture-grid { grid-template-columns: 1fr; }
-    .lecture-depth .lecture-narrative { columns: 1; }
-    .lecture-depth .lecture-step, .lecture-depth .lecture-example { grid-template-columns: 1fr; }
-}
-/* mq-lecture-depth:end */
+
 </style>
 </head>
 <body>
-    <h1>Trasformazioni Unitarie</h1>
-    <h2>Definizione</h2>
-    Le trasformazioni unitarie sono operazioni matematiche che preservano la norma di un vettore nello spazio di Hilbert. 
-    Una trasformazione unitaria è rappresentata da un operatore \( \hat{U} \) che soddisfa la seguente condizione:
-    <div class="formula">
-        \[
-        \hat{U}^\dagger \hat{U} = \hat{U} \hat{U}^\dagger = \hat{I}
-        \]
-    </div>
-    dove \( \hat{U}^\dagger \) è l'operatore hermitiano coniugato di \( \hat{U} \) e \( \hat{I} \) è l'operatore identità.
-
-    <h2>Proprietà delle trasformazioni unitarie</h2>
-    <ul>
-        <li>Preservano il prodotto scalare: \( \langle\psi|\phi\rangle = \langle\psi'|\phi'\rangle \), dove \( |\psi'\rangle = \hat{U}|\psi\rangle \) e \( |\phi'\rangle = \hat{U}|\phi\rangle \).</li>
-        <li>Preservano la norma dei vettori: \( \|\hat{U}|\psi\rangle\| = \||\psi\rangle\| \).</li>
-        <li>Conservano la probabilità nei sistemi quantistici.</li>
-    </ul>
-
-    <h2>Evoluzione temporale e operatori unitari</h2>
-    In meccanica quantistica, l'evoluzione temporale di un sistema è descritta da un operatore unitario \( \hat{U}(t) \), che è legato all'hamiltoniano \( \hat{H} \) attraverso la relazione:
-    <div class="formula">
-        \[
-        \hat{U}(t) = e^{-\frac{i}{\hbar} \hat{H} t}
-        \]
-    </div>
-    Questo operatore descrive come uno stato \( |\psi(t)\rangle \) evolve nel tempo:
-    <div class="formula">
-        \[
-        |\psi(t)\rangle = \hat{U}(t) |\psi(0)\rangle
-        \]
-
-    <h2>Applicazioni</h2>
-    Le trasformazioni unitarie sono alla base di molteplici fenomeni quantistici:
-    <ul>
-        <li><strong>Traslazioni nello spazio:</strong> Descritte dall'operatore:
-            \[
-            \hat{T}(a) = e^{-\frac{i}{\hbar} \hat{p} a}
-            \]
-            dove \( a \) è lo spostamento e \( \hat{p} \) è l'operatore quantità di moto.
-        </li>
-        <li><strong>Rotazioni:</strong> Descritte da operatori come:
-            \[
-            \hat{R}(\theta) = e^{-\frac{i}{\hbar} \vec{\theta} \cdot \hat{\vec{L}}}
-            \]
-            dove \( \vec{\theta} \) è l'angolo di rotazione e \( \hat{\vec{L}} \) è il momento angolare.
-        </li>
-    </ul>
-
-    <h2>Simmetrie e conservazione</h2>
-    Secondo il teorema di Noether, ogni simmetria continua di un sistema fisico corrisponde a una quantità conservata. 
-    Ad esempio:
-    <ul>
-        <li>Simmetria delle traslazioni \(\rightarrow\) Conservazione della quantità di moto.</li>
-        <li>Simmetria delle rotazioni \(\rightarrow\) Conservazione del momento angolare.</li>
-    </ul>
-
-    
-
-<section id="percorso-appunti" class="lecture-depth" data-mq-enrichment="2026-08-11">
-  <div class="lecture-kicker">Lezione approfondita - Argomento 5</div>
-  <h2>Trasformazioni Unitarie: percorso completo</h2>
-  <p class="lecture-lead"><strong>Obiettivo.</strong> Distinguere trasformazione di stati, operatori e componenti sotto un cambio di base.</p>
-  <h3>Quadro fisico</h3>
-  <div class="lecture-narrative">  <p>Un operatore unitario preserva prodotti scalari. In una trasformazione attiva cambia il ket; in un cambio passivo cambiano le componenti. Le formule sono correlate ma i segni dei generatori dipendono dalla convenzione.</p></div>
-  <h3>Dimostrazioni di base - traccia orale</h3>
-  <div class="lecture-steps"><article class="lecture-card lecture-step">
-      <h4>1. Stati<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Trasformazione attiva.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="|\psi&#x27;\rangle=U|\psi\rangle,\quad U^\dagger U=I"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle |\psi'\rangle=U|\psi\rangle,\quad\langle\phi'|\psi'\rangle=\langle\phi|U^\dagger U|\psi\rangle\stackrel{!}{=}\langle\phi|\psi\rangle\Rightarrow U^\dagger U=I\)</span></div>
-    </article><article class="lecture-card lecture-step">
-      <h4>2. Operatori<span class="lecture-step-boss">DIM 0</span><span class="lecture-step-boss">DIM 3</span></h4>
-      <p>Per preservare i valori medi.</p>
-      <div class="lecture-formula" aria-label="Dimostrazione algebrica di base" data-result="A&#x27;=UAU^\dagger"><span class="lecture-proof-tag">Base</span><span class="lecture-proof-math">\(\displaystyle \langle A\rangle'=\langle\psi'|A'|\psi'\rangle=\langle\psi|U^\dagger A'U|\psi\rangle\stackrel{!}{=}\langle\psi|A|\psi\rangle\Rightarrow U^\dagger A'U=A\Rightarrow A'=UAU^\dagger\)</span></div>
-    </article></div>
-  <h3>Esempio calcolato: Rotazione infinitesima</h3>
-  <article class="lecture-card lecture-result lecture-example">
-    <p><strong>Dati e domanda.</strong> Con \(U\simeq I-i\epsilon G/\hbar\).</p>
-    <p><strong>Calcolo.</strong> \(A'=A-(i\epsilon/\hbar)[G,A]+O(\epsilon^2)\).</p>
-    <p><strong>Risultato e controllo.</strong> Il commutatore con il generatore determina la variazione.</p>
-  </article>
-  <details class="boss-ref"><summary>Tracce orali collegate: Boss e domande 2025</summary><ul><li><a href="boss/P1_DIM_0-6.txt">DIM 0</a> - copione e passaggi richiesti all'orale</li><li><a href="boss/P1_DIM_0-6.txt">DIM 3</a> - copione e passaggi richiesti all'orale</li></ul></details>
-  <div class="lecture-grid">
-    <article class="lecture-card lecture-warning"><h3>Ipotesi e limiti</h3><ul>          <li>U deve essere definito sull'intero spazio rilevante.</li>
-          <li>Non confondere similitudine \(UAU^\dagger\) con evoluzione di Heisenberg \(U^\dagger AU\).</li></ul></article>
-    <article class="lecture-card"><h3>Lettura fisica</h3><p>L'unitarietà esprime equivalenza fisica: cambiano coordinate o orientazione, non probabilità totali.</p></article>
-  </div>
-  <article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul>          <li>Mostra che lo spettro è invariato.</li>
-          <li>Riconcilia convenzioni attiva e passiva.</li></ul></article>
-
-  <details>
-    <summary>Riferimenti usati negli appunti del corso</summary>
-    <ul>
-          <li><a href="Appunti-MQ.pdf#page=60">Appunti-MQ.pdf, pp. 60-71 e 107-109: cambio di base ed evoluzione unitaria</a></li>
-          <li><a href="MQ.pdf#page=3">MQ.pdf, pp. capitoli 3 e 7: operatori unitari</a></li>
-    </ul>
-    <p class="lecture-note">La lezione integra teoria, calcolo e controlli senza riprodurre letteralmente le dispense.</p>
-  </details>
-</section>
-
-<a href="1mq.html" class="back-link">Ritorna all'Indice</a>
+<div class="language-switch" aria-label="Lingua / Language" data-i18n-skip="true" role="group"><button type="button" aria-pressed="false" data-language="it">ITA</button><button type="button" aria-pressed="false" data-language="en">ENG</button></div>
+<main class="lecture-depth" data-mq-enrichment="2026-08-12" id="lezione-trasformazioni-unitarie"><div class="lecture-kicker">Lezione approfondita - Argomento 5</div><h1>Cambiamenti di base e trasformazioni unitarie</h1><p class="lecture-lead"><strong>Obiettivo.</strong> Dimostrare perché un cambio di base ortonormale è unitario, trasformare componenti e operatori senza ambiguità attiva-passiva, provare l'invarianza di ampiezze, spettro e valori medi e collegare trasformazioni continue ai generatori hermitiani.</p><div class="lecture-grid"><article class="lecture-card lecture-result"><h3>Coordinate che cambiano</h3><p>Un cambio passivo riscrive lo stesso ket in una nuova base. Una trasformazione attiva produce invece un nuovo ket nello stesso sistema di coordinate.</p></article><article class="lecture-card lecture-warning"><h3>La convenzione decide i pugnali</h3><p>Formule come A primo uguale U aggiunto A U o U A U aggiunto dipendono da come U collega le basi. Va dichiarata la convenzione e verificata su un'ampiezza.</p></article></div><h2>Convenzione passiva adottata</h2><div class="lecture-grid"><article class="lecture-card "><h3>Basi</h3><p>Si definisce |e_i primo&gt; uguale somma j |e_j&gt; U_ji. Le colonne di U sono i nuovi vettori espressi nella vecchia base.</p></article><article class="lecture-card "><h3>Componenti</h3><p>Con questa convenzione la colonna nuova è U aggiunto volte la colonna vecchia; lo stato astratto resta invariato.</p></article></div><h2>Dimostrazione compatta, passaggio per passaggio</h2><section class="lecture-steps"><article class="lecture-card lecture-step"><h4>1. Due basi<span class="lecture-step-boss">DEFINISCI</span></h4><p>Si introducono due basi ortonormali complete dello stesso spazio.</p><div class="lecture-formula" aria-label="Definizione della matrice di cambio base"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |e_i'\rangle=\sum_j|e_j\rangle U_{ji},\qquad U_{ji}=\langle e_j|e_i'\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>2. Unitarietà<span class="lecture-step-boss">DIMOSTRA</span></h4><p>L'ortonormalità della nuova base impone colonne ortonormali alla matrice U.</p><div class="lecture-formula" aria-label="Prova dell&#x27;unitarietà dal prodotto interno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \delta_{ik}=\langle e_i'|e_k'\rangle=\sum_jU_{ji}^*U_{jk}=(U^\dagger U)_{ik}\Rightarrow U^\dagger U=I\)</span></div></article><article class="lecture-card lecture-step"><h4>3. Componenti del ket<span class="lecture-step-boss">PASSIVO</span></h4><p>Proiettare lo stesso ket sulla nuova base produce U aggiunto sulla colonna delle componenti.</p><div class="lecture-formula" aria-label="Trasformazione passiva delle componenti"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \psi_i'=\langle e_i'|\psi\rangle=\sum_jU_{ji}^*\psi_j\Rightarrow\boldsymbol\psi'=U^\dagger\boldsymbol\psi\)</span></div></article><article class="lecture-card lecture-step"><h4>4. Matrice dell'operatore<span class="lecture-step-boss">SIMILITUDINE</span></h4><p>Proiettare A tra due nuovi vettori inserisce U aggiunto a sinistra e U a destra.</p><div class="lecture-formula" aria-label="Trasformazione passiva di un operatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A_{ik}'=\langle e_i'|A|e_k'\rangle=(U^\dagger A U)_{ik}\)</span></div></article><article class="lecture-card lecture-step"><h4>5. Ampiezza invariante<span class="lecture-step-boss">CHECK</span></h4><p>Le trasformazioni di componenti e matrice si cancellano nel numero complesso fisico.</p><div class="lecture-formula" aria-label="Invarianza degli elementi di matrice"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \boldsymbol\phi'^{\dagger}A'\boldsymbol\psi'=\boldsymbol\phi^\dagger U(U^\dagger A U)U^\dagger\boldsymbol\psi=\boldsymbol\phi^\dagger A\boldsymbol\psi\)</span></div></article><article class="lecture-card lecture-step"><h4>6. Prodotto interno<span class="lecture-step-boss">NORMA</span></h4><p>L'unitarietà conserva norme, angoli e probabilità di sovrapposizione.</p><div class="lecture-formula" aria-label="Conservazione del prodotto interno"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \langle U\phi|U\psi\rangle=\langle\phi|U^\dagger U|\psi\rangle=\langle\phi|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>7. Spettro invariante<span class="lecture-step-boss">AUTOVALORI</span></h4><p>Operatori unitarily simili hanno gli stessi autovalori e la stessa molteplicità.</p><div class="lecture-formula" aria-label="Invarianza dello spettro sotto cambio base"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A|a\rangle=a|a\rangle\Rightarrow(U^\dagger A U)(U^\dagger|a\rangle)=a(U^\dagger|a\rangle)\)</span></div></article><article class="lecture-card lecture-step"><h4>8. Traccia e determinante<span class="lecture-step-boss">INVARIANTI</span></h4><p>Ciclicità della traccia e modulo unitario del determinante di U conservano gli invarianti caratteristici.</p><div class="lecture-formula" aria-label="Invarianti di similitudine unitaria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \operatorname{tr}(U^\dagger A U)=\operatorname{tr}A,\qquad\det(U^\dagger A U)=\det A\)</span></div></article><article class="lecture-card lecture-step"><h4>9. Trasformazione attiva<span class="lecture-step-boss">ATTIVO</span></h4><p>Mantenendo fissa la base, U applicato al ket cambia lo stato e gli elementi di matrice si possono riscrivere trasformando l'operatore.</p><div class="lecture-formula" aria-label="Equivalenza tra trasformazione di stati e operatori"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle |\psi\rangle\to|\psi_U\rangle=U|\psi\rangle,\qquad\langle\psi_U|A|\psi_U\rangle=\langle\psi|U^\dagger A U|\psi\rangle\)</span></div></article><article class="lecture-card lecture-step"><h4>10. Proiettori e densità<span class="lecture-step-boss">STATISTICA</span></h4><p>Uno stato puro o misto si trasforma per coniugazione e mantiene positività e traccia.</p><div class="lecture-formula" aria-label="Trasformazione unitaria della matrice densità"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle \rho\to U\rho U^\dagger,\qquad\operatorname{tr}\rho=1,\quad\operatorname{tr}(U\rho U^\dagger)=1\)</span></div></article><article class="lecture-card lecture-step"><h4>11. Trasformazione infinitesima<span class="lecture-step-boss">GENERA</span></h4><p>Una famiglia unitaria continua vicino all'identità ha coefficiente infinitesimo antihermitiano, scritto con un generatore hermitiano G.</p><div class="lecture-formula" aria-label="Forma infinitesima di una trasformazione unitaria"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(\epsilon)=I-\frac{i\epsilon}{\hbar}G+O(\epsilon^2),\qquad G=G^\dagger\)</span></div></article><article class="lecture-card lecture-step"><h4>12. Esponenziale finito<span class="lecture-step-boss">GRUPPO</span></h4><p>Se il generatore non dipende dal parametro, la legge di composizione integra la trasformazione in un esponenziale.</p><div class="lecture-formula" aria-label="Famiglia unitaria a un parametro"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U(\epsilon)=e^{-i\epsilon G/\hbar},\qquad U(\epsilon_1)U(\epsilon_2)=U(\epsilon_1+\epsilon_2)\)</span></div></article><article class="lecture-card lecture-step"><h4>13. Variazione di A<span class="lecture-step-boss">COMMUTATORE</span></h4><p>Espandere la coniugazione al primo ordine mostra che il generatore agisce tramite commutatore.</p><div class="lecture-formula" aria-label="Variazione infinitesima di un operatore"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle U^\dagger A U=A+\frac{i\epsilon}{\hbar}[G,A]+O(\epsilon^2)\)</span></div></article><article class="lecture-card lecture-step"><h4>14. Diagonalizzazione<span class="lecture-step-boss">TEOREMA</span></h4><p>Ogni matrice hermitiana finita ammette una base ortonormale di autovettori, raccolti in una matrice unitaria.</p><div class="lecture-formula" aria-label="Diagonalizzazione unitaria di un&#x27;osservabile"><span class="lecture-proof-tag">Passaggio</span><span class="lecture-proof-math" data-i18n-skip="true">\(\displaystyle A=A^\dagger,\quad U=(|a_1\rangle\cdots|a_n\rangle)\Rightarrow U^\dagger A U=\operatorname{diag}(a_1,\ldots,a_n)\)</span></div></article></section><h2>Esempio: base z e base x di uno spin</h2><article class="lecture-card lecture-result lecture-example"><p><strong>Impostazione.</strong> Le colonne sono gli autovettori di sigma x espressi nella base z.</p><p data-i18n-skip="true">\(\displaystyle U=\frac1{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}=U^\dagger=U^{-1},\quad U^\dagger\sigma_xU=\sigma_z,\quad\binom{1}{0}_z\mapsto U^\dagger\binom{1}{0}=\frac1{\sqrt2}\binom{1}{1}_x\)</p><p><strong>Controllo.</strong> La matrice è unitaria; l'operatore sigma x diventa diagonale nella propria base e le due componenti del ket più z hanno moduli quadri un mezzo.</p></article><h2>Interpretazione e limiti</h2><div class="lecture-grid"><article class="lecture-card "><h3>Unitario non significa hermitiano</h3><p>U aggiunto U uguale I non implica U uguale U aggiunto. Nell'esempio la coincidenza vale perché la matrice specifica è anche involutiva.</p></article><article class="lecture-card "><h3>Cambio di base e simmetria</h3><p>Un cambio passivo non modifica il sistema. Una simmetria attiva è un'operazione fisica o geometrica che lascia invarianti le previsioni e, in particolare, H.</p></article><article class="lecture-card "><h3>Fasi della base</h3><p>Moltiplicare ciascun vettore di base per una fase cambia U e gli elementi di matrice, ma non probabilità, autovalori o relazioni fisiche.</p></article><article class="lecture-card "><h3>Dimensione infinita</h3><p>In spazi infiniti gli operatori unitari restano limitati, ma generatori e osservabili possono essere non limitati e richiedere attenzione ai domini.</p></article></div><div class="lecture-grid"><article class="lecture-card lecture-warning"><h3>Errori tipici</h3><p>Usare trasposto invece di aggiunto; cambiare componenti senza cambiare la matrice dell'operatore; confondere attivo e passivo; assumere ogni unitario hermitiano; dimenticare hbar nell'esponenziale del generatore.</p></article><article class="lecture-card lecture-warning"><h3>Controlli rapidi</h3><p>Le colonne di U sono ortonormali; U aggiunto U vale I; l'ampiezza resta identica; A primo ha gli stessi autovalori; per epsilon reale e G hermitiano l'esponenziale è unitario.</p></article></div><article class="lecture-card lecture-oral"><h3>Controllo da orale</h3><ul><li>Dichiara come U collega le due basi.</li><li>Dimostra U aggiunto U uguale I.</li><li>Ricava componenti e matrice trasformate.</li><li>Verifica un elemento di matrice invariante.</li><li>Distingui trasformazione attiva e passiva.</li><li>Mostra spettro, traccia e norma invarianti.</li><li>Deriva la forma infinitesima con G hermitiano.</li><li>Diagonalizza l'esempio di spin.</li></ul></article><details class="boss-ref"><summary>Boss, appunti e pagine verificate</summary><ul><li><a href="boss/P1_DIM_0-6.txt#L802">Boss P1 - formalismo, rappresentazioni ed evoluzione</a></li><li><a href="Appunti-MQ.pdf#page=60">Appunti-MQ.pdf, pagine PDF 60-64 - cambiamenti di base e trasformazioni unitarie</a></li><li><a href="boss/P3_DIM_13-18.txt#L440">DIM 15 - commutatori, generatori e simmetrie</a></li></ul><p class="lecture-note">La convenzione è quella ricostruita dalle pagine verificate 60-64; ogni posizione di U e U aggiunto è controllata proiettando esplicitamente ket e operatori sulle due basi.</p></details><div class="lecture-return"><a href="1mq.html">Ritorna all'indice MQ</a></div></main>
+<script id="cp-i18n-data" type="application/json">{"source":"it","target":"en","texts":{"Lezione approfondita - Argomento 5":"In-depth lesson - Topic 5","Cambiamenti di base e trasformazioni unitarie":"Basis changes and unitary transformations","Obiettivo.":"Objective.","Dimostrare perché un cambio di base ortonormale è unitario, trasformare componenti e operatori senza ambiguità attiva-passiva, provare l'invarianza di ampiezze, spettro e valori medi e collegare trasformazioni continue ai generatori hermitiani.":"Prove why an orthonormal basis change is unitary, transform components and operators without active-passive ambiguity, prove invariance of amplitudes, spectra, and expectation values, and connect continuous transformations to Hermitian generators.","Coordinate che cambiano":"Changing coordinates","Un cambio passivo riscrive lo stesso ket in una nuova base. Una trasformazione attiva produce invece un nuovo ket nello stesso sistema di coordinate.":"A passive change rewrites the same ket in a new basis. An active transformation instead produces a new ket in the same coordinate system.","La convenzione decide i pugnali":"Convention fixes daggers","Formule come A primo uguale U aggiunto A U o U A U aggiunto dipendono da come U collega le basi. Va dichiarata la convenzione e verificata su un'ampiezza.":"Formulas such as A prime equals U dagger A U or U A U dagger depend on how U connects bases. State the convention and check it on an amplitude.","Convenzione passiva adottata":"Adopted passive convention","Basi":"Bases","Si definisce |e_i primo> uguale somma j |e_j> U_ji. Le colonne di U sono i nuovi vettori espressi nella vecchia base.":"Define |e_i prime> equal sum j |e_j> U_ji. Columns of U are the new vectors expressed in the old basis.","Componenti":"Components","Con questa convenzione la colonna nuova è U aggiunto volte la colonna vecchia; lo stato astratto resta invariato.":"With this convention the new component column is U dagger times the old column; the abstract state is unchanged.","Dimostrazione compatta, passaggio per passaggio":"Compact derivation, step by step","1. Due basi":"1. Two bases","DEFINISCI":"DEFINE","Si introducono due basi ortonormali complete dello stesso spazio.":"Introduce two complete orthonormal bases of the same space.","Passaggio":"Step","2. Unitarietà":"2. Unitarity","DIMOSTRA":"PROVE","L'ortonormalità della nuova base impone colonne ortonormali alla matrice U.":"Orthonormality of the new basis imposes orthonormal columns on U.","3. Componenti del ket":"3. Ket components","PASSIVO":"PASSIVE","Proiettare lo stesso ket sulla nuova base produce U aggiunto sulla colonna delle componenti.":"Projecting the same ket onto the new basis produces U dagger on the component column.","4. Matrice dell'operatore":"4. Operator matrix","SIMILITUDINE":"SIMILARITY","Proiettare A tra due nuovi vettori inserisce U aggiunto a sinistra e U a destra.":"Projecting A between two new vectors inserts U dagger on the left and U on the right.","5. Ampiezza invariante":"5. Invariant amplitude","CHECK":"CHECK","Le trasformazioni di componenti e matrice si cancellano nel numero complesso fisico.":"Component and matrix transformations cancel in the physical complex number.","6. Prodotto interno":"6. Inner product","NORMA":"NORM","L'unitarietà conserva norme, angoli e probabilità di sovrapposizione.":"Unitarity preserves norms, angles, and overlap probabilities.","7. Spettro invariante":"7. Invariant spectrum","AUTOVALORI":"EIGENVALUES","Operatori unitarily simili hanno gli stessi autovalori e la stessa molteplicità.":"Unitarily similar operators have the same eigenvalues and multiplicities.","8. Traccia e determinante":"8. Trace and determinant","INVARIANTI":"INVARIANTS","Ciclicità della traccia e modulo unitario del determinante di U conservano gli invarianti caratteristici.":"Trace cyclicity and unit modulus of U's determinant preserve characteristic invariants.","9. Trasformazione attiva":"9. Active transformation","ATTIVO":"ACTIVE","Mantenendo fissa la base, U applicato al ket cambia lo stato e gli elementi di matrice si possono riscrivere trasformando l'operatore.":"Keeping the basis fixed, applying U to a ket changes the state and matrix elements can be rewritten by transforming the operator.","10. Proiettori e densità":"10. Projectors and density","STATISTICA":"STATISTICS","Uno stato puro o misto si trasforma per coniugazione e mantiene positività e traccia.":"A pure or mixed state transforms by conjugation and retains positivity and trace.","11. Trasformazione infinitesima":"11. Infinitesimal transformation","GENERA":"GENERATE","Una famiglia unitaria continua vicino all'identità ha coefficiente infinitesimo antihermitiano, scritto con un generatore hermitiano G.":"A continuous unitary family near the identity has an anti-Hermitian infinitesimal coefficient, written with a Hermitian generator G.","12. Esponenziale finito":"12. Finite exponential","GRUPPO":"GROUP","Se il generatore non dipende dal parametro, la legge di composizione integra la trasformazione in un esponenziale.":"If the generator is parameter independent, the composition law integrates the transformation into an exponential.","13. Variazione di A":"13. Variation of A","COMMUTATORE":"COMMUTATOR","Espandere la coniugazione al primo ordine mostra che il generatore agisce tramite commutatore.":"Expanding conjugation to first order shows that the generator acts through a commutator.","14. Diagonalizzazione":"14. Diagonalization","TEOREMA":"THEOREM","Ogni matrice hermitiana finita ammette una base ortonormale di autovettori, raccolti in una matrice unitaria.":"Every finite Hermitian matrix admits an orthonormal eigenbasis collected in a unitary matrix.","Esempio: base z e base x di uno spin":"Example: z and x bases of a spin","Impostazione.":"Setup.","Le colonne sono gli autovettori di sigma x espressi nella base z.":"Columns are sigma-x eigenvectors expressed in the z basis.","Controllo.":"Check.","La matrice è unitaria; l'operatore sigma x diventa diagonale nella propria base e le due componenti del ket più z hanno moduli quadri un mezzo.":"The matrix is unitary; sigma x becomes diagonal in its own basis and the two plus-z ket components have squared moduli one half.","Interpretazione e limiti":"Interpretation and limits","Unitario non significa hermitiano":"Unitary does not mean Hermitian","U aggiunto U uguale I non implica U uguale U aggiunto. Nell'esempio la coincidenza vale perché la matrice specifica è anche involutiva.":"U dagger U equal I does not imply U equal U dagger. In the example the coincidence holds because that specific matrix is also involutory.","Cambio di base e simmetria":"Basis change and symmetry","Un cambio passivo non modifica il sistema. Una simmetria attiva è un'operazione fisica o geometrica che lascia invarianti le previsioni e, in particolare, H.":"A passive basis change does not modify the system. An active symmetry is a physical or geometric operation leaving predictions and, in particular, H invariant.","Fasi della base":"Basis phases","Moltiplicare ciascun vettore di base per una fase cambia U e gli elementi di matrice, ma non probabilità, autovalori o relazioni fisiche.":"Multiplying each basis vector by a phase changes U and matrix elements but not probabilities, eigenvalues, or physical relations.","Dimensione infinita":"Infinite dimension","In spazi infiniti gli operatori unitari restano limitati, ma generatori e osservabili possono essere non limitati e richiedere attenzione ai domini.":"In infinite spaces unitary operators remain bounded, but generators and observables may be unbounded and require domain care.","Errori tipici":"Common errors","Usare trasposto invece di aggiunto; cambiare componenti senza cambiare la matrice dell'operatore; confondere attivo e passivo; assumere ogni unitario hermitiano; dimenticare hbar nell'esponenziale del generatore.":"Using transpose instead of adjoint; changing components without changing the operator matrix; confusing active and passive transformations; assuming every unitary is Hermitian; forgetting hbar in the generator exponential.","Controlli rapidi":"Quick checks","Le colonne di U sono ortonormali; U aggiunto U vale I; l'ampiezza resta identica; A primo ha gli stessi autovalori; per epsilon reale e G hermitiano l'esponenziale è unitario.":"Columns of U are orthonormal; U dagger U equals I; the amplitude remains identical; A prime has the same eigenvalues; for real epsilon and Hermitian G the exponential is unitary.","Controllo da orale":"Oral exam checklist","Dichiara come U collega le due basi.":"State how U connects the two bases.","Dimostra U aggiunto U uguale I.":"Prove U dagger U equals I.","Ricava componenti e matrice trasformate.":"Derive transformed components and matrix.","Verifica un elemento di matrice invariante.":"Verify an invariant matrix element.","Distingui trasformazione attiva e passiva.":"Distinguish active and passive transformations.","Mostra spettro, traccia e norma invarianti.":"Show spectrum, trace, and norm invariance.","Deriva la forma infinitesima con G hermitiano.":"Derive the infinitesimal form with Hermitian G.","Diagonalizza l'esempio di spin.":"Diagonalize the spin example.","Boss, appunti e pagine verificate":"Boss questions, notes, and verified pages","Boss P1 - formalismo, rappresentazioni ed evoluzione":"Boss P1 - formalism, representations, and evolution","Appunti-MQ.pdf, pagine PDF 60-64 - cambiamenti di base e trasformazioni unitarie":"Appunti-MQ.pdf, PDF pages 60-64 - cambiamenti di base e trasformazioni unitarie","DIM 15 - commutatori, generatori e simmetrie":"DIM 15 - commutators, generators, and symmetries","La convenzione è quella ricostruita dalle pagine verificate 60-64; ogni posizione di U e U aggiunto è controllata proiettando esplicitamente ket e operatori sulle due basi.":"The convention is reconstructed from verified pages 60-64; every placement of U and U dagger is checked by explicitly projecting kets and operators onto both bases.","Ritorna all'indice MQ":"Return to the MQ index"},"attrs":{"Definizione della matrice di cambio base":"Definition of the basis-change matrix","Prova dell'unitarietà dal prodotto interno":"Proof of unitarity from the inner product","Trasformazione passiva delle componenti":"Passive transformation of components","Trasformazione passiva di un operatore":"Passive transformation of an operator","Invarianza degli elementi di matrice":"Invariance of matrix elements","Conservazione del prodotto interno":"Preservation of the inner product","Invarianza dello spettro sotto cambio base":"Spectral invariance under basis change","Invarianti di similitudine unitaria":"Unitary-similarity invariants","Equivalenza tra trasformazione di stati e operatori":"Equivalence between state and operator transformations","Trasformazione unitaria della matrice densità":"Unitary transformation of the density matrix","Forma infinitesima di una trasformazione unitaria":"Infinitesimal form of a unitary transformation","Famiglia unitaria a un parametro":"One-parameter unitary family","Variazione infinitesima di un operatore":"Infinitesimal variation of an operator","Diagonalizzazione unitaria di un'osservabile":"Unitary diagonalization of an observable"},"title":{"it":"Cambiamenti di base e trasformazioni unitarie","en":"Basis changes and unitary transformations"}}</script>
+<script id="cp-i18n-runtime">
+(function(){
+  const data = JSON.parse(document.getElementById('cp-i18n-data').textContent); const storageKey = 'cp-language-v1'; let lang = data.source;
+  try { lang = localStorage.getItem(storageKey) || data.source; } catch(error) { lang = data.source; }
+  if(lang !== 'it' && lang !== 'en') lang = data.source; document.documentElement.lang = lang; const targetActive = lang === data.target;
+  const trimParts = value => { const match = String(value).match(/^(\s*)([\s\S]*?)(\s*)$/); return match ? match.slice(1) : ['', String(value), '']; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { const parent = node.parentElement; if(!parent || parent.closest('script,style,template,noscript,[data-i18n-skip]')) return; const [prefix, core, suffix] = trimParts(node.nodeValue); const translated = data.texts[core]; if(targetActive && translated) node.nodeValue = prefix + translated + suffix; });
+  document.querySelectorAll('*').forEach(element => { if(element.closest('[data-i18n-skip]')) return; ['alt','title','placeholder','aria-label','aria-description'].forEach(attr => { if(!element.hasAttribute(attr)) return; const original = element.getAttribute(attr); const translated = data.attrs[original]; if(targetActive && translated) element.setAttribute(attr, translated); }); });
+  document.title = data.title[lang] || data.title[data.source] || document.title;
+  document.querySelectorAll('[data-language]').forEach(button => { const active = button.dataset.language === lang; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); button.addEventListener('click', () => { const next = button.dataset.language; if(next === lang) return; try { localStorage.setItem(storageKey, next); } catch(error) {} location.reload(); }); }); window.CP_LANGUAGE = lang;
+})();
+</script>
 </body>
 </html>
